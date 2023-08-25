@@ -1,0 +1,123 @@
+[tool.poetry]
+name = "Hoo-gua-tsu-im"
+version = "0.1.0"
+description = "將存放於 Excel 的漢字，自動添加「河洛話」注音；以利發佈於網頁之用。"
+authors = ["Alan Jui <alanjui.1960@gmail.com>"]
+readme = "README.md"
+packages = [{include = "Hoo_Gua_Tsu_Im"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+openpyxl = "^3.0.10"
+xlwings = "^0.28.5"
+pandas = "^1.5.2"
+psycopg2 = "^2.9.5"
+python-dotenv = "^0.21.1"
+
+
+[tool.poetry.group.dev.dependencies]
+pylint = "^2.15.7"
+autopep8 = "^2.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[virtualenvs]
+in-project = false
+
+#==============================================
+
+[tool.pyright]
+pythonPlatform = "Darwin"
+pythonVersion = "3.10"
+venv = "python-3.10.6"
+venvPath = "/Users/alanjui/.pyenv/versions"
+
+sexclude = [
+    "**/node_modules",
+    "**/__pycache__"
+]
+reportGeneralTypeIssues = "warning"
+reportMissingImports = true
+# reportMissingTypeStubs = "warning"
+reportMissingTypeStubs = false
+reportOptionalMemberAccess = false
+reportUnusedFunction = false
+reportUnusedImport = true
+reportUnusedVariable = false
+stubPath = "typings"
+typeCheckingMode = "basic"
+typeshedPaths = []
+useLibraryCodeForTypes = true
+
+
+# --------------------------------------------------------------- PYLINT
+# Pylint code checker configuration.
+# - Pylint docs:
+#   https://pylint.readthedocs.io/en/latest/
+# - Configuration reference:
+#   http://pylint.pycqa.org/en/latest/technical_reference/features.html
+
+[tool.pylint.MASTER]
+# Python code to execute, usually for sys.path manipulation such as
+# pygtk.require().
+# init-hook="import sys; import os; from pylint.config import find_pylintrc; sys.path.append(os.path.dirname(find_pylintrc()))"
+# Work in parallel.
+# Parallel work disabled due to a bug in the pylint-django:
+# https://github.com/PyCQA/pylint-django/issues/276
+#jobs = "0"
+jobs = "1"
+# load-plugins = "pylint_django"
+
+# Do not store results of previous runs.
+persistent = "no"
+# Allow to load C extension modules.
+unsafe-load-any-extension = "yes"
+
+[tool.pylint."MESSAGES CONTROL"]
+enable = "c-extension-no-member"
+disable = [
+  "bare-except",
+  "redefined-outer-name",
+  "no-member",
+  "unused-variable",
+  "broad-except",
+  "line-too-long",
+  "consider-using-f-string",
+  "missing-module-docstring",
+  "missing-function-docstring",
+  "missing-docstring"
+]
+
+[tool.pylint.BASIC]
+# It is OK to have 2-letters identifiers, e.g. 'id' or 'ok'. Also allow
+# long identifiers, cause there is a strong line length limitation which
+# will force engineers to thing twice before giving too long names.
+argument-rgx = "[a-z_][a-z0-9_]{1,64}$"
+attr-rgx = "[a-z_][a-z0-9_]{1,64}$"
+bad-names = "foo,bar,baz,toto,tutu,tata,responce,pathes"
+class-attribute-rgx = "([A-Za-z_][A-Za-z0-9_]{1,64}|(__.*__))$"
+function-rgx = "[a-z_][a-z0-9_]{1,64}$"
+good-names = "i,j,k,ex,Run,_"
+method-rgx = "[a-z_][a-z0-9_]{1,64}$"
+# Docstrings are needed everywhere.
+no-docstring-rgx = "^$"
+variable-rgx = "[a-z_][a-z0-9_]{1,64}$"
+
+[tool.pylint.FORMAT]
+max-line-length="88"
+max-module-lines="9000" # Right, over nine thousand!
+# [tool.pylint.PYLINT_DJANGO]
+# # NOTE: When Pytest runs Pylint this setting is overwritten by the
+# # environment variable `DJANGO_SETTINGS_MODULE` set by `pytest-django`.
+# # Anyway, the setting is still useful when VS Code runs Pylint directly.
+# django-settings-module = "web_project.settings"
+
+[tool.pylint.REFACTORING]
+# We have line length 88, no need to check.
+max-nested-blocks = "9000"
+
+[tool.pylint.REPORTS]
+reports = "no"
+score = "no"
