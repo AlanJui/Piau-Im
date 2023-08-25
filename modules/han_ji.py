@@ -10,13 +10,13 @@ valid_un_bu_endings = [
 ]
 
 
-def is_chu_im_tone(self):
+def within_tiau_ho(ping_im):
     """
     判斷注音符號中是否含有「聲調」.
 
     若最後一個字元不是數值，表示使用者可能引用「略去聲調」不寫規則.
     """
-    last_char = self.chu_im[-1]
+    last_char = ping_im[-1]
     return last_char.isdigit()
 
 def split_chu_im(ping_im):
@@ -42,7 +42,7 @@ def split_chu_im(ping_im):
     siann_pattern = re.compile(r"(b|tsh|ts|g|h|j|kh|k|l|m|ng|n|ph|p|s|th|t|q)?")
     # 透過 match 方法，找到「注音」之中的「聲母」。然後再利用 group
     # 方法，將注音群分「聲母」與「韻母」。
-    siann_match = siann_pattern.match(ping_im.chu_im)
+    siann_match = siann_pattern.match(ping_im)
 
     if siann_match:
         siann_bu = siann_match.group()
@@ -50,12 +50,12 @@ def split_chu_im(ping_im):
         siann_bu = ""
 
     # 依據「注音符號」中是否有含「聲調」，決定取得韻母與調號的方式。
-    if ping_im.is_chu_im_tone():
+    if within_tiau_ho(ping_im):
         # 若注音符號最後一個字元為「數值」，表「聲調」。即
-        un_bu = ping_im.chu_im[len(siann_bu): -1]
-        tiau = ping_im.chu_im[-1]
+        un_bu = ping_im[len(siann_bu): -1]
+        tiau = ping_im[-1]
     else:
-        un_bu = ping_im.chu_im[len(siann_bu):]
+        un_bu = ping_im[len(siann_bu):]
         if un_bu in valid_un_bu_endings:
             tiau = '1'
         else:
@@ -65,5 +65,3 @@ def split_chu_im(ping_im):
     result += [un_bu]
     result += [tiau]
     return result
-
-

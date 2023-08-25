@@ -1,5 +1,5 @@
 # coding=utf-8
-
+import re
 import xlwings as xw
 
 from modules.han_ji import split_chu_im
@@ -57,8 +57,6 @@ def main_run(CONVERT_FILE_NAME):
         # 如是空白或換行，處理換行
         # =========================================================
         if han_ji == '' or han_ji == '\n':
-            html_str = "</p><p>"
-            target_sheet.range('A' + str(i)).value = html_str
             i += 1
             row += 1
             continue
@@ -69,8 +67,6 @@ def main_run(CONVERT_FILE_NAME):
         piau_tiam = r"[；：？！\uFF0C\uFF08-\uFF09\u2013-\u2014\u2026\\u2018-\u201D\u3000\u3001-\u303F]"
         searchObj = re.search(piau_tiam, han_ji, re.M | re.I)
         if searchObj:
-            # 將取到的「標點符號」，寫入目標工作表
-            target_sheet.range('A' + str(i)).value = han_ji
             i += 1
             row += 1
             continue
@@ -78,10 +74,9 @@ def main_run(CONVERT_FILE_NAME):
         # =========================================================
         # 在字庫中查不到注音的漢字，略過注音處理
         # =========================================================
-        chu_im_code = str(source_sheet.range('B' + str(row)).value).strip()
-        if chu_im_code == 'None':
+        ping_im = str(source_sheet.range('B' + str(row)).value).strip()
+        if ping_im == '':
             # 讀到空白儲存格，視為使用者：「欲終止一個段落」；故於目標工作表寫入一個「換行」字元。
-            target_sheet.range('A' + str(i)).value = ''
             i += 1
             row += 1
             continue
@@ -89,8 +84,6 @@ def main_run(CONVERT_FILE_NAME):
         # =========================================================
         # 將台羅拼音拆分成聲母、韻母、調號
         # =========================================================
-        ping_im = str(source_sheet.range('B' + str(row)).value)
-        ping_im = ping_im.strip()
         siann = split_chu_im(ping_im)[0]
         un = split_chu_im(ping_im)[1]
         tiau = split_chu_im(ping_im)[2]

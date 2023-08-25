@@ -2,8 +2,9 @@ import getopt
 import sys
 
 import settings
-from p01_import_source_data import main_run as san_sing_han_ji_tsu_im_paiau
-from p100_cha_ji_tian import main_run as cha_ji_tian
+# from p01_import_source_data import main_run as san_sing_han_ji_tsu_im_paiau
+# from p100_cha_ji_tian import main_run as cha_ji_tian
+from hun_siann_un_tiau import main_run as ping_im_hun_siann_un_tiau
 from p210_hoo_goa_chu_im_all import main_run as hoo_goa_chu_im_all
 
 
@@ -58,8 +59,13 @@ if __name__ == "__main__":
     print(f"CONVERT_FILE_NAME = {CONVERT_FILE_NAME}")
 
     # 將輸入之「漢字」文章，編製成「漢字注音表」，以便後續填入注音。
-    san_sing_han_ji_tsu_im_paiau(CONVERT_FILE_NAME)
+    # san_sing_han_ji_tsu_im_paiau(CONVERT_FILE_NAME)
+
     # 在字典查注音，填入漢字注音表。
-    cha_ji_tian(CONVERT_FILE_NAME)
+    # cha_ji_tian(CONVERT_FILE_NAME)
+
+    # 將「漢字注音表」的「台羅注音」拆解出聲母、韻母及聲調
+    ping_im_hun_siann_un_tiau(CONVERT_FILE_NAME)
+
     # 將已填入注音之「漢字注音表」，製作成 HTML 格式的各式「注音／拼音／標音」。
     hoo_goa_chu_im_all(CONVERT_FILE_NAME)
