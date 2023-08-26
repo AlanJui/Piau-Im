@@ -2,6 +2,7 @@ import getopt
 import sys
 
 import settings
+
 # from p01_import_source_data import main_run as san_sing_han_ji_tsu_im_paiau
 # from p100_cha_ji_tian import main_run as cha_ji_tian
 from hun_siann_un_tiau import main_run as ping_im_hun_siann_un_tiau
@@ -15,9 +16,10 @@ def myfunc(argv):
     arg_help = "{0} -i <input> -u <user> -o <output>".format(argv[0])
 
     try:
-        opts, args = getopt.getopt(argv[1:], "hi:u:o:", ["help", "input=",
-                                                         "user=", "output="])
-    except:
+        opts, args = getopt.getopt(
+            argv[1:], "hi:u:o:", ["help", "input=", "user=", "output="]
+        )
+    except getopt.GetoptError:
         print(arg_help)
         sys.exit(2)
 
@@ -32,14 +34,14 @@ def myfunc(argv):
         elif opt in ("-o", "--output"):
             arg_output = arg
 
-    print('input:', arg_input)
-    print('user:', arg_user)
-    print('output:', arg_output)
+    print("input:", arg_input)
+    print("user:", arg_user)
+    print("output:", arg_output)
 
     return {
-        'input': arg_input,
-        'user': arg_user,
-        'output': arg_output,
+        "input": arg_input,
+        "user": arg_user,
+        "output": arg_output,
     }
 
 
@@ -50,10 +52,10 @@ if __name__ == "__main__":
         print("未設定 config.env 檔案")
         # sys.exit(2)
         opts = myfunc(sys.argv)
-        if opts['input'] != "":
-            CONVERT_FILE_NAME = opts['input']
+        if opts["input"] != "":
+            CONVERT_FILE_NAME = opts["input"]
         else:
-            CONVERT_FILE_NAME = 'hoo-goa-chu-im.xlsx'
+            CONVERT_FILE_NAME = "hoo-goa-chu-im.xlsx"
     else:
         CONVERT_FILE_NAME = file_path
     print(f"CONVERT_FILE_NAME = {CONVERT_FILE_NAME}")
