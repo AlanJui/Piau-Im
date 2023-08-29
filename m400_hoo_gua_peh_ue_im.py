@@ -1,10 +1,9 @@
 import getopt
+import os
 import sys
 
-import settings
+from dotenv import dotenv_values
 
-# from p01_import_source_data import main_run as san_sing_han_ji_tsu_im_paiau
-# from p100_cha_ji_tian import main_run as cha_ji_tian
 from hun_siann_un_tiau import main_run as ping_im_hun_siann_un_tiau
 from p210_hoo_goa_chu_im_all import main_run as hoo_goa_chu_im_all
 
@@ -47,7 +46,10 @@ def myfunc(argv):
 
 if __name__ == "__main__":
     # 取得 Input 檔案名稱
-    file_path = settings.get_input_file_path()
+    config = dotenv_values(".env")
+    dir_path = str(config["INPUT_FILE_PATH"])
+    file_name = str(config["FILE_NAME"])
+    file_path = os.path.join(dir_path, file_name)
     if not file_path:
         print("未設定 config.env 檔案")
         # sys.exit(2)

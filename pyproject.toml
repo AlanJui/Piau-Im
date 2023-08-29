@@ -1,11 +1,10 @@
 [tool.poetry]
-name = "Hoo-gua-tsu-im"
+name = "Piau-Im"
 version = "0.1.0"
 description = "將存放於 Excel 的漢字，自動添加「河洛話」注音；以利發佈於網頁之用。"
 authors = ["Alan Jui <alanjui.1960@gmail.com>"]
 readme = "README.md"
-packages = [{include = "Hoo_Gua_Tsu_Im"}]
-
+packages = [{include = "piau_im", from = "."}]
 [tool.poetry.dependencies]
 python = "^3.10"
 openpyxl = "^3.0.10"
