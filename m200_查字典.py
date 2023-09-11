@@ -2,7 +2,7 @@ import getopt
 import sys
 
 from p01_import_source_data import main_run as san_sing_han_ji_tsu_im_paiau
-from p100_cha_ji_tian import main_run as cha_ji_tian
+from p100_cha_ji_tian import main_run as tsa_ji_tian_tshue_tsu_im
 from p210_hoo_goa_chu_im_all import main_run as hoo_goa_chu_im_all
 
 
@@ -51,6 +51,6 @@ if __name__ == "__main__":
     print(f"CONVERT_FILE_NAME = {CONVERT_FILE_NAME}")
 
     # 在字典查注音，填入漢字注音表。
-    cha_ji_tian(CONVERT_FILE_NAME)
+    tsa_ji_tian_tshue_tsu_im(CONVERT_FILE_NAME)
     # 將已填入注音之「漢字注音表」，製作成 HTML 格式的各式「注音／拼音／標音」。
     hoo_goa_chu_im_all(CONVERT_FILE_NAME)

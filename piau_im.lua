@@ -1,5 +1,5 @@
 -- 定義文章標題和注音/拼音方法
-local title = "心經"
+local title = "歸去來辭"
 local methods = {
 	"十五音標音",
 	"方音符號注音",
@@ -9,8 +9,7 @@ local methods = {
 }
 
 -- 定義圖片的 URL
-local img_url =
-	"https://www.newton.com.tw/img/f/b37/nBnauQWMwAjMwIDOwY2M3MTMxQWOlNDO0cDZ2UTO4M2MzkDZ3EmM0QjMlBzLtVGdp9yYpB3LltWahJ2Lt92YuUHZpFmYuMmczdWbp9yL6MHc0RHa.jpg"
+local img_url = "https://p3-tt.byteimg.com/origin/pgc-image/92b3838d44574423aa662573d30043ef?from=pc"
 
 local format = "《%s》【%s】\n"
 	.. '<div class="separator" style="clear: both">\n'

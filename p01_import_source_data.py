@@ -32,15 +32,13 @@ def main_run(CONVERT_FILE_NAME):
     for sheet_name in sheet_name_list:
         sheet = wb.sheets[sheet_name]
         try:
-            wb.sheets.add(name=sheet_name)
-        except Exception as e:
-            # CommandError 的 Exception 發生日，表工作表不存在
-            # 新增程式需使用之工作表
-            print(e)
             sheet.select()
             sheet.clear()
-            wb.sheets.add(name=sheet_name)
             continue
+        except:
+            # CommandError 的 Exception 發生日，表工作表不存在
+            # 新增程式需使用之工作表
+            wb.sheets.add(name=sheet_name)
 
     # -----------------------------------------------------
     # 檢查工作表是否已存在
@@ -71,10 +69,12 @@ def main_run(CONVERT_FILE_NAME):
         list1[:0] = string
         return list1
 
-    # %%
     # ==========================================================
     # 主程式
     # ==========================================================
+    # 自【來源工作表】，讀入【整段】的漢字，轉存到目的工作表：【漢字注音表】
+    # 在【漢字注音表】的每個儲存格，只存放一個漢字
+    # =========================================================
 
     i = 1  # index for target sheet
     for row in range(1, source_rows + 1):
@@ -91,7 +91,7 @@ def main_run(CONVERT_FILE_NAME):
         han_ji_range = convert_string_to_chars_list(hang_ji_str)
 
         # =========================================================
-        # Write to target worksheet
+        # 讀到的整段文字，寫入【漢字注音表】。寫入時，每個儲存格只存放一個漢字
         # =========================================================
         han_ji_tsu_im_paiu.range("A" + str(i)).options(
             transpose=True
