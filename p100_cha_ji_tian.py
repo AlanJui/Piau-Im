@@ -20,8 +20,10 @@ def main_run(CONVERT_FILE_NAME):
 
     # 指定提供來源的【工作表】；及【總列數】
     source_sheet = wb.sheets["漢字注音表"]
-    end_row = source_sheet.range('A' + str(source_sheet.cells.last_cell.row)).end('up').row
-    print(f'end_row = {end_row}')
+    end_row = (
+        source_sheet.range("A" + str(source_sheet.cells.last_cell.row)).end("up").row
+    )
+    print(f"end_row = {end_row}")
 
     # ==========================================================
     # 備妥程式需使用之工作表
@@ -52,23 +54,30 @@ def main_run(CONVERT_FILE_NAME):
     # ==========================================================
     chu_im_sheet = wb.sheets["漢字注音表"]
 
-    row = 1     # index for source sheet
+    # =========================================================="
+    # 資料庫",
+    # =========================================================="
+    conn = psycopg2.connect(
+        database="alanjui", user="alanjui", host="127.0.0.1", port="5432"
+    )
+    cur = conn.cursor()
+    row = 1  # index for source sheet
     chu_im_index = 1
     ji_khoo_index = 1
     khiam_ji_index = 1
     end_counter = end_row + 1
 
     while row < end_counter:
-        print(f'row = {row}')
+        print(f"row = {row}")
         # 自 source_sheet 取待注音漢字
-        han_ji = str(source_sheet.range('A' + str(row)).value)
+        han_ji = str(source_sheet.range("A" + str(row)).value)
         han_ji.strip()
 
         # =========================================================
         # 如是空白或換行，處理換行
         # =========================================================
-        if han_ji == '\n' or han_ji == 'None':
-            chu_im_sheet.range('A' + str(chu_im_index)).value = '\n'
+        if han_ji == "\n" or han_ji == "None":
+            chu_im_sheet.range("A" + str(chu_im_index)).value = "\n"
             chu_im_index += 1
             row += 1
             continue
@@ -79,8 +88,9 @@ def main_run(CONVERT_FILE_NAME):
         # =========================================================
         han_ji_list = ji.convert_string_to_list(han_ji)
 
-        chu_im_sheet.range('A' + str(chu_im_index)) \
-                    .options(transpose=True).value = han_ji_list
+        chu_im_sheet.range("A" + str(chu_im_index)).options(
+            transpose=True
+        ).value = han_ji_list
 
         # =========================================================
         # 將整段讀入的漢字，逐一加注音
@@ -104,10 +114,12 @@ def main_run(CONVERT_FILE_NAME):
 
             # SQL 查詢指令：自字庫查找某漢字之注音碼
             # sql = f"select id, han_ji, chu_im, freq, siann, un, tiau from han_ji where han_ji='{search_han_ji}'"
-            sql = "SELECT id, han_ji, chu_im, freq, siann, un, tiau "\
-                "FROM han_ji "\
-                f"WHERE han_ji='{search_han_ji}' "\
+            sql = (
+                "SELECT id, han_ji, chu_im, freq, siann, un, tiau "
+                "FROM han_ji "
+                f"WHERE han_ji='{search_han_ji}' "
                 "ORDER BY freq DESC;"
+            )
             cur.execute(sql)
             query_rows = cur.fetchall()
 
@@ -115,7 +127,7 @@ def main_run(CONVERT_FILE_NAME):
             if not query_rows:
                 # 問題發生：找不到漢字的注音碼
                 print(f"Can not find 【{search_han_ji}】in Han-Ji-Khoo!!")
-                khiam_ji_sheet.range('A' + str(khiam_ji_index)).value = search_han_ji
+                khiam_ji_sheet.range("A" + str(khiam_ji_index)).value = search_han_ji
                 khiam_ji_index += 1
                 i += 1
                 continue
@@ -138,25 +150,25 @@ def main_run(CONVERT_FILE_NAME):
                 # =========================================================
                 if ji_found == 0:
                     # 處理查到的第一個漢字
-                    chu_im_sheet.range('B' + str(i)).value = chu_im
-                    chu_im_sheet.range('C' + str(i)).value = siann_bu
-                    chu_im_sheet.range('D' + str(i)).value = un_bu
-                    chu_im_sheet.range('E' + str(i)).value = tiau_ho
+                    chu_im_sheet.range("B" + str(i)).value = chu_im
+                    chu_im_sheet.range("C" + str(i)).value = siann_bu
+                    chu_im_sheet.range("D" + str(i)).value = un_bu
+                    chu_im_sheet.range("E" + str(i)).value = tiau_ho
                 else:
                     # 若查到的漢字有兩個以上
                     # ji_khoo_sheet  = wb.sheets["字庫表"]
                     idx = ji_khoo_index
-                    ji_khoo_sheet.range('A' + str(idx)).value = search_han_ji
+                    ji_khoo_sheet.range("A" + str(idx)).value = search_han_ji
 
-                    ji_khoo_sheet.range('B' + str(idx)).value = chu_im
-                    ji_khoo_sheet.range('C' + str(idx)).value = siann_bu
-                    ji_khoo_sheet.range('D' + str(idx)).value = un_bu
-                    ji_khoo_sheet.range('E' + str(idx)).value = tiau_ho
+                    ji_khoo_sheet.range("B" + str(idx)).value = chu_im
+                    ji_khoo_sheet.range("C" + str(idx)).value = siann_bu
+                    ji_khoo_sheet.range("D" + str(idx)).value = un_bu
+                    ji_khoo_sheet.range("E" + str(idx)).value = tiau_ho
 
                     # 記錄對映【漢字注音表】的【列號（Excel Row Number）】
-                    ji_khoo_sheet.range('F' + str(idx)).value = i
+                    ji_khoo_sheet.range("F" + str(idx)).value = i
                     # 記錄【字庫】資料庫的【紀錄識別碼（Record ID of Table）】
-                    ji_khoo_sheet.range('G' + str(idx)).value = han_ji_id
+                    ji_khoo_sheet.range("G" + str(idx)).value = han_ji_id
 
                     位於字庫表的列號清單 += [idx]
                     ji_khoo_index += 1
@@ -164,8 +176,8 @@ def main_run(CONVERT_FILE_NAME):
                 # 記錄漢字在字庫中所擁有的不同注音
                 if ji_soo > 1:
                     # 同字異音紀錄 = f"本字共【{ji_soo}】個注音碼：參考【字庫表】第 {位於字庫表的列號清單} 列。"
-                    chu_im_sheet.range('F' + str(i)).value = ji_soo
-                    chu_im_sheet.range('G' + str(i)).value = 位於字庫表的列號清單
+                    chu_im_sheet.range("F" + str(i)).value = ji_soo
+                    chu_im_sheet.range("G" + str(i)).value = 位於字庫表的列號清單
 
             # =========================================================
             # 計數【整段讀入，逐一處理的漢字】已處理多少個
@@ -176,7 +188,7 @@ def main_run(CONVERT_FILE_NAME):
         # 調整讀取來源；寫入標的各手標
         # =========================================================
         chu_im_index += len(han_ji_list)
-        chu_im_sheet.range('A' + str(chu_im_index)).value = '\n'
+        chu_im_sheet.range("A" + str(chu_im_index)).value = "\n"
         chu_im_index += 1
         row += 1
 

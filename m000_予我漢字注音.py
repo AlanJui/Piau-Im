@@ -14,8 +14,9 @@ def myfunc(argv):
     arg_help = "{0} -i <input> -u <user> -o <output>".format(argv[0])
 
     try:
-        opts, args = getopt.getopt(argv[1:], "hi:u:o:", ["help", "input=",
-                                                         "user=", "output="])
+        opts, args = getopt.getopt(
+            argv[1:], "hi:u:o:", ["help", "input=", "user=", "output="]
+        )
     except:
         print(arg_help)
         sys.exit(2)
@@ -31,14 +32,14 @@ def myfunc(argv):
         elif opt in ("-o", "--output"):
             arg_output = arg
 
-    print('input:', arg_input)
-    print('user:', arg_user)
-    print('output:', arg_output)
+    print("input:", arg_input)
+    print("user:", arg_user)
+    print("output:", arg_output)
 
     return {
-        'input': arg_input,
-        'user': arg_user,
-        'output': arg_output,
+        "input": arg_input,
+        "user": arg_user,
+        "output": arg_output,
     }
 
 
@@ -46,13 +47,13 @@ if __name__ == "__main__":
     # 取得 Input 檔案名稱
     file_path = settings.get_input_file_path()
     if not file_path:
-        print("未設定 config.env 檔案")
+        print("未設定 .env 檔案")
         # sys.exit(2)
         opts = myfunc(sys.argv)
-        if opts['input'] != "":
-            CONVERT_FILE_NAME = opts['input']
+        if opts["input"] != "":
+            CONVERT_FILE_NAME = opts["input"]
         else:
-            CONVERT_FILE_NAME = 'hoo-goa-chu-im.xlsx'
+            CONVERT_FILE_NAME = "hoo-goa-chu-im.xlsx"
     else:
         CONVERT_FILE_NAME = file_path
     print(f"CONVERT_FILE_NAME = {CONVERT_FILE_NAME}")

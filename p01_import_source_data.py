@@ -11,11 +11,13 @@ def main_run(CONVERT_FILE_NAME):
     wb = xw.Book(file_path)
 
     # 指定來源工作表
-    source_sheet = wb.sheets['工作表1']
+    source_sheet = wb.sheets["工作表1"]
 
     # 取得工作表內總列數
-    source_rows = source_sheet.range('A' + str(wb.sheets[0].cells.last_cell.row)).end('up').row
-    print(f'source_rows = {source_rows}')
+    source_rows = (
+        source_sheet.range("A" + str(wb.sheets[0].cells.last_cell.row)).end("up").row
+    )
+    print(f"source_rows = {source_rows}")
 
     # ==========================================================
     # 備妥程式需使用之工作表
@@ -30,17 +32,37 @@ def main_run(CONVERT_FILE_NAME):
     for sheet_name in sheet_name_list:
         sheet = wb.sheets[sheet_name]
         try:
-            sheet.select()
-            sheet.clear()
-            continue
-        except:
+            wb.sheets.add(name=sheet_name)
+        except Exception as e:
             # CommandError 的 Exception 發生日，表工作表不存在
             # 新增程式需使用之工作表
+            print(e)
+            sheet.select()
+            sheet.clear()
             wb.sheets.add(name=sheet_name)
+            continue
 
-    tui_chiau_sheet = wb.sheets["漢字注音表"]
+    # -----------------------------------------------------
+    # 檢查工作表是否已存在
+    # for sheet_name in sheet_name_list:
+    #     sheet = wb.sheets[sheet_name]
+    #     try:
+    #         sheet.select()
+    #         sheet.clear()
+    #     except Exception as e:
+    #         # CommandError 的 Exception 發生日，表工作表不存在
+    #         # 新增程式需使用之工作表
+    #         wb.sheets.add(name=sheet_name)
+    #         print(e)
+    #         continue
 
-    # %%
+    try:
+        han_ji_tsu_im_paiu = wb.sheets["漢字注音表"]
+    except Exception as e:
+        # 处理找不到 "漢字注音表" 工作表的异常
+        print("找不到：〖漢字注音表〗工作表。")
+        return e
+
     # -----------------------------------------------------
     # 將字串轉換成 List
     # Python code to convert string to list character-wise
@@ -57,7 +79,7 @@ def main_run(CONVERT_FILE_NAME):
     i = 1  # index for target sheet
     for row in range(1, source_rows + 1):
         # Read data from source_sheet
-        chit_hang_ji = str(source_sheet.range('A' + str(row)).value)
+        chit_hang_ji = str(source_sheet.range("A" + str(row)).value)
         hang_ji_str = chit_hang_ji.strip()
 
         # 讀到空白行
@@ -71,7 +93,9 @@ def main_run(CONVERT_FILE_NAME):
         # =========================================================
         # Write to target worksheet
         # =========================================================
-        tui_chiau_sheet.range('A' + str(i)).options(transpose=True).value = han_ji_range
+        han_ji_tsu_im_paiu.range("A" + str(i)).options(
+            transpose=True
+        ).value = han_ji_range
 
         ji_soo = len(han_ji_range)
         i += ji_soo
