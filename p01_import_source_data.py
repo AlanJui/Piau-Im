@@ -35,34 +35,23 @@ def main_run(CONVERT_FILE_NAME):
             sheet.select()
             sheet.clear()
             continue
-        except:
+        except Exception as e:
             # CommandError 的 Exception 發生日，表工作表不存在
             # 新增程式需使用之工作表
+            print(e)
             wb.sheets.add(name=sheet_name)
 
-    # -----------------------------------------------------
-    # 檢查工作表是否已存在
-    # for sheet_name in sheet_name_list:
-    #     sheet = wb.sheets[sheet_name]
-    #     try:
-    #         sheet.select()
-    #         sheet.clear()
-    #     except Exception as e:
-    #         # CommandError 的 Exception 發生日，表工作表不存在
-    #         # 新增程式需使用之工作表
-    #         wb.sheets.add(name=sheet_name)
-    #         print(e)
-    #         continue
-
+    # 選用「漢字注音表」
     try:
         han_ji_tsu_im_paiu = wb.sheets["漢字注音表"]
+        han_ji_tsu_im_paiu.select()
     except Exception as e:
         # 处理找不到 "漢字注音表" 工作表的异常
         print("找不到：〖漢字注音表〗工作表。")
         return e
 
     # -----------------------------------------------------
-    # 將字串轉換成 List
+    # 將「字串」轉換成「串列（Characters List）」
     # Python code to convert string to list character-wise
     def convert_string_to_chars_list(string):
         list1 = []
@@ -70,11 +59,12 @@ def main_run(CONVERT_FILE_NAME):
         return list1
 
     # ==========================================================
-    # 主程式
+    # (1)
     # ==========================================================
-    # 自【來源工作表】，讀入【整段】的漢字，轉存到目的工作表：【漢字注音表】
-    # 在【漢字注音表】的每個儲存格，只存放一個漢字
-    # =========================================================
+    # 自【工作表1】的每一列，讀入一個「段落」的漢字。然後將整個段
+    # 落拆成「單字」，存到【漢字注音表】；在【漢字注音表】的每個
+    # 儲存格，只存放一個「單字」。
+    # ==========================================================
 
     i = 1  # index for target sheet
     for row in range(1, source_rows + 1):
@@ -91,7 +81,7 @@ def main_run(CONVERT_FILE_NAME):
         han_ji_range = convert_string_to_chars_list(hang_ji_str)
 
         # =========================================================
-        # 讀到的整段文字，寫入【漢字注音表】。寫入時，每個儲存格只存放一個漢字
+        # 讀到的整段文字，以「單字」形式寫入【漢字注音表】。
         # =========================================================
         han_ji_tsu_im_paiu.range("A" + str(i)).options(
             transpose=True

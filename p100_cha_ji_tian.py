@@ -32,21 +32,24 @@ def main_run(CONVERT_FILE_NAME):
         "缺字表",
         "字庫表",
     ]
-    # -----------------------------------------------------
-    # 檢查工作表是否已存在
+    # ----------------------------------------------------------
+    # 檢查工作表是否已存在？
+    # 若已存在，則清除工作表內容；
+    # 若不存在，則新增工作表
+    # ----------------------------------------------------------
     for sheet_name in sheet_name_list:
         sheet = wb.sheets[sheet_name]
         try:
             sheet.select()
             sheet.clear()
             continue
-        except:
+        except Exception as e:
             # CommandError 的 Exception 發生日，表工作表不存在
             # 新增程式需使用之工作表
             wb.sheets.add(name=sheet_name)
 
-    khiam_ji_sheet = wb.sheets["缺字表"]
-    ji_khoo_sheet = wb.sheets["字庫表"]
+    khiam_ji_piau = wb.sheets["缺字表"]
+    ji_khoo_piau = wb.sheets["字庫表"]
 
     # ==========================================================
     # 在「漢字注音表」B欄已有台羅拼音，需將之拆分成聲母、韻母、調號
@@ -70,7 +73,9 @@ def main_run(CONVERT_FILE_NAME):
     while source_index <= end_of_row_no:
         print(f"row = {source_index}")
         # 自 source_sheet 取出一個「欲查注音的漢字」(beh_tshue_tsu_im_e_ji)
-        beh_tshue_tsu_im_e_ji = str(source_sheet.range("A" + str(source_index)).value).strip()
+        beh_tshue_tsu_im_e_ji = str(
+            source_sheet.range("A" + str(source_index)).value
+        ).strip()
 
         # =========================================================
         # 如是空白或換行，處理換行
@@ -112,7 +117,7 @@ def main_run(CONVERT_FILE_NAME):
         # =========================================================
         if not ji_e_piau_im:
             print(f"Can not find 【{beh_tshue_tsu_im_e_ji}】in Han-Ji-Khoo!!")
-            khiam_ji_sheet.range("A" + str(khiam_ji_index)).value = beh_tshue_tsu_im_e_ji
+            khiam_ji_piau.range("A" + str(khiam_ji_index)).value = beh_tshue_tsu_im_e_ji
             khiam_ji_index += 1
             target_index += 1
             source_index += 1
@@ -121,6 +126,7 @@ def main_run(CONVERT_FILE_NAME):
         # =========================================================
         # 自【字庫】查到的【漢字】，取出：聲母、韻母、調號
         # =========================================================
+        piau_im_tsong_soo = len(ji_e_piau_im)
         han_ji_id = ji_e_piau_im[0][0]
         tsu_im = ji_e_piau_im[0][2]
         siann_bu = ji_e_piau_im[0][4]
@@ -134,37 +140,35 @@ def main_run(CONVERT_FILE_NAME):
         han_ji_tsu_im_piau.range("C" + str(target_index)).value = siann_bu
         han_ji_tsu_im_piau.range("D" + str(target_index)).value = un_bu
         han_ji_tsu_im_piau.range("E" + str(target_index)).value = tiau_ho
-        han_ji_tsu_im_piau.range("F" + str(target_index)).value = han_ji_id
+        han_ji_tsu_im_piau.range("F" + str(target_index)).value = piau_im_tsong_soo
 
         # =========================================================
         # 若是查到漢字有一個以上的注音碼，在【字庫表】做記錄
+        # ji_khoo_sheet  = wb.sheets["字庫表"]
         # =========================================================
-        piau_im_tsong_soo = len(ji_e_piau_im)
-        for piau_im_index in range(piau_im_tsong_soo):
-            if piau_im_index == 0:
-                continue
+        if piau_im_tsong_soo > 1:
+            for piau_im_index in range(piau_im_tsong_soo):
+                han_ji_id = ji_e_piau_im[piau_im_index][0]
+                tsu_im = ji_e_piau_im[piau_im_index][2]
+                siann_bu = ji_e_piau_im[piau_im_index][4]
+                un_bu = ji_e_piau_im[piau_im_index][5]
+                tiau_ho = ji_e_piau_im[piau_im_index][6]
 
-            # 若查到注音的漢字，有兩個以上；則需記錄漢字的 ID 編碼
-            han_ji_id = ji_e_piau_im[piau_im_index][0]
-            tsu_im = ji_e_piau_im[piau_im_index][2]
-            siann_bu = ji_e_piau_im[piau_im_index][4]
-            un_bu = ji_e_piau_im[piau_im_index][5]
-            tiau_ho = ji_e_piau_im[piau_im_index][6]
-            # ===========================================
+                # 記錄對映至【漢字注音表】的【列號】
+                ji_khoo_piau.range("A" + str(ji_khoo_index)).value = source_index
 
-            # 若查到的漢字有兩個以上
-            # ji_khoo_sheet  = wb.sheets["字庫表"]
-            ji_khoo_sheet.range("A" + str(ji_khoo_index)).value = beh_tshue_tsu_im_e_ji
-            ji_khoo_sheet.range("B" + str(ji_khoo_index)).value = tsu_im
-            ji_khoo_sheet.range("C" + str(ji_khoo_index)).value = siann_bu
-            ji_khoo_sheet.range("D" + str(ji_khoo_index)).value = un_bu
-            ji_khoo_sheet.range("E" + str(ji_khoo_index)).value = tiau_ho
-            # 記錄【字庫】資料庫的【紀錄識別碼（Record ID of Table）】
-            ji_khoo_sheet.range("F" + str(ji_khoo_index)).value = han_ji_id
-            # 記錄對映【漢字注音表】的【列號（Excel Row Number）】
-            ji_khoo_sheet.range("G" + str(ji_khoo_index)).value = source_index
+                # 記錄【字庫】資料庫的【紀錄識別碼（Record ID of Table）】
+                ji_khoo_piau.range("B" + str(ji_khoo_index)).value = han_ji_id
 
-            ji_khoo_index += 1
+                ji_khoo_piau.range(
+                    "C" + str(ji_khoo_index)
+                ).value = beh_tshue_tsu_im_e_ji
+                ji_khoo_piau.range("D" + str(ji_khoo_index)).value = tsu_im
+                ji_khoo_piau.range("E" + str(ji_khoo_index)).value = siann_bu
+                ji_khoo_piau.range("F" + str(ji_khoo_index)).value = un_bu
+                ji_khoo_piau.range("G" + str(ji_khoo_index)).value = tiau_ho
+
+                ji_khoo_index += 1
 
         # =========================================================
         # 調整讀取來源；寫入標的各手標
