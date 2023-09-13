@@ -8,8 +8,10 @@ import modules.han_ji_chu_im as ji
 # ==========================================================
 # 設定共用變數
 # ==========================================================
+wb = None
 end_of_source_row = 0
 source_sheet = None
+source_sheet_name = ""
 
 # ==========================================================
 # 設定輸出使用的注音方法
@@ -18,7 +20,7 @@ tsu_im_huat_list = {
     "SNI": [
         "fifteen_yin",  # <div class="">
         "rt",  # Ruby Tag: <rt> / <rtc>
-        "十五音注音",  # 輸出工作表名稱
+        "十五音切音",  # 輸出工作表名稱
     ],
     "TPS": [
         "zhu_yin",  # <div class="">
@@ -58,17 +60,40 @@ def get_sheet_ready_to_work(wb, sheet_name_list):
             print(e)
             # 新增程式需使用之工作表
             wb.sheets.add(name=sheet_name)
+            print(f"工作表【{sheet_name}】已新增！")
 
 
 # =========================================================
 # 依據指定的【注音方法】，輸出含 Ruby Tags 之 HTML 網頁
 # =========================================================
 def build_web_page(target_sheet, tsu_im_huat, div_class, rt_tag):
+    source_index = 1  # index for source sheet
+    target_index = 1  # index for target sheet
+
+    # =========================================================
+    # 輸出放置圖片的 HTML Tag
+    # =========================================================
+    title = wb.sheets["env"].range("TITLE").value
+    image_url = wb.sheets["env"].range("IMAGE_URL").value
+
+    # ruff: noqa: E501
+    div_tag = (
+        "《%s》【%s】\n"
+        "<div class='separator' style='clear: both'>\n"
+        "  <a href='圖片' style='display: block; padding: 1em 0; text-align: center'>\n"
+        "    <img alt='%s' border='0' width='400' data-original-height='630' data-original-width='1200'\n"
+        "      src='%s' />\n"
+        "  </a>\n"
+        "</div>\n"
+    )
+    html_str = ""
+    html_str += div_tag % (title, source_sheet_name, title, image_url)
+    target_sheet.range("A" + str(target_index)).value = html_str
+    target_index += 1
+
     # =========================================================
     # 輸出 <div> tag
     # =========================================================
-    source_index = 1  # index for source sheet
-    target_index = 1  # index for target sheet
     html_str = f"<div class='{div_class}'><p>"
     target_sheet.range("A" + str(target_index)).value = html_str
     target_index += 1
@@ -173,7 +198,9 @@ def build_web_page(target_sheet, tsu_im_huat, div_class, rt_tag):
 
 
 def main_run(CONVERT_FILE_NAME):
+    global wb  # 宣告 wb 為全域變數
     global source_sheet  # 宣告 source_sheet 為全域變數
+    global source_sheet_name  # 宣告 source_sheet_name 為全域變數
     global end_of_source_row  # 宣告 end_of_source_row 為全域變數
 
     # ==========================================================
@@ -199,15 +226,22 @@ def main_run(CONVERT_FILE_NAME):
         rt_tag = tsu_im_huat_list[tsu_im_huat][1]
 
         # 取得輸出工作表，使用之名稱
-        zhu_im_piau_mia = tsu_im_huat_list[tsu_im_huat][2]
+        tsu_im_piau_e_mia = tsu_im_huat_list[tsu_im_huat][2]
 
         # -----------------------------------------------------
         # 檢查工作表是否已存在
         # -----------------------------------------------------
-        get_sheet_ready_to_work(wb, [zhu_im_piau_mia])
-        beh_tsu_im_e_piau = wb.sheets[zhu_im_piau_mia]
+        get_sheet_ready_to_work(wb, [tsu_im_piau_e_mia])
+        beh_tsu_im_e_piau = wb.sheets[tsu_im_piau_e_mia]
+        source_sheet_name = beh_tsu_im_e_piau.name
 
         # -----------------------------------------------------
         # 製作 HTML 網頁
         # -----------------------------------------------------
+        # 设置A列的列宽为128
+        beh_tsu_im_e_piau.range("A:A").column_width = 128
+
+        # 启用A列单元格的自动换行
+        beh_tsu_im_e_piau.range("A:A").api.WrapText = True
+
         build_web_page(beh_tsu_im_e_piau, tsu_im_huat, div_class, rt_tag)
