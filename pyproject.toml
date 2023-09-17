@@ -5,6 +5,7 @@ description = "將存放於 Excel 的漢字，自動添加「河洛話」注音�
 authors = ["Alan Jui <alanjui.1960@gmail.com>"]
 readme = "README.md"
 packages = [{include = "piau_im", from = "."}]
+
 [tool.poetry.dependencies]
 python = "^3.10"
 openpyxl = "^3.0.10"
@@ -12,12 +13,11 @@ xlwings = "^0.28.5"
 pandas = "^1.5.2"
 psycopg2 = "^2.9.5"
 python-dotenv = "^0.21.1"
-mypy = "^1.5.1"
-
 
 [tool.poetry.group.dev.dependencies]
 pylint = "^2.15.7"
 autopep8 = "^2.0.0"
+mypy = "^1.5.1"
 
 [build-system]
 requires = ["poetry-core"]

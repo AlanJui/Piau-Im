@@ -56,7 +56,7 @@ if __name__ == "__main__":
         if opts["input"] != "":
             CONVERT_FILE_NAME = opts["input"]
         else:
-            CONVERT_FILE_NAME = "hoo-goa-chu-im.xlsx"
+            CONVERT_FILE_NAME = "Piau-Tsu-Im"
     else:
         CONVERT_FILE_NAME = file_path
     print(f"CONVERT_FILE_NAME = {CONVERT_FILE_NAME}")

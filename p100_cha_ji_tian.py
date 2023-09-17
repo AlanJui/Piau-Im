@@ -4,7 +4,7 @@ import re
 import psycopg2
 import xlwings as xw
 
-import modules.han_ji_chu_im as ji
+# import modules.han_ji_chu_im as ji
 
 
 def main_run(CONVERT_FILE_NAME):
@@ -23,6 +23,7 @@ def main_run(CONVERT_FILE_NAME):
     end_of_row_no = (
         source_sheet.range("A" + str(source_sheet.cells.last_cell.row)).end("up").row
     )
+    end_of_row_no = int(end_of_row_no) - 1
     print(f"end_row = {end_of_row_no}")
 
     # ==========================================================
@@ -46,6 +47,7 @@ def main_run(CONVERT_FILE_NAME):
         except Exception as e:
             # CommandError 的 Exception 發生日，表工作表不存在
             # 新增程式需使用之工作表
+            print(e)
             wb.sheets.add(name=sheet_name)
 
     khiam_ji_piau = wb.sheets["缺字表"]
@@ -80,7 +82,7 @@ def main_run(CONVERT_FILE_NAME):
         # =========================================================
         # 如是空白或換行，處理換行
         # =========================================================
-        if beh_tshue_tsu_im_e_ji == "\n" or beh_tshue_tsu_im_e_ji == "None":
+        if beh_tshue_tsu_im_e_ji == "\n" or beh_tshue_tsu_im_e_ji == "":
             han_ji_tsu_im_piau.range("A" + str(target_index)).value = "\n"
             target_index += 1
             source_index += 1
@@ -90,7 +92,7 @@ def main_run(CONVERT_FILE_NAME):
         # 若取出之字為標點符號，則跳過，並繼續取下一個漢字。
         # =========================================================
         # piau_tiam = r"[，、：；。？！（）「」【】《》“]"
-        # piau_tiam = r"[\uFF0C\uFF08-\uFF09\u2013-\u2014\u2026\\u2018-\u201D\u3000\u3001-\u303F\uFE50-\uFE5E]"
+        # piau_tiam = r"[\uFF0C\uFF08-\uFF09\u2013-\u2014\u2026\\u2018-\u201D\u3000\u3001-\u303F\uFE50-\uFE5E]"  # noqa: E501
         piau_tiam = r"[\u2013-\u2026\u3000-\u303F\uFE50-\uFF20]"
         is_piau_tiam = re.search(piau_tiam, beh_tshue_tsu_im_e_ji, re.M | re.I)
         if is_piau_tiam:
@@ -102,7 +104,9 @@ def main_run(CONVERT_FILE_NAME):
         # 在【字庫】資料庫查找【注音碼】
         # SQL 查詢指令：自字庫查找某漢字之注音碼
         # =========================================================
-        # sql = f"select id, han_ji, chu_im, freq, siann, un, tiau from han_ji where han_ji='{search_han_ji}'"
+        # sql = select id, han_ji, chu_im, freq, siann, un, tiau
+        #           from han_ji
+        #           where han_ji='{search_han_ji}'
         sql = (
             "SELECT id, han_ji, chu_im, freq, siann, un, tiau "
             "FROM han_ji "
@@ -117,7 +121,12 @@ def main_run(CONVERT_FILE_NAME):
         # =========================================================
         if not ji_e_piau_im:
             print(f"Can not find 【{beh_tshue_tsu_im_e_ji}】in Han-Ji-Khoo!!")
-            khiam_ji_piau.range("A" + str(khiam_ji_index)).value = beh_tshue_tsu_im_e_ji
+            # 記錄【缺字表】的【列號】
+            khiam_ji_piau.range("A" + str(khiam_ji_index)).value = khiam_ji_index
+            # 記錄【缺字表】的【漢字】
+            khiam_ji_piau.range("B" + str(khiam_ji_index)).value = beh_tshue_tsu_im_e_ji
+            # 記錄【漢字注音表】的【列號】
+            khiam_ji_piau.range("C" + str(khiam_ji_index)).value = source_index
             khiam_ji_index += 1
             target_index += 1
             source_index += 1

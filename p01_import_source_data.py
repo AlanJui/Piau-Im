@@ -15,7 +15,12 @@ def main_run(CONVERT_FILE_NAME):
 
     # 取得工作表內總列數
     source_rows = (
-        source_sheet.range("A" + str(wb.sheets[0].cells.last_cell.row)).end("up").row
+        int(
+            source_sheet.range("A" + str(wb.sheets[0].cells.last_cell.row))
+            .end("up")
+            .row
+        )
+        - 1
     )
     print(f"source_rows = {source_rows}")
 
@@ -67,7 +72,7 @@ def main_run(CONVERT_FILE_NAME):
     # ==========================================================
 
     i = 1  # index for target sheet
-    for row in range(1, source_rows + 1):
+    for row in range(1, source_rows):
         # Read data from source_sheet
         chit_hang_ji = str(source_sheet.range("A" + str(row)).value)
         hang_ji_str = chit_hang_ji.strip()

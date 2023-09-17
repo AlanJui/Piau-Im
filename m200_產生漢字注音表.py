@@ -3,8 +3,6 @@ import sys
 
 import settings
 from p01_import_source_data import main_run as san_sing_han_ji_tsu_im_paiau
-from p100_cha_ji_tian import main_run as tsa_ji_tian_tshue_tsu_im
-from p210_hoo_goa_chu_im_all import main_run as hoo_goa_chu_im_all
 
 
 def myfunc(argv):
@@ -18,7 +16,7 @@ def myfunc(argv):
             argv[1:], "hi:u:o:", ["help", "input=", "user=", "output="]
         )
     except Exception as e:
-        print(arg_help)
+        print(e)
         sys.exit(2)
 
     for opt, arg in opts:
@@ -56,7 +54,7 @@ if __name__ == "__main__":
         if opts["input"] != "":
             CONVERT_FILE_NAME = opts["input"]
         else:
-            CONVERT_FILE_NAME = "hoo-goa-chu-im.xlsx"
+            CONVERT_FILE_NAME = "Piau-Tsu-Im.xlsx"
     else:
         CONVERT_FILE_NAME = file_path
     print(f"CONVERT_FILE_NAME = {CONVERT_FILE_NAME}")
@@ -65,8 +63,3 @@ if __name__ == "__main__":
     # (2) 將存放在「工作表1」的「漢字」文章，製成「漢字注音表」以便填入注音。
     # ===========================================================================
     san_sing_han_ji_tsu_im_paiau(CONVERT_FILE_NAME)
-
-    # ===========================================================================
-    # (3) 在字典查注音，填入漢字注音表。
-    # ===========================================================================
-    tsa_ji_tian_tshue_tsu_im(CONVERT_FILE_NAME)
