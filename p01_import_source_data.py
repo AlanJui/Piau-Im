@@ -1,28 +1,25 @@
-# coding=utf-8
-
 import xlwings as xw
 
 
 def main_run(CONVERT_FILE_NAME):
     # %%
     # 打開活頁簿檔案
-    # file_path = 'hoo-goa-chu-im.xlsx'
     file_path = CONVERT_FILE_NAME
     wb = xw.Book(file_path)
 
     # 指定來源工作表
     source_sheet = wb.sheets["工作表1"]
+    source_sheet.select()
 
     # 取得工作表內總列數
-    source_rows = (
+    source_row_no = (
         int(
             source_sheet.range("A" + str(wb.sheets[0].cells.last_cell.row))
             .end("up")
             .row
         )
-        - 1
     )
-    print(f"source_rows = {source_rows}")
+    print(f"source_row_no = {source_row_no}")
 
     # ==========================================================
     # 備妥程式需使用之工作表
@@ -52,8 +49,9 @@ def main_run(CONVERT_FILE_NAME):
         han_ji_tsu_im_paiu.select()
     except Exception as e:
         # 处理找不到 "漢字注音表" 工作表的异常
+        print(e)
         print("找不到：〖漢字注音表〗工作表。")
-        return e
+        return False
 
     # -----------------------------------------------------
     # 將「字串」轉換成「串列（Characters List）」
@@ -71,26 +69,29 @@ def main_run(CONVERT_FILE_NAME):
     # 儲存格，只存放一個「單字」。
     # ==========================================================
 
-    i = 1  # index for target sheet
-    for row in range(1, source_rows):
-        # Read data from source_sheet
-        chit_hang_ji = str(source_sheet.range("A" + str(row)).value)
-        hang_ji_str = chit_hang_ji.strip()
+    source_row_index = 1
+    target_row_index = 1  # index for target sheet
+    # for row in range(1, source_rows):
+    while source_row_index <= source_row_no:
+        # 自【工作表1】取得「一行漢字」
+        tsit_hang_ji = str(source_sheet.range("A" + str(source_row_index)).value)
+        hang_ji_str = tsit_hang_ji.strip()
 
         # 讀到空白行
-        if hang_ji_str == "None":
+        if hang_ji_str == "None" or hang_ji_str == "":
             hang_ji_str = "\n"
         else:
-            hang_ji_str = f"{chit_hang_ji}\n"
+            hang_ji_str = f"{tsit_hang_ji}\n"
 
         han_ji_range = convert_string_to_chars_list(hang_ji_str)
 
         # =========================================================
         # 讀到的整段文字，以「單字」形式寫入【漢字注音表】。
         # =========================================================
-        han_ji_tsu_im_paiu.range("A" + str(i)).options(
+        han_ji_tsu_im_paiu.range("A" + str(target_row_index)).options(
             transpose=True
         ).value = han_ji_range
 
         ji_soo = len(han_ji_range)
-        i += ji_soo
+        target_row_index += ji_soo
+        source_row_index += 1

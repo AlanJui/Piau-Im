@@ -1,5 +1,6 @@
 import getopt
 import sys
+import xlwings as xw
 
 import settings
 from p01_import_source_data import main_run as san_sing_han_ji_tsu_im_paiau
@@ -75,3 +76,15 @@ if __name__ == "__main__":
     # (4) 將已注音之「漢字注音表」，製作成 HTML 格式之「注音／拼音／標音」網頁。
     # ===========================================================================
     hoo_goa_chu_im_all(CONVERT_FILE_NAME)
+
+    # ==========================================================
+    # 檢查「缺字表」狀態
+    # ==========================================================
+    # 指定來源工作表
+    source_sheet = xw.Book(CONVERT_FILE_NAME).sheets["缺字表"]
+    # 取得工作表內總列數
+    end_row_no = (
+        source_sheet.range("A" + str(source_sheet.cells.last_cell.row)).end("up").row
+    )
+    if end_row_no > 1:
+        print(f"總計字典查不到注音的漢字共：{end_row_no}個。")

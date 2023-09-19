@@ -1,10 +1,12 @@
 import getopt
 import os
 import sys
+import xlwings as xw
 
 from dotenv import dotenv_values
 
-from hun_siann_un_tiau import main_run as ping_im_hun_siann_un_tiau
+# from hun_siann_un_tiau import main_run as ping_im_hun_siann_un_tiau
+from p110_khuat_ji_poo_tsu_im import main_run as poo_tsu_im
 from p210_hoo_goa_chu_im_all import main_run as hoo_goa_chu_im_all
 
 
@@ -57,19 +59,25 @@ if __name__ == "__main__":
         if opts["input"] != "":
             CONVERT_FILE_NAME = opts["input"]
         else:
-            CONVERT_FILE_NAME = "hoo-goa-chu-im.xlsx"
+            CONVERT_FILE_NAME = "Piau-Tsu-Im.xlsx"
     else:
         CONVERT_FILE_NAME = file_path
     print(f"CONVERT_FILE_NAME = {CONVERT_FILE_NAME}")
 
-    # 將輸入之「漢字」文章，編製成「漢字注音表」，以便後續填入注音。
-    # san_sing_han_ji_tsu_im_paiau(CONVERT_FILE_NAME)
-
-    # 在字典查注音，填入漢字注音表。
-    # cha_ji_tian(CONVERT_FILE_NAME)
-
     # 將「漢字注音表」的「台羅注音」拆解出聲母、韻母及聲調
-    ping_im_hun_siann_un_tiau(CONVERT_FILE_NAME)
+    poo_tsu_im(CONVERT_FILE_NAME)
 
     # 將已填入注音之「漢字注音表」，製作成 HTML 格式的各式「注音／拼音／標音」。
     hoo_goa_chu_im_all(CONVERT_FILE_NAME)
+
+    # ==========================================================
+    # 檢查「缺字表」狀態
+    # ==========================================================
+    # 指定來源工作表
+    source_sheet = xw.Book(CONVERT_FILE_NAME).sheets["缺字表"]
+    # 取得工作表內總列數
+    end_row_no = (
+        source_sheet.range("A" + str(source_sheet.cells.last_cell.row)).end("up").row
+    )
+    if end_row_no > 1:
+        print(f"總計字典查不到注音的漢字共：{end_row_no}個。")

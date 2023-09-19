@@ -1,4 +1,3 @@
-# coding=utf-8
 import re
 import xlwings as xw
 
@@ -12,10 +11,12 @@ def main_run(CONVERT_FILE_NAME):
     wb = xw.Book(file_path)
 
     # 指定來源工作表
-    source_sheet = wb.sheets['漢字注音表']
+    source_sheet = wb.sheets["漢字注音表"]
     # 取得工作表內總列數
-    end_row = source_sheet.range('A' + str(source_sheet.cells.last_cell.row)).end('up').row
-    print(f'end_row = {end_row}')
+    end_row = (
+        source_sheet.range("A" + str(source_sheet.cells.last_cell.row)).end("up").row
+    )
+    print(f"end_row = {end_row}")
 
     # ==========================================================
     # 備妥程式需使用之工作表
@@ -33,9 +34,10 @@ def main_run(CONVERT_FILE_NAME):
             sheet.select()
             sheet.clear()
             continue
-        except:
+        except Exception as e:
             # CommandError 的 Exception 發生日，表工作表不存在
             # 新增程式需使用之工作表
+            print(e)
             wb.sheets.add(name=sheet_name)
 
     target_sheet = wb.sheets["漢字注音表"]
@@ -50,13 +52,13 @@ def main_run(CONVERT_FILE_NAME):
 
     while row < end_counter:
         # 自 source_sheet 取待注音漢字
-        han_ji = str(source_sheet.range('A' + str(row)).value)
+        han_ji = str(source_sheet.range("A" + str(row)).value)
         han_ji.strip()
 
         # =========================================================
         # 如是空白或換行，處理換行
         # =========================================================
-        if han_ji == '' or han_ji == '\n':
+        if han_ji == "" or han_ji == "\n":
             i += 1
             row += 1
             continue
@@ -64,7 +66,7 @@ def main_run(CONVERT_FILE_NAME):
         # =========================================================
         # 如只是標點符號，不必處理為漢字注音的工作
         # =========================================================
-        piau_tiam = r"[；：？！\uFF0C\uFF08-\uFF09\u2013-\u2014\u2026\\u2018-\u201D\u3000\u3001-\u303F]"
+        piau_tiam = r"[；：？！\uFF0C\uFF08-\uFF09\u2013-\u2014\u2026\\u2018-\u201D\u3000\u3001-\u303F]"  # noqa
         searchObj = re.search(piau_tiam, han_ji, re.M | re.I)
         if searchObj:
             i += 1
@@ -74,9 +76,10 @@ def main_run(CONVERT_FILE_NAME):
         # =========================================================
         # 在字庫中查不到注音的漢字，略過注音處理
         # =========================================================
-        ping_im = str(source_sheet.range('B' + str(row)).value).strip()
-        if ping_im == '':
-            # 讀到空白儲存格，視為使用者：「欲終止一個段落」；故於目標工作表寫入一個「換行」字元。
+        ping_im = str(source_sheet.range("B" + str(row)).value).strip()
+        if ping_im == "":
+            # 讀到空白儲存格，視為使用者：「欲終止一個段落」；故於目標工作表
+            # 寫入一個「換行」字元。
             i += 1
             row += 1
             continue
@@ -91,9 +94,9 @@ def main_run(CONVERT_FILE_NAME):
         # =========================================================
         # 將漢字之聲、韻與調，寫入【漢字注音表】
         # =========================================================
-        target_sheet.range('C' + str(i)).value = siann
-        target_sheet.range('D' + str(i)).value = un
-        target_sheet.range('E' + str(i)).value = tiau
+        target_sheet.range("C" + str(i)).value = siann
+        target_sheet.range("D" + str(i)).value = un
+        target_sheet.range("E" + str(i)).value = tiau
 
         # =========================================================
         # 調整讀取來源；寫入標的各工作表
