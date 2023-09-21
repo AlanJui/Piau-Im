@@ -2,7 +2,6 @@ import xlwings as xw
 
 
 def main_run(CONVERT_FILE_NAME):
-    # %%
     # 打開活頁簿檔案
     file_path = CONVERT_FILE_NAME
     wb = xw.Book(file_path)
@@ -12,12 +11,8 @@ def main_run(CONVERT_FILE_NAME):
     source_sheet.select()
 
     # 取得工作表內總列數
-    source_row_no = (
-        int(
-            source_sheet.range("A" + str(wb.sheets[0].cells.last_cell.row))
-            .end("up")
-            .row
-        )
+    source_row_no = int(
+        source_sheet.range("A" + str(wb.sheets[0].cells.last_cell.row)).end("up").row
     )
     print(f"source_row_no = {source_row_no}")
 
@@ -78,7 +73,7 @@ def main_run(CONVERT_FILE_NAME):
         hang_ji_str = tsit_hang_ji.strip()
 
         # 讀到空白行
-        if hang_ji_str == "None" or hang_ji_str == "":
+        if hang_ji_str == "None":
             hang_ji_str = "\n"
         else:
             hang_ji_str = f"{tsit_hang_ji}\n"

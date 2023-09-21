@@ -187,6 +187,7 @@ def build_web_page(target_sheet, tsu_im_huat, div_class, rt_tag):
         # =========================================================
         # 調整讀取來源；寫入標的各工作表
         # =========================================================
+        print(f"row = {source_index}，漢字：{han_ji}，注音：[{piau_im}]")
         target_index += 1
         source_index += 1
 
@@ -244,4 +245,6 @@ def main_run(CONVERT_FILE_NAME):
         # 启用A列单元格的自动换行
         beh_tsu_im_e_piau.range("A:A").api.WrapText = True
 
+        print(f"開始製作【{tsu_im_piau_e_mia}】網頁！")
         build_web_page(beh_tsu_im_e_piau, tsu_im_huat, div_class, rt_tag)
+        print(f"【{tsu_im_piau_e_mia}】網頁製作完畢！")

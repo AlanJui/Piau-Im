@@ -10,6 +10,10 @@ return {
 		},
 	},
 	tasks = {
+		a000 = {
+			command = "poetry run python a000_建立注音檔案.py",
+			output = "terminal",
+		},
 		a100 = {
 			command = "poetry run python a100_予我漢字注音.py",
 			output = "terminal",

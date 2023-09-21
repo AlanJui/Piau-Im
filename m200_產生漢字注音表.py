@@ -2,7 +2,7 @@ import getopt
 import sys
 
 import settings
-from p01_import_source_data import main_run as san_sing_han_ji_tsu_im_paiau
+from p000_import_source_data import main_run as san_sing_han_ji_tsu_im_paiau
 
 
 def myfunc(argv):
@@ -12,7 +12,7 @@ def myfunc(argv):
     arg_help = "{0} -i <input> -u <user> -o <output>".format(argv[0])
 
     try:
-        opts, args = getopt.getopt(
+        opts, args = getopt.getopt(  # pyright: ignore
             argv[1:], "hi:u:o:", ["help", "input=", "user=", "output="]
         )
     except Exception as e:

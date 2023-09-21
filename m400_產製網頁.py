@@ -2,7 +2,7 @@ import getopt
 import sys
 
 import settings
-from p210_hoo_goa_chu_im_all import main_run as hoo_goa_chu_im_all
+from p200_hoo_gua_tsu_im import main_run as hoo_gua_tsu_im
 
 
 def myfunc(argv):
@@ -16,6 +16,7 @@ def myfunc(argv):
             argv[1:], "hi:u:o:", ["help", "input=", "user=", "output="]
         )
     except Exception as e:
+        print(e)
         print(arg_help)
         sys.exit(2)
 
@@ -62,4 +63,4 @@ if __name__ == "__main__":
     # ===========================================================================
     # (2) 將已注音之「漢字注音表」，製作成 HTML 格式之「注音／拼音／標音」網頁。
     # ===========================================================================
-    hoo_goa_chu_im_all(CONVERT_FILE_NAME)
+    hoo_gua_tsu_im(CONVERT_FILE_NAME)

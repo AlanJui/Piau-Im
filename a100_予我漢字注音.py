@@ -1,11 +1,12 @@
 import getopt
 import sys
+
 import xlwings as xw
 
 import settings
-from p01_import_source_data import main_run as san_sing_han_ji_tsu_im_paiau
-from p100_cha_ji_tian import main_run as tsa_ji_tian_tshue_tsu_im
-from p210_hoo_goa_chu_im_all import main_run as hoo_goa_chu_im_all
+from p000_import_source_data import main_run as san_sing_han_ji_tsu_im_paiau
+from p100_tsa_ji_tian import main_run as tsa_ji_tian_tshue_tsu_im
+from p200_hoo_gua_tsu_im import main_run as hoo_gua_tsu_im
 
 
 def myfunc(argv):
@@ -15,10 +16,11 @@ def myfunc(argv):
     arg_help = "{0} -i <input> -u <user> -o <output>".format(argv[0])
 
     try:
-        opts, args = getopt.getopt(
+        opts, args = getopt.getopt(  # pyright: ignore
             argv[1:], "hi:u:o:", ["help", "input=", "user=", "output="]
         )
     except Exception as e:
+        print(e)
         print(arg_help)
         sys.exit(2)
 
@@ -75,7 +77,7 @@ if __name__ == "__main__":
     # ===========================================================================
     # (4) 將已注音之「漢字注音表」，製作成 HTML 格式之「注音／拼音／標音」網頁。
     # ===========================================================================
-    hoo_goa_chu_im_all(CONVERT_FILE_NAME)
+    hoo_gua_tsu_im(CONVERT_FILE_NAME)
 
     # ==========================================================
     # 檢查「缺字表」狀態

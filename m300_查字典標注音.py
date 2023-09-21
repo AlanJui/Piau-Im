@@ -2,7 +2,7 @@ import getopt
 import sys
 
 import settings
-from p100_cha_ji_tian import main_run as tsa_ji_tian_tshue_tsu_im
+from p100_tsa_ji_tian import main_run as tsa_ji_tian_tshue_tsu_im
 
 
 def myfunc(argv):
@@ -12,10 +12,12 @@ def myfunc(argv):
     arg_help = "{0} -i <input> -u <user> -o <output>".format(argv[0])
 
     try:
-        opts, args = getopt.getopt(
+        # pyright: ignore[reportOptionalMemberAccess]
+        opts, args = getopt.getopt(  # pyright: ignore
             argv[1:], "hi:u:o:", ["help", "input=", "user=", "output="]
         )
     except Exception as e:
+        print(e)
         print(arg_help)
         sys.exit(2)
 

@@ -36,7 +36,7 @@ def main_run(CONVERT_FILE_NAME):
     end_row_no = (
         source_sheet.range("A" + str(source_sheet.cells.last_cell.row)).end("up").row
     )
-    end_row_no -= 1
+    # end_row_no -= 1
     print(f"end_row_no = {end_row_no}")
 
     # ==========================================================
@@ -60,7 +60,8 @@ def main_run(CONVERT_FILE_NAME):
             source_row_index += 1
             continue
         else:
-            target_row_index = source_sheet.range("C" + str(source_row_index)).value
+            value = source_sheet.range("C" + str(source_row_index)).value
+            target_row_index = int(value)
 
         # =========================================================
         # 將台羅拼音拆分成聲母、韻母、調號

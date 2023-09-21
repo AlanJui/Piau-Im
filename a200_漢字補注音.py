@@ -5,9 +5,8 @@ import xlwings as xw
 
 from dotenv import dotenv_values
 
-# from hun_siann_un_tiau import main_run as ping_im_hun_siann_un_tiau
 from p110_khuat_ji_poo_tsu_im import main_run as poo_tsu_im
-from p210_hoo_goa_chu_im_all import main_run as hoo_goa_chu_im_all
+from p200_hoo_gua_tsu_im import main_run as hoo_gua_tsu_im
 
 
 def myfunc(argv):
@@ -68,7 +67,7 @@ if __name__ == "__main__":
     poo_tsu_im(CONVERT_FILE_NAME)
 
     # 將已填入注音之「漢字注音表」，製作成 HTML 格式的各式「注音／拼音／標音」。
-    hoo_goa_chu_im_all(CONVERT_FILE_NAME)
+    hoo_gua_tsu_im(CONVERT_FILE_NAME)
 
     # ==========================================================
     # 檢查「缺字表」狀態

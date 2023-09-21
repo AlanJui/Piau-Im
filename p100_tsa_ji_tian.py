@@ -1,10 +1,7 @@
-# coding=utf-8
 import re
 
 import psycopg2
 import xlwings as xw
-
-# import modules.han_ji_chu_im as ji
 
 
 def main_run(CONVERT_FILE_NAME):
@@ -14,7 +11,6 @@ def main_run(CONVERT_FILE_NAME):
     # ==========================================================
 
     # 指定提供來源的【檔案】
-    # file_path = 'hoo-goa-chu-im.xlsx'
     file_path = CONVERT_FILE_NAME
     wb = xw.Book(file_path)
 
@@ -82,7 +78,11 @@ def main_run(CONVERT_FILE_NAME):
         # =========================================================
         # 如是空白或換行，處理換行
         # =========================================================
-        if beh_tshue_tsu_im_e_ji == "\n" or beh_tshue_tsu_im_e_ji == "":
+        if beh_tshue_tsu_im_e_ji == " " or beh_tshue_tsu_im_e_ji == "":
+            target_index += 1
+            source_index += 1
+            continue
+        elif beh_tshue_tsu_im_e_ji == "\n":
             han_ji_tsu_im_piau.range("A" + str(target_index)).value = "\n"
             target_index += 1
             source_index += 1
@@ -91,9 +91,10 @@ def main_run(CONVERT_FILE_NAME):
         # =========================================================
         # 若取出之字為標點符號，則跳過，並繼續取下一個漢字。
         # =========================================================
-        # piau_tiam = r"[，、：；。？！（）「」【】《》“]"
-        # piau_tiam = r"[\uFF0C\uFF08-\uFF09\u2013-\u2014\u2026\\u2018-\u201D\u3000\u3001-\u303F\uFE50-\uFE5E]"  # noqa: E501
-        piau_tiam = r"[\u2013-\u2026\u3000-\u303F\uFE50-\uFF20]"
+        piau_tiam_1 = r"[，、：；。？！（）「」【】《》“]"
+        piau_tiam_2 = r"[\uFF0C\uFF08-\uFF09\u2013-\u2014\u2026\\u2018-\u201D\u3000\u3001-\u303F\uFE50-\uFE5E]"  # noqa: E501
+        # piau_tiam = r"[\u2013-\u2026\u3000-\u303F\uFE50-\uFF20]"
+        piau_tiam = f"{piau_tiam_1}|{piau_tiam_2}"
         is_piau_tiam = re.search(piau_tiam, beh_tshue_tsu_im_e_ji, re.M | re.I)
         if is_piau_tiam:
             target_index += 1
@@ -138,6 +139,7 @@ def main_run(CONVERT_FILE_NAME):
         piau_im_tsong_soo = len(ji_e_piau_im)
         han_ji_id = ji_e_piau_im[0][0]
         tsu_im = ji_e_piau_im[0][2]
+        freq = ji_e_piau_im[0][3]
         siann_bu = ji_e_piau_im[0][4]
         un_bu = ji_e_piau_im[0][5]
         tiau_ho = ji_e_piau_im[0][6]
@@ -150,6 +152,7 @@ def main_run(CONVERT_FILE_NAME):
         han_ji_tsu_im_piau.range("D" + str(target_index)).value = un_bu
         han_ji_tsu_im_piau.range("E" + str(target_index)).value = tiau_ho
         han_ji_tsu_im_piau.range("F" + str(target_index)).value = piau_im_tsong_soo
+        han_ji_tsu_im_piau.range("G" + str(target_index)).value = freq
 
         # =========================================================
         # 若是查到漢字有一個以上的注音碼，在【字庫表】做記錄
@@ -159,6 +162,7 @@ def main_run(CONVERT_FILE_NAME):
             for piau_im_index in range(piau_im_tsong_soo):
                 han_ji_id = ji_e_piau_im[piau_im_index][0]
                 tsu_im = ji_e_piau_im[piau_im_index][2]
+                freq = ji_e_piau_im[piau_im_index][3]
                 siann_bu = ji_e_piau_im[piau_im_index][4]
                 un_bu = ji_e_piau_im[piau_im_index][5]
                 tiau_ho = ji_e_piau_im[piau_im_index][6]
@@ -176,6 +180,7 @@ def main_run(CONVERT_FILE_NAME):
                 ji_khoo_piau.range("E" + str(ji_khoo_index)).value = siann_bu
                 ji_khoo_piau.range("F" + str(ji_khoo_index)).value = un_bu
                 ji_khoo_piau.range("G" + str(ji_khoo_index)).value = tiau_ho
+                ji_khoo_piau.range("H" + str(ji_khoo_index)).value = freq
 
                 ji_khoo_index += 1
 

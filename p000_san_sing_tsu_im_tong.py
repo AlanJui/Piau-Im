@@ -47,6 +47,3 @@ def main():
 
     # 選擇 Piau-Im.xlsx 檔案的〖工作表1〗工作表
     sheet.select()
-
-
-main()
