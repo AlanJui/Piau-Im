@@ -38,5 +38,9 @@ return {
 			command = "poetry run python m400_產製網頁.py",
 			output = "terminal",
 		},
+		m500 = {
+			command = "poetry run python m500_台羅拼音拆解出聲韻調.py",
+			output = "terminal",
+		},
 	},
 }
