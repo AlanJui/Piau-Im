@@ -1,5 +1,6 @@
 import os
 
+# py -m pip install python-dotenv
 from dotenv import dotenv_values
 
 # Get the path to he directory this file is in

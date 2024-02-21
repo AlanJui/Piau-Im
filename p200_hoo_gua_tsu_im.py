@@ -50,17 +50,20 @@ tsu_im_huat_list = {
 # =========================================================
 def get_sheet_ready_to_work(wb, sheet_name_list):
     for sheet_name in sheet_name_list:
-        sheet = wb.sheets[sheet_name]
-        try:
-            sheet.select()
-            sheet.clear()
-            continue
-        except Exception as e:
-            # 當 Exception 為 CommandError 時，表工作表不存在
-            print(e)
+        sheets =  [sheet.name for sheet in wb.sheets]  # 獲取所有工作表的名稱
+        if sheet_name in sheets:
+            sheet = wb.sheets[sheet_name]
+            try:
+                sheet.select()
+                sheet.clear()
+                continue
+            except Exception as e:
+                print(e)
+        else:
+            # CommandError 的 Exception 發生時，表工作表不存在
             # 新增程式需使用之工作表
-            wb.sheets.add(name=sheet_name)
             print(f"工作表【{sheet_name}】已新增！")
+            wb.sheets.add(name=sheet_name)
 
 
 # =========================================================

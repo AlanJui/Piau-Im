@@ -27,15 +27,19 @@ def main_run(CONVERT_FILE_NAME):
     # -----------------------------------------------------
     # 檢查工作表是否已存在
     for sheet_name in sheet_name_list:
-        sheet = wb.sheets[sheet_name]
-        try:
-            sheet.select()
-            sheet.clear()
-            continue
-        except Exception as e:
-            # CommandError 的 Exception 發生日，表工作表不存在
+        sheets =  [sheet.name for sheet in wb.sheets]  # 獲取所有工作表的名稱
+        if sheet_name in sheets:
+            sheet = wb.sheets[sheet_name]
+            try:
+                sheet.select()
+                sheet.clear()
+                continue
+            except Exception as e:
+                print(e)
+        else:
+            # CommandError 的 Exception 發生時，表工作表不存在
             # 新增程式需使用之工作表
-            print(e)
+            print(f"工作表 {sheet_name} 不存在，正在新增...")
             wb.sheets.add(name=sheet_name)
 
     # 選用「漢字注音表」

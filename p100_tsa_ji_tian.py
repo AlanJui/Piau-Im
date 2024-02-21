@@ -60,7 +60,8 @@ def main_run(CONVERT_FILE_NAME):
     # 資料庫",
     # =========================================================="
     conn = psycopg2.connect(
-        database="alanjui", user="alanjui", host="127.0.0.1", port="5432"
+        # database="alanjui", user="alanjui", host="127.0.0.1", port="5432"
+        database="Ho_Lok_Ue", user="postgres", password="ChingHai99@", host="127.0.0.1", port="5432"
     )
     db_cursor = conn.cursor()
     source_index = 1  # index for source sheet
@@ -110,7 +111,7 @@ def main_run(CONVERT_FILE_NAME):
         #           where han_ji='{search_han_ji}'
         sql = (
             "SELECT id, han_ji, chu_im, freq, siann, un, tiau "
-            "FROM han_ji "
+            "FROM han_ji_dict "
             f"WHERE han_ji='{beh_tshue_tsu_im_e_ji}' "
             "ORDER BY freq DESC;"
         )
