@@ -23,7 +23,8 @@ def main():
     # 2. 將子目錄 ./docs 的檔案： env.xlsx ，其中名稱為：env 的工作表，複製到這個
     # ===============================================================================
     # 新建立的 Excel 檔案中指定 env.xlsx 檔案的路徑
-    source_file_path = os.path.join("./docs", "env.xlsx")
+    # source_file_path = os.path.join("./docs", "env.xlsx")
+    source_file_path = os.path.join(".\\docs", "env.xlsx")
 
     # 開啟 env.xlsx 檔案
     source_wb = xw.Book(source_file_path)
@@ -35,7 +36,7 @@ def main():
     # 3. 將新建立的檔案，以名稱：Piaum-Im.xlsx 存檔
     # ===============================================================================
     # 指定新 Excel 檔案的路徑和名稱
-    new_file_path = "Piau-Tsu-Im.xlsx"
+    new_file_path = os.path.join(".\\docs", "Piau-Tsu-Im.xlsx")
 
     # 儲存新建立的工作簿
     wb.save(new_file_path)

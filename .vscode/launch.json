@@ -5,11 +5,33 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "特定偵錯：a000_建立注音檔案",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a000_建立注音檔案.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "特定偵錯：a100_予我漢字注音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a100_予我漢字注音.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "特定偵錯：a200_漢字補注音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a200_漢字補注音.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "Python 偵錯工具: 目前檔案",
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal"
+            // "args": "${command:pickArgs}"
         }
     ]
 }

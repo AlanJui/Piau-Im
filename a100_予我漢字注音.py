@@ -1,5 +1,6 @@
 import getopt
 import sys
+import os
 
 import xlwings as xw
 
@@ -90,3 +91,18 @@ if __name__ == "__main__":
     )
     if end_row_no > 1:
         print(f"總計字典查不到注音的漢字共：{end_row_no}個。")
+
+    # ===========================================================================
+    # (5) 依據《文章標題》另存新檔。
+    # ===========================================================================
+    wb = xw.Book(CONVERT_FILE_NAME)
+    setting_sheet = wb.sheets["env"]
+    new_file_name = str(
+        setting_sheet.range("C4").value
+    ).strip()
+    new_file_path = os.path.join(
+        ".\\docs", 
+        f"【河洛話注音】{new_file_name}" + ".xlsx")
+
+    # 儲存新建立的工作簿
+    wb.save(new_file_path)
