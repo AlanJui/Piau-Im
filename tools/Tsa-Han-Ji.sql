@@ -1,0 +1,1 @@
+SELECT * FROM han_ji_view WHERE han_ji = '字';

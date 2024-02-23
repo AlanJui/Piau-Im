@@ -1,0 +1,1 @@
+SELECT * FROM han_ji_view_tc WHERE 漢字 = '字';

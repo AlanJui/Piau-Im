@@ -1,0 +1,1 @@
+SELECT id, han_ji, chu_im, freq FROM han_ji_dict WHERE han_ji = '字';

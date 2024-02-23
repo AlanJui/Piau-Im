@@ -1,0 +1,1 @@
+CREATE VIEW han_ji_view AS SELECT id, han_ji, chu_im, freq FROM han_ji_dict;
