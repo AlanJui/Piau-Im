@@ -8,7 +8,6 @@ from dotenv import dotenv_values
 from p110_khuat_ji_poo_tsu_im import main_run as poo_tsu_im
 from p200_hoo_gua_tsu_im import main_run as hoo_gua_tsu_im
 
-
 def myfunc(argv):
     arg_input = ""
     arg_output = ""
@@ -79,7 +78,7 @@ if __name__ == "__main__":
         source_sheet.range("A" + str(source_sheet.cells.last_cell.row)).end("up").row
     )
     if end_row_no > 1:
-        print(f"總計字典查不到注音的漢字共：{end_row_no}個。")
+        print(f"此次增補注音的漢字總數共：{end_row_no}個。")
 
     # ===========================================================================
     # 依據《文章標題》另存新檔。

@@ -5,33 +5,30 @@ from modules.han_ji import split_chu_im as hun_siann_un_tiau
 
 def main_run(CONVERT_FILE_NAME):
     # 打開活頁簿檔案
-    file_path = CONVERT_FILE_NAME
-    wb = xw.Book(file_path)
+    wb = xw.Book(CONVERT_FILE_NAME)
 
     # ==========================================================
     # 備妥程式需使用之工作表
     # ==========================================================
     sheet_name_list = [
-        "缺字表",
         "漢字注音表",
+        "缺字表",
     ]
-    # 確認來源與目標工作表皆已存在
+    # 確認來源工作表皆已存在
     for sheet_name in sheet_name_list:
-        sheet = wb.sheets[sheet_name]
-        try:
-            sheet.select()
-            continue
-        except Exception as e:
-            # 新增程式需使用之工作表
-            print(e)
-            print(f"欠缺工作表：{sheet_name}！")
-            return False
+        if sheet_name not in [sheet.name for sheet in wb.sheets]:
+            # print(f"欠缺工作表：{sheet_name}！")
+            # return False
+            raise Exception(f"欠缺工作表：{sheet_name}！")
+        else:
+            print(f"【{sheet_name}】工作表存在！")
 
     # ==========================================================
-    # 備妥「缺字表」
+    # 自「缺字表」取得待補入「漢字注音表」的作業總數
     # ==========================================================
     # 指定來源工作表
     source_sheet = wb.sheets["缺字表"]
+    source_sheet.select()
     # 取得工作表內總列數
     end_row_no = (
         source_sheet.range("A" + str(source_sheet.cells.last_cell.row)).end("up").row
@@ -43,6 +40,7 @@ def main_run(CONVERT_FILE_NAME):
     # 備妥「漢字注音表」
     # ==========================================================
     target_sheet = wb.sheets["漢字注音表"]
+    target_sheet.select()
 
     # ==========================================================
     # 自【缺字表】取得漢字的注音，補入【漢字注音表】
