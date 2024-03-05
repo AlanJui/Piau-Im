@@ -13,15 +13,14 @@
             "args": "${command:pickArgs}"
         },
         {
-            "name": "a900_廣韻反切查羅馬拼音",
+            "name": "a900_漢字查廣韻擬音",
             "type": "debugpy",
             "request": "launch",
-            "program": "a900_廣韻反切查羅馬拼音.ipynb",
+            "program": "a900_漢字查廣韻擬音.py",
             "console": "integratedTerminal",
             "args": [
                 "詼",
-                "苦回",
-                "(《廣韻·上平聲·灰·恢》)"
+                // "苦回 (《廣韻·上平聲·灰·恢》)"
             ]
         },
         {

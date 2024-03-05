@@ -9,7 +9,7 @@ from config_dev_env import CHROMEDRIVER_PATH, WAIT_TIME, KONG_UN_DICT_URL
 service = Service(executable_path=CHROMEDRIVER_PATH)
 driver = webdriver.Chrome(service=service)
 
-def fetch_guangyun_info(character):
+def fetch_kong_un_info(character):
     driver.get(KONG_UN_DICT_URL)
 
     # 等待搜索框出现
@@ -46,12 +46,14 @@ def fetch_guangyun_info(character):
 
     return result
 
-# 示例：查询字符"无"的信息
-guangyun_info = fetch_guangyun_info("無")
-print(guangyun_info)
+if __name__ == "__main__":
+    # 示例：查询字符"无"的信息
+    kong_un_info = fetch_kong_un_info("無")
+    print(kong_un_info)
 
-guangyun_info = fetch_guangyun_info("不")
-print(guangyun_info)
+    kong_un_info = fetch_kong_un_info("不")
+    print(kong_un_info)
 
-# 關閉瀏覽器
-driver.quit()
+    # 關閉瀏覽器
+    if driver:
+        driver.quit()
