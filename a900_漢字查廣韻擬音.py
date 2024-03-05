@@ -21,23 +21,20 @@ def fetch_arg():
     # 檢查 cmd_arg 是否有內容
     if not cmd_arg:  # 如果沒有傳入任何參數
         print("沒有傳入任何參數，使用預設參數。")
-    else:
-        # 無論是否使用預設參數，都遍歷 cmd_arg 中的每個元素
-        for i, arg in enumerate(cmd_arg, start=1):
-            print(f"參數 {i}: {arg}")
+    # else:
+    #     # 無論是否使用預設參數，都遍歷 cmd_arg 中的每個元素
+    #     for i, arg in enumerate(cmd_arg, start=1):
+    #         print(f"參數 {i}: {arg}")
+    # else:
+    #     # 如果沒有傳入任何參數，則顯示提示信息，然後終止程式
+    #     print("請輸入欲查詢《廣韻》切語之漢字。")
+    #     sys.exit(1)
 
-    # 根據獲取的 cmd_arg 分別賦值
+    # 若使用者未輸入欲查詢之漢字，則賦予預設值
     han_ji = cmd_arg[0] if len(cmd_arg) > 0 else "詼"
-    # kong_un_huan_tshiat = cmd_arg[1] if len(cmd_arg) > 1 else "苦回(《廣韻·上平聲·灰·恢》)"
-    kong_un_huan_tshiat = cmd_arg[1] if len(cmd_arg) > 1 else ""
-
     print(f"han_ji = {han_ji}")
-    print(f"kong_un_huan_tshiat = {kong_un_huan_tshiat}")
 
-    return {
-        "han_ji": han_ji,
-        "kong_un_huan_tshiat": kong_un_huan_tshiat,
-    }
+    return han_ji
 
 # 接收使用者輸入的 "反切" 查詢參數
 # 根據傳入的 siann_lui 參數取出 "聲" 字左邊的一個中文字
@@ -54,18 +51,10 @@ def tshu_tiau(tiau_lui):
 # 4. 自反切雙字分離出：反切上字、反切下字，如：反切上字=苦、反切下字=回。
 if __name__ == "__main__":
     # 取得使用者輸入的參數
-    args = fetch_arg()
-    han_ji = args["han_ji"]
-    kong_un_huan_tshiat = args["kong_un_huan_tshiat"]
+    han_ji = fetch_arg()
 
     # 取得反切語與四聲調類
-    if not kong_un_huan_tshiat and han_ji:
-        # 僅只輸入漢字，未輸入廣韻查詢索引
-        tshiat_gu_list = fetch_kong_un_info(han_ji)
-        # item_count = len(tshiat_gu_list)
-    else:
-        print("請輸入欲查詢《廣韻》切語之漢字。")
-        sys.exit(1)
+    tshiat_gu_list = fetch_kong_un_info(han_ji)
 
     ## 開啟可執行反切查羅馬拼音之活頁簿檔案
     # 1. 開啟 Excel 活頁簿檔案： .\tools\廣韻反切查音工具.xlsx ；
@@ -107,7 +96,8 @@ if __name__ == "__main__":
             print(f"查詢漢字：{han_ji}\t廣韻切語為: {item['tshiat_gu']}\t台羅拼音為: {tai_lo_phing_im}")
             print(f"反切上字：{siong_ji}\t得聲母台羅拼音為: {sheet.range('D5').value}\t分清濁為：{sheet.range('E5').value}")
             print(f"反切下字：{ha_ji}\t得韻母台羅拼音為: {sheet.range('D6').value}\t辨四聲為：{sheet.range('E6').value}聲")
-            print(f"依分清濁與辨四聲，得聲調為：{sheet.range('E7').value}，即：台羅四聲八調之第 {int(sheet.range('D7').value)} 調")
+            if not sheet.range('D7').value == "找不到":
+                print(f"依分清濁與辨四聲，得聲調為：{sheet.range('E7').value}，即：台羅四聲八調之第 {int(sheet.range('D7').value)} 調")
 
     except Exception as e:
         # 如果遇到任何錯誤，顯示錯誤信息並終止程式
