@@ -19,7 +19,8 @@
             "program": "a900_漢字查廣韻擬音.py",
             "console": "integratedTerminal",
             "args": [
-                "詼",
+                "不",
+                // "詼",
                 // "苦回 (《廣韻·上平聲·灰·恢》)"
             ]
         },
