@@ -1,21 +1,10 @@
-import os
-
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from dotenv import load_dotenv
 
-# Get the path to he directory this file is in
-BASEDIR = os.path.abspath(os.path.dirname(__file__))
-# Load environment variables
-load_dotenv(os.path.join(BASEDIR, 'config.env'))
-CHROMEDRIVER_PATH = os.getenv('CHROMEDRIVER_PATH')
-
-# from config_dev_env import CHROMEDRIVER_PATH, WAIT_TIME, KONG_UN_DICT_URL
-KONG_UN_DICT_URL = 'https://ctext.org/dictionary.pl?if=gb'
-WAIT_TIME = 5  # seconds
+from config_dev_env import CHROMEDRIVER_PATH, WAIT_TIME, KONG_UN_DICT_URL
 
 service = Service(executable_path=CHROMEDRIVER_PATH)
 driver = webdriver.Chrome(service=service)
@@ -55,12 +44,14 @@ def fetch_guangyun_info(character):
             "tshia_gu_ha_ji": tshia_gu_ha_ji,  # 切语下字
         })
 
-    driver.quit()
     return result
 
 # 示例：查询字符"无"的信息
 guangyun_info = fetch_guangyun_info("無")
 print(guangyun_info)
 
-# guangyun_info = fetch_guangyun_info("不")
-# print(guangyun_info)
+guangyun_info = fetch_guangyun_info("不")
+print(guangyun_info)
+
+# 關閉瀏覽器
+driver.quit()
