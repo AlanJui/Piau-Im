@@ -8,19 +8,11 @@
 #   ipython a900_廣韻反切查羅馬拼音.ipynb 攝 "書涉 (《廣韻·入聲·葉·攝》)"
 #==============================================================================
 
-import getopt
 import sys
 import xlwings as xw
 
 from a910_於字典網站查詢漢字之廣韻切語發音 import fetch_kong_un_info
 
-
-# 接收使用者輸入的 "反切" 查詢參數
-# 根據傳入的 siann_lui 參數取出 "聲" 字左邊的一個中文字
-# "調類" siann_lui 可能值：上平聲、下平聲、上聲、去聲、入聲
-def tshu_tiau(tiau_lui):
-    # 永遠取出 "聲" 字左邊的一個中文字
-    return tiau_lui[tiau_lui.find("聲")-1]
 
 def fetch_arg():
     # 取得命令行參數
@@ -47,34 +39,12 @@ def fetch_arg():
         "kong_un_huan_tshiat": kong_un_huan_tshiat,
     }
 
-# 根據傳入的廣韻查詢索引，取出 "反切語" 與 "四聲調類" 
-def fetch_tshiat_gu_tiau_lui(kong_un_huan_tshiat):
-    # 分離 "苦回" 與 "廣韻·上平聲·灰·恢"
-    tshiat_gu, kong_un_with_brackets = kong_un_huan_tshiat.split('(')
-    tshiat_gu = tshiat_gu.strip()  # 清除前後的空白
-
-    siong_ji = tshiat_gu[0]  # 取反切之上字：即反切的首字
-    ha_ji = tshiat_gu[1] if len(tshiat_gu) > 1 else ""  # 取反切之下字：即反切的第二個字符，如果有的話
-
-    # 移除結尾的 "》)"
-    kong_un_khi_bue = kong_un_with_brackets[:-2]  
-    # 移除 "《" 並重新分離 "廣韻·上平聲·灰·恢"
-    kong_un_cleaned = kong_un_khi_bue[1:]  # 移除開頭的 "《"
-
-    # 將 "廣韻·上平聲·灰·恢" 依 "·" 切分成有 4 個元素的字串陣列
-    kong_un = kong_un_cleaned.split('·')
-
-    # 分離 "廣韻·上平聲·灰·恢" 中的 "上平聲"
-    tiau_lui = kong_un[1]
-
-    # 取四聲調之調類
-    siann_tiau = tshu_tiau(tiau_lui)  
-
-    return {
-        "siong_ji": siong_ji,
-        "ha_ji": ha_ji,
-        "siann_tiau": siann_tiau,
-    }
+# 接收使用者輸入的 "反切" 查詢參數
+# 根據傳入的 siann_lui 參數取出 "聲" 字左邊的一個中文字
+# "調類" siann_lui 可能值：上平聲、下平聲、上聲、去聲、入聲
+def tshu_tiau(tiau_lui):
+    # 永遠取出 "聲" 字左邊的一個中文字
+    return tiau_lui[tiau_lui.find("聲")-1]
 
 
 # 程式作業流程：
@@ -91,13 +61,11 @@ if __name__ == "__main__":
     # 取得反切語與四聲調類
     if not kong_un_huan_tshiat and han_ji:
         # 僅只輸入漢字，未輸入廣韻查詢索引
-        print("請輸入廣韻查詢索引。")
-        sys.exit(1)
+        tshiat_gu_list = fetch_kong_un_info(han_ji)
+        # item_count = len(tshiat_gu_list)
     else:
-        tshiat_gu_tiau_lui = fetch_tshiat_gu_tiau_lui(kong_un_huan_tshiat)
-        siong_ji = tshiat_gu_tiau_lui["siong_ji"]
-        ha_ji = tshiat_gu_tiau_lui["ha_ji"]
-        siann_tiau = tshiat_gu_tiau_lui["siann_tiau"]
+        print("請輸入欲查詢《廣韻》切語之漢字。")
+        sys.exit(1)
 
     ## 開啟可執行反切查羅馬拼音之活頁簿檔案
     # 1. 開啟 Excel 活頁簿檔案： .\tools\廣韻反切查音工具.xlsx ；
@@ -119,20 +87,27 @@ if __name__ == "__main__":
         
         # 將變數值填入指定的儲存格
         sheet.range('C2').value = han_ji
-        sheet.range('D2').value = kong_un_huan_tshiat
+        for item in tshiat_gu_list:
+            # 將漢字之切語填入指定的儲存格    
+            sheet.range('D2').value = item["tshiat_gu"]
+            # 將切語上字填入指定的儲存格
+            sheet.range('C5').value = siong_ji = item["tshiat_gu"][0]
+            # 將切語下字填入指定的儲存格
+            sheet.range('C6').value = ha_ji = item["tshiat_gu"][1]
+            # 將切語下字所屬之四聲調類填入指定的儲存格    
+            sheet.range('E6').value = tshu_tiau(item["tiau"]) 
                 
-        # 從 D8 儲存格取出值，存放於變數 tai_lo_phing_im
-        tai_lo_phing_im = sheet.range('D8').value
-        
-        #=======================================================
-        # 顯示查詢結果
-        #=======================================================
-        print("\n===================================================")
-        print(f"查詢漢字：{han_ji}\t廣韻反切為: {kong_un_huan_tshiat}")
-        print(f"反切上字：{siong_ji}\t得聲母台羅拼音為: {sheet.range('D5').value}\t分清濁為：{sheet.range('E5').value}")
-        print(f"反切下字：{ha_ji}\t得韻母台羅拼音為: {sheet.range('D6').value}\t辨四聲為：{sheet.range('E6').value}聲")
-        print(f"依分清濁與辨四聲，得聲調為：{sheet.range('E7').value}，即：台羅四聲八調之第 {int(sheet.range('D7').value)} 調")
-        print(f"漢字：{han_ji}\t台羅拼音為: {tai_lo_phing_im}")
+            # 從 D8 儲存格取出值，存放於變數 tai_lo_phing_im
+            tai_lo_phing_im = sheet.range('D8').value
+            
+            #=======================================================
+            # 顯示查詢結果
+            #=======================================================
+            print("\n===================================================")
+            print(f"查詢漢字：{han_ji}\t廣韻切語為: {item['tshiat_gu']}\t台羅拼音為: {tai_lo_phing_im}")
+            print(f"反切上字：{siong_ji}\t得聲母台羅拼音為: {sheet.range('D5').value}\t分清濁為：{sheet.range('E5').value}")
+            print(f"反切下字：{ha_ji}\t得韻母台羅拼音為: {sheet.range('D6').value}\t辨四聲為：{sheet.range('E6').value}聲")
+            print(f"依分清濁與辨四聲，得聲調為：{sheet.range('E7').value}，即：台羅四聲八調之第 {int(sheet.range('D7').value)} 調")
 
     except Exception as e:
         # 如果遇到任何錯誤，顯示錯誤信息並終止程式

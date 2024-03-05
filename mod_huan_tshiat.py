@@ -64,6 +64,42 @@ def e_ji_tsa_un_bu(e_ji):
         print(f"發生錯誤：{e}")
         return None
 
+# 接收使用者輸入的 "反切" 查詢參數
+# 根據傳入的 siann_lui 參數取出 "聲" 字左邊的一個中文字
+# "調類" siann_lui 可能值：上平聲、下平聲、上聲、去聲、入聲
+def tshu_tiau(tiau_lui):
+    # 永遠取出 "聲" 字左邊的一個中文字
+    return tiau_lui[tiau_lui.find("聲")-1]
+
+# 根據傳入的廣韻查詢索引，取出 "反切語" 與 "四聲調類" 
+def fetch_tshiat_gu_tiau_lui(kong_un_huan_tshiat):
+    # 分離 "苦回" 與 "廣韻·上平聲·灰·恢"
+    tshiat_gu, kong_un_with_brackets = kong_un_huan_tshiat.split('(')
+    tshiat_gu = tshiat_gu.strip()  # 清除前後的空白
+
+    siong_ji = tshiat_gu[0]  # 取反切之上字：即反切的首字
+    ha_ji = tshiat_gu[1] if len(tshiat_gu) > 1 else ""  # 取反切之下字：即反切的第二個字符，如果有的話
+
+    # 移除結尾的 "》)"
+    kong_un_khi_bue = kong_un_with_brackets[:-2]  
+    # 移除 "《" 並重新分離 "廣韻·上平聲·灰·恢"
+    kong_un_cleaned = kong_un_khi_bue[1:]  # 移除開頭的 "《"
+
+    # 將 "廣韻·上平聲·灰·恢" 依 "·" 切分成有 4 個元素的字串陣列
+    kong_un = kong_un_cleaned.split('·')
+
+    # 分離 "廣韻·上平聲·灰·恢" 中的 "上平聲"
+    tiau_lui = kong_un[1]
+
+    # 取四聲調之調類
+    siann_tiau = tshu_tiau(tiau_lui)  
+
+    return {
+        "siong_ji": siong_ji,
+        "ha_ji": ha_ji,
+        "siann_tiau": siann_tiau,
+    }
+
 if __name__ == "__main__":
     # 測試 siong_ji_tsa_siann_bu 函數
     siong_ji = "普"
