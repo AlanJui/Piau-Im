@@ -31,20 +31,20 @@ def siong_ji_tsa_siann_bu(siong_ji):
         return None
     
 
-def e_ji_tsa_un_bu(e_ji):
+def ha_ji_tsa_un_bu(ha_ji):
     try:
         # 使用 xlwings 打開 Excel 檔案
         file_path = r'.\\tools\\反切下字與韻母對映表.xlsx'
         wb = xw.Book(file_path)
         sheet = wb.sheets['反切下字表']  
         
-        # 查找 e_ji 在指定範圍 (J2:J187) 的位置
+        # 查找 ha_ji 在指定範圍 (J2:J187) 的位置
         for row in range(2, 188):  # 資料從第2列開始，到第187列
             cell_value = sheet.range(f'J{row}').value
             if cell_value:
                 words = cell_value.split()  # 按空格拆分儲存格的值
-                if e_ji in words:
-                    # 如果找到了 e_ji，則記錄下其相對映之 "列號"，並從相關欄位獲取資料
+                if ha_ji in words:
+                    # 如果找到了 ha_ji，則記錄下其相對映之 "列號"，並從相關欄位獲取資料
                     data = {
                         "id": row - 1,  # 第一行為標題行，故實際列號需要減1
                         "liap": sheet.range(f'B{row}').value, # 攝
@@ -59,7 +59,7 @@ def e_ji_tsa_un_bu(e_ji):
                     wb.close()  # 處理完成後關閉工作簿
                     return data
         wb.close()  # 如果沒找到，也關閉工作簿
-        return None  # 如果在範圍內沒有找到 e_ji，返回 None
+        return None  # 如果在範圍內沒有找到 ha_ji，返回 None
     except Exception as e:
         print(f"發生錯誤：{e}")
         return None
@@ -97,8 +97,30 @@ def fetch_tshiat_gu_tiau_lui(kong_un_huan_tshiat):
     return {
         "siong_ji": siong_ji,
         "ha_ji": ha_ji,
+        "tiau_lui": tiau_lui,
         "siann_tiau": siann_tiau,
     }
+
+# 依據切語上字辧清濁，切語下字分四聲，查詢反切語之四聲八調之調號
+def query_tiau_ho(tshing_tok, su_sing):
+    # 建立映射字典
+    mapping = {
+        '清平': 1,
+        '清上': 2,
+        '清去': 3,
+        '清入': 4,
+        '濁平': 5,
+        '濁上': 6,
+        '濁去': 7,
+        '濁入': 8
+    }
+    # 組合 tshing_tok 和 su_sing
+    # 取得 tshing_tok 的最後一個字符
+    key = tshing_tok[-1] + su_sing
+    # 從字典中獲取 tiau_ho
+    tiau_ho = mapping.get(key)
+    # 回傳 tiau_ho ，並確保 tiau_ho 是整數
+    return int(tiau_ho) if tiau_ho is not None else None
 
 if __name__ == "__main__":
     # 測試 siong_ji_tsa_siann_bu 函數
@@ -110,10 +132,10 @@ if __name__ == "__main__":
     print(f"\n查反切上字：{siong_ji}")
     print(f"siong_ji_tsa_siann_bu 測試結果：{result_siong_ji}")
 
-    # 測試 e_ji_tsa_un_bu 函數
-    e_ji = "荅"
-    result_e_ji = e_ji_tsa_un_bu(e_ji)
-    assert result_e_ji["un_bu"] == "合"
-    assert result_e_ji["tai_lo"] == "ap"
-    print(f"\n查反切下字：{e_ji}")
-    print(f"e_ji_tsa_un_bu 測試結果：{result_e_ji}")
+    # 測試 ha_ji_tsa_un_bu 函數
+    ha_ji = "荅"
+    result_ha_ji = ha_ji_tsa_un_bu(ha_ji)
+    assert result_ha_ji["un_bu"] == "合"
+    assert result_ha_ji["tai_lo"] == "ap"
+    print(f"\n查反切下字：{ha_ji}")
+    print(f"ha_ji_tsa_un_bu 測試結果：{result_ha_ji}")

@@ -22,21 +22,30 @@ def query_tshiat_gu(table_name, fields, query_field, keyword):
     # 回傳字典列表
     return dict_results
 
-if __name__ == "__main__":
-    # 測試 "查詢切語上字" 
+
+def query_tshiat_gu_siong_ji(han_ji):
     table_name = "Tshiat_Gu_Siong_Ji"
     # 資料表欄位：序、發聲部位、聲母、台羅、擬音、清濁、切語上字
     fields = ['id', 'huat_siann_poo_ui', 'siann_bu', 'tai_lo', 'IPA', 'tshing_tok', 'tshiat_gu_siong_ji']
     query_field = "切語上字"
+    return query_tshiat_gu(table_name, fields, query_field, han_ji)
+    
+
+def query_tshiat_gu_ha_ji(han_ji):
+    table_name = "Tshiat_Gu_Ha_Ji"
+    # 資料表欄位：序、攝、韻系、四聲、等弟、開合、台羅、擬音、切語下字
+    fields = ['id', 'liap', 'un_he', 'su_sing', 'ting_te', 'khai_hap', 'un_bu', 'tai_lo', 'IPA', 'tshing_tok', 'tshiat_gu_ha_ji']
+    query_field = "切語下字"
+    return query_tshiat_gu(table_name, fields, query_field, han_ji)
+
+
+if __name__ == "__main__":
+    # 測試 "查詢切語上字" 
     keyword = "徒"
-    results = query_tshiat_gu(table_name, fields, query_field, keyword)
+    results = query_tshiat_gu_siong_ji(keyword)
     print(results)
 
     # 測試 "查詢切語下字" 
-    table_name = "Tshiat_Gu_Ha_Ji"
-    # 資料表欄位：序、攝、韻系、四聲、等弟、開合、台羅、擬音、切語下字
-    fields = ['id', 'liap', 'un_he', 'su_sing', 'ting_te', 'khai_hap', 'tai_lo', 'IPA', 'tshing_tok', 'tshiat_gu_ha_ji']
-    query_field = "切語下字"
     keyword = "紅"
-    results = query_tshiat_gu(table_name, fields, query_field, keyword)
+    results = query_tshiat_gu_ha_ji(keyword)
     print(results)
