@@ -11,7 +11,8 @@
 import sys
 import xlwings as xw
 
-from a910_於字典網站查詢漢字之廣韻切語發音 import fetch_kong_un_info
+from mod_huan_tshiat import tshu_tiau
+from mod_於字典網站查詢漢字之廣韻切語發音 import fetch_kong_un_info
 
 
 def fetch_arg():
@@ -36,12 +37,6 @@ def fetch_arg():
 
     return han_ji
 
-# 接收使用者輸入的 "反切" 查詢參數
-# 根據傳入的 siann_lui 參數取出 "聲" 字左邊的一個中文字
-# "調類" siann_lui 可能值：上平聲、下平聲、上聲、去聲、入聲
-def tshu_tiau(tiau_lui):
-    # 永遠取出 "聲" 字左邊的一個中文字
-    return tiau_lui[tiau_lui.find("聲")-1]
 
 
 # 程式作業流程：
