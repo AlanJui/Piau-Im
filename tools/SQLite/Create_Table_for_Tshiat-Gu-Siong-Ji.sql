@@ -1,0 +1,25 @@
+CREATE TABLE "Tshiat_Gu_Siong_Ji" (
+	"序"	INTEGER NOT NULL UNIQUE,
+	"韻"	TEXT NOT NULL,
+	"聲母"	TEXT NOT NULL,
+	"台羅"	TEXT NOT NULL,
+	"擬音"	TEXT NOT NULL,
+	"清濁"	TEXT NOT NULL,
+	"切語上字"	TEXT NOT NULL,
+	PRIMARY KEY("序" AUTOINCREMENT)
+)
+
+CREATE TABLE "Tshiat_Gu_Ha_Ji" (
+	"序"	INTEGER NOT NULL UNIQUE,
+  "攝"   TEXT   NOT NULL,
+  "韻系"   TEXT   NOT NULL,
+  "四聲"   TEXT   NOT NULL,
+  "等第"   TEXT   NOT NULL,
+  "開合"   TEXT   NOT NULL,
+  "韻母"   TEXT   NOT NULL,
+  "台羅"   TEXT   NOT NULL,
+  "擬音"   TEXT   NOT NULL,
+  "切語下字"   TEXT   NOT NULL,
+	PRIMARY KEY("序" AUTOINCREMENT)
+)
+
