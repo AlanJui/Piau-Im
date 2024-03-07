@@ -14,15 +14,17 @@ records = cur.fetchall()
 
 # 對於每一條記錄
 for record in records:
-    # 更新 "Han-Ji-Phing-Im-Ji-Tian" 表
+    # 更新 "Han_Ji_Phing_Im_Ji_Tian" 表
     cur.execute("""
-        UPDATE Han-Ji-Phing-Im-Ji-Tian
+        UPDATE Han_Ji_Phing_Im_Ji_Tian
         SET NST_ID = ?, Siann = ?, Un = ?, Tiau = ?
         WHERE Han_Ji = ?
-    """, (record[0], record[1], record[2], record[3], record[4]))
+    """, (record[0], record[2], record[3], record[4], record[1]))
 
 # 提交事務
 conn.commit()
 
 # 關閉連接
 conn.close()
+
+print("程式執行完畢！")
