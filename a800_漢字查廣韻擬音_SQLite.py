@@ -48,6 +48,11 @@ if __name__ == "__main__":
     # }
     tshiat_gu_list = fetch_kong_un_info(han_ji)
 
+    #=======================================================
+    # 顯示查詢結果
+    #=======================================================
+    print("\n===================================================")
+    print(f"查詢漢字：{han_ji}")
     for item in tshiat_gu_list:
         # 取得切語
         tshiat_gu = item["tshiat_gu"]
@@ -55,12 +60,22 @@ if __name__ == "__main__":
         # 查詢切語上字
         siong_ji = item["tshiat_gu"][0]
         tshiat_gu_siong_ji = query_tshiat_gu_siong_ji(siong_ji)
+        if not tshiat_gu_siong_ji:
+            print("---------------------------------------------------")
+            print(f"廣韻切語: {tshiat_gu}\t找不到切語上字：{siong_ji}")
+            continue
+
         tai_lo_siann_bu = tshiat_gu_siong_ji[0]["tai_lo"]
         tshing_tok = tshiat_gu_siong_ji[0]["tshing_tok"]
 
         # 查詢切語下字
         ha_ji = item["tshiat_gu"][1]
         tshiat_gu_ha_ji = query_tshiat_gu_ha_ji(ha_ji)
+        if not tshiat_gu_ha_ji:
+            print("---------------------------------------------------")
+            print(f"廣韻切語: {tshiat_gu}\t找不到切語下字：{ha_ji}")
+            continue
+
         tai_lo_un_bu = tshiat_gu_ha_ji[0]["tai_lo"]
 
         # 取得四聲調類
@@ -75,8 +90,8 @@ if __name__ == "__main__":
         #=======================================================
         # 顯示查詢結果
         #=======================================================
-        print("\n===================================================")
-        print(f"查詢漢字：{han_ji}\t廣韻切語為: {tshiat_gu}\t台羅拼音為: {tai_lo_phing_im}")
+        print("---------------------------------------------------")
+        print(f"廣韻切語: {tshiat_gu}\t台羅拼音: {tai_lo_phing_im}")
         print(f"反切上字：{siong_ji}\t得聲母台羅拼音為: {siong_ji}\t分清濁為：{tshing_tok}")
         print(f"反切下字：{ha_ji}\t得韻母台羅拼音為: {ha_ji}\t辨四聲為：{su_sing}聲")
         print(f"依分清濁與辨四聲，得聲調為：{tshing_tok[-1]}{su_sing}，即：台羅四聲八調之第 {tiau_ho} 調")
