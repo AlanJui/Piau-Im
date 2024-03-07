@@ -89,7 +89,7 @@ if __name__ == "__main__":
         setting_sheet.range("C4").value
     ).strip()
     new_file_path = os.path.join(
-        ".\\docs", 
+        ".\\output", 
         f"【河洛話注音】{new_file_name}" + ".xlsx")
 
     # 儲存新建立的工作簿
