@@ -1,3 +1,5 @@
+
+```plantuml
 @startuml
 start
 :Let entSet be a set of Entitlements to revoke;
@@ -36,6 +38,5 @@ entitlements of entSet entitlements;;
 Consumers that have an entitlement in entSet;
 stop
 @enduml
-
-plantuml
+```
 
