@@ -1,0 +1,26 @@
+@startuml
+!include <C4/C4_Container>
+HIDE_STEREOTYPE()
+
+Person(a, "A")
+Person(b, "B")
+Person(c, "C")
+Person(d, "D")
+Person(e, "E")
+
+BiRel_U(a, b, "talk with")
+BiRel_R(a, c, "talk with")
+BiRel_D(a, d, "talk with")
+BiRel_L(a, e, "talk with")
+
+Person(x, "X")
+System(s1, "S1")
+System(s2, "S2")
+System(s3, "S3")
+System(s4, "S4")
+
+Rel_U(x, s1, "uses")
+Rel_R(x, s2, "uses")
+Rel_D(x, s3, "uses")
+Rel_L(x, s4, "uses")
+@enduml
