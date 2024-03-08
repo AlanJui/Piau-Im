@@ -1,19 +1,20 @@
--- 創建一個新的表格，其結構與原表格相同，但多了一個帶有 AUTOINCREMENT 屬性的 ID 列
-CREATE TABLE "Lui_Tsip_Nga_Siok_Thong_new" (
+CREATE TABLE "Han_Ji_Phing_Im_Ji_Tian_new" (
     "ID" INTEGER PRIMARY KEY AUTOINCREMENT,
-    "Ji" TEXT NOT NULL,
-    "Siann" TEXT NOT NULL,
-    "Un" TEXT NOT NULL,
-    "Tiau" TEXT NOT NULL,
-    "Phing_Im" TEXT NOT NULL
+    "Han_Ji" TEXT NOT NULL,
+    "TL_Phing_Im" TEXT NOT NULL,
+    "freq" REAL,
+    "NST_ID" TEXT,
+    "Siann" TEXT,
+    "Un" TEXT,
+    "Tiau" TEXT
 );
 
 -- 將原表格的數據複製到新表格中
-INSERT INTO "Lui_Tsip_Nga_Siok_Thong_new" ("Ji", "Siann", "Un", "Tiau", "Phing_Im")
-SELECT "Ji", "Siann", "Un", "Tiau", "Phing_Im" FROM "Lui_Tsip_Nga_Siok_Thong";
+INSERT INTO "Han_Ji_Phing_Im_Ji_Tian_new" ("Han_Ji", "TL_Phing_Im", "freq", "NST_ID", "Siann", "Un", "Tiau")
+SELECT "Han_Ji", "TL_Phing_Im", "freq", "NST_ID", "Siann", "Un", "Tiau" FROM "Han_Ji_Phing_Im_Ji_Tian";
 
 -- 刪除原表格
-DROP TABLE "Lui_Tsip_Nga_Siok_Thong";
+DROP TABLE "Han_Ji_Phing_Im_Ji_Tian";
 
 -- 將新表格重命名為原表格的名稱
-ALTER TABLE "Lui_Tsip_Nga_Siok_Thong_new" RENAME TO "Lui_Tsip_Nga_Siok_Thong";
+ALTER TABLE "Han_Ji_Phing_Im_Ji_Tian_new" RENAME TO "Han_Ji_Phing_Im_Ji_Tian";
