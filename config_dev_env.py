@@ -22,4 +22,4 @@ WIKIPEDIA_URL='https://wikipedia.org'
 WAIT_TIME = 5  # seconds
 
 # Database
-DATABASE_PATH = '.\\Kong_Un.db'
+DATABASE = '.\\Kong_Un.db'
