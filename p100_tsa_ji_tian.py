@@ -105,7 +105,7 @@ def main_run(CONVERT_FILE_NAME):
         # 在【字庫】資料庫查找【注音碼】
         # SQL 查詢指令：自字庫查找某漢字之注音碼
         # =========================================================
-        # sql = select id, han_ji, chu_im, freq, siann, un, tiau
+        # sql = select id, han_ji, tl_im, freq, siann, un, tiau
         #           from han_ji
         #           where han_ji='{search_han_ji}'
         sql = (
