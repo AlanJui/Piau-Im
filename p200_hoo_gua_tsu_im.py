@@ -151,7 +151,7 @@ def build_web_page(target_sheet, tsu_im_huat, div_class, rt_tag):
         # 取得聲母之聲母碼
         siann_bu = source_sheet.range("C" + str(source_index)).value
         siann_index = 0
-        if siann_bu.strip() != "":
+        if  siann_bu and siann_bu.strip() != "":
             siann_index = ji.get_siann_idx(siann_bu)
             if siann_index == -1:
                 # 記錄沒找到之聲母

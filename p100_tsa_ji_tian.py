@@ -4,7 +4,7 @@ import sqlite3
 import xlwings as xw
 
 # 專案全域常數
-from config_dev_env import DATABASE_PATH
+from config_dev_env import DATABASE
 
 def main_run(CONVERT_FILE_NAME):
     # ==========================================================
@@ -61,7 +61,7 @@ def main_run(CONVERT_FILE_NAME):
     # =========================================================="
     # 資料庫",
     # =========================================================="
-    conn = sqlite3.connect(DATABASE_PATH)
+    conn = sqlite3.connect(DATABASE)
     db_cursor = conn.cursor()
     source_index = 1  # index for source sheet
     target_index = 1
