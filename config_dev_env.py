@@ -22,4 +22,5 @@ WIKIPEDIA_URL='https://wikipedia.org'
 WAIT_TIME = 5  # seconds
 
 # Database
-DATABASE = '.\\Kong_Un.db'
+# DATABASE = '.\\Kong_Un.db'
+DATABASE = '.\\Nga_Siok_Thong_Ji_Tian.db'
