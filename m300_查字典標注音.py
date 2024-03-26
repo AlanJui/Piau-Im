@@ -2,7 +2,8 @@ import getopt
 import sys
 
 import settings
-from p100_tsa_ji_tian import main_run as tsa_ji_tian_tshue_tsu_im
+# from p100_tsa_ji_tian import main_run as tsa_ji_tian_tshue_tsu_im
+from p100_tsa_nga_siok_thong_ji_tian import main_run as tsa_ji_tian_tshue_tsu_im
 
 
 def myfunc(argv):
