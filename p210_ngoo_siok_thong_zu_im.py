@@ -27,6 +27,7 @@ def init_siann_bu_dict():
     # 從查詢結果中提取資料並將其整理成一個字典
     for row in rows:
         siann_bu_dict[row[1]] = {
+            'code': row[1],
             'ipa': row[2],
             'poj': row[3],
             'tl': row[4],
@@ -60,6 +61,7 @@ def init_un_bu_dict():
     # 從查詢結果中提取資料並將其整理成一個字典
     for row in rows:
         un_bu_dict[row[1]] = {
+            'code': row[1],
             'ipa': row[2],
             'poj': row[3],
             'tl': row[4],
