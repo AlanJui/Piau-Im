@@ -1,19 +1,20 @@
 import re
 import pandas as pd
 
-#==========================================================
+# ==========================================================
 # 自漢字的「注音碼」，分析出：聲母、韻母、調號
-#==========================================================
+# ==========================================================
 
-#siann_pattern_POJ = re.compile(r"(b|chh|ch|g|h|j|kh|k|l|m|ng|n|ph|p|s|th|t|q)")
+# siann_pattern_POJ = re.compile(r"(b|chh|ch|g|h|j|kh|k|l|m|ng|n|ph|p|s|th|t|q)")
 siann_pattern = re.compile(r"(b|tsh|ts|g|h|j|kh|k|l|m|ng|n|ph|p|s|th|t|q)")
+
 
 def split_chu_im(chu_im):
     result = []
 
     siann_bu = siann_pattern.match(chu_im).group()
-    un_bu = chu_im[ len(siann_bu):len(chu_im)-1 ]
-    diau = chu_im[ len(chu_im)-1 ]
+    un_bu = chu_im[len(siann_bu) : len(chu_im) - 1]
+    diau = chu_im[len(chu_im) - 1]
 
     result += [siann_bu]
     result += [un_bu]
@@ -21,18 +22,826 @@ def split_chu_im(chu_im):
     return result
 
 
-#==========================================================
+# ==========================================================
 # 韻母處理
-#==========================================================
+# ==========================================================
 un_mu_dict = {
-    'sip_ngoo_im_un_id': ['1', '1', '2', '2', '3', '3', '4', '4', '5', '5', '6', '6', '7', '7', '8', '8', '9', '9', '10', '10', '11', '11', '12', '12', '13', '13', '14', '14', '15', '15', '16', '16', '17', '17', '18', '18', '19', '19', '20', '20', '21', '21', '22', '22', '23', '23', '24', '24', '25', '25', '26', '26', '27', '27', '28', '28', '29', '29', '30', '30', '31', '31', '32', '32', '33', '33', '34', '34', '35', '35', '36', '36', '37', '37', '38', '38', '39', '39', '40', '40', '41', '41', '42', '42', '43', '43', '44', '44', '45', '45', '46', '46', '47', '47', '48', '48', '49', '49', '50', '50'],
-    'sip_ngoo_im': ['君', '君', '堅', '堅', '金', '金', '規', '規', '嘉', '嘉', '干', '干', '公', '公', '乖', '乖', '經', '經', '觀', '觀', '沽', '沽', '嬌', '嬌', '稽', '稽', '恭', '恭', '高', '高', '皆', '皆', '巾', '巾', '姜', '姜', '甘', '甘', '瓜', '瓜', '江', '江', '兼', '兼', '交', '交', '迦', '迦', '檜', '檜', '監', '監', '艍', '艍', '膠', '膠', '居', '居', '丩', '丩', '更', '更', '褌', '褌', '茄', '茄', '梔', '梔', '薑', '薑', '驚', '驚', '官', '官', '鋼', '鋼', '伽', '伽', '閒', '閒', '姑', '姑', '姆', '姆', '光', '光', '閂', '閂', '糜', '糜', '嘄', '嘄', '箴', '箴', '爻', '爻', '扛', '扛', '牛', '牛'],
-    'un_code': ['un', 'ut', 'ian', 'iat', 'im', 'ip', 'ui', 'uih', 'ee', 'eeh', 'an', 'at', 'ong', 'ok', 'uai', 'uaih', 'ing', 'ik', 'uan', 'uat', 'oo', 'ooh', 'iau', 'iauh', 'ei', 'eih', 'iong', 'iok', 'o', 'oh', 'ai', 'aih', 'in', 'it', 'iang', 'iak', 'am', 'ap', 'ua', 'uah', 'ang', 'ak', 'iam', 'iap', 'au', 'auh', 'ia', 'iah', 'ue', 'ueh', 'ann', 'ahnn', 'u', 'uh', 'a', 'ah', 'i', 'ih', 'iu', 'iuh', 'enn', 'ehnn', 'uinn', 'uinnh', 'io', 'ioh', 'inn', 'ihnn', 'ionn', 'ionnh', 'iann', 'iannh', 'uann', 'uannh', 'ng', 'ngh', 'e', 'eh', 'ainn', 'ainnh', 'onn', 'onnh', 'm', 'mh', 'uang', 'uak', 'uainn', 'uaihnn', 'uenn', 'uennh', 'iaunn', 'iauhnn', 'om', 'op', 'aunn', 'aunnh', 'onn', 'ohnn', 'iunn', 'iunnh'],
-    'TPS': ['ㄨㄣ', 'ㄨㆵ', 'ㄧㄢ', 'ㄧㄚㆵ', 'ㄧㆬ', 'ㄧㆴ', 'ㄨㄧ', 'ㄨㄧㆷ', 'ㄝ', 'ㄝㆷ', 'ㄢ', 'ㄚㆵ', 'ㆲ', 'ㆦㆻ', 'ㄨㄞ', 'ㄨㄞㆷ', 'ㄧㄥ', 'ㄧㆻ', 'ㄨㄢ', 'ㄨㄚㆵ', 'ㆦ', 'ㆦㆷ', 'ㄧㄠ', 'ㄧㄠㆷ', 'ㄟ', 'ㄟㆷ', 'ㄧㆲ', 'ㄧㆦㆻ', 'ㄜ', 'ㄜㆷ', 'ㄞ', 'ㄞㆷ', 'ㄧㄣ', 'ㄧㆵ', 'ㄧㄤ', 'ㄧㄚㆻ', 'ㆰ', 'ㄚㆴ', 'ㄨㄚ', 'ㄨㄚㆷ', 'ㄤ', 'ㄚㆻ', 'ㄧㆰ', 'ㄧㄚㆴ', 'ㄠ', 'ㄠㆷ', 'ㄧㄚ', 'ㄧㄚㆷ', 'ㄨㆤ', 'ㄨㆤㆷ', 'ㆩ', 'ㆩㆷ', 'ㄨ', 'ㄨㆷ', 'ㄚ', 'ㄚㆷ', 'ㄧ', 'ㄧㆷ', 'ㄧㄨ', 'ㄧㄨㆷ', 'ㆥ', 'ㆥㆷ', 'ㄨㆪ', 'ㄨㆪㆷ', 'ㄧㄜ', 'ㄧㄜㆷ', 'ㆪ', 'ㆪ', 'ㄧㆧ', 'ㄧㆧㆷ', 'ㄧㆩ', 'ㄧㆩㆷ', 'ㄨㆩ', 'ㄨㆩㆷ', 'ㆭ', 'ㆭㆷ', 'ㆤ', 'ㆤㆷ', 'ㆮ', 'ㆮㆷ', 'ㆧ', 'ㆧㆷ', 'ㆬ', 'ㆬㆷ', 'ㄨㄤ', 'ㄨㄚㆻ', 'ㄨㆮ', 'ㄨㆮㆷ', 'ㄨㆥ', 'ㄨㆥㆷ', 'ㄧㆯ', 'ㄧㆯㆷ', 'ㆱ', 'ㆦㆴ', 'ㆯ', 'ㆯㆷ', 'ㆧ', 'ㆧㆷ', 'ㄧㆫ', 'ㄧㆫㆷ'],
-    'IPA': ['un', 'ut̚', 'ian', 'iat̚', 'im', 'ip̚', 'ui', 'ui?', 'ɛ', 'ɛ?', 'an', 'at̚', 'ɔŋ', 'ɔk̚', 'uai', 'uai?', 'ɪŋ', 'ik̚', 'uan', 'uat̚', 'ɔ', 'ɔu?', 'iaʊ', 'iau?', 'ei', 'ei?', 'iɔŋ', 'iɔk̚', 'o', 'ə?', 'ai', 'ai?', 'in', 'it̚', 'iaŋ', 'iak̚', 'am', 'ap̚', 'ua', 'ua?', 'aŋ', 'ak̚', 'iam', 'iap̚', 'aʊ', 'au?', 'ia', 'ia?', 'ue', 'ue?', 'ã', 'ã?', 'u', 'u?', 'a', 'a?', 'i', 'i?', 'iu', 'iu?', 'ẽ', 'ẽ?', 'ũĩ', 'ũĩ?', 'io', 'iə?', 'ĩ', 'ĩ?', 'ĩɔ̃', 'ĩɔ̃?', 'ĩã', 'iãh', 'ũã', 'ũã?', 'ŋ̍', 'ŋ̍h', 'e', 'e?', 'ãĩ', 'ãĩ?', 'ɔ̃', 'ɔ̃?', 'm̩', 'm̩h', 'uaŋ', 'uak̚', 'ũãĩ', 'uãĩ?', 'ũẽ', 'ũẽ?', 'ĩãũ', 'ĩãũ?', 'ɔm', 'ɔp̚', 'ãũ', 'ãũ?', 'õ', 'õh', 'ĩũ', 'iũh'],
-    'POJ': ['un', 'ut', 'ian', 'iat', 'im', 'ip', 'ui', 'uih', 'ee', 'eeh', 'an', 'at', 'ong', 'ok', 'oai', 'oaih', 'eng', 'ek', 'oan', 'oat', 'o͘', 'o͘h', 'iau', 'iauh', 'ei', 'eih', 'iong', 'iok', 'o', 'oh', 'ai', 'aih', 'in', 'it', 'iang', 'iak', 'am', 'ap', 'oa', 'oah', 'ang', 'ak', 'iam', 'iap', 'au', 'auh', 'ia', 'iah', 'oe', 'oeh', 'aⁿ', 'ahⁿ', 'u', 'uh', 'a', 'ah', 'i', 'ih', 'iu', 'iuh', 'eⁿ', 'ehⁿ', 'uiⁿ', 'uihⁿ', 'io', 'ioh', 'iⁿ', 'iⁿh', 'ioⁿ', 'iohⁿ', 'iaⁿ', 'iahⁿ', 'oaⁿ', 'oahⁿ', 'ng', 'ngh', 'e', 'eh', 'aiⁿ', 'aihⁿ', 'oⁿ', 'ohⁿ', 'm', 'mh', 'oang', 'oak', 'oaiⁿ', 'oaiⁿh', 'oeⁿ', 'oehⁿ', 'iauⁿ', 'iauⁿh', 'om', 'op', 'auⁿ', 'auhⁿ', 'oⁿ', 'ohⁿ', 'iuⁿ', 'iuhⁿ'],
-    'TL': ['un', 'ut', 'ian', 'iat', 'im', 'ip', 'ui', 'uih', 'ee', 'eh', 'an', 'ap', 'ong', 'ok', 'uai', 'uaih', 'ing', 'ik', 'uan', 'uat', 'oo', 'ooh', 'iau', 'iauh', 'e', 'eh', 'iong', 'iok', 'o', 'oh', 'ai', 'aih', 'in', 'it', 'iang', 'iak', 'am', 'ap', 'ua', 'uah', 'ang', 'ak', 'iam', 'iap', 'au', 'auh', 'ia', 'iah', 'ue', 'ueh', 'ann', 'annh', 'u', 'uh', 'a', 'ah', 'i', 'ih', 'iu', 'iuh', 'enn', 'ennh', 'uinn', 'uinnh', 'io', 'ioh', 'inn', 'innh', 'ionn', 'ionnh', 'iann', 'iannh', 'uann', 'uannh', 'ng', 'ngh', 'e', 'eh', 'ainn', 'ainnh', 'onn', 'onnh', 'm', 'mh', 'uang', 'uak', 'uainn', 'uainnh', 'uenn', 'uennh', 'iaunn', 'iaunnh', 'om', 'op', 'aunn', 'aunnh', 'onn', 'onnh', 'iunn', 'iunnh'],
-    'BP': ['un', 'ut', 'ian', 'iat', 'im', 'ip', 'ui', 'uih', 'e', 'eh', 'an', 'at', 'ong', 'ok', 'uai', 'uaih', 'ing', 'ik', 'uan', 'uat', 'oo', 'ooh', 'iao', 'iaoh', 'e', 'eh', 'iong', 'iok', 'o', 'oh', 'ai', 'aih', 'in', 'it', 'iang', 'iak', 'am', 'ap', 'ua', 'uah', 'ang', 'ak', 'iam', 'iap', 'ao', 'aoh', 'ia', 'iah', 'ue', 'ueh', 'na', 'nah', 'u', 'uh', 'a', 'ah', 'i', 'ih', 'iu', 'iuh', 'ne', 'neh', 'nui', 'nuih', 'io', 'ioh', 'ni', 'nih', 'nioo', 'niooh', 'nia', 'niah', 'nua', 'nuah', 'ng', 'ngh', 'e', 'eh', 'nai', 'naih', 'noo', 'nooh', 'm', 'mh', 'uang', 'uak', 'nuai', 'nuaih', 'nue', 'nueh', 'niao', 'niaoh', 'om', 'op', 'nao', 'naoh', 'no', 'noh', 'niu', 'niuh'],
+    "sip_ngoo_im_un_id": [
+        "1",
+        "1",
+        "2",
+        "2",
+        "3",
+        "3",
+        "4",
+        "4",
+        "5",
+        "5",
+        "6",
+        "6",
+        "7",
+        "7",
+        "8",
+        "8",
+        "9",
+        "9",
+        "10",
+        "10",
+        "11",
+        "11",
+        "12",
+        "12",
+        "13",
+        "13",
+        "14",
+        "14",
+        "15",
+        "15",
+        "16",
+        "16",
+        "17",
+        "17",
+        "18",
+        "18",
+        "19",
+        "19",
+        "20",
+        "20",
+        "21",
+        "21",
+        "22",
+        "22",
+        "23",
+        "23",
+        "24",
+        "24",
+        "25",
+        "25",
+        "26",
+        "26",
+        "27",
+        "27",
+        "28",
+        "28",
+        "29",
+        "29",
+        "30",
+        "30",
+        "31",
+        "31",
+        "32",
+        "32",
+        "33",
+        "33",
+        "34",
+        "34",
+        "35",
+        "35",
+        "36",
+        "36",
+        "37",
+        "37",
+        "38",
+        "38",
+        "39",
+        "39",
+        "40",
+        "40",
+        "41",
+        "41",
+        "42",
+        "42",
+        "43",
+        "43",
+        "44",
+        "44",
+        "45",
+        "45",
+        "46",
+        "46",
+        "47",
+        "47",
+        "48",
+        "48",
+        "49",
+        "49",
+        "50",
+        "50",
+    ],
+    "sip_ngoo_im": [
+        "君",
+        "君",
+        "堅",
+        "堅",
+        "金",
+        "金",
+        "規",
+        "規",
+        "嘉",
+        "嘉",
+        "干",
+        "干",
+        "公",
+        "公",
+        "乖",
+        "乖",
+        "經",
+        "經",
+        "觀",
+        "觀",
+        "沽",
+        "沽",
+        "嬌",
+        "嬌",
+        "稽",
+        "稽",
+        "恭",
+        "恭",
+        "高",
+        "高",
+        "皆",
+        "皆",
+        "巾",
+        "巾",
+        "姜",
+        "姜",
+        "甘",
+        "甘",
+        "瓜",
+        "瓜",
+        "江",
+        "江",
+        "兼",
+        "兼",
+        "交",
+        "交",
+        "迦",
+        "迦",
+        "檜",
+        "檜",
+        "監",
+        "監",
+        "艍",
+        "艍",
+        "膠",
+        "膠",
+        "居",
+        "居",
+        "丩",
+        "丩",
+        "更",
+        "更",
+        "褌",
+        "褌",
+        "茄",
+        "茄",
+        "梔",
+        "梔",
+        "薑",
+        "薑",
+        "驚",
+        "驚",
+        "官",
+        "官",
+        "鋼",
+        "鋼",
+        "伽",
+        "伽",
+        "閒",
+        "閒",
+        "姑",
+        "姑",
+        "姆",
+        "姆",
+        "光",
+        "光",
+        "閂",
+        "閂",
+        "糜",
+        "糜",
+        "嘄",
+        "嘄",
+        "箴",
+        "箴",
+        "爻",
+        "爻",
+        "扛",
+        "扛",
+        "牛",
+        "牛",
+    ],
+    "un_code": [
+        "un",
+        "ut",
+        "ian",
+        "iat",
+        "im",
+        "ip",
+        "ui",
+        "uih",
+        "ee",
+        "eeh",
+        "an",
+        "at",
+        "ong",
+        "ok",
+        "uai",
+        "uaih",
+        "ing",
+        "ik",
+        "uan",
+        "uat",
+        "oo",
+        "ooh",
+        "iau",
+        "iauh",
+        "ei",
+        "eih",
+        "iong",
+        "iok",
+        "o",
+        "oh",
+        "ai",
+        "aih",
+        "in",
+        "it",
+        "iang",
+        "iak",
+        "am",
+        "ap",
+        "ua",
+        "uah",
+        "ang",
+        "ak",
+        "iam",
+        "iap",
+        "au",
+        "auh",
+        "ia",
+        "iah",
+        "ue",
+        "ueh",
+        "ann",
+        "ahnn",
+        "u",
+        "uh",
+        "a",
+        "ah",
+        "i",
+        "ih",
+        "iu",
+        "iuh",
+        "enn",
+        "ehnn",
+        "uinn",
+        "uinnh",
+        "io",
+        "ioh",
+        "inn",
+        "ihnn",
+        "ionn",
+        "ionnh",
+        "iann",
+        "iannh",
+        "uann",
+        "uannh",
+        "ng",
+        "ngh",
+        "e",
+        "eh",
+        "ainn",
+        "ainnh",
+        "onn",
+        "onnh",
+        "m",
+        "mh",
+        "uang",
+        "uak",
+        "uainn",
+        "uaihnn",
+        "uenn",
+        "uennh",
+        "iaunn",
+        "iauhnn",
+        "om",
+        "op",
+        "aunn",
+        "aunnh",
+        "onn",
+        "ohnn",
+        "iunn",
+        "iunnh",
+    ],
+    "TPS": [
+        "ㄨㄣ",
+        "ㄨㆵ",
+        "ㄧㄢ",
+        "ㄧㄚㆵ",
+        "ㄧㆬ",
+        "ㄧㆴ",
+        "ㄨㄧ",
+        "ㄨㄧㆷ",
+        "ㄝ",
+        "ㄝㆷ",
+        "ㄢ",
+        "ㄚㆵ",
+        "ㆲ",
+        "ㆦㆻ",
+        "ㄨㄞ",
+        "ㄨㄞㆷ",
+        "ㄧㄥ",
+        "ㄧㆻ",
+        "ㄨㄢ",
+        "ㄨㄚㆵ",
+        "ㆦ",
+        "ㆦㆷ",
+        "ㄧㄠ",
+        "ㄧㄠㆷ",
+        "ㄟ",
+        "ㄟㆷ",
+        "ㄧㆲ",
+        "ㄧㆦㆻ",
+        "ㄜ",
+        "ㄜㆷ",
+        "ㄞ",
+        "ㄞㆷ",
+        "ㄧㄣ",
+        "ㄧㆵ",
+        "ㄧㄤ",
+        "ㄧㄚㆻ",
+        "ㆰ",
+        "ㄚㆴ",
+        "ㄨㄚ",
+        "ㄨㄚㆷ",
+        "ㄤ",
+        "ㄚㆻ",
+        "ㄧㆰ",
+        "ㄧㄚㆴ",
+        "ㄠ",
+        "ㄠㆷ",
+        "ㄧㄚ",
+        "ㄧㄚㆷ",
+        "ㄨㆤ",
+        "ㄨㆤㆷ",
+        "ㆩ",
+        "ㆩㆷ",
+        "ㄨ",
+        "ㄨㆷ",
+        "ㄚ",
+        "ㄚㆷ",
+        "ㄧ",
+        "ㄧㆷ",
+        "ㄧㄨ",
+        "ㄧㄨㆷ",
+        "ㆥ",
+        "ㆥㆷ",
+        "ㄨㆪ",
+        "ㄨㆪㆷ",
+        "ㄧㄜ",
+        "ㄧㄜㆷ",
+        "ㆪ",
+        "ㆪ",
+        "ㄧㆧ",
+        "ㄧㆧㆷ",
+        "ㄧㆩ",
+        "ㄧㆩㆷ",
+        "ㄨㆩ",
+        "ㄨㆩㆷ",
+        "ㆭ",
+        "ㆭㆷ",
+        "ㆤ",
+        "ㆤㆷ",
+        "ㆮ",
+        "ㆮㆷ",
+        "ㆧ",
+        "ㆧㆷ",
+        "ㆬ",
+        "ㆬㆷ",
+        "ㄨㄤ",
+        "ㄨㄚㆻ",
+        "ㄨㆮ",
+        "ㄨㆮㆷ",
+        "ㄨㆥ",
+        "ㄨㆥㆷ",
+        "ㄧㆯ",
+        "ㄧㆯㆷ",
+        "ㆱ",
+        "ㆦㆴ",
+        "ㆯ",
+        "ㆯㆷ",
+        "ㆧ",
+        "ㆧㆷ",
+        "ㄧㆫ",
+        "ㄧㆫㆷ",
+    ],
+    "IPA": [
+        "un",
+        "ut̚",
+        "ian",
+        "iat̚",
+        "im",
+        "ip̚",
+        "ui",
+        "ui?",
+        "ɛ",
+        "ɛ?",
+        "an",
+        "at̚",
+        "ɔŋ",
+        "ɔk̚",
+        "uai",
+        "uai?",
+        "ɪŋ",
+        "ik̚",
+        "uan",
+        "uat̚",
+        "ɔ",
+        "ɔu?",
+        "iaʊ",
+        "iau?",
+        "ei",
+        "ei?",
+        "iɔŋ",
+        "iɔk̚",
+        "o",
+        "ə?",
+        "ai",
+        "ai?",
+        "in",
+        "it̚",
+        "iaŋ",
+        "iak̚",
+        "am",
+        "ap̚",
+        "ua",
+        "ua?",
+        "aŋ",
+        "ak̚",
+        "iam",
+        "iap̚",
+        "aʊ",
+        "au?",
+        "ia",
+        "ia?",
+        "ue",
+        "ue?",
+        "ã",
+        "ã?",
+        "u",
+        "u?",
+        "a",
+        "a?",
+        "i",
+        "i?",
+        "iu",
+        "iu?",
+        "ẽ",
+        "ẽ?",
+        "ũĩ",
+        "ũĩ?",
+        "io",
+        "iə?",
+        "ĩ",
+        "ĩ?",
+        "ĩɔ̃",
+        "ĩɔ̃?",
+        "ĩã",
+        "iãh",
+        "ũã",
+        "ũã?",
+        "ŋ̍",
+        "ŋ̍h",
+        "e",
+        "e?",
+        "ãĩ",
+        "ãĩ?",
+        "ɔ̃",
+        "ɔ̃?",
+        "m̩",
+        "m̩h",
+        "uaŋ",
+        "uak̚",
+        "ũãĩ",
+        "uãĩ?",
+        "ũẽ",
+        "ũẽ?",
+        "ĩãũ",
+        "ĩãũ?",
+        "ɔm",
+        "ɔp̚",
+        "ãũ",
+        "ãũ?",
+        "õ",
+        "õh",
+        "ĩũ",
+        "iũh",
+    ],
+    "POJ": [
+        "un",
+        "ut",
+        "ian",
+        "iat",
+        "im",
+        "ip",
+        "ui",
+        "uih",
+        "ee",
+        "eeh",
+        "an",
+        "at",
+        "ong",
+        "ok",
+        "oai",
+        "oaih",
+        "eng",
+        "ek",
+        "oan",
+        "oat",
+        "o͘",
+        "o͘h",
+        "iau",
+        "iauh",
+        "ei",
+        "eih",
+        "iong",
+        "iok",
+        "o",
+        "oh",
+        "ai",
+        "aih",
+        "in",
+        "it",
+        "iang",
+        "iak",
+        "am",
+        "ap",
+        "oa",
+        "oah",
+        "ang",
+        "ak",
+        "iam",
+        "iap",
+        "au",
+        "auh",
+        "ia",
+        "iah",
+        "oe",
+        "oeh",
+        "aⁿ",
+        "ahⁿ",
+        "u",
+        "uh",
+        "a",
+        "ah",
+        "i",
+        "ih",
+        "iu",
+        "iuh",
+        "eⁿ",
+        "ehⁿ",
+        "uiⁿ",
+        "uihⁿ",
+        "io",
+        "ioh",
+        "iⁿ",
+        "iⁿh",
+        "ioⁿ",
+        "iohⁿ",
+        "iaⁿ",
+        "iahⁿ",
+        "oaⁿ",
+        "oahⁿ",
+        "ng",
+        "ngh",
+        "e",
+        "eh",
+        "aiⁿ",
+        "aihⁿ",
+        "oⁿ",
+        "ohⁿ",
+        "m",
+        "mh",
+        "oang",
+        "oak",
+        "oaiⁿ",
+        "oaiⁿh",
+        "oeⁿ",
+        "oehⁿ",
+        "iauⁿ",
+        "iauⁿh",
+        "om",
+        "op",
+        "auⁿ",
+        "auhⁿ",
+        "oⁿ",
+        "ohⁿ",
+        "iuⁿ",
+        "iuhⁿ",
+    ],
+    "TL": [
+        "un",
+        "ut",
+        "ian",
+        "iat",
+        "im",
+        "ip",
+        "ui",
+        "uih",
+        "ee",
+        "eh",
+        "an",
+        "ap",
+        "ong",
+        "ok",
+        "uai",
+        "uaih",
+        "ing",
+        "ik",
+        "uan",
+        "uat",
+        "oo",
+        "ooh",
+        "iau",
+        "iauh",
+        "e",
+        "eh",
+        "iong",
+        "iok",
+        "o",
+        "oh",
+        "ai",
+        "aih",
+        "in",
+        "it",
+        "iang",
+        "iak",
+        "am",
+        "ap",
+        "ua",
+        "uah",
+        "ang",
+        "ak",
+        "iam",
+        "iap",
+        "au",
+        "auh",
+        "ia",
+        "iah",
+        "ue",
+        "ueh",
+        "ann",
+        "annh",
+        "u",
+        "uh",
+        "a",
+        "ah",
+        "i",
+        "ih",
+        "iu",
+        "iuh",
+        "enn",
+        "ennh",
+        "uinn",
+        "uinnh",
+        "io",
+        "ioh",
+        "inn",
+        "innh",
+        "ionn",
+        "ionnh",
+        "iann",
+        "iannh",
+        "uann",
+        "uannh",
+        "ng",
+        "ngh",
+        "e",
+        "eh",
+        "ainn",
+        "ainnh",
+        "onn",
+        "onnh",
+        "m",
+        "mh",
+        "uang",
+        "uak",
+        "uainn",
+        "uainnh",
+        "uenn",
+        "uennh",
+        "iaunn",
+        "iaunnh",
+        "om",
+        "op",
+        "aunn",
+        "aunnh",
+        "onn",
+        "onnh",
+        "iunn",
+        "iunnh",
+    ],
+    "BP": [
+        "un",
+        "ut",
+        "ian",
+        "iat",
+        "im",
+        "ip",
+        "ui",
+        "uih",
+        "e",
+        "eh",
+        "an",
+        "at",
+        "ong",
+        "ok",
+        "uai",
+        "uaih",
+        "ing",
+        "ik",
+        "uan",
+        "uat",
+        "oo",
+        "ooh",
+        "iao",
+        "iaoh",
+        "e",
+        "eh",
+        "iong",
+        "iok",
+        "o",
+        "oh",
+        "ai",
+        "aih",
+        "in",
+        "it",
+        "iang",
+        "iak",
+        "am",
+        "ap",
+        "ua",
+        "uah",
+        "ang",
+        "ak",
+        "iam",
+        "iap",
+        "ao",
+        "aoh",
+        "ia",
+        "iah",
+        "ue",
+        "ueh",
+        "na",
+        "nah",
+        "u",
+        "uh",
+        "a",
+        "ah",
+        "i",
+        "ih",
+        "iu",
+        "iuh",
+        "ne",
+        "neh",
+        "nui",
+        "nuih",
+        "io",
+        "ioh",
+        "ni",
+        "nih",
+        "nioo",
+        "niooh",
+        "nia",
+        "niah",
+        "nua",
+        "nuah",
+        "ng",
+        "ngh",
+        "e",
+        "eh",
+        "nai",
+        "naih",
+        "noo",
+        "nooh",
+        "m",
+        "mh",
+        "uang",
+        "uak",
+        "nuai",
+        "nuaih",
+        "nue",
+        "nueh",
+        "niao",
+        "niaoh",
+        "om",
+        "op",
+        "nao",
+        "naoh",
+        "no",
+        "noh",
+        "niu",
+        "niuh",
+    ],
 }
 df_un_bu = pd.DataFrame(un_mu_dict)
 # un_mu_dict = {
@@ -63,18 +872,20 @@ tiau_hu_dict = {
     9: "\u030B",
 }
 
-#==========================================================
+# ==========================================================
 # 找韻母的「索引編號」
-#==========================================================
+# ==========================================================
+
 
 def get_un_idx(un_bu):
     try:
         un_idx = un_list.index(un_bu)
     except ValueError:
         un_idx = -1
-        print(f'Un-bu: {un_bu} does not exist')
+        print(f"Un-bu: {un_bu} does not exist")
 
     return un_idx
+
 
 def get_sip_ngoo_im_idx(un_bu_index):
     try:
@@ -86,20 +897,190 @@ def get_sip_ngoo_im_idx(un_bu_index):
     return sip_ngoo_im_idx
 
 
-
-#==========================================================
+# ==========================================================
 # 聲母處理
-#==========================================================
+# ==========================================================
 siann_bu_dict = {
-    'siann_id': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'],
-    'sip_ngoo_im_siann_id': ['l', 'n', 'p', 'k', 'kh', 't', 'ph', 'th', 'ts', 'j', 's', 'q', 'b', 'm', 'g', 'ng', 'tsh', 'h'],
-    'sip_ngoo_im': ['柳', '柳', '邊', '求', '去', '地', '頗', '他', '曾', '入', '時', '英', '門', '門', '語', '語', '出', '喜'],
-    'siann_code': ['l', 'n', 'p', 'k', 'kh', 't', 'ph', 'th', 'ts', 'j', 's', 'q', 'b', 'm', 'g', 'ng', 'tsh', 'h'],
-    'IPA': ['l', 'n', 'p', 'k', 'kʰ', 't', 'pʰ', 'tʰ', 'ʦ', 'ʣ', 's', ' ', 'b', 'm', 'ɡ', 'ŋ', 'ʦʰ', 'h'],
-    'TPS': ['ㄌ', 'ㄋ', 'ㄅ', 'ㄍ', 'ㄎ', 'ㄉ', 'ㄆ', 'ㄊ', 'ㄗ', 'ㆡ', 'ㄙ', ' ', 'ㆠ', 'ㄇ', 'ㆣ', 'ㄫ', 'ㄘ', 'ㄏ'],
-    'POJ': ['l', 'n', 'p', 'k', 'kh', 't', 'ph', 'th', 'ch', 'j', 's', ' ', 'b', 'm', 'g', 'ng', 'chh', 'h'],
-    'TL': ['l', 'n', 'p', 'k', 'kh', 't', 'ph', 'th', 'ts', 'j', 's', ' ', 'b', 'm', 'g', 'ng', 'tsh', 'h'],
-    'BP': ['l', 'ln', 'b', 'g', 'k', 'd', 'p', 't', 'z', 'zz', 's', ' ', 'bb', 'bbn', 'gg', 'ggn', 'c', 'h'],
+    "siann_id": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+    ],
+    "sip_ngoo_im_siann_id": [
+        "l",
+        "n",
+        "p",
+        "k",
+        "kh",
+        "t",
+        "ph",
+        "th",
+        "ts",
+        "j",
+        "s",
+        "q",
+        "b",
+        "m",
+        "g",
+        "ng",
+        "tsh",
+        "h",
+    ],
+    "sip_ngoo_im": [
+        "柳",
+        "柳",
+        "邊",
+        "求",
+        "去",
+        "地",
+        "頗",
+        "他",
+        "曾",
+        "入",
+        "時",
+        "英",
+        "門",
+        "門",
+        "語",
+        "語",
+        "出",
+        "喜",
+    ],
+    "siann_code": [
+        "l",
+        "n",
+        "p",
+        "k",
+        "kh",
+        "t",
+        "ph",
+        "th",
+        "ts",
+        "j",
+        "s",
+        "q",
+        "b",
+        "m",
+        "g",
+        "ng",
+        "tsh",
+        "h",
+    ],
+    "ipa": [
+        "l",
+        "n",
+        "p",
+        "k",
+        "kʰ",
+        "t",
+        "pʰ",
+        "tʰ",
+        "ʦ",
+        "ʣ",
+        "s",
+        " ",
+        "b",
+        "m",
+        "ɡ",
+        "ŋ",
+        "ʦʰ",
+        "h",
+    ],
+    "tps": [
+        "ㄌ",
+        "ㄋ",
+        "ㄅ",
+        "ㄍ",
+        "ㄎ",
+        "ㄉ",
+        "ㄆ",
+        "ㄊ",
+        "ㄗ",
+        "ㆡ",
+        "ㄙ",
+        " ",
+        "ㆠ",
+        "ㄇ",
+        "ㆣ",
+        "ㄫ",
+        "ㄘ",
+        "ㄏ",
+    ],
+    "poj": [
+        "l",
+        "n",
+        "p",
+        "k",
+        "kh",
+        "t",
+        "ph",
+        "th",
+        "ch",
+        "j",
+        "s",
+        " ",
+        "b",
+        "m",
+        "g",
+        "ng",
+        "chh",
+        "h",
+    ],
+    "tl": [
+        "l",
+        "n",
+        "p",
+        "k",
+        "kh",
+        "t",
+        "ph",
+        "th",
+        "ts",
+        "j",
+        "s",
+        " ",
+        "b",
+        "m",
+        "g",
+        "ng",
+        "tsh",
+        "h",
+    ],
+    "bp": [
+        "l",
+        "ln",
+        "b",
+        "g",
+        "k",
+        "d",
+        "p",
+        "t",
+        "z",
+        "zz",
+        "s",
+        " ",
+        "bb",
+        "bbn",
+        "gg",
+        "ggn",
+        "c",
+        "h",
+    ],
 }
 df_siann_bu = pd.DataFrame(siann_bu_dict)
 # siann_bu_dict = {
@@ -116,9 +1097,10 @@ df_siann_bu = pd.DataFrame(siann_bu_dict)
 siann_list = df_siann_bu["siann_code"].values.tolist()
 sip_ngoo_im_siann_bu = df_siann_bu["sip_ngoo_im"].values.tolist()
 
-#==========================================================
+# ==========================================================
 # 找聲母的「索引編號」
-#==========================================================
+# ==========================================================
+
 
 def get_siann_idx(siann_bu):
     siann_idx = siann_list.index(siann_bu)
@@ -129,8 +1111,8 @@ def get_siann_idx(siann_bu):
 # 將字串轉換成 List
 # Python code to convert string to list character-wise
 def convert_string_to_list(string):
-    list1=[]
-    list1[:0]=string
+    list1 = []
+    list1[:0] = string
     return list1
 
 
@@ -139,56 +1121,56 @@ def convert_string_to_list(string):
 """
 
 sip_ngoo_im_un_bu_2_un_code_dict = {
-    '君' : [ 'un', 'ut' ],
-    '堅' : [ 'ian', 'iat' ],
-    '金' : [ 'im', 'ip' ],
-    '規' : [ 'ui', 'uih' ],
-    '嘉' : [ 'ee', 'eeh' ],
-    '干' : [ 'an', 'at' ],
-    '公' : [ 'ong', 'ok' ],
-    '乖' : [ 'uai', 'uaih' ],
-    '經' : [ 'ing', 'ik' ],
-    '觀' : [ 'uan', 'uat' ],
-    '沽' : [ 'oo', 'ooh' ],
-    '嬌' : [ 'iau', 'iauh' ],
-    '稽' : [ 'ei', 'eih' ],
-    '恭' : [ 'iong', 'iok' ],
-    '高' : [ 'o', 'oh' ],
-    '皆' : [ 'ai', 'aih' ],
-    '巾' : [ 'in', 'it' ],
-    '姜' : [ 'iang', 'iak' ],
-    '甘' : [ 'am', 'ap' ],
-    '瓜' : [ 'ua', 'uah' ],
-    '江' : [ 'ang', 'ak' ],
-    '兼' : [ 'iam', 'iap' ],
-    '交' : [ 'au', 'auh' ],
-    '迦' : [ 'ia', 'iah' ],
-    '檜' : [ 'ue', 'ueh' ],
-    '監' : [ 'ann', 'ahnn' ],
-    '艍' : [ 'u', 'uh' ],
-    '膠' : [ 'a', 'ah' ],
-    '居' : [ 'i', 'ih' ],
-    '丩' : [ 'iu', 'iuh' ],
-    '更' : [ 'enn', 'ehnn' ],
-    '褌' : [ 'uinn', 'uinnh' ],
-    '茄' : [ 'io', 'ioh' ],
-    '梔' : [ 'inn', 'ihnn' ],
-    '薑' : [ 'ionn', 'ionnh' ],
-    '驚' : [ 'iann', 'iannh' ],
-    '官' : [ 'uann', 'uannh' ],
-    '鋼' : [ 'ng', 'ngh' ],
-    '伽' : [ 'e', 'eh' ],
-    '閒' : [ 'ainn', 'ainnh' ],
-    '姑' : [ 'onn', 'onnh' ],
-    '姆' : [ 'm', 'mh' ],
-    '光' : [ 'uang', 'uak' ],
-    '閂' : [ 'uainn', 'uaihnn' ],
-    '糜' : [ 'uenn', 'uennh' ],
-    '嘄' : [ 'iaunn', 'iauhnn' ],
-    '箴' : [ 'om', 'op' ],
-    '爻' : [ 'aunn', 'aunnh' ],
-    '扛' : [ 'onn', 'ohnn' ],
-    '牛' : [ 'iunn', 'iunnh' ],
+    "君": ["un", "ut"],
+    "堅": ["ian", "iat"],
+    "金": ["im", "ip"],
+    "規": ["ui", "uih"],
+    "嘉": ["ee", "eeh"],
+    "干": ["an", "at"],
+    "公": ["ong", "ok"],
+    "乖": ["uai", "uaih"],
+    "經": ["ing", "ik"],
+    "觀": ["uan", "uat"],
+    "沽": ["oo", "ooh"],
+    "嬌": ["iau", "iauh"],
+    "稽": ["ei", "eih"],
+    "恭": ["iong", "iok"],
+    "高": ["o", "oh"],
+    "皆": ["ai", "aih"],
+    "巾": ["in", "it"],
+    "姜": ["iang", "iak"],
+    "甘": ["am", "ap"],
+    "瓜": ["ua", "uah"],
+    "江": ["ang", "ak"],
+    "兼": ["iam", "iap"],
+    "交": ["au", "auh"],
+    "迦": ["ia", "iah"],
+    "檜": ["ue", "ueh"],
+    "監": ["ann", "ahnn"],
+    "艍": ["u", "uh"],
+    "膠": ["a", "ah"],
+    "居": ["i", "ih"],
+    "丩": ["iu", "iuh"],
+    "更": ["enn", "ehnn"],
+    "褌": ["uinn", "uinnh"],
+    "茄": ["io", "ioh"],
+    "梔": ["inn", "ihnn"],
+    "薑": ["ionn", "ionnh"],
+    "驚": ["iann", "iannh"],
+    "官": ["uann", "uannh"],
+    "鋼": ["ng", "ngh"],
+    "伽": ["e", "eh"],
+    "閒": ["ainn", "ainnh"],
+    "姑": ["onn", "onnh"],
+    "姆": ["m", "mh"],
+    "光": ["uang", "uak"],
+    "閂": ["uainn", "uaihnn"],
+    "糜": ["uenn", "uennh"],
+    "嘄": ["iaunn", "iauhnn"],
+    "箴": ["om", "op"],
+    "爻": ["aunn", "aunnh"],
+    "扛": ["onn", "ohnn"],
+    "牛": ["iunn", "iunnh"],
 }
 
 sip_ngoo_im_tiau_dict = {
@@ -212,9 +1194,11 @@ sip_ngoo_im_trandication_tiau_dict = {
     "下入": 8,
 }
 
+
 def get_siann_code_by_siann_bu(sian_bu):
     index = sip_ngoo_im_siann_bu.index(sian_bu)
     return siann_list[index]
+
 
 def get_un_code_by_un_bu(un_bu, tiau):
     if tiau == 4 or tiau == 8:
@@ -225,41 +1209,47 @@ def get_un_code_by_un_bu(un_bu, tiau):
         un_bu_code = sip_ngoo_im_un_bu_2_un_code_dict[un_bu][0]
     return un_bu_code
 
+
 def convert_trandication_tiau(tiau):
     return sip_ngoo_im_trandication_tiau_dict[tiau]
+
 
 def get_sip_ngoo_im_un_bu(idx):
     return df_un_bu["sip_ngoo_im"][idx]
 
+
 def get_sip_ngoo_im_siann_bu(idx):
     return df_siann_bu["sip_ngoo_im"][idx]
 
+
 def get_sip_ngoo_im_tiau_ho(idx):
     return sip_ngoo_im_tiau_dict[idx]
+
 
 def get_sip_ngoo_im_chu_im(siann_idx, un_idx, tiau_ho):
     sni_un = get_sip_ngoo_im_un_bu(un_idx)
     sni_tiau = get_sip_ngoo_im_tiau_ho(int(tiau_ho))
     sni_siann = get_sip_ngoo_im_siann_bu(siann_idx)
 
-    return(f"{sni_un}{sni_tiau}{sni_siann}")
+    return f"{sni_un}{sni_tiau}{sni_siann}"
+
 
 """
 方音符號(TPS)
 """
 
 TPS_mapping_dict = {
-    'p': 'ㆴ˙',
-    't': 'ㆵ˙',
-    'k': 'ㆻ˙',
-    'h': 'ㆷ˙',
+    "p": "ㆴ˙",
+    "t": "ㆵ˙",
+    "k": "ㆻ˙",
+    "h": "ㆷ˙",
 }
 
 TPS_remap_dict = {
-    'ㄗㄧ': 'ㄐㄧ',
-    'ㄘㄧ': 'ㄑㄧ',
-    'ㄙㄧ': 'ㄒㄧ',
-    'ㆡㄧ': 'ㆢㄧ',
+    "ㄗㄧ": "ㄐㄧ",
+    "ㄘㄧ": "ㄑㄧ",
+    "ㄙㄧ": "ㄒㄧ",
+    "ㆡㄧ": "ㆢㄧ",
 }
 
 TPS_tiau_dict = {
@@ -272,14 +1262,18 @@ TPS_tiau_dict = {
     8: "\u02D9",
 }
 
+
 def get_TPS_un_bu(idx):
     return df_un_bu["TPS"][idx]
+
 
 def get_TPS_siann_bu(idx):
     return df_siann_bu["TPS"][idx]
 
+
 def get_TPS_tiau_ho(idx):
     return TPS_tiau_dict[idx]
+
 
 def get_TPS_chu_im(siann_idx, un_idx, tiau_ho):
     sni_un = get_TPS_un_bu(un_idx)
@@ -289,13 +1283,13 @@ def get_TPS_chu_im(siann_idx, un_idx, tiau_ho):
     TPS_chu_im = f"{sni_siann}{sni_un}{sni_tiau}"
 
     pattern = r"(ㄗㄧ|ㄘㄧ|ㄙㄧ|ㆡㄧ)"
-    searchObj = re.search( pattern, TPS_chu_im, re.M|re.I)
+    searchObj = re.search(pattern, TPS_chu_im, re.M | re.I)
     if searchObj:
         key_value = searchObj.group(1)
-        TPS_chu_im = TPS_chu_im.replace(key_value,
-                                        TPS_remap_dict[key_value])
+        TPS_chu_im = TPS_chu_im.replace(key_value, TPS_remap_dict[key_value])
 
     return TPS_chu_im
+
 
 """
 白話字（POJ）
@@ -307,15 +1301,19 @@ oeh 標在 e 上。
 pattern1 = r"(oai|oan|oah|oeh|ee|ei)"
 pattern2 = r"(o|e|a|u|i|ng|m)"
 
+
 def get_POJ_tiau_hu(goan_im, tiau):
     goan_im_with_tiau_hu = f"{goan_im}{tiau_hu_dict[int(tiau)]}"
     return goan_im_with_tiau_hu
 
+
 def get_POJ_un_bu(idx):
     return df_un_bu["POJ"][idx]
 
+
 def get_POJ_siann_bu(idx):
     return df_siann_bu["POJ"][idx]
+
 
 def get_POJ_chu_im(siann_idx, un_idx, tiau):
     un = get_POJ_un_bu(un_idx)
@@ -324,12 +1322,12 @@ def get_POJ_chu_im(siann_idx, un_idx, tiau):
     POJ_chu_im = f"{siann}{un}"
 
     # pattern1 = r"(oai|oan|oah|oeh)"
-    searchObj = re.search(pattern1, POJ_chu_im, re.M|re.I)
+    searchObj = re.search(pattern1, POJ_chu_im, re.M | re.I)
     if searchObj:
         found = searchObj.group(1)
         un_chars = list(found)
         idx = 0
-        if found == 'ee' or found == 'ei':
+        if found == "ee" or found == "ei":
             idx = 0
         else:
             # found = oai/oan/oah/oeh
@@ -340,7 +1338,7 @@ def get_POJ_chu_im(siann_idx, un_idx, tiau):
         POJ_chu_im = POJ_chu_im.replace(found, un_str)
     else:
         # pattern2 = r"(o|e|a|u|i|ng|m)"
-        searchObj2 = re.search(pattern2, POJ_chu_im, re.M|re.I)
+        searchObj2 = re.search(pattern2, POJ_chu_im, re.M | re.I)
         if searchObj2:
             found = searchObj2.group(1)
             goan_im = found
@@ -348,6 +1346,7 @@ def get_POJ_chu_im(siann_idx, un_idx, tiau):
             POJ_chu_im = POJ_chu_im.replace(found, new_un)
 
     return POJ_chu_im
+
 
 """
 閩拼（BP）
@@ -365,37 +1364,42 @@ def get_POJ_chu_im(siann_idx, un_idx, tiau):
 
 # 將「傳統八聲調」轉換成閩拼使用的調號
 BP_tiau_remap_dict = {
-    1: 1, # 陰平: 44
-    2: 3, # 上聲：53
-    3: 5, # 陰去：21
-    4: 7, # 上聲：53
-    5: 2, # 陽平：24
-    7: 6, # 陰入：3?
-    8: 8, # 陽入：4?
+    1: 1,  # 陰平: 44
+    2: 3,  # 上聲：53
+    3: 5,  # 陰去：21
+    4: 7,  # 上聲：53
+    5: 2,  # 陽平：24
+    7: 6,  # 陰入：3?
+    8: 8,  # 陽入：4?
 }
 
 BP_tiau_hu_dict = {
-    1: "\u0304",    # 陰平
-    2: "\u0341",    # 陽平
-    3: "\u030C",    # 上声
-    5: "\u0300",    # 陰去
-    6: "\u0302",    # 陽去
-    7: "\u0304",    # 陰入
-    8: "\u0341",    # 陽入
+    1: "\u0304",  # 陰平
+    2: "\u0341",  # 陽平
+    3: "\u030C",  # 上声
+    5: "\u0300",  # 陰去
+    6: "\u0302",  # 陽去
+    7: "\u0304",  # 陰入
+    8: "\u0341",  # 陽入
 }
+
 
 def get_BP_un_bu(idx):
     return df_un_bu["BP"][idx]
 
+
 def get_BP_siann_bu(idx):
     return df_siann_bu["BP"][idx]
 
+
 def get_BP_tiau_remap(tiau_ho):
-   return BP_tiau_remap_dict[int(tiau_ho)]
+    return BP_tiau_remap_dict[int(tiau_ho)]
+
 
 def get_BP_tiau_hu(goan_im, BP_tiau):
     goan_im_with_tiau_hu = f"{goan_im}{BP_tiau_hu_dict[int(BP_tiau)]}"
     return goan_im_with_tiau_hu
+
 
 def get_BP_chu_im_simple(siann_idx, un_idx, tiau):
     un = get_BP_un_bu(un_idx)
@@ -407,6 +1411,7 @@ def get_BP_chu_im_simple(siann_idx, un_idx, tiau):
     BP_chu_im = f"{siann}{un}{BP_tiau}"
 
     return BP_chu_im
+
 
 def get_BP_chu_im(siann_idx, un_idx, tiau):
     un = get_BP_un_bu(un_idx)
@@ -426,7 +1431,7 @@ def get_BP_chu_im(siann_idx, un_idx, tiau):
     BP_chu_im = f"{siann}{un}"
 
     pattern = r"(a|oo|ere|iu|ui|ng|e|o|i|u|m)"
-    searchObj = re.search(pattern, BP_chu_im, re.M|re.I)
+    searchObj = re.search(pattern, BP_chu_im, re.M | re.I)
 
     if searchObj:
         found = searchObj.group(1)
@@ -446,19 +1451,25 @@ def get_BP_chu_im(siann_idx, un_idx, tiau):
 
     return BP_chu_im
 
+
 """
 羅馬拼音（TL）
 順序：《o＞e＞a＞u＞i＞ng＞m》；而 ng 標示在字母 n 上。
 """
+
+
 def get_TL_tiau_hu(goan_im, tiau):
     goan_im_with_tiau_hu = f"{goan_im}{tiau_hu_dict[int(tiau)]}"
     return goan_im_with_tiau_hu
 
+
 def get_TL_un_bu(idx):
     return df_un_bu["TL"][idx]
 
+
 def get_TL_siann_bu(idx):
     return df_siann_bu["TL"][idx]
+
 
 def get_TL_chu_im(siann_idx, un_idx, tiau):
     un = get_TL_un_bu(un_idx)
@@ -467,7 +1478,7 @@ def get_TL_chu_im(siann_idx, un_idx, tiau):
     TL_chu_im = f"{siann}{un}"
 
     pattern = r"(oo|ee|ei|o|e|a|u|i|ng|m)"
-    searchObj = re.search(pattern, TL_chu_im, re.M|re.I)
+    searchObj = re.search(pattern, TL_chu_im, re.M | re.I)
 
     if searchObj:
         found = searchObj.group(1)
@@ -478,6 +1489,7 @@ def get_TL_chu_im(siann_idx, un_idx, tiau):
         TL_chu_im = TL_chu_im.replace(found, un_str)
 
     return TL_chu_im
+
 
 # import psycopg2
 
