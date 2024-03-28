@@ -3,7 +3,8 @@ import re
 
 import xlwings as xw
 
-import modules.han_ji_chu_im as ji
+import p210_ngoo_siok_thong_zu_im as zu_im
+
 
 # ==========================================================
 # 設定共用變數
@@ -12,6 +13,60 @@ wb = None
 end_of_source_row = 0
 source_sheet = None
 source_sheet_name = ""
+
+# 使用 SQLite 資料庫，設定聲母及韻母之注音對照表
+try:
+    siann_bu_dict = zu_im.init_siann_bu_dict()
+    un_bu_dict = zu_im.init_un_bu_dict()
+except Exception as e:
+    print(e)
+    
+# 將「傳統八聲調」轉換成閩拼使用的調號
+tiau_ho_remap_for_BP = {
+    1: 1,  # 陰平: 44
+    2: 3,  # 上聲：53
+    3: 5,  # 陰去：21
+    4: 7,  # 上聲：53
+    5: 2,  # 陽平：24
+    7: 6,  # 陰入：3?
+    8: 8,  # 陽入：4?
+}
+
+tiau_ho_remap_for_sip_ngoo_im = {
+    1: "一",
+    2: "二",
+    3: "三",
+    4: "四",
+    5: "五",
+    7: "七",
+    8: "八",
+} 
+
+tiau_ho_remap_for_TPS = {
+    1: "",
+    2: "ˋ",
+    3: "˪",
+    4: "",
+    5: "ˊ",
+    7: "˫",
+    8: "\u02D9",
+}
+
+TPS_mapping_dict = {
+    "p": "ㆴ˙",
+    "t": "ㆵ˙",
+    "k": "ㆻ˙",
+    "h": "ㆷ˙",
+}
+
+TPS_remap_dict = {
+    "ㄗㄧ": "ㄐㄧ",
+    "ㄘㄧ": "ㄑㄧ",
+    "ㄙㄧ": "ㄒㄧ",
+    "ㆡㄧ": "ㆢㄧ",
+}
+
+
 
 # ==========================================================
 # 設定輸出使用的注音方法
@@ -150,17 +205,13 @@ def build_web_page(target_sheet, tsu_im_huat, div_class, rt_tag):
         # =========================================================
         # 取得聲母之聲母碼
         siann_bu = source_sheet.range("C" + str(source_index)).value
-        siann_index = 0
-        if  siann_bu and siann_bu.strip() != "":
-            siann_index = ji.get_siann_idx(siann_bu)
-            if siann_index == -1:
-                # 記錄沒找到之聲母
-                print(f"漢字：【{han_ji}】，找不到【聲母】：{siann_bu}！")
+        if not siann_bu_dict[siann_bu]:  
+            # 記錄沒找到之聲母
+            print(f"漢字：【{han_ji}】，找不到【聲母】：{siann_bu}！")
 
         # 取得韻母之韻母碼
         un_bu = source_sheet.range("D" + str(source_index)).value
-        un_index = ji.get_un_idx(un_bu)
-        if un_index == -1:
+        if not un_bu_dict[un_bu]:
             # 記錄沒找到之韻母
             print(f"漢字：【{han_ji}】，找不到【韻母】：{un_bu}！")
 
@@ -171,15 +222,37 @@ def build_web_page(target_sheet, tsu_im_huat, div_class, rt_tag):
         # 將漢字的「注音碼」，依指定的〖注音法〗，轉換為注音／拼音
         # =========================================================
         if tsu_im_huat == "SNI":  # 輸出十五音
-            piau_im = ji.get_sip_ngoo_im_chu_im(siann_index, un_index, tiau_ho)
-        elif tsu_im_huat == "TPS":  # 方音符號注音
-            piau_im = ji.get_TPS_chu_im(siann_index, un_index, tiau_ho)
+            siann = siann_bu_dict[siann_bu]["sni"]
+            un = un_bu_dict[un_bu]["sni"]
+            tiau = tiau_ho_remap_for_sip_ngoo_im[tiau_ho]
+            piau_im = f"{un}{tiau}{siann}"
         elif tsu_im_huat == "POJ":  # 輸出白話字拼音
-            piau_im = ji.get_POJ_chu_im(siann_index, un_index, tiau_ho)
+            siann = siann_bu_dict[siann_bu]["poj"]
+            un = un_bu_dict[un_bu]["poj"]
+            tiau = tiau_ho
+            piau_im = f"{siann}{un}{tiau}"
         elif tsu_im_huat == "TL":  # 輸出羅馬拼音
-            piau_im = ji.get_TL_chu_im(siann_index, un_index, tiau_ho)
+            siann = siann_bu_dict[siann_bu]["tl"]
+            un = un_bu_dict[un_bu]["tl"]
+            tiau = tiau_ho
+            piau_im = f"{siann}{un}{tiau}"
         elif tsu_im_huat == "BP":  # 輸出閩拼拼音
-            piau_im = ji.get_BP_chu_im(siann_index, un_index, tiau_ho)
+            siann = siann_bu_dict[siann_bu]["bp"]
+            un = un_bu_dict[un_bu]["bp"]
+            tiau = tiau_ho_remap_for_BP[tiau_ho]
+            piau_im = f"{siann}{un}{tiau}"
+        elif tsu_im_huat == "TPS":  # 方音符號注音
+            siann = siann_bu_dict[siann_bu]["tps"]
+            un = un_bu_dict[un_bu]["tps"]
+            tiau = tiau_ho_remap_for_TPS[tiau_ho]
+            piau_im = f"{siann}{un}{tiau}"
+
+            pattern = r"(ㄗㄧ|ㄘㄧ|ㄙㄧ|ㆡㄧ)"
+            searchObj = re.search(pattern, piau_im, re.M | re.I)
+            if searchObj:
+                key_value = searchObj.group(1)
+                piau_im = piau_im.replace(key_value, TPS_remap_dict[key_value])
+
 
         # =========================================================
         # 將已注音之漢字加入【漢字注音表】
@@ -251,3 +324,24 @@ def main_run(CONVERT_FILE_NAME):
         print(f"開始製作【{tsu_im_piau_e_mia}】網頁！")
         build_web_page(beh_tsu_im_e_piau, tsu_im_huat, div_class, rt_tag)
         print(f"【{tsu_im_piau_e_mia}】網頁製作完畢！")
+
+if __name__ == "__main__":
+    # 方音符號
+    han_ji = "時"
+    siann_bu = "s"
+    un_bu = "i"
+    tiau_ho = 5
+    
+    siann = siann_bu_dict[siann_bu]["tps"]
+    un = un_bu_dict[un_bu]["tps"]
+    tiau = tiau_ho_remap_for_TPS[tiau_ho]
+    piau_im = f"{siann}{un}{tiau}"
+
+    pattern = r"(ㄗㄧ|ㄘㄧ|ㄙㄧ|ㆡㄧ)"
+    searchObj = re.search(pattern, piau_im, re.M | re.I)
+    if searchObj:
+        key_value = searchObj.group(1)
+        piau_im = piau_im.replace(key_value, TPS_remap_dict[key_value])
+        print(f"han_ji = {han_ji}")
+        print(f"siann_bu = {siann_bu}, un_bu = {un_bu}, tiau_ho = {tiau_ho}")
+        print(f"piau_im = {piau_im}")

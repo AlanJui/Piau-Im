@@ -2,7 +2,8 @@ import getopt
 import sys
 
 import settings
-from p200_hoo_gua_tsu_im import main_run as hoo_gua_tsu_im
+# from p200_hoo_gua_tsu_im import main_run as hoo_gua_tsu_im
+from p200_Iong_Nga_Siok_Thong_Zu_Im import main_run as hoo_gua_tsu_im
 
 
 def myfunc(argv):

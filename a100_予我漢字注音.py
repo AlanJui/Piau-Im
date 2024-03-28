@@ -6,8 +6,10 @@ import xlwings as xw
 
 import settings
 from p000_import_source_data import main_run as san_sing_han_ji_tsu_im_paiau
-from p100_tsa_ji_tian import main_run as tsa_ji_tian_tshue_tsu_im
-from p200_hoo_gua_tsu_im import main_run as hoo_gua_tsu_im
+# from p100_tsa_ji_tian import main_run as tsa_ji_tian_tshue_tsu_im
+# from p200_hoo_gua_tsu_im import main_run as hoo_gua_tsu_im
+from p100_tsa_nga_siok_thong_ji_tian import main_run as tsa_ji_tian_tshue_tsu_im
+from p200_Iong_Nga_Siok_Thong_Zu_Im import main_run as hoo_gua_tsu_im
 
 
 def myfunc(argv):
