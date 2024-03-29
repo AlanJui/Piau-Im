@@ -1,4 +1,4 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 import re
 
 import xlwings as xw
@@ -21,16 +21,15 @@ try:
 except Exception as e:
     print(e)
     
-# 將「傳統八聲調」轉換成閩拼使用的調號
-tiau_ho_remap_for_BP = {
-    1: 1,  # 陰平: 44
-    2: 3,  # 上聲：53
-    3: 5,  # 陰去：21
-    4: 7,  # 上聲：53
-    5: 2,  # 陽平：24
-    7: 6,  # 陰入：3?
-    8: 8,  # 陽入：4?
-}
+#================================================================
+# 雅俗通十五音(SNI:Nga-Siok-Thong)
+#================================================================
+def SNI_piau_im(siann_bu, un_bu, tiau_ho):
+    siann = siann_bu_dict[siann_bu]["sni"]
+    un = un_bu_dict[un_bu]["sni"]
+    tiau = tiau_ho_remap_for_sip_ngoo_im[tiau_ho]
+    piau_im = f"{un}{tiau}{siann}"
+    return piau_im
 
 tiau_ho_remap_for_sip_ngoo_im = {
     1: "一",
@@ -42,36 +41,228 @@ tiau_ho_remap_for_sip_ngoo_im = {
     8: "八",
 } 
 
-tiau_ho_remap_for_TPS = {
-    1: "",
-    2: "ˋ",
-    3: "˪",
-    4: "",
-    5: "ˊ",
-    7: "˫",
-    8: "\u02D9",
+#================================================================
+# 方音符號注音（TPS）
+# TPS_mapping_dict = {
+#     "p": "ㆴ˙",
+#     "t": "ㆵ˙",
+#     "k": "ㆻ˙",
+#     "h": "ㆷ˙",
+# }
+#================================================================
+def TPS_piau_im(siann, un, tiau):
+    tiau_ho_remap_for_TPS = {
+        1: "",
+        2: "ˋ",
+        3: "˪",
+        4: "",
+        5: "ˊ",
+        7: "˫",
+        8: "\u02D9",
+    }
+
+    TPS_piau_im_remap_dict = {
+        "ㄗㄧ": "ㄐㄧ",
+        "ㄘㄧ": "ㄑㄧ",
+        "ㄙㄧ": "ㄒㄧ",
+        "ㆡㄧ": "ㆢㄧ",
+    }
+
+    siann = siann_bu_dict[siann_bu]["tps"]
+    un = un_bu_dict[un_bu]["tps"]
+    tiau = tiau_ho_remap_for_TPS[tiau_ho]
+    piau_im = f"{siann}{un}{tiau}"
+
+    pattern = r"(ㄗㄧ|ㄘㄧ|ㄙㄧ|ㆡㄧ)"
+    searchObj = re.search(pattern, piau_im, re.M | re.I)
+    if searchObj:
+        key_value = searchObj.group(1)
+        piau_im = piau_im.replace(key_value, TPS_piau_im_remap_dict[key_value])
+
+    return piau_im
+
+#================================================================
+# 在韻母加調號：白話字(POJ)與台羅(TL)同
+#================================================================
+def un_bu_ga_tiau_ho(guan_im, tiau):
+    tiau_hu_dict = {
+        1: "",
+        2: "\u0301",
+        3: "\u0300",
+        4: "",
+        5: "\u0302",
+        6: "\u030C",
+        7: "\u0304",
+        8: "\u030D",
+        9: "\u030B",
+    }
+    guan_im_u_ga_tiau_ho = f"{guan_im}{tiau_hu_dict[tiau]}"
+    return guan_im_u_ga_tiau_ho
+
+#================================================================
+# 白話字（POJ）
+# 順序：《o＞e＞a＞u＞i＞ng＞m》；而 ng 標示在字母 n 上。
+# 例外：
+#  - oai、oan、oat、oah 標在 a 上。
+#  - oeh 標在 e 上。
+#================================================================
+def POJ_piau_im(siann_bu, un_bu, tiau_ho):
+    siann = siann_bu_dict[siann_bu]["poj"]
+    un = un_bu_dict[un_bu]["poj"]
+    piau_im = f"{siann}{un}"
+    
+    # 韻母為複元音
+    # pattern1 = r"(oai|oan|oah|oeh|ee|ei)"
+    pattern1 = r"(oai|oan|oah|oeh)"
+    searchObj = re.search(pattern1, piau_im, re.M | re.I)
+    if searchObj:
+        found = searchObj.group(1)
+        un_chars = list(found)
+        idx = 0
+        if found == "ee" or found == "ei":
+            idx = 0
+        else:
+            # found = oai/oan/oah/oeh
+            idx = 1
+        guan_im = un_chars[idx]
+        un_chars[idx] = un_bu_ga_tiau_ho(guan_im, tiau_ho)
+        un_str = "".join(un_chars)
+        piau_im = piau_im.replace(found, un_str)
+    else:
+        # 韻母為單元音或鼻音韻
+        pattern2 = r"(o|e|a|u|i|ng|m)"
+        searchObj2 = re.search(pattern2, piau_im, re.M | re.I)
+        if searchObj2:
+            found = searchObj2.group(1)
+            guan_im = found
+            new_un = un_bu_ga_tiau_ho(guan_im, tiau_ho)
+            piau_im = piau_im.replace(found, new_un)
+
+    return piau_im
+
+#================================================================
+# 台羅拼音（TL）
+# 順序：《o＞e＞a＞u＞i＞ng＞m》；而 ng 標示在字母 n 上。
+#================================================================
+def TL_piau_im(siann_bu, un_bu, tiau_ho):
+    siann = siann_bu_dict[siann_bu]["tl"]
+    un = un_bu_dict[un_bu]["tl"]
+    piau_im = f"{siann}{un}"
+
+    # 韻母為複元音
+    pattern1 = r"(uai|uan|uah|ueh|ee|ei)"
+    searchObj = re.search(pattern1, piau_im, re.M | re.I)
+    if searchObj:
+        found = searchObj.group(1)
+        un_chars = list(found)
+        idx = 0
+        if found == "ee" or found == "ei":
+            idx = 0
+        else:
+            # found = uai/uan/uah/ueh
+            idx = 1
+        guan_im = un_chars[idx]
+        un_chars[idx] = un_bu_ga_tiau_ho(guan_im, tiau_ho)
+        un_str = "".join(un_chars)
+        piau_im = piau_im.replace(found, un_str)
+    else:
+        # 韻母為單元音或鼻音韻
+        pattern2 = r"(o|e|a|u|i|ng|m)"
+        searchObj2 = re.search(pattern2, piau_im, re.M | re.I)
+        if searchObj2:
+            found = searchObj2.group(1)
+            guan_im = found
+            new_un = un_bu_ga_tiau_ho(guan_im, tiau_ho)
+            piau_im = piau_im.replace(found, new_un)
+
+        # pattern = r"(oo|ee|ei|o|e|a|u|i|ng|m)"
+        # searchObj = re.search(pattern, piau_im, re.M | re.I)
+        # if searchObj:
+        #     found = searchObj.group(1)
+        #     un_chars = list(found)
+        #     guan_im = un_chars[0]
+        #     un_chars[0] = un_bu_ga_tiau_ho(guan_im, tiau_ho)
+        #     un_str = "".join(un_chars)
+        #     piau_im = piau_im.replace(found, un_str)
+
+    return piau_im
+    
+#================================================================
+# 閩拼（BP）
+#
+# 【調號標示規則】
+# 當一個音節有多個字母時，調號得標示在響度最大的字母上面（通常在韻腹）。由規則可以判定確切的字母：
+# 
+#  - 響度優先順序： a > oo > (e = o) > (i = u)〈低元音 > 高元音 > 無擦通音 > 擦音 > 塞音〉
+#  - 二合字母 iu 及 ui ，調號都標在後一個字母上；因為前一個字母是介音。
+#  - m 作韻腹時則標於字母 m 上。
+#  - 二合字母 oo 及 ng，標於前一個字母上；比如 ng 標示在字母 n 上。
+#  - 三合字母 ere，標於最後的字母 e 上。
+#================================================================
+
+# 將「台羅八聲調」轉換成閩拼使用的調號
+tiau_ho_remap_for_BP = {
+    1: 1,  # 陰平: 44
+    2: 3,  # 上聲：53
+    3: 5,  # 陰去：21
+    4: 7,  # 上聲：53
+    5: 2,  # 陽平：24
+    7: 6,  # 陰入：3?
+    8: 8,  # 陽入：4?
 }
 
-TPS_mapping_dict = {
-    "p": "ㆴ˙",
-    "t": "ㆵ˙",
-    "k": "ㆻ˙",
-    "h": "ㆷ˙",
-}
+def bp_un_bu_ga_tiau_ho(guan_im, tiau):
+    tiau_hu_dict = {
+        1: "\u0304",  # 陰平
+        2: "\u0341",  # 陽平
+        3: "\u030C",  # 上声
+        5: "\u0300",  # 陰去
+        6: "\u0302",  # 陽去
+        7: "\u0304",  # 陰入
+        8: "\u0341",  # 陽入
+    }
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
 
-TPS_remap_dict = {
-    "ㄗㄧ": "ㄐㄧ",
-    "ㄘㄧ": "ㄑㄧ",
-    "ㄙㄧ": "ㄒㄧ",
-    "ㆡㄧ": "ㆢㄧ",
-}
+def BP_piau_im(siann_bu, un_bu, tiau_ho):
+    siann = siann_bu_dict[siann_bu]["bp"]
+    un = un_bu_dict[un_bu]["bp"]
+    piau_im = f"{siann}{un}"
 
+    # 當聲母為「空白」，韻母為：i 或 u 時，調整聲母
+    un_chars = list(un)
+    if siann == "":
+        if un_chars[0] == "i":
+            siann = "y"
+        elif un_chars[0] == "u":
+            siann = "w"
 
+    pattern = r"(a|oo|ere|iu|ui|ng|e|o|i|u|m)"
+    searchObj = re.search(pattern, piau_im, re.M | re.I)
+
+    if searchObj:
+        found = searchObj.group(1)
+        un_chars = list(found)
+        idx = 0
+        if found == "iu" or found == "ui":
+            idx = 1
+        elif found == "oo" or found == "ng":
+            idx = 0
+        elif found == "ere":
+            idx = 2
+
+        # 處理韻母加聲調符號
+        guan_im = un_chars[idx]
+        tiau = tiau_ho_remap_for_BP[tiau_ho]  # 將「傳統八聲調」轉換成閩拼使用的調號
+        un_chars[idx] = bp_un_bu_ga_tiau_ho(guan_im, tiau)
+        un_str = "".join(un_chars)
+        piau_im = piau_im.replace(found, un_str)
+
+    return piau_im
 
 # ==========================================================
 # 設定輸出使用的注音方法
 # ==========================================================
-tsu_im_huat_list = {
+zu_im_huat_list = {
     "SNI": [
         "fifteen_yin",  # <div class="">
         "rt",  # Ruby Tag: <rt> / <rtc>
@@ -97,6 +288,12 @@ tsu_im_huat_list = {
         "rt",  # Ruby Tag: <rt> / <rtc>
         "閩拼標音",  # 輸出工作表名稱
     ],
+    "TLPA_Plus": [
+        "pin_yin",  # <div class="">
+        "rt",  # Ruby Tag: <rt> / <rtc>
+        "台羅拼音改良",  # 輸出工作表名稱
+        
+    ]
 }
 
 
@@ -124,7 +321,7 @@ def get_sheet_ready_to_work(wb, sheet_name_list):
 # =========================================================
 # 依據指定的【注音方法】，輸出含 Ruby Tags 之 HTML 網頁
 # =========================================================
-def build_web_page(target_sheet, tsu_im_huat, div_class, rt_tag):
+def build_web_page(target_sheet, zu_im_huat, div_class, rt_tag):
     source_index = 1  # index for source sheet
     target_index = 1  # index for target sheet
 
@@ -221,38 +418,21 @@ def build_web_page(target_sheet, tsu_im_huat, div_class, rt_tag):
         # =========================================================
         # 將漢字的「注音碼」，依指定的〖注音法〗，轉換為注音／拼音
         # =========================================================
-        if tsu_im_huat == "SNI":  # 輸出十五音
-            siann = siann_bu_dict[siann_bu]["sni"]
-            un = un_bu_dict[un_bu]["sni"]
-            tiau = tiau_ho_remap_for_sip_ngoo_im[tiau_ho]
-            piau_im = f"{un}{tiau}{siann}"
-        elif tsu_im_huat == "POJ":  # 輸出白話字拼音
-            siann = siann_bu_dict[siann_bu]["poj"]
-            un = un_bu_dict[un_bu]["poj"]
+        if zu_im_huat == "SNI":  # 輸出十五音
+            piau_im = SNI_piau_im(siann_bu, un_bu, tiau_ho)
+        elif zu_im_huat == "POJ":  # 輸出白話字拼音
+            piau_im = POJ_piau_im(siann_bu, un_bu, tiau_ho)
+        elif zu_im_huat == "TL":  # 輸出羅馬拼音
+            piau_im = TL_piau_im(siann_bu, un_bu, tiau_ho)
+        elif zu_im_huat == "BP":  # 輸出閩拼拼音
+            piau_im = BP_piau_im(siann_bu, un_bu, tiau_ho)
+        elif zu_im_huat == "TPS":  # 方音符號注音
+            piau_im = TPS_piau_im(siann_bu, un_bu, tiau_ho)
+        else:
+            siann = siann_bu_dict[siann_bu]["code"]
+            un = un_bu_dict[un_bu]["code"]
             tiau = tiau_ho
             piau_im = f"{siann}{un}{tiau}"
-        elif tsu_im_huat == "TL":  # 輸出羅馬拼音
-            siann = siann_bu_dict[siann_bu]["tl"]
-            un = un_bu_dict[un_bu]["tl"]
-            tiau = tiau_ho
-            piau_im = f"{siann}{un}{tiau}"
-        elif tsu_im_huat == "BP":  # 輸出閩拼拼音
-            siann = siann_bu_dict[siann_bu]["bp"]
-            un = un_bu_dict[un_bu]["bp"]
-            tiau = tiau_ho_remap_for_BP[tiau_ho]
-            piau_im = f"{siann}{un}{tiau}"
-        elif tsu_im_huat == "TPS":  # 方音符號注音
-            siann = siann_bu_dict[siann_bu]["tps"]
-            un = un_bu_dict[un_bu]["tps"]
-            tiau = tiau_ho_remap_for_TPS[tiau_ho]
-            piau_im = f"{siann}{un}{tiau}"
-
-            pattern = r"(ㄗㄧ|ㄘㄧ|ㄙㄧ|ㆡㄧ)"
-            searchObj = re.search(pattern, piau_im, re.M | re.I)
-            if searchObj:
-                key_value = searchObj.group(1)
-                piau_im = piau_im.replace(key_value, TPS_remap_dict[key_value])
-
 
         # =========================================================
         # 將已注音之漢字加入【漢字注音表】
@@ -295,53 +475,104 @@ def main_run(CONVERT_FILE_NAME):
     # ==========================================================
     # 自「漢字注音表」，製作各種注音法之 HTML 網頁
     # ==========================================================
-    for tsu_im_huat in tsu_im_huat_list:
+    for zu_im_huat in zu_im_huat_list:
         # 取得 <div> tag 使用的 class 名稱
-        div_class = tsu_im_huat_list[tsu_im_huat][0]
+        div_class = zu_im_huat_list[zu_im_huat][0]
 
         # 取得 Ruby Tag 應使用的 tag 類別( <rt> 或 <rtc>)
-        rt_tag = tsu_im_huat_list[tsu_im_huat][1]
+        rt_tag = zu_im_huat_list[zu_im_huat][1]
 
         # 取得輸出工作表，使用之名稱
-        tsu_im_piau_e_mia = tsu_im_huat_list[tsu_im_huat][2]
+        zu_im_piau_e_mia = zu_im_huat_list[zu_im_huat][2]
 
         # -----------------------------------------------------
         # 檢查工作表是否已存在
         # -----------------------------------------------------
-        get_sheet_ready_to_work(wb, [tsu_im_piau_e_mia])
-        beh_tsu_im_e_piau = wb.sheets[tsu_im_piau_e_mia]
-        source_sheet_name = beh_tsu_im_e_piau.name
+        get_sheet_ready_to_work(wb, [zu_im_piau_e_mia])
+        beh_zu_im_e_piau = wb.sheets[zu_im_piau_e_mia]
+        source_sheet_name = beh_zu_im_e_piau.name
 
         # -----------------------------------------------------
         # 製作 HTML 網頁
         # -----------------------------------------------------
         # 设置A列的列宽为128
-        beh_tsu_im_e_piau.range("A:A").column_width = 128
+        beh_zu_im_e_piau.range("A:A").column_width = 128
 
         # 启用A列单元格的自动换行
-        beh_tsu_im_e_piau.range("A:A").api.WrapText = True
+        beh_zu_im_e_piau.range("A:A").api.WrapText = True
 
-        print(f"開始製作【{tsu_im_piau_e_mia}】網頁！")
-        build_web_page(beh_tsu_im_e_piau, tsu_im_huat, div_class, rt_tag)
-        print(f"【{tsu_im_piau_e_mia}】網頁製作完畢！")
+        print(f"開始製作【{zu_im_piau_e_mia}】網頁！")
+        build_web_page(beh_zu_im_e_piau, zu_im_huat, div_class, rt_tag)
+        print(f"【{zu_im_piau_e_mia}】網頁製作完畢！")
 
 if __name__ == "__main__":
+    #=====================================================================
     # 方音符號
+    #=====================================================================
     han_ji = "時"
     siann_bu = "s"
     un_bu = "i"
     tiau_ho = 5
     
-    siann = siann_bu_dict[siann_bu]["tps"]
-    un = un_bu_dict[un_bu]["tps"]
-    tiau = tiau_ho_remap_for_TPS[tiau_ho]
-    piau_im = f"{siann}{un}{tiau}"
+    piau_im = TPS_piau_im(siann_bu, un_bu, tiau_ho) 
+    print("測試方音符號注音：")
+    print(f"han_ji = {han_ji}")
+    print(f"siann_bu = {siann_bu}, un_bu = {un_bu}, tiau_ho = {tiau_ho}")
+    print(f"piau_im = {piau_im}")
+    assert piau_im == "ㄒㄧˊ", "測試失敗!"
 
-    pattern = r"(ㄗㄧ|ㄘㄧ|ㄙㄧ|ㆡㄧ)"
-    searchObj = re.search(pattern, piau_im, re.M | re.I)
-    if searchObj:
-        key_value = searchObj.group(1)
-        piau_im = piau_im.replace(key_value, TPS_remap_dict[key_value])
-        print(f"han_ji = {han_ji}")
-        print(f"siann_bu = {siann_bu}, un_bu = {un_bu}, tiau_ho = {tiau_ho}")
-        print(f"piau_im = {piau_im}")
+    #=====================================================================
+    # 雅俗通十五
+    #=====================================================================
+    piau_im = SNI_piau_im(siann_bu, un_bu, tiau_ho) 
+    print("\n測試雅俗通十五音注音：")
+    print(f"han_ji = {han_ji}")
+    print(f"siann_bu = {siann_bu}, un_bu = {un_bu}, tiau_ho = {tiau_ho}")
+    print(f"piau_im = {piau_im}")
+    assert piau_im == "居五時", "測試失敗!"
+
+    #=====================================================================
+    # 閩拼
+    #=====================================================================
+    han_ji = "字"
+    siann_bu = "j"
+    un_bu = "i"
+    tiau_ho = 7
+
+    piau_im = BP_piau_im(siann_bu, un_bu, tiau_ho) 
+    print("\n測試閩拼注音：")
+    print(f"han_ji = {han_ji}")
+    print(f"siann_bu = {siann_bu}, un_bu = {un_bu}, tiau_ho = {tiau_ho}")
+    print(f"piau_im = {piau_im}")
+    assert piau_im == "zzî", "測試失敗!"
+
+    #=====================================================================
+    # 白話字
+    #=====================================================================
+    han_ji = "轉"
+    siann_bu = "z"
+    un_bu = "uan"
+    tiau_ho = 2
+
+    piau_im = POJ_piau_im(siann_bu, un_bu, tiau_ho) 
+    print("\n測試白話字注音：")
+    print(f"han_ji = {han_ji}")
+    print(f"siann_bu = {siann_bu}, un_bu = {un_bu}, tiau_ho = {tiau_ho}")
+    print(f"piau_im = {piau_im}")
+    # assert piau_im == "choán", "測試失敗!"
+    assert piau_im == "choán", "測試失敗!"
+
+    #=====================================================================
+    # 台羅拼音
+    #=====================================================================
+    han_ji = "轉"
+    siann_bu = "z"
+    un_bu = "uan"
+    tiau_ho = 2
+
+    piau_im = TL_piau_im(siann_bu, un_bu, tiau_ho) 
+    print("\n測試白話字注音：")
+    print(f"han_ji = {han_ji}")
+    print(f"siann_bu = {siann_bu}, un_bu = {un_bu}, tiau_ho = {tiau_ho}")
+    print(f"piau_im = {piau_im}")
+    # assert piau_im == "tsuán", "測試失敗!"
