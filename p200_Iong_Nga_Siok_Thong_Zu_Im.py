@@ -7,6 +7,43 @@ import p210_ngoo_siok_thong_zu_im as zu_im
 
 
 # ==========================================================
+# 設定輸出使用的注音方法
+# ==========================================================
+zu_im_huat_list = {
+    "SNI": [
+        "fifteen_yin",  # <div class="">
+        "rt",  # Ruby Tag: <rt> / <rtc>
+        "十五音切語",  # 輸出工作表名稱
+    ],
+    "TPS": [
+        "zhu_yin",  # <div class="">
+        "rtc",  # Ruby Tag: <rt> / <rtc>
+        "方音符號注音",  # 輸出工作表名稱
+    ],
+    "POJ": [
+        "pin_yin",  # <div class="">
+        "rt",  # Ruby Tag: <rt> / <rtc>
+        "白話字拼音",  # 輸出工作表名稱
+    ],
+    "TL": [
+        "pin_yin",  # <div class="">
+        "rt",  # Ruby Tag: <rt> / <rtc>
+        "台羅拼音",  # 輸出工作表名稱
+    ],
+    "BP": [
+        "pin_yin",  # <div class="">
+        "rt",  # Ruby Tag: <rt> / <rtc>
+        "閩拼標音",  # 輸出工作表名稱
+    ],
+    "TLPA_Plus": [
+        "pin_yin",  # <div class="">
+        "rt",  # Ruby Tag: <rt> / <rtc>
+        "台羅改良式",  # 輸出工作表名稱
+        
+    ]
+}
+
+# ==========================================================
 # 設定共用變數
 # ==========================================================
 wb = None
@@ -50,7 +87,7 @@ tiau_ho_remap_for_sip_ngoo_im = {
 #     "h": "ㆷ˙",
 # }
 #================================================================
-def TPS_piau_im(siann, un, tiau):
+def TPS_piau_im(siann_bu, un_bu, tiau_ho):
     tiau_ho_remap_for_TPS = {
         1: "",
         2: "ˋ",
@@ -259,44 +296,6 @@ def BP_piau_im(siann_bu, un_bu, tiau_ho):
 
     return piau_im
 
-# ==========================================================
-# 設定輸出使用的注音方法
-# ==========================================================
-zu_im_huat_list = {
-    "SNI": [
-        "fifteen_yin",  # <div class="">
-        "rt",  # Ruby Tag: <rt> / <rtc>
-        "十五音切語",  # 輸出工作表名稱
-    ],
-    "TPS": [
-        "zhu_yin",  # <div class="">
-        "rtc",  # Ruby Tag: <rt> / <rtc>
-        "方音符號注音",  # 輸出工作表名稱
-    ],
-    "POJ": [
-        "pin_yin",  # <div class="">
-        "rt",  # Ruby Tag: <rt> / <rtc>
-        "白話字拼音",  # 輸出工作表名稱
-    ],
-    "TL": [
-        "pin_yin",  # <div class="">
-        "rt",  # Ruby Tag: <rt> / <rtc>
-        "台羅拼音",  # 輸出工作表名稱
-    ],
-    "BP": [
-        "pin_yin",  # <div class="">
-        "rt",  # Ruby Tag: <rt> / <rtc>
-        "閩拼標音",  # 輸出工作表名稱
-    ],
-    "TLPA_Plus": [
-        "pin_yin",  # <div class="">
-        "rt",  # Ruby Tag: <rt> / <rtc>
-        "台羅拼音改良",  # 輸出工作表名稱
-        
-    ]
-}
-
-
 # =========================================================
 # 檢查工作表是否已存在；若否：則建立
 # =========================================================
@@ -316,7 +315,6 @@ def get_sheet_ready_to_work(wb, sheet_name_list):
             # 新增程式需使用之工作表
             print(f"工作表【{sheet_name}】已新增！")
             wb.sheets.add(name=sheet_name)
-
 
 # =========================================================
 # 依據指定的【注音方法】，輸出含 Ruby Tags 之 HTML 網頁
