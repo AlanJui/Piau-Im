@@ -39,8 +39,12 @@ zu_im_huat_list = {
         "pin_yin",  # <div class="">
         "rt",  # Ruby Tag: <rt> / <rtc>
         "台羅改良式",  # 輸出工作表名稱
-        
-    ]
+    ],
+    "DBL": [
+        "zhu_yin",  # <div class="">
+        "rtc",  # Ruby Tag: <rt> / <rtc>
+        "雙排注音",  # 輸出工作表名稱
+    ],
 }
 
 # ==========================================================
@@ -426,18 +430,30 @@ def build_web_page(target_sheet, zu_im_huat, div_class, rt_tag):
             piau_im = BP_piau_im(siann_bu, un_bu, tiau_ho)
         elif zu_im_huat == "TPS":  # 方音符號注音
             piau_im = TPS_piau_im(siann_bu, un_bu, tiau_ho)
-        else:
+        elif zu_im_huat == "TLPA_Plus":  # 台羅改良式
             siann = siann_bu_dict[siann_bu]["code"]
             # 若是空聲母，則不輸出聲母
             siann = "" if siann == "q" else siann
             un = un_bu_dict[un_bu]["code"]
             tiau = tiau_ho
             piau_im = f"{siann}{un}{tiau}"
+        else:
+            piau_im = TPS_piau_im(siann_bu, un_bu, tiau_ho)
+            siann = siann_bu_dict[siann_bu]["code"]
+            # 若是空聲母，則不輸出聲母
+            siann = "" if siann == "q" else siann
+            un = un_bu_dict[un_bu]["code"]
+            tiau = tiau_ho
+            piau_im2 = f"{siann}{un}{tiau}"
 
         # =========================================================
         # 將已注音之漢字加入【漢字注音表】
         # =========================================================
-        ruby_tag = f"  <ruby><rb>{han_ji}</rb><rp>(</rp><{rt_tag}>{piau_im}</{rt_tag}><rp>)</rp></ruby>"
+        if zu_im_huat != "DBL":
+            ruby_tag = f"  <ruby><rb>{han_ji}</rb><rp>(</rp><{rt_tag}>{piau_im}</{rt_tag}><rp>)</rp></ruby>"
+        else:
+            ruby_tag = f"  <ruby><rb>{han_ji}</rb><rp>(</rp><{rt_tag}>{piau_im}</{rt_tag}><rp>)</rp><rt>{piau_im2}</rt></ruby>"
+
         target_sheet.range("A" + str(target_index)).value = ruby_tag
 
         # =========================================================
