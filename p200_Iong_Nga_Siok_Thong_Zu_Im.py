@@ -428,6 +428,8 @@ def build_web_page(target_sheet, zu_im_huat, div_class, rt_tag):
             piau_im = TPS_piau_im(siann_bu, un_bu, tiau_ho)
         else:
             siann = siann_bu_dict[siann_bu]["code"]
+            # 若是空聲母，則不輸出聲母
+            siann = "" if siann == "q" else siann
             un = un_bu_dict[un_bu]["code"]
             tiau = tiau_ho
             piau_im = f"{siann}{un}{tiau}"
