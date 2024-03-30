@@ -30,6 +30,47 @@ def within_tiau_ho(ping_im):
     return last_char.isdigit()
 
 
+def Tshiat_Siann_Un_Tiau(piau_im):
+    # 正規表達式，用於表達所有可能的聲母。
+    siann_pattern = re.compile(r"(b|c|z|g|h|j|kh|k|l|m|ng|n|ph|p|s|th|t|q)?")
+    # 透過 match 方法，找到「注音」之中的「聲母」。然後再利用 group
+    # 方法，將注音群分「聲母」與「韻母」。
+    siann_match = siann_pattern.match(ping_im)
+
+    if siann_match:
+        siann_bu = siann_match.group()
+    else:
+        siann_bu = ""
+
+    # 依據「注音符號」中是否有含「聲調」，決定取得韻母與調號的方式。
+    valid_un_bu_endings = [
+        'un', 'ian', 'im', 'ui', 'ee', 'an', 'ong', 'uai', 'ing', 'uan',
+        'oo', 'iau', 'ei', 'iong', 'o', 'ai', 'in', 'iang', 'am', 'ua',
+        'ang', 'iam', 'au', 'ia', 'ue', 'ann', 'u', 'a', 'i', 'iu', 'enn',
+        'uinn', 'io', 'inn', 'ionn', 'iannh', 'uann', 'ng', 'e', 'ainn',
+        'onn', 'm', 'uang', 'uainn', 'uenn', 'iaunn', 'om', 'aunn', 'onn',
+        'iunn'
+    ]
+
+    if within_tiau_ho(piau_im):
+        # 若注音符號最後一個字元為「數值」，表「聲調」。即
+        un_bu = piau_im[len(siann_bu): -1]
+        tiau = piau_im[-1]
+    else:
+        un_bu = piau_im[len(siann_bu):]
+        if un_bu in valid_un_bu_endings:
+            tiau = '1'
+        else:
+            tiau = '4'
+
+    result = []
+    result += [siann_bu]
+    result += [un_bu]
+    result += [tiau]
+    return result
+
+
+
 def TL_Tshiat_Siann_Un_Tiau(ping_im):
     # 正規表達式，用於表達所有可能的聲母。
     siann_pattern = re.compile(r"(b|tsh|ts|g|h|j|kh|k|l|m|ng|n|ph|p|s|th|t|q)?")
