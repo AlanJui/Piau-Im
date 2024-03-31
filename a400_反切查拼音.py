@@ -198,6 +198,7 @@ if __name__ == "__main__":
 
     # 查詢反切上字
     print('\n-------------------------------------------------')
+    print('【切語上字】：\n')
     siann_bu = query_ji_piau(siong_ji)
     if not siann_bu:
         print(f'查不到【反切上字】：{siong_ji}')
@@ -213,15 +214,37 @@ if __name__ == "__main__":
 
     # 查詢反切下字
     print('\n-------------------------------------------------')
-    un_bu = query_ji_piau(ha_ji)
-    if not un_bu:
+    print('【切語下字】：\n')
+    ji_piau = query_ji_piau(ha_ji)
+    un_bu = []
+    if not ji_piau:
         print(f'查不到【反切下字】：{ha_ji}')
     else:
-        un = query_un_bu(ha_ji)
-        print(f"切語下字 = {ha_ji} (拼音：{un_bu[0]['拼音']})")
-        print(f"韻母：{un[0]['韻母']} [{un[0]['韻母拼音碼']}] IPA: /{un[0]['韻母國際音標']}/")
-        print(f"攝：{un[0]['攝']}，調：{un[0]['調']}聲，目次：{un[0]['目次']}")
-        print(f"{un[0]['韻']}韻，{un[0]['等']}等（{un[0]['等呼']}），{un[0]['呼']}口呼")
+        un_bu = query_un_bu(ha_ji)
+        print(f"切語下字 = {ha_ji} (拼音：{ji_piau[0]['拼音']})")
+        print(f"韻母：{un_bu[0]['韻母']} [{un_bu[0]['韻母拼音碼']}] IPA: /{un_bu[0]['韻母國際音標']}/")
+        print(f"攝：{un_bu[0]['攝']}，調：{un_bu[0]['調']}聲，目次：{un_bu[0]['目次']}")
+        print(f"{un_bu[0]['韻']}韻，{un_bu[0]['等']}等（{un_bu[0]['等呼']}），{un_bu[0]['呼']}口呼")
+
+    # 組合拼音
+    tiau_ho_list = {
+        '清平': 1,
+        '清上': 2,
+        '清去': 3,
+        '清入': 4,
+        '濁平': 5,
+        '濁上': 6,
+        '濁去': 7,
+        '濁入': 8,
+    }
+    siann = siong_ji_piau[0]['聲母拼音碼']
+    cing_tok_str = siong_ji_piau[0]['清濁']
+    cing_tok = cing_tok_str[-1]
+    un = un_bu[0]['韻母拼音碼']
+    tiau_ho = tiau_ho_list[ f"{cing_tok}{un_bu[0]['調']}" ]
+
+    print('\n-------------------------------------------------')
+    print(f'【切語拼音】：{ciat_gu} [{siann}{un}{tiau_ho}]\n')
 
     # 關閉 DB
     close_db_connection(conn)
