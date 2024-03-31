@@ -1,4 +1,5 @@
-import sys, os 
+import sys
+import os 
 from mod_Query_for_Tshiat_Gu import query_ji_piau, query_siau_un, query_ciat_gu_siong_ji, query_ciat_gu_ha_ji
 
 

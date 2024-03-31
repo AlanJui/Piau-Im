@@ -5,7 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python 偵錯工具: 帶引數的目前檔案",
+            "name": "Python 偵錯: 目前檔案",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python 偵錯: 帶引數的目前檔案",
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
@@ -46,23 +53,14 @@
             "console": "integratedTerminal",
         },
         {
-            "name": "a300_反切查拼音",
+            "name": "a400_反切查拼音",
             "type": "debugpy",
             "request": "launch",
-            "program": "a300_反切查拼音.py",
+            "program": "a400_反切查拼音.py",
             "console": "integratedTerminal",
             "args": [
-                "東",
                 "德紅"
             ]
-        },
-        {
-            "name": "Python 偵錯工具: 目前檔案",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal"
-            // "args": "${command:pickArgs}"
         }
     ]
 }
