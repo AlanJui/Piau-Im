@@ -20,6 +20,9 @@ def close_db_connection(conn):
     conn.close()
 
 
+"""
+查音雅俗通十五音聲母對照表
+"""
 def query_sip_ngoo_im_siann_bu_tui_ziau_piau():
     # SQL 查詢語句
     query = """
@@ -28,7 +31,7 @@ def query_sip_ngoo_im_siann_bu_tui_ziau_piau():
         雅俗通聲母,
         聲母拼音碼,
         國際音標
-    FROM 十五音聲母對照表;
+    FROM CSV05_十五音聲母對照表;    
     """
 
     # 執行 SQL 查詢
@@ -45,16 +48,21 @@ def query_sip_ngoo_im_siann_bu_tui_ziau_piau():
     return dict_results
 
     
+"""
+查詢雅俗通十五音韻母對照表
+"""
 def query_sip_ngoo_im_un_bu_tui_ziau_piau():
     # SQL 查詢語句
     query = """
     SELECT 識別號,
         廣韻韻母,
-        韻母拼音碼,
         雅俗通韻母,
         舒促聲,
-        國際音標
-    FROM 十五音韻母對照表;
+        拚音碼,
+        國際音標,
+        十五音序號,
+        林進三拚音碼
+    FROM CSV06_十五音韻母對照表;
     """
 
     # 執行 SQL 查詢
@@ -64,7 +72,7 @@ def query_sip_ngoo_im_un_bu_tui_ziau_piau():
     results = cursor.fetchall()
 
     # 將結果轉換為字典列表
-    fields = ['識別號', '廣韻韻母', '韻母拼音碼', '雅俗通韻母', '舒促聲', '國際音標', ]
+    fields = ['識別號', '廣韻韻母', '雅俗通韻母', '舒促聲', '韻母拼音碼', '國際音標', ]
     dict_results = [dict(zip(fields, result)) for result in results]
 
     # 回傳字典列表
@@ -172,80 +180,115 @@ def query_un_bu(han_ji):
 
 
 if __name__ == "__main__":
-    # 確認使用者有輸入反切之切語參數
-    if len(sys.argv) != 2:
-        print("請輸入欲查詢讀音之【切語】(反切上字及下字)!")
-        os._exit(-1)
-
-    ciat_gu = sys.argv[1]
-
-    # 檢查反切拼音是否有兩個字
-    if len(ciat_gu) != 2:
-        print("反切用的切語，必須有兩個漢字！")
-        os._exit(-1)
     
-    # 連上 DB
-    conn, cursor = connect_to_db('.\\Kong_Un.db')
+    # 整合前測試
+    conn, cursor = connect_to_db('.\\Kong_Un_V2.db')
     
-    # 根據反切上字和反切下字來查詢台羅拼音
-    siong_ji = ciat_gu[0]
-    ha_ji = ciat_gu[1]
-
-    # 顯示結果
-    os.system('cls')
-    print('\n=================================================')
-    print(f'欲查詢拼音之切語為：【{ciat_gu}】')
-
-    # 查詢反切上字
-    print('\n-------------------------------------------------')
-    print('【切語上字】：\n')
-    siann_bu = query_ji_piau(siong_ji)
-    if not siann_bu:
-        print(f'查不到【反切上字】：{siong_ji}')
-    else:
-        siong_ji_piau = query_table_by_id(
-            '切語上字表', 
-            ['識別號', '發音部位', '聲母', '清濁', '發送收', '聲母拼音碼', '國際音標', '切語上字', '備註'], 
-            siann_bu[0]['上字表識別號']
-        )
-        print(f"切語上字 = {siong_ji} (拼音：{siann_bu[0]['拼音']})")
-        print(f"聲母：{siong_ji_piau[0]['聲母']} [{siong_ji_piau[0]['聲母拼音碼']}] IPA: /{siong_ji_piau[0]['國際音標']}/")
-        print(f"(發音部位：{siong_ji_piau[0]['發音部位']}  ，清濁：{siong_ji_piau[0]['清濁']})")
-
-    # 查詢反切下字
-    print('\n-------------------------------------------------')
-    print('【切語下字】：\n')
-    ji_piau = query_ji_piau(ha_ji)
-    un_bu = []
-    if not ji_piau:
-        print(f'查不到【反切下字】：{ha_ji}')
-    else:
-        un_bu = query_un_bu(ha_ji)
-        print(f"切語下字 = {ha_ji} (拼音：{ji_piau[0]['拼音']})")
-        print(f"韻母：{un_bu[0]['韻母']} [{un_bu[0]['韻母拼音碼']}] IPA: /{un_bu[0]['韻母國際音標']}/")
-        print(f"攝：{un_bu[0]['攝']}，調：{un_bu[0]['調']}聲，目次：{un_bu[0]['目次']}")
-        print(f"{un_bu[0]['韻']}韻，{un_bu[0]['等']}等（{un_bu[0]['等呼']}），{un_bu[0]['呼']}口呼")
-
-    # 組合拼音
-    tiau_ho_list = {
-        '清平': 1,
-        '清上': 2,
-        '清去': 3,
-        '清入': 4,
-        '濁平': 5,
-        '濁上': 2,
-        '濁去': 7,
-        '濁入': 8,
-    }
-    siann = siong_ji_piau[0]['聲母拼音碼']
-    cing_tok_str = siong_ji_piau[0]['清濁']
-    cing_tok = cing_tok_str[-1]
-    un = un_bu[0]['韻母拼音碼']
-    tiau_ho = tiau_ho_list[ f"{cing_tok}{un_bu[0]['調']}" ]
-
-    print('\n-------------------------------------------------')
-    print(f'【切語拼音】：{ciat_gu} [{siann}{un}{tiau_ho}]\n')
+    # 
+    siann_bu_results = query_sip_ngoo_im_siann_bu_tui_ziau_piau()
+    un_bu_results =  query_sip_ngoo_im_un_bu_tui_ziau_piau()
 
     # 關閉 DB
     close_db_connection(conn)
+    sys.exit(0)
+    
+    # #============================================================================================
+    # # 根據反切上字和反切下字來查詢台羅拼音
+    # siong_ji = ciat_gu[0]
+    # ha_ji = ciat_gu[1]
+
+    # # 顯示結果
+    # os.system('cls')
+    # print('\n=================================================')
+    # print(f'欲查詢拼音之切語為：【{ciat_gu}】')
+
+    # # 查詢反切上字
+    # print('\n-------------------------------------------------')
+    # print('【切語上字】：\n')
+    # siann_bu = query_ji_piau(siong_ji)
+    # if not siann_bu:
+    #     print(f'查不到【反切上字】：{siong_ji}')
+    # else:
+    #     siong_ji_piau = query_table_by_id(
+    #         '切語上字表', 
+    #         ['識別號', '發音部位', '聲母', '清濁', '發送收', '聲母拼音碼', '國際音標', '切語上字', '備註'], 
+    #         siann_bu[0]['上字表識別號']
+    
+    
+    # # 確認使用者有輸入反切之切語參數
+    # if len(sys.argv) != 2:
+    #     print("請輸入欲查詢讀音之【切語】(反切上字及下字)!")
+    #     os._exit(-1)
+
+    # ciat_gu = sys.argv[1]
+
+    # # 檢查反切拼音是否有兩個字
+    # if len(ciat_gu) != 2:
+    #     print("反切用的切語，必須有兩個漢字！")
+    #     os._exit(-1)
+    
+    # # 連上 DB
+    # conn, cursor = connect_to_db('.\\Kong_Un.db')
+    
+    # # 根據反切上字和反切下字來查詢台羅拼音
+    # siong_ji = ciat_gu[0]
+    # ha_ji = ciat_gu[1]
+
+    # # 顯示結果
+    # os.system('cls')
+    # print('\n=================================================')
+    # print(f'欲查詢拼音之切語為：【{ciat_gu}】')
+
+    # # 查詢反切上字
+    # print('\n-------------------------------------------------')
+    # print('【切語上字】：\n')
+    # siann_bu = query_ji_piau(siong_ji)
+    # if not siann_bu:
+    #     print(f'查不到【反切上字】：{siong_ji}')
+    # else:
+    #     siong_ji_piau = query_table_by_id(
+    #         '切語上字表', 
+    #         ['識別號', '發音部位', '聲母', '清濁', '發送收', '聲母拼音碼', '國際音標', '切語上字', '備註'], 
+    #         siann_bu[0]['上字表識別號']
+    #     )
+    #     print(f"切語上字 = {siong_ji} (拼音：{siann_bu[0]['拼音']})")
+    #     print(f"聲母：{siong_ji_piau[0]['聲母']} [{siong_ji_piau[0]['聲母拼音碼']}] IPA: /{siong_ji_piau[0]['國際音標']}/")
+    #     print(f"(發音部位：{siong_ji_piau[0]['發音部位']}  ，清濁：{siong_ji_piau[0]['清濁']})")
+
+    # # 查詢反切下字
+    # print('\n-------------------------------------------------')
+    # print('【切語下字】：\n')
+    # ji_piau = query_ji_piau(ha_ji)
+    # un_bu = []
+    # if not ji_piau:
+    #     print(f'查不到【反切下字】：{ha_ji}')
+    # else:
+    #     un_bu = query_un_bu(ha_ji)
+    #     print(f"切語下字 = {ha_ji} (拼音：{ji_piau[0]['拼音']})")
+    #     print(f"韻母：{un_bu[0]['韻母']} [{un_bu[0]['韻母拼音碼']}] IPA: /{un_bu[0]['韻母國際音標']}/")
+    #     print(f"攝：{un_bu[0]['攝']}，調：{un_bu[0]['調']}聲，目次：{un_bu[0]['目次']}")
+    #     print(f"{un_bu[0]['韻']}韻，{un_bu[0]['等']}等（{un_bu[0]['等呼']}），{un_bu[0]['呼']}口呼")
+
+    # # 組合拼音
+    # tiau_ho_list = {
+    #     '清平': 1,
+    #     '清上': 2,
+    #     '清去': 3,
+    #     '清入': 4,
+    #     '濁平': 5,
+    #     '濁上': 2,
+    #     '濁去': 7,
+    #     '濁入': 8,
+    # }
+    # siann = siong_ji_piau[0]['聲母拼音碼']
+    # cing_tok_str = siong_ji_piau[0]['清濁']
+    # cing_tok = cing_tok_str[-1]
+    # un = un_bu[0]['韻母拼音碼']
+    # tiau_ho = tiau_ho_list[ f"{cing_tok}{un_bu[0]['調']}" ]
+
+    # print('\n-------------------------------------------------')
+    # print(f'【切語拼音】：{ciat_gu} [{siann}{un}{tiau_ho}]\n')
+
+    # # 關閉 DB
+    # close_db_connection(conn)
 
