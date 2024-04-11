@@ -23,7 +23,7 @@ class TestFunctions(unittest.TestCase):
         result = query_sip_ngoo_im_un_bu_tui_ciau_piau(self.cursor)
         self.assertIsNotNone(result)
 
-    def test_query_xiao_yun_cha_xun(self):
+    def test_query_cha_siau_un(self):
         # SQL 查询语句，从"小韻查詢"视图中选择数据
         query = """
         SELECT * 
@@ -41,7 +41,7 @@ class TestFunctions(unittest.TestCase):
         self.assertIsNotNone(result)
         self.assertGreater(len(result), 0, "小韻查詢视图没有返回数据")
 
-    def test_query_xiao_yun_for_feng(self):
+    def test_query_han_ji_cha_siau_un(self):
         # 定義 SQL 查詢語句，篩選小韻字為“風”的紀錄
         query = """
         SELECT 切語, 拼音
