@@ -78,6 +78,57 @@ def query_sip_ngoo_im_un_bu_tui_ciau_piau(cursor):
     return dict_results
 
 
+"""
+查詢漢字在 `小韻` 中的標音
+"""
+def query_han_ji_piau_im(cursor, han_ji):
+    """
+    根據漢字查詢其讀音資訊。
+    
+    :param cursor: 數據庫游標
+    :param han_zi: 欲查詢的漢字
+    :return: 包含讀音資訊的字典列表
+    """
+    query = """
+    SELECT 小韻字, 切語, 拼音
+    FROM 小韻查詢
+    WHERE 小韻字 = ?;
+    """
+    cursor.execute(query, (han_ji,))
+    results = cursor.fetchall()
+    
+    # 將結果轉換為字典列表
+    fields = ['小韻字', '切語', '標音']
+    return [dict(zip(fields, result)) for result in results]
+
+"""
+查詢某漢字的 `小韻` 資料
+"""
+def han_ji_cha_siau_un(cursor, han_ji):
+    # SQL 查詢語句
+    query = """
+    SELECT *
+    FROM 小韻查詢
+    WHERE 小韻字 = ?;
+    """
+
+    # 執行 SQL 查詢
+    cursor.execute(query, (han_ji,))
+
+    # 獲取查詢結果
+    results = cursor.fetchall()
+
+    # 將結果轉換為字典列表
+    fields = ['小韻字', '切語', '標音', '目次編碼', '小韻字序號', '小韻字集', '字數', 
+        '發音部位', '聲母', '清濁', '發送收', '聲母拼音碼', '切語上字集',
+        '韻系列號', '韻系行號', '韻目索引', '目次', '攝', '韻系', 
+        '韻目', '調', '呼', '等', '韻母', '切語下字集', '等呼', '韻母拼音碼']
+
+    dict_results = [dict(zip(fields, result)) for result in results]
+
+    # 回傳字典列表
+    return dict_results
+
 def query_table_by_id(table_name, fields, id):
     # 執行 SQL 查詢
     cursor.execute(f"SELECT * FROM {table_name} WHERE 識別號 = ?", (id,))
