@@ -1,4 +1,3 @@
-import os
 import sqlite3
 import sys
 
@@ -23,7 +22,7 @@ def close_db_connection(conn):
 """
 查音雅俗通十五音聲母對照表
 """
-def query_sip_ngoo_im_siann_bu_tui_ziau_piau():
+def query_sip_ngoo_im_siann_bu_tui_ciau_piau(cursor):
     # SQL 查詢語句
     query = """
     SELECT 識別號,
@@ -31,7 +30,7 @@ def query_sip_ngoo_im_siann_bu_tui_ziau_piau():
         雅俗通聲母,
         聲母拼音碼,
         國際音標
-    FROM CSV05_十五音聲母對照表;    
+    FROM 聲母對照表;
     """
 
     # 執行 SQL 查詢
@@ -51,7 +50,7 @@ def query_sip_ngoo_im_siann_bu_tui_ziau_piau():
 """
 查詢雅俗通十五音韻母對照表
 """
-def query_sip_ngoo_im_un_bu_tui_ziau_piau():
+def query_sip_ngoo_im_un_bu_tui_ciau_piau(cursor):
     # SQL 查詢語句
     query = """
     SELECT 識別號,
@@ -62,7 +61,7 @@ def query_sip_ngoo_im_un_bu_tui_ziau_piau():
         國際音標,
         十五音序號,
         林進三拚音碼
-    FROM CSV06_十五音韻母對照表;
+    FROM 韻母對照表;
     """
 
     # 執行 SQL 查詢
@@ -185,8 +184,8 @@ if __name__ == "__main__":
     conn, cursor = connect_to_db('.\\Kong_Un_V2.db')
     
     # 
-    siann_bu_results = query_sip_ngoo_im_siann_bu_tui_ziau_piau()
-    un_bu_results =  query_sip_ngoo_im_un_bu_tui_ziau_piau()
+    siann_bu_results = query_sip_ngoo_im_siann_bu_tui_ciau_piau()
+    un_bu_results =  query_sip_ngoo_im_un_bu_tui_ciau_piau()
 
     # 關閉 DB
     close_db_connection(conn)
