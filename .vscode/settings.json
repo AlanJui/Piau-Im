@@ -12,6 +12,13 @@
             "name": "Ho-Lok-Ue",
             "database": "Ho_Lok_Ue",
             "username": "postgres"
+        },
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "Kong_Un_V2",
+            "database": "${workspaceFolder:Piau-Im}/Kong_Un_V2.db"
         }
-    ]
+    ],
+    "sqltools.useNodeRuntime": true
 }
