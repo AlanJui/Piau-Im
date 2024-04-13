@@ -1,5 +1,5 @@
 #==============================================================================
-# 程式用於查詢反切拼音
+# 輸入漢字，查詢廣韻反切標音
 #==============================================================================
 import os
 import sys
@@ -15,28 +15,37 @@ from mod_廣韻 import (
 def main():
     # 確認使用者有輸入反切之切語參數
     if len(sys.argv) != 2:
-        print("請輸入欲查詢讀音之【切語】(反切上字及下字)!")
+        print("請輸入欲查詢讀音之【漢字】(無需輸入切語之反切上字及下字)!")
         sys.exit(-1)
 
-    ciat_gu = sys.argv[1]
-
-    # 檢查反切拼音是否有兩個字
-    if len(ciat_gu) != 2:
-        print("反切用的切語，必須有兩個漢字！")
-        sys.exit(-1)
+    beh_cha_e_han_ji = sys.argv[1]
 
     # 連上 DB
     with connect_to_db2('.\\Kong_Un_V2.db') as conn:
         cursor = conn.cursor()
 
-        # 根據反切上字和反切下字來查詢台羅拼音
+        # 查漢字之切語
+        han_ji_piau_im = han_ji_cha_piau_im(cursor, beh_cha_e_han_ji)
+        if not han_ji_piau_im:
+            print("找不到此【漢字】!")
+            sys.exit(-1)
+        
+        ciat_gu = han_ji_piau_im[0]['切語']    
         siong_ji = ciat_gu[0]
         ha_ji = ciat_gu[1]
 
         # 顯示結果
         os.system('cls')
         print('\n=================================================')
-        print(f'欲查詢拼音之切語為：【{ciat_gu}】')
+        print(f'查詢漢字：【{beh_cha_e_han_ji}】')
+        print(f'切語：{ciat_gu}')
+        print(f'標音：{han_ji_piau_im[0]["漢字標音"]}')
+        print(f'字義：{han_ji_piau_im[0]["字義"]}')
+
+        # 顯示廣韻參考資料
+        print('\n-------------------------------------------------')
+        print('【廣韻查找資料】：\n')
+        print(f'目次：{han_ji_piau_im[0]["目次"]}，小韻字序號：{han_ji_piau_im[0]["小韻字序號"]}，小韻字：{han_ji_piau_im[0]["小韻字"]}')
 
         # 查詢反切上字
         print('\n-------------------------------------------------')
