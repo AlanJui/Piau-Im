@@ -71,6 +71,13 @@
             "args": [
                 "德紅"
             ]
+        },
+        {
+            "name": "a500_予我廣韻標音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a500_予我廣韻標音.py",
+            "console": "integratedTerminal",
         }
     ]
 }
