@@ -4,14 +4,20 @@
 #================================================================
 import getopt
 import os
+import sqlite3
 import sys
 
 import xlwings as xw
 
 import settings
-from p000_import_source_data import main_run as san_sing_han_ji_tsu_im_paiau
-from p200_Iong_Nga_Siok_Thong_Zu_Im import main_run as hoo_gua_tsu_im
-from p300_Kong_Un_Cha_Ji_Tian import Kong_Un_Piau_Im as tsa_ji_tian_tshue_tsu_im
+from mod_廣韻 import init_sing_bu_dict, init_un_bu_dict
+from p500_Import_Source_Sheet import San_Sing_Han_Ji_Tsh_Im_Piau
+from p501_Kong_Un_Cha_Ji_Tian import Kong_Un_Piau_Im
+from p502_TLPA_Cu_Im import Iong_TLPA_Cu_Im
+
+# 專案全域常數
+# from config_dev_env import DATABASE
+DATABASE = "Kong_Un_V2.db"
 
 
 def get_cmd_input(gargv):
@@ -51,6 +57,12 @@ def get_cmd_input(gargv):
     }
 
 def main():
+    # =========================================================="
+    # 資料庫",
+    # =========================================================="
+    conn = sqlite3.connect(DATABASE)
+    db_cursor = conn.cursor()
+
     # =========================================================================
     # (1) 取得需要注音的「檔案名稱」及其「目錄路徑」。
     # =========================================================================
@@ -72,17 +84,24 @@ def main():
     # (2) 建置「漢字注音表」
     # 將存放在「工作表1」的「漢字」文章，製成「漢字注音表」以便填入注音。
     # =========================================================================
-    san_sing_han_ji_tsu_im_paiau(CONVERT_FILE_NAME)
+    San_Sing_Han_Ji_Tsh_Im_Piau(CONVERT_FILE_NAME)
 
     # =========================================================================
     # (3) 在字典查注音，填入漢字注音表。
     # =========================================================================
-    tsa_ji_tian_tshue_tsu_im(CONVERT_FILE_NAME)
+    Kong_Un_Piau_Im(CONVERT_FILE_NAME, db_cursor)
 
     # =========================================================================
     # (4) 將已注音之「漢字注音表」，製作成 HTML 格式之「注音／拼音／標音」網頁。
     # =========================================================================
-    hoo_gua_tsu_im(CONVERT_FILE_NAME)
+
+    # 設定聲母及韻母之注音對照表
+    try:
+        sing_bu_dict = init_sing_bu_dict(db_cursor)
+        un_bu_dict = init_un_bu_dict(db_cursor)
+    except Exception as e:
+        print(e)
+    Iong_TLPA_Cu_Im(CONVERT_FILE_NAME, sing_bu_dict, un_bu_dict)
 
     # ==========================================================
     # 檢查「缺字表」狀態
@@ -111,6 +130,10 @@ def main():
     # 儲存新建立的工作簿
     wb.save(new_file_path)
     
+    # ==========================================================
+    # 關閉資料庫
+    # ==========================================================
+    conn.close()
 
 if __name__ == "__main__":
     main()

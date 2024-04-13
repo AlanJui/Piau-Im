@@ -38,3 +38,4 @@ dist
 config.local.js
 basement_dist
 ~$*
+docs/tmp.csv

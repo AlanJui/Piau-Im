@@ -272,3 +272,100 @@ def piau_tiau_ho(ji_tian_piau_im):
     sing_tiau = ji_tian_piau_im['調']
     su_sing_pat_tiau = tiau_ho_list[ f"{cing_tok}{sing_tiau}" ]
     return su_sing_pat_tiau
+
+
+def init_sing_bu_dict(cursor):
+    # 執行 SQL 查詢
+    cursor.execute("SELECT * FROM 聲母對照表")
+
+    # 獲取所有資料
+    rows = cursor.fetchall()
+
+    # 初始化字典
+    sing_bu_dict = {}
+
+    # 從查詢結果中提取資料並將其整理成一個字典
+    for row in rows:
+        sing_bu_dict[row[1]] = {
+            'code': row[1],
+            'ipa': row[2],
+            'poj': row[3],
+            'bp': row[4],
+            'tl': row[5],
+            'tps': row[6],
+            'sni': row[7],
+        }
+
+    return sing_bu_dict
+
+
+def init_un_bu_dict(cursor):
+    # 執行 SQL 查詢
+    cursor.execute("SELECT * FROM 韻母對照表")
+
+    # 獲取所有資料
+    rows = cursor.fetchall()
+
+    # 初始化字典
+    un_bu_dict = {}
+
+    # 從查詢結果中提取資料並將其整理成一個字典
+    for row in rows:
+        un_bu_dict[row[1]] = {
+            'code': row[1],
+            'ipa': row[2],
+            'poj': row[3],
+            'bp': row[4],
+            'tl': row[5],
+            'tps': row[6],
+            'sni': row[7],
+            'sni_su_ciok_sing': row[8],
+            'sni_su_ho': int(row[9]),
+        }
+
+    return un_bu_dict
+
+
+if __name__ == "__main__":
+    sing_bu_dict = init_sing_bu_dict()    
+    sing_code = 'c'
+
+    sing_bu_tl = sing_bu_dict[sing_code]['tl']
+    assert sing_bu_tl == 'tsh', "轉換錯誤！"
+
+    sing_bu_ipa = sing_bu_dict[sing_code]['ipa']
+    assert sing_bu_ipa == 'ʦʰ', "轉換錯誤！"
+
+    sing_bu_poj = sing_bu_dict[sing_code]['poj']
+    assert sing_bu_poj == 'chh', "轉換錯誤！"
+
+    sing_bu_bp = sing_bu_dict[sing_code]['bp']
+    assert sing_bu_bp == 'c', "轉換錯誤！"
+
+    sing_bu_tps = sing_bu_dict[sing_code]['tps']
+    assert sing_bu_tps == 'ㄘ', "轉換錯誤！"
+
+    sing_bu_sni = sing_bu_dict[sing_code]['sni']
+    assert sing_bu_sni == '出', "轉換錯誤！"
+
+    #--------------------------------------------------
+    un_bu_dict = init_un_bu_dict()    
+    un_code = 'ee'
+
+    un_bu_tl = un_bu_dict[un_code]['tl']
+    assert un_bu_tl == 'ee', "轉換錯誤！"
+
+    un_bu_ipa = un_bu_dict[un_code]['ipa']
+    assert un_bu_ipa == 'ɛ', "轉換錯誤！"
+
+    un_bu_poj = un_bu_dict[un_code]['poj']
+    assert un_bu_poj == 'e', "轉換錯誤！"
+
+    un_bu_bp = un_bu_dict[un_code]['bp']
+    assert un_bu_bp == 'e', "轉換錯誤！"
+
+    un_bu_tps = un_bu_dict[un_code]['tps']
+    assert un_bu_tps == 'ㄝ', "轉換錯誤！"
+
+    un_bu_sni = un_bu_dict[un_code]['sni']
+    assert un_bu_sni == '嘉', "轉換錯誤！"
