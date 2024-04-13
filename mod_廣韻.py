@@ -38,7 +38,7 @@ def connect_to_db2(db_path):
     conn = sqlite3.connect(db_path)
 
     # 創建一個游標
-    cursor = conn.cursor()
+    cursor = conn.cursor()  # noqa: F841
 
     return conn
 

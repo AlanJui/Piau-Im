@@ -53,6 +53,16 @@
             "console": "integratedTerminal",
         },
         {
+            "name": "a300_漢字查標音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a300_漢字查標音.py",
+            "console": "integratedTerminal",
+            "args": [
+                "凍"
+            ]
+        },
+        {
             "name": "a400_反切查拼音",
             "type": "debugpy",
             "request": "launch",
