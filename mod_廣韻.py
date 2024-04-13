@@ -251,3 +251,24 @@ def query_table_by_id(cursor, table_name, fields, id):
 
     # 回傳字典列表
     return dict_results
+
+
+# =========================================================
+# 判斷調號
+# =========================================================
+def piau_tiau_ho(ji_tian_piau_im):
+    tiau_ho_list = {
+        '清平': 1,
+        '清上': 2,
+        '清去': 3,
+        '清入': 4,
+        '濁平': 5,
+        '濁上': 2,
+        '濁去': 7,
+        '濁入': 8,
+    }
+    siong_ji_cing_tok = ji_tian_piau_im['清濁']
+    cing_tok = siong_ji_cing_tok[-1]
+    sing_tiau = ji_tian_piau_im['調']
+    su_sing_pat_tiau = tiau_ho_list[ f"{cing_tok}{sing_tiau}" ]
+    return su_sing_pat_tiau

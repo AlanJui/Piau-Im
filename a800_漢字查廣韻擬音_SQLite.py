@@ -10,8 +10,8 @@
 
 import sys
 
-from mod_Query_for_Tshiat_Gu import query_tshiat_gu_siong_ji, query_tshiat_gu_ha_ji
-from mod_huan_tshiat import tshu_tiau, query_tiau_ho
+from mod_huan_tshiat import query_tiau_ho, tshu_tiau
+from mod_Query_for_Tshiat_Gu import query_tshiat_gu_ha_ji, query_tshiat_gu_siong_ji
 from mod_於字典網站查詢漢字之廣韻切語發音 import fetch_kong_un_info
 
 
