@@ -1,15 +1,46 @@
 import sqlite3
 
 
+def connect_to_db_by_context_manager_decorator(db_path):
+    def connect_to_db(func):
+        def wrapper(*args, **kwargs):
+            # 創建數據庫連接
+            conn = sqlite3.connect(db_path)
 
-def connect_to_db(db_name):
+            # 創建一個游標
+            cursor = conn.cursor()
+
+            # 執行函數
+            result = func(cursor, *args, **kwargs)
+
+            # 關閉數據庫連接
+            conn.close()
+
+            return result
+
+        return wrapper
+
+    return connect_to_db
+
+
+def connect_to_db(db_path):
     # 創建數據庫連接
-    conn = sqlite3.connect(db_name)
+    conn = sqlite3.connect(db_path)
 
     # 創建一個游標
     cursor = conn.cursor()
 
     return conn, cursor
+
+
+def connect_to_db2(db_path):
+    # 創建數據庫連接
+    conn = sqlite3.connect(db_path)
+
+    # 創建一個游標
+    cursor = conn.cursor()
+
+    return conn
 
 
 def close_db_connection(conn):
