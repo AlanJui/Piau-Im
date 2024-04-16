@@ -177,7 +177,7 @@ class TestQueryHanJiPiauIm(unittest.TestCase):
         # 检查是否存在符合条件的记录
         found = False
         for result in results:
-            if result.get('韻母') == '冬開1' and result.get('韻母拼音碼') == 'ong':
+            if result.get('韻母') == '冬開1舒聲' and result.get('韻母拼音碼') == 'ong':
                 found = True
                 break
 
