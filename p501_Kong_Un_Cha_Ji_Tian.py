@@ -137,8 +137,8 @@ def Kong_Un_Piau_Im(CONVERT_FILE_NAME, db_cursor):
         piau_im = kong_un_piau_im[0]
         han_ji_id = piau_im['漢字識別號']
         # sing_bu = piau_im['上字標音'] if piau_im['上字標音'] != "Ø" else "q"
-        sing_bu = piau_im['上字標音']
-        un_bu = piau_im['下字標音']
+        sing_bu = piau_im['聲母碼']
+        un_bu = piau_im['韻母碼']
         tiau_ho = piau_tiau_ho(piau_im)
         cu_im = f"{sing_bu}{un_bu}{tiau_ho}"
 
@@ -160,8 +160,8 @@ def Kong_Un_Piau_Im(CONVERT_FILE_NAME, db_cursor):
                 piau_im = kong_un_piau_im[index]
                 han_ji_id = piau_im['漢字識別號']
                 # sing_bu = piau_im['上字標音'] if piau_im['上字標音'] != "Ø" else "q"
-                sing_bu = piau_im['上字標音']
-                un_bu = piau_im['下字標音']
+                sing_bu = piau_im['聲母碼']
+                un_bu = piau_im['韻母碼']
                 tiau_ho = piau_tiau_ho(piau_im)
                 cu_im = f"{sing_bu}{un_bu}{tiau_ho}"
 
