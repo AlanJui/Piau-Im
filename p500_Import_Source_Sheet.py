@@ -1,6 +1,15 @@
 import xlwings as xw
 
 
+# -----------------------------------------------------
+# 將「字串」轉換成「串列（Characters List）」
+# Python code to convert string to list character-wise
+def convert_string_to_chars_list(string):
+    list1 = []
+    list1[:0] = string
+    return list1
+
+
 def San_Sing_Han_Ji_Tsh_Im_Piau(CONVERT_FILE_NAME):
     # 打開活頁簿檔案
     file_path = CONVERT_FILE_NAME
@@ -51,14 +60,6 @@ def San_Sing_Han_Ji_Tsh_Im_Piau(CONVERT_FILE_NAME):
         print(e)
         print("找不到：〖漢字注音表〗工作表。")
         return False
-
-    # -----------------------------------------------------
-    # 將「字串」轉換成「串列（Characters List）」
-    # Python code to convert string to list character-wise
-    def convert_string_to_chars_list(string):
-        list1 = []
-        list1[:0] = string
-        return list1
 
     # ==========================================================
     # (1)
