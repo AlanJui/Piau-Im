@@ -1,7 +1,10 @@
 # coding=utf-8
 import re
+import sqlite3
 
 import xlwings as xw
+
+from mod_廣韻 import init_sing_bu_dict, init_un_bu_dict
 
 # ==========================================================
 # 設定輸出使用的注音方法
@@ -192,13 +195,13 @@ def TL_piau_im(sing_bu, un_bu, tiau_ho):
     piau_im = f"{siann}{un}"
 
     # 韻母為複元音
-    pattern1 = r"(uai|uan|uah|ueh|ee|ei)"
+    pattern1 = r"(uai|uan|uah|ueh|ee|ei|oo)"
     searchObj = re.search(pattern1, piau_im, re.M | re.I)
     if searchObj:
         found = searchObj.group(1)
         un_chars = list(found)
         idx = 0
-        if found == "ee" or found == "ei":
+        if found == "ee" or found == "ei" or found == "oo":
             idx = 0
         else:
             # found = uai/uan/uah/ueh
@@ -529,6 +532,24 @@ def Iong_TLPA_Cu_Im(CONVERT_FILE_NAME, sing_bu_dict, un_bu_dict):
 
 
 if __name__ == "__main__":
+    # 專案全域常數
+    global Sing_Bu_Dict, Un_Bu_Dict
+
+    # =========================================================="
+    # 資料庫",
+    # =========================================================="
+    DATABASE = "Kong_Un_V2.db"
+    conn = sqlite3.connect(DATABASE)
+    db_cursor = conn.cursor()
+
+    # 設定聲母及韻母之注音對照表
+    try:
+        # sing_bu_dict = init_sing_bu_dict(db_cursor)
+        # un_bu_dict = init_un_bu_dict(db_cursor)
+        Sing_Bu_Dict = init_sing_bu_dict(db_cursor)
+        Un_Bu_Dict = init_un_bu_dict(db_cursor)
+    except Exception as e:
+        print(e)
     #=====================================================================
     # 方音符號
     #=====================================================================
@@ -573,7 +594,7 @@ if __name__ == "__main__":
     # 白話字
     #=====================================================================
     han_ji = "轉"
-    sing_bu = "z"
+    sing_bu = "c"
     un_bu = "uan"
     tiau_ho = 2
 
@@ -589,7 +610,7 @@ if __name__ == "__main__":
     # 台羅拼音
     #=====================================================================
     han_ji = "轉"
-    sing_bu = "z"
+    sing_bu = "c"
     un_bu = "uan"
     tiau_ho = 2
 
@@ -599,3 +620,20 @@ if __name__ == "__main__":
     print(f"sing_bu = {sing_bu}, un_bu = {un_bu}, tiau_ho = {tiau_ho}")
     print(f"piau_im = {piau_im}")
     # assert piau_im == "tsuán", "測試失敗!"
+
+    han_ji = "湖"
+    sing_bu = "h"
+    un_bu = "oo"
+    tiau_ho = 5
+
+    piau_im = TL_piau_im(sing_bu, un_bu, tiau_ho) 
+    print("\n測試白話字注音：")
+    print(f"han_ji = {han_ji}")
+    print(f"sing_bu = {sing_bu}, un_bu = {un_bu}, tiau_ho = {tiau_ho}")
+    print(f"piau_im = {piau_im}")
+    assert piau_im == "hôo", "測試失敗!"
+
+    # ==========================================================
+    # 關閉資料庫
+    # ==========================================================
+    conn.close()
