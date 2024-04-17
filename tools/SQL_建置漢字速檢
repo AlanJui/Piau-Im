@@ -1,0 +1,9 @@
+DROP VIEW  IF EXISTS 漢字速檢;
+
+CREATE VIEW 漢字速檢 AS SELECT
+           字表.識別號 AS 漢字識別號,
+           字表.字,
+           字表.字義,
+           小韻速檢.*
+      FROM 字表
+           LEFT JOIN 小韻速檢 ON 字表.小韻識別號 = 小韻速檢.小韻識別號
