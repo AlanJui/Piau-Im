@@ -1,4 +1,5 @@
 # coding=utf-8
+import os
 import re
 import sqlite3
 
@@ -329,6 +330,8 @@ def get_sheet_ready_to_work(wb, sheet_name_list):
 # 依據指定的【注音方法】，輸出含 Ruby Tags 之 HTML 網頁
 # =========================================================
 def build_web_page(target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict, un_bu_dict):
+    write_buffer = ""
+    
     source_index = 1  # index for source sheet
     target_index = 1  # index for target sheet
 
@@ -353,12 +356,16 @@ def build_web_page(target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict, un
     target_sheet.range("A" + str(target_index)).value = html_str
     target_index += 1
 
+    write_buffer += (html_str + "\n")
+
     # =========================================================
     # 輸出 <div> tag
     # =========================================================
     html_str = f"<div class='{div_class}'><p>"
     target_sheet.range("A" + str(target_index)).value = html_str
     target_index += 1
+
+    # write_buffer += (html_str + "\n")
 
     while source_index <= end_of_source_row:
         # 自 source_sheet 取待注音漢字
@@ -373,6 +380,8 @@ def build_web_page(target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict, un
             target_sheet.range("A" + str(target_index)).value = html_str
             target_index += 1
             source_index += 1
+    
+            write_buffer += (html_str + "\n")
             continue
 
         # =========================================================
@@ -388,6 +397,8 @@ def build_web_page(target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict, un
             target_sheet.range("A" + str(target_index)).value = han_ji
             target_index += 1
             source_index += 1
+    
+            write_buffer += (html_str + "\n")
             continue
 
         # =========================================================
@@ -402,6 +413,8 @@ def build_web_page(target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict, un
             target_sheet.range("A" + str(target_index)).value = ruby_tag
             target_index += 1
             source_index += 1
+    
+            write_buffer += (ruby_tag + "\n")
             continue
 
         # =========================================================
@@ -460,6 +473,8 @@ def build_web_page(target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict, un
             ruby_tag = f"  <ruby><rb>{han_ji}</rb><rp>(</rp><{rt_tag}>{piau_im}</{rt_tag}><rp>)</rp><rt>{piau_im2}</rt></ruby>"
 
         target_sheet.range("A" + str(target_index)).value = ruby_tag
+    
+        write_buffer += (ruby_tag + "\n")
 
         # =========================================================
         # 調整讀取來源；寫入標的各工作表
@@ -474,6 +489,10 @@ def build_web_page(target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict, un
     html_str = "</p></div>"
     target_sheet.range("A" + str(target_index)).value = html_str
 
+    write_buffer += html_str        
+
+    # 返回網頁輸出暫存區
+    return write_buffer 
 
 def Iong_TLPA_Cu_Im(CONVERT_FILE_NAME, sing_bu_dict, un_bu_dict):
     global wb  # 宣告 wb 為全域變數
@@ -527,9 +546,30 @@ def Iong_TLPA_Cu_Im(CONVERT_FILE_NAME, sing_bu_dict, un_bu_dict):
         beh_cu_im_e_piau.range("A:A").api.WrapText = True
 
         print(f"開始製作【{cu_im_piau_e_mia}】網頁！")
-        build_web_page(beh_cu_im_e_piau, cu_im_huat, div_class, rt_tag, sing_bu_dict, un_bu_dict)
-        print(f"【{cu_im_piau_e_mia}】網頁製作完畢！")
+        # -----------------------------------------------------
+        # 產生 HTML 網頁用文字檔
+        # -----------------------------------------------------
+        title = wb.sheets["env"].range("TITLE").value
+        # 確保 output 子目錄存在
+        output_dir = 'output'
+        output_file = f"{title}_{source_sheet_name}.html"
+        output_path = os.path.join(output_dir, output_file)
 
+        f = open(output_path, 'w', encoding='utf-8')
+
+        buffer = build_web_page(beh_cu_im_e_piau, cu_im_huat, div_class, rt_tag, sing_bu_dict, un_bu_dict)
+
+        try:
+            # 輸出到網頁檔案
+            f.write(buffer)
+        except Exception as e:
+            print(f"An error occurred: {e}")
+        finally:
+            # 確保檔案在任何情況下都會被關閉
+            if not f.closed:
+                f.close()
+        
+        print(f"【{cu_im_piau_e_mia}】網頁製作完畢！")
 
 if __name__ == "__main__":
     # 專案全域常數
