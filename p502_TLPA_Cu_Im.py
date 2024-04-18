@@ -427,13 +427,17 @@ def build_web_page(target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict, un
         # =========================================================
         # 取得聲母之聲母碼
         sing_bu = source_sheet.range("C" + str(source_index)).value
-        if not Sing_Bu_Dict[sing_bu]:  
+        try:
+            sing_list = Sing_Bu_Dict[sing_bu]
+        except KeyError:
             # 記錄沒找到之聲母
             print(f"漢字：【{han_ji}】，找不到【聲母】：{sing_bu}！")
 
         # 取得韻母之韻母碼
         un_bu = source_sheet.range("D" + str(source_index)).value
-        if not Un_Bu_Dict[un_bu]:
+        try:
+            un_list = Un_Bu_Dict[un_bu]
+        except KeyError:
             # 記錄沒找到之韻母
             print(f"漢字：【{han_ji}】，找不到【韻母】：{un_bu}！")
 
@@ -443,31 +447,32 @@ def build_web_page(target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict, un
         # =========================================================
         # 將漢字的「注音碼」，依指定的〖注音法〗，轉換為注音／拼音
         # =========================================================
-        if cu_im_huat == "SNI":  # 輸出十五音
-            piau_im = SNI_piau_im(sing_bu, un_bu, tiau_ho)
-        elif cu_im_huat == "POJ":  # 輸出白話字拼音
-            piau_im = POJ_piau_im(sing_bu, un_bu, tiau_ho)
-        elif cu_im_huat == "TL":  # 輸出羅馬拼音
-            piau_im = TL_piau_im(sing_bu, un_bu, tiau_ho)
-        elif cu_im_huat == "BP":  # 輸出閩拼拼音
-            piau_im = BP_piau_im(sing_bu, un_bu, tiau_ho)
-        elif cu_im_huat == "TPS":  # 方音符號注音
-            piau_im = TPS_piau_im(sing_bu, un_bu, tiau_ho)
-        elif cu_im_huat == "TLPA_Plus":  # 台羅改良式
-            siann = Sing_Bu_Dict[sing_bu]["code"]
-            # 若是空聲母，則不輸出聲母
-            siann = "" if sing_bu == "Ø" or siann == None else siann
-            un = Un_Bu_Dict[un_bu]["code"]
-            tiau = tiau_ho
-            piau_im = f"{siann}{un}{tiau}"
-        else:
-            piau_im = TPS_piau_im(sing_bu, un_bu, tiau_ho)
-            siann = Sing_Bu_Dict[sing_bu]["code"]
-            # 若是空聲母，則不輸出聲母
-            siann = "" if sing_bu == "Ø" or siann == None else siann
-            un = Un_Bu_Dict[un_bu]["code"]
-            tiau = tiau_ho
-            piau_im2 = f"{siann}{un}{tiau}"
+        if sing_list and un_list: # 若是空白，則不輸出注音
+            if cu_im_huat == "SNI":  # 輸出十五音
+                piau_im = SNI_piau_im(sing_bu, un_bu, tiau_ho)
+            elif cu_im_huat == "POJ":  # 輸出白話字拼音
+                piau_im = POJ_piau_im(sing_bu, un_bu, tiau_ho)
+            elif cu_im_huat == "TL":  # 輸出羅馬拼音
+                piau_im = TL_piau_im(sing_bu, un_bu, tiau_ho)
+            elif cu_im_huat == "BP":  # 輸出閩拼拼音
+                piau_im = BP_piau_im(sing_bu, un_bu, tiau_ho)
+            elif cu_im_huat == "TPS":  # 方音符號注音
+                piau_im = TPS_piau_im(sing_bu, un_bu, tiau_ho)
+            elif cu_im_huat == "TLPA_Plus":  # 台羅改良式
+                siann = Sing_Bu_Dict[sing_bu]["code"]
+                # 若是空聲母，則不輸出聲母
+                siann = "" if sing_bu == "Ø" or siann == None else siann
+                un = Un_Bu_Dict[un_bu]["code"]
+                tiau = tiau_ho
+                piau_im = f"{siann}{un}{tiau}"
+            else:
+                piau_im = TPS_piau_im(sing_bu, un_bu, tiau_ho)
+                siann = Sing_Bu_Dict[sing_bu]["code"]
+                # 若是空聲母，則不輸出聲母
+                siann = "" if sing_bu == "Ø" or siann == None else siann
+                un = Un_Bu_Dict[un_bu]["code"]
+                tiau = tiau_ho
+                piau_im2 = f"{siann}{un}{tiau}"
 
         # =========================================================
         # 將已注音之漢字加入【漢字注音表】

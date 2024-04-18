@@ -271,7 +271,11 @@ def piau_tiau_ho(ji_tian_piau_im):
     siong_ji_cing_tok = ji_tian_piau_im['清濁']
     cing_tok = siong_ji_cing_tok[-1]
     sing_tiau = ji_tian_piau_im['調']
-    su_sing_pat_tiau = tiau_ho_list[ f"{cing_tok}{sing_tiau}" ]
+    try:
+        su_sing_pat_tiau = tiau_ho_list[ f"{cing_tok}{sing_tiau}" ]
+    except KeyError:
+        print(f"無法判漢字：{ji_tian_piau_im['字']}的 [{ji_tian_piau_im['聲母碼']}{ji_tian_piau_im['韻母碼']}] 調號！")
+        su_sing_pat_tiau = 0
     return su_sing_pat_tiau
 
 
