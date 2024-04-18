@@ -1,0 +1,50 @@
+@font-face {
+  font-family: 'BopomofoRuby';
+  src:
+    local('BopomofoRuby1909-v1-Regular'),
+    url('./assets/fonts/BopomofoRuby1909-v1-Regular.ttf');
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500&display=swap');
+
+body, input, button, select, textarea {
+  font-family: "Noto Serif TC", serif;
+  line-height: 1.2;
+  font-size: 24px;
+  letter-spacing: 2px;
+  margin: 10px 50px;
+}
+
+h2 {
+  font-family: sans-serif;
+}
+
+.zhu_yin {
+  font-size: 48px;
+  line-height: 1.2;
+}
+
+rt {
+  font-family: Arial;
+  font-size: 45%;
+  ruby-merge: separate;
+  writing-mode: horizontal-tb;
+  color: darkcyan;
+}
+
+rtc {
+  font-family: BopomofoRuby;
+  font-size: 30%;
+  display: inline-block;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  vertical-align: middle;
+  padding-right: 0.4rem;
+  color: brown;
+}
+
+ruby {
+  ruby-position: under;
+  ruby-align: center;
+  ruby-merge: auto;
+}

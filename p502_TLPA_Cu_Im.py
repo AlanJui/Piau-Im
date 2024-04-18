@@ -343,7 +343,6 @@ def build_web_page(target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict, un
 
     # ruff: noqa: E501
     div_tag = (
-        "《%s》【%s】\n"
         "<div class='separator' style='clear: both'>\n"
         "  <a href='圖片' style='display: block; padding: 1em 0; text-align: center'>\n"
         "    <img alt='%s' border='0' width='400' data-original-height='630' data-original-width='1200'\n"
@@ -351,32 +350,38 @@ def build_web_page(target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict, un
         "  </a>\n"
         "</div>\n"
     )
-    html_str = ""
-    html_str += div_tag % (title, source_sheet_name, title, image_url)
+    html_str = f"《{title}》【{source_sheet_name}】\n"
+    html_str += div_tag % (title, image_url)
+    target_sheet.range("A" + str(target_index)).value = html_str
+    target_index += 1
+
+    # 寫入文章附圖
+    write_buffer += (div_tag % (title, image_url) + "\n")
+
+    # =========================================================
+    # 輸出 <div> tag
+    # =========================================================
+    html_str = f"<div class='{div_class}'><p style='font-size: 1.2em;letter-spacing: 2px;text-align: center;'>"
     target_sheet.range("A" + str(target_index)).value = html_str
     target_index += 1
 
     write_buffer += (html_str + "\n")
 
-    # =========================================================
-    # 輸出 <div> tag
-    # =========================================================
-    html_str = f"<div class='{div_class}'><p>"
-    target_sheet.range("A" + str(target_index)).value = html_str
-    target_index += 1
-
-    # write_buffer += (html_str + "\n")
-
+    pagrpah_count = 1
     while source_index <= end_of_source_row:
         # 自 source_sheet 取待注音漢字
         han_ji = str(source_sheet.range("A" + str(source_index)).value)
         han_ji.strip()
 
         # =========================================================
-        # 如是空白或換行，處理換行
+        # 如是空白或換行，輸出段落 <p> tag
         # =========================================================
         if han_ji == "" or han_ji == "\n":
-            html_str = "</p><p>"
+            pagrpah_count += 1
+            if pagrpah_count == 2:
+                html_str = "</p><p style='font-size: 0.6em;letter-spacing: 2px;text-align: right;'>"
+            else:
+                html_str = "</p><p>"
             target_sheet.range("A" + str(target_index)).value = html_str
             target_index += 1
             source_index += 1
@@ -398,7 +403,7 @@ def build_web_page(target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict, un
             target_index += 1
             source_index += 1
     
-            write_buffer += (html_str + "\n")
+            write_buffer += (han_ji + "\n")
             continue
 
         # =========================================================
@@ -494,6 +499,34 @@ def build_web_page(target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict, un
     # 返回網頁輸出暫存區
     return write_buffer 
 
+def create_html_file(output_path, content, title='您的標題'):
+    template = f"""
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <title>{title}</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="assets/styles/styles.css">
+</head>
+<body>
+    {content}
+    <div>
+        <p>
+            為能正確顯示「注音符號」，請點擊以下連結，下載注音符號專用字型：
+            <a href="https://github.com/cmex-30/Bopomofo_on_Web/tree/master/font/BopomofoRuby1909-v1-Regular.ttf">
+                BopomofoRuby1909-v1-Regular.ttf
+            </a>
+            ，並於使用之電腦端安裝此字型。
+        </p>
+    </div>
+</body>
+</html>
+    """
+
+    # Write to HTML file
+    with open(output_path, 'w', encoding='utf-8') as file:
+        file.write(template)
+
 def Iong_TLPA_Cu_Im(CONVERT_FILE_NAME, sing_bu_dict, un_bu_dict):
     global wb  # 宣告 wb 為全域變數
     global source_sheet  # 宣告 source_sheet 為全域變數
@@ -551,23 +584,16 @@ def Iong_TLPA_Cu_Im(CONVERT_FILE_NAME, sing_bu_dict, un_bu_dict):
         # -----------------------------------------------------
         title = wb.sheets["env"].range("TITLE").value
         # 確保 output 子目錄存在
-        output_dir = 'output'
+        output_dir = 'docs'
         output_file = f"{title}_{source_sheet_name}.html"
         output_path = os.path.join(output_dir, output_file)
 
         f = open(output_path, 'w', encoding='utf-8')
 
-        buffer = build_web_page(beh_cu_im_e_piau, cu_im_huat, div_class, rt_tag, sing_bu_dict, un_bu_dict)
+        html_content = build_web_page(beh_cu_im_e_piau, cu_im_huat, div_class, rt_tag, sing_bu_dict, un_bu_dict)
 
-        try:
-            # 輸出到網頁檔案
-            f.write(buffer)
-        except Exception as e:
-            print(f"An error occurred: {e}")
-        finally:
-            # 確保檔案在任何情況下都會被關閉
-            if not f.closed:
-                f.close()
+        # 輸出到網頁檔案
+        create_html_file(output_path, html_content, title)
         
         print(f"【{cu_im_piau_e_mia}】網頁製作完畢！")
 

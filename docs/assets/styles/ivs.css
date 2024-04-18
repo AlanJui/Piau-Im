@@ -1,0 +1,157 @@
+@charset "UTF-8";
+@font-face {
+    font-family: BopomofoRuby;
+    src: url('BopomofoRuby1909-v1-Regular.ttf');
+}
+@font-face {
+    font-family: TL;
+    src: url('fonts/TaigiKaiStd-TL-R.ttf');
+}
+
+@font-face {
+    font-family: POJ;
+    src: url('fonts/TaigiKaiStd-POJ-R.ttf');
+}
+
+@font-face {
+    font-family: HI;
+    src: url('fonts/TaigiKaiStd-HI-R.ttf');
+}
+
+@font-face {
+    font-family: KN;
+    src: url('fonts/TaigiKaiStd-KN-R.ttf');
+}
+
+@font-face {
+    font-family: TLHI;
+    src: url('fonts/TaigiKaiStd-TLHI-R.ttf');
+}
+
+@font-face {
+    font-family: POJHI;
+    src: url('fonts/TaigiKaiStd-POJHI-R.ttf');
+}
+
+.dummy2 {
+    line-height: 1;
+    font-size: 3em;
+    font-family: BopomofoRuby, 'AR KaiB5', 'KaiTi TW', '標楷體';
+}
+.dummy2 ruby {
+    line-height: 1;
+}
+.dummy2 rt {
+    font-family: BopomofoRuby;
+    min-width: 1em;
+}
+
+.tb { writing-mode: tb-rl; }
+.lr { writing-mode: lr-tb; }
+
+/* 豎標 */
+/*
+.v {
+}
+*/
+.v ruby {
+    writing-mode: vertical-lr;
+    -webkit-writing-mode: vertical-lr;
+    -moz-writing-mode: vertical-lr;
+    text-orientation: upright;
+}
+.v rt {
+    letter-spacing: 0;
+}
+
+div.v.after ruby[data-after] {
+    margin-right: 0.5em;
+}
+
+div.v.after ruby[data-after]::after {
+    top: 0;
+    right: -0.6em;
+    height: 3.85em;
+}
+
+
+/* 橫標 */
+.h
+{
+  font-variant-east-asian: salt;
+  -moz-font-feature-settings: "salt";
+  -webkit-font-feature-settings: "salt";
+  font-feature-settings: "salt";
+}
+.h ruby {
+    padding: 0 0 0.1em 0;
+    writing-mode: lr-tb;
+    background-position-y: 0.1em;
+}
+.h rt {
+    letter-spacing: -0.4em;
+}
+/*
+.lr.h ruby { line-height: 1.1;  }
+*/
+
+
+.after ruby[data-after] {
+    position:relative;
+    margin:0.1em;
+}
+
+div.after ruby[data-after]::after{
+    content:attr(data-after);
+    position:absolute;
+    text-align:center;
+    font-size:26%;
+    color:#888;
+}
+
+div.h.after ruby[data-after]
+{ margin-top:0.5em; }
+
+div.h.after ruby[data-after]::after {
+    top:-1em;
+    left:0;
+    width:3.85em;
+    letter-spacing:-0.4em;
+}
+
+/*
+*/
+
+ruby {
+    padding-right: 2px;
+    margin: 0.1em;
+    margin-right:0.2em;
+    background: url(bg1.gif);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+rt
+{
+    font-size: 26%;
+    text-align: center;	/* chrome */
+    text-orientation: upright;
+}
+
+label {
+    border:1px dashed #888;
+    padding:2px;
+    line-height:200%;
+    font-family:標楷體;
+    white-space: nowrap;
+}
+
+label:hover { background:#ffc; }
+label:checked, input[type="radio"]:checked { color:red; }
+
+textarea { width:100%; }
+ol>li { padding:2px; }
+ol>li:hover { border:1px solid blue; padding:1px; }
+
+#editor { max-width:50vw; padding:0.2em 0; }
+#phonA { max-height:95vh; overflow:auto; }
