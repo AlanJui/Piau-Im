@@ -5,60 +5,98 @@
     url('./assets/fonts/BopomofoRuby1909-v1-Regular.ttf');
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap") body {
+  font-family: 'Noto Sans TC', sans-serif !important;
+}
 
-body,
-input,
-button,
-select,
-textarea {
+@import url(https://fonts.googleapis.com/css?family=Noto+Serif+TC&amp;display=swap") body {
+  font-family: 'Noto Serif TC', serif;
+}
+
+body {
   font-family: "Noto Serif TC", serif;
-  line-height: 1.8;
-  font-size: 24px;
+  line-height: 2.4;
   letter-spacing: 0px;
   margin: 10px 50px;
 }
 
-h2 {
-  font-family: sans-serif;
-}
-
-.zhu_yin {
-  font-size: 48px;
-}
-
-.title {
-  text-align: center;
-  font-size: 1.4em;
-}
-
-.author {
-  text-align: right;
-  font-size: 0.8em;
+ruby {
+  /*ruby-position: under;*/
+  ruby-align: center;
+  ruby-merge: auto;
 }
 
 rt {
-  font-family: Arial;
-  font-size: 45%;
-  ruby-merge: separate;
-  writing-mode: horizontal-tb;
+  font-family: sans-serif;
   color: darkcyan;
+  font-size: 45%;
+  text-align: center;
+  letter-spacing: 0.0em
 }
 
 rtc {
   font-family: BopomofoRuby;
+  color: brown;
   font-size: 30%;
   display: inline-block;
+  ruby-position: inter-character;
+  text-align: center;
   writing-mode: vertical-rl;
   text-orientation: upright;
   vertical-align: middle;
-  padding-right: 0.4rem;
-  color: brown;
+  letter-spacing: 0.0em;
+  padding-right: 0.0rem;
 }
 
-.ruby {
-  font-variant-east-asian: ruby;
-  -moz-font-feature-settings: "ruby";
-  -webkit-font-feature-settings: "ruby";
-  font-feature-settings: "ruby";
+/* 方音符號 */
+.zhu_yin {
+  font-family: "Noto Serif TC";
+  font-size: 42px;
+  letter-spacing: 0.2em;
+  line-height: 2.0;
+}
+
+.zhu_yin rt {
+  letter-spacing: 0;
+}
+
+/* 十五音 */
+.fifteen_yin {
+  font-family: "Noto Serif TC";
+  font-size: 42px;
+  letter-spacing: 0.2em;
+  line-height: 2.0;
+}
+
+.fifteen_yin rt {
+  letter-spacing: 0;
+  font-size: 40%;
+}
+
+/* 台羅、閩拼、白話字 */
+.pin_yin {
+  font-family: "Noto Serif TC";
+  font-size: 42px;
+  letter-spacing: 0.2em;
+  line-height: 2.0;
+}
+
+/* 白話字 */
+.poj {
+  font-family: "Noto Serif TC";
+  font-size: 42px;
+  letter-spacing: 0.2em;
+  line-height: 2.0;
+}
+
+.hljs-ln-numbers {
+  text-align: center;
+  color: #CCC;
+  border-right: 1px solid #CCC;
+  vertical-align: top;
+  padding-right: 5px !important;
+}
+
+.hljs-ln-code {
+  padding-left: 10px !important;
 }
