@@ -1,3 +1,4 @@
+import re
 import sqlite3
 
 
@@ -331,46 +332,86 @@ def init_un_bu_dict(cursor):
     return un_bu_dict
 
 
+# ==========================================================
+# 自漢字的「注音碼」，分析出：聲母、韻母、調號
+# ==========================================================
+def split_cu_im(cu_im):
+    sing_bu_pattern = re.compile(r"(b|ch|c|g|h|j|kh|k|l|m|ng|n|ph|p|s|th|t|Ø)")
+    result = []
+
+    sing_bu = sing_bu_pattern.match(cu_im).group()
+    un_bu = cu_im[len(sing_bu) : len(cu_im) - 1]
+    tiau = cu_im[len(cu_im) - 1]
+
+    result += [sing_bu]
+    result += [un_bu]
+    result += [tiau]
+    return result
+
+
 if __name__ == "__main__":
-    sing_bu_dict = init_sing_bu_dict()    
-    sing_code = 'c'
+    # sing_bu_dict = init_sing_bu_dict()    
+    # sing_code = 'c'
 
-    sing_bu_tl = sing_bu_dict[sing_code]['tl']
-    assert sing_bu_tl == 'tsh', "轉換錯誤！"
+    # sing_bu_tl = sing_bu_dict[sing_code]['tl']
+    # assert sing_bu_tl == 'tsh', "轉換錯誤！"
 
-    sing_bu_ipa = sing_bu_dict[sing_code]['ipa']
-    assert sing_bu_ipa == 'ʦʰ', "轉換錯誤！"
+    # sing_bu_ipa = sing_bu_dict[sing_code]['ipa']
+    # assert sing_bu_ipa == 'ʦʰ', "轉換錯誤！"
 
-    sing_bu_poj = sing_bu_dict[sing_code]['poj']
-    assert sing_bu_poj == 'chh', "轉換錯誤！"
+    # sing_bu_poj = sing_bu_dict[sing_code]['poj']
+    # assert sing_bu_poj == 'chh', "轉換錯誤！"
 
-    sing_bu_bp = sing_bu_dict[sing_code]['bp']
-    assert sing_bu_bp == 'c', "轉換錯誤！"
+    # sing_bu_bp = sing_bu_dict[sing_code]['bp']
+    # assert sing_bu_bp == 'c', "轉換錯誤！"
 
-    sing_bu_tps = sing_bu_dict[sing_code]['tps']
-    assert sing_bu_tps == 'ㄘ', "轉換錯誤！"
+    # sing_bu_tps = sing_bu_dict[sing_code]['tps']
+    # assert sing_bu_tps == 'ㄘ', "轉換錯誤！"
 
-    sing_bu_sni = sing_bu_dict[sing_code]['sni']
-    assert sing_bu_sni == '出', "轉換錯誤！"
+    # sing_bu_sni = sing_bu_dict[sing_code]['sni']
+    # assert sing_bu_sni == '出', "轉換錯誤！"
+
+    # #--------------------------------------------------
+    # un_bu_dict = init_un_bu_dict()    
+    # un_code = 'ee'
+
+    # un_bu_tl = un_bu_dict[un_code]['tl']
+    # assert un_bu_tl == 'ee', "轉換錯誤！"
+
+    # un_bu_ipa = un_bu_dict[un_code]['ipa']
+    # assert un_bu_ipa == 'ɛ', "轉換錯誤！"
+
+    # un_bu_poj = un_bu_dict[un_code]['poj']
+    # assert un_bu_poj == 'e', "轉換錯誤！"
+
+    # un_bu_bp = un_bu_dict[un_code]['bp']
+    # assert un_bu_bp == 'e', "轉換錯誤！"
+
+    # un_bu_tps = un_bu_dict[un_code]['tps']
+    # assert un_bu_tps == 'ㄝ', "轉換錯誤！"
+
+    # un_bu_sni = un_bu_dict[un_code]['sni']
+    # assert un_bu_sni == '嘉', "轉換錯誤！"
 
     #--------------------------------------------------
-    un_bu_dict = init_un_bu_dict()    
-    un_code = 'ee'
+    # 受[siu2]
+    han_ji_piau_im = 'siu2'
+    result = split_cu_im(han_ji_piau_im)
+    print(result)
+    assert result == ['s', 'iu', '2'], "轉換錯誤！"
+    # assert result == ['s', 'iu', '3'], "轉換錯誤！"
 
-    un_bu_tl = un_bu_dict[un_code]['tl']
-    assert un_bu_tl == 'ee', "轉換錯誤！"
+    # 衣 [Øi1]
+    han_ji_piau_im = 'Øi1'
+    result = split_cu_im(han_ji_piau_im)
+    assert result == ['Ø', 'i', '1'], "轉換錯誤！" 
 
-    un_bu_ipa = un_bu_dict[un_code]['ipa']
-    assert un_bu_ipa == 'ɛ', "轉換錯誤！"
-
-    un_bu_poj = un_bu_dict[un_code]['poj']
-    assert un_bu_poj == 'e', "轉換錯誤！"
-
-    un_bu_bp = un_bu_dict[un_code]['bp']
-    assert un_bu_bp == 'e', "轉換錯誤！"
-
-    un_bu_tps = un_bu_dict[un_code]['tps']
-    assert un_bu_tps == 'ㄝ', "轉換錯誤！"
-
-    un_bu_sni = un_bu_dict[un_code]['sni']
-    assert un_bu_sni == '嘉', "轉換錯誤！"
+    # 州 [ciu1]
+    han_ji_piau_im = 'ciu1'
+    result = split_cu_im(han_ji_piau_im)
+    assert result == ['c', 'iu', '1'], "轉換錯誤！"
+    
+    # 此 [chu2]
+    han_ji_piau_im = 'chi2'
+    result = split_cu_im(han_ji_piau_im)
+    assert result == ['ch', 'i', '2'], "轉換錯誤！"

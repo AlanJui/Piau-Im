@@ -2,15 +2,7 @@ import re
 
 import xlwings as xw
 
-from mod_廣韻 import han_ji_cha_piau_im, piau_tiau_ho
-
-# import sqlite3
-
-
-
-# 專案全域常數
-# from config_dev_env import DATABASE
-# DATABASE = "Kong_Un_V2.db"
+from mod_廣韻 import han_ji_cha_piau_im, piau_tiau_ho, split_cu_im
 
 
 def Kong_Un_Piau_Im(CONVERT_FILE_NAME, db_cursor):
@@ -136,14 +128,19 @@ def Kong_Un_Piau_Im(CONVERT_FILE_NAME, db_cursor):
         piau_im_tsong_soo = len(kong_un_piau_im)
         piau_im = kong_un_piau_im[0]
         han_ji_id = piau_im['漢字識別號']
-        # sing_bu = piau_im['上字標音'] if piau_im['上字標音'] != "Ø" else "q"
         
         # =========================================================
         # 若是漢字注音碼有異常狀況，在【缺字表】做記錄
         # =========================================================
         sing_bu = None; un_bu = None; tiau_ho = None; cu_im = None
+        piau_im_list = split_cu_im(piau_im['漢字標音'])
+        sing_bu = piau_im_list[0]
+        un_bu = piau_im_list[1]
+        tiau_ho = piau_im_list[2]
+        piau_im_str = [str(i) for i in piau_im_list]  # 將 list 中所有元素轉為 string
+        cu_im = ''.join(piau_im_str)  # 將 list 中所有元素合併為一個 string
 
-        if piau_im['聲母碼'] == None or piau_im['韻母碼'] == None:
+        if sing_bu == None or un_bu == None or tiau_ho == None:
             print(f"廣韻字典的漢字：【{beh_piau_im_e_han_ji}】有缺聲母/韻母/調號異常之問題!!")
             # 記錄【缺字表】的【列號】
             khiam_ji_piau.range("A" + str(khiam_ji_index)).value = khiam_ji_index
@@ -152,11 +149,20 @@ def Kong_Un_Piau_Im(CONVERT_FILE_NAME, db_cursor):
             # 記錄【漢字注音表】的【列號】
             khiam_ji_piau.range("C" + str(khiam_ji_index)).value = source_index
             khiam_ji_index += 1
-        else:
-            sing_bu = piau_im['聲母碼']
-            un_bu = piau_im['韻母碼']
-            tiau_ho = piau_tiau_ho(piau_im)
-            cu_im = f"{sing_bu}{un_bu}{tiau_ho}"
+        # if piau_im['聲母碼'] == None or piau_im['韻母碼'] == None:
+        #     print(f"廣韻字典的漢字：【{beh_piau_im_e_han_ji}】有缺聲母/韻母/調號異常之問題!!")
+        #     # 記錄【缺字表】的【列號】
+        #     khiam_ji_piau.range("A" + str(khiam_ji_index)).value = khiam_ji_index
+        #     # 記錄【缺字表】的【漢字】
+        #     khiam_ji_piau.range("B" + str(khiam_ji_index)).value = beh_piau_im_e_han_ji
+        #     # 記錄【漢字注音表】的【列號】
+        #     khiam_ji_piau.range("C" + str(khiam_ji_index)).value = source_index
+        #     khiam_ji_index += 1
+        # else:
+        #     sing_bu = piau_im['聲母碼']
+        #     un_bu = piau_im['韻母碼']
+        #     tiau_ho = piau_tiau_ho(piau_im)
+        #     cu_im = f"{sing_bu}{un_bu}{tiau_ho}"
 
         # =========================================================
         # 寫入：【漢字注音表】
