@@ -20,6 +20,19 @@ body {
   margin: 10px 50px;
 }
 
+h1 {
+  color: #333;
+}
+
+a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 ruby {
   /*ruby-position: under;*/
   ruby-align: center;
