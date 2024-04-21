@@ -1,179 +1,43 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
+<html>
 
 <head>
-    <title>
-        漢字横排，注音：方音在漢字右側，及下方擺白話字拚音
-    </title>
     <meta charset="UTF-8">
-    <style>
-        @import url('https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap');
-        /*****
-        @font-face {
-            font-family: BopomofoRuby;
-            src: local('./assets/fonts/BopomofoRuby1909-v1-Regular'),
-                url(/assets/fonts/BopomofoRuby1909-v1-Regular.ttf);
-        }
-        *****/
-        @font-face {
-            font-family: BopomofoRuby;
-            src:
-                local('BopomofoRuby1909-v1-Regular'),
-                url('assets/fonts/BopomofoRuby1909-v1-Regular.ttf');
-        }
-
-        @font-face {
-            font-family: Ho-Lok-Oe;
-            src: url(Iansui094-Regular.ttf);
-        }
-
-        body, input, button, select, textarea {
-            font-family: "標楷體", 'Noto Sans TC', "微軟正黑體", "Helvetica Neue", Helvetica, Arial, "微软雅黑", sans-serif;
-            line-height: 1.8;
-            letter-spacing: 2px;
-            margin: 10px 50px;
-        }
-
-        a {
-            text-decoration: none;
-        }
-
-        h2 {
-            font-family: sans-serif;
-        }
-
-        /***************************
-        .zhu_yin {
-            font-family: 'Noto Serif TC';
-            font-size: 48px;
-            line-height: 1.4;
-            font-family: BopomofoRuby;
-        }
-        **************/
-        .zhu_yin {
-            font-size: 48px;
-            line-height: 1.2;
-        }
-
-        rt {
-            font-family: sans-serif;
-            font-size: 45%;
-            ruby-merge: separate;
-            writing-mode: horizontal-tb;
-            color: darkcyan;
-        }
-
-        rtc {
-            font-family: BopomofoRuby;
-            font-size: 30%;
-            display: inline-block;
-            ruby-position: inter-character;
-            writing-mode: vertical-rl;
-            text-orientation: upright;
-            vertical-align: middle;
-            padding-right: 0.4rem;
-            color: brown;
-        }
-
-        ruby {
-            ruby-position: under;
-            ruby-align: center;
-            ruby-merge: auto;
-        }
-    </style>
+    <title>Index</title>
 </head>
 
 <body>
-    <h2>
-        漢字横排，注音：方音在漢字右側，及下方擺白話字拚音
-    </h2>
-
-    <div class='zhu_yin'>
-        <p>
-        《
-        <ruby>臨<rt>lìm</rt><rtc>ㄌㄧㆬˊ</rtc></ruby>
-        <ruby>江<rt>gāng</rt><rtc>ㄍㄤ</rtc></ruby>
-        <ruby>仙<rt>siān</rt><rtc>ㄒㄧㄢ</rtc></ruby>
-        》
-        </p><p>
-        <ruby>滾<rt>gún</rt><rtc>ㄍㄨㄣˋ</rtc></ruby>
-        <ruby>滾<rt>gún</rt><rtc>ㄍㄨㄣˋ</rtc></ruby>
-        <ruby>長<rt>diòng</rt><rtc>ㄉㄧㆲˊ</rtc></ruby>
-        <ruby>江<rt>gāng</rt><rtc>ㄍㄤ</rtc></ruby>
-        <ruby>東<rt>dōng</rt><rtc>ㄉㆲ</rtc></ruby>
-        <ruby>逝<rt>sē</rt><rtc>ㄙㆤ˫</rtc></ruby>
-        <ruby>水<rt>suí</rt><rtc>ㄙㄨㄧˋ</rtc></ruby>
-        ，
-        <ruby>浪<rt>lōng</rt><rtc>ㄌㆲ˫</rtc></ruby>
-        <ruby>花<rt>huā</rt><rtc>ㄏㄨㄚ</rtc></ruby>
-        <ruby>淘<rt>dò</rt><rtc>ㄉㄜˊ</rtc></ruby>
-        <ruby>盡<rt>zǐn</rt><rtc>ㄐㄧㄣ˪</rtc></ruby>
-        <ruby>英<rt> īng</rt><rtc>ㄧㄥ</rtc></ruby>
-        <ruby>雄<rt>hiòng</rt><rtc>ㄏㄧㆲˊ</rtc></ruby>
-        。
-        </p><p>
-        <ruby>是<rt>sī</rt><rtc>ㄒㄧ˫</rtc></ruby>
-        <ruby>非<rt>huī</rt><rtc>ㄏㄨㄧ</rtc></ruby>
-        <ruby>成<rt>sìng</rt><rtc>ㄒㄧㄥˊ</rtc></ruby>
-        <ruby>敗<rt>bāi</rt><rtc>ㄅㄞ˫</rtc></ruby>
-        <ruby>轉<rt>zuán</rt><rtc>ㄗㄨㄢˋ</rtc></ruby>
-        <ruby>頭<rt>tiò</rt><rtc>ㄊㄧㄜˊ</rtc></ruby>
-        <ruby>空<rt>kōng</rt><rtc>ㄎㆲ</rtc></ruby>
-        。
-        </p><p>
-        <ruby>青<rt>cīng</rt><rtc>ㄑㄧㄥ</rtc></ruby>
-        <ruby>山<rt>sān</rt><rtc>ㄙㄢ</rtc></ruby>
-        <ruby>依<rt> ī</rt><rtc>ㄧ</rtc></ruby>
-        <ruby>舊<rt>giū</rt><rtc>ㄍㄧㄨ˫</rtc></ruby>
-        <ruby>在<rt>zāi</rt><rtc>ㄗㄞ˫</rtc></ruby>
-        ，
-        <ruby>幾<rt>gí</rt><rtc>ㄍㄧˋ</rtc></ruby>
-        <ruby>度<rt>dōo</rt><rtc>ㄉㆦ˫</rtc></ruby>
-        <ruby>夕<rt>sík</rt><rtc>ㄙㄧㆻ˙</rtc></ruby>
-        <ruby>陽<rt> iòng</rt><rtc>ㄧㆲˊ</rtc></ruby>
-        <ruby>紅<rt>hòng</rt><rtc>ㄏㆲˊ</rtc></ruby>
-        。
-        </p><p>
-        <ruby>白<rt>bik</rt><rtc>ㄅㄧㆻ</rtc></ruby>
-        <ruby>髮<rt>huat</rt><rtc>ㄏㄨㄚㆵ</rtc></ruby>
-        <ruby>漁<rt>ggù</rt><rtc>ㆣㄨˊ</rtc></ruby>
-        <ruby>樵<rt>ziào</rt><rtc>ㄐㄧㄠˊ</rtc></ruby>
-        <ruby>江<rt>gāng</rt><rtc>ㄍㄤ</rtc></ruby>
-        <ruby>渚<rt>zú</rt><rtc>ㄗㄨˋ</rtc></ruby>
-        <ruby>上<rt>siōng</rt><rtc>ㄒㄧㆲ˫</rtc></ruby>
-        ，
-        <ruby>慣<rt>guǎn</rt><rtc>ㄍㄨㄢ˪</rtc></ruby>
-        <ruby>看<rt>kǎn</rt><rtc>ㄎㄢ˪</rtc></ruby>
-        <ruby>秋<rt>ciū</rt><rtc>ㄑㄧㄨ</rtc></ruby>
-        <ruby>月<rt>gguát</rt><rtc>ㆣㄨㄚㆵ˙</rtc></ruby>
-        <ruby>春<rt>cūn</rt><rtc>ㄘㄨㄣ</rtc></ruby>
-        <ruby>風<rt>hōng</rt><rtc>ㄏㆲ</rtc></ruby>
-        。
-        </p><p>
-        <ruby>一<rt> it</rt><rtc>ㄧㆵ</rtc></ruby>
-        <ruby>壺<rt>hòo</rt><rtc>ㄏㆦˊ</rtc></ruby>
-        <ruby>濁<rt>dók</rt><rtc>ㄉㆦㆻ˙</rtc></ruby>
-        <ruby>酒<rt>ziú</rt><rtc>ㄐㄧㄨˋ</rtc></ruby>
-        <ruby>喜<rt>hí</rt><rtc>ㄏㄧˋ</rtc></ruby>
-        <ruby>相<rt>siǒng</rt><rtc>ㄒㄧㆲ˪</rtc></ruby>
-        <ruby>逢<rt>hòng</rt><rtc>ㄏㆲˊ</rtc></ruby>
-        。
-        </p><p>
-        <ruby>古<rt>góo</rt><rtc>ㄍㆦˋ</rtc></ruby>
-        <ruby>今<rt>gīm</rt><rtc>ㄍㄧㆬ</rtc></ruby>
-        <ruby>多<rt>dō</rt><rtc>ㄉㄜ</rtc></ruby>
-        <ruby>少<rt>siáo</rt><rtc>ㄒㄧㄠˋ</rtc></ruby>
-        <ruby>事<rt>sū</rt><rtc>ㄙㄨ˫</rtc></ruby>
-        ，
-        <ruby>都<rt>dōo</rt><rtc>ㄉㆦ</rtc></ruby>
-        <ruby>付<rt>hǔ</rt><rtc>ㄏㄨ˪</rtc></ruby>
-        <ruby>笑<rt>ciáo</rt><rtc>ㄑㄧㄠˋ</rtc></ruby>
-        <ruby>談<rt>dàm</rt><rtc>ㄉㆰˊ</rtc></ruby>
-        <ruby>中<rt>diōng</rt><rtc>ㄉㄧㆲ</rtc></ruby>
-        。
-        </p><p>
-        </p>
-    </div>
+    <h1>前出師表</h1>
+    <a href="前出師表_十五音切語.html">十五音切語</a><br>
+    <a href="前出師表_台羅拼音.html">台羅拼音</a><br>
+    <a href="前出師表_台羅改良式.html">台羅改良式</a><br>
+    <a href="前出師表_方音符號注音.html">方音符號注音</a><br>
+    <a href="前出師表_白話字拼音.html">白話字拼音</a><br>
+    <a href="前出師表_閩拼標音.html">閩拼標音</a><br>
+    <a href="前出師表_雙排注音.html">雙排注音</a><br>
+    <h1>寄黃幾復</h1>
+    <a href="寄黃幾復_十五音切語.html">十五音切語</a><br>
+    <a href="寄黃幾復_台羅拼音.html">台羅拼音</a><br>
+    <a href="寄黃幾復_台羅改良式.html">台羅改良式</a><br>
+    <a href="寄黃幾復_方音符號注音.html">方音符號注音</a><br>
+    <a href="寄黃幾復_白話字拼音.html">白話字拼音</a><br>
+    <a href="寄黃幾復_閩拼標音.html">閩拼標音</a><br>
+    <a href="寄黃幾復_雙排注音.html">雙排注音</a><br>
+    <h1>念奴嬌·斷虹霽雨</h1>
+    <a href="念奴嬌·斷虹霽雨_十五音切語.html">十五音切語</a><br>
+    <a href="念奴嬌·斷虹霽雨_台羅拼音.html">台羅拼音</a><br>
+    <a href="念奴嬌·斷虹霽雨_台羅改良式.html">台羅改良式</a><br>
+    <a href="念奴嬌·斷虹霽雨_方音符號注音.html">方音符號注音</a><br>
+    <a href="念奴嬌·斷虹霽雨_白話字拼音.html">白話字拼音</a><br>
+    <a href="念奴嬌·斷虹霽雨_閩拼標音.html">閩拼標音</a><br>
+    <a href="念奴嬌·斷虹霽雨_雙排注音.html">雙排注音</a><br>
+    <h1>短歌行</h1>
+    <a href="短歌行_十五音切語.html">十五音切語</a><br>
+    <a href="短歌行_台羅拼音.html">台羅拼音</a><br>
+    <a href="短歌行_台羅改良式.html">台羅改良式</a><br>
+    <a href="短歌行_方音符號注音.html">方音符號注音</a><br>
+    <a href="短歌行_白話字拼音.html">白話字拼音</a><br>
+    <a href="短歌行_閩拼標音.html">閩拼標音</a><br>
+    <a href="短歌行_雙排注音.html">雙排注音</a><br>
 </body>
 
 </html>
