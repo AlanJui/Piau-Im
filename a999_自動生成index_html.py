@@ -9,7 +9,31 @@ index_file = os.path.join(docs_directory, 'index.html')
 # 開始 index.html 檔案
 with open(index_file, 'w', encoding='utf-8') as f:  # 指定 UTF-8 編碼
     # 寫入 HTML 開頭，並指定使用 UTF-8 編碼
-    f.write('<html>\n<head>\n<meta charset="UTF-8">\n<title>Index</title>\n</head>\n<body>\n')
+    f.write('''<html>
+<head>
+    <meta charset="UTF-8">
+    <title>文章清單</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>文章清單</h1>
+    <div id="articles"></div>
+    <script src="./assets/javascripts/main.js"></script>\n''')
     
     # 文章名稱與注音方式的字典
     articles = {}
@@ -37,7 +61,7 @@ with open(index_file, 'w', encoding='utf-8') as f:  # 指定 UTF-8 編碼
     # 遍歷每個文章
     for article, phonetic_methods in articles.items():
         # 生成文章標題
-        f.write(f'<h1>{article}</h1>\n')
+        f.write(f'    <h2>{article}</h2>\n')
         
         # 遍歷每個注音方式
         for phonetic_method in phonetic_methods:
@@ -45,7 +69,7 @@ with open(index_file, 'w', encoding='utf-8') as f:  # 指定 UTF-8 編碼
             filename = f"{article}_{phonetic_method}.html"
             
             # 生成超連結
-            link = f'<a href="{filename}">{phonetic_method}</a><br>\n'
+            link = f'    <a href="{filename}">{phonetic_method}</a><br>\n'
             
             # 寫入超連結到 index.html
             f.write(link)
