@@ -1,12 +1,20 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-<title>{title}</title>
-<meta charset="UTF-8">
-<link rel="stylesheet" href="assets/styles/styles.css">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- <title>{title}</title> -->
+    <title>文章清單</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="assets/styles/styles.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 
 <body>
-    {content}
+    <h1>文章清單</h1>
+    <div id="articles">
+        {articles_placeholder}
+    </div>
     <div>
         <p>
             為能正確顯示「注音符號」，請點擊以下連結，下載注音符號專用字型：
@@ -16,6 +24,9 @@
             ，並於使用之電腦端安裝此字型。
         </p>
     </div>
+    <script src="./assets/javascripts/main.js"></script>
 </body>
 
 </html>
+
+<html>
