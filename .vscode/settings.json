@@ -20,5 +20,6 @@
             "database": "${workspaceFolder:Piau-Im}/Kong_Un_V2.db"
         }
     ],
-    "sqltools.useNodeRuntime": true
+    "sqltools.useNodeRuntime": true,
+    "liveServer.settings.port": 5501
 }

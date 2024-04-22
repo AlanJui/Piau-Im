@@ -1,4 +1,3 @@
-// JavaScript 代碼將在這裡添加
 $(document).ready(function () {
     // 隱藏所有文章的注音方式列表
     $('#articles ul').hide();
@@ -10,5 +9,13 @@ $(document).ready(function () {
 
         // 切換注音方式列表的顯示狀態
         phoneticList.toggle();
+    });
+
+    $('#articles ul a').on('click', function (e) {
+        e.preventDefault();  // 阻止默認行為
+
+        var url = $(this).attr('href');  // 獲取連結的 URL
+
+        $('#main').load(url);
     });
 });
