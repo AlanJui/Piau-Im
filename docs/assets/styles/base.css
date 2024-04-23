@@ -375,7 +375,7 @@ body {
 /* 主內容
 ---------------------------*/
 #main {
-	width: 1600px;
+	width: 1500px;
 	margin-bottom: 40px;
 	float: right;
 }
@@ -383,7 +383,7 @@ body {
 /* 側邊選單
 ---------------------------*/
 #side {
-	width: 200px;
+	width: 300px;
 	margin-bottom: 40px;
 	float: left;
 }
