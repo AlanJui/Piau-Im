@@ -1,4 +1,8 @@
+import os
+
 import xlwings as xw
+
+from mod_file_access import open_excel_file, write_to_excel_file
 
 
 # -----------------------------------------------------
@@ -10,11 +14,7 @@ def convert_string_to_chars_list(string):
     return list1
 
 
-def San_Sing_Han_Ji_Tsh_Im_Piau(CONVERT_FILE_NAME):
-    # 打開活頁簿檔案
-    file_path = CONVERT_FILE_NAME
-    wb = xw.Book(file_path)
-
+def San_Sing_Han_Ji_Tsh_Im_Piau(wb):
     # 指定來源工作表
     source_sheet = wb.sheets["工作表1"]
     source_sheet.select()
@@ -95,3 +95,4 @@ def San_Sing_Han_Ji_Tsh_Im_Piau(CONVERT_FILE_NAME):
         ji_soo = len(han_ji_range)
         target_row_index += ji_soo
         source_row_index += 1
+

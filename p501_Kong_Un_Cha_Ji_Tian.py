@@ -1,19 +1,17 @@
+import os
 import re
 
 import xlwings as xw
 
+from mod_file_access import open_excel_file, write_to_excel_file
 from mod_廣韻 import han_ji_cha_piau_im, piau_tiau_ho, split_cu_im
 
 
-def Kong_Un_Piau_Im(CONVERT_FILE_NAME, db_cursor):
+def Kong_Un_Piau_Im(wb, db_cursor):
     # ==========================================================
     # 在「漢字注音表」B欄已有台羅拼音，需將之拆分成聲母、韻母、調號
     # 聲母、韻母、調號，分別存放在 C、D、E 欄
     # ==========================================================
-
-    # 指定提供來源的【檔案】
-    file_path = CONVERT_FILE_NAME
-    wb = xw.Book(file_path)
 
     # 指定提供來源的【工作表】；及【總列數】
     source_sheet = wb.sheets["漢字注音表"]
@@ -58,7 +56,7 @@ def Kong_Un_Piau_Im(CONVERT_FILE_NAME, db_cursor):
     han_ji_cu_im_piau.select()
 
     # =========================================================="
-    # 資料庫",
+    # 資料庫
     # =========================================================="
     # conn = sqlite3.connect(DATABASE)
     # db_cursor = conn.cursor()
@@ -67,6 +65,9 @@ def Kong_Un_Piau_Im(CONVERT_FILE_NAME, db_cursor):
     ji_khoo_index = 1
     khiam_ji_index = 1
 
+    # =========================================================="
+    # 主要處理作業
+    # =========================================================="
     while source_index <= end_of_row_no:
         print(f"row = {source_index}")
         # 自 source_sheet 取出一個「欲查注音的漢字」(beh_piau_im_e_han_ji)

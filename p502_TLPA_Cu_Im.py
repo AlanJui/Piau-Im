@@ -5,6 +5,7 @@ import sqlite3
 
 import xlwings as xw
 
+from mod_file_access import open_excel_file
 from mod_廣韻 import init_sing_bu_dict, init_un_bu_dict
 
 # ==========================================================
@@ -329,7 +330,7 @@ def get_sheet_ready_to_work(wb, sheet_name_list):
 # =========================================================
 # 依據指定的【注音方法】，輸出含 Ruby Tags 之 HTML 網頁
 # =========================================================
-def build_web_page(target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict, un_bu_dict):
+def build_web_page(wb, target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict, un_bu_dict):
     write_buffer = ""
     
     source_index = 1  # index for source sheet
@@ -532,8 +533,7 @@ def create_html_file(output_path, content, title='您的標題'):
     with open(output_path, 'w', encoding='utf-8') as file:
         file.write(template)
 
-def Iong_TLPA_Cu_Im(CONVERT_FILE_NAME, sing_bu_dict, un_bu_dict):
-    global wb  # 宣告 wb 為全域變數
+def Iong_TLPA_Cu_Im(wb, sing_bu_dict, un_bu_dict):
     global source_sheet  # 宣告 source_sheet 為全域變數
     global source_sheet_name  # 宣告 source_sheet_name 為全域變數
     global end_of_source_row  # 宣告 end_of_source_row 為全域變數
@@ -545,9 +545,6 @@ def Iong_TLPA_Cu_Im(CONVERT_FILE_NAME, sing_bu_dict, un_bu_dict):
     # ==========================================================
     # 打開 Excel 檔案
     # ==========================================================
-    file_path = CONVERT_FILE_NAME
-    wb = xw.Book(file_path)
-
     source_sheet = wb.sheets["漢字注音表"]
     end_of_source_row = (
         source_sheet.range("A" + str(source_sheet.cells.last_cell.row)).end("up").row
@@ -595,7 +592,7 @@ def Iong_TLPA_Cu_Im(CONVERT_FILE_NAME, sing_bu_dict, un_bu_dict):
 
         f = open(output_path, 'w', encoding='utf-8')
 
-        html_content = build_web_page(beh_cu_im_e_piau, cu_im_huat, div_class, rt_tag, sing_bu_dict, un_bu_dict)
+        html_content = build_web_page(wb, beh_cu_im_e_piau, cu_im_huat, div_class, rt_tag, sing_bu_dict, un_bu_dict)
 
         # 輸出到網頁檔案
         create_html_file(output_path, html_content, title)
