@@ -15,3 +15,7 @@ def get_input_file_path():
     dir_path = config["INPUT_FILE_PATH"]
     file_name = config["FILE_NAME"]
     return os.path.join(dir_path, file_name)
+
+
+def get_database_path():
+    return config["DATABASE_PATH"]
