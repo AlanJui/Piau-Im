@@ -12,23 +12,46 @@
     <style>
         /* 用於大螢幕裝置（例如 PC）的樣式 */
         #side {
-            float: right;
-            width: 30%;
             /* 調整側邊欄的寬度 */
-            font-size: 16px;
+            font-size: 24px;
             /* 設定字型大小為 16px */
         }
 
         /* 用於小螢幕裝置（例如手機）的樣式 */
         @media screen and (max-width: 768px) {
-            #side {
-                float: none;
-                width: auto;
-                font-size: 24px;
-                /* 設定字型大小為 24px */
-                text-align: center;
-                /* 文字置中 */
+            body {
+                color: #666666;
+                font-family: sans-serif;
+                font-size: 160%;
+                line-height: 1.8;
             }
+
+            #header {
+                width: 100%;
+                padding: 10px 0;
+                border-top: #00c4ab 5px solid;
+                background: url(./assets/picts/bg_header.png) #e6e6e6;
+            }
+
+            #header .inner {
+                display: table;
+                text-align: center;
+                font-size: 3em;
+            }
+        }
+
+        #contents {
+            flex-direction: column;
+        }
+
+        #main,
+        #side {
+            float: none;
+            width: 85%;
+            font-size: 3em;
+            /* 設定字型大小為 24px */
+            text-align: center;
+            /* 文字置中 */
         }
     </style>
 </head>
@@ -175,7 +198,7 @@
         </div><!-- /#sidebar -->
     </div><!-- /#contents -->
 
-    <div>
+    <!-- <div>
         <p>
             為能正確顯示「注音符號」，請點擊以下連結，下載注音符號專用字型：
             <a href="https://github.com/cmex-30/Bopomofo_on_Web/tree/master/font/BopomofoRuby1909-v1-Regular.ttf">
@@ -183,7 +206,7 @@
             </a>
             ，並於使用之電腦端安裝此字型。
         </p>
-    </div>
+    </div> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script type="text/javascript" src="./assets/javascripts/main.js"></script>
 </body>
