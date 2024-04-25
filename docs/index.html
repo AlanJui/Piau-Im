@@ -8,6 +8,29 @@
     <link href="./assets/styles/base.css" rel="stylesheet" media="all">
     <link href="./assets/styles/main.css" rel="stylesheet" media="all">
     <meta property="og:image" content="https://alanjui.github.io/Piau-Im/assets/picts/king_tian.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /* 用於大螢幕裝置（例如 PC）的樣式 */
+        #side {
+            float: right;
+            width: 30%;
+            /* 調整側邊欄的寬度 */
+            font-size: 16px;
+            /* 設定字型大小為 16px */
+        }
+
+        /* 用於小螢幕裝置（例如手機）的樣式 */
+        @media screen and (max-width: 768px) {
+            #side {
+                float: none;
+                width: auto;
+                font-size: 24px;
+                /* 設定字型大小為 24px */
+                text-align: center;
+                /* 文字置中 */
+            }
+        }
+    </style>
 </head>
 
 <body>
