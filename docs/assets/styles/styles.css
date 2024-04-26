@@ -18,7 +18,7 @@ body {
   font-family: 'BopomofoRuby';
   src:
     local('BopomofoRuby1909-v1-Regular'),
-    url('../BopomofoRuby1909-v1-Regular.ttf');
+    url('../fonts/BopomofoRuby1909-v1-Regular.ttf');
 }
 
 body {
@@ -26,10 +26,6 @@ body {
   line-height: 1.8;
   letter-spacing: 0px;
   color: #333;
-
-  /* &>* {
-    margin: auto;
-  } */
 }
 
 header {
@@ -40,16 +36,14 @@ header {
 }
 
 header h1 {
-  padding: 80px 25px;
+  padding: 0 80px 25px;
   font-family: 'Noto Serif TC', serif;
-  font-size: 200%;
+  font-size: 240%;
   font-weight: bold;
 }
 
 #articles {
-  font: 1em sans-serif;
-  /* font-size: xx-large; */
-  font-size: 160%;
+  font-size: 180%;
   font-weight: bold;
 }
 
@@ -69,9 +63,9 @@ button {
   cursor: pointer;
 }
 
-button:focus {
+/* button:focus {
   outline: none;
-}
+} */
 
 ul {
   display: none;
@@ -116,6 +110,7 @@ a:hover {
   text-decoration: underline;
 }
 
+
 ruby {
   /*ruby-position: under;*/
   ruby-align: center;
@@ -135,6 +130,8 @@ rtc {
   color: brown;
   font-size: 30%;
   display: inline-block;
+  ruby-position: inter-character;
+  -webkit-ruby-position: inter-character;
   text-align: center;
   writing-mode: vertical-rl;
   text-orientation: upright;
