@@ -3,210 +3,155 @@
 
 <head>
     <meta charset="utf-8">
-    <title>文章清單</title>
-    <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
-    <link href="./assets/styles/base.css" rel="stylesheet" media="all">
-    <link href="./assets/styles/main.css" rel="stylesheet" media="all">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
     <meta property="og:image" content="https://alanjui.github.io/Piau-Im/assets/picts/king_tian.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        /* 用於大螢幕裝置（例如 PC）的樣式 */
-        #side {
-            /* 調整側邊欄的寬度 */
-            font-size: 24px;
-            /* 設定字型大小為 16px */
-        }
-
-        /* 用於小螢幕裝置（例如手機）的樣式 */
-        @media screen and (max-width: 768px) {
-            body {
-                color: #666666;
-                font-family: sans-serif;
-                font-size: 160%;
-                line-height: 1.8;
-            }
-
-            #header {
-                width: 100%;
-                padding: 10px 0;
-                border-top: #00c4ab 5px solid;
-                background: url(./assets/picts/bg_header.png) #e6e6e6;
-            }
-
-            #header .inner {
-                display: table;
-                text-align: center;
-                font-size: 3em;
-            }
-        }
-
-        #contents {
-            flex-direction: column;
-        }
-
-        #main,
-        #side {
-            float: none;
-            width: 85%;
-            font-size: 3em;
-            /* 設定字型大小為 24px */
-            text-align: center;
-            /* 文字置中 */
-        }
-    </style>
+    <title>文章清單</title>
+    <!-- <link href="./assets/styles/base.css" rel="stylesheet" media="all"> -->
+    <!-- <link href="./assets/styles/main.css" rel="stylesheet" media="all"> -->
+    <link rel="stylesheet" href="./assets/styles/reset.css">
+    <link rel="stylesheet" href="./assets/styles/styles.css">
 </head>
 
 <body>
     <!-- 頁首 -->
     <header id="header">
-        <div class="inner">
-            <img src="./assets/picts/king_tian.png" width="600" height="400" alt="四晝五經">
-            <h1>河洛話暢讀古文</h1>
-        </div>
+        <img src="./assets/picts/king_tian.png" width="300" height="200" alt="四晝五經">
+        <h1>河洛話暢讀古文</h1>
     </header><!-- /#header -->
-
+    <nav>
+        <button><img src="./assets/picts/menu_botton.png" width="40" height="50" alt="Button"></button>
+        <ul>
+            <li><a href="#">回到首頁</a></li>
+            <li><a href="#">操作指引</a></li>
+        </ul>
+    </nav>
     <!-- 內容 -->
-    <div id="contents">
-        <!-- 主內容 -->
-        <main id="main">
-        </main><!-- /#main -->
+    <main id="main">
+        <div id="articles">
+            <h2 class="title">六國論</h2>
+            <ul class="item">
+                <li><a href="六國論_十五音切語.html">十五音切語</a></li>
+                <li><a href="六國論_台羅拼音.html">台羅拼音</a></li>
+                <li><a href="六國論_台羅改良式.html">台羅改良式</a></li>
+                <li><a href="六國論_方音符號注音.html">方音符號注音</a></li>
+                <li><a href="六國論_白話字拼音.html">白話字拼音</a></li>
+                <li><a href="六國論_閩拼標音.html">閩拼標音</a></li>
+                <li><a href="六國論_雙排注音.html">雙排注音</a></li>
+            </ul>
+            <h2 class="title">前出師表</h2>
+            <ul class="item">
+                <li><a href="前出師表_十五音切語.html">十五音切語</a></li>
+                <li><a href="前出師表_台羅拼音.html">台羅拼音</a></li>
+                <li><a href="前出師表_台羅改良式.html">台羅改良式</a></li>
+                <li><a href="前出師表_方音符號注音.html">方音符號注音</a></li>
+                <li><a href="前出師表_白話字拼音.html">白話字拼音</a></li>
+                <li><a href="前出師表_閩拼標音.html">閩拼標音</a></li>
+                <li><a href="前出師表_雙排注音.html">雙排注音</a></li>
+            </ul>
+            <h2 class="title">前赤壁賦</h2>
+            <ul class="item">
+                <li><a href="前赤壁賦_十五音切語.html">十五音切語</a></li>
+                <li><a href="前赤壁賦_台羅拼音.html">台羅拼音</a></li>
+                <li><a href="前赤壁賦_台羅改良式.html">台羅改良式</a></li>
+                <li><a href="前赤壁賦_方音符號注音.html">方音符號注音</a></li>
+                <li><a href="前赤壁賦_白話字拼音.html">白話字拼音</a></li>
+                <li><a href="前赤壁賦_閩拼標音.html">閩拼標音</a></li>
+                <li><a href="前赤壁賦_雙排注音.html">雙排注音</a></li>
+            </ul>
+            <h2 class="title">回首前塵</h2>
+            <ul class="item">
+                <li><a href="回首前塵_十五音切語.html">十五音切語</a></li>
+                <li><a href="回首前塵_台羅拼音.html">台羅拼音</a></li>
+                <li><a href="回首前塵_台羅改良式.html">台羅改良式</a></li>
+                <li><a href="回首前塵_方音符號注音.html">方音符號注音</a></li>
+                <li><a href="回首前塵_白話字拼音.html">白話字拼音</a></li>
+                <li><a href="回首前塵_閩拼標音.html">閩拼標音</a></li>
+                <li><a href="回首前塵_雙排注音.html">雙排注音</a></li>
+            </ul>
+            <h2 class="title">寄黃幾復</h2>
+            <ul class="item">
+                <li><a href="寄黃幾復_十五音切語.html">十五音切語</a></li>
+                <li><a href="寄黃幾復_台羅拼音.html">台羅拼音</a></li>
+                <li><a href="寄黃幾復_台羅改良式.html">台羅改良式</a></li>
+                <li><a href="寄黃幾復_方音符號注音.html">方音符號注音</a></li>
+                <li><a href="寄黃幾復_白話字拼音.html">白話字拼音</a></li>
+                <li><a href="寄黃幾復_閩拼標音.html">閩拼標音</a></li>
+                <li><a href="寄黃幾復_雙排注音.html">雙排注音</a></li>
+            </ul>
+            <h2 class="title">岳陽樓記</h2>
+            <ul class="item">
+                <li><a href="岳陽樓記_十五音切語.html">十五音切語</a></li>
+                <li><a href="岳陽樓記_台羅拼音.html">台羅拼音</a></li>
+                <li><a href="岳陽樓記_台羅改良式.html">台羅改良式</a></li>
+                <li><a href="岳陽樓記_方音符號注音.html">方音符號注音</a></li>
+                <li><a href="岳陽樓記_白話字拼音.html">白話字拼音</a></li>
+                <li><a href="岳陽樓記_閩拼標音.html">閩拼標音</a></li>
+                <li><a href="岳陽樓記_雙排注音.html">雙排注音</a></li>
+            </ul>
+            <h2 class="title">心經</h2>
+            <ul class="item">
+                <li><a href="心經_十五音切語.html">十五音切語</a></li>
+                <li><a href="心經_台羅拼音.html">台羅拼音</a></li>
+                <li><a href="心經_台羅改良式.html">台羅改良式</a></li>
+                <li><a href="心經_方音符號注音.html">方音符號注音</a></li>
+                <li><a href="心經_白話字拼音.html">白話字拼音</a></li>
+                <li><a href="心經_閩拼標音.html">閩拼標音</a></li>
+                <li><a href="心經_雙排注音.html">雙排注音</a></li>
+            </ul>
+            <h2 class="title">念奴嬌·斷虹霽雨</h2>
+            <ul class="item">
+                <li><a href="念奴嬌·斷虹霽雨_十五音切語.html">十五音切語</a></li>
+                <li><a href="念奴嬌·斷虹霽雨_台羅拼音.html">台羅拼音</a></li>
+                <li><a href="念奴嬌·斷虹霽雨_台羅改良式.html">台羅改良式</a></li>
+                <li><a href="念奴嬌·斷虹霽雨_方音符號注音.html">方音符號注音</a></li>
+                <li><a href="念奴嬌·斷虹霽雨_白話字拼音.html">白話字拼音</a></li>
+                <li><a href="念奴嬌·斷虹霽雨_閩拼標音.html">閩拼標音</a></li>
+                <li><a href="念奴嬌·斷虹霽雨_雙排注音.html">雙排注音</a></li>
+            </ul>
+            <h2 class="title">水龍吟·登建康賞心亭</h2>
+            <ul class="item">
+                <li><a href="水龍吟·登建康賞心亭_十五音切語.html">十五音切語</a></li>
+                <li><a href="水龍吟·登建康賞心亭_台羅拼音.html">台羅拼音</a></li>
+                <li><a href="水龍吟·登建康賞心亭_台羅改良式.html">台羅改良式</a></li>
+                <li><a href="水龍吟·登建康賞心亭_方音符號注音.html">方音符號注音</a></li>
+                <li><a href="水龍吟·登建康賞心亭_白話字拼音.html">白話字拼音</a></li>
+                <li><a href="水龍吟·登建康賞心亭_閩拼標音.html">閩拼標音</a></li>
+                <li><a href="水龍吟·登建康賞心亭_雙排注音.html">雙排注音</a></li>
+            </ul>
+            <h2 class="title">漢語古詩</h2>
+            <ul class="item">
+                <li><a href="漢語古詩_十五音切語.html">十五音切語</a></li>
+                <li><a href="漢語古詩_台羅拼音.html">台羅拼音</a></li>
+                <li><a href="漢語古詩_台羅改良式.html">台羅改良式</a></li>
+                <li><a href="漢語古詩_方音符號注音.html">方音符號注音</a></li>
+                <li><a href="漢語古詩_白話字拼音.html">白話字拼音</a></li>
+                <li><a href="漢語古詩_閩拼標音.html">閩拼標音</a></li>
+                <li><a href="漢語古詩_雙排注音.html">雙排注音</a></li>
+            </ul>
+            <h2 class="title">短歌行</h2>
+            <ul class="item">
+                <li><a href="短歌行_十五音切語.html">十五音切語</a></li>
+                <li><a href="短歌行_台羅拼音.html">台羅拼音</a></li>
+                <li><a href="短歌行_台羅改良式.html">台羅改良式</a></li>
+                <li><a href="短歌行_方音符號注音.html">方音符號注音</a></li>
+                <li><a href="短歌行_白話字拼音.html">白話字拼音</a></li>
+                <li><a href="短歌行_閩拼標音.html">閩拼標音</a></li>
+                <li><a href="短歌行_雙排注音.html">雙排注音</a></li>
+            </ul>
+            <h2 class="title">顏氏家訓【教子】</h2>
+            <ul class="item">
+                <li><a href="顏氏家訓【教子】_十五音切語.html">十五音切語</a></li>
+                <li><a href="顏氏家訓【教子】_台羅拼音.html">台羅拼音</a></li>
+                <li><a href="顏氏家訓【教子】_台羅改良式.html">台羅改良式</a></li>
+                <li><a href="顏氏家訓【教子】_方音符號注音.html">方音符號注音</a></li>
+                <li><a href="顏氏家訓【教子】_白話字拼音.html">白話字拼音</a></li>
+                <li><a href="顏氏家訓【教子】_閩拼標音.html">閩拼標音</a></li>
+                <li><a href="顏氏家訓【教子】_雙排注音.html">雙排注音</a></li>
+            </ul>
+        </div>
+    </main>
 
-        <!-- 側邊選單 -->
-        <div id="side">
-            <div id="articles">
-                <h2 class="title">六國論</h2>
-                <ul class="item">
-                    <li><a href="六國論_十五音切語.html">十五音切語</a></li>
-                    <li><a href="六國論_台羅拼音.html">台羅拼音</a></li>
-                    <li><a href="六國論_台羅改良式.html">台羅改良式</a></li>
-                    <li><a href="六國論_方音符號注音.html">方音符號注音</a></li>
-                    <li><a href="六國論_白話字拼音.html">白話字拼音</a></li>
-                    <li><a href="六國論_閩拼標音.html">閩拼標音</a></li>
-                    <li><a href="六國論_雙排注音.html">雙排注音</a></li>
-                </ul>
-                <h2 class="title">前出師表</h2>
-                <ul class="item">
-                    <li><a href="前出師表_十五音切語.html">十五音切語</a></li>
-                    <li><a href="前出師表_台羅拼音.html">台羅拼音</a></li>
-                    <li><a href="前出師表_台羅改良式.html">台羅改良式</a></li>
-                    <li><a href="前出師表_方音符號注音.html">方音符號注音</a></li>
-                    <li><a href="前出師表_白話字拼音.html">白話字拼音</a></li>
-                    <li><a href="前出師表_閩拼標音.html">閩拼標音</a></li>
-                    <li><a href="前出師表_雙排注音.html">雙排注音</a></li>
-                </ul>
-                <h2 class="title">前赤壁賦</h2>
-                <ul class="item">
-                    <li><a href="前赤壁賦_十五音切語.html">十五音切語</a></li>
-                    <li><a href="前赤壁賦_台羅拼音.html">台羅拼音</a></li>
-                    <li><a href="前赤壁賦_台羅改良式.html">台羅改良式</a></li>
-                    <li><a href="前赤壁賦_方音符號注音.html">方音符號注音</a></li>
-                    <li><a href="前赤壁賦_白話字拼音.html">白話字拼音</a></li>
-                    <li><a href="前赤壁賦_閩拼標音.html">閩拼標音</a></li>
-                    <li><a href="前赤壁賦_雙排注音.html">雙排注音</a></li>
-                </ul>
-                <h2 class="title">回首前塵</h2>
-                <ul class="item">
-                    <li><a href="回首前塵_十五音切語.html">十五音切語</a></li>
-                    <li><a href="回首前塵_台羅拼音.html">台羅拼音</a></li>
-                    <li><a href="回首前塵_台羅改良式.html">台羅改良式</a></li>
-                    <li><a href="回首前塵_方音符號注音.html">方音符號注音</a></li>
-                    <li><a href="回首前塵_白話字拼音.html">白話字拼音</a></li>
-                    <li><a href="回首前塵_閩拼標音.html">閩拼標音</a></li>
-                    <li><a href="回首前塵_雙排注音.html">雙排注音</a></li>
-                </ul>
-                <h2 class="title">寄黃幾復</h2>
-                <ul class="item">
-                    <li><a href="寄黃幾復_十五音切語.html">十五音切語</a></li>
-                    <li><a href="寄黃幾復_台羅拼音.html">台羅拼音</a></li>
-                    <li><a href="寄黃幾復_台羅改良式.html">台羅改良式</a></li>
-                    <li><a href="寄黃幾復_方音符號注音.html">方音符號注音</a></li>
-                    <li><a href="寄黃幾復_白話字拼音.html">白話字拼音</a></li>
-                    <li><a href="寄黃幾復_閩拼標音.html">閩拼標音</a></li>
-                    <li><a href="寄黃幾復_雙排注音.html">雙排注音</a></li>
-                </ul>
-                <h2 class="title">岳陽樓記</h2>
-                <ul class="item">
-                    <li><a href="岳陽樓記_十五音切語.html">十五音切語</a></li>
-                    <li><a href="岳陽樓記_台羅拼音.html">台羅拼音</a></li>
-                    <li><a href="岳陽樓記_台羅改良式.html">台羅改良式</a></li>
-                    <li><a href="岳陽樓記_方音符號注音.html">方音符號注音</a></li>
-                    <li><a href="岳陽樓記_白話字拼音.html">白話字拼音</a></li>
-                    <li><a href="岳陽樓記_閩拼標音.html">閩拼標音</a></li>
-                    <li><a href="岳陽樓記_雙排注音.html">雙排注音</a></li>
-                </ul>
-                <h2 class="title">心經</h2>
-                <ul class="item">
-                    <li><a href="心經_十五音切語.html">十五音切語</a></li>
-                    <li><a href="心經_台羅拼音.html">台羅拼音</a></li>
-                    <li><a href="心經_台羅改良式.html">台羅改良式</a></li>
-                    <li><a href="心經_方音符號注音.html">方音符號注音</a></li>
-                    <li><a href="心經_白話字拼音.html">白話字拼音</a></li>
-                    <li><a href="心經_閩拼標音.html">閩拼標音</a></li>
-                    <li><a href="心經_雙排注音.html">雙排注音</a></li>
-                </ul>
-                <h2 class="title">念奴嬌·斷虹霽雨</h2>
-                <ul class="item">
-                    <li><a href="念奴嬌·斷虹霽雨_十五音切語.html">十五音切語</a></li>
-                    <li><a href="念奴嬌·斷虹霽雨_台羅拼音.html">台羅拼音</a></li>
-                    <li><a href="念奴嬌·斷虹霽雨_台羅改良式.html">台羅改良式</a></li>
-                    <li><a href="念奴嬌·斷虹霽雨_方音符號注音.html">方音符號注音</a></li>
-                    <li><a href="念奴嬌·斷虹霽雨_白話字拼音.html">白話字拼音</a></li>
-                    <li><a href="念奴嬌·斷虹霽雨_閩拼標音.html">閩拼標音</a></li>
-                    <li><a href="念奴嬌·斷虹霽雨_雙排注音.html">雙排注音</a></li>
-                </ul>
-                <h2 class="title">水龍吟·登建康賞心亭</h2>
-                <ul class="item">
-                    <li><a href="水龍吟·登建康賞心亭_十五音切語.html">十五音切語</a></li>
-                    <li><a href="水龍吟·登建康賞心亭_台羅拼音.html">台羅拼音</a></li>
-                    <li><a href="水龍吟·登建康賞心亭_台羅改良式.html">台羅改良式</a></li>
-                    <li><a href="水龍吟·登建康賞心亭_方音符號注音.html">方音符號注音</a></li>
-                    <li><a href="水龍吟·登建康賞心亭_白話字拼音.html">白話字拼音</a></li>
-                    <li><a href="水龍吟·登建康賞心亭_閩拼標音.html">閩拼標音</a></li>
-                    <li><a href="水龍吟·登建康賞心亭_雙排注音.html">雙排注音</a></li>
-                </ul>
-                <h2 class="title">漢語古詩</h2>
-                <ul class="item">
-                    <li><a href="漢語古詩_十五音切語.html">十五音切語</a></li>
-                    <li><a href="漢語古詩_台羅拼音.html">台羅拼音</a></li>
-                    <li><a href="漢語古詩_台羅改良式.html">台羅改良式</a></li>
-                    <li><a href="漢語古詩_方音符號注音.html">方音符號注音</a></li>
-                    <li><a href="漢語古詩_白話字拼音.html">白話字拼音</a></li>
-                    <li><a href="漢語古詩_閩拼標音.html">閩拼標音</a></li>
-                    <li><a href="漢語古詩_雙排注音.html">雙排注音</a></li>
-                </ul>
-                <h2 class="title">短歌行</h2>
-                <ul class="item">
-                    <li><a href="短歌行_十五音切語.html">十五音切語</a></li>
-                    <li><a href="短歌行_台羅拼音.html">台羅拼音</a></li>
-                    <li><a href="短歌行_台羅改良式.html">台羅改良式</a></li>
-                    <li><a href="短歌行_方音符號注音.html">方音符號注音</a></li>
-                    <li><a href="短歌行_白話字拼音.html">白話字拼音</a></li>
-                    <li><a href="短歌行_閩拼標音.html">閩拼標音</a></li>
-                    <li><a href="短歌行_雙排注音.html">雙排注音</a></li>
-                </ul>
-                <h2 class="title">顏氏家訓【教子】</h2>
-                <ul class="item">
-                    <li><a href="顏氏家訓【教子】_十五音切語.html">十五音切語</a></li>
-                    <li><a href="顏氏家訓【教子】_台羅拼音.html">台羅拼音</a></li>
-                    <li><a href="顏氏家訓【教子】_台羅改良式.html">台羅改良式</a></li>
-                    <li><a href="顏氏家訓【教子】_方音符號注音.html">方音符號注音</a></li>
-                    <li><a href="顏氏家訓【教子】_白話字拼音.html">白話字拼音</a></li>
-                    <li><a href="顏氏家訓【教子】_閩拼標音.html">閩拼標音</a></li>
-                    <li><a href="顏氏家訓【教子】_雙排注音.html">雙排注音</a></li>
-                </ul>
-            </div>
-        </div><!-- /#sidebar -->
-    </div><!-- /#contents -->
-
-    <!-- <div>
-        <p>
-            為能正確顯示「注音符號」，請點擊以下連結，下載注音符號專用字型：
-            <a href="https://github.com/cmex-30/Bopomofo_on_Web/tree/master/font/BopomofoRuby1909-v1-Regular.ttf">
-                BopomofoRuby1909-v1-Regular.ttf
-            </a>
-            ，並於使用之電腦端安裝此字型。
-        </p>
-    </div> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script type="text/javascript" src="./assets/javascripts/main.js"></script>
 </body>
