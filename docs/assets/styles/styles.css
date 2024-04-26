@@ -1,23 +1,106 @@
+@charset "UTF-8";
+
+@import url("https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap");
+
+body {
+  font-family: 'Noto Sans TC', sans-serif !important;
+}
+
+/* END: ed8c6549bwf9 */
+
+@import url(https://fonts.googleapis.com/css?family=Noto+Serif+TC&amp;display=swap);
+
+body {
+  font-family: 'Noto Serif TC', serif;
+}
+
 @font-face {
   font-family: 'BopomofoRuby';
   src:
     local('BopomofoRuby1909-v1-Regular'),
-    url('./assets/fonts/BopomofoRuby1909-v1-Regular.ttf');
-}
-
-@import url("https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap") body {
-  font-family: 'Noto Sans TC', sans-serif !important;
-}
-
-@import url(https://fonts.googleapis.com/css?family=Noto+Serif+TC&amp;display=swap") body {
-  font-family: 'Noto Serif TC', serif;
+    url('../BopomofoRuby1909-v1-Regular.ttf');
 }
 
 body {
   font-family: "Noto Serif TC", serif;
-  line-height: 2.4;
+  line-height: 1.8;
   letter-spacing: 0px;
-  margin: 10px 50px;
+  color: #333;
+
+  /* &>* {
+    margin: auto;
+  } */
+}
+
+header {
+  /* display: block; */
+  border-top: #00c4ab 5px solid;
+  text-align: center;
+  background: url(../picts/bg_header.png) #e6e6e6;
+}
+
+header h1 {
+  padding: 80px 25px;
+  font-family: 'Noto Serif TC', serif;
+  font-size: 200%;
+  font-weight: bold;
+}
+
+#articles {
+  font: 1em sans-serif;
+  /* font-size: xx-large; */
+  font-size: 160%;
+  font-weight: bold;
+}
+
+button {
+  position: absolute;
+  top: 14px;
+  right: 8px;
+  background-color: transparent;
+  /* 将边框宽度设置为0 */
+  border-width: 0;
+  /* 使用outline属性创建类似边框的效果 */
+  outline: 1px solid #00c4ab;
+  /* 如果需要圆角，可以添加border-radius属性 */
+  border-radius: 5px;
+  /* 如果需要内边距，可以添加padding属性 */
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+button:focus {
+  outline: none;
+}
+
+ul {
+  display: none;
+  list-style-type: none;
+}
+
+li a {
+  text-decoration: none;
+  display: block;
+  padding: 17px 25px;
+  color: #FFF;
+  background: #B94B6A;
+  border-bottom: 1px solid #A24861;
+  font-size: 100%;
+}
+
+li:last-child a {
+  border-bottom: none;
+}
+
+main {
+  display: block;
+  padding: 40px 20px 20px;
+  color: #333;
+}
+
+p {
+  margin-bottom: 50px;
+  line-height: 2em;
 }
 
 h1 {
@@ -52,7 +135,6 @@ rtc {
   color: brown;
   font-size: 30%;
   display: inline-block;
-  ruby-position: inter-character;
   text-align: center;
   writing-mode: vertical-rl;
   text-orientation: upright;
@@ -100,16 +182,4 @@ rtc {
   font-size: 42px;
   letter-spacing: 0.2em;
   line-height: 2.0;
-}
-
-.hljs-ln-numbers {
-  text-align: center;
-  color: #CCC;
-  border-right: 1px solid #CCC;
-  vertical-align: top;
-  padding-right: 5px !important;
-}
-
-.hljs-ln-code {
-  padding-left: 10px !important;
 }
