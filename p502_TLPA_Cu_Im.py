@@ -19,7 +19,7 @@ cu_im_huat_list = {
     ],
     "TPS": [
         "zhu_yin",  # <div class="">
-        "rtc",  # Ruby Tag: <rt> / <rtc>
+        "rt",  # Ruby Tag: <rt> / <rtc>
         "方音符號注音",  # 輸出工作表名稱
     ],
     "POJ": [
@@ -362,7 +362,7 @@ def build_web_page(wb, target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict
     # =========================================================
     # 輸出 <div> tag
     # =========================================================
-    html_str = f"<div class='{div_class}'><p style='font-size: 1.2em;letter-spacing: 2px;text-align: center;'>"
+    html_str = f"<div class='{div_class}'><p class='title'>"
     target_sheet.range("A" + str(target_index)).value = html_str
     target_index += 1
 
@@ -380,7 +380,7 @@ def build_web_page(wb, target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict
         if han_ji == "" or han_ji == "\n":
             pagrpah_count += 1
             if pagrpah_count == 2:
-                html_str = "</p><p style='font-size: 0.6em;letter-spacing: 2px;text-align: right;'>"
+                html_str = "</p><p class='author'>"
             else:
                 html_str = "</p><p>"
             target_sheet.range("A" + str(target_index)).value = html_str
