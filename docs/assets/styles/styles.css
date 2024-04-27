@@ -23,8 +23,6 @@ body {
 
 body {
   font-family: "Noto Serif TC", serif;
-  line-height: 1.8;
-  letter-spacing: 0px;
   color: #333;
 }
 
@@ -63,9 +61,9 @@ button {
   cursor: pointer;
 }
 
-/* button:focus {
+button:focus {
   outline: none;
-} */
+}
 
 ul {
   display: none;
@@ -80,6 +78,7 @@ li a {
   background: #B94B6A;
   border-bottom: 1px solid #A24861;
   font-size: 100%;
+  line-height: 1.0em;
 }
 
 li:last-child a {
@@ -90,6 +89,7 @@ main {
   display: block;
   padding: 40px 20px 20px;
   color: #333;
+  line-height: 1.8;
 }
 
 p {
@@ -122,34 +122,59 @@ rt {
   color: darkcyan;
   font-size: 45%;
   text-align: center;
-  letter-spacing: 0.0em
+  letter-spacing: 0.0em;
 }
 
 rtc {
   font-family: BopomofoRuby;
-  color: brown;
   font-size: 30%;
-  display: inline-block;
-  ruby-position: inter-character;
+  letter-spacing: 0;
+  color: brown;
+
   -webkit-ruby-position: inter-character;
+  ruby-position: inter-character;
+  text-orientation: upright;
   text-align: center;
   writing-mode: vertical-rl;
-  text-orientation: upright;
   vertical-align: middle;
-  letter-spacing: 0.0em;
-  padding-right: 0.0rem;
 }
 
 /* 方音符號 */
 .zhu_yin {
+  padding: 40px 20px 20px;
   font-family: "Noto Serif TC";
   font-size: 42px;
-  letter-spacing: 0.2em;
   line-height: 2.0;
 }
 
+.zhu_yin ruby {
+  padding-right: 2px;
+  writing-mode: vertical-lr;
+}
+
 .zhu_yin rt {
+  font-family: BopomofoRuby;
+  font-size: 30%;
   letter-spacing: 0;
+  color: darkcyan;
+
+  -webkit-ruby-position: inter-character;
+  ruby-position: inter-character;
+  text-orientation: upright;
+  text-align: center;
+}
+
+.zhu_yin rtc {
+  font-family: BopomofoRuby;
+  font-size: 30%;
+  letter-spacing: 0;
+  color: #B94B6A;
+
+  -webkit-ruby-position: inter-character;
+  ruby-position: inter-character;
+  text-orientation: upright;
+  text-align: center;
+  writing-mode: inherit;
 }
 
 /* 十五音 */
@@ -168,7 +193,7 @@ rtc {
 /* 台羅、閩拼、白話字 */
 .pin_yin {
   font-family: "Noto Serif TC";
-  font-size: 42px;
+  font-size: 3em;
   letter-spacing: 0.2em;
   line-height: 2.0;
 }
@@ -179,4 +204,16 @@ rtc {
   font-size: 42px;
   letter-spacing: 0.2em;
   line-height: 2.0;
+}
+
+.title {
+  font-size: 1.2em;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+.author {
+  font-size: 0.7em;
+  letter-spacing: 2px;
+  text-align: right;
 }
