@@ -141,40 +141,45 @@ rtc {
 
 /* 方音符號 */
 .zhu_yin {
-  padding: 40px 20px 20px;
   font-family: "Noto Serif TC";
-  font-size: 42px;
-  line-height: 2.0;
+  font-size: 2em;
+}
+
+.zhu_yin p {
+  line-height: 3em;
+  letter-spacing: 0.2em;
 }
 
 .zhu_yin ruby {
-  padding-right: 2px;
-  writing-mode: vertical-lr;
+  /* writing-mode: vertical-lr; */
 }
 
-.zhu_yin rt {
-  font-family: BopomofoRuby;
-  font-size: 30%;
-  letter-spacing: 0;
-  color: darkcyan;
-
-  -webkit-ruby-position: inter-character;
-  ruby-position: inter-character;
-  text-orientation: upright;
-  text-align: center;
+.zhu_yin rb {
+  font-size: 1.5em;
 }
 
 .zhu_yin rtc {
+  white-space: nowrap;
+  line-height: 1;
+
   font-family: BopomofoRuby;
-  font-size: 30%;
+  font-size: 40%;
   letter-spacing: 0;
   color: #B94B6A;
+  font-weight: bold;
 
   -webkit-ruby-position: inter-character;
   ruby-position: inter-character;
-  text-orientation: upright;
+  /* text-align: center; */
+  /* text-orientation: upright; */
+}
+
+.zhu_yin rt {
+  font-family: sans-serif;
+  color: darkcyan;
+  font-size: 50%;
   text-align: center;
-  writing-mode: inherit;
+  letter-spacing: 0;
 }
 
 /* 十五音 */
