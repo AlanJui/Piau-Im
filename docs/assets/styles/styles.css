@@ -36,28 +36,21 @@ header {
 header h1 {
   padding: 0 10px 25px;
   font-family: 'Noto Serif TC', serif;
-  font-size: 240%;
+  font-size: 32pt;
   font-weight: bold;
 }
 
 #articles {
-  font-size: 180%;
+  font-size: 28pt;
   font-weight: bold;
 }
 
 button {
   position: absolute;
-  top: 14px;
-  right: 8px;
+  top: 25px;
+  right: 15px;
   background-color: transparent;
-  /* 将边框宽度设置为0 */
-  border-width: 0;
-  /* 使用outline属性创建类似边框的效果 */
-  outline: 1px solid #00c4ab;
-  /* 如果需要圆角，可以添加border-radius属性 */
-  border-radius: 5px;
-  /* 如果需要内边距，可以添加padding属性 */
-  padding: 5px 10px;
+  border: none;
   cursor: pointer;
 }
 
@@ -110,105 +103,118 @@ a:hover {
   text-decoration: underline;
 }
 
-
-ruby {
-  /*ruby-position: under;*/
+/* Ruby Tag */
+/* ruby {
   ruby-align: center;
   ruby-merge: auto;
-}
+} */
 
 rt {
-  font-family: sans-serif;
+  font-family: Arial;
   color: darkcyan;
   font-size: 45%;
-  text-align: center;
-  letter-spacing: 0.0em;
+  letter-spacing: 0;
 }
 
 rtc {
   font-family: BopomofoRuby;
+  color: #B94B6A;
   font-size: 30%;
-  letter-spacing: 0;
-  color: brown;
+  line-height: normal;
+  ruby-merge: merge;
 
   -webkit-ruby-position: inter-character;
   ruby-position: inter-character;
   text-orientation: upright;
-  text-align: center;
-  writing-mode: vertical-rl;
+  letter-spacing: 2px;
+
+  -webkitg_writing-mode: vertical-lr;
+  writing-mode: vertical-lr;
   vertical-align: middle;
+  display: inline;
 }
 
 /* 方音符號 */
 .zhu_yin {
   font-family: "Noto Serif TC";
-  font-size: 2em;
-}
-
-.zhu_yin p {
-  line-height: 3em;
+  font-size: 28pt;
   letter-spacing: 0.2em;
+  line-height: 1.8em;
 }
 
 .zhu_yin ruby {
-  /* writing-mode: vertical-lr; */
-}
-
-.zhu_yin rb {
-  font-size: 1.5em;
-}
-
-.zhu_yin rtc {
-  white-space: nowrap;
-  line-height: 1;
-
-  font-family: BopomofoRuby;
-  font-size: 40%;
-  letter-spacing: 0;
-  color: #B94B6A;
-  font-weight: bold;
-
-  -webkit-ruby-position: inter-character;
-  ruby-position: inter-character;
-  /* text-align: center; */
-  /* text-orientation: upright; */
+  writing-mode: vertical-lr;
+  text-orientation: upright;
+  line-height: normal;
 }
 
 .zhu_yin rt {
-  font-family: sans-serif;
-  color: darkcyan;
-  font-size: 50%;
-  text-align: center;
-  letter-spacing: 0;
-}
-
-/* 十五音 */
-.fifteen_yin {
-  font-family: "Noto Serif TC";
-  font-size: 42px;
-  letter-spacing: 0.2em;
-  line-height: 2.0;
-}
-
-.fifteen_yin rt {
-  letter-spacing: 0;
+  font-family: BopomofoRuby;
+  color: #B94B6A;
   font-size: 40%;
+  letter-spacing: 0;
+}
+
+/* 雙排注音符號 */
+.Siang_Pai {
+  font-family: "Noto Serif TC";
+  font-size: 28pt;
+  letter-spacing: 0.2em;
+  line-height: 1.8em;
+}
+
+.Siang_Pai rt {
+  font-family: Arial, Helvetica, sans-serif;
+  color: darkcyan;
+  font-size: 45%;
+  letter-spacing: 0;
+}
+
+.Siang_Pai rtc {
+  font-family: BopomofoRuby;
+  color: #B94B6A;
+  font-size: 30%;
+  line-height: normal;
+  ruby-merge: merge;
+
+  -webkit-ruby-position: inter-character;
+  ruby-position: inter-character;
+  text-orientation: upright;
+  letter-spacing: 2px;
+
+  -webkitg_writing-mode: vertical-lr;
+  writing-mode: vertical-lr;
+  vertical-align: middle;
+  display: inline;
 }
 
 /* 台羅、閩拼、白話字 */
 .pin_yin {
   font-family: "Noto Serif TC";
-  font-size: 3em;
+  font-size: 28pt;
   letter-spacing: 0.2em;
-  line-height: 2.0;
+  line-height: 1.8em;
 }
 
 /* 白話字 */
 .poj {
   font-family: "Noto Serif TC";
-  font-size: 42px;
+  font-size: 28pt;
   letter-spacing: 0.2em;
-  line-height: 2.0;
+  line-height: 1.8em;
+}
+
+/* 十五音 */
+.fifteen_yin {
+  font-family: "Noto Serif TC";
+  font-size: 28pt;
+  letter-spacing: 0.2em;
+  line-height: 1.8em;
+}
+
+.fifteen_yin rt {
+  letter-spacing: 0;
+  font-size: 40%;
 }
 
 .title {
