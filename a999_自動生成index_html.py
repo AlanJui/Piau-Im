@@ -3,6 +3,20 @@ import os
 # 要生成超連結的目錄
 docs_directory = 'docs'
 
+exculude_list = ['index.html', '_template.html']
+
+def create_file_list(directory, extension):
+    # 建立檔案清單
+    file_list = []
+
+    # 遍歷目錄下的檔案
+    for filename in os.listdir(directory):
+        # 排除 index.html 和 _template.html 檔案
+        if filename not in exculude_list:
+            if filename.endswith(extension):
+                file_list.append(filename)
+    return file_list
+
 # 生成超連結的檔案名稱
 index_file = os.path.join(docs_directory, 'index.html')
 
@@ -21,7 +35,7 @@ with open(index_file, 'w', encoding='utf-8') as f:  # 指定 UTF-8 編碼
         # 遍歷目錄下的檔案
         for filename in os.listdir(docs_directory):
             # 排除 index.html 和 _template.html 檔案
-            if filename not in ['index.html', '_template.html']:
+            if filename not in exculude_list:
                 # 取得檔案名稱 (不包含副檔名)
                 article_and_phonetic = os.path.splitext(filename)[0]
                 

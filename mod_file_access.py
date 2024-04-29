@@ -17,7 +17,8 @@ def get_cmd_input():
 
 
 def open_excel_file(main_file_name):
-    excel_file_name = main_file_name + ".xlsx"
+    # excel_file_name = main_file_name + ".xlsx"
+    excel_file_name = main_file_name
     current_path = os.getcwd()
     file_path = os.path.join(current_path, "output", excel_file_name)
     return xw.Book(file_path)
@@ -38,6 +39,8 @@ def write_to_excel_file(excel_workbook):
 
     # 儲存新建立的工作簿
     excel_workbook.save(new_file_path)
+    # 關閉工作簿
+    excel_workbook.close()
 
 # -----------------------------------------------------
 # 將「字串」轉換成「串列（Characters List）」
@@ -46,3 +49,22 @@ def convert_string_to_chars_list(string):
     list1 = []
     list1[:0] = string
     return list1
+
+# -----------------------------------------------------
+# 要生成超連結的目錄
+# directory = 'output'
+# extenstion = 'xlsx'
+# exculude_list = ['Piau-Tsu-Im.xlsx', 'env.xlsx', 'env_osX.xlsx']
+
+def create_file_list(directory, extension, exculude_list):
+    # 建立檔案清單
+    file_list = []
+
+    # 遍歷目錄下的檔案
+    for filename in os.listdir(directory):
+        # 排除 index.html 和 _template.html 檔案
+        if filename not in exculude_list:
+            if filename.endswith(extension):
+                file_list.append(filename)
+
+    return file_list

@@ -43,7 +43,7 @@ cu_im_huat_list = {
         "台羅改良式",  # 輸出工作表名稱
     ],
     "DBL": [
-        "zhu_yin",  # <div class="">
+        "Siang_Pai",  # <div class="">
         "rtc",  # Ruby Tag: <rt> / <rtc>
         "雙排注音",  # 輸出工作表名稱
     ],
@@ -481,7 +481,7 @@ def build_web_page(wb, target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict
         if cu_im_huat != "DBL":
             ruby_tag = f"  <ruby><rb>{han_ji}</rb><rp>(</rp><{rt_tag}>{piau_im}</{rt_tag}><rp>)</rp></ruby>"
         else:
-            ruby_tag = f"  <ruby><rb>{han_ji}</rb><rp>(</rp><{rt_tag}>{piau_im}</{rt_tag}><rp>)</rp><rt>{piau_im2}</rt></ruby>"
+            ruby_tag = f"  <ruby><rb>{han_ji}</rb><rt>{piau_im2}</rt><rp>(</rp><{rt_tag}>{piau_im}</{rt_tag}><rp>)</rp></ruby>"
 
         target_sheet.range("A" + str(target_index)).value = ruby_tag
     

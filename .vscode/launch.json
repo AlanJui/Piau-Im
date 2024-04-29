@@ -32,6 +32,20 @@
             "args": "${command:pickArgs}"
         },
         {
+            "name": "a900_Batch_Process",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a900_Batch_Process.py",
+            "console": "integratedTerminal",
+            // "a520_製作注音網頁.py",
+            "args": [
+                // "a500_予我廣韻標音.py",
+                "a510_用廣韻為漢字標音.py",
+                "-i",
+                "output",
+            ]
+        },
+        {
             "name": "a900_漢字查廣韻擬音",
             "type": "debugpy",
             "request": "launch",
