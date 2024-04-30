@@ -1,5 +1,6 @@
 import argparse
 import os
+import time
 
 import xlwings as xw
 
@@ -39,6 +40,10 @@ def write_to_excel_file(excel_workbook):
 
     # 儲存新建立的工作簿
     excel_workbook.save(new_file_path)
+
+    # 等待一段時間讓 save 完成
+    time.sleep(10)
+
     # 關閉工作簿
     excel_workbook.close()
 

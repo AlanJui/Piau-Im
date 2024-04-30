@@ -170,7 +170,10 @@ def Kong_Un_Piau_Im(wb, db_cursor):
                 han_ji_id = piau_im['漢字識別號']
                 # sing_bu = piau_im['上字標音'] if piau_im['上字標音'] != "Ø" else "q"
                 cu_im = piau_im['漢字標音']
-                freq = float(piau_im['常用率'])
+                try:
+                    freq = float(piau_im['常用率'])
+                except Exception:
+                    freq = 0
 
                 # 記錄對映至【漢字注音表】的【列號】
                 ji_khoo_piau.range("A" + str(ji_khoo_index)).value = source_index
