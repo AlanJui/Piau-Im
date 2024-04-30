@@ -10,8 +10,8 @@ exclude_file = sys.argv[4] if len(sys.argv) > 4 else None
 # 獲取目錄中的所有檔案
 all_files = os.listdir(directory_path)
 
-# 過濾出與指定副檔名相符的檔案
-filtered_files = [file for file in all_files if file.endswith(file_extension)]
+# 過濾出與指定副檔名相符且不以 ~$ 開頭的檔案
+filtered_files = [file for file in all_files if file.endswith(file_extension) and not file.startswith('~$')]
 
 # 如果提供了除外清單檔案，則讀取該檔案並從檔案清單中排除在除外清單中的檔案
 if exclude_file:
