@@ -1,5 +1,6 @@
 import argparse
 import os
+import os.path
 import time
 
 import xlwings as xw
@@ -17,9 +18,21 @@ def get_cmd_input():
     }
 
 
+# def open_excel_file(main_file_name):
+#     # excel_file_name = main_file_name + ".xlsx"
+#     excel_file_name = main_file_name
+#     current_path = os.getcwd()
+#     file_path = os.path.join(current_path, "output", excel_file_name)
+#     return xw.Book(file_path)
 def open_excel_file(main_file_name):
-    # excel_file_name = main_file_name + ".xlsx"
-    excel_file_name = main_file_name
+    # 檢查檔案名稱是否已包含副檔名
+    file_name, file_extension = os.path.splitext(main_file_name)
+    if not file_extension:
+        # 如果沒有副檔名，添加 .xlsx
+        excel_file_name = file_name + '.xlsx'
+    else:
+        excel_file_name = main_file_name
+
     current_path = os.getcwd()
     file_path = os.path.join(current_path, "output", excel_file_name)
     return xw.Book(file_path)
