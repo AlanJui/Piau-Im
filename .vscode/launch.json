@@ -46,10 +46,34 @@
             ]
         },
         {
-            "name": "a900_漢字查廣韻擬音",
+            "name": "a910_Batch_Process_By_Todo_List",
             "type": "debugpy",
             "request": "launch",
-            "program": "a900_漢字查廣韻擬音.py",
+            "program": "a910_Batch_Process_By_Todo_List.py",
+            "console": "integratedTerminal",
+            "args": [
+                // "a510_用廣韻為漢字標音.py",
+                "a520_製作注音網頁.py",
+            ]
+        },
+        {
+            "name": "a920_製作目錄檔案清單",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a920_製作目錄檔案清單.py",
+            "console": "integratedTerminal",
+            "args": [
+                "todo_list.txt",
+                "output",
+                "xlsx",
+                "exclude_files.txt"
+            ]
+        },
+        {
+            "name": "a600_漢字查廣韻擬音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a600_漢字查廣韻擬音.py",
             "console": "integratedTerminal",
             "args": [
                 "不",
