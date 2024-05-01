@@ -10,7 +10,13 @@ import sys
 import xlwings as xw
 
 import settings
-from mod_file_access import get_cmd_input, open_excel_file, write_to_excel_file
+from mod_file_access import (
+    close_excel_file,
+    get_cmd_input,
+    open_excel_file,
+    save_to_a_working_copy,
+    write_to_excel_file,
+)
 from mod_廣韻 import init_sing_bu_dict, init_un_bu_dict
 from p500_Import_Source_Sheet import San_Sing_Han_Ji_Tsh_Im_Piau
 from p501_Kong_Un_Cha_Ji_Tian import Kong_Un_Piau_Im
@@ -36,7 +42,9 @@ def main():
     print(f"CONVERT_FILE_NAME = {CONVERT_FILE_NAME}")
 
     # 指定提供來源的【檔案】
-    wb = open_excel_file(CONVERT_FILE_NAME)
+    # wb = open_excel_file(CONVERT_FILE_NAME)
+    save_to_a_working_copy(CONVERT_FILE_NAME)
+    wb = open_excel_file("working.xlsx")
 
     # =========================================================================
     # (2) 建置「漢字注音表」
@@ -52,7 +60,8 @@ def main():
     # ==========================================================
     # 儲存輸出結果
     # ==========================================================
-    write_to_excel_file(wb)
+    # write_to_excel_file(wb)
+    close_excel_file(wb)
 
     # ==========================================================
     # 關閉資料庫
