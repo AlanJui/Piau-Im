@@ -79,12 +79,6 @@ def save_to_a_working_copy(main_file_name):
         # 无论是否成功，都关闭原始工作簿
         wb.close()
 
-    # 重新打开刚才另存的工作簿
-    # new_wb = load_workbook(new_file_path)
-
-    # 返回新的工作簿对象
-    # return new_wb
-
 
 def write_to_excel_file(excel_workbook):
     # 自工作表「env」取得新檔案名稱
@@ -105,11 +99,20 @@ def write_to_excel_file(excel_workbook):
         os.makedirs(output_dir)
 
     # 儲存新建立的工作簿
-    excel_workbook.save(new_file_path)
+    try:
+        excel_workbook.save(new_file_path)
+    except Exception as e:
+        print(f"存檔失敗，原因：{e}")
+        if os.path.exists(new_file_path):
+            os.remove(new_file_path)
+        try:
+            excel_workbook.save(new_file_path)
+        except Exception as e:
+            print(f"再次存檔失敗，原因：{e}")
+            return
 
     # 等待一段時間讓 save 完成
     time.sleep(3)
-
 
 def close_excel_file(excel_workbook):
     # 關閉工作簿

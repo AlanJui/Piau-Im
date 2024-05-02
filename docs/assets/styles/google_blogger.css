@@ -1,0 +1,115 @@
+/* 方音符號專用 */
+@import url(http://www.cmex.org.tw/phon/phon.css);
+
+@font-face {
+    font-family: BopomofoRuby;
+    src: local("BopomofoRuby1909-v1 Regular"), url(BopomofoRuby1909-v1-Regular.ttf);
+}
+
+@import url("https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap") body {
+    font-family: 'Noto Sans TC', sans-serif !important;
+}
+
+@import url(https://fonts.googleapis.com/css?family=Noto+Serif+TC&amp;display=swap") body {
+    font-family: 'Noto Serif TC', serif;
+}
+
+body {
+    font-family: "Noto Serif TC", serif;
+    line-height: 1.8;
+    letter-spacing: 0px;
+    margin: 10px 50px;
+}
+
+ruby {
+    /*ruby-position: under;*/
+    ruby-align: center;
+    ruby-merge: auto;
+}
+
+rt {
+    font-family: sans-serif;
+    color: darkcyan;
+    font-size: 45%;
+    text-align: center;
+    letter-spacing: 0.0em
+}
+
+rtc {
+    font-family: BopomofoRuby;
+    color: brown;
+    font-size: 30%;
+    display: inline-block;
+    ruby-position: inter-character;
+    text-align: center;
+    writing-mode: vertical-rl;
+    writing-mode: sideways-lr;
+    text-orientation: upright;
+    vertical-align: middle;
+    letter-spacing: 0.0em;
+    padding-right: 0.0rem;
+}
+
+/* 方音符號 */
+.zhu_yin {
+    font-family: "Noto Serif TC";
+    font-size: 42px;
+    letter-spacing: 0.2em;
+    line-height: 2.0;
+}
+
+.zhu_yin rt {
+    letter-spacing: 0;
+}
+
+/* 十五音 */
+.fifteen_yin {
+    font-family: "Noto Serif TC";
+    font-size: 42px;
+    letter-spacing: 0.2em;
+    line-height: 2.0;
+}
+
+.fifteen_yin rt {
+    letter-spacing: 0;
+    font-size: 40%;
+}
+
+/* 台羅、閩拼、白話字 */
+.pin_yin {
+    font-family: "Noto Serif TC";
+    font-size: 42px;
+    letter-spacing: 0.2em;
+    line-height: 2.0;
+}
+
+/* 白話字 */
+.poj {
+    font-family: "Noto Serif TC";
+    font-size: 42px;
+    letter-spacing: 0.2em;
+    line-height: 2.0;
+}
+
+.hljs-ln-numbers {
+    text-align: center;
+    color: #CCC;
+    border-right: 1px solid #CCC;
+    vertical-align: top;
+    padding-right: 5px !important;
+}
+
+.hljs-ln-code {
+    padding-left: 10px !important;
+}
+
+.article_content {
+    font-family: "Noto Serif TC", Arial, sans-serif;
+    font-size: 24px;
+    letter-spacing: 0.0em;
+    line-height: 2;
+}
+
+.author {
+    text-align: right;
+}
