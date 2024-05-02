@@ -18,7 +18,7 @@ cu_im_huat_list = {
         "十五音切語",  # 輸出工作表名稱
     ],
     "TPS": [
-        "zhu_yin",  # <div class="">
+        "Piau_Im",  # <div class="">
         "rt",  # Ruby Tag: <rt> / <rtc>
         "方音符號注音",  # 輸出工作表名稱
     ],
@@ -340,6 +340,7 @@ def build_web_page(wb, target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict
     # 輸出放置圖片的 HTML Tag
     # =========================================================
     title = wb.sheets["env"].range("TITLE").value
+    web_page_title = f"《{title}》【{source_sheet_name}】\n"
     image_url = wb.sheets["env"].range("IMAGE_URL").value
 
     # ruff: noqa: E501
@@ -377,7 +378,7 @@ def build_web_page(wb, target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict
         # =========================================================
         # 如是空白或換行，輸出段落 <p> tag
         # =========================================================
-        if han_ji == "" or han_ji == "\n":
+        if han_ji == 'None' or han_ji == "" or han_ji == "\n":
             pagrpah_count += 1
             if pagrpah_count == 2:
                 html_str = "</p><p class='author'>"
@@ -503,7 +504,8 @@ def build_web_page(wb, target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict
     write_buffer += html_str        
 
     # 返回網頁輸出暫存區
-    return write_buffer 
+    return write_buffer
+
 
 def create_html_file(output_path, content, title='您的標題'):
     template = f"""
@@ -585,6 +587,7 @@ def Iong_TLPA_Cu_Im(wb, sing_bu_dict, un_bu_dict):
         # 產生 HTML 網頁用文字檔
         # -----------------------------------------------------
         title = wb.sheets["env"].range("TITLE").value
+        web_page_title = f"《{title}》【{source_sheet_name}】"
         # 確保 output 子目錄存在
         output_dir = 'docs'
         output_file = f"{title}_{source_sheet_name}.html"
@@ -595,7 +598,7 @@ def Iong_TLPA_Cu_Im(wb, sing_bu_dict, un_bu_dict):
         html_content = build_web_page(wb, beh_cu_im_e_piau, cu_im_huat, div_class, rt_tag, sing_bu_dict, un_bu_dict)
 
         # 輸出到網頁檔案
-        create_html_file(output_path, html_content, title)
+        create_html_file(output_path, html_content, web_page_title)
         
         print(f"【{cu_im_piau_e_mia}】網頁製作完畢！")
 
