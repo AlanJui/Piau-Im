@@ -42,9 +42,7 @@ def main():
     print(f"CONVERT_FILE_NAME = {CONVERT_FILE_NAME}")
 
     # 指定提供來源的【檔案】
-    # wb = open_excel_file(CONVERT_FILE_NAME)
-    save_to_a_working_copy(CONVERT_FILE_NAME)
-    wb = open_excel_file("working.xlsx")
+    wb = open_excel_file(CONVERT_FILE_NAME)
 
     # =========================================================================
     # (2) 建置「漢字注音表」
