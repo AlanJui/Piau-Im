@@ -29,8 +29,8 @@ def open_excel_file(main_file_name):
         excel_file_name = main_file_name
 
     current_path = os.getcwd()
-    # file_path = os.path.join(current_path, "output", excel_file_name)
-    file_path = os.path.join(current_path, excel_file_name)
+    file_path = os.path.join(current_path, "output", excel_file_name)
+    # file_path = os.path.join(current_path, excel_file_name)
     return xw.Book(file_path)
 
 
@@ -68,6 +68,9 @@ def save_to_a_working_copy(main_file_name):
         print(f"File {file_path} not found.")
         return None
 
+    # 在刪除文件前確保 working.xlsx 檔案已存在。
+    del_working_file()
+
     try:
         # 指定新保存路径和新文件名
         # new_file_path = os.path.join(current_path, "output", "Piau-Tsu-Im.xlsx")
@@ -80,43 +83,21 @@ def save_to_a_working_copy(main_file_name):
         wb.close()
 
 
-def write_to_excel_file(excel_workbook):
-    # 自工作表「env」取得新檔案名稱
-    setting_sheet = excel_workbook.sheets["env"]
-    new_file_name = str(
-        setting_sheet.range("C4").value
-    ).strip()
+def del_working_file():
+    # 在刪除文件前確保 working.xlsx 檔案已存在。
     current_path = os.getcwd()
-    new_file_path = os.path.join(
-        current_path,
-        "output", 
-        f"【河洛話注音】{new_file_name}" + ".xlsx")
-    print(f"儲存輸出，置於檔案：{new_file_path}")
-
-    # 在儲存文件前確保 output 資料夾存在。如果不存在，則先創建它
-    output_dir = os.path.join(os.getcwd(), "output")
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-
-    # 儲存新建立的工作簿
-    try:
-        excel_workbook.save(new_file_path)
-    except Exception as e:
-        print(f"存檔失敗，原因：{e}")
-        if os.path.exists(new_file_path):
-            os.remove(new_file_path)
+    tmp_file_path = os.path.join(current_path, "working.xlsx")
+    if os.path.exists(tmp_file_path):
         try:
-            excel_workbook.save(new_file_path)
+            os.remove(tmp_file_path)
         except Exception as e:
-            print(f"再次存檔失敗，原因：{e}")
-            return
+            print(f"工作暫存檔刪除失敗，原因為：{e}")
 
-    # 等待一段時間讓 save 完成
-    time.sleep(3)
 
 def close_excel_file(excel_workbook):
     # 關閉工作簿
     excel_workbook.close()
+
 
 # -----------------------------------------------------------------
 # 將「字串」轉換成「串列（Characters List）」
@@ -126,6 +107,7 @@ def convert_string_to_chars_list(string):
     list1 = []
     list1[:0] = string
     return list1
+
 
 # -----------------------------------------------------------------
 # 要生成超連結的目錄
@@ -175,19 +157,57 @@ def create_file_list(directory, extension, exculude_list):
 #         print(f"File {file_path} not found.")
 #         return None
 
-#     # 指定新存檔路徑和新檔名
-#     # new_file_path = os.path.join(current_path, "output", "Piau-Tsu-Im.xlsx")
-#     # new_file_path = os.path.join(current_path, "output", "_tmp.xlsx")
-#     new_file_path = os.path.join(current_path, "working.xlsx")
+#     return wb
 
-#     # 使用另存為將檔案儲存至指定路徑
-#     wb.save(new_file_path)
 
-#     # 關閉原始工作簿
-#     wb.close()
+def write_to_excel_file(excel_workbook):
+    # 儲存新建立的工作簿
+    try:
+        excel_workbook.save()
+    except Exception as e:
+        print(f"存檔失敗，原因：{e}")
+        return
 
-#     # 重新打開剛才另存的工作簿
-#     new_wb = xw.Book(new_file_path)
+    # 等待一段時間讓 save 完成
+    time.sleep(3)
 
-#     # 回傳新的工作簿對象
-#     return new_wb
+
+def save_as_excel_file(excel_workbook):
+    # 自工作表「env」取得新檔案名稱
+    setting_sheet = excel_workbook.sheets["env"]
+    new_file_name = str(
+        setting_sheet.range("C4").value
+    ).strip()
+    current_path = os.getcwd()
+    # new_file_path = os.path.join(
+    #     current_path,
+    #     "output", 
+    #     f"【河洛話注音】{new_file_name}" + ".xlsx")
+    new_file_path = os.path.join(
+        current_path,
+        "output", 
+        f"{new_file_name}.xlsx")
+    print(f"儲存輸出，置於檔案：{new_file_path}")
+
+    # 在儲存文件前確保 output 資料夾存在。如果不存在，則先創建它
+    output_dir = os.path.join(os.getcwd(), "output")
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    # 儲存新建立的工作簿
+    try:
+        excel_workbook.save(new_file_path)
+    except Exception as e:
+        print(f"存檔失敗，原因：{e}")
+        if os.path.exists(new_file_path):
+            os.remove(new_file_path)
+        try:
+            excel_workbook.save(new_file_path)
+        except Exception as e:
+            print(f"再次存檔失敗，原因：{e}")
+            return
+
+    # 等待一段時間讓 save 完成
+    time.sleep(3)
+
+

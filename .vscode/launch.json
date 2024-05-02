@@ -37,10 +37,10 @@
             "request": "launch",
             "program": "a900_Batch_Process.py",
             "console": "integratedTerminal",
-            // "a520_製作注音網頁.py",
             "args": [
-                // "a500_予我廣韻標音.py",
-                "a510_用廣韻為漢字標音.py",
+                "a500_予我廣韻標音.py",
+                // "a510_用廣韻為漢字標音.py",
+                // "a520_製作注音網頁.py",
                 "-i",
                 "output",
             ]
@@ -52,7 +52,8 @@
             "program": "a910_Batch_Process_By_Todo_List.py",
             "console": "integratedTerminal",
             "args": [
-                "a510_用廣韻為漢字標音.py",
+                "a500_予我廣韻標音.py",
+                // "a510_用廣韻為漢字標音.py",
                 // "a520_製作注音網頁.py",
             ]
         },
@@ -68,6 +69,13 @@
                 "xlsx",
                 "exclude_files.txt"
             ]
+        },
+        {
+            "name": "a999_自動生成index_html",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a999_自動生成index_html.py",
+            "console": "integratedTerminal",
         },
         {
             "name": "a600_漢字查廣韻擬音",
@@ -130,7 +138,10 @@
             "console": "integratedTerminal",
             "args": [
                 "-i",
-                "【河洛話注音】前赤壁賦．蘇軾"
+                // "【河洛話注音】前赤壁賦．蘇軾.xlsx"
+                "【河洛話注音】原道．韓愈.xlsx"
+                // "【河洛話注音】回鄉偶書．賀知章.xlsx"
+                // "Piau-Tsu-Im.xlsx"
             ]
         },
         {
@@ -141,7 +152,8 @@
             "console": "integratedTerminal",
             "args": [
                 "-i",
-                "Piau-Tsu-Im.xlsx"
+                "【河洛話注音】丘陵歌．孔子.xlsx"
+                // "Piau-Tsu-Im.xlsx"
                 // "【河洛話注音】最有力量的每日祈禱文"
             ]
         },
@@ -153,7 +165,8 @@
             "console": "integratedTerminal",
             "args": [
                 "-i",
-                "【河洛話注音】上有力量的每日祈禱文"
+                "【河洛話注音】丘陵歌．孔子.xlsx"
+                // "Piau-Tsu-Im.xlsx"
                 // "Piau-Tsu-Im.xlsx"
             ]
         }
