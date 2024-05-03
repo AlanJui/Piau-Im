@@ -4,22 +4,25 @@ import os.path
 import time
 
 import xlwings as xw
-from openpyxl import load_workbook
+
+# from openpyxl import load_workbook
 
 
 def get_cmd_input():
     parser = argparse.ArgumentParser(description='Process some files.')
+    parser.add_argument('-d', '--dir', default='output', help='Directory path')
     parser.add_argument('-i', '--input', default='Piau_Tsu_Im', help='Input file name')
     parser.add_argument('-o', '--output', default='', help='Output file name')
     args = parser.parse_args()
 
     return {
+        "dir_path": args.dir,  # "output
         "input": args.input,
         "output": args.output,
     }
 
 
-def open_excel_file(main_file_name):
+def open_excel_file(dir_path, main_file_name):
     # 檢查檔案名稱是否已包含副檔名
     file_name, file_extension = os.path.splitext(main_file_name)
     if not file_extension:
@@ -29,9 +32,14 @@ def open_excel_file(main_file_name):
         excel_file_name = main_file_name
 
     current_path = os.getcwd()
-    file_path = os.path.join(current_path, "output", excel_file_name)
-    # file_path = os.path.join(current_path, excel_file_name)
-    return xw.Book(file_path)
+    file_path = os.path.join(current_path, dir_path, excel_file_name)
+    try:
+        wb = xw.Book(file_path)
+    except Exception as e:
+        print(f"檔案：`{file_path}` 無法開啟，原因為：{e}")
+        return None
+
+    return wb
 
 
 #==================================================================
@@ -64,8 +72,8 @@ def save_to_a_working_copy(main_file_name):
     # 尝试打开 Excel 文件
     try:
         wb = load_workbook(file_path)
-    except FileNotFoundError:
-        print(f"File {file_path} not found.")
+    except FileNotFoundError as e:
+        print(f"檔案：{file_path} 無法開啟，原因為：{e}")
         return None
 
     # 在刪除文件前確保 working.xlsx 檔案已存在。
