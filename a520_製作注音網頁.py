@@ -41,8 +41,14 @@ def main():
     CONVERT_FILE_NAME = opts["input"]
     print(f"CONVERT_FILE_NAME = {CONVERT_FILE_NAME}")
 
+    # 取得檔案所屬之目錄路徑
+    dir_path = opts["dir_path"]
+
     # 指定提供來源的【檔案】
-    wb = open_excel_file(CONVERT_FILE_NAME)
+    wb = open_excel_file(dir_path, CONVERT_FILE_NAME)
+    if wb is None:
+        print("無法開啟檔案，終止程式執行。")
+        sys.exit()
 
     # =========================================================================
     # (2) 建置「漢字注音表」

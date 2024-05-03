@@ -138,9 +138,9 @@
             "console": "integratedTerminal",
             "args": [
                 "-i",
+                "【河洛話注音】回鄉偶書．賀知章.xlsx"
                 // "【河洛話注音】前赤壁賦．蘇軾.xlsx"
-                "【河洛話注音】原道．韓愈.xlsx"
-                // "【河洛話注音】回鄉偶書．賀知章.xlsx"
+                // "【河洛話注音】原道．韓愈.xlsx"
                 // "Piau-Tsu-Im.xlsx"
             ]
         },
@@ -164,9 +164,11 @@
             "program": "a520_製作注音網頁.py",
             "console": "integratedTerminal",
             "args": [
+                "-d",
+                "output2",
                 "-i",
-                "【河洛話注音】丘陵歌．孔子.xlsx"
-                // "Piau-Tsu-Im.xlsx"
+                "【河洛話注音】上有力量的每日祈禱文"
+                // "【河洛話注音】丘陵歌．孔子.xlsx"
                 // "Piau-Tsu-Im.xlsx"
             ]
         }
