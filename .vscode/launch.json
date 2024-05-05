@@ -140,12 +140,27 @@
             "console": "integratedTerminal",
             "args": [
                 "-i",
-                "【河洛話注音】回鄉偶書．賀知章.xlsx"
+                "【河洛話注音】京口北固亭懷古"
+                // "【河洛話注音】水龍吟·登建康賞心亭"
+                // "【河洛話注音】回鄉偶書．賀知章.xlsx"
                 // "【河洛話注音】前赤壁賦．蘇軾.xlsx"
                 // "【河洛話注音】原道．韓愈.xlsx"
                 // "Piau-Tsu-Im.xlsx"
             ]
         },
+        // {
+        //     "name": "a500_予我廣韻標音 ouput2",
+        //     "type": "debugpy",
+        //     "request": "launch",
+        //     "program": "a500_予我廣韻標音.py",
+        //     "console": "integratedTerminal",
+        //     "args": [
+        //         "-d",
+        //         "output2",
+        //         "-i",
+        //         "【河洛話注音】上有力量的每日祈禱文"
+        //     ]
+        // },
         {
             "name": "a510_用廣韻為漢字標音",
             "type": "debugpy",
@@ -169,9 +184,21 @@
                 "-d",
                 "output2",
                 "-i",
-                "【河洛話注音】上有力量的每日祈禱文"
-                // "【河洛話注音】丘陵歌．孔子.xlsx"
+                "【河洛話注音】丘陵歌．孔子.xlsx"
                 // "Piau-Tsu-Im.xlsx"
+            ]
+        },
+        {
+            "name": "a520_製作注音網頁 ouput2",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a520_製作注音網頁.py",
+            "console": "integratedTerminal",
+            "args": [
+                "-d",
+                "output2",
+                "-i",
+                "【河洛話注音】上有力量的每日祈禱文"
             ]
         }
     ]

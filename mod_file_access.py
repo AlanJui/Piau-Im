@@ -137,7 +137,6 @@ def create_file_list(directory, extension, exculude_list):
     return file_list
 
     
-
 # -----------------------------------------------------
 # Backup the original file
 # -----------------------------------------------------
@@ -178,6 +177,17 @@ def write_to_excel_file(excel_workbook):
 
     # 等待一段時間讓 save 完成
     time.sleep(3)
+
+    # 取得檔案的完整路徑
+    full_path = excel_workbook.fullname
+
+    # 使用 os.path 模組來分解路徑和檔案名稱
+    dir_path = os.path.dirname(full_path)
+    file_name = os.path.basename(full_path)
+
+    print(f"\n將已變更之 Excel 檔案存檔...")
+    print(f"檔案路徑：{dir_path}")
+    print(f"檔案名稱：{file_name}")
 
 
 def save_as_excel_file(excel_workbook):
