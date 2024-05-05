@@ -181,10 +181,8 @@
             "program": "a520_製作注音網頁.py",
             "console": "integratedTerminal",
             "args": [
-                "-d",
-                "output2",
                 "-i",
-                "【河洛話注音】丘陵歌．孔子.xlsx"
+                "【河洛話注音】京口北固亭懷古"
                 // "Piau-Tsu-Im.xlsx"
             ]
         },

@@ -179,17 +179,24 @@ def han_ji_cha_siau_un(cursor, han_ji):
 """
 def han_ji_cha_piau_im(cursor, han_ji):
     """
-    根據漢字查詢其讀音資訊。
+    根據漢字查詢其讀音資訊。 若資料紀錄在`常用率`欄位儲存值為空值(NULL) 
+    ，則將其視為 0人值，因此可排在查詢結果的最後。
     
     :param cursor: 數據庫游標
     :param han_ji: 欲查詢的漢字
     :return: 包含讀音資訊的字典列表
+
+    SELECT *
+    FROM 漢字檢視
+    WHERE 字 = ?
+    ORDER BY CASE WHEN 常用率 IS NULL THEN 1 ELSE 0 END, 常用率 DESC;
     """
+
     query = """
     SELECT *
     FROM 漢字檢視
     WHERE 字 = ?
-    ORDER BY 常用率 DESC;
+    ORDER BY COALESCE(常用率, 0) DESC;
     """
     cursor.execute(query, (han_ji,))
     results = cursor.fetchall()
