@@ -535,6 +535,10 @@ def create_html_file(output_path, content, title='您的標題'):
     with open(output_path, 'w', encoding='utf-8') as file:
         file.write(template)
 
+    # 顯示輸出之網頁檔案及其存放目錄路徑
+    print(f"\n輸出網頁檔案：{output_path}")
+
+
 def Iong_TLPA_Cu_Im(wb, sing_bu_dict, un_bu_dict):
     global source_sheet  # 宣告 source_sheet 為全域變數
     global source_sheet_name  # 宣告 source_sheet_name 為全域變數
