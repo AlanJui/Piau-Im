@@ -5,12 +5,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Attach to Chrome",
-            "port": 9222,
-            "request": "attach",
-            "type": "chrome",
-        },
-        {
             "type": "msedge",
             "request": "launch",
             "name": "Launch Piau-Im App",
@@ -176,9 +170,17 @@
             "request": "launch",
             "program": "a520_製作注音網頁.py",
             "console": "integratedTerminal",
+            "args": "${command:pickArgs}"
+        },
+        {
+            "name": "a520_製作注音網頁 (自動提供輸入)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a520_製作注音網頁.py",
+            "console": "integratedTerminal",
             "args": [
-                "-i",
-                "【河洛話注音】京口北固亭懷古"
+                // "-i",
+                // "【河洛話注音】京口北固亭懷古"
                 // "Piau-Tsu-Im.xlsx"
             ]
         },
