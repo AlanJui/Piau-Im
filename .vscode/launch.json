@@ -5,6 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "a700_Iong_Excel_Piau_Zu_Im",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a700_Iong_Excel_Piau_Zu_Im.py",
+            "console": "integratedTerminal",
+            "args": [
+                "a700_Iong_Excel_Piau_Zu_Im.py",
+            ]
+        },
+        {
             "type": "msedge",
             "request": "launch",
             "name": "Launch Piau-Im App",

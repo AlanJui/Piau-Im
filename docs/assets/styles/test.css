@@ -1,0 +1,242 @@
+@charset "UTF-8";
+
+@import url("https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap");
+
+body {
+    font-family: 'Noto Sans TC', sans-serif !important;
+}
+
+/* END: ed8c6549bwf9 */
+
+@import url(https://fonts.googleapis.com/css?family=Noto+Serif+TC&amp;display=swap);
+
+body {
+    font-family: 'Noto Serif TC', serif;
+}
+
+@font-face {
+    font-family: 'BopomofoRuby';
+    src:
+        local('BopomofoRuby1909-v1-Regular'),
+        url('../fonts/BopomofoRuby1909-v1-Regular.ttf');
+}
+
+body {
+    font-family: "Noto Serif TC", serif;
+    color: #333;
+    line-height: 1.8;
+}
+
+header {
+    /* display: block; */
+    border-top: #00c4ab 5px solid;
+    text-align: center;
+    background: url(../picts/bg_header.png) #e6e6e6;
+}
+
+header h1 {
+    padding: 0 10px 25px;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 32pt;
+    font-weight: bold;
+}
+
+#articles {
+    font-size: 28pt;
+    font-weight: bold;
+}
+
+button {
+    position: absolute;
+    top: 25px;
+    right: 15px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+button:focus {
+    outline: none;
+}
+
+ul {
+    display: none;
+    list-style-type: none;
+}
+
+li a {
+    text-decoration: none;
+    display: block;
+    padding: 17px 25px;
+    color: #FFF;
+    background: #B94B6A;
+    border-bottom: 1px solid #A24861;
+    font-size: 100%;
+    line-height: 1.0em;
+}
+
+li:last-child a {
+    border-bottom: none;
+}
+
+main {
+    display: block;
+    padding: 40px 20px 20px;
+    color: #333;
+    line-height: 1.8;
+}
+
+p {
+    margin-bottom: 50px;
+    line-height: 2em;
+}
+
+h1 {
+    color: #333;
+}
+
+a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+rt {
+    font-family: Arial;
+    color: darkcyan;
+    font-size: 45%;
+    letter-spacing: 0;
+}
+
+rtc {
+    font-family: BopomofoRuby;
+    color: #B94B6A;
+    font-size: 30%;
+    line-height: normal;
+    ruby-merge: merge;
+
+    -webkit-ruby-position: inter-character;
+    ruby-position: inter-character;
+    text-orientation: upright;
+    letter-spacing: 0px;
+
+    -webkitg_writing-mode: vertical-lr;
+    writing-mode: vertical-lr;
+    vertical-align: middle;
+    display: inline;
+}
+
+/* 方音符號 */
+.zhu_yin {
+    font-family: "Noto Serif TC";
+    font-size: 28pt;
+    letter-spacing: 0.2em;
+    line-height: 1.8;
+}
+
+.zhu_yin ruby {
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    line-height: normal;
+}
+
+.zhu_yin rt {
+    font-family: BopomofoRuby;
+    color: #B94B6A;
+    font-size: 40%;
+    letter-spacing: 0;
+}
+
+.Piau_Im {
+    font-family: "Noto Serif TC";
+    font-size: 28pt;
+    letter-spacing: 0.2em;
+    line-height: 1.8;
+}
+
+.Piau_Im ruby {
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    line-height: normal;
+}
+
+.Piau_Im rt {
+    font-family: BopomofoRuby;
+    color: #B94B6A;
+    font-size: 40%;
+    letter-spacing: 0;
+}
+
+/* 雙排注音符號 */
+.Siang_Pai {
+    font-family: "Noto Serif TC";
+    font-size: 28pt;
+    letter-spacing: 0.2em;
+    line-height: 1.8;
+}
+
+.Siang_Pai rt {
+    font-family: Arial, Helvetica, sans-serif;
+    color: darkcyan;
+    font-size: 45%;
+    letter-spacing: 0;
+}
+
+.Siang_Pai rtc {
+    font-family: BopomofoRuby;
+    color: #B94B6A;
+    font-size: 30%;
+    line-height: 1;
+    /* 控制行距 */
+    letter-spacing: 0px;
+
+    ruby-position: under;
+    /* text-orientation: mixed;
+    writing-mode: horizontal-tb;
+    padding-top: 0.1em; */
+    /* 控制注音符號與漢字的間距 */
+}
+
+/* 台羅、閩拼、白話字 */
+.pin_yin {
+    font-family: "Noto Serif TC";
+    font-size: 28pt;
+    letter-spacing: 0.2em;
+    line-height: 1.8;
+}
+
+/* 白話字 */
+.poj {
+    font-family: "Noto Serif TC";
+    font-size: 28pt;
+    letter-spacing: 0.2em;
+    line-height: 1.8;
+}
+
+/* 十五音 */
+.fifteen_yin {
+    font-family: "Noto Serif TC";
+    font-size: 28pt;
+    letter-spacing: 0.2em;
+    line-height: 1.8;
+}
+
+.fifteen_yin rt {
+    letter-spacing: 0;
+    font-size: 40%;
+}
+
+.title {
+    font-size: 1.2em;
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+.author {
+    font-size: 0.7em;
+    letter-spacing: 2px;
+    text-align: right;
+}
