@@ -63,4 +63,8 @@ def fill_hanji_in_cells(file_name, sheet_name='漢字注音', cell='V3'):
     wb.save(file_name)
     # wb.close()
 
+    # 選擇名為 "顯示注音輸入" 的命名範圍
+    named_range = wb.names['顯示注音輸入']
+    named_range.refers_to_range.value = True
+
     print(f"{file_name} 已成功更新，漢字已填入對應儲存格，上下方儲存格已清空。")

@@ -7,6 +7,7 @@ import xlwings as xw
 
 import settings
 from a720_Thiam_Zu_Im import thiam_zu_im
+from p730_Tng_Sing_Bang_Iah import tng_sing_bang_iah
 
 
 def get_input_and_output_options(argv):
@@ -69,12 +70,12 @@ if __name__ == "__main__":
     #     - 上方：台語音標
     #     - 下方：台語注音符號
     # =========================================================================
-    thiam_zu_im(CONVERT_FILE_NAME)
+    # thiam_zu_im(CONVERT_FILE_NAME)
 
     # =========================================================================
     # (4) 將已注音之「漢字注音表」，製作成 HTML 格式之「注音／拼音／標音」網頁。
     # =========================================================================
-    # hoo_gua_tsu_im(CONVERT_FILE_NAME)
+    tng_sing_bang_iah(CONVERT_FILE_NAME)
 
     # =========================================================================
     # (5) 依據《文章標題》另存新檔。
