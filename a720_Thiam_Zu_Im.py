@@ -65,3 +65,10 @@ def thiam_zu_im(file_name, sheet_name='漢字注音', cell='V3'):
     # 保存 Excel 檔案
     wb.save('Tai_Gi_Zu_Im_Bun.xlsx')
     # wb.close()
+
+    # 令人工手動填入的台語音標和注音符號不要顯示
+
+    # 選擇名為 "顯示注音輸入" 的命名範圍
+    named_range = wb.names['顯示注音輸入']
+
+    named_range.refers_to_range.value = False
