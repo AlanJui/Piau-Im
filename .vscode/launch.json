@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "a710_Thiam_Han_Ji_Tan_Piau_Im",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a710_Thiam_Han_Ji_Tan_Piau_Im.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "a700_Iong_Excel_Piau_Zu_Im",
             "type": "debugpy",
             "request": "launch",
