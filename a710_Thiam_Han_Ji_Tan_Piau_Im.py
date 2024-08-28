@@ -1,12 +1,9 @@
+# 填漢字等標音：將整段的文字拆解，個別填入儲存格，以便後續人工手動填入台語音標、注音符號。
 import getopt
-import math
-import os
 import sys
 
-import xlwings as xw
-
 import settings
-from a720_Thiam_Zu_Im import thiam_zu_im
+from p710_thiam_han_ji import fill_hanji_in_cells
 
 
 def get_input_and_output_options(argv):
@@ -65,31 +62,8 @@ if __name__ == "__main__":
     print(f"CONVERT_FILE_NAME = {CONVERT_FILE_NAME}")
 
     # =========================================================================
-    # (2) 分析已輸入的【台語音標】及【台語注音符號】，將之各別填入漢字之上、下方。
+    # (2) 將漢字填入
     #     - 上方：台語音標
     #     - 下方：台語注音符號
     # =========================================================================
-    thiam_zu_im(CONVERT_FILE_NAME)
-
-    # =========================================================================
-    # (4) 將已注音之「漢字注音表」，製作成 HTML 格式之「注音／拼音／標音」網頁。
-    # =========================================================================
-    # hoo_gua_tsu_im(CONVERT_FILE_NAME)
-
-    # =========================================================================
-    # (5) 依據《文章標題》另存新檔。
-    # =========================================================================
-    # wb = xw.Book(CONVERT_FILE_NAME)
-    # setting_sheet = wb.sheets["env"]
-    # new_file_name = str(
-    #     setting_sheet.range("C4").value
-    # ).strip()
-    # new_file_path = os.path.join(
-    #     ".\\output", 
-    #     f"【河洛話注音】{new_file_name}" + ".xlsx")
-
-    # # 儲存新建立的工作簿
-    # wb.save(new_file_path)
-
-    # 保存 Excel 檔案
-    # wb.close()
+    fill_hanji_in_cells(CONVERT_FILE_NAME)

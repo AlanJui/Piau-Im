@@ -17,5 +17,11 @@ def get_input_file_path():
     return os.path.join(dir_path, file_name)
 
 
+def get_tai_gi_zu_im_bun_path():
+    dir_path = config["TAI_GI_ZU_IM_BUN_PATH"]
+    file_name = config["TAI_GI_ZU_IM_BUN_FILE_NAME"]
+    return os.path.join(dir_path, file_name)
+
+
 def get_database_path():
     return config["DATABASE_PATH"]
