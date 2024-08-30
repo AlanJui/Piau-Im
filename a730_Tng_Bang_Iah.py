@@ -6,7 +6,6 @@ import sys
 import xlwings as xw
 
 import settings
-from p720_Thiam_Zu_Im import thiam_zu_im
 from p730_Tng_Sing_Bang_Iah import tng_sing_bang_iah
 
 
@@ -66,11 +65,24 @@ if __name__ == "__main__":
     print(f"CONVERT_FILE_NAME = {CONVERT_FILE_NAME}")
 
     # =========================================================================
-    # (2) 分析已輸入的【台語音標】及【台語注音符號】，將之各別填入漢字之上、下方。
-    #     - 上方：台語音標
-    #     - 下方：台語注音符號
+    # (2) 將已注音之「漢字注音表」，製作成 HTML 格式之「注音／拼音／標音」網頁。
     # =========================================================================
-    thiam_zu_im(CONVERT_FILE_NAME)
+    tng_sing_bang_iah(CONVERT_FILE_NAME)
+
+    # =========================================================================
+    # (3) 依據《文章標題》另存新檔。
+    # =========================================================================
+    wb = xw.Book(CONVERT_FILE_NAME)
+    setting_sheet = wb.sheets["env"]
+    new_file_name = str(
+        setting_sheet.range("C4").value
+    ).strip()
+    new_file_path = os.path.join(
+        ".\\output", 
+        f"【河洛話注音】{new_file_name}" + ".xlsx")
+
+    # 儲存新建立的工作簿
+    wb.save(new_file_path)
 
     # 保存 Excel 檔案
-    # wb.close()
+    wb.close()

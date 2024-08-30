@@ -5,6 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "a720_Thiam_Zu_Im",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a720_Thiam_Zu_Im.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "a730_Tng_Bang_Iah",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a730_Tng_Bang_Iah.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "a710_Thiam_Han_Ji_Tan_Piau_Im",
             "type": "debugpy",
             "request": "launch",

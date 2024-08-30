@@ -119,15 +119,16 @@ def build_web_page(wb, sheet, total_length):
                         # =========================================================
                         # 將已注音之漢字加入【漢字注音表】
                         # =========================================================
-                        ruby_tag = f"""  
-                        <ruby>
-                            <rb>{han_ji}</rb>
-                            <rt>{lo_ma_im_piau}</rt>
-                            <rp>(</rp>
-                                <rtc>{zu_im_hu_ho}</rtc>
-                            <rp>)</rp>
-                        </ruby>
-                        """
+                        # ruby_tag = f"""  
+                        # <ruby>
+                        #     <rb>{han_ji}</rb>
+                        #     <rt>{lo_ma_im_piau}</rt>
+                        #     <rp>(</rp>
+                        #         <rtc>{zu_im_hu_ho}</rtc>
+                        #     <rp>)</rp>
+                        # </ruby>
+                        # """
+                        ruby_tag = f"<ruby><rb>{han_ji}</rb><rt>{lo_ma_im_piau}</rt><rtc>{zu_im_hu_ho}</rtc></ruby>"
 
                     write_buffer += (ruby_tag + "\n")
                     index += 1
