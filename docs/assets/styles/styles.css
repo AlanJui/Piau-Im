@@ -179,6 +179,24 @@ rtc {
   line-height: 1.8;
 }
 
+.Siang_Pai rtc {
+  font-family: BopomofoRuby;
+  color: #B94B6A;
+  font-size: 30%;
+  line-height: normal;
+  ruby-merge: merge;
+
+  -webkit-ruby-position: inter-character;
+  ruby-position: inter-character;
+  text-orientation: upright;
+  letter-spacing: 3px;
+
+  -webkit-writing-mode: vertical-lr;
+  writing-mode: vertical-lr;
+  vertical-align: middle;
+  display: inline;
+}
+
 /* 台羅、閩拼、白話字 */
 .pin_yin {
   font-family: "Noto Serif TC";
