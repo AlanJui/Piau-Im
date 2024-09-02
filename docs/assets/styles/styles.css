@@ -122,7 +122,7 @@ rtc {
   -webkit-ruby-position: inter-character;
   ruby-position: inter-character;
   text-orientation: upright;
-  letter-spacing: 0px;
+  letter-spacing: 3px;
 
   -webkitg_writing-mode: vertical-lr;
   writing-mode: vertical-lr;
