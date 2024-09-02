@@ -25,6 +25,7 @@ body {
   font-family: "Noto Serif TC", serif;
   color: #333;
   line-height: 1.8;
+  width: 80%;
 }
 
 header {
@@ -173,30 +174,9 @@ rtc {
 /* 雙排注音符號 */
 .Siang_Pai {
   font-family: "Noto Serif TC";
-  font-size: 28pt;
+  font-size: 48pt;
   letter-spacing: 0.2em;
   line-height: 1.8;
-}
-
-rt {
-  font-family: Arial;
-  font-size: 40%;
-  color: green;
-  ruby-merge: merge;
-}
-
-rtc {
-  font-family: BopomofoRuby;
-  font-size: 30%;
-  color: #B94B6A;
-  ruby-merge: merge;
-
-  ruby-position: inter-character;
-  text-orientation: upright;
-
-  writing-mode: vertical-rl;
-  vertical-align: middle;
-  display: inline;
 }
 
 /* 台羅、閩拼、白話字 */
