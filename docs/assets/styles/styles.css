@@ -153,30 +153,43 @@ rtc {
 
 .Piau_Im {
   font-family: "Noto Serif TC";
-  font-size: 28pt;
-  letter-spacing: 0.2em;
-  line-height: 1.8;
-}
-
-.Piau_Im ruby {
-  writing-mode: vertical-lr;
-  text-orientation: upright;
-  line-height: normal;
+  font-size: 2.0em;
+  line-height: 2.0;
 }
 
 .Piau_Im rt {
   font-family: BopomofoRuby;
   color: #B94B6A;
-  font-size: 40%;
-  letter-spacing: 0;
+  font-size: 30%;
+  line-height: normal;
+
+  -webkit-ruby-position: inter-character;
+  ruby-position: inter-character;
+  text-orientation: upright;
+
+  -webkit-writing-mode: vertical-rl;
+  writing-mode: vertical-rl;
+  vertical-align: middle;
+  display: inline;
 }
 
 /* 雙排注音符號 */
 .Siang_Pai {
   font-family: "Noto Serif TC";
-  font-size: 48pt;
-  letter-spacing: 0.2em;
-  line-height: 1.8;
+  text-align: left;
+  line-height: 2.0;
+  font-size: 2.0em;
+}
+
+.Siang_Pai ruby {
+  ruby-merge: separate;
+  ruby-position: over;
+}
+
+.Siang_Pai rt {
+  font-family: Arial;
+  color: blueviolet;
+  font-size: 40%;
 }
 
 .Siang_Pai rtc {
@@ -184,12 +197,10 @@ rtc {
   color: #B94B6A;
   font-size: 30%;
   line-height: normal;
-  ruby-merge: merge;
 
   -webkit-ruby-position: inter-character;
   ruby-position: inter-character;
   text-orientation: upright;
-  letter-spacing: 0.2em;
 
   -webkit-writing-mode: vertical-lr;
   writing-mode: vertical-lr;

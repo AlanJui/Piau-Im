@@ -80,17 +80,17 @@ if __name__ == "__main__":
     # =========================================================================
     # (5) 依據《文章標題》另存新檔。
     # =========================================================================
-    # wb = xw.Book(CONVERT_FILE_NAME)
-    # setting_sheet = wb.sheets["env"]
-    # new_file_name = str(
-    #     setting_sheet.range("C4").value
-    # ).strip()
-    # new_file_path = os.path.join(
-    #     ".\\output", 
-    #     f"【河洛話注音】{new_file_name}" + ".xlsx")
+    wb = xw.Book(CONVERT_FILE_NAME)
+    setting_sheet = wb.sheets["env"]
+    new_file_name = str(
+        setting_sheet.range("C4").value
+    ).strip()
+    new_file_path = os.path.join(
+        ".\\output", 
+        f"【河洛話注音】{new_file_name}" + ".xlsx")
 
-    # # 儲存新建立的工作簿
-    # wb.save(new_file_path)
+    # 儲存新建立的工作簿
+    wb.save(new_file_path)
 
     # 保存 Excel 檔案
-    # wb.close()
+    wb.close()
