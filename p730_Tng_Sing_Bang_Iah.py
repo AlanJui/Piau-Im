@@ -88,7 +88,7 @@ def build_web_page(wb, sheet, total_length):
     # =========================================================
     # 輸出 <div> tag
     # =========================================================
-    div_class = "Sing_Pai"
+    div_class = "Siang_Pai"
     html_str = f"<div class='{div_class}'><p>"
     write_buffer += (html_str + "\n")
 
