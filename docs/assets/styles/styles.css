@@ -1,18 +1,7 @@
 @charset "UTF-8";
 
 @import url("https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap");
-
-body {
-  font-family: 'Noto Sans TC', sans-serif !important;
-}
-
-/* END: ed8c6549bwf9 */
-
 @import url(https://fonts.googleapis.com/css?family=Noto+Serif+TC&amp;display=swap);
-
-body {
-  font-family: 'Noto Serif TC', serif;
-}
 
 @font-face {
   font-family: 'BopomofoRuby';
@@ -22,10 +11,10 @@ body {
 }
 
 body {
-  font-family: "Noto Serif TC", serif;
+  font-family: 'Noto Sans TC', sans-serif !important;
   color: #333;
   line-height: 1.8;
-  width: 80%;
+  width: 100%;
 }
 
 header {
