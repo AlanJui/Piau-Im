@@ -11,10 +11,23 @@
 }
 
 body {
+  width: 100%;
+  color: #333;
+  line-height: 2.0;
+  font-size: 28pt;
   font-family: 'Noto Sans TC', sans-serif !important;
+}
+
+main {
+  display: block;
+  padding: 40px 20px 20px;
   color: #333;
   line-height: 1.8;
-  width: 100%;
+}
+
+p {
+  margin-bottom: 50px;
+  line-height: 2em;
 }
 
 header {
@@ -31,22 +44,24 @@ header h1 {
   font-weight: bold;
 }
 
+h1 {
+  color: #333;
+}
+
 #articles {
-  font-size: 28pt;
   font-weight: bold;
 }
 
-button {
-  position: absolute;
-  top: 25px;
-  right: 15px;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
+.title {
+  font-size: 1.2em;
+  letter-spacing: 2px;
+  text-align: center;
 }
 
-button:focus {
-  outline: none;
+.author {
+  font-size: 0.7em;
+  letter-spacing: 2px;
+  text-align: right;
 }
 
 ul {
@@ -69,22 +84,6 @@ li:last-child a {
   border-bottom: none;
 }
 
-main {
-  display: block;
-  padding: 40px 20px 20px;
-  color: #333;
-  line-height: 1.8;
-}
-
-p {
-  margin-bottom: 50px;
-  line-height: 2em;
-}
-
-h1 {
-  color: #333;
-}
-
 a {
   color: #0066cc;
   text-decoration: none;
@@ -92,6 +91,19 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+button {
+  position: absolute;
+  top: 25px;
+  right: 15px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+button:focus {
+  outline: none;
 }
 
 rt {
@@ -122,15 +134,12 @@ rtc {
 /* 方音符號 */
 .zhu_yin {
   font-family: "Noto Serif TC";
-  font-size: 28pt;
   letter-spacing: 0.2em;
-  line-height: 1.8;
 }
 
 .zhu_yin ruby {
   writing-mode: vertical-lr;
   text-orientation: upright;
-  line-height: normal;
 }
 
 .zhu_yin rt {
@@ -142,15 +151,12 @@ rtc {
 
 .Piau_Im {
   font-family: "Noto Serif TC";
-  font-size: 2.0em;
-  line-height: 2.0;
 }
 
 .Piau_Im rt {
   font-family: BopomofoRuby;
   color: #B94B6A;
   font-size: 30%;
-  line-height: normal;
 
   -webkit-ruby-position: inter-character;
   ruby-position: inter-character;
@@ -165,9 +171,6 @@ rtc {
 /* 雙排注音符號 */
 .Siang_Pai {
   font-family: "Noto Serif TC";
-  text-align: left;
-  line-height: 2.0;
-  font-size: 2.0em;
 }
 
 .Siang_Pai ruby {
@@ -185,7 +188,6 @@ rtc {
   font-family: BopomofoRuby;
   color: #B94B6A;
   font-size: 30%;
-  line-height: normal;
 
   -webkit-ruby-position: inter-character;
   ruby-position: inter-character;
@@ -200,40 +202,21 @@ rtc {
 /* 台羅、閩拼、白話字 */
 .pin_yin {
   font-family: "Noto Serif TC";
-  font-size: 28pt;
-  letter-spacing: 0.2em;
-  line-height: 1.8;
 }
 
 /* 白話字 */
 .poj {
   font-family: "Noto Serif TC";
-  font-size: 28pt;
   letter-spacing: 0.2em;
-  line-height: 1.8;
 }
 
 /* 十五音 */
 .fifteen_yin {
   font-family: "Noto Serif TC";
-  font-size: 28pt;
   letter-spacing: 0.2em;
-  line-height: 1.8;
 }
 
 .fifteen_yin rt {
   letter-spacing: 0;
   font-size: 40%;
-}
-
-.title {
-  font-size: 1.2em;
-  letter-spacing: 2px;
-  text-align: center;
-}
-
-.author {
-  font-size: 0.7em;
-  letter-spacing: 2px;
-  text-align: right;
 }
