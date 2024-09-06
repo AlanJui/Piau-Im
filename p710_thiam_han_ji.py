@@ -1,6 +1,3 @@
-import math
-
-
 def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
     # 選擇指定的工作表
     sheet = wb.sheets[sheet_name]
@@ -15,28 +12,13 @@ def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
 
         # 每列最多處理 15 個字元，計算總共需要多少列
         chars_per_row = 15
-        total_rows_needed = math.ceil(total_length / chars_per_row)  # 無條件進位
-
-        # 迴圈清空所有漢字的上下方儲存格 (羅馬拼音和台語注音符號)
-        row = 5
-        for i in range(total_rows_needed+1):
-            for col in range(4, 19):  # 【D欄=4】到【R欄=18】
-                # 清空漢字儲存格 (Row)
-                sheet.range((row, col)).value = None
-                # 清空上方的台語拼音儲存格 (Row-1)
-                sheet.range((row - 1, col)).value = None
-                # 清空下方的台語注音儲存格 (Row+1)
-                sheet.range((row + 1, col)).value = None
-                # 清空填入注音的儲存格 (Row-2)
-                sheet.range((row - 2, col)).value = None
-
-            # 每處理 15 個字元後，換到下一行
-            row += 4
 
         # 逐字處理字串，並填入對應的儲存格
         row = 5
         index = 0  # 用來追蹤目前處理到的字元位置
-        for i in range(total_rows_needed+1):
+
+        # 逐字處理字串 
+        while index < total_length:     # 使用 while 而非 for，確保處理完整個字串
             for col in range(4, 19):  # 【D欄=4】到【R欄=18】
                 # 確認是否還有字元可以處理
                 if index < total_length:
@@ -47,9 +29,9 @@ def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
                         # 將字元填入對應的儲存格
                         sheet.range((row, col)).value = char
                     else:
-                        # 若遇到換行字元，退出迴圈 
+                        # 若遇到換行字元，直接跳過
                         index += 1
-                        break;  
+                        break  
 
                     # 更新索引，處理下一個字元
                     index += 1
@@ -61,7 +43,6 @@ def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
 
     # 保存 Excel 檔案
     wb.save()
-    # wb.close()
 
     # 選擇名為 "顯示注音輸入" 的命名範圍
     named_range = wb.names['顯示注音輸入']
