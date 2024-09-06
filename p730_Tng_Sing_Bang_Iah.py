@@ -77,7 +77,7 @@ def is_punctuation(char):
 # =========================================================
 # 依據指定的【注音方法】，輸出含 Ruby Tags 之 HTML 網頁
 # =========================================================
-def build_web_page(wb, sheet, total_length):
+def build_web_page(wb, sheet, source_chars, total_length):
     write_buffer = ""
     
     # =========================================================
@@ -103,32 +103,38 @@ def build_web_page(wb, sheet, total_length):
         while index < total_length:
             for col in range(4, 19):  # 【D欄=4】到【R欄=18】
                 if index < total_length:
-                    han_ji = sheet.range((row, col)).value  # 取得漢字
+                    src_char = source_chars[index]  # 取得目前欲處理的【漢字】
+                    if src_char == "\n":
+                        # 若遇到換行字元，退出迴圈 
+                        index += 1
+                        break;  
+                    else: 
+                        han_ji = sheet.range((row, col)).value  # 取得漢字
+                        # 當 han_ji 是標點符號時，不需要注音
+                        if is_punctuation(han_ji):
+                            ruby_tag = f"<span>{han_ji}</span>"
+                        else:
+                            lo_ma_im_piau = sheet.range((row - 1, col)).value  # 取得漢字的台語音標
+                            zu_im_hu_ho = sheet.range((row + 1, col)).value  # 取得漢字的台語注音符號
 
-                    # 當 han_ji 是標點符號時，不需要注音
-                    if is_punctuation(han_ji):
-                        ruby_tag = f"<span>{han_ji}</span>"
-                    else:
-                        lo_ma_im_piau = sheet.range((row - 1, col)).value  # 取得漢字的台語音標
-                        zu_im_hu_ho = sheet.range((row + 1, col)).value  # 取得漢字的台語注音符號
+                            # 處理拼音或注音是 None 的情況
+                            lo_ma_im_piau = lo_ma_im_piau if lo_ma_im_piau is not None else ""
+                            zu_im_hu_ho = zu_im_hu_ho if zu_im_hu_ho is not None else ""
 
-                        # 處理拼音或注音是 None 的情況
-                        lo_ma_im_piau = lo_ma_im_piau if lo_ma_im_piau is not None else ""
-                        zu_im_hu_ho = zu_im_hu_ho if zu_im_hu_ho is not None else ""
-
-                        # =========================================================
-                        # 將已注音之漢字加入【漢字注音表】
-                        # =========================================================
-                        # ruby_tag = f"""  
-                        # <ruby>
-                        #     <rb>{han_ji}</rb>
-                        #     <rt>{lo_ma_im_piau}</rt>
-                        #     <rp>(</rp>
-                        #         <rtc>{zu_im_hu_ho}</rtc>
-                        #     <rp>)</rp>
-                        # </ruby>
-                        # """
-                        ruby_tag = f"<ruby><rb>{han_ji}</rb><rt>{lo_ma_im_piau}</rt><rtc>{zu_im_hu_ho}</rtc></ruby>"
+                            # =========================================================
+                            # 將已注音之漢字加入【漢字注音表】
+                            # =========================================================
+                            # ruby_tag = f"""  
+                            # <ruby>
+                            #     <rb>{han_ji}</rb>
+                            #     <rt>{lo_ma_im_piau}</rt>
+                            #     <rp>(</rp>
+                            #         <rtc>{zu_im_hu_ho}</rtc>
+                            #     <rp>)</rp>
+                            # </ruby>
+                            # """
+                            # ruby_tag = f"<ruby><rb>{han_ji}</rb><rt>{lo_ma_im_piau}</rt><rtc>{zu_im_hu_ho}</rtc></ruby>"
+                            ruby_tag = f"<ruby><rb>{han_ji}</rb><rt>{lo_ma_im_piau}</rt><rtc>{zu_im_hu_ho}</rtc></ruby>"
 
                     write_buffer += (ruby_tag + "\n")
                     index += 1
@@ -149,13 +155,10 @@ def build_web_page(wb, sheet, total_length):
     return write_buffer
 
 
-def tng_sing_bang_iah(file_name, sheet_name='漢字注音', cell='V3'):
+def tng_sing_bang_iah(wb, sheet_name='漢字注音', cell='V3'):
     global source_sheet  # 宣告 source_sheet 為全域變數
     global source_sheet_name  # 宣告 source_sheet_name 為全域變數
     global total_length  # 宣告 end_of_source_row 為全域變數
-
-   # 打開 Excel 檔案
-    wb = xw.Book(file_name)
 
     # 選擇指定的工作表
     sheet = wb.sheets[sheet_name]
@@ -176,16 +179,16 @@ def tng_sing_bang_iah(file_name, sheet_name='漢字注音', cell='V3'):
     f = open(output_path, 'w', encoding='utf-8')
 
     # 取得 V3 儲存格的字串
-    v3_value = sheet.range(cell).value
-    if v3_value:
+    source_chars = sheet.range(cell).value
+    if source_chars:
         # 計算字串的總長度
-        total_length = len(v3_value)
+        total_length = len(source_chars)
 
         # ==========================================================
         # 自「漢字注音表」，製作各種注音法之 HTML 網頁
         # ==========================================================
         print(f"開始製作【漢字注音】網頁！")
-        html_content = build_web_page(wb, sheet, total_length)
+        html_content = build_web_page(wb, sheet, source_chars, total_length)
 
         # 輸出到網頁檔案
         create_html_file(output_path, html_content, web_page_title)

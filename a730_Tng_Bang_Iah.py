@@ -64,25 +64,28 @@ if __name__ == "__main__":
         CONVERT_FILE_NAME = file_path
     print(f"CONVERT_FILE_NAME = {CONVERT_FILE_NAME}")
 
+    # 打開 Excel 檔案
+    wb = xw.Book(CONVERT_FILE_NAME)
+
     # =========================================================================
     # (2) 將已注音之「漢字注音表」，製作成 HTML 格式之「注音／拼音／標音」網頁。
     # =========================================================================
-    tng_sing_bang_iah(CONVERT_FILE_NAME)
+    tng_sing_bang_iah(wb, '漢字注音', 'V3')
 
     # =========================================================================
     # (3) 依據《文章標題》另存新檔。
     # =========================================================================
-    wb = xw.Book(CONVERT_FILE_NAME)
-    setting_sheet = wb.sheets["env"]
-    new_file_name = str(
-        setting_sheet.range("C4").value
-    ).strip()
-    new_file_path = os.path.join(
-        ".\\output", 
-        f"【河洛話注音】{new_file_name}" + ".xlsx")
+    # wb = xw.Book(CONVERT_FILE_NAME)
+    # setting_sheet = wb.sheets["env"]
+    # new_file_name = str(
+    #     setting_sheet.range("C4").value
+    # ).strip()
+    # new_file_path = os.path.join(
+    #     ".\\output", 
+    #     f"【河洛話注音】{new_file_name}" + ".xlsx")
 
-    # 儲存新建立的工作簿
-    wb.save(new_file_path)
+    # # 儲存新建立的工作簿
+    # wb.save(new_file_path)
 
-    # 保存 Excel 檔案
-    wb.close()
+    # # 保存 Excel 檔案
+    # wb.close()
