@@ -1,19 +1,17 @@
-import math
-
 import xlwings as xw
 
 
 def thiam_zu_im(wb, sheet_name='漢字注音', cell='V3'):
+    # 顯示「已輸入之拼音字母及注音符號」 
+    named_range = wb.names['顯示注音輸入']  # 選擇名為 "顯示注音輸入" 的命名範圍# 選擇名為 "顯示注音輸入" 的命名範圍
+    named_range.refers_to_range.value = True
+
     # 選擇工作表
     sheet = wb.sheets[sheet_name]
 
     # 取得 V3 儲存格的字串
     v3_value = sheet.range(cell).value
     
-    # 顯示「已輸入之拼音字母及注音符號」 
-    named_range = wb.names['顯示注音輸入']  # 選擇名為 "顯示注音輸入" 的命名範圍# 選擇名為 "顯示注音輸入" 的命名範圍
-    named_range.refers_to_range.value = True
-
     # 確認 V3 不為空
     if v3_value:
         # 計算字串的總長度
@@ -21,12 +19,12 @@ def thiam_zu_im(wb, sheet_name='漢字注音', cell='V3'):
 
         # 每列最多處理 15 個字元，計算總共需要多少列
         chars_per_row = 15
-        total_rows_needed = math.ceil(total_length / chars_per_row)  # 無條件進位
 
         # 清空 Row: 5, 9, 13, ... 漢字所在儲存格，上方的台語音標儲存格，及下方的台語注音符號儲存格
         row = 5
         index = 0  # 漢字處理指標
-        for i in range(total_rows_needed+1):
+        # 逐字處理字串 
+        while index < total_length:     # 使用 while 而非 for，確保處理完整個字串
             for col in range(4, 19):  # 【D欄=4】到【R欄=18】
                 # 確認是否還有字元可以處理
                 if index < total_length:
@@ -55,7 +53,7 @@ def thiam_zu_im(wb, sheet_name='漢字注音', cell='V3'):
         # 逐行處理資料，從 Row 3 開始，每列處理 15 個字元
         row = 3
         index = 0  # 漢字處理指標
-        for i in range(total_rows_needed+1):
+        while index < total_length:     # 使用 while 而非 for，確保處理完整個字串
             for col in range(4, 19):  # 【D欄=4】到【R欄=18】
                 # 確認是否還有字元可以處理
                 if index < total_length:
