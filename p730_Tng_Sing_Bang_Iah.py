@@ -103,16 +103,18 @@ def build_web_page(wb, sheet, source_chars, total_length):
         while index < total_length:
             for col in range(4, 19):  # 【D欄=4】到【R欄=18】
                 if index < total_length:
+                    ruby_tag = ""
                     src_char = source_chars[index]  # 取得目前欲處理的【漢字】
                     if src_char == "\n":
                         # 若遇到換行字元，退出迴圈 
+                        write_buffer += ("</p><p>\n")
                         index += 1
                         break;  
                     else: 
                         han_ji = sheet.range((row, col)).value  # 取得漢字
                         # 當 han_ji 是標點符號時，不需要注音
                         if is_punctuation(han_ji):
-                            ruby_tag = f"<span>{han_ji}</span>"
+                            ruby_tag = f"<span>{han_ji}</span>\n"
                         else:
                             lo_ma_im_piau = sheet.range((row - 1, col)).value  # 取得漢字的台語音標
                             zu_im_hu_ho = sheet.range((row + 1, col)).value  # 取得漢字的台語注音符號
@@ -133,16 +135,14 @@ def build_web_page(wb, sheet, source_chars, total_length):
                             #     <rp>)</rp>
                             # </ruby>
                             # """
-                            # ruby_tag = f"<ruby><rb>{han_ji}</rb><rt>{lo_ma_im_piau}</rt><rtc>{zu_im_hu_ho}</rtc></ruby>"
-                            ruby_tag = f"<ruby><rb>{han_ji}</rb><rt>{lo_ma_im_piau}</rt><rtc>{zu_im_hu_ho}</rtc></ruby>"
-
-                    write_buffer += (ruby_tag + "\n")
+                            ruby_tag = f"<ruby><rb>{han_ji}</rb><rt>{lo_ma_im_piau}</rt><rtc>{zu_im_hu_ho}</rtc></ruby>\n"
+                    write_buffer += ruby_tag
                     index += 1
                 else:
                     break  # 若已處理完畢，退出欄位迴圈
 
             # 每處理一行後，換到下一行
-            write_buffer += "<br>\n"
+            # write_buffer += "<br>\n"
             row += 4
 
         # =========================================================
