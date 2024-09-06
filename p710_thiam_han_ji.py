@@ -1,12 +1,7 @@
 import math
 
-import xlwings as xw
 
-
-def fill_hanji_in_cells(file_name, sheet_name='漢字注音', cell='V3'):
-    # 打開 Excel 檔案
-    wb = xw.Book(file_name)
-
+def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
     # 選擇指定的工作表
     sheet = wb.sheets[sheet_name]
 
@@ -24,7 +19,7 @@ def fill_hanji_in_cells(file_name, sheet_name='漢字注音', cell='V3'):
 
         # 迴圈清空所有漢字的上下方儲存格 (羅馬拼音和台語注音符號)
         row = 5
-        for i in range(total_rows_needed):
+        for i in range(total_rows_needed+1):
             for col in range(4, 19):  # 【D欄=4】到【R欄=18】
                 # 清空漢字儲存格 (Row)
                 sheet.range((row, col)).value = None
@@ -41,15 +36,20 @@ def fill_hanji_in_cells(file_name, sheet_name='漢字注音', cell='V3'):
         # 逐字處理字串，並填入對應的儲存格
         row = 5
         index = 0  # 用來追蹤目前處理到的字元位置
-        for i in range(total_rows_needed):
+        for i in range(total_rows_needed+1):
             for col in range(4, 19):  # 【D欄=4】到【R欄=18】
                 # 確認是否還有字元可以處理
                 if index < total_length:
                     # 取得當前字元
                     char = v3_value[index]
 
-                    # 將字元填入對應的儲存格
-                    sheet.range((row, col)).value = char
+                    if char != "\n":
+                        # 將字元填入對應的儲存格
+                        sheet.range((row, col)).value = char
+                    else:
+                        # 若遇到換行字元，退出迴圈 
+                        index += 1
+                        break;  
 
                     # 更新索引，處理下一個字元
                     index += 1
@@ -60,11 +60,11 @@ def fill_hanji_in_cells(file_name, sheet_name='漢字注音', cell='V3'):
             row += 4
 
     # 保存 Excel 檔案
-    wb.save(file_name)
+    wb.save()
     # wb.close()
 
     # 選擇名為 "顯示注音輸入" 的命名範圍
     named_range = wb.names['顯示注音輸入']
     named_range.refers_to_range.value = True
 
-    print(f"{file_name} 已成功更新，漢字已填入對應儲存格，上下方儲存格已清空。")
+    print(f"已成功更新，漢字已填入對應儲存格，上下方儲存格已清空。")

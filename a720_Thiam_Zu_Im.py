@@ -65,12 +65,30 @@ if __name__ == "__main__":
         CONVERT_FILE_NAME = file_path
     print(f"CONVERT_FILE_NAME = {CONVERT_FILE_NAME}")
 
+    # 打開 Excel 檔案
+    wb = xw.Book(CONVERT_FILE_NAME)
+
     # =========================================================================
     # (2) 分析已輸入的【台語音標】及【台語注音符號】，將之各別填入漢字之上、下方。
     #     - 上方：台語音標
     #     - 下方：台語注音符號
     # =========================================================================
-    thiam_zu_im(CONVERT_FILE_NAME)
+    thiam_zu_im(wb, '漢字注音', 'V3')
+
+    # =========================================================================
+    # (3) 依據《文章標題》另存新檔。
+    # =========================================================================
+    # wb = xw.Book(CONVERT_FILE_NAME)
+    # setting_sheet = wb.sheets["env"]
+    # new_file_name = str(
+    #     setting_sheet.range("C4").value
+    # ).strip()
+    # new_file_path = os.path.join(
+    #     ".\\output", 
+    #     f"【河洛話注音】{new_file_name}" + ".xlsx")
+
+    # # 儲存新建立的工作簿
+    # wb.save(new_file_path)
 
     # 保存 Excel 檔案
     # wb.close()
