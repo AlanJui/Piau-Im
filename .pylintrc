@@ -25,35 +25,35 @@ ignore=tests.py, urls.py, migrations
 # E501(flake8): line too long ( > 79 characters )
 # disable=C0111,I0011,I0012,W0704,W0142,W0212,W0232,W0613,W0702,R0201,C1001,C0103,R0901,E501
 #
-# disable=all
-# enable=F,E
-disable=raw-checker-failed,
-        bad-inline-option,
-        locally-disabled,
-        file-ignored,
-        suppressed-message,
-        useless-suppression,
-        deprecated-pragma,
-        use-symbolic-message-instead,
-        too-many-instance-attributes,
-        len-as-condition,
-        too-few-public-methods,
-        anomalous-backslash-in-string,
-        no-else-return,
-        simplifiable-if-statement,
-        too-many-arguments,
-        duplicate-code,
-        no-name-in-module,
-        no-member,
-        import-error,
-        missing-module-docstring,
-        missing-docstring,
-        invalid-name,
-        redefined-outer-name,
-        bare-except,
-        unknown-option-value,
-        unused-variable,
-        consider-using-enumerate
+disable=all
+enable=F,E
+; disable=raw-checker-failed,
+;         bad-inline-option,
+;         locally-disabled,
+;         file-ignored,
+;         suppressed-message,
+;         useless-suppression,
+;         deprecated-pragma,
+;         use-symbolic-message-instead,
+;         too-many-instance-attributes,
+;         len-as-condition,
+;         too-few-public-methods,
+;         anomalous-backslash-in-string,
+;         no-else-return,
+;         simplifiable-if-statement,
+;         too-many-arguments,
+;         duplicate-code,
+;         no-name-in-module,
+;         no-member,
+;         import-error,
+;         missing-module-docstring,
+;         missing-docstring,
+;         invalid-name,
+;         redefined-outer-name,
+;         bare-except,
+;         unknown-option-value,
+;         unused-variable,
+;         consider-using-enumerate
 
 
 [REPORTS]
