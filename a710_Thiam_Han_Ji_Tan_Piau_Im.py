@@ -6,6 +6,7 @@ import sys
 import xlwings as xw
 
 import settings
+from p701_Clear_Cells import clear_hanji_in_cells
 from p710_thiam_han_ji import fill_hanji_in_cells
 
 
@@ -67,12 +68,17 @@ if __name__ == "__main__":
     # 打開 Excel 檔案
     wb = xw.Book(CONVERT_FILE_NAME)
 
+    # 顯示「已輸入之拼音字母及注音符號」 
+    named_range = wb.names['顯示注音輸入']  # 選擇名為 "顯示注音輸入" 的命名範圍# 選擇名為 "顯示注音輸入" 的命名範圍
+    named_range.refers_to_range.value = True
+
     # =========================================================================
     # (2) 將漢字填入
     #     - 上方：台語音標
     #     - 下方：台語注音符號
     # =========================================================================
-    fill_hanji_in_cells(wb)
+    clear_hanji_in_cells(wb)    # 清除先前已填入的漢字、注音符號
+    fill_hanji_in_cells(wb)     # 將漢字逐個填入各儲存格
 
     # =========================================================================
     # (3) 依據《文章標題》另存新檔。

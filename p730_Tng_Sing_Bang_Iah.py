@@ -99,6 +99,9 @@ def build_web_page(wb, sheet, source_chars, total_length):
         row = 5
         index = 0  # 用來追蹤處理到哪個字元
 
+        # 在 Console 顯示待處理的字串
+        print(f"待處理的漢字 = {source_chars}")
+
         # 逐字處理字串
         while index < total_length:
             for col in range(4, 19):  # 【D欄=4】到【R欄=18】
@@ -112,6 +115,9 @@ def build_web_page(wb, sheet, source_chars, total_length):
                         break;  
                     else: 
                         han_ji = sheet.range((row, col)).value  # 取得漢字
+                        # 在 Console 顯示目前處理的漢字，以便使用者可知目前進度
+                        print(f"處理中：{han_ji}") 
+                        
                         # 當 han_ji 是標點符號時，不需要注音
                         if is_punctuation(han_ji):
                             ruby_tag = f"<span>{han_ji}</span>\n"
