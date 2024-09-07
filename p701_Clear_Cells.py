@@ -1,6 +1,8 @@
+# 全域常數
+TOTAL_ROWS = 12
+
 # 填漢字等標音：將整段的文字拆解，個別填入儲存格，以便後續人工手動填入台語音標、注音符號。
 import getopt
-import math
 import sys
 
 import xlwings as xw
@@ -59,11 +61,10 @@ def clear_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
 
         # 每列最多處理 15 個字元，計算總共需要多少列
         chars_per_row = 15
-        total_rows_needed = math.ceil(total_length / chars_per_row)  # 無條件進位
 
         # 迴圈清空所有漢字的上下方儲存格 (羅馬拼音和台語注音符號)
         row = 5
-        for i in range(total_rows_needed+1):
+        for i in range(TOTAL_ROWS):
             for col in range(4, 19):  # 【D欄=4】到【R欄=18】
                 # 清空漢字儲存格 (Row)
                 sheet.range((row, col)).value = None
@@ -76,6 +77,8 @@ def clear_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
 
             # 每處理 15 個字元後，換到下一行
             row += 4
+
+    # sheet.range(cell).value = None
 
 
 
