@@ -6,6 +6,8 @@ ignore=tests.py, urls.py, migrations
 #django-settings-module=mysite.settings
 
 [MESSAGES CONTROL]
+; disable=all
+; enable=F,E
 # C0111 Missing docstring
 # C0114(missing-module-docstring) Missing module docstring
 # I0011 Warning locally suppressed using disable-msg
@@ -54,6 +56,8 @@ disable=raw-checker-failed,
 
 
 [REPORTS]
+; output-format=text
+; msg-template={msg_id}: {msg} ({symbol}) at {path}:{line}
 msg-template={path}:{line}: [{msg_id}({symbol}), {obj}] {msg}
 
 [BASIC]
