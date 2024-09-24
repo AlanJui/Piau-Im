@@ -5,24 +5,31 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "a710_Thiam_Han_Ji_Tan_Piau_Im",
+            "name": "a710_清理原填入漢字及注音",
             "type": "debugpy",
             "request": "launch",
-            "program": "a710_Thiam_Han_Ji_Tan_Piau_Im.py",
+            "program": "a710_清理原填入漢字及注音.py",
             "console": "integratedTerminal",
         },
         {
-            "name": "a720_Thiam_Zu_Im",
+            "name": "a720_待注音漢字填入標音用方格",
             "type": "debugpy",
             "request": "launch",
-            "program": "a720_Thiam_Zu_Im.py",
+            "program": "a720_待注音漢字填入標音用方格.py",
             "console": "integratedTerminal",
         },
         {
-            "name": "a730_Tng_Bang_Iah",
+            "name": "a730_將漢字注音填入",
             "type": "debugpy",
             "request": "launch",
-            "program": "a730_Tng_Bang_Iah.py",
+            "program": "a730_將漢字注音填入.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "a740_漢字注音轉網頁",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a740_漢字注音轉網頁.py",
             "console": "integratedTerminal",
         },
         {
