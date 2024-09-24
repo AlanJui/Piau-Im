@@ -1,13 +1,12 @@
+# 填漢字等標音：將整段的文字拆解，個別填入儲存格，以便後續人工手動填入台語音標、注音符號。
 import getopt
-import math
-import os
 import sys
 
 import xlwings as xw
 
 import settings
-from a730_將漢字注音填入 import thiam_zu_im
-from p730_Tng_Sing_Bang_Iah import tng_sing_bang_iah
+from p701_Clear_Cells import clear_hanji_in_cells
+from p710_thiam_han_ji import fill_hanji_in_cells
 
 
 def get_input_and_output_options(argv):
@@ -46,6 +45,7 @@ def get_input_and_output_options(argv):
         "output": arg_output,
     }
 
+
 if __name__ == "__main__":
     # =========================================================================
     # (1) 取得需要注音的「檔案名稱」及其「目錄路徑」。
@@ -67,32 +67,31 @@ if __name__ == "__main__":
     # 打開 Excel 檔案
     wb = xw.Book(CONVERT_FILE_NAME)
 
+    # 顯示「已輸入之拼音字母及注音符號」 
+    named_range = wb.names['顯示注音輸入']  # 選擇名為 "顯示注音輸入" 的命名範圍# 選擇名為 "顯示注音輸入" 的命名範圍
+    named_range.refers_to_range.value = True
+
     # =========================================================================
-    # (2) 分析已輸入的【台語音標】及【台語注音符號】，將之各別填入漢字之上、下方。
+    # (2) 將漢字填入
     #     - 上方：台語音標
     #     - 下方：台語注音符號
     # =========================================================================
-    thiam_zu_im(wb, '漢字注音', 'V3')
+    fill_hanji_in_cells(wb)     # 將漢字逐個填入各儲存格
 
     # =========================================================================
-    # (3) 將已注音之「漢字注音表」，製作成 HTML 格式之「注音／拼音／標音」網頁。
+    # (3) 依據《文章標題》另存新檔。
     # =========================================================================
-    tng_sing_bang_iah(wb, '漢字注音', 'V3')
+    # wb = xw.Book(CONVERT_FILE_NAME)
+    # setting_sheet = wb.sheets["env"]
+    # new_file_name = str(
+    #     setting_sheet.range("C4").value
+    # ).strip()
+    # new_file_path = os.path.join(
+    #     ".\\output", 
+    #     f"【河洛話注音】{new_file_name}" + ".xlsx")
 
-    # =========================================================================
-    # (4) 依據《文章標題》另存新檔。
-    # =========================================================================
-    wb = xw.Book(CONVERT_FILE_NAME)
-    setting_sheet = wb.sheets["env"]
-    new_file_name = str(
-        setting_sheet.range("C4").value
-    ).strip()
-    new_file_path = os.path.join(
-        ".\\output", 
-        f"【河洛話注音】{new_file_name}" + ".xlsx")
+    # # 儲存新建立的工作簿
+    # wb.save(new_file_path)
 
-    # 儲存新建立的工作簿
-    wb.save(new_file_path)
-
-    # 保存 Excel 檔案
-    wb.close()
+    # # 保存 Excel 檔案
+    # wb.close()

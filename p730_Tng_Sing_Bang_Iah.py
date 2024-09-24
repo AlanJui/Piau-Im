@@ -17,15 +17,6 @@ def create_html_file(output_path, content, title='您的標題'):
 </head>
 <body>
     {content}
-    <div>
-        <p>
-            為能正確顯示「注音符號」，請點擊以下連結，下載注音符號專用字型：
-            <a href="https://github.com/cmex-30/Bopomofo_on_Web/tree/master/font/BopomofoRuby1909-v1-Regular.ttf">
-                BopomofoRuby1909-v1-Regular.ttf
-            </a>
-            ，並於使用之電腦端安裝此字型。
-        </p>
-    </div>
 </body>
 </html>
     """

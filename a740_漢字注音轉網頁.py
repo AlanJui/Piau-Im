@@ -1,12 +1,9 @@
 import getopt
-import math
-import os
 import sys
 
 import xlwings as xw
 
 import settings
-from p720_Thiam_Zu_Im import thiam_zu_im
 from p730_Tng_Sing_Bang_Iah import tng_sing_bang_iah
 
 
@@ -69,11 +66,9 @@ if __name__ == "__main__":
     wb = xw.Book(CONVERT_FILE_NAME)
 
     # =========================================================================
-    # (2) 分析已輸入的【台語音標】及【台語注音符號】，將之各別填入漢字之上、下方。
-    #     - 上方：台語音標
-    #     - 下方：台語注音符號
+    # (2) 將已注音之「漢字注音表」，製作成 HTML 格式之「注音／拼音／標音」網頁。
     # =========================================================================
-    thiam_zu_im(wb, '漢字注音', 'V3')
+    tng_sing_bang_iah(wb, '漢字注音', 'V3')
 
     # =========================================================================
     # (3) 依據《文章標題》另存新檔。
@@ -90,5 +85,5 @@ if __name__ == "__main__":
     # # 儲存新建立的工作簿
     # wb.save(new_file_path)
 
-    # 保存 Excel 檔案
+    # # 保存 Excel 檔案
     # wb.close()
