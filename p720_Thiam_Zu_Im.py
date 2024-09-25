@@ -55,6 +55,9 @@ def thiam_zu_im(wb, sheet_name='漢字注音', cell='V3'):
         index = 0  # 漢字處理指標
         while index < total_length:     # 使用 while 而非 for，確保處理完整個字串
             for col in range(4, 19):  # 【D欄=4】到【R欄=18】
+                char = None
+                lo_ma_ji = None
+                zu_im_hu_ho = None
                 # 確認是否還有字元可以處理
                 if index < total_length:
                     char = v3_value[index]  # 取得目前欲處理的【漢字】
@@ -74,6 +77,12 @@ def thiam_zu_im(wb, sheet_name='漢字注音', cell='V3'):
                         # 若遇到換行字元，退出迴圈 
                         index += 1
                         break;  
+
+                    # 顯示當前處理的【漢字】、【羅馬拼音】和【台語注音】
+                    if lo_ma_ji and zu_im_hu_ho:
+                        print(f"{char}： ［{lo_ma_ji}］ 【{zu_im_hu_ho}】")
+                    else:
+                        print(f"{char}")
 
                     # 更新索引，處理下一個字元
                     index += 1
