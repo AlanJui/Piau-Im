@@ -1,6 +1,5 @@
 # Tng_Sing_Bang_Iah.py (轉成網頁)
 # 用途：將【漢字注音】工作表中的漢字、台語音標及台語注音符號，轉成 HTML 網頁格式。
-import math
 import os
 
 import xlwings as xw
@@ -83,10 +82,15 @@ def build_web_page(wb, sheet, source_chars, total_length):
     html_str = f"<div class='{div_class}'><p>"
     write_buffer += (html_str + "\n")
 
-    # 每列最多處理 15 個字元
-    chars_per_row = 15
+    # 每頁最多處理 20 列
+    TOTAL_ROWS = int(wb.names['每頁總列數'].refers_to_range.value) # 自名稱為【每頁總列數】之儲存格，取得【每頁最多處理幾列】之值
+    # 每列最多處理 15 字元
+    CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)  # 自名稱為【每列總字數】之儲存格，取得【每列最多處理幾個字元】之值
+    # 設定起始及結束的欄位  （【D欄=4】到【R欄=18】）
+    start = 4
+    end = start + CHARS_PER_ROW
 
-    if total_length:
+    if total_length and total_length < (CHARS_PER_ROW * TOTAL_ROWS):
         row = 5
         index = 0  # 用來追蹤處理到哪個字元
 
@@ -95,7 +99,8 @@ def build_web_page(wb, sheet, source_chars, total_length):
 
         # 逐字處理字串
         while index < total_length:
-            for col in range(4, 19):  # 【D欄=4】到【R欄=18】
+            for col in range(start, end):  # 【D欄=4】到【R欄=18】
+                col_name = xw.utils.col_name(col)
                 if index < total_length:
                     ruby_tag = ""
                     src_char = source_chars[index]  # 取得目前欲處理的【漢字】
@@ -103,15 +108,15 @@ def build_web_page(wb, sheet, source_chars, total_length):
                         # 若遇到換行字元，退出迴圈 
                         write_buffer += ("</p><p>\n")
                         index += 1
+                        print("\n")
                         break;  
                     else: 
                         han_ji = sheet.range((row, col)).value  # 取得漢字
-                        # 在 Console 顯示目前處理的漢字，以便使用者可知目前進度
-                        print(f"處理中：{han_ji}") 
-                        
                         # 當 han_ji 是標點符號時，不需要注音
                         if is_punctuation(han_ji):
                             ruby_tag = f"<span>{han_ji}</span>\n"
+                            # 在 Console 顯示目前處理的漢字，以便使用者可知目前進度
+                            print(f"({row}, {col_name}) = {han_ji}")
                         else:
                             lo_ma_im_piau = sheet.range((row - 1, col)).value  # 取得漢字的台語音標
                             zu_im_hu_ho = sheet.range((row + 1, col)).value  # 取得漢字的台語注音符號
@@ -120,6 +125,8 @@ def build_web_page(wb, sheet, source_chars, total_length):
                             lo_ma_im_piau = lo_ma_im_piau if lo_ma_im_piau is not None else ""
                             zu_im_hu_ho = zu_im_hu_ho if zu_im_hu_ho is not None else ""
 
+                            # 在 Console 顯示目前處理的漢字，以便使用者可知目前進度
+                            print(f"({row}, {col_name}) = {han_ji} [{lo_ma_im_piau}] 【{zu_im_hu_ho}】")
                             # =========================================================
                             # 將已注音之漢字加入【漢字注音表】
                             # =========================================================
@@ -139,7 +146,7 @@ def build_web_page(wb, sheet, source_chars, total_length):
                     break  # 若已處理完畢，退出欄位迴圈
 
             # 每處理一行後，換到下一行
-            # write_buffer += "<br>\n"
+            print("\n")
             row += 4
 
         # =========================================================

@@ -6,7 +6,6 @@ import xlwings as xw
 
 import settings
 from p701_Clear_Cells import clear_hanji_in_cells
-from p710_thiam_han_ji import fill_hanji_in_cells
 
 
 def get_input_and_output_options(argv):
@@ -77,7 +76,6 @@ if __name__ == "__main__":
     #     - 下方：台語注音符號
     # =========================================================================
     clear_hanji_in_cells(wb)    # 清除先前已填入的漢字、注音符號
-    wb.sheets['漢字注音'].range("V3").value = ""
 
     # =========================================================================
     # (3) 依據《文章標題》另存新檔。

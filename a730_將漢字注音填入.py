@@ -5,7 +5,6 @@ import xlwings as xw
 
 import settings
 from p720_Thiam_Zu_Im import thiam_zu_im
-from p730_Tng_Sing_Bang_Iah import tng_sing_bang_iah
 
 
 def get_input_and_output_options(argv):
