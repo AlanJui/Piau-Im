@@ -1,3 +1,6 @@
+import xlwings as xw
+
+
 def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
     # 選擇指定的工作表
     sheet = wb.sheets[sheet_name]
@@ -9,9 +12,15 @@ def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
     if v3_value:
         # 計算字串的總長度
         total_length = len(v3_value)
+        print(f" {total_length} 個字元")
 
-        # 每列最多處理 15 個字元，計算總共需要多少列
-        chars_per_row = 15
+        # 每頁最多處理 20 列
+        TOTAL_ROWS = int(wb.names['每頁總列數'].refers_to_range.value) # 自名稱為【每頁總列數】之儲存格，取得【每頁最多處理幾列】之值
+        # 每列最多處理 15 字元
+        CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)  # 自名稱為【每列總字數】之儲存格，取得【每列最多處理幾個字元】之值
+        # 設定起始及結束的欄位  （【D欄=4】到【R欄=18】）
+        start = 4
+        end = start + CHARS_PER_ROW
 
         # 逐字處理字串，並填入對應的儲存格
         row = 5
@@ -19,7 +28,7 @@ def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
 
         # 逐字處理字串 
         while index < total_length:     # 使用 while 而非 for，確保處理完整個字串
-            for col in range(4, 19):  # 【D欄=4】到【R欄=18】
+            for col in range(start, end):  # 【D欄=4】到【R欄=18】
                 # 確認是否還有字元可以處理
                 if index < total_length:
                     # 取得當前字元
@@ -28,6 +37,9 @@ def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
                     if char != "\n":
                         # 將字元填入對應的儲存格
                         sheet.range((row, col)).value = char
+
+                        col_name = xw.utils.col_name(col)
+                        print(f"【{row} 列， {col_name} 欄】：{char}")
                     else:
                         # 若遇到換行字元，直接跳過
                         index += 1
@@ -39,6 +51,7 @@ def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
                     break  # 若字串已處理完畢，退出迴圈
 
             # 每處理 15 個字元後，換到下一行
+            print("\n")
             row += 4
 
     # 保存 Excel 檔案

@@ -11,7 +11,9 @@
 }
 
 body {
-  width: 100%;
+  /* width: 100%; */
+  margin: 10px auto;
+  width: 60%;
   color: #333;
   line-height: 2.0;
   font-size: 28pt;
