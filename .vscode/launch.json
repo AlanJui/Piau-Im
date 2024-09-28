@@ -63,8 +63,8 @@
             "program": "a760_漢字注音檔存成工作暫存檔.py",
             "console": "integratedTerminal",
             "args": [
-                "-i 【河洛話注音】金剛般若波羅蜜經-006.xlsx",
-                "-o Tai_Gi_Zu_Im_Bun.xlsx",
+                // "-i 【河洛話注音】金剛般若波羅蜜經。無為福勝分第十一.xlsx",
+                // "-o Tai_Gi_Zu_Im_Bun.xlsx",
             ]
         },
         {
