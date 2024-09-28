@@ -19,6 +19,13 @@
             "console": "integratedTerminal",
         },
         {
+            "name": "a700_Iong_Excel_Piau_Zu_Im",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a700_Iong_Excel_Piau_Zu_Im.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "a730_將漢字注音填入",
             "type": "debugpy",
             "request": "launch",
