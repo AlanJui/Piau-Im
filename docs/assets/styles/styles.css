@@ -12,7 +12,7 @@
 
 body {
   /* width: 100%; */
-  margin: 10px auto;
+  margin: 0 auto;
   width: 100%;
   color: #333;
   line-height: 2.0;
@@ -25,7 +25,7 @@ main {
   padding: 40px 20px 20px;
   color: #333;
   line-height: 1.8;
-  width: 90%;
+  width: 95%;
   margin: 0 auto;
 }
 
@@ -54,10 +54,33 @@ h1 {
 
 #articles {
   font-weight: bold;
+  width: 95%;
+  margin: 0 auto;
+}
+
+p {
+  margin-bottom: 50px;
+  line-height: 2em;
+}
+
+header {
+  /* display: block; */
+  border-top: #00c4ab 5px solid;
+  text-align: center;
+  background: url(../picts/bg_header.png) #e6e6e6;
+}
+
+header h1 {
+  padding: 0 10px 25px;
+  font-family: 'Noto Serif TC', serif;
+  font-size: 32pt;
+  font-weight: bold;
 }
 
 .title {
-  font-size: 1.2em;
+  font-family: 'Noto Sans TC', serif;
+  color: #0066cc;
+  font-size: 1.0em;
   letter-spacing: 2px;
   text-align: center;
 }
@@ -139,6 +162,42 @@ rtc {
 .zhu_yin {
   font-family: "Noto Serif TC";
   letter-spacing: 0.2em;
+  /* 控制漢字之間的間距 */
+  display: inline-flex;
+  /* 保證所有標注都在同一行 */
+  white-space: nowrap;
+  /* 防止元素換行 */
+}
+
+.zhu_yin ruby {
+  writing-mode: vertical-lr;
+  /* 垂直排列方音符號 */
+  text-orientation: upright;
+  /* 直立顯示符號 */
+  display: inline-flex;
+  /* 保持元素內部的靈活布局 */
+  white-space: nowrap;
+  /* 防止 Ruby 標籤換行 */
+  vertical-align: middle;
+  /* 保持漢字與符號的垂直對齊 */
+}
+
+.zhu_yin rt {
+  font-family: BopomofoRuby;
+  color: #B94B6A;
+  font-size: 35%;
+  /* 適當調整符號字體大小，避免過大導致布局錯亂 */
+  letter-spacing: 0.1em;
+  /* 調整符號之間的間距，讓排列更清晰 */
+  vertical-align: middle;
+  /* 保證符號與漢字的對齊 */
+  display: inline-block;
+  /* 防止行內元素換行 */
+}
+
+/* .zhu_yin {
+  font-family: "Noto Serif TC";
+  letter-spacing: 0.2em;
 }
 
 .zhu_yin ruby {
@@ -151,8 +210,9 @@ rtc {
   color: #B94B6A;
   font-size: 40%;
   letter-spacing: 0;
-}
+} */
 
+/* 標音 */
 .Piau_Im {
   font-family: "Noto Serif TC";
 }
