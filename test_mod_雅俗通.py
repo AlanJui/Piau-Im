@@ -1,3 +1,4 @@
+# 測試執行方法： python -m unittest test_mod_雅俗通.py
 import sqlite3
 import unittest
 
