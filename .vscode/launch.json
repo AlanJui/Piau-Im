@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "mod_雅俗通",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "mod_雅俗通.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "a710_清理原填入漢字及注音",
             "type": "debugpy",
             "request": "launch",
