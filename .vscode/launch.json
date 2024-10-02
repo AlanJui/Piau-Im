@@ -12,6 +12,13 @@
             "console": "integratedTerminal",
         },
         {
+            "name": "a702_Batch_Zu_Tong_Piau_Zu_Im",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a702_Batch_Zu_Tong_Piau_Zu_Im.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "a710_清理原填入漢字及注音",
             "type": "debugpy",
             "request": "launch",
@@ -37,6 +44,13 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a730_將漢字注音填入.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "a731_自動為漢字查注音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a731_自動為漢字查注音.py",
             "console": "integratedTerminal",
         },
         {
