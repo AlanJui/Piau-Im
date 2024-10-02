@@ -1,23 +1,20 @@
-# 填漢字等標音：將整段的文字拆解，個別填入儲存格，以便後續人工手動填入台語音標、注音符號。
 import getopt
 import sys
 
 import xlwings as xw
 
 import settings
-from p701_Clear_Cells import clear_hanji_in_cells
-from p710_thiam_han_ji import fill_hanji_in_cells
+from p702_Ca_Han_Ji_Thak_Im import ca_han_ji_thak_im
 
 
 def get_input_and_output_options(argv):
     arg_input = ""
     arg_output = ""
-    arg_user = ""
-    arg_help = "{0} -i <input> -u <user> -o <output>".format(argv[0])
+    arg_help = "{0} -i <input> -o <output>".format(argv[0])
 
     try:
         opts, args = getopt.getopt(  # pyright: ignore
-            argv[1:], "hi:u:o:", ["help", "input=", "user=", "output="]
+            argv[1:], "hi:o:", ["help", "input=", "output="]
         )
     except Exception as e:
         print(e)
@@ -30,18 +27,14 @@ def get_input_and_output_options(argv):
             sys.exit(2)
         elif opt in ("-i", "--input"):
             arg_input = arg
-        elif opt in ("-u", "--user"):
-            arg_user = arg
         elif opt in ("-o", "--output"):
             arg_output = arg
 
     print("input:", arg_input)
-    print("user:", arg_user)
     print("output:", arg_output)
 
     return {
         "input": arg_input,
-        "user": arg_user,
         "output": arg_output,
     }
 
@@ -67,20 +60,9 @@ if __name__ == "__main__":
     # 打開 Excel 檔案
     wb = xw.Book(CONVERT_FILE_NAME)
 
-    # 顯示「已輸入之拼音字母及注音符號」 
-    named_range = wb.names['顯示注音輸入']  # 選擇名為 "顯示注音輸入" 的命名範圍# 選擇名為 "顯示注音輸入" 的命名範圍
-    named_range.refers_to_range.value = True
-
     # =========================================================================
-    # (2) 將漢字填入
+    # (2) 分析已輸入的【台語音標】及【台語注音符號】，將之各別填入漢字之上、下方。
     #     - 上方：台語音標
     #     - 下方：台語注音符號
     # =========================================================================
-    # 選擇工作表
-    sheet = wb.sheets['漢字注音']
-
-    # 清除 C3:R166 範圍的內容
-    sheet.range('D3:R166').clear_contents()
-
-    # 將漢字逐個填入各儲存格
-    fill_hanji_in_cells(wb)     
+    ca_han_ji_thak_im(wb, '漢字注音', 'V3')

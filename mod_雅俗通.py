@@ -53,7 +53,7 @@ def close_db_connection(conn):
 # ==========================================================
 # 用 `漢字` 查詢《雅俗通十五音》的標音
 # ==========================================================
-def han_ji_cha_piau_im(cursor, han_ji):
+def han_ji_ca_piau_im(cursor, han_ji):
     """
     根據漢字查詢其讀音資訊。若資料紀錄在`常用度`欄位儲存值為空值(NULL)，
     則將其視為 0，因此可排在查詢結果的最後。
@@ -128,7 +128,7 @@ if __name__ == "__main__":
     # 測試 `han_ji_cha_piau_im` 函數
     #--------------------------------------------------
     han_ji = '不'
-    result = han_ji_cha_piau_im(cursor, han_ji)
+    result = han_ji_ca_piau_im(cursor, han_ji)
     print(result)
     assert result[0]['十五音聲母'] == '邊', "轉換錯誤！"
     assert result[0]['十五音韻母'] == '君', "轉換錯誤！"
