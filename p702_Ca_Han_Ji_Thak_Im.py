@@ -3,7 +3,8 @@ import sqlite3
 
 import xlwings as xw
 
-from mod_雅俗通 import han_ji_ca_piau_im
+# from mod_雅俗通 import han_ji_ca_piau_im
+from mod_台羅音標漢字庫 import han_ji_ca_piau_im
 
 HONG_IM_TIAU_HO = {
     '0': '˙',
@@ -60,7 +61,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3'):
     # 漢字下方儲存：台語注音符號
     #--------------------------------------------------------------------------------------------------------
     # 在所有測試開始前，連接資料庫
-    conn = sqlite3.connect('Nga_Siok_Thong_Sip_Ngoo_Im.db')  # 替換為實際資料庫路徑
+    conn = sqlite3.connect('Tai_Loo_Han_Ji_Khoo.db')  # 替換為實際資料庫路徑
     cursor = conn.cursor()
 
     # 確認 V3 不為空
@@ -94,10 +95,10 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3'):
 
                             # 取羅馬拼音和台語注音
                             if result:
-                                siann_tiau = str(int(result[0]['八聲調']))
-                                fong_im_tiau_ho = HONG_IM_TIAU_HO[siann_tiau]
-                                lo_ma_im_piau = f"{result[0]['聲母台語音標']}{result[0]['韻母台語音標']}{siann_tiau}"
-                                zu_im_hu_ho = f"{result[0]['聲母方音符號']}{result[0]['韻母方音符號']}{fong_im_tiau_ho}"
+                                siann_tiau = str(int(result[0]['聲調']))
+                                lo_ma_im_piau = f"{result[0]['聲母']}{result[0]['韻母']}{siann_tiau}"
+                                # fong_im_tiau_ho = HONG_IM_TIAU_HO[siann_tiau]
+                                # zu_im_hu_ho = f"{result[0]['聲母方音符號']}{result[0]['韻母方音符號']}{fong_im_tiau_ho}"
 
                                 # 將羅馬拼音填入當前 row + 1 的儲存格
                                 sheet.range((row - 1, col)).value = lo_ma_im_piau

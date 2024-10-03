@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "mod_台羅音標漢字庫",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "mod_台羅音標漢字庫.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "mod_雅俗通",
             "type": "debugpy",
             "request": "launch",
