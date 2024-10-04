@@ -115,7 +115,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3'):
 
                     # 取羅馬拼音和台語注音
                     if result:
-                        lo_ma_im_piau = result[0]['台羅音標']  # 取得【羅馬拼音】
+                        lo_ma_im_piau = result[0]['台語音標']  # 取得【台語音標】拼音羅馬字母
                         # 將台羅音標轉換為台語注音符號
                         zu_im_hu_ho = TL_Tng_Zu_Im(
                             siann_bu=result[0]['聲母'],
