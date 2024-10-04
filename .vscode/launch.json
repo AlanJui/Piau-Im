@@ -5,6 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "a701_作業中活頁檔填入漢字",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a701_作業中活頁檔填入漢字.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "a702_Batch_Zu_Tong_Piau_Zu_Im",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a702_Batch_Zu_Tong_Piau_Zu_Im.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "p711_TL_Tng_Zu_Im",
             "type": "debugpy",
             "request": "launch",
@@ -23,13 +37,6 @@
             "type": "debugpy",
             "request": "launch",
             "program": "mod_雅俗通.py",
-            "console": "integratedTerminal",
-        },
-        {
-            "name": "a702_Batch_Zu_Tong_Piau_Zu_Im",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a702_Batch_Zu_Tong_Piau_Zu_Im.py",
             "console": "integratedTerminal",
         },
         {
