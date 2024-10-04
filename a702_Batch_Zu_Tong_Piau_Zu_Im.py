@@ -16,18 +16,19 @@ directory = r"C:\work\Piau-Im\output2"
 
 # 所有檔案名稱
 files = [
-    "【河洛話注音】金剛般若波羅蜜經001。法會因由分第一.xlsx",
+    # "【河洛話注音】金剛般若波羅蜜經001。法會因由分第一.xlsx",
     # "【河洛話注音】金剛般若波羅蜜經002。善現啟請分第二.xlsx",
     # "【河洛話注音】金剛般若波羅蜜經003。大乘正宗分第三.xlsx",
     # "【河洛話注音】金剛般若波羅蜜經004。妙行無住分第四.xlsx",
     # "【河洛話注音】金剛般若波羅蜜經005。如理實見分第五.xlsx",
     # "【河洛話注音】金剛般若波羅蜜經006。正信希有分第六.xlsx",
     # "【河洛話注音】金剛般若波羅蜜經007。無得無說分第七.xlsx",
-    # "【河洛話注音】金剛般若波羅蜜經009。一相無相分第九.xlsx",
-    # "【河洛話注音】金剛般若波羅蜜經010。莊嚴淨土分第十.xlsx",
-    # "【河洛話注音】金剛般若波羅蜜經011。無為福勝分第十一.xlsx",
-    # "【河洛話注音】金剛般若波羅蜜經012。尊重正教分第十二.xlsx",
-    # "【河洛話注音】金剛般若波羅蜜經013。如法受持分第十三.xlsx"
+    "【河洛話注音】金剛般若波羅蜜經008。依法出生分第八.xlsx",
+    "【河洛話注音】金剛般若波羅蜜經009。一相無相分第九.xlsx",
+    "【河洛話注音】金剛般若波羅蜜經010。莊嚴淨土分第十.xlsx",
+    "【河洛話注音】金剛般若波羅蜜經011。無為福勝分第十一.xlsx",
+    "【河洛話注音】金剛般若波羅蜜經012。尊重正教分第十二.xlsx",
+    "【河洛話注音】金剛般若波羅蜜經013。如法受持分第十三.xlsx"
 ]
 
 # 迴圈遍歷所有檔案並依次執行 Python 檔案
@@ -51,16 +52,21 @@ for file_name in files:
     tng_sing_bang_iah(wb, '漢字注音', 'V3')
 
     # (4) A750: 將 Tai_Gi_Zu_Im_Bun.xlsx 檔案，依 env 工作表的設定，另存新檔到指定目錄。
-    setting_sheet = wb.sheets["env"]
-    new_file_name = str(
-        setting_sheet.range("C4").value
-    ).strip()
-    
+    try:
+        file_name = str(wb.names['TITLE'].refers_to_range.value).strip()
+    except KeyError:
+        # print("未找到命名範圍 'TITLE'，使用預設名稱")
+        # file_name = "default_file_name.xlsx"  # 提供一個預設檔案名稱
+        setting_sheet = wb.sheets["env"]
+        file_name = str(
+            setting_sheet.range("C4").value
+        ).strip()
+
     # 設定檔案輸出路徑，存於專案根目錄下的 output2 資料夾
     output_path = wb.names['OUTPUT_PATH'].refers_to_range.value 
     new_file_path = os.path.join(
         ".\\{0}".format(output_path), 
-        f"【河洛話注音】{new_file_name}" + ".xlsx")
+        f"【河洛話注音】{file_name}.xlsx")
 
     # 儲存新建立的工作簿
     wb.save(new_file_path)
