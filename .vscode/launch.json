@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "p711_TL_Tng_Zu_Im",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "p711_TL_Tng_Zu_Im.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "mod_台羅音標漢字庫",
             "type": "debugpy",
             "request": "launch",
