@@ -5,6 +5,9 @@ def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
     # 選擇指定的工作表
     sheet = wb.sheets[sheet_name]
 
+    # 清空儲存格內容
+    sheet.range('D3:R166').clear_contents()    # 清除 C3:R166 範圍的內容
+
     # 取得 V3 儲存格的字串
     v3_value = sheet.range(cell).value
 

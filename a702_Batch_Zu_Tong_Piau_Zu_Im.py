@@ -41,12 +41,8 @@ for file_name in files:
     named_range = wb.names['顯示注音輸入']  # 選擇名為 "顯示注音輸入" 的命名範圍# 選擇名為 "顯示注音輸入" 的命名範圍
     named_range.refers_to_range.value = True
 
-    # 清空儲存格內容
-    sheet = wb.sheets['漢字注音']               # 選擇指定的工作表# 選擇工作表
-    sheet.range('D3:R166').clear_contents()    # 清除 C3:R166 範圍的內容
-
     # (1) A720: 將 V3 儲存格內的漢字，逐個填入標音用方格。
-    fill_hanji_in_cells(wb)     
+    # fill_hanji_in_cells(wb)     
 
     # (2) A731: 自動為漢字查找讀音，並抄寫到漢字的上方(拼音)及下方(注音)。
     ca_han_ji_thak_im(wb, '漢字注音', 'V3')
