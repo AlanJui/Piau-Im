@@ -16,16 +16,16 @@ def close_db_connection(conn):
     conn.close()
 
 # ==========================================================
-# 用 `漢字` 查詢《台羅音標》的讀音資訊
+# 用 `漢字` 查詢《台語音標》的讀音資訊
 # ==========================================================
 def han_ji_ca_piau_im(cursor, han_ji):
     """
-    根據漢字查詢其台羅音標及相關讀音資訊。若資料紀錄在`常用度`欄位儲存值為空值(NULL)，
-    則將其視為 0，因此可排在查詢結果的最後。
+    根據漢字查詢其台羅音標及相關讀音資訊，並將台羅音標轉換為台語音標。
+    若資料紀錄在`常用度`欄位儲存值為空值(NULL)，則將其視為 0，因此可排在查詢結果的最後。
     
     :param cursor: 數據庫游標
     :param han_ji: 欲查詢的漢字
-    :return: 包含讀音資訊的字典列表，包含台羅音標、聲母、韻母、聲調。
+    :return: 包含讀音資訊的字典列表，包含台語音標、聲母、韻母、聲調。
     """
 
     query = """
@@ -46,28 +46,48 @@ def han_ji_ca_piau_im(cursor, han_ji):
     cursor.execute(query, (han_ji,))
     results = cursor.fetchall()
 
+    # 定義【台羅音標】到【台語音標】的轉換規則
+    tai_luo_to_tai_gi_mapping = {
+        'tsh': 'c',
+        'ts': 'z'
+    }
+
     # 將結果轉換為字典列表
-    fields = ['識別號', '漢字', '台羅音標', '常用度', '摘要說明']
+    fields = ['識別號', '漢字', '台語音標', '常用度', '摘要說明']
     
     data = []
     for result in results:
         row_dict = dict(zip(fields, result))
-        # 分析台羅音標，拆分出聲母、韻母、聲調
-        zu_im = row_dict['台羅音標']
-        split_result = split_zu_im(zu_im)
+        # 取得台羅音標
+        tai_loo_im = row_dict['台語音標']
+
+        # 將台羅音標轉換為台語音標
+        tai_gi_im = tai_loo_im
+        for tai_luo, tai_gi in tai_luo_to_tai_gi_mapping.items():
+            tai_gi_im = tai_gi_im.replace(tai_luo, tai_gi)
+
+        # 更新 row_dict 中的台語音標
+        row_dict['台語音標'] = tai_gi_im
+
+        # 分析台語音標，拆分出聲母、韻母、聲調
+        split_result = split_zu_im(tai_gi_im)
         row_dict['聲母'] = split_result[0]
         row_dict['韻母'] = split_result[1]
         row_dict['聲調'] = split_result[2]
+
+        # 將結果加入列表
         data.append(row_dict)
     
     return data
+
 
 # ==========================================================
 # 自「台羅音標」，分析出：聲母、韻母、調號
 # ==========================================================
 def split_zu_im(zu_im):
     # 定義聲母的正規表示式，包括常見的聲母，但不包括 m 和 ng
-    siann_bu_pattern = re.compile(r"(b|tsh|ts|g|h|j|kh|k|l|m(?!\d)|ng(?!\d)|n|ph|p|s|th|t|Ø)")
+    # siann_bu_pattern = re.compile(r"(b|tsh|ts|g|h|j|kh|k|l|m(?!\d)|ng(?!\d)|n|ph|p|s|th|t|Ø)")
+    siann_bu_pattern = re.compile(r"(b|c|z|g|h|j|kh|k|l|m(?!\d)|ng(?!\d)|n|ph|p|s|th|t|Ø)")
     
     # 韻母為 m 或 ng 這種情況的正規表示式 (m\d 或 ng\d)
     un_bu_as_m_or_ng_pattern = re.compile(r"(m|ng)\d")
