@@ -11,37 +11,63 @@ def close_db_connection(conn):
 
 def TL_Tng_Zu_Im(siann_bu, un_bu, siann_tiau, cursor):
     """
-    根據傳入的台羅拼音聲母、韻母、聲調，轉換成對應的方音符號
-    :param siann_bu: 聲母 (台羅拼音)
-    :param un_bu: 韻母 (台羅拼音)
-    :param siann_tiau: 聲調 (台羅拼音中的數字)
+    根據傳入的台語音標聲母、韻母、聲調，轉換成對應的方音符號
+    :param siann_bu: 聲母 (台語音標)
+    :param un_bu: 韻母 (台語音標)
+    :param siann_tiau: 聲調 (台語音標中的數字)
     :param cursor: 數據庫游標
     :return: 包含方音符號的字典
     """
 
-    # 查詢聲母表，將台羅拼音的聲母轉換成方音符號
-    cursor.execute("SELECT 方音符號 FROM 聲母表 WHERE 台羅拚音 = ?", (siann_bu,))
+    # 查詢聲母表，將台語音標的聲母轉換成方音符號
+    cursor.execute("SELECT 方音符號 FROM 聲母表 WHERE 台語音標 = ?", (siann_bu,))
     siann_bu_result = cursor.fetchone()
     if siann_bu_result:
         zu_im_siann_bu = siann_bu_result[0]  # 取得方音符號
     else:
         zu_im_siann_bu = ''  # 無聲母的情況
 
-    # 查詢韻母表，將台羅拼音的韻母轉換成方音符號
-    cursor.execute("SELECT 方音符號 FROM 韻母表 WHERE 台羅拚音 = ?", (un_bu,))
+    # 查詢韻母表，將台語音標的韻母轉換成方音符號
+    cursor.execute("SELECT 方音符號 FROM 韻母表 WHERE 台語音標 = ?", (un_bu,))
     un_bu_result = cursor.fetchone()
     if un_bu_result:
         zu_im_un_bu = un_bu_result[0]  # 取得方音符號
     else:
         zu_im_un_bu = ''
 
-    # 查詢聲調表，將台羅拼音的聲調轉換成方音符號
+    # 查詢聲調表，將台語音標的聲調轉換成方音符號
     cursor.execute("SELECT 方音符號 FROM 聲調表 WHERE 台羅八聲調 = ?", (siann_tiau,))
     siann_tiau_result = cursor.fetchone()
     if siann_tiau_result:
         zu_im_siann_tiau = siann_tiau_result[0]  # 取得方音符號
     else:
         zu_im_siann_tiau = ''
+
+    #=======================================================================
+    # 【聲母】校調
+    #
+    # 齒間音【聲母】：ㄗ、ㄘ、ㄙ、ㆡ，若其後所接【韻母】之第一個符號亦為：ㄧ、ㆪ時，須變改
+    # 為：ㄐ、ㄑ、ㄒ、ㆢ。
+    #-----------------------------------------------------------------------
+    # 參考 RIME 輸入法如下規則：
+    # - xform/ㄗ(ㄧ|ㆪ)/ㄐ$1/
+    # - xform/ㄘ(ㄧ|ㆪ)/ㄑ$1/
+    # - xform/ㄙ(ㄧ|ㆪ)/ㄒ$1/
+    # - xform/ㆡ(ㄧ|ㆪ)/ㆢ$1/
+    #=======================================================================
+    
+    # 取【韻母】的第一個注音符號
+    first_un_bu_char = zu_im_un_bu[0] if zu_im_un_bu else ''
+
+    # 比對聲母是否為 ㄗ、ㄘ、ㄙ、ㆡ，且韻母的第一個符號是 ㄧ 或 ㆪ
+    if zu_im_siann_bu == 'ㄗ' and (first_un_bu_char == 'ㄧ' or first_un_bu_char == 'ㆪ'):
+        zu_im_siann_bu = 'ㄐ'
+    elif zu_im_siann_bu == 'ㄘ' and (first_un_bu_char == 'ㄧ' or first_un_bu_char == 'ㆪ'):
+        zu_im_siann_bu = 'ㄑ'
+    elif zu_im_siann_bu == 'ㄙ' and (first_un_bu_char == 'ㄧ' or first_un_bu_char == 'ㆪ'):
+        zu_im_siann_bu = 'ㄒ'
+    elif zu_im_siann_bu == 'ㆡ' and (first_un_bu_char == 'ㄧ' or first_un_bu_char == 'ㆪ'):
+        zu_im_siann_bu = 'ㆢ'
 
     return {
         '注音符號': f"{zu_im_siann_bu}{zu_im_un_bu}{zu_im_siann_tiau}",
