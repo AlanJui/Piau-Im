@@ -1,69 +1,62 @@
-import getopt
 import os
 import sys
 from pathlib import Path
 
 import xlwings as xw
 
-from p710_thiam_han_ji import fill_hanji_in_cells
+# 指定虛擬環境的 Python 路徑
+venv_python = os.path.join(".venv", "Scripts", "python.exe") if sys.platform == "win32" else os.path.join(".venv", "bin", "python")
 
-# =========================================================================
-# (1) 取得專案根目錄。
-# =========================================================================
-# 獲取當前檔案的路徑
-current_file_path = Path(__file__).resolve()
-
-# 專案根目錄
-project_root = current_file_path.parent
-
-print(f"專案根目錄為: {project_root}")
-
-# =========================================================================
-# (2) 若無指定輸入檔案，則獲取當前作用中的 Excel 檔案並另存新檔。
-# =========================================================================
-wb = None
+# (0) 取得專案根目錄。
 # 使用已打開且處於作用中的 Excel 工作簿
 try:
-    # 嘗試獲取當前作用中的 Excel 工作簿
     wb = xw.apps.active.books.active
 except Exception as e:
     print(f"發生錯誤: {e}")
     print("無法找到作用中的 Excel 工作簿")
     sys.exit(2)
 
-if not wb:
-    print("無法執行，可能原因：(1) 未指定輸入檔案；(2) 未找到作用中的 Excel 工作簿")
-    sys.exit(2)
+# 獲取活頁簿的完整檔案路徑
+file_path = wb.fullname
+print(f"完整檔案路徑: {file_path}")
 
-# 清空儲存格內容
-sheet = wb.sheets['漢字注音']
-sheet.range('D3:R166').clear_contents()     # 清除 C3:R166 範圍的內容
+# 獲取活頁簿的檔案名稱（不包括路徑）
+file_name = wb.name
+print(f"檔案名稱: {file_name}")
 
-# 將待注音的漢字填入
-fill_hanji_in_cells(wb)    
+# 獲取當前檔案的路徑
+current_file_path = Path(file_path).resolve()
 
-# 將檔案存放路徑設為【專案根目錄】之下
-file_name = "Tai_Gi_Zu_Im_Bun.xlsx"
-try:
-    file_name = str(wb.names['TITLE'].refers_to_range.value).strip()
-except KeyError:
-    # print("未找到命名範圍 'TITLE'，使用預設名稱")
-    # file_name = "default_file_name.xlsx"  # 提供一個預設檔案名稱
-    setting_sheet = wb.sheets["env"]
-    file_name = str(
-        setting_sheet.range("C4").value
-    ).strip()
+# 專案根目錄
+working_dir_path = current_file_path.parent
+print(f"專案根目錄為: {working_dir_path}")
+
+# (1) 存成作業暫存檔
+new_file_name = "working"
 
 # 設定檔案輸出路徑，存於專案根目錄下的 output2 資料夾
-output_path = wb.names['OUTPUT_PATH'].refers_to_range.value 
 new_file_path = os.path.join(
-    ".\\{0}".format(output_path), 
-    f"【河洛話注音】{file_name}.xlsx")
+    working_dir_path, 
+    f"【河洛話注音】{new_file_name}.xlsx")
 
 # 儲存新建立的工作簿
 wb.save(new_file_path)
+print(f"作業中暫存檔名: {wb.name}")
 
-# 關閉工作簿
-wb.close()
+# (2) 將儲存格內的舊資料清除
+sheet = wb.sheets['漢字注音']   # 選擇工作表
+sheet.activate()               # 將「漢字注音」工作表設為作用中工作表
+sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
+sheet.range('D3:R166').clear_contents()  # 清除 C3:R166 範圍的內容 
 
-print(f"檔案已成功存為 {new_file_path}")
+# 獲取 V3 儲存格的合併範圍
+merged_range = sheet.range('V3').merge_area
+# 清空合併儲存格的內容
+merged_range.clear_contents()
+
+# 顯示「已輸入之拼音字母及注音符號」 
+named_range = wb.names['顯示注音輸入']  # 選擇名為 "顯示注音輸入" 的命名範圍# 選擇名為 "顯示注音輸入" 的命名範圍
+named_range.refers_to_range.value = True
+
+# 設定 V3 儲存格為作用儲存格
+sheet.range('V3').select()
