@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "a700_産生作業用工作暫存檔",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a700_産生作業用工作暫存檔.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "a701_作業中活頁檔填入漢字",
             "type": "debugpy",
             "request": "launch",
@@ -12,17 +19,17 @@
             "console": "integratedTerminal",
         },
         {
-            "name": "a702_Zu_Tong_Piau_Zu_Im",
+            "name": "a702_查找及填入漢字標音",
             "type": "debugpy",
             "request": "launch",
-            "program": "a702_Zu_Tong_Piau_Zu_Im.py",
+            "program": "a702_查找及填入漢字標音.py",
             "console": "integratedTerminal",
         },
         {
-            "name": "a703_Batch_Zu_Tong_Piau_Zu_Im",
+            "name": "a703_批次式查找及填入漢字標音",
             "type": "debugpy",
             "request": "launch",
-            "program": "a703_Batch_Zu_Tong_Piau_Zu_Im.py",
+            "program": "a703_批次式查找及填入漢字標音.py",
             "console": "integratedTerminal",
         },
         {
