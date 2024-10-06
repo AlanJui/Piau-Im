@@ -30,6 +30,10 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3'):
 
     # 選擇工作表
     sheet = wb.sheets[sheet_name]
+    # 將「漢字注音」工作表設為作用中工作表
+    sheet.activate()
+    # 將 A1 儲存格設為作用儲存格
+    sheet.range('A1').select()
 
     # 取得 V3 儲存格的字串
     v3_value = sheet.range(cell).value
