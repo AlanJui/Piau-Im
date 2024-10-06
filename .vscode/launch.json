@@ -12,17 +12,17 @@
             "console": "integratedTerminal",
         },
         {
-            "name": "a702_Batch_Zu_Tong_Piau_Zu_Im",
+            "name": "a702_Zu_Tong_Piau_Zu_Im",
             "type": "debugpy",
             "request": "launch",
-            "program": "a702_Batch_Zu_Tong_Piau_Zu_Im.py",
+            "program": "a702_Zu_Tong_Piau_Zu_Im.py",
             "console": "integratedTerminal",
         },
         {
-            "name": "a703_Zu_Tong_Piau_Zu_Im",
+            "name": "a703_Batch_Zu_Tong_Piau_Zu_Im",
             "type": "debugpy",
             "request": "launch",
-            "program": "a703_Zu_Tong_Piau_Zu_Im.py",
+            "program": "a703_Batch_Zu_Tong_Piau_Zu_Im.py",
             "console": "integratedTerminal",
         },
         {
