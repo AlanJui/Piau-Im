@@ -19,6 +19,13 @@
             "console": "integratedTerminal",
         },
         {
+            "name": "a703_Zu_Tong_Piau_Zu_Im",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a703_Zu_Tong_Piau_Zu_Im.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "p711_TL_Tng_Zu_Im",
             "type": "debugpy",
             "request": "launch",

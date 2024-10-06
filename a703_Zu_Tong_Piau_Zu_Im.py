@@ -1,27 +1,70 @@
-# =========================================================================
-# 當 Tai_Gi_Zu_Im_Bun.xlsx 檔案已完成人工手動注音後，執行此程式可完成以下工作：
-# (1) A730: 將人工填入之拼音及注音，抄寫到漢字的上方(拼音)及下方(注音)。
-# (2) A740: 將【漢字注音】工作表的內容，轉成 HTML 網頁檔案。
-# (3) A750: 將 Tai_Gi_Zu_Im_Bun.xlsx 檔案，依 env 工作表的設定，另存新檔到指定目錄。
-# =========================================================================
 import os
-import subprocess
 import sys
+
+import xlwings as xw
+
+from p702_Ca_Han_Ji_Thak_Im import ca_han_ji_thak_im
+from p710_thiam_han_ji import fill_hanji_in_cells
+from p730_Tng_Sing_Bang_Iah import tng_sing_bang_iah
 
 # 指定虛擬環境的 Python 路徑
 venv_python = os.path.join(".venv", "Scripts", "python.exe") if sys.platform == "win32" else os.path.join(".venv", "bin", "python")
 
-# 依次執行三個 Python 檔案
+# (0) 取得專案根目錄。
+# 使用已打開且處於作用中的 Excel 工作簿
+try:
+    wb = xw.apps.active.books.active
+except Exception as e:
+    print(f"發生錯誤: {e}")
+    print("無法找到作用中的 Excel 工作簿")
+    sys.exit(2)
 
-# (1) A720: 將 V3 儲存格內的漢字，填入標音用方格。
-subprocess.run([venv_python, "a720_待注音漢字填入標音用方格.py", "-i", "Tai_Gi_Zu_Im_Bun.xlsx"])
+# 獲取活頁簿的完整檔案路徑
+file_path = wb.fullname
+print(f"完整檔案路徑: {file_path}")
+
+# 獲取活頁簿的檔案名稱（不包括路徑）
+file_name = wb.name
+print(f"檔案名稱: {file_name}")
+
+# 顯示「已輸入之拼音字母及注音符號」 
+named_range = wb.names['顯示注音輸入']  # 選擇名為 "顯示注音輸入" 的命名範圍# 選擇名為 "顯示注音輸入" 的命名範圍
+named_range.refers_to_range.value = True
+
+# (1) A720: 將 V3 儲存格內的漢字，逐個填入標音用方格。
+sheet = wb.sheets['漢字注音']   # 選擇工作表
+sheet.activate()               # 將「漢字注音」工作表設為作用中工作表
+sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
+# sheet.range('D3:R166').clear_contents()  # 清除 C3:R166 範圍的內容 
+
+# fill_hanji_in_cells(wb)   # 將漢字逐個填入各儲存格
 
 # (2) A731: 自動為漢字查找讀音，並抄寫到漢字的上方(拼音)及下方(注音)。
-subprocess.run([venv_python, "a731_自動為漢字查注音.py", "-i", "Tai_Gi_Zu_Im_Bun.xlsx"])
+ca_han_ji_thak_im(wb, '漢字注音', 'V3')
 
 # (3) A740: 將【漢字注音】工作表的內容，轉成 HTML 網頁檔案。
-subprocess.run([venv_python, "a740_漢字注音轉網頁.py", "-i", "Tai_Gi_Zu_Im_Bun.xlsx"])
+tng_sing_bang_iah(wb, '漢字注音', 'V3')
 
 # (4) A750: 將 Tai_Gi_Zu_Im_Bun.xlsx 檔案，依 env 工作表的設定，另存新檔到指定目錄。
-# subprocess.run([venv_python, "a750_漢字注音存檔.py"])
-subprocess.run([venv_python, "a750_漢字注音存檔.py", "-i", "Tai_Gi_Zu_Im_Bun.xlsx"])
+try:
+    file_name = str(wb.names['TITLE'].refers_to_range.value).strip()
+except KeyError:
+    # print("未找到命名範圍 'TITLE'，使用預設名稱")
+    # file_name = "default_file_name.xlsx"  # 提供一個預設檔案名稱
+    setting_sheet = wb.sheets["env"]
+    file_name = str(
+        setting_sheet.range("C4").value
+    ).strip()
+
+# 設定檔案輸出路徑，存於專案根目錄下的 output2 資料夾
+output_path = wb.names['OUTPUT_PATH'].refers_to_range.value 
+new_file_path = os.path.join(
+    ".\\{0}".format(output_path), 
+    f"【河洛話注音】{file_name}.xlsx")
+
+# 儲存新建立的工作簿
+wb.save(new_file_path)
+
+# 保存 Excel 檔案
+# wb.close()
+
