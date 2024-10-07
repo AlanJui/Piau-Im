@@ -34,10 +34,6 @@ if not wb:
     print("無法執行，可能原因：(1) 未指定輸入檔案；(2) 未找到作用中的 Excel 工作簿")
     sys.exit(2)
 
-# 清空儲存格內容
-sheet = wb.sheets['漢字注音']
-sheet.range('D3:R166').clear_contents()     # 清除 C3:R166 範圍的內容
-
 # 將待注音的漢字填入
 fill_hanji_in_cells(wb)    
 
