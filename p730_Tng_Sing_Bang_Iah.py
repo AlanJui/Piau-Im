@@ -99,6 +99,9 @@ def build_web_page(wb, sheet, source_chars, total_length):
 
         # 逐字處理字串
         while index < total_length:
+            # 設定當前作用儲存格，根據 `row` 和 `col` 動態選取
+            sheet.range((row, 1)).select()
+
             for col in range(start, end):  # 【D欄=4】到【R欄=18】
                 col_name = xw.utils.col_name(col)
                 if index < total_length:

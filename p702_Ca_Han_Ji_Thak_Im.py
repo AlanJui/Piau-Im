@@ -68,10 +68,14 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3'):
             row = 5
             index = 0  # 漢字處理指標
             while index < total_length:     # 使用 while 而非 for，確保處理完整個字串
+                # 設定當前作用儲存格，根據 `row` 和 `col` 動態選取
+                sheet.range((row, 1)).select()
+
                 for col in range(start, end):  # 【D欄=4】到【R欄=18】
                     if index == total_length:  # 確認是否已處理完整個字串
                         break
                     
+                    # 設定處理前的初始值
                     col_name = xw.utils.col_name(col)
                     char = None
                     cell_value = ""

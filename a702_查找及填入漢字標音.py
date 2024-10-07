@@ -4,7 +4,6 @@ import sys
 import xlwings as xw
 
 from p702_Ca_Han_Ji_Thak_Im import ca_han_ji_thak_im
-from p710_thiam_han_ji import fill_hanji_in_cells
 from p730_Tng_Sing_Bang_Iah import tng_sing_bang_iah
 
 # 指定虛擬環境的 Python 路徑
@@ -35,9 +34,6 @@ named_range.refers_to_range.value = True
 sheet = wb.sheets['漢字注音']   # 選擇工作表
 sheet.activate()               # 將「漢字注音」工作表設為作用中工作表
 sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
-# sheet.range('D3:R166').clear_contents()  # 清除 C3:R166 範圍的內容 
-
-# fill_hanji_in_cells(wb)   # 將漢字逐個填入各儲存格
 
 # (2) A731: 自動為漢字查找讀音，並抄寫到漢字的上方(拼音)及下方(注音)。
 ca_han_ji_thak_im(wb, '漢字注音', 'V3')

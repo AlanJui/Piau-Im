@@ -1,12 +1,21 @@
+# 用途：將漢字填入對應的儲存格
+# 詳述：待加註讀音的漢字文置於 V3 儲存格。本程式將漢字逐字填入對應的儲存格：
+# 【第一列】D5, E5, F5,... ,R5；
+# 【第二列】D9, E9, F9,... ,R9；
+# 【第三列】D13, E13, F13,... ,R13；
+# 每個漢字佔一格，每格最多容納一個漢字。
+# 漢字上方的儲存格（如：D4）為：【台語音標】欄，由【羅馬拼音字母】組成拼音。
+# 漢字下方的儲存格（如：D6）為：【台語注音符號】欄，由【台語方音符號】組成注音。
+# 漢字上上方的儲存格（如：D3）為：【人工標音】欄，可以只輸入【台語音標】；或
+# 【台語音標】和【台語注音符號】皆輸入。
 import xlwings as xw
 
 
 def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
     # 選擇指定的工作表
     sheet = wb.sheets[sheet_name]
-
-    # 清空儲存格內容
-    sheet.range('D3:R166').clear_contents()    # 清除 C3:R166 範圍的內容
+    sheet.activate()               # 將「漢字注音」工作表設為作用中工作表
+    sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
 
     # 取得 V3 儲存格的字串
     v3_value = sheet.range(cell).value
@@ -31,22 +40,35 @@ def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
 
         # 逐字處理字串 
         while index < total_length:     # 使用 while 而非 for，確保處理完整個字串
+            # 設定當前作用儲存格，根據 `row` 和 `col` 動態選取
+            sheet.range((row, 1)).select()
+
             for col in range(start, end):  # 【D欄=4】到【R欄=18】
                 # 確認是否還有字元可以處理
                 if index < total_length:
                     # 取得當前字元
                     char = v3_value[index]
 
-                    if char != "\n":
-                        # 將字元填入對應的儲存格
-                        sheet.range((row, col)).value = char
+                    # 檢查下一個字元（確保 index + 1 在範圍內）
+                    next_char = v3_value[index + 1] if index + 1 < total_length else None
 
-                        col_name = xw.utils.col_name(col)
-                        print(f"【{row} 列， {col_name} 欄】：{char}")
-                    else:
+                    # 自動檢查是否為【不】字，且下一個字元為【？】
+                    if char == '不' and next_char == '？':
+                        # 在【人工標音】欄自動輸入【hiu2】
+                        # 【人工標音】欄位為漢字上方的儲存格（如 D3）
+                        sheet.range((row - 2, col)).value = "hiu2"
+                        print(f"自動填入【hiu2】於 {xw.utils.col_name(col)}{row - 2}")
+
+                    if char == "\n":
                         # 若遇到換行字元，直接跳過
                         index += 1
                         break  
+
+                    # 將字元填入對應的儲存格
+                    sheet.range((row, col)).value = char
+
+                    col_name = xw.utils.col_name(col)
+                    print(f"【{row} 列， {col_name} 欄】：{char}")
 
                     # 更新索引，處理下一個字元
                     index += 1
