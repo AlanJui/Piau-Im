@@ -82,11 +82,14 @@ def han_ji_ca_piau_im(cursor, han_ji):
 
 
 # ==========================================================
-# 自「台羅音標」，分析出：聲母、韻母、調號
+# 自「台語音標+」，分析出：聲母、韻母、聲調
 # ==========================================================
 def split_zu_im(zu_im):
+    # 先進行聲母轉換處理
+    zu_im = zu_im.replace("tsh", "c").replace("ch", "c")  # 將 tsh, ch 轉換為 c
+    zu_im = zu_im.replace("ts", "z").replace("c", "z")  # 將 ts, c 轉換為 z
+
     # 定義聲母的正規表示式，包括常見的聲母，但不包括 m 和 ng
-    # siann_bu_pattern = re.compile(r"(b|tsh|ts|g|h|j|kh|k|l|m(?!\d)|ng(?!\d)|n|ph|p|s|th|t|Ø)")
     siann_bu_pattern = re.compile(r"(b|c|z|g|h|j|kh|k|l|m(?!\d)|ng(?!\d)|n|ph|p|s|th|t|Ø)")
     
     # 韻母為 m 或 ng 這種情況的正規表示式 (m\d 或 ng\d)
@@ -115,7 +118,6 @@ def split_zu_im(zu_im):
     result += [un_bu]
     result += [tiau]
     return result
-
 
 # 使用範例
 if __name__ == "__main__":
