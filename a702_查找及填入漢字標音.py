@@ -6,6 +6,18 @@ import xlwings as xw
 from p702_Ca_Han_Ji_Thak_Im import ca_han_ji_thak_im
 from p730_Tng_Sing_Bang_Iah import tng_sing_bang_iah
 
+
+# ==========================================================
+# 查詢語音類型，若未設定則預設為文讀音
+# ==========================================================
+def get_sound_type(wb):
+    try:
+        reading_type = wb.names['語音類型'].refers_to_range.value
+    except KeyError:
+        reading_type = "文讀音"
+    return reading_type
+
+
 # 指定虛擬環境的 Python 路徑
 venv_python = os.path.join(".venv", "Scripts", "python.exe") if sys.platform == "win32" else os.path.join(".venv", "bin", "python")
 
@@ -36,10 +48,12 @@ sheet.activate()               # 將「漢字注音」工作表設為作用中�
 sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
 
 # (2) A731: 自動為漢字查找讀音，並抄寫到漢字的上方(拼音)及下方(注音)。
-ca_han_ji_thak_im(wb, '漢字注音', 'V3')
+# type = '白話音'
+type = get_sound_type(wb) 
+ca_han_ji_thak_im(wb, '漢字注音', 'V3', type)
 
 # (3) A740: 將【漢字注音】工作表的內容，轉成 HTML 網頁檔案。
-tng_sing_bang_iah(wb, '漢字注音', 'V3')
+# tng_sing_bang_iah(wb, '漢字注音', 'V3')
 
 # (4) A750: 將 Tai_Gi_Zu_Im_Bun.xlsx 檔案，依 env 工作表的設定，另存新檔到指定目錄。
 try:

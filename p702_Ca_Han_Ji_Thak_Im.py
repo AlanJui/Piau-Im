@@ -23,7 +23,7 @@ def is_valid_han_ji(char):
     return char not in punctuation_marks
 
 
-def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3'):
+def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', type="文讀音"):
     # 顯示「已輸入之拼音字母及注音符號」 
     named_range = wb.names['顯示注音輸入']  # 選擇名為 "顯示注音輸入" 的命名範圍# 選擇名為 "顯示注音輸入" 的命名範圍
     named_range.refers_to_range.value = True
@@ -122,8 +122,8 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3'):
                         sheet.range((row - 1, col)).value = lo_ma_im_piau
                         sheet.range((row + 1, col)).value = zu_im_hu_ho
                     else:
-                        # 查找漢字讀音 
-                        result = han_ji_ca_piau_im(cursor, han_ji)
+                        # 查找漢字讀音 (type: 白話音、文讀音)
+                        result = han_ji_ca_piau_im(cursor, han_ji, type) 
 
                         # 取羅馬拼音和台語注音
                         if result:

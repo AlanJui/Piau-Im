@@ -56,18 +56,7 @@ def TL_Tng_Zu_Im(siann_bu, un_bu, siann_tiau, cursor):
     # - xform/ㆡ(ㄧ|ㆪ)/ㆢ$1/
     #=======================================================================
     
-    # 取【韻母】的第一個注音符號
-    # first_un_bu_char = zu_im_un_bu[0] if zu_im_un_bu else ''
-    # 
     # 比對聲母是否為 ㄗ、ㄘ、ㄙ、ㆡ，且韻母的第一個符號是 ㄧ 或 ㆪ
-    # if zu_im_siann_bu == 'ㄗ' and (first_un_bu_char == 'ㄧ' or first_un_bu_char == 'ㆪ'):
-    #     zu_im_siann_bu = 'ㄐ'
-    # elif zu_im_siann_bu == 'ㄘ' and (first_un_bu_char == 'ㄧ' or first_un_bu_char == 'ㆪ'):
-    #     zu_im_siann_bu = 'ㄑ'
-    # elif zu_im_siann_bu == 'ㄙ' and (first_un_bu_char == 'ㄧ' or first_un_bu_char == 'ㆪ'):
-    #     zu_im_siann_bu = 'ㄒ'
-    # elif zu_im_siann_bu == 'ㆡ' and (first_un_bu_char == 'ㄧ' or first_un_bu_char == 'ㆪ'):
-    #     zu_im_siann_bu = 'ㆢ'
     if siann_bu == 'z' and (un_bu[0] == 'i' or un_bu == 'inn'):
         zu_im_siann_bu = 'ㄐ'
     elif siann_bu == 'c' and (un_bu[0] == 'i' or un_bu == 'inn'):
