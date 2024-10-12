@@ -15,20 +15,29 @@ def close_db_connection(conn):
     # 關閉數據庫連接
     conn.close()
 
+
 # ==========================================================
 # 用 `漢字` 查詢《台語音標》的讀音資訊
 # ==========================================================
-def han_ji_ca_piau_im(cursor, han_ji):
+def han_ji_ca_piau_im(cursor, han_ji, reading_type="文讀音"):
     """
     根據漢字查詢其台羅音標及相關讀音資訊，並將台羅音標轉換為台語音標。
     若資料紀錄在`常用度`欄位儲存值為空值(NULL)，則將其視為 0，因此可排在查詢結果的最後。
     
     :param cursor: 數據庫游標
     :param han_ji: 欲查詢的漢字
+    :param reading_type: 查詢的讀音類型，可以是 "文讀音" 或 "白話音"
     :return: 包含讀音資訊的字典列表，包含台語音標、聲母、韻母、聲調。
     """
 
-    query = """
+    if reading_type == "文讀音":
+        reading_condition = "常用度 >= 0.61"
+    elif reading_type == "白話音":
+        reading_condition = "常用度 <= 0.60"
+    else:
+        reading_condition = "1=1"  # 查詢所有
+
+    query = f"""
     SELECT 
         識別號,
         漢字,
@@ -38,13 +47,33 @@ def han_ji_ca_piau_im(cursor, han_ji):
     FROM 
         台羅音標漢字庫
     WHERE 
-        漢字 = ?
+        漢字 = ? AND ({reading_condition})
     ORDER BY 
         COALESCE(常用度, 0) DESC;
     """
 
     cursor.execute(query, (han_ji,))
     results = cursor.fetchall()
+
+    # 如果沒有找到符合條件的讀音，則查詢所有讀音，並選擇常用度最高者
+    if not results:
+        query = """
+        SELECT 
+            識別號,
+            漢字,
+            台羅音標,
+            常用度,
+            摘要說明
+        FROM 
+            台羅音標漢字庫
+        WHERE 
+            漢字 = ?
+        ORDER BY 
+            COALESCE(常用度, 0) DESC
+        LIMIT 1;
+        """
+        cursor.execute(query, (han_ji,))
+        results = cursor.fetchall()
 
     # 定義【台羅音標】到【台語音標】的轉換規則
     tai_luo_to_tai_gi_mapping = {
@@ -85,9 +114,9 @@ def han_ji_ca_piau_im(cursor, han_ji):
 # 自「台語音標+」，分析出：聲母、韻母、聲調
 # ==========================================================
 def split_zu_im(zu_im):
-    # 先進行聲母轉換處理
-    zu_im = zu_im.replace("tsh", "c").replace("ch", "c")  # 將 tsh, ch 轉換為 c
-    zu_im = zu_im.replace("ts", "z").replace("c", "z")  # 將 ts, c 轉換為 z
+    # 聲母相容性轉換處理（將 tsh 轉換為 c；將 ts 轉換為 z）
+    zu_im = zu_im.replace("tsh", "c")   # 將 tsh 轉換為 c
+    zu_im = zu_im.replace("ts", "z")    # 將 ts  轉換為 z
 
     # 定義聲母的正規表示式，包括常見的聲母，但不包括 m 和 ng
     siann_bu_pattern = re.compile(r"(b|c|z|g|h|j|kh|k|l|m(?!\d)|ng(?!\d)|n|ph|p|s|th|t|Ø)")

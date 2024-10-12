@@ -311,3 +311,43 @@ UPDATE Han_Ji_Tian
 SET 台語音標拼音 = SUBSTR(台語音標拼音, 2)
 WHERE 台語音標拼音 LIKE 'q%';
 ```
+
+## 台羅音標漢字庫
+
+### 資料表結構（Schema）
+
+```bash
+CREATE TABLE 台羅音標漢字庫 (
+    識別號  INTEGER NOT NULL
+                 UNIQUE,
+    漢字   TEXT,
+    台羅音標 TEXT,
+    常用度  TEXT,
+    摘要說明 TEXT,
+    建立時間 TEXT    DEFAULT (DATETIME('now', 'localtime') ) 
+                 NOT NULL,
+    更新時間 TEXT    NOT NULL
+                 DEFAULT (DATETIME('now', 'localtime') ),
+    PRIMARY KEY (
+        識別號 AUTOINCREMENT
+    )
+);
+```
+
+
+### 資料更新觸發器
+
+```bash
+DROP TRIGGER IF EXISTS 紀錄更新觸發器;
+
+CREATE TRIGGER 紀錄更新觸發器
+AFTER UPDATE ON 台羅音標漢字庫
+FOR EACH ROW
+WHEN NEW.更新時間 = OLD.更新時間
+BEGIN
+    UPDATE 台羅音標漢字庫
+    SET 更新時間 = DATETIME('now', 'localtime')
+    WHERE 識別號 = NEW.識別號;
+END;
+```
+
