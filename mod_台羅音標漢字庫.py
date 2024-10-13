@@ -18,6 +18,10 @@ def close_db_connection(conn):
 
 # ==========================================================
 # 用 `漢字` 查詢《台語音標》的讀音資訊
+# 在【台羅音標漢字庫】資料表結構中，以【常用度】欄位之值，區分【文讀音】與【白話音】。
+# 文讀音：常用度 > 0.60；最常用的讀音其值為 0.80，次常用的讀音其值為 0.70；其餘則使用數值 0.69 ~ 0.61。
+# 白話音：常用度 > 0.40；最常用的讀音其值為 0.60，次常用的讀音其值為 0.50；其餘則使用數值 0.59 ~ 0.41。
+# 其　它：常用度 > 0.00；使用數值 0.40 ~ 0.01；使用時機為：（1）方言地方腔；(2) 罕見發音；(3) 尚未查證屬文讀音或白話音 。
 # ==========================================================
 def han_ji_ca_piau_im(cursor, han_ji, reading_type="文讀音"):
     """
@@ -115,8 +119,12 @@ def han_ji_ca_piau_im(cursor, han_ji, reading_type="文讀音"):
 # ==========================================================
 def split_zu_im(zu_im):
     # 聲母相容性轉換處理（將 tsh 轉換為 c；將 ts 轉換為 z）
-    zu_im = zu_im.replace("tsh", "c")   # 將 tsh 轉換為 c
-    zu_im = zu_im.replace("ts", "z")    # 將 ts  轉換為 z
+    # zu_im = zu_im.replace("tsh", "c")   # 將 tsh 轉換為 c
+    # zu_im = zu_im.replace("ts", "z")    # 將 ts  轉換為 z
+    if zu_im.startswith("tsh") or zu_im.startswith("ch"):
+        zu_im = zu_im.replace("tsh", "c", 1).replace("ch", "c", 1)  # 將 tsh, ch 轉換為 c
+    elif zu_im.startswith("ts") or zu_im.startswith("c"):
+        zu_im = zu_im.replace("ts", "z", 1).replace("c", "z", 1)  # 將 ts, c 轉換為 z
 
     # 定義聲母的正規表示式，包括常見的聲母，但不包括 m 和 ng
     siann_bu_pattern = re.compile(r"(b|c|z|g|h|j|kh|k|l|m(?!\d)|ng(?!\d)|n|ph|p|s|th|t|Ø)")

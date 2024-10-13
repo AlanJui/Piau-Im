@@ -26,10 +26,17 @@
             "console": "integratedTerminal",
         },
         {
-            "name": "a703_批次式查找及填入漢字標音",
+            "name": "a703_製作標音網頁",
             "type": "debugpy",
             "request": "launch",
-            "program": "a703_批次式查找及填入漢字標音.py",
+            "program": "a703_製作標音網頁.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "a704_批次式查找及填入漢字標音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a704_批次式查找及填入漢字標音.py",
             "console": "integratedTerminal",
         },
         {
