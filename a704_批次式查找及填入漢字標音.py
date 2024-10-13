@@ -3,9 +3,16 @@ import sys
 
 import xlwings as xw
 
+from mod_台羅音標漢字庫 import get_sound_type
 from p702_Ca_Han_Ji_Thak_Im import ca_han_ji_thak_im
-from p710_thiam_han_ji import fill_hanji_in_cells
 from p730_Tng_Sing_Bang_Iah import tng_sing_bang_iah
+
+
+# ==========================================================
+# 自動補上 Excel 檔案的副檔名 .xlsx (單個檔案處理)
+# ==========================================================
+def ensure_xlsx_extension(file_name):
+    return file_name if file_name.lower().endswith('.xlsx') else file_name + '.xlsx'
 
 # 指定虛擬環境的 Python 路徑
 venv_python = os.path.join(".venv", "Scripts", "python.exe") if sys.platform == "win32" else os.path.join(".venv", "bin", "python")
@@ -15,24 +22,14 @@ directory = r"C:\work\Piau-Im\output2"
 
 # 所有檔案名稱
 files = [
-    "【河洛話注音】金剛般若波羅蜜經001。法會因由分第一.xlsx",
-    "【河洛話注音】金剛般若波羅蜜經002。善現啟請分第二.xlsx",
-    "【河洛話注音】金剛般若波羅蜜經003。大乘正宗分第三.xlsx",
-    "【河洛話注音】金剛般若波羅蜜經004。妙行無住分第四.xlsx",
-    "【河洛話注音】金剛般若波羅蜜經005。如理實見分第五.xlsx",
-    "【河洛話注音】金剛般若波羅蜜經006。正信希有分第六.xlsx",
-    "【河洛話注音】金剛般若波羅蜜經007。無得無說分第七.xlsx",
-    "【河洛話注音】金剛般若波羅蜜經008。依法出生分第八.xlsx",
-    "【河洛話注音】金剛般若波羅蜜經009。一相無相分第九.xlsx",
-    "【河洛話注音】金剛般若波羅蜜經010。莊嚴淨土分第十.xlsx",
-    "【河洛話注音】金剛般若波羅蜜經011。無為福勝分第十一.xlsx",
-    "【河洛話注音】金剛般若波羅蜜經012。尊重正教分第十二.xlsx",
-    "【河洛話注音】金剛般若波羅蜜經013。如法受持分第十三.xlsx"
+    "【河洛話注音】桃花源記【白話音】", 
+    # "【河洛話注音】桃花源記【文讀音】", 
 ]
 
 # 迴圈遍歷所有檔案並依次執行 Python 檔案
 for file_name in files:
-    file_path = os.path.join(directory, file_name)
+    updated_file_name = ensure_xlsx_extension(file_name)
+    file_path = os.path.join(directory, updated_file_name)
 
     # 打開 Excel 檔案
     wb = xw.Book(file_path)
@@ -45,7 +42,8 @@ for file_name in files:
     # fill_hanji_in_cells(wb)     
 
     # (2) A731: 自動為漢字查找讀音，並抄寫到漢字的上方(拼音)及下方(注音)。
-    ca_han_ji_thak_im(wb, '漢字注音', 'V3')
+    type = get_sound_type(wb) 
+    ca_han_ji_thak_im(wb, '漢字注音', 'V3', type)
 
     # (3) A740: 將【漢字注音】工作表的內容，轉成 HTML 網頁檔案。
     tng_sing_bang_iah(wb, '漢字注音', 'V3')
