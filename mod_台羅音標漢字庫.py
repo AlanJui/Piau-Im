@@ -92,12 +92,6 @@ def han_ji_ca_piau_im(cursor, han_ji, reading_type="文讀音"):
         cursor.execute(query, (han_ji,))
         results = cursor.fetchall()
 
-    # 定義【台羅音標】到【台語音標】的轉換規則
-    tai_luo_to_tai_gi_mapping = {
-        'tsh': 'c',
-        'ts': 'z'
-    }
-
     # 將結果轉換為字典列表
     fields = ['識別號', '漢字', '台語音標', '常用度', '摘要說明']
     
@@ -109,9 +103,6 @@ def han_ji_ca_piau_im(cursor, han_ji, reading_type="文讀音"):
 
         # 將台羅音標轉換為台語音標
         tai_gi_im = tai_loo_im
-        # for tai_luo, tai_gi in tai_luo_to_tai_gi_mapping.items():
-        #     tai_gi_im = tai_gi_im.replace(tai_luo, tai_gi)
-
         # 更新 row_dict 中的台語音標
         row_dict['台語音標'] = tai_gi_im
 
@@ -128,6 +119,14 @@ def han_ji_ca_piau_im(cursor, han_ji, reading_type="文讀音"):
 
 # ==========================================================
 # 自「台語音標+」，分析出：聲母、韻母、聲調
+# ----------------------------------------------------------
+# 【台羅音標】到【台語音標】的轉換規則
+# tai_loo_to_tai_gi_mapping = {
+#     'tsh': 'c',
+#     'ts': 'z'
+# }
+# for tai_loo, tai_gi in tai_loo_to_tai_gi_mapping.items():
+#     tai_gi_im = tai_gi_im.replace(tai_loo, tai_gi)
 # ==========================================================
 def split_zu_im(zu_im):
     # 聲母相容性轉換處理（將 tsh 轉換為 c；將 ts 轉換為 z）
@@ -192,3 +191,4 @@ if __name__ == "__main__":
     
     # 關閉資料庫連接
     close_db_connection(conn)
+
