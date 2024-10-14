@@ -41,14 +41,16 @@ def han_ji_ca_piau_im(cursor, han_ji, reading_type="文讀音"):
     
     :param cursor: 數據庫游標
     :param han_ji: 欲查詢的漢字
-    :param reading_type: 查詢的讀音類型，可以是 "文讀音" 或 "白話音"
+    :param reading_type: 查詢的讀音類型，可以是 "文讀音"、"白話音" 或 "其它"
     :return: 包含讀音資訊的字典列表，包含台語音標、聲母、韻母、聲調。
     """
 
     if reading_type == "文讀音":
-        reading_condition = "常用度 >= 0.61"
+        reading_condition = "常用度 >= 0.61 AND 常用度 <= 1.0"
     elif reading_type == "白話音":
-        reading_condition = "常用度 <= 0.60"
+        reading_condition = "常用度 <= 0.60 AND 常用度 > 0.40"
+    elif reading_type == "其它":
+        reading_condition = "常用度 <= 0.40 AND 常用度 >= 0.01"
     else:
         reading_condition = "1=1"  # 查詢所有
 
@@ -107,8 +109,8 @@ def han_ji_ca_piau_im(cursor, han_ji, reading_type="文讀音"):
 
         # 將台羅音標轉換為台語音標
         tai_gi_im = tai_loo_im
-        for tai_luo, tai_gi in tai_luo_to_tai_gi_mapping.items():
-            tai_gi_im = tai_gi_im.replace(tai_luo, tai_gi)
+        # for tai_luo, tai_gi in tai_luo_to_tai_gi_mapping.items():
+        #     tai_gi_im = tai_gi_im.replace(tai_luo, tai_gi)
 
         # 更新 row_dict 中的台語音標
         row_dict['台語音標'] = tai_gi_im
@@ -123,7 +125,6 @@ def han_ji_ca_piau_im(cursor, han_ji, reading_type="文讀音"):
         data.append(row_dict)
     
     return data
-
 
 # ==========================================================
 # 自「台語音標+」，分析出：聲母、韻母、聲調
