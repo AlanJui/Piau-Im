@@ -21,11 +21,13 @@ def close_db_connection(conn):
 # ==========================================================
 def get_sound_type(wb):
     try:
-        reading_type = wb.names['語音類型'].refers_to_range.value
+        if '語音類型' in wb.names:
+            reading_type = wb.names['語音類型'].refers_to_range.value
+        else:
+            raise KeyError
     except KeyError:
         reading_type = "文讀音"
     return reading_type
-
 
 # ==========================================================
 # 用 `漢字` 查詢《台語音標》的讀音資訊
