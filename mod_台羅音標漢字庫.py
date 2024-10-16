@@ -32,6 +32,7 @@ def get_sound_type(wb):
 # ==========================================================
 # 用 `漢字` 查詢《台語音標》的讀音資訊
 # 在【台羅音標漢字庫】資料表結構中，以【常用度】欄位之值，區分【文讀音】與【白話音】。
+# 通用音：常用度 < 1.00；表文、白通用的讀音，最常用的讀音其值為 1.00，次常用的讀音值為 0.90，其餘則使用值為 0.89 ~ 0.81。
 # 文讀音：常用度 > 0.60；最常用的讀音其值為 0.80，次常用的讀音其值為 0.70；其餘則使用數值 0.69 ~ 0.61。
 # 白話音：常用度 > 0.40；最常用的讀音其值為 0.60，次常用的讀音其值為 0.50；其餘則使用數值 0.59 ~ 0.41。
 # 其　它：常用度 > 0.00；使用數值 0.40 ~ 0.01；使用時機為：（1）方言地方腔；(2) 罕見發音；(3) 尚未查證屬文讀音或白話音 。
@@ -39,7 +40,7 @@ def get_sound_type(wb):
 def han_ji_ca_piau_im(cursor, han_ji, reading_type="文讀音"):
     """
     根據漢字查詢其台羅音標及相關讀音資訊，並將台羅音標轉換為台語音標。
-    若資料紀錄在`常用度`欄位儲存值為空值(NULL)，則將其視為 0，因此可排在查詢結果的最後。
+    若資料紀錄在常用度欄位儲存值為空值(NULL)，則將其視為 0，因此可排在查詢結果的最後。
     
     :param cursor: 數據庫游標
     :param han_ji: 欲查詢的漢字
@@ -47,12 +48,16 @@ def han_ji_ca_piau_im(cursor, han_ji, reading_type="文讀音"):
     :return: 包含讀音資訊的字典列表，包含台語音標、聲母、韻母、聲調。
     """
 
+    # 將文白通用音視為第一優選
+    common_reading_condition = "常用度 >= 0.81 AND 常用度 <= 1.0"
+
+    # 根據不同讀音類型，添加額外的查詢條件
     if reading_type == "文讀音":
-        reading_condition = "常用度 >= 0.61 AND 常用度 <= 1.0"
+        reading_condition = f"({common_reading_condition}) OR (常用度 >= 0.61 AND 常用度 < 0.81)"
     elif reading_type == "白話音":
-        reading_condition = "常用度 <= 0.60 AND 常用度 > 0.40"
+        reading_condition = f"({common_reading_condition}) OR (常用度 > 0.40 AND 常用度 < 0.61)"
     elif reading_type == "其它":
-        reading_condition = "常用度 <= 0.40 AND 常用度 >= 0.01"
+        reading_condition = "常用度 > 0.00 AND 常用度 <= 0.40"
     else:
         reading_condition = "1=1"  # 查詢所有
 
@@ -118,6 +123,7 @@ def han_ji_ca_piau_im(cursor, han_ji, reading_type="文讀音"):
         data.append(row_dict)
     
     return data
+
 
 # ==========================================================
 # 自「台語音標+」，分析出：聲母、韻母、聲調
