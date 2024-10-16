@@ -3,6 +3,7 @@ import sys
 
 import xlwings as xw
 
+from mod_file_access import get_named_value
 from p730_Tng_Sing_Bang_Iah import tng_sing_bang_iah
 
 # 指定虛擬環境的 Python 路徑
@@ -26,8 +27,9 @@ file_name = wb.name
 print(f"檔案名稱: {file_name}")
 
 # 顯示「已輸入之拼音字母及注音符號」 
-named_range = wb.names['顯示注音輸入']  # 選擇名為 "顯示注音輸入" 的命名範圍# 選擇名為 "顯示注音輸入" 的命名範圍
-named_range.refers_to_range.value = True
+# named_range = wb.names['顯示注音輸入']  # 選擇名為 "顯示注音輸入" 的命名範圍# 選擇名為 "顯示注音輸入" 的命名範圍
+# named_range.refers_to_range.value = True
+named_range = get_named_value(wb, '顯示注音輸入', True)
 
 # (1) A720: 將 V3 儲存格內的漢字，逐個填入標音用方格。
 sheet = wb.sheets['漢字注音']   # 選擇工作表
@@ -58,5 +60,5 @@ new_file_path = os.path.join(
 wb.save(new_file_path)
 
 # 保存 Excel 檔案
-wb.close()
+# wb.close()
 

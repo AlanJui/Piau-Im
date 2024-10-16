@@ -4,6 +4,8 @@ import os
 
 import xlwings as xw
 
+from mod_file_access import get_named_value
+
 
 def create_html_file(output_path, content, title='您的標題'):
     template = f"""
@@ -32,7 +34,8 @@ def put_picture(wb, source_sheet_name):
     html_str = ""
     
     title = wb.sheets["env"].range("TITLE").value
-    web_page_title = f"《{title}》【{source_sheet_name}】\n"
+    # web_page_title = f"《{title}》【{source_sheet_name}】\n"
+    web_page_title = f"《{title}》\n"
     image_url = wb.sheets["env"].range("IMAGE_URL").value
 
     # ruff: noqa: E501
@@ -175,11 +178,14 @@ def tng_sing_bang_iah(wb, sheet_name='漢字注音', cell='V3'):
     # 產生 HTML 網頁用文字檔
     # -----------------------------------------------------
     title = wb.sheets["env"].range("TITLE").value
-    web_page_title = f"《{title}》【{source_sheet_name}】"
+    # web_page_title = f"《{title}》【{source_sheet_name}】"
+    web_page_title = f"{title}"
 
     # 確保 output 子目錄存在
+    siann_lui = get_named_value(wb, '語音類型', '文讀音')
     output_dir = 'docs'
-    output_file = f"{title}_{source_sheet_name}.html"
+    # output_file = f"{title}_{siann_lui}.html"
+    output_file = f"{title}.html"
     output_path = os.path.join(output_dir, output_file)
 
     # 開啟文字檔，準備寫入網頁內容
