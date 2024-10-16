@@ -7,6 +7,33 @@ import xlwings as xw
 
 # from openpyxl import load_workbook
 
+#----------------------------------------------------------------
+# 使用範例
+# type = get_named_value(wb, '語音類型', default_value="文讀音")
+# ca_han_ji_thak_im(wb, '漢字注音', 'V3', type)
+#----------------------------------------------------------------
+def get_named_value(wb, name, default_value=None):
+    """
+    取得 Excel 活頁簿中名稱的值，如果名稱不存在或範圍無效，則回傳預設值。
+    
+    :param wb: 打開的 Excel 活頁簿
+    :param name: 名稱
+    :param default_value: 預設值，如果名稱不存在或無效則回傳該值
+    :return: 儲存格中的值或預設值
+    """
+    try:
+        # 檢查名稱是否存在
+        if name in wb.names:
+            # 嘗試取得名稱所指的範圍
+            named_range = wb.names[name].refers_to_range
+            return named_range.value
+        else:
+            # 如果名稱不存在，回傳預設值
+            return default_value
+    except (AttributeError, com_error) as e:
+        # 捕捉 refers_to_range 相關的錯誤，回傳預設值
+        return default_value
+
 
 def get_cmd_input():
     parser = argparse.ArgumentParser(description='Process some files.')
