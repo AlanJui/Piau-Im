@@ -40,6 +40,20 @@
             "console": "integratedTerminal",
         },
         {
+            "name": "a711_批次式查找漢字標音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a711_批次式查找漢字標音.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "a712_批次式製作標音網頁",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a712_批次式製作標音網頁.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "p711_TL_Tng_Zu_Im",
             "type": "debugpy",
             "request": "launch",
