@@ -35,6 +35,17 @@ def get_named_value(wb, name, default_value=None):
         return default_value
 
 
+# ==========================================================
+# 自動補上 Excel 檔案的副檔名 .xlsx (單個檔案處理)
+# ==========================================================
+def ensure_xlsx_extension(file_name):
+    return file_name if file_name.lower().endswith('.xlsx') else file_name + '.xlsx'
+
+
+def ensure_extension_name(file_name, extension):
+    return file_name if file_name.lower().endswith(f'.{extension}') else file_name + '.xlsx'
+
+
 def get_cmd_input():
     parser = argparse.ArgumentParser(description='Process some files.')
     parser.add_argument('-d', '--dir', default='output', help='Directory path')

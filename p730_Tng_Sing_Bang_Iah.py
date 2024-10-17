@@ -70,14 +70,15 @@ def is_punctuation(char):
 # =========================================================
 # 依據指定的【注音方法】，輸出含 Ruby Tags 之 HTML 網頁
 # =========================================================
-def build_web_page(wb, sheet, source_chars, total_length):
+def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭'):
     write_buffer = ""
     
     # =========================================================
     # 輸出放置圖片的 HTML Tag
     # =========================================================
     # 寫入文章附圖
-    write_buffer += put_picture(wb, sheet.name)
+    if page_type == '含頁頭':
+        write_buffer += put_picture(wb, sheet.name)
     # =========================================================
     # 輸出 <div> tag
     # =========================================================
@@ -165,7 +166,7 @@ def build_web_page(wb, sheet, source_chars, total_length):
     return write_buffer
 
 
-def tng_sing_bang_iah(wb, sheet_name='漢字注音', cell='V3'):
+def tng_sing_bang_iah(wb, sheet_name='漢字注音', cell='V3', page_type='含頁頭'):
     global source_sheet  # 宣告 source_sheet 為全域變數
     global source_sheet_name  # 宣告 source_sheet_name 為全域變數
     global total_length  # 宣告 end_of_source_row 為全域變數
@@ -201,7 +202,7 @@ def tng_sing_bang_iah(wb, sheet_name='漢字注音', cell='V3'):
         # 自「漢字注音表」，製作各種注音法之 HTML 網頁
         # ==========================================================
         print(f"開始製作【漢字注音】網頁！")
-        html_content = build_web_page(wb, sheet, source_chars, total_length)
+        html_content = build_web_page(wb, sheet, source_chars, total_length, page_type)
 
         # 輸出到網頁檔案
         create_html_file(output_path, html_content, web_page_title)
