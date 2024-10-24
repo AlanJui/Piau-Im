@@ -8,6 +8,19 @@ import xlwings as xw
 # from openpyxl import load_workbook
 
 #----------------------------------------------------------------
+# 查詢語音類型，若未設定則預設為文讀音
+#----------------------------------------------------------------
+def get_sound_type(wb):
+    try:
+        if '語音類型' in wb.names:
+            reading_type = wb.names['語音類型'].refers_to_range.value
+        else:
+            raise KeyError
+    except KeyError:
+        reading_type = "文讀音"
+    return reading_type
+
+#----------------------------------------------------------------
 # 使用範例
 # type = get_named_value(wb, '語音類型', default_value="文讀音")
 # ca_han_ji_thak_im(wb, '漢字注音', 'V3', type)

@@ -3,12 +3,13 @@ import sys
 
 import xlwings as xw
 
-from mod_台羅音標漢字庫 import get_sound_type
-from p702_Ca_Han_Ji_Thak_Im import ca_han_ji_thak_im
-from p730_Tng_Sing_Bang_Iah import tng_sing_bang_iah
+from mod_file_access import get_sound_type
+
+# from p702_Ca_Han_Ji_Thak_Im import ca_han_ji_thak_im
+from p703_Kong_Un_Ca_Thak_Im import ca_han_ji_thak_im
 
 # 指定虛擬環境的 Python 路徑
-venv_python = os.path.join(".venv", "Scripts", "python.exe") if sys.platform == "win32" else os.path.join(".venv", "bin", "python")
+# venv_python = os.path.join(".venv", "Scripts", "python.exe") if sys.platform == "win32" else os.path.join(".venv", "bin", "python")
 
 # (0) 取得專案根目錄。
 # 使用已打開且處於作用中的 Excel 工作簿
@@ -38,7 +39,9 @@ sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
 
 # (2) A731: 自動為漢字查找讀音，並抄寫到漢字的上方(拼音)及下方(注音)。
 type = get_sound_type(wb) 
-ca_han_ji_thak_im(wb, '漢字注音', 'V3', type)
+# ca_han_ji_thak_im(wb, '漢字注音', 'V3', type)
+# ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', type="文讀音", db_name='Tai_Loo_Han_Ji_Khoo.db', module_name='mod_台羅音標漢字庫', function_name='han_ji_ca_piau_im')
+ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', type="文讀音", db_name='Kong_Un.db', module_name='mod_廣韻', function_name='han_ji_ca_piau_im')
 
 # (3) A740: 將【漢字注音】工作表的內容，轉成 HTML 網頁檔案。
 # tng_sing_bang_iah(wb, '漢字注音', 'V3')
