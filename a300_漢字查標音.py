@@ -6,9 +6,9 @@ import sqlite3
 import sys
 
 from mod_廣韻 import (
+    Kong_Un_Tng_Tai_Loo,
     ca_siann_bu_piau_im,
     ca_un_bu_piau_im,
-    connect_to_db2,
     han_ji_ca_piau_im,
 )
 
@@ -75,12 +75,16 @@ if __name__ == "__main__":
         print(f"韻目：{韻目}，{等}等，{呼}口 ({等呼})")
 
         # 組合拼音
-        廣韻調名 = record['廣韻調名']
-        台羅聲調 = record['台羅聲調']
+        # 廣韻調名 = record['廣韻調名']
+        # 台羅聲調 = record['台羅聲調']
+        廣韻調名 = f'{清濁[-1]}{調}' 
+        台羅聲調 = Kong_Un_Tng_Tai_Loo(廣韻調名)
         print('\n-------------------------------------------------')
-        print('【聲調】：\n')
-        print(f'上字取聲之【清濁】，下字取調之【陰陽】，得：{廣韻調名}調；')
-        print(f'推導【台羅聲調】得：第 {台羅聲調} 調。')
+        print('聲調：上取聲母分【清濁】，下取韻母定【開合】。\n')
+        print(f' (1) 清濁：上字得【{清濁[-1]}】聲；')
+        print(f' (2) 聲調：下字得【{調}】聲調；')
+        print(f' (3) 台羅聲調：第【{台羅聲調}】調。')
+
         print('\n-------------------------------------------------')
         print(f'【切語拼音】：\n')
         print(f'台語音標：{聲母標音}{韻母標音}{台羅聲調}')
