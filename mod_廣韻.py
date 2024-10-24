@@ -163,3 +163,25 @@ def huan_ciat_ca_piau_im(cursor, siong_ji, ha_ji):
         '韻目', '等呼', '等', '呼', '廣韻調名', '台羅聲調', '字義識別號'
     ]
     return [dict(zip(fields, result)) for result in results]
+
+
+def Kong_Un_Tng_Tai_Loo(廣韻調名):
+    """
+    將【廣韻調名】轉換成【台羅聲調】號
+    清平(1)、清上(2)、清去(3)、清入(4)
+    濁平(5)、濁上(6)、濁去(7)、濁入(8)
+    
+    :param 廣韻調名: 廣韻的調名
+    :return: 對應的台羅聲調號
+    """
+    調名對照 = {
+        "清平": 1,
+        "清上": 2,
+        "清去": 3,
+        "清入": 4,
+        "濁平": 5,
+        "濁上": 6,
+        "濁去": 7,
+        "濁入": 8
+    }
+    return 調名對照.get(廣韻調名, None)
