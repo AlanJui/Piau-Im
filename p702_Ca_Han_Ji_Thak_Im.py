@@ -1,4 +1,5 @@
 # 查找漢字讀音，並標註台語音標和注音符號
+import importlib
 import sqlite3
 
 import xlwings as xw
@@ -23,7 +24,17 @@ def is_valid_han_ji(char):
     return char not in punctuation_marks
 
 
-def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', type="文讀音"):
+# =========================================================
+# 動態載入模組和函數
+# =========================================================
+def load_module_function(module_name, function_name):
+    module = importlib.import_module(module_name)
+    return getattr(module, function_name)
+
+
+# def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', type="文讀音", db_name='Tai_Loo_Han_Ji_Khoo.db', module_name='mod_台羅音標漢字庫', function_name='han_ji_ca_piau_im'):
+# def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', type="文讀音"):
+def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', type="文讀音", db_name='Tai_Loo_Han_Ji_Khoo.db'):
     # 顯示「已輸入之拼音字母及注音符號」 
     named_range = wb.names['顯示注音輸入']  # 選擇名為 "顯示注音輸入" 的命名範圍# 選擇名為 "顯示注音輸入" 的命名範圍
     named_range.refers_to_range.value = True
@@ -55,7 +66,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', type="文讀音"
     # 漢字下方儲存：台語注音符號
     #--------------------------------------------------------------------------------------------------------
     # 在所有測試開始前，連接資料庫
-    conn = sqlite3.connect('Tai_Loo_Han_Ji_Khoo.db')  # 替換為實際資料庫路徑
+    conn = sqlite3.connect(db_name)  # 替換為實際資料庫路徑
     cursor = conn.cursor()
 
     # 確認 V3 不為空
