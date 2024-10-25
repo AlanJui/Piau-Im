@@ -71,7 +71,7 @@ def han_ji_ca_piau_im(cursor, han_ji):
     SELECT *
     FROM 廣韻漢字庫
     WHERE 漢字 = ?
-    ORDER BY COALESCE(台羅聲調, 0) DESC;
+    ORDER BY COALESCE(常用度, 0) DESC;
     """
     cursor.execute(query, (han_ji,))
     results = cursor.fetchall()
@@ -268,10 +268,10 @@ def Kong_Un_Tng_Tai_Loo(廣韻調名):
 # ==========================================================
 def split_zu_im(zu_im):
     # 聲母相容性轉換處理（將 tsh 轉換為 c；將 ts 轉換為 z）
-    if zu_im.startswith("tsh") or zu_im.startswith("ch"):
-        zu_im = zu_im.replace("tsh", "c", 1).replace("ch", "c", 1)  # 將 tsh, ch 轉換為 c
-    elif zu_im.startswith("ts") or zu_im.startswith("c"):
-        zu_im = zu_im.replace("ts", "z", 1).replace("c", "z", 1)  # 將 ts, c 轉換為 z
+    if zu_im.startswith("tsh"):
+        zu_im = zu_im.replace("tsh", "c", 1)  # 將 tsh, ch 轉換為 c
+    elif zu_im.startswith("ts"):
+        zu_im = zu_im.replace("ts", "z", 1)  # 將 ts, c 轉換為 z
 
     # 定義聲母的正規表示式，包括常見的聲母，並加入 Ø 表示無聲母
     siann_bu_pattern = re.compile(r"(b|c|z|g|h|j|kh|k|l|m(?!\d)|ng(?!\d)|n|ph|p|s|th|t|Ø)")
