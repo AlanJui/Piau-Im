@@ -32,9 +32,9 @@ def load_module_function(module_name, function_name):
     return getattr(module, function_name)
 
 
-# def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', type="文讀音", db_name='Tai_Loo_Han_Ji_Khoo.db', module_name='mod_台羅音標漢字庫', function_name='han_ji_ca_piau_im'):
 # def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', type="文讀音"):
-def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', type="文讀音", db_name='Tai_Loo_Han_Ji_Khoo.db'):
+# def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', type="文讀音", db_name='Tai_Loo_Han_Ji_Khoo.db'):
+def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', type="文讀音", db_name='Tai_Loo_Han_Ji_Khoo.db', module_name='mod_台羅音標漢字庫', function_name='han_ji_ca_piau_im'):
     # 顯示「已輸入之拼音字母及注音符號」 
     named_range = wb.names['顯示注音輸入']  # 選擇名為 "顯示注音輸入" 的命名範圍# 選擇名為 "顯示注音輸入" 的命名範圍
     named_range.refers_to_range.value = True
@@ -60,6 +60,9 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', type="文讀音"
     # 計算字串的總長度
     total_length = len(v3_value)
 
+    # 動態載入查找函數
+    han_ji_ca_piau_im = load_module_function(module_name, function_name)
+    
     #--------------------------------------------------------------------------------------------------------
     # 漢字所在儲存： 5, 9, 13, ... 
     # 漢字上方儲存：台語音標
