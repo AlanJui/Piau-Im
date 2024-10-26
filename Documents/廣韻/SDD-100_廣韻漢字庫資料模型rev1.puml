@@ -1,0 +1,148 @@
+
+@startuml
+skin rose
+
+class 字義資料表 {
+    - 識別號: integer
+    - 廣韻小字序: integer
+    - 漢字: text
+    - 字義摘要: text
+
+    -privateMethod()http://www.plantuml.com/plantuml/img/tLVRJXfH57qtuH_c4TFGIEybJUE3httg1pHK9oqfLGAZQMAQG8sLEXAaeUWKBq5I12jAQzEWe7uCdBdyHVVCcO4v5uPfVIjlxCivUw-rzkRmV6Oc59wQUe4wLME_etOFK7CBNNpNpzRKagBMAsXFJefBuTk9nRVnm4HWOZebHPEIzINr9ZOl91TIeccVZKTJAG6IjQi6JjOhTM4vC2709oJepMsK_QOh-n4XDY-9hyIauy4NerRUkZZF-7594K4Itqc37EiQjR2jrpAEn_Obah6bg2G-4wNN2tF1IMozbLXy6O_D3etlpNYws2SXfve13494GDqlMh5knnvMZJKv69vqTKmb-EYutrw7OBZHAqGU5s9Nv1N2WqwjAyR-6GLdksssU56B24an6YVh94DnOLIw1O6U-QaVNLEUV4kxMdKyW-em-XHmeT1J0MNNzAEz0Juc-laIbDPBRy0XwcckbyvfvRQnjODP2zvnCq4b-s027ufQEMtrS0mVAn1hLFR8_ZIb2s0QA_N-POxqu9CfwDkhwdM6FI6TKOk_AU1SlHZbZvJpWwBNEuuDWqdrRe99DGTWccXYQ_zSxgKtWHx8WWv05Brq8NZNXIQTxMUITsJZQnaVn-XWS15F8JoFfbpgZH-Cs8nIGvMxQkbShMGfU4ldS8vsNBDg8ox9PVeNHPVinmfGfWHe1fwIqhl7aPxiNtfmebO-yHGT3i43QnCn9XPbjqOvppfwPMDqflRh01OT1MXnbyAnNCQpp9qbUlZDseyh57lMPOoD7Qpc9rJeCZPMSdGG9ee_JF9V3fFi6YPyBi458myOAXmGlE_I1Z_JlqAy_4ohf0myoUJ1ZWdcaVJFXEZPp-OguVpgzAzN68-5Fn-n8GiU-7EMsWE6Y_zqgL5c01uZFC9FlhN60u-tbHjoi03an59yI89jv_WMkzcjKXqNvILv-WLqinKs-cKp0bsyym1QXYvo6pfmsm0vsYxkmXi1bKvS3vzDC8ACKNxTrBPhFarjFwAqFSXVlWaw9ChyKeTaaSyq-zV4fGbuiWKVCx8O9liMnure7qaaoHWv3zFY_1pyq_a3
+    +publicMethod()
+}
+
+字義資料表 <-- 廣韻漢字庫 : 引用字義解釋(1)
+
+class 廣韻漢字庫 {
+    - 識別號: integer
+    - 上字表識別號: integer
+    - 下字表識別號: integer
+    - 字義表識別號: integer
+    - 漢字: text
+    - 標音: text
+    - 常用度: real
+    - 上字: text
+    - 下字: text
+    - 廣韻聲調: text
+    - 台羅聲調: integer
+}
+
+廣韻漢字庫 --> 切語上字表 : 取用「聲母」相關資料(2)
+
+class 切語上字表 {
+    - 識別號: integer
+    - 聲母對照表識別號: integer
+    - 七聲類: text
+    - 發音部位: text
+    - 聲母: text
+    - 清濁: text
+    - 發送收: text
+    - 切語上字集: text
+    - 備註: text
+}
+
+切語上字表 --> 聲母對照表 :  取聲母之【台語音標】(3)
+
+class 聲母對照表 {
+    - 識別號: integer
+    - 國際音標: text
+    - 台語音標: text
+    - 台羅音標: text
+    - 白話字: text
+    - 閩拼方案: text
+    - 方音符號: text
+    - 十五音: text
+}
+
+廣韻漢字庫 --> 切語下字表 : 取用韻母相關資料(4)
+
+class 切語下字表 {
+    - 識別號: integer
+    - 韻目表識別號: integer
+    - 韻目標音對照識別號: integer
+    - 韻目列號: integer
+    - 韻系行號: integer
+    - 韻目索引: text
+    - 攝: text
+    - 四聲調號: integer
+    - 調: text
+    - 目次: text
+    - 韻目: text
+    - 韻類: text
+    - 等呼: text
+    - 等: integer
+    - 呼: text
+    - 韻母: text
+    - 切語下字集: text
+    - 備註: text
+}
+
+切語下字表 --> 韻母標音對照表 : 取用韻母之標音(5)
+
+class 韻母標音對照表 {
+    - 識別號: integer
+    - 韻目識別號: integer
+    - 韻母: text
+    - 韻目列號: text
+    - 攝: text
+    - 韻類: text
+    - 四聲韻目: text
+    - 等呼: text
+    - 等: integer
+    - 呼: text
+    - 舒聲標音: text
+    - 促聲標音: text
+}
+
+韻母標音對照表 --> 韻母對照表 : 取用韻母之【台語音標】(6)
+
+class 韻母對照表 {
+    - 識別號: integer
+    - 國際音標: text
+    - 台語音標: text
+    - 台羅音標: text
+    - 白話字: text
+    - 閩拼方案: text
+    - 方音符號: text
+    - 十五音: text
+    - 十五音舒促聲: text
+    - 十五音序: integer
+}
+
+韻母標音對照表 --> 韻目表 : 取用韻目之相關資料(7)
+
+class 韻目表 {
+    - 識別號: integer
+    - 韻目方陣識別號: integer
+    - 韻目: text
+    - 韻目列號: integer
+    - 攝: text
+    - 四聲調號: integer
+    - 調: text
+    - 廣韻聲調: text
+    - 舒促聲: text
+    - 目次序號: text
+    - 目次: text
+}
+
+韻目表 --> 韻攝清單 : 取用【攝】及【四聲韻目】(8)
+
+class 韻攝清單 {
+    - 韻目列號: integer
+    - 攝: text
+    - 四聲韻目: text
+}
+
+韻目表 --> 韻目方陣表 : 取用「韻目相關資料」(9)
+
+class 韻目方陣表 {
+    - 識別號: integer
+    - 韻目: text
+    - 韻目列號: integer
+    - 攝: text
+    - 廣韻聲調: text
+    - 目次序號: integer
+}
+
+@enduml
