@@ -24,13 +24,13 @@ if __name__ == "__main__":
     # 建立資料庫連線
     connection = sqlite3.connect('Kong_Un.db')
     cursor = connection.cursor()
-    
+
     han_ji_piau_im = han_ji_ca_piau_im(cursor, beh_cha_e_han_ji)
 
     os.system('cls')
     for record in han_ji_piau_im:
-        上字 = record['上字']    
-        下字 = record['下字']    
+        上字 = record['上字']
+        下字 = record['下字']
 
         # 顯示結果
         print('\n=================================================')
@@ -69,7 +69,7 @@ if __name__ == "__main__":
         韻母其它標音 = ca_un_bu_piau_im(cursor, 韻母標音)
         韻母國際音標 = 韻母其它標音[0]['國際音標韻母']
         韻母方音符號 = 韻母其它標音[0]['方音韻母']
-        print(f"切語下字 = {下字}") 
+        print(f"切語下字 = {下字}")
         print(f"韻母：{韻母} [{韻母標音}]，國際音標：/{韻母國際音標}/，方音符號：{韻母方音符號}")
         print(f"攝：{攝}，調：{調}聲，目次：{目次}")
         print(f"韻目：{韻目}，{等}等，{呼}口 ({等呼})")
@@ -77,10 +77,10 @@ if __name__ == "__main__":
         # 組合拼音
         # 廣韻調名 = record['廣韻調名']
         # 台羅聲調 = record['台羅聲調']
-        廣韻調名 = f'{清濁[-1]}{調}' 
+        廣韻調名 = f'{清濁[-1]}{調}'
         台羅聲調 = Kong_Un_Tng_Tai_Loo(廣韻調名)
         print('\n-------------------------------------------------')
-        print('聲調：上取聲母分【清濁】，下取韻母定【開合】。\n')
+        print('【聲調】：上取聲母分【清濁】，下取韻母定【開合】。\n')
         print(f' (1) 清濁：上字得【{清濁[-1]}】聲；')
         print(f' (2) 聲調：下字得【{調}】聲調；')
         print(f' (3) 台羅聲調：第【{台羅聲調}】調。')
