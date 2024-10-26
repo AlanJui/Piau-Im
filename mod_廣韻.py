@@ -56,7 +56,7 @@ def han_ji_ca_piau_im(cursor, han_ji):
     """
     根據漢字查詢其讀音資訊。 若資料紀錄在`台羅聲調`欄位儲存值為空值(NULL)
     ，則將其視為 0，因此可排在查詢結果的最後。
-    
+
     :param cursor: 數據庫游標
     :param han_ji: 欲查詢的漢字
     :return: 包含讀音資訊的字典列表
@@ -75,20 +75,20 @@ def han_ji_ca_piau_im(cursor, han_ji):
     """
     cursor.execute(query, (han_ji,))
     results = cursor.fetchall()
-    
+
     # 將結果轉換為字典列表
     fields = [
-        '字號', '漢字', '標音', '上字', '下字', '上字號', '聲母', '聲母標音', '七聲類',
+        '字號', '漢字', '標音', '常用度', '上字', '下字', '上字號', '聲母', '聲母標音', '七聲類',
         '清濁', '發送收', '下字號', '韻母', '韻母標音', '韻目列號', '攝', '調', '目次',
         '韻目', '等呼', '等', '呼', '廣韻調名', '台羅聲調', '字義識別號'
-    ]   
+    ]
     return [dict(zip(fields, result)) for result in results]
 
 
 def ca_siann_bu_piau_im(cursor, siann_bu):
     """
     根據聲母標音查詢其國際音標聲母和方音聲母。
-    
+
     :param cursor: 數據庫游標
     :param siann_bu: 欲查詢的聲母標音（台語音標）
     :return: 包含國際音標聲母和方音聲母的字典列表
@@ -105,7 +105,7 @@ def ca_siann_bu_piau_im(cursor, siann_bu):
     """
     cursor.execute(query, (siann_bu,))
     results = cursor.fetchall()
-    
+
     fields = ['國際音標聲母', '方音聲母']
     return [dict(zip(fields, result)) for result in results]
 
@@ -113,7 +113,7 @@ def ca_siann_bu_piau_im(cursor, siann_bu):
 def ca_un_bu_piau_im(cursor, un_bu):
     """
     根據韻母標音查詢其國際音標韻母和方音韻母。
-    
+
     :param cursor: 數據庫游標
     :param un_bu: 欲查詢的韻母標音（台語音標）
     :return: 包含國際音標韻母和方音韻母的字典列表
@@ -130,7 +130,7 @@ def ca_un_bu_piau_im(cursor, un_bu):
     """
     cursor.execute(query, (un_bu,))
     results = cursor.fetchall()
-    
+
     fields = ['國際音標韻母', '方音韻母']
     return [dict(zip(fields, result)) for result in results]
 
@@ -138,7 +138,7 @@ def ca_un_bu_piau_im(cursor, un_bu):
 def huan_ciat_ca_piau_im(cursor, siong_ji, ha_ji):
     """
     根據反切上字和下字查詢符合條件的所有漢字及其讀音資訊。
-    
+
     :param cursor: 數據庫游標
     :param siong_ji: 反切上字
     :param ha_ji: 反切下字
@@ -156,7 +156,7 @@ def huan_ciat_ca_piau_im(cursor, siong_ji, ha_ji):
     """
     cursor.execute(query, (siong_ji, ha_ji))
     results = cursor.fetchall()
-    
+
     # 將結果轉換為字典列表
     fields = [
         '字號', '漢字', '標音', '上字', '下字', '上字號', '聲母', '聲母標音', '七聲類',
@@ -213,7 +213,7 @@ def TL_Tng_Zu_Im(siann_bu, un_bu, siann_tiau, cursor):
     # - xform/ㄙ(ㄧ|ㆪ)/ㄒ$1/
     # - xform/ㆡ(ㄧ|ㆪ)/ㆢ$1/
     #=======================================================================
-    
+
     # 比對聲母是否為 ㄗ、ㄘ、ㄙ、ㆡ，且韻母的第一個符號是 ㄧ 或 ㆪ
     if siann_bu == 'z' and (un_bu[0] == 'i' or un_bu == 'inn'):
         zu_im_siann_bu = 'ㄐ'
@@ -238,7 +238,7 @@ def Kong_Un_Tng_Tai_Loo(廣韻調名):
     將【廣韻調名】轉換成【台羅聲調】號
     清平(1)、清上(2)、清去(3)、清入(4)
     濁平(5)、濁上(6)、濁去(7)、濁入(8)
-    
+
     :param 廣韻調名: 廣韻的調名
     :return: 對應的台羅聲調號
     """
@@ -275,7 +275,7 @@ def split_zu_im(zu_im):
 
     # 定義聲母的正規表示式，包括常見的聲母，並加入 Ø 表示無聲母
     siann_bu_pattern = re.compile(r"(b|c|z|g|h|j|kh|k|l|m(?!\d)|ng(?!\d)|n|ph|p|s|th|t|Ø)")
-    
+
     # 韻母為 m 或 ng 這種情況的正規表示式 (m\d 或 ng\d)
     un_bu_as_m_or_ng_pattern = re.compile(r"(m|ng)\d")
 
@@ -319,7 +319,7 @@ def split_zu_im(zu_im):
 
 #     # 定義聲母的正規表示式，包括常見的聲母，但不包括 m 和 ng
 #     siann_bu_pattern = re.compile(r"(b|c|z|g|h|j|kh|k|l|m(?!\d)|ng(?!\d)|n|ph|p|s|th|t|Ø)")
-    
+
 #     # 韻母為 m 或 ng 這種情況的正規表示式 (m\d 或 ng\d)
 #     un_bu_as_m_or_ng_pattern = re.compile(r"(m|ng)\d")
 

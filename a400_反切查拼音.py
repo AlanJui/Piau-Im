@@ -31,17 +31,19 @@ if __name__ == "__main__":
     # 建立資料庫連線
     connection = sqlite3.connect('Kong_Un.db')
     cursor = connection.cursor()
-    
+
     os.system('cls')
-    
+
     切語上字 = han_ji_ca_piau_im(cursor, siong_ji)
     for record in 切語上字:
         切語上字 = record["漢字"]
 
         # 顯示結果
         print('\n=================================================')
+        print(f'查詢切語：{ciat_gu}')
 
         # 查詢反切上字
+        print('\n-------------------------------------------------')
         print(f'切語上字：【{record["漢字"]}】(字號：{record["字號"]})\n')
         聲母 = record['聲母']
         聲母標音 = record['聲母標音']
@@ -78,7 +80,7 @@ if __name__ == "__main__":
         print(f"韻目：{韻目}，{等}等，{呼}口 ({等呼})")
 
     # 組合拼音
-    廣韻調名 = f'{清濁[-1]}{調}' 
+    廣韻調名 = f'{清濁[-1]}{調}'
     台羅聲調 = Kong_Un_Tng_Tai_Loo(廣韻調名)
     print('\n-------------------------------------------------')
     print('聲調：上取聲母分【清濁】，下取韻母定【開合】。\n')
