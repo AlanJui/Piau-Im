@@ -37,7 +37,7 @@ CREATE TABLE 廣韻漢字庫 (
     FOREIGN KEY (
         上字號
     )
-    REFERENCES 切語上字表 (識別號) 
+    REFERENCES 切語上字表 (識別號)
 );
 ```
 
@@ -119,7 +119,7 @@ CREATE TABLE 切語下字表 (
     FOREIGN KEY (
         韻目識別號
     )
-    REFERENCES 韻目資料表 (韻目識別號) 
+    REFERENCES 韻目資料表 (韻目識別號)
 );
 ```
 
@@ -173,7 +173,7 @@ CREATE TABLE 韻目資料表 (
     FOREIGN KEY (
         韻目方陣識別號
     )
-    REFERENCES 韻目方陣表 (識別) 
+    REFERENCES 韻目方陣表 (識別)
 );
 ```
 
@@ -240,5 +240,21 @@ CREATE TABLE 聲調表 (
     PRIMARY KEY (
         識別號 AUTOINCREMENT
     )
+);
+```
+
+
+```sql
+CREATE TABLE 韻母對照表 (
+    識別號    INTEGER,
+    國際音標韻母 TEXT,
+    台語音標韻母 TEXT,
+    台羅韻母   TEXT,
+    白話字韻母  TEXT,
+    閩拼韻母   TEXT,
+    方音韻母   TEXT,
+    十五音韻母  TEXT,
+    十五音舒促聲 TEXT,
+    十五音序   INTEGER
 );
 ```
