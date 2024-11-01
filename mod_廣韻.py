@@ -257,7 +257,7 @@ def Kong_Un_Tng_Tai_Loo(廣韻調名):
         "清去": 3,
         "清入": 4,
         "濁平": 5,
-        "濁上": 6,
+        "濁上": 2,
         "濁去": 7,
         "濁入": 8
     }
@@ -330,6 +330,8 @@ def split_zu_im(zu_im):
             un_bu = zu_im[:-1]  # 韻母是剩下的部分，去掉最後的聲調
 
         tiau = zu_im[-1]  # 最後一個字符是聲調
+        if tiau == '6':
+            tiau = '2'  # 將 6 轉換為 2
 
     result += [siann_bu]
     result += [un_bu]
