@@ -21,7 +21,7 @@ def han_ji_ca_piau_im(cursor, han_ji):
     query = """
     SELECT 漢字號, 漢字, 漢字標音, 常用度, 上字, 下字, 字義解釋,
            七聲類, 發音部位, 聲母, 聲母標音, 清濁, 發送收,
-           韻母, 韻母標音, 攝, 調, 韻目, 目次, 等呼, 等, 呼
+           韻母, 調, 韻母標音, 攝, 韻系列號, 韻系, 韻目, 目次, 等呼, 等, 呼
     FROM 漢字檢視
     WHERE 漢字 = ?
     ORDER BY COALESCE(常用度, 0) DESC;
@@ -38,7 +38,7 @@ def han_ji_ca_piau_im(cursor, han_ji):
     fields = [
         '字號', '漢字', '標音', '常用度', '上字', '下字', '字義解釋',
         '七聲類', '發音部位', '聲母', '聲母標音', '清濁', '發送收',
-        '韻母', '韻母標音', '攝', '調', '韻目', '目次', '等呼', '等', '呼'
+        '韻母', '調', '韻母標音', '攝', '韻系列號', '韻系', '韻目', '目次', '等呼', '等', '呼'
     ]
     return [dict(zip(fields, result)) for result in results]
 
@@ -124,6 +124,57 @@ def huan_ciat_ca_piau_im(cursor, siong_ji, ha_ji):
     return [dict(zip(fields, result)) for result in results]
 
 
+# ==========================================================
+# 台羅音標轉換為【十五音】切韻標音
+def TL_Tng_Sip_Ngoo_Im(siann_bu, un_bu, siann_tiau, cursor):
+    """
+    根據傳入的台羅音標聲母、韻母、聲調，轉換成對應的十五音切韻標音
+    :param siann_bu: 聲母 (台羅音標)
+    :param un_bu: 韻母 (台羅音標)
+    :param siann_tiau: 聲調 (台羅音標中的數字)
+    :param cursor: 資料庫游標
+    :return: 包含十五音標音的字典
+    """
+
+    # 查詢聲母對照表，將台羅音標的聲母轉換成十五音
+    cursor.execute("SELECT 十五音 FROM 聲母對照表 WHERE 台語音標 = ?", (siann_bu,))
+    siann_bu_result = cursor.fetchone()
+    if siann_bu_result:
+        sni_siann_bu = siann_bu_result[0]  # 取得十五音
+    else:
+        sni_siann_bu = ''  # 無聲母的情況
+
+    # 查詢韻母對照表，將台羅音標的韻母轉換成十五音
+    cursor.execute("SELECT 十五音 FROM 韻母對照表 WHERE 台語音標 = ?", (un_bu,))
+    un_bu_result = cursor.fetchone()
+    if un_bu_result:
+        sni_un_bu = un_bu_result[0]  # 取得十五音
+    else:
+        sni_un_bu = ''
+
+    # 查詢聲調對照表，將台羅音標的聲調轉換成十五音的調符
+    cursor.execute("SELECT 十五音聲調 FROM 聲調對照表 WHERE 台羅調號 = ?", (siann_tiau,))
+    siann_tiau_result = cursor.fetchone()
+    if siann_tiau_result:
+        sni_siann_tiau = siann_tiau_result[0]  # 取得十五音調符
+    else:
+        sni_siann_tiau = ''
+
+    #=======================================================================
+    # 【聲母】校調（如有需要，可根據十五音的規則進行聲母的調整）
+    #-----------------------------------------------------------------------
+    # 此處暫無特別的聲母校調規則，如有需要請添加
+    #=======================================================================
+
+    return {
+        '標音': f"{sni_un_bu}{sni_siann_tiau}{sni_siann_bu}",
+        '聲母': sni_siann_bu,
+        '韻母': sni_un_bu,
+        '聲調': sni_siann_tiau
+    }
+
+
+# 台羅音標轉換為方音符號
 def TL_Tng_Zu_Im(siann_bu, un_bu, siann_tiau, cursor):
     """
     根據傳入的台語音標聲母、韻母、聲調，轉換成對應的方音符號
