@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "csv01_更新漢字表資料",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "csv01_更新【漢字表】資料.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "a700_産生作業用工作暫存檔",
             "type": "debugpy",
             "request": "launch",
@@ -263,7 +270,7 @@
             "program": "a400_反切查拼音.py",
             "console": "integratedTerminal",
             "args": [
-                "德紅"
+                "烏候"
             ]
         },
         {
