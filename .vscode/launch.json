@@ -5,6 +5,28 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "a800_漢字查十五音標音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a800_漢字查十五音標音.py",
+            "console": "integratedTerminal",
+            "args": [
+                "凍"
+            ]
+        },
+        {
+            "name": "a801_十五音切讀音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a801_十五音切讀音.py",
+            "console": "integratedTerminal",
+            "args": [
+                "君",
+                "五",
+                "求"
+            ]
+        },
+        {
             "name": "csv01_更新漢字表資料",
             "type": "debugpy",
             "request": "launch",
