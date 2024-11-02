@@ -14,13 +14,19 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     # 取得使用者之輸入：欲查詢讀音的漢字
-    beh_cha_e_han_ji = sys.argv[1]
+    beh_ca_e_han_ji = sys.argv[1]
 
     # 建立資料庫連線
     connection = sqlite3.connect('雅俗通十五音字典.db')
     cursor = connection.cursor()
 
-    han_ji_piau_im = han_ji_ca_piau_im(cursor, beh_cha_e_han_ji)
+    han_ji_piau_im = han_ji_ca_piau_im(cursor, beh_ca_e_han_ji)
+
+    # 檢查是否查找到結果
+    if not han_ji_piau_im:
+        print("查找不到漢字：【{beh_ca_e_han_ji}】。")
+        connection.close()
+        sys.exit(-1)
 
     os.system('cls')
     for record in han_ji_piau_im:
