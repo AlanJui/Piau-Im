@@ -32,7 +32,7 @@ def create_html_file(output_path, content, title='您的標題'):
 
 def put_picture(wb, source_sheet_name):
     html_str = ""
-    
+
     title = wb.sheets["env"].range("TITLE").value
     # web_page_title = f"《{title}》【{source_sheet_name}】\n"
     web_page_title = f"《{title}》\n"
@@ -48,10 +48,11 @@ def put_picture(wb, source_sheet_name):
         "</div>\n"
     )
     # 寫入文章附圖
-    html_str = f"《{title}》【{source_sheet_name}】\n"
+    # html_str = f"《{title}》【{source_sheet_name}】\n"
+    html_str = f"{title}\n"
     # html_str += div_tag % (title, image_url)
     html_str += (div_tag % (title, image_url) + "\n")
-    return html_str 
+    return html_str
 
 
 # =========================================================
@@ -61,7 +62,7 @@ def is_punctuation(char):
     # 如果 char 是 None，直接返回 False
     if char is None:
         return False
-    
+
     # 可以根據需要擴充此列表以判斷各種標點符號
     punctuation_marks = "，。！？；：、（）「」『』《》……"
     return char in punctuation_marks
@@ -72,7 +73,7 @@ def is_punctuation(char):
 # =========================================================
 def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭'):
     write_buffer = ""
-    
+
     # =========================================================
     # 輸出放置圖片的 HTML Tag
     # =========================================================
@@ -112,12 +113,12 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭')
                     ruby_tag = ""
                     src_char = source_chars[index]  # 取得目前欲處理的【漢字】
                     if src_char == "\n":
-                        # 若遇到換行字元，退出迴圈 
+                        # 若遇到換行字元，退出迴圈
                         write_buffer += ("</p><p>\n")
                         index += 1
                         print("\n")
-                        break;  
-                    else: 
+                        break;
+                    else:
                         han_ji = sheet.range((row, col)).value  # 取得漢字
                         # 當 han_ji 是標點符號時，不需要注音
                         if is_punctuation(han_ji):
@@ -137,7 +138,7 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭')
                             # =========================================================
                             # 將已注音之漢字加入【漢字注音表】
                             # =========================================================
-                            # ruby_tag = f"""  
+                            # ruby_tag = f"""
                             # <ruby>
                             #     <rb>{han_ji}</rb>
                             #     <rt>{lo_ma_im_piau}</rt>
@@ -160,7 +161,7 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭')
         # 輸出 </div>
         # =========================================================
         html_str = "</p></div>"
-        write_buffer += html_str        
+        write_buffer += html_str
 
     # 返回網頁輸出暫存區
     return write_buffer
@@ -206,5 +207,5 @@ def tng_sing_bang_iah(wb, sheet_name='漢字注音', cell='V3', page_type='含�
 
         # 輸出到網頁檔案
         create_html_file(output_path, html_content, web_page_title)
-        
+
         print(f"【漢字注音】網頁製作完畢！")
