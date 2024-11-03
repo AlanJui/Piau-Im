@@ -1,17 +1,17 @@
 #==============================================================================
 # 透過 Excel ，使用廣韻的反切方法，查找漢字的羅馬拼音。
-# 
+#
 # 操作方式：
 #  - 輸入欲查詢羅馬拼音之漢字；
 #  - 輸入廣韻的查找索引資料。
-# 
+#
 #   ipython a900_廣韻反切查羅馬拼音.ipynb 攝 "書涉 (《廣韻·入聲·葉·攝》)"
 #==============================================================================
 
 import sys
 
-from mod_huan_tshiat import query_tiau_ho, tshu_tiau
-from mod_Query_for_Tshiat_Gu import query_tshiat_gu_ha_ji, query_tshiat_gu_siong_ji
+from __mod_huan_tshiat import query_tiau_ho, tshu_tiau
+from __mod_Query_for_Tshiat_Gu import query_tshiat_gu_ha_ji, query_tshiat_gu_siong_ji
 from mod_於字典網站查詢漢字之廣韻切語發音 import fetch_kong_un_info
 
 
@@ -86,7 +86,7 @@ if __name__ == "__main__":
 
         # 組合台羅拼音
         tai_lo_phing_im = f"{tai_lo_siann_bu}{tai_lo_un_bu}{tiau_ho}"
-        
+
         #=======================================================
         # 顯示查詢結果
         #=======================================================

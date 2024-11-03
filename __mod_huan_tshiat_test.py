@@ -1,6 +1,6 @@
 # mod_huan_tshiat_test.py 內容
 
-from mod_huan_tshiat import siong_ji_tsa_siann_bu, ha_ji_tsa_un_bu
+from __mod_huan_tshiat import ha_ji_tsa_un_bu, siong_ji_tsa_siann_bu
 
 # 測試 siong_ji_tsa_siann_bu 函數
 siong_ji = "普"

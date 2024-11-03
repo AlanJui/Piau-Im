@@ -46,7 +46,7 @@ def han_ji_ca_piau_im(cursor, han_ji, reading_type="文讀音"):
         常用度,
         摘要說明
     FROM
-        台羅音標漢字庫
+        漢字庫
     WHERE
         漢字 = ? AND ({reading_condition})
     ORDER BY
@@ -66,7 +66,7 @@ def han_ji_ca_piau_im(cursor, han_ji, reading_type="文讀音"):
             常用度,
             摘要說明
         FROM
-            台羅音標漢字庫
+            漢字庫
         WHERE
             漢字 = ?
         ORDER BY

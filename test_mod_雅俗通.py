@@ -2,22 +2,22 @@
 import sqlite3
 import unittest
 
-from mod_雅俗通 import han_ji_cha_piau_im, split_cu_im  # 假設你將函數保存在 'your_module.py' 中
+from __mod_雅俗通 import han_ji_cha_piau_im, split_cu_im  # 假設你將函數保存在 'your_module.py' 中
 
 
 class TestHanJiChaPiauIm(unittest.TestCase):
-    
+
     @classmethod
     def setUpClass(cls):
         # 在所有測試開始前，連接資料庫
         cls.conn = sqlite3.connect('Nga_Siok_Thong_Sip_Ngoo_Im.db')  # 替換為實際資料庫路徑
         cls.cursor = cls.conn.cursor()
-    
+
     @classmethod
     def tearDownClass(cls):
         # 在所有測試結束後，關閉資料庫連接
         cls.conn.close()
-    
+
     def test_han_ji_cha_piau_im(self):
         # 測試漢字查詢功能
         han_ji = '不'
