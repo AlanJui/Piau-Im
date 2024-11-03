@@ -14,14 +14,14 @@ from mod_標音 import split_zu_im
 # 白話音：常用度 > 0.40；最常用的讀音其值為 0.60，次常用的讀音其值為 0.50；其餘則使用數值 0.59 ~ 0.41。
 # 其　它：常用度 > 0.00；使用數值 0.40 ~ 0.01；使用時機為：（1）方言地方腔；(2) 罕見發音；(3) 尚未查證屬文讀音或白話音 。
 # ==========================================================
-def han_ji_ca_piau_im(cursor, han_ji, reading_type="文讀音"):
+def han_ji_ca_piau_im(cursor, han_ji, hue_im="文讀音"):
     """
     根據漢字查詢其台羅音標及相關讀音資訊，並將台羅音標轉換為台語音標。
     若資料紀錄在常用度欄位儲存值為空值(NULL)，則將其視為 0，因此可排在查詢結果的最後。
 
     :param cursor: 數據庫游標
     :param han_ji: 欲查詢的漢字
-    :param reading_type: 查詢的讀音類型，可以是 "文讀音"、"白話音" 或 "其它"
+    :param hue_im: 查詢的讀音類型，可以是 "文讀音"、"白話音" 或 "其它"
     :return: 包含讀音資訊的字典列表，包含台語音標、聲母、韻母、聲調。
     """
 
@@ -29,11 +29,11 @@ def han_ji_ca_piau_im(cursor, han_ji, reading_type="文讀音"):
     common_reading_condition = "常用度 >= 0.81 AND 常用度 <= 1.0"
 
     # 根據不同讀音類型，添加額外的查詢條件
-    if reading_type == "文讀音":
+    if hue_im == "文讀音":
         reading_condition = f"({common_reading_condition}) OR (常用度 >= 0.61 AND 常用度 < 0.81)"
-    elif reading_type == "白話音":
+    elif hue_im == "白話音":
         reading_condition = f"({common_reading_condition}) OR (常用度 > 0.40 AND 常用度 < 0.61)"
-    elif reading_type == "其它":
+    elif hue_im == "其它":
         reading_condition = "常用度 > 0.00 AND 常用度 <= 0.40"
     else:
         reading_condition = "1=1"  # 查詢所有

@@ -7,7 +7,7 @@ from mod_file_access import load_module_function
 from mod_標音 import TL_Tng_Zu_Im, is_valid_han_ji, split_zu_im
 
 
-def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', type="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im'):
+def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', hue_im="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im'):
     # 顯示「已輸入之拼音字母及注音符號」
     named_range = wb.names['顯示注音輸入']
     named_range.refers_to_range.value = True
@@ -91,8 +91,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', type="白話音"
                         sheet.range((row - 1, col)).value = lo_ma_im_piau
                         sheet.range((row + 1, col)).value = zu_im_hu_ho
                     else:
-                        # result = han_ji_ca_piau_im(cursor, han_ji, type)
-                        result = han_ji_ca_piau_im(cursor, han_ji)
+                        result = han_ji_ca_piau_im(cursor=cursor, han_ji=han_ji, hue_im=hue_im)
 
                         if result:
                             if han_ji_khoo == "河洛話":
