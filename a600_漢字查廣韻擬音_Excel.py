@@ -1,17 +1,18 @@
 #==============================================================================
 # 透過 Excel ，使用廣韻的反切方法，查找漢字的羅馬拼音。
-# 
+#
 # 操作方式：
 #  - 輸入欲查詢羅馬拼音之漢字；
 #  - 輸入廣韻的查找索引資料。
-# 
+#
 #   ipython a900_廣韻反切查羅馬拼音.ipynb 攝 "書涉 (《廣韻·入聲·葉·攝》)"
 #==============================================================================
 
 import sys
+
 import xlwings as xw
 
-from mod_huan_tshiat import tshu_tiau
+from __mod_huan_tshiat import tshu_tiau
 from mod_於字典網站查詢漢字之廣韻切語發音 import fetch_kong_un_info
 
 
@@ -54,7 +55,7 @@ if __name__ == "__main__":
     ## 開啟可執行反切查羅馬拼音之活頁簿檔案
     # 1. 開啟 Excel 活頁簿檔案： .\tools\廣韻反切查音工具.xlsx ；
     # 2. 擇用 "反切" 工作表。
-    # 
+    #
     # [程式規格]：
     #  - 使用 xlwings 套件，操作 Excel 檔案；
     #  - 以上兩步的作業程序，都用 try: exception: 形式執行，遇有意外事件發生時，於畫面顯示問題狀況，然後終止程式的繼續執行。
@@ -62,28 +63,28 @@ if __name__ == "__main__":
     try:
         # 指定 Excel 檔案路徑
         file_path = r'.\\tools\\廣韻反切查音工具.xlsx'
-        
+
         # 使用 xlwings 開啟 Excel 檔案
         wb = xw.Book(file_path)
-        
+
         # 選擇名為 "反切" 的工作表
         sheet = wb.sheets['反切']
-        
+
         # 將變數值填入指定的儲存格
         sheet.range('C2').value = han_ji
         for item in tshiat_gu_list:
-            # 將漢字之切語填入指定的儲存格    
+            # 將漢字之切語填入指定的儲存格
             sheet.range('D2').value = item["tshiat_gu"]
             # 將切語上字填入指定的儲存格
             sheet.range('C5').value = siong_ji = item["tshiat_gu"][0]
             # 將切語下字填入指定的儲存格
             sheet.range('C6').value = ha_ji = item["tshiat_gu"][1]
-            # 將切語下字所屬之四聲調類填入指定的儲存格    
-            sheet.range('E6').value = tshu_tiau(item["tiau"]) 
-                
+            # 將切語下字所屬之四聲調類填入指定的儲存格
+            sheet.range('E6').value = tshu_tiau(item["tiau"])
+
             # 從 D8 儲存格取出值，存放於變數 tai_lo_phing_im
             tai_lo_phing_im = sheet.range('D8').value
-            
+
             #=======================================================
             # 顯示查詢結果
             #=======================================================
