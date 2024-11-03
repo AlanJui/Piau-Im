@@ -38,9 +38,9 @@ sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
 type = get_sound_type(wb)
 han_ji_khoo = get_han_ji_khoo(wb)
 if han_ji_khoo == "河洛話":
-    ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', type="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im')
+    ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', hue_im="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im')
 else:
-    ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', type="文讀音", han_ji_khoo="廣韻", db_name='Kong_Un.db', module_name='mod_廣韻', function_name='han_ji_ca_piau_im')
+    ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', hue_im="文讀音", han_ji_khoo="廣韻", db_name='Kong_Un.db', module_name='mod_廣韻', function_name='han_ji_ca_piau_im')
 
 # (3) A740: 將【漢字注音】工作表的內容，轉成 HTML 網頁檔案。
 # tng_sing_bang_iah(wb, '漢字注音', 'V3')
