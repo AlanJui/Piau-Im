@@ -4,7 +4,7 @@ import sys
 import xlwings as xw
 
 from mod_file_access import ensure_extension_name
-from mod_台羅音標漢字庫 import get_sound_type
+from mod_河洛話 import get_sound_type
 from p702_Ca_Han_Ji_Thak_Im import ca_han_ji_thak_im
 from p730_Tng_Sing_Bang_Iah import tng_sing_bang_iah
 
@@ -23,7 +23,7 @@ directory = r"C:\work\Piau-Im\output2"
 
 # 所有檔案名稱
 files = [
-    # '【河洛話注音】金剛般若波羅蜜經001',         
+    # '【河洛話注音】金剛般若波羅蜜經001',
     # '【河洛話注音】金剛般若波羅蜜經002',
     # '【河洛話注音】金剛般若波羅蜜經003',
     # '【河洛話注音】金剛般若波羅蜜經004',
@@ -65,12 +65,12 @@ for file_name in files:
     # 打開 Excel 檔案
     wb = xw.Book(file_path)
 
-    # 顯示「已輸入之拼音字母及注音符號」 
+    # 顯示「已輸入之拼音字母及注音符號」
     named_range = wb.names['顯示注音輸入']  # 選擇名為 "顯示注音輸入" 的命名範圍# 選擇名為 "顯示注音輸入" 的命名範圍
     named_range.refers_to_range.value = True
 
     # (1) A731: 自動為漢字查找讀音，並抄寫到漢字的上方(拼音)及下方(注音)。
-    type = get_sound_type(wb) 
+    type = get_sound_type(wb)
     ca_han_ji_thak_im(wb, '漢字注音', 'V3', type)
 
     # (2) A750: 將 Tai_Gi_Zu_Im_Bun.xlsx 檔案，依 env 工作表的設定，另存新檔到指定目錄。
@@ -85,9 +85,9 @@ for file_name in files:
         ).strip()
 
     # 設定檔案輸出路徑，存於專案根目錄下的 output2 資料夾
-    output_path = wb.names['OUTPUT_PATH'].refers_to_range.value 
+    output_path = wb.names['OUTPUT_PATH'].refers_to_range.value
     new_file_path = os.path.join(
-        ".\\{0}".format(output_path), 
+        ".\\{0}".format(output_path),
         f"【河洛話注音】{file_name}.xlsx")
 
     # 儲存新建立的工作簿

@@ -1,4 +1,5 @@
 import argparse
+import importlib
 import os
 import os.path
 import time
@@ -6,6 +7,16 @@ import time
 import xlwings as xw
 
 # from openpyxl import load_workbook
+
+# 指定虛擬環境的 Python 路徑
+# venv_python = os.path.join(".venv", "Scripts", "python.exe") if sys.platform == "win32" else os.path.join(".venv", "bin", "python")
+
+#----------------------------------------------------------------
+# 動態載入模組和函數
+#----------------------------------------------------------------
+def load_module_function(module_name, function_name):
+    module = importlib.import_module(module_name)
+    return getattr(module, function_name)
 
 #----------------------------------------------------------------
 # 查詢語音類型，若未設定則預設為文讀音
@@ -21,6 +32,19 @@ def get_sound_type(wb):
     return reading_type
 
 #----------------------------------------------------------------
+# 查詢標音使用之【漢字庫】，預設為【河洛話】漢字庫（Tai_Loo_Han_Ji_Khoo.db）
+#----------------------------------------------------------------
+def get_han_ji_khoo(wb):
+    try:
+        if '漢字庫' in wb.names:
+            han_ji_khoo = wb.names['漢字庫'].refers_to_range.value
+        else:
+            raise KeyError
+    except KeyError:
+        han_ji_khoo = "河洛話"
+    return han_ji_khoo
+
+#----------------------------------------------------------------
 # 使用範例
 # type = get_named_value(wb, '語音類型', default_value="文讀音")
 # ca_han_ji_thak_im(wb, '漢字注音', 'V3', type)
@@ -28,7 +52,7 @@ def get_sound_type(wb):
 def get_named_value(wb, name, default_value=None):
     """
     取得 Excel 活頁簿中名稱的值，如果名稱不存在或範圍無效，則回傳預設值。
-    
+
     :param wb: 打開的 Excel 活頁簿
     :param name: 名稱
     :param default_value: 預設值，如果名稱不存在或無效則回傳該值
@@ -187,7 +211,7 @@ def create_file_list(directory, extension, exculude_list):
 
     return file_list
 
-    
+
 # -----------------------------------------------------
 # Backup the original file
 # -----------------------------------------------------
@@ -250,11 +274,11 @@ def save_as_excel_file(excel_workbook):
     current_path = os.getcwd()
     # new_file_path = os.path.join(
     #     current_path,
-    #     "output", 
+    #     "output",
     #     f"【河洛話注音】{new_file_name}" + ".xlsx")
     new_file_path = os.path.join(
         current_path,
-        "output", 
+        "output",
         f"{new_file_name}.xlsx")
     print(f"儲存輸出，置於檔案：{new_file_path}")
 
