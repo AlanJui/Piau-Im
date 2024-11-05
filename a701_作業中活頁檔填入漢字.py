@@ -4,6 +4,8 @@ from pathlib import Path
 
 import xlwings as xw
 
+from mod_file_access import get_han_ji_khoo, get_sound_type
+from p702_Ca_Han_Ji_Thak_Im import ca_han_ji_thak_im
 from p709_reset_han_ji_cells import reset_han_ji_cells
 from p710_thiam_han_ji import fill_hanji_in_cells
 
@@ -40,6 +42,14 @@ reset_han_ji_cells(wb)
 
 # 將待注音的漢字填入
 fill_hanji_in_cells(wb)
+
+# A731: 自動為漢字查找讀音，並抄寫到漢字的上方(拼音)及下方(注音)。
+type = get_sound_type(wb)
+han_ji_khoo = get_han_ji_khoo(wb)
+if han_ji_khoo == "河洛話":
+    ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', hue_im="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im')
+else:
+    ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', hue_im="文讀音", han_ji_khoo="廣韻", db_name='Kong_Un.db', module_name='mod_廣韻', function_name='han_ji_ca_piau_im')
 
 # 將檔案存放路徑設為【專案根目錄】之下
 try:
