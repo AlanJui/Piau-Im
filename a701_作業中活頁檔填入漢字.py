@@ -4,6 +4,7 @@ from pathlib import Path
 
 import xlwings as xw
 
+from p709_reset_han_ji_cells import reset_han_ji_cells
 from p710_thiam_han_ji import fill_hanji_in_cells
 
 # =========================================================================
@@ -34,8 +35,11 @@ if not wb:
     print("無法執行，可能原因：(1) 未指定輸入檔案；(2) 未找到作用中的 Excel 工作簿")
     sys.exit(2)
 
+# 將待注音的【漢字儲存格】，文字顏色重設為黑色（自動 RGB: 0, 0, 0）；填漢顏色重設為無填滿
+reset_han_ji_cells(wb)
+
 # 將待注音的漢字填入
-fill_hanji_in_cells(wb)    
+fill_hanji_in_cells(wb)
 
 # 將檔案存放路徑設為【專案根目錄】之下
 try:
@@ -49,9 +53,9 @@ except KeyError:
     ).strip()
 
 # 設定檔案輸出路徑，存於專案根目錄下的 output2 資料夾
-output_path = wb.names['OUTPUT_PATH'].refers_to_range.value 
+output_path = wb.names['OUTPUT_PATH'].refers_to_range.value
 new_file_path = os.path.join(
-    ".\\{0}".format(output_path), 
+    ".\\{0}".format(output_path),
     f"【河洛話注音】{file_name}.xlsx")
 
 # 儲存新建立的工作簿
