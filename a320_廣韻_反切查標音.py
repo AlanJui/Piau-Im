@@ -27,7 +27,7 @@ if __name__ == "__main__":
         print("反切用的切語，必須有兩個漢字！")
         sys.exit(-1)
 
-    siong_ji, han_ji = ciat_gu[0], ciat_gu[1]
+    siong_ji, ha_ji = ciat_gu[0], ciat_gu[1]
 
     # 建立資料庫連線
     connection = sqlite3.connect('Kong_Un.db')
@@ -36,6 +36,10 @@ if __name__ == "__main__":
     os.system('cls')
 
     切語上字 = han_ji_ca_piau_im(cursor, siong_ji)
+    if not 切語上字:
+        print(f"切語上字：【{siong_ji}】找不到，無法反切出讀音！")
+        sys.exit(-1)
+
     for record in 切語上字:
         切語上字 = record["漢字"]
 
@@ -60,7 +64,12 @@ if __name__ == "__main__":
             print(f"聲母：{聲母} [{聲母標音}]，國際音標：/{聲母國際音標}/，方音符號：{聲母方音符號}")
         print(f"(發音部位：{七聲類}，清濁：{清濁}，發送收：{發送收})")
 
-        切語下字 = han_ji_ca_piau_im(cursor, han_ji)
+        切語下字 = han_ji_ca_piau_im(cursor, ha_ji)
+        if not 切語下字:
+            print('\n---------------------------------------')
+            print(f"切語下字：【{ha_ji}】找不到，無法反切出讀音！")
+            sys.exit(-1)
+
         for record in 切語下字:
             切語下字 = record["漢字"]
 
