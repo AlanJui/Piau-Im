@@ -34,7 +34,28 @@ if not wb:
     print("無法執行，可能原因：(1) 未指定輸入檔案；(2) 未找到作用中的 Excel 工作簿")
     sys.exit(2)
 
+#--------------------------------------------------------------------------
+# 將儲存格內的舊資料清除
+#--------------------------------------------------------------------------
+sheet = wb.sheets['漢字注音']   # 選擇工作表
+sheet.activate()               # 將「漢字注音」工作表設為作用中工作表
+sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
+
+total_rows = wb.names['每頁總列數'].refers_to_range.value
+cells_per_row = 4
+end_of_rows = int((total_rows * cells_per_row ) + 2)
+cells_range = f'D3:R{end_of_rows}'
+
+sheet.range(cells_range).clear_contents()     # 清除 C3:R{end_of_row} 範圍的內容
+
+# 獲取 V3 儲存格的合併範圍
+merged_range = sheet.range('V3').merge_area
+# 清空合併儲存格的內容
+merged_range.clear_contents()
+
+#--------------------------------------------------------------------------
 # 將待注音的【漢字儲存格】，文字顏色重設為黑色（自動 RGB: 0, 0, 0）；填漢顏色重設為無填滿
+#--------------------------------------------------------------------------
 reset_han_ji_cells(wb)
 
 # 將檔案存放路徑設為【專案根目錄】之下

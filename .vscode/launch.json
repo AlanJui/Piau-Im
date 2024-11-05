@@ -12,10 +12,10 @@
             "console": "integratedTerminal",
         },
         {
-            "name": "a700_産生作業用工作暫存檔",
+            "name": "a700_重置漢字標音工作表",
             "type": "debugpy",
             "request": "launch",
-            "program": "a700_産生作業用工作暫存檔.py",
+            "program": "a700_重置漢字標音工作表.py",
             "console": "integratedTerminal",
         },
         {
