@@ -26,7 +26,7 @@ print(f"完整檔案路徑: {file_path}")
 file_name = wb.name
 print(f"檔案名稱: {file_name}")
 
-# 顯示「已輸入之拼音字母及注音符號」 
+# 顯示「已輸入之拼音字母及注音符號」
 # named_range = wb.names['顯示注音輸入']  # 選擇名為 "顯示注音輸入" 的命名範圍# 選擇名為 "顯示注音輸入" 的命名範圍
 # named_range.refers_to_range.value = True
 named_range = get_named_value(wb, '顯示注音輸入', True)
@@ -37,7 +37,8 @@ sheet.activate()               # 將「漢字注音」工作表設為作用中�
 sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
 
 # (2) A740: 將【漢字注音】工作表的內容，轉成 HTML 網頁檔案。
-tng_sing_bang_iah(wb, '漢字注音', 'V3')
+# tng_sing_bang_iah(wb, '漢字注音', 'V3')
+tng_sing_bang_iah(wb, '十五音', 'V3')
 
 # (3) A750: 將 Tai_Gi_Zu_Im_Bun.xlsx 檔案，依 env 工作表的設定，另存新檔到指定目錄。
 try:
@@ -51,9 +52,9 @@ except KeyError:
     ).strip()
 
 # 設定檔案輸出路徑，存於專案根目錄下的 output2 資料夾
-output_path = wb.names['OUTPUT_PATH'].refers_to_range.value 
+output_path = wb.names['OUTPUT_PATH'].refers_to_range.value
 new_file_path = os.path.join(
-    ".\\{0}".format(output_path), 
+    ".\\{0}".format(output_path),
     f"【河洛話注音】{file_name}.xlsx")
 
 # 儲存新建立的工作簿

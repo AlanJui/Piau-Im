@@ -173,7 +173,9 @@ def tng_sing_bang_iah(wb, sheet_name='漢字注音', cell='V3', page_type='含�
     global total_length  # 宣告 end_of_source_row 為全域變數
 
     # 選擇指定的工作表
-    sheet = wb.sheets[sheet_name]
+    sheet = wb.sheets[sheet_name]   # 選擇工作表
+    sheet.activate()               # 將「漢字注音」工作表設為作用中工作表
+    sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
     source_sheet_name = sheet.name
 
     # -----------------------------------------------------

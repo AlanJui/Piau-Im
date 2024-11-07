@@ -130,4 +130,71 @@ def TL_Tng_Zu_Im(siann_bu, un_bu, siann_tiau, cursor):
         '聲調': zu_im_siann_tiau
     }
 
+# 台語音標轉換為方音符號
+def TLPA_Tng_Zap_Goo_Im(siann_bu, un_bu, siann_tiau, cursor):
+    """
+    根據傳入的台語音標聲母、韻母、聲調，轉換成對應的方音符號
+    :param siann_bu: 聲母 (台語音標)
+    :param un_bu: 韻母 (台語音標)
+    :param siann_tiau: 聲調 (台語音標中的數字)
+    :param cursor: 數據庫游標
+    :return: 包含方音符號的字典
+    """
 
+    # 如果聲母為 None、空字串或空集合符號(無聲母)，將其設為 '英'
+    if siann_bu in [None, '', '∅']:  # 假設空集合符號用 '∅' 表示
+        zu_im_siann_bu = '英'  # 無聲母的情況
+    else:
+        # 查詢聲母表，將台語音標的聲母轉換成方音符號
+        cursor.execute("SELECT 十五音 FROM 聲母對照表 WHERE 台語音標 = ?", (siann_bu,))
+        siann_bu_result = cursor.fetchone()
+        if siann_bu_result:
+            zu_im_siann_bu = siann_bu_result[0]  # 取得方音符號
+        else:
+            zu_im_siann_bu = '英'  # 無聲母的情況
+
+    # 查詢韻母表，將台語音標的韻母轉換成方音符號
+    cursor.execute("SELECT 十五音 FROM 韻母對照表 WHERE 台語音標 = ?", (un_bu,))
+    un_bu_result = cursor.fetchone()
+    if un_bu_result:
+        zu_im_un_bu = un_bu_result[0]  # 取得方音符號
+    else:
+        zu_im_un_bu = ''
+
+    # 查詢聲調表，將台語音標的聲調轉換成方音符號
+    cursor.execute("SELECT 十五音聲調 FROM 聲調對照表 WHERE 台羅調號 = ?", (siann_tiau,))
+    siann_tiau_result = cursor.fetchone()
+    if siann_tiau_result:
+        zu_im_siann_tiau = siann_tiau_result[0]  # 取得方音符號
+    else:
+        zu_im_siann_tiau = ''
+
+    #=======================================================================
+    # 【聲母】校調
+    #
+    # 齒間音【聲母】：ㄗ、ㄘ、ㄙ、ㆡ，若其後所接【韻母】之第一個符號亦為：ㄧ、ㆪ時，須變改
+    # 為：ㄐ、ㄑ、ㄒ、ㆢ。
+    #-----------------------------------------------------------------------
+    # 參考 RIME 輸入法如下規則：
+    # - xform/ㄗ(ㄧ|ㆪ)/ㄐ$1/
+    # - xform/ㄘ(ㄧ|ㆪ)/ㄑ$1/
+    # - xform/ㄙ(ㄧ|ㆪ)/ㄒ$1/
+    # - xform/ㆡ(ㄧ|ㆪ)/ㆢ$1/
+    #=======================================================================
+
+    # 比對聲母是否為 ㄗ、ㄘ、ㄙ、ㆡ，且韻母的第一個符號是 ㄧ 或 ㆪ
+    if siann_bu == 'z' and (un_bu[0] == 'i' or un_bu == 'inn'):
+        zu_im_siann_bu = 'ㄐ'
+    elif siann_bu == 'c' and (un_bu[0] == 'i' or un_bu == 'inn'):
+        zu_im_siann_bu = 'ㄑ'
+    elif siann_bu == 's' and (un_bu[0] == 'i' or un_bu == 'inn'):
+        zu_im_siann_bu = 'ㄒ'
+    elif siann_bu == 'j' and (un_bu[0] == 'i' or un_bu == 'inn'):
+        zu_im_siann_bu = 'ㆢ'
+
+    return {
+        '漢字標音': f"{zu_im_un_bu}{zu_im_siann_tiau}{zu_im_siann_bu}",
+        '聲母': zu_im_siann_bu,
+        '韻母': zu_im_un_bu,
+        '聲調': zu_im_siann_tiau
+    }

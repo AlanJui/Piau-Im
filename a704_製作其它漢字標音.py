@@ -3,13 +3,8 @@ import sys
 
 import xlwings as xw
 
-from mod_file_access import (
-    copy_excel_sheet,
-    get_han_ji_khoo,
-    get_sound_type,
-    reset_han_ji_piau_im_cells,
-)
-from p702_Ca_Han_Ji_Thak_Im import ca_han_ji_thak_im
+from mod_file_access import copy_excel_sheet, reset_han_ji_piau_im_cells
+from p704_漢字以十五音標注音 import zap_goo_im_piau_im
 
 # from p703_Kong_Un_Ca_Thak_Im import ca_han_ji_thak_im
 
@@ -39,13 +34,10 @@ sheet = wb.sheets['漢字注音']   # 選擇工作表
 sheet.activate()               # 將「漢字注音」工作表設為作用中工作表
 sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
 
-# (2) A731: 自動為漢字查找讀音，並抄寫到漢字的上方(拼音)及下方(注音)。
-type = get_sound_type(wb)
-han_ji_khoo = get_han_ji_khoo(wb)
-if han_ji_khoo == "河洛話":
-    ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', hue_im="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im')
-else:
-    ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', hue_im="文讀音", han_ji_khoo="廣韻", db_name='Kong_Un.db', module_name='mod_廣韻', function_name='han_ji_ca_piau_im')
+# (2) 複製【漢字注音】工作表，並將【漢字注音】工作表已有漢字標清除（不含上列之【台語音標】）
+# copy_excel_sheet(wb, '漢字注音', '十五音')
+reset_han_ji_piau_im_cells(wb, '十五音')
+zap_goo_im_piau_im(wb, sheet_name='十五音', cell='V3', hue_im="白話音")
 
 # (3) A740: 將【漢字注音】工作表的內容，轉成 HTML 網頁檔案。
 # tng_sing_bang_iah(wb, '漢字注音', 'V3')
