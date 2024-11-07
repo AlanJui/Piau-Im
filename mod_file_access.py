@@ -304,3 +304,36 @@ def save_as_excel_file(excel_workbook):
     time.sleep(3)
 
 
+def copy_excel_sheet(excel_workbook, source_name='漢字注音', sheet_name='working'):
+    # 複製工作表
+    try:
+        source_sheet = excel_workbook.sheets[source_name]
+        new_sheet = source_sheet.copy(after=source_sheet)
+        new_sheet.name = sheet_name
+        print(f"將【{source_name}】工作表複製成：，【{sheet_name}】工作表。")
+    except Exception as e:
+        print(f"複製工作表失敗，原因：{e}")
+        return
+
+    # 等待一段時間讓 copy 完成
+    time.sleep(3)
+
+
+#--------------------------------------------------------------------------
+# 將【漢字標音】儲存格內的資料清除
+#--------------------------------------------------------------------------
+def reset_han_ji_piau_im_cells(wb, sheet_name='漢字注音'):
+    sheet = wb.sheets[sheet_name]  # 選擇工作表
+    sheet.activate()               # 將「漢字注音」工作表設為作用中工作表
+    sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
+
+    # 取得每頁總列數 = 迴圈執行總次數
+    total_rows = int(wb.names['每頁總列數'].refers_to_range.value)
+    start_row_no = 6
+    row_step = 4  # 每次跳過 4 行
+
+    for i in range(total_rows):
+        # 計算要清除的行號，從 start_row_no 開始，依次遞增 4 行
+        current_row_no = start_row_no + i * row_step
+        # 清除指定範圍的內容
+        sheet.range(f'D{current_row_no}:R{current_row_no}').clear_contents()
