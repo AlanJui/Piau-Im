@@ -35,9 +35,11 @@ sheet.activate()               # 將「漢字注音」工作表設為作用中�
 sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
 
 # (2) 複製【漢字注音】工作表，並將【漢字注音】工作表已有漢字標清除（不含上列之【台語音標】）
-# copy_excel_sheet(wb, '漢字注音', '十五音')
-reset_han_ji_piau_im_cells(wb, '十五音')
-zap_goo_im_piau_im(wb, sheet_name='十五音', cell='V3', hue_im="白話音")
+piau_im_huat = wb.names['標音方法'].refers_to_range.value
+
+copy_excel_sheet(wb, '漢字注音', piau_im_huat)
+reset_han_ji_piau_im_cells(wb, piau_im_huat)
+zap_goo_im_piau_im(wb, sheet_name=piau_im_huat, cell='V3', hue_im="白話音")
 
 # (3) A740: 將【漢字注音】工作表的內容，轉成 HTML 網頁檔案。
 # tng_sing_bang_iah(wb, '漢字注音', 'V3')
