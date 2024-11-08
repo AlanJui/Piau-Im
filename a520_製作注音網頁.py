@@ -1,8 +1,3 @@
-#================================================================
-# 《予我廣韻標音》
-# 使用《廣韻》作為漢字標讀音之依據。
-#================================================================
-import getopt
 import os
 import sqlite3
 import sys
@@ -11,6 +6,7 @@ import xlwings as xw
 
 import settings
 from mod_file_access import (
+    San_Sing_Han_Ji_Zu_Im_Piau,
     close_excel_file,
     get_cmd_input,
     open_excel_file,
@@ -18,83 +14,92 @@ from mod_file_access import (
     write_to_excel_file,
 )
 from mod_廣韻 import init_sing_bu_dict, init_un_bu_dict
-from p500_Import_Source_Sheet import San_Sing_Han_Ji_Tsh_Im_Piau
 from p501_Kong_Un_Cha_Ji_Tian import Kong_Un_Piau_Im
 from p502_TLPA_Cu_Im import Iong_TLPA_Cu_Im
 
 
-def main():
-    # =========================================================="
-    # 資料庫",
-    # =========================================================="
-    # 自 .env 檔案取得資料庫名稱
-    DATABASE = settings.get_database_path()
-    conn = sqlite3.connect(DATABASE)
-    db_cursor = conn.cursor()
-    print(f"DATABASE = {DATABASE}")
-
-    # =========================================================================
-    # (1) 取得需要注音的「檔案名稱」及其「目錄路徑」。
-    # =========================================================================
-    # 自命令列取得 Input 檔案名稱
-    opts = get_cmd_input()
-    CONVERT_FILE_NAME = opts["input"]
-    print(f"CONVERT_FILE_NAME = {CONVERT_FILE_NAME}")
-
-    # 取得檔案所屬之目錄路徑
-    dir_path = opts["dir_path"]
-
-    # 指定提供來源的【檔案】
-    wb = open_excel_file(dir_path, CONVERT_FILE_NAME)
-    if wb is None:
-        print("無法開啟檔案，終止程式執行。")
-        sys.exit()
-
-    # =========================================================================
-    # (2) 建置「漢字注音表」
-    # 將存放在「工作表1」的「漢字」文章，製成「漢字注音表」以便填入注音。
-    # =========================================================================
-    # San_Sing_Han_Ji_Tsh_Im_Piau(CONVERT_FILE_NAME)
-
-    # =========================================================================
-    # (3) 在字典查注音，填入漢字注音表。
-    # =========================================================================
-    # Kong_Un_Piau_Im(CONVERT_FILE_NAME, db_cursor)
-
-    # =========================================================================
-    # (4) 將已注音之「漢字注音表」，製作成 HTML 格式之「注音／拼音／標音」網頁。
-    # =========================================================================
-
-    # 設定聲母及韻母之注音對照表
+def initialize_dicts(db_cursor):
+    """初始化聲母和韻母對照表字典"""
     try:
         sing_bu_dict = init_sing_bu_dict(db_cursor)
         un_bu_dict = init_un_bu_dict(db_cursor)
+        print("字典初始化完成。")
     except Exception as e:
-        print(e)
-    Iong_TLPA_Cu_Im(wb, sing_bu_dict, un_bu_dict)
+        print(f"字典初始化失敗：{e}")
+        sys.exit(1)
+    return sing_bu_dict, un_bu_dict
 
-    # ==========================================================
-    # 檢查「缺字表」狀態
-    # ==========================================================
-    # 指定來源工作表
-    source_sheet = wb.sheets["缺字表"]
-    # 取得工作表內總列數
-    end_row_no = (
-        source_sheet.range("A" + str(source_sheet.cells.last_cell.row)).end("up").row
-    )
-    if end_row_no > 1:
-        print(f"總計字典查不到注音的漢字共：{end_row_no}個。")
 
-    # =========================================================================
-    # (5) 依據《文章標題》另存新檔。
-    # =========================================================================
-    write_to_excel_file(wb)
-    close_excel_file(wb)
-    
-    # ==========================================================
-    # 關閉資料庫
-    # ==========================================================
-    conn.close()
+def create_annotation_file(wb, db_cursor):
+    """建立注音表並進行查詢填寫"""
+    # 建立漢字注音表
+    San_Sing_Han_Ji_Zu_Im_Piau(wb.name)
+    # # 查詢注音並填寫表格
+    # Kong_Un_Piau_Im(wb.name, db_cursor)
+
+
+def export_to_html(wb):
+    """將已注音的漢字注音表導出為 HTML 格式"""
+    # 這裡可以使用已經填寫的漢字注音表進行轉換
+    print("將注音表轉換為 HTML 格式的功能可以在這裡實現。")
+
+
+def main():
+    #-------------------------------------------------------------------------
+    # 使用已打開且處於作用中的 Excel 工作簿
+    #-------------------------------------------------------------------------
+    # 取得專案根目錄。
+    try:
+        wb = xw.apps.active.books.active
+    except Exception as e:
+        print(f"發生錯誤: {e}")
+        print("無法找到作用中的 Excel 工作簿")
+        sys.exit(2)
+
+    # 獲取活頁簿的完整檔案路徑
+    file_path = wb.fullname
+    print(f"完整檔案路徑: {file_path}")
+
+    # 獲取活頁簿的檔案名稱（不包括路徑）
+    file_name = wb.name
+    print(f"檔案名稱: {file_name}")
+
+    # 資料庫連接
+    DATABASE = settings.get_database_path()
+    with sqlite3.connect(DATABASE) as conn:
+        db_cursor = conn.cursor()
+        print(f"DATABASE = {DATABASE}")
+
+        # # 取得命令列參數和檔案路徑
+        # opts = get_cmd_input()
+        # CONVERT_FILE_NAME = opts["input"]
+        # dir_path = opts["dir_path"]
+        # print(f"處理檔案: {CONVERT_FILE_NAME}")
+
+        # # 開啟指定的 Excel 檔案
+        # wb = open_excel_file(dir_path, CONVERT_FILE_NAME)
+        # if wb is None:
+        #     print("無法開啟檔案，終止程式執行。")
+        #     sys.exit()
+
+        # 初始化字典
+        sing_bu_dict, un_bu_dict = initialize_dicts(db_cursor)
+
+        # 創建漢字注音表並查詢注音
+        create_annotation_file(wb, db_cursor)
+
+        # 注音轉換處理
+        Iong_TLPA_Zu_Im(wb, sing_bu_dict, un_bu_dict)
+
+        # 檢查缺字表狀態
+        source_sheet = wb.sheets["缺字表"]
+        end_row_no = source_sheet.range("A" + str(source_sheet.cells.last_cell.row)).end("up").row
+        if end_row_no > 1:
+            print(f"總計字典查不到注音的漢字共：{end_row_no}個。")
+
+        # 儲存 Excel 檔案並關閉
+        write_to_excel_file(wb)
+        close_excel_file(wb)
 
 if __name__ == "__main__":
     main()

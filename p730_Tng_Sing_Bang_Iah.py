@@ -1,10 +1,90 @@
 # Tng_Sing_Bang_Iah.py (轉成網頁)
 # 用途：將【漢字注音】工作表中的漢字、台語音標及台語注音符號，轉成 HTML 網頁格式。
 import os
+import sqlite3
 
 import xlwings as xw
 
 from mod_file_access import get_named_value
+from mod_標音 import (
+    init_piau_im_dict,
+    init_sing_bu_dict,
+    init_un_bu_dict,
+    is_punctuation,
+    split_zu_im,
+)
+
+# ==========================================================
+# 注音法設定和共用變數
+# ==========================================================
+zu_im_huat_list = {
+    "SNI": ["fifteen_yin", "rt", "十五音切語"],
+    "TPS": ["Piau_Im", "rt", "方音符號注音"],
+    "POJ": ["pin_yin", "rt", "白話字拼音"],
+    "TL": ["pin_yin", "rt", "台羅拼音"],
+    "BP": ["pin_yin", "rt", "閩拼標音"],
+    "TLPA_Plus": ["pin_yin", "rt", "台羅改良式"],
+    "DBL": ["Siang_Pai", "rtc", "雙排注音"],
+}
+
+TONE_MARKS = {
+    "十五音": {
+        1: "一",
+        2: "二",
+        3: "三",
+        4: "四",
+        5: "五",
+        7: "七",
+        8: "八"
+    },
+    "方音符號": {
+        1: "",
+        2: "ˋ",
+        3: "˪",
+        4: "",
+        5: "ˊ",
+        7: "˫",
+        8: "\u02D9"
+    },
+    "閩拼方案": {
+        1: "\u0304",
+        2: "\u0341",
+        3: "\u030C",
+        5: "\u0300",
+        6: "\u0302",
+        7: "\u0304",
+        8: "\u0341"
+    },
+    "台羅拼音": {
+        1: "",
+        2: "\u0301",
+        3: "\u0300",
+        4: "",
+        5: "\u0302",
+        6: "\u030C",
+        7: "\u0304",
+        8: "\u030D"
+    }
+}
+
+
+# def choose_piau_im_method(zu_im_huat, sing_bu, un_bu, tiau_ho):
+#     """選擇並執行對應的注音方法"""
+#     if zu_im_huat == "SNI":
+#         return SNI_piau_im(sing_bu, un_bu, tiau_ho)
+#     elif zu_im_huat == "POJ":
+#         return POJ_piau_im(sing_bu, un_bu, tiau_ho)
+#     elif zu_im_huat == "TL":
+#         return TL_piau_im(sing_bu, un_bu, tiau_ho)
+#     elif zu_im_huat == "BP":
+#         return BP_piau_im(sing_bu, un_bu, tiau_ho)
+#     elif zu_im_huat == "TPS":
+#         return TPS_piau_im(sing_bu, un_bu, tiau_ho)
+#     elif zu_im_huat == "TLPA_Plus":
+#         siann = Sing_Bu_Dict[sing_bu]["code"] or ""
+#         un = Un_Bu_Dict[un_bu]["code"]
+#         return f"{siann}{un}{tiau_ho}"
+#     return ""
 
 
 def create_html_file(output_path, content, title='您的標題'):
@@ -56,22 +136,9 @@ def put_picture(wb, source_sheet_name):
 
 
 # =========================================================
-# 判斷是否為標點符號的輔助函數
-# =========================================================
-def is_punctuation(char):
-    # 如果 char 是 None，直接返回 False
-    if char is None:
-        return False
-
-    # 可以根據需要擴充此列表以判斷各種標點符號
-    punctuation_marks = "，。！？；：、（）「」『』《》……"
-    return char in punctuation_marks
-
-
-# =========================================================
 # 依據指定的【注音方法】，輸出含 Ruby Tags 之 HTML 網頁
 # =========================================================
-def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭'):
+def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭', piau_im_huat='方音符號'):
     write_buffer = ""
 
     # =========================================================
@@ -126,28 +193,42 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭')
                             # 在 Console 顯示目前處理的漢字，以便使用者可知目前進度
                             print(f"({row}, {col_name}) = {han_ji}")
                         else:
+                            # 取得漢字的【台語音標】
                             lo_ma_im_piau = sheet.range((row - 1, col)).value  # 取得漢字的台語音標
-                            zu_im_hu_ho = sheet.range((row + 1, col)).value  # 取得漢字的台語注音符號
-
-                            # 處理拼音或注音是 None 的情況
+                            # 當儲存格寫入之資料為 None 情況時之處理作法：給予空字串
                             lo_ma_im_piau = lo_ma_im_piau if lo_ma_im_piau is not None else ""
-                            zu_im_hu_ho = zu_im_hu_ho if zu_im_hu_ho is not None else ""
+
+                            # zu_im_hu_ho = sheet.range((row + 1, col)).value  # 取得漢字的台語注音符號
+                            zu_im_list = split_zu_im(lo_ma_im_piau)
+                            if zu_im_list[0] == "" or zu_im_list[0] == None:
+                                sian_bu = "Ø"
+                            else:
+                                sian_bu = zu_im_list[0]
+                            sian_bu = Sing_Bu_Dict[sian_bu][piau_im_huat]
+                            un_bu = Un_Bu_Dict[zu_im_list[1]][piau_im_huat]
+                            if piau_im_huat == "方音符號":
+                                tiau_ho = TONE_MARKS[piau_im_huat][int(zu_im_list[2])]
+                            elif piau_im_huat == "十五音":
+                                tiau_ho = TONE_MARKS[piau_im_huat][int(zu_im_list[2])]
+                            elif piau_im_huat == "閩拼方案":
+                                tiau_ho = TONE_MARKS[piau_im_huat][int(zu_im_list[2])]
+                            elif piau_im_huat == "台羅拼音" or piau_im_huat == "白話字":
+                                tiau_ho = TONE_MARKS[piau_im_huat][int(zu_im_list[2])]
+                            else:
+                                tiau_ho = zu_im_list[2]
+
+                            if piau_im_huat == "十五音":
+                                han_ji_piau_im = f'{un_bu}{tiau_ho}{sian_bu}'
+                            else:
+                                han_ji_piau_im = f'{sian_bu}{un_bu}{tiau_ho}'
 
                             # 在 Console 顯示目前處理的漢字，以便使用者可知目前進度
-                            print(f"({row}, {col_name}) = {han_ji} [{lo_ma_im_piau}] 【{zu_im_hu_ho}】")
+                            print(f"({row}, {col_name}) = {han_ji} [{lo_ma_im_piau}] 【{han_ji_piau_im}】")
                             # =========================================================
                             # 將已注音之漢字加入【漢字注音表】
                             # =========================================================
-                            # ruby_tag = f"""
-                            # <ruby>
-                            #     <rb>{han_ji}</rb>
-                            #     <rt>{lo_ma_im_piau}</rt>
-                            #     <rp>(</rp>
-                            #         <rtc>{zu_im_hu_ho}</rtc>
-                            #     <rp>)</rp>
-                            # </ruby>
-                            # """
-                            ruby_tag = f"<ruby><rb>{han_ji}</rb><rt>{lo_ma_im_piau}</rt><rtc>{zu_im_hu_ho}</rtc></ruby>\n"
+                            ruby_tag = f"<ruby><rb>{han_ji}</rb><rt>{lo_ma_im_piau}</rt><rtc>{han_ji_piau_im}</rtc></ruby>\n"
+
                     write_buffer += ruby_tag
                     index += 1
                 else:
@@ -171,12 +252,23 @@ def tng_sing_bang_iah(wb, sheet_name='漢字注音', cell='V3', page_type='含�
     global source_sheet  # 宣告 source_sheet 為全域變數
     global source_sheet_name  # 宣告 source_sheet_name 為全域變數
     global total_length  # 宣告 end_of_source_row 為全域變數
+    global Sing_Bu_Dict, Un_Bu_Dict
 
+    # -------------------------------------------------------------------------
+    # 連接指定資料庫
+    # -------------------------------------------------------------------------
+    han_ji_khoo = get_named_value(wb, '漢字庫', '河洛話')
+    Sing_Bu_Dict, Un_Bu_Dict = init_piau_im_dict(han_ji_khoo)
+
+    # -------------------------------------------------------------------------
     # 選擇指定的工作表
+    # -------------------------------------------------------------------------
     sheet = wb.sheets[sheet_name]   # 選擇工作表
     sheet.activate()               # 將「漢字注音」工作表設為作用中工作表
     sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
     source_sheet_name = sheet.name
+
+    han_ji_piau_im_huat = wb.names['標音方法'].refers_to_range.value
 
     # -----------------------------------------------------
     # 產生 HTML 網頁用文字檔
@@ -189,7 +281,7 @@ def tng_sing_bang_iah(wb, sheet_name='漢字注音', cell='V3', page_type='含�
     siann_lui = get_named_value(wb, '語音類型', '文讀音')
     output_dir = 'docs'
     # output_file = f"{title}_{siann_lui}.html"
-    output_file = f"{title}.html"
+    output_file = f"{title}_{han_ji_piau_im_huat}.html"
     output_path = os.path.join(output_dir, output_file)
 
     # 開啟文字檔，準備寫入網頁內容
@@ -205,7 +297,9 @@ def tng_sing_bang_iah(wb, sheet_name='漢字注音', cell='V3', page_type='含�
         # 自「漢字注音表」，製作各種注音法之 HTML 網頁
         # ==========================================================
         print(f"開始製作【漢字注音】網頁！")
-        html_content = build_web_page(wb, sheet, source_chars, total_length, page_type)
+        html_content = build_web_page(
+            wb, sheet, source_chars, total_length, page_type, han_ji_piau_im_huat
+        )
 
         # 輸出到網頁檔案
         create_html_file(output_path, html_content, web_page_title)

@@ -37,8 +37,8 @@ sheet.activate()               # 將「漢字注音」工作表設為作用中�
 sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
 
 # (2) A740: 將【漢字注音】工作表的內容，轉成 HTML 網頁檔案。
-# tng_sing_bang_iah(wb, '漢字注音', 'V3')
-tng_sing_bang_iah(wb, '十五音', 'V3')
+han_ji_piau_im_huat = get_named_value(wb, '標音方法')
+tng_sing_bang_iah(wb=wb, sheet_name='漢字注音', cell='V3', page_type='含頁頭')
 
 # (3) A750: 將 Tai_Gi_Zu_Im_Bun.xlsx 檔案，依 env 工作表的設定，另存新檔到指定目錄。
 try:

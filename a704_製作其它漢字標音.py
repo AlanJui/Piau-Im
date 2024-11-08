@@ -4,9 +4,7 @@ import sys
 import xlwings as xw
 
 from mod_file_access import copy_excel_sheet, reset_han_ji_piau_im_cells
-from p704_漢字以十五音標注音 import zap_goo_im_piau_im
-
-# from p703_Kong_Un_Ca_Thak_Im import ca_han_ji_thak_im
+from p704_漢字以十五音標注音 import han_ji_piau_im
 
 # (0) 取得專案根目錄。
 # 使用已打開且處於作用中的 Excel 工作簿
@@ -26,20 +24,46 @@ file_name = wb.name
 print(f"檔案名稱: {file_name}")
 
 # 顯示「已輸入之拼音字母及注音符號」
-named_range = wb.names['顯示注音輸入']  # 選擇名為 "顯示注音輸入" 的命名範圍# 選擇名為 "顯示注音輸入" 的命名範圍
+named_range = wb.names['顯示注音輸入']
 named_range.refers_to_range.value = True
 
 # (1) A720: 將 V3 儲存格內的漢字，逐個填入標音用方格。
-sheet = wb.sheets['漢字注音']   # 選擇工作表
-sheet.activate()               # 將「漢字注音」工作表設為作用中工作表
-sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
+sheet = wb.sheets['漢字注音']
+sheet.activate()
+sheet.range('A1').select()
 
 # (2) 複製【漢字注音】工作表，並將【漢字注音】工作表已有漢字標清除（不含上列之【台語音標】）
 piau_im_huat = wb.names['標音方法'].refers_to_range.value
 
 copy_excel_sheet(wb, '漢字注音', piau_im_huat)
 reset_han_ji_piau_im_cells(wb, piau_im_huat)
-zap_goo_im_piau_im(wb, sheet_name=piau_im_huat, cell='V3', hue_im="白話音")
+
+# 根據標音方法選擇對應參數
+if piau_im_huat == '十五音':
+    hue_im = "白話音"
+    module_name = 'mod_標音'
+    function_name = 'TLPA_Tng_Zap_Goo_Im'
+elif piau_im_huat == '白話字':
+    # 以下為待完成之虛擬程式碼
+    hue_im = "白話字"
+    module_name = 'mod_白話字'
+    function_name = 'bah_hoat_tng_im'
+elif piau_im_huat == '台羅拼音':
+    # 以下為待完成之虛擬程式碼
+    hue_im = "台羅拼音"
+    module_name = 'mod_台羅拼音'
+    function_name = 'tai_lo_pin_im'
+elif piau_im_huat == '閩拚方案':
+    # 以下為待完成之虛擬程式碼
+    hue_im = "閩拚方案"
+    module_name = 'mod_閩拚方案'
+    function_name = 'min_pian_han_im'
+else:
+    print(f"無法識別的標音方法：{piau_im_huat}")
+    sys.exit(1)
+
+# 呼叫 han_ji_piau_im 函數，並傳入動態參數
+han_ji_piau_im(wb, sheet_name=piau_im_huat, cell='V3', hue_im=hue_im, module_name=module_name, function_name=function_name)
 
 # (3) A740: 將【漢字注音】工作表的內容，轉成 HTML 網頁檔案。
 # tng_sing_bang_iah(wb, '漢字注音', 'V3')
@@ -48,22 +72,14 @@ zap_goo_im_piau_im(wb, sheet_name=piau_im_huat, cell='V3', hue_im="白話音")
 try:
     file_name = str(wb.names['TITLE'].refers_to_range.value).strip()
 except KeyError:
-    # print("未找到命名範圍 'TITLE'，使用預設名稱")
-    # file_name = "default_file_name.xlsx"  # 提供一個預設檔案名稱
     setting_sheet = wb.sheets["env"]
-    file_name = str(
-        setting_sheet.range("C4").value
-    ).strip()
+    file_name = str(setting_sheet.range("C4").value).strip()
 
 # 設定檔案輸出路徑，存於專案根目錄下的 output2 資料夾
 output_path = wb.names['OUTPUT_PATH'].refers_to_range.value
 new_file_path = os.path.join(
     ".\\{0}".format(output_path),
-    f"【河洛話注音】{file_name}.xlsx")
+    f"【{piau_im_huat}】{file_name}.xlsx")
 
 # 儲存新建立的工作簿
 wb.save(new_file_path)
-
-# 保存 Excel 檔案
-# wb.close()
-

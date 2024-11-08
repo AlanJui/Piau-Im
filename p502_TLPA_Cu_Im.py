@@ -6,7 +6,7 @@ import sqlite3
 import xlwings as xw
 
 from mod_file_access import open_excel_file
-from mod_廣韻 import init_sing_bu_dict, init_un_bu_dict
+from mod_廣韻_v3 import init_sing_bu_dict, init_un_bu_dict
 
 # ==========================================================
 # 設定輸出使用的注音方法
@@ -64,7 +64,7 @@ source_sheet_name = ""
 #     un_bu_dict = cu_im.init_un_bu_dict()
 # except Exception as e:
 #     print(e)
-    
+
 #================================================================
 # 雅俗通十五音(SNI:Nga-Siok-Thong)
 #================================================================
@@ -83,7 +83,7 @@ tiau_ho_remap_for_sip_ngoo_im = {
     5: "五",
     7: "七",
     8: "八",
-} 
+}
 
 #================================================================
 # 方音符號注音（TPS）
@@ -156,7 +156,7 @@ def POJ_piau_im(sing_bu, un_bu, tiau_ho):
         siann = ""
     un = Un_Bu_Dict[un_bu]["poj"]
     piau_im = f"{siann}{un}"
-    
+
     # 韻母為複元音
     # pattern1 = r"(oai|oan|oah|oeh|ee|ei)"
     pattern1 = r"(oai|oan|oah|oeh)"
@@ -233,13 +233,13 @@ def TL_piau_im(sing_bu, un_bu, tiau_ho):
         #     piau_im = piau_im.replace(found, un_str)
 
     return piau_im
-    
+
 #================================================================
 # 閩拼（BP）
 #
 # 【調號標示規則】
 # 當一個音節有多個字母時，調號得標示在響度最大的字母上面（通常在韻腹）。由規則可以判定確切的字母：
-# 
+#
 #  - 響度優先順序： a > oo > (e = o) > (i = u)〈低元音 > 高元音 > 無擦通音 > 擦音 > 塞音〉
 #  - 二合字母 iu 及 ui ，調號都標在後一個字母上；因為前一個字母是介音。
 #  - m 作韻腹時則標於字母 m 上。
@@ -332,7 +332,7 @@ def get_sheet_ready_to_work(wb, sheet_name_list):
 # =========================================================
 def build_web_page(wb, target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict, un_bu_dict):
     write_buffer = ""
-    
+
     source_index = 1  # index for source sheet
     target_index = 1  # index for target sheet
 
@@ -387,7 +387,7 @@ def build_web_page(wb, target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict
             target_sheet.range("A" + str(target_index)).value = html_str
             target_index += 1
             source_index += 1
-    
+
             write_buffer += (html_str + "\n")
             continue
 
@@ -404,7 +404,7 @@ def build_web_page(wb, target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict
             target_sheet.range("A" + str(target_index)).value = han_ji
             target_index += 1
             source_index += 1
-    
+
             write_buffer += (han_ji + "\n")
             continue
 
@@ -420,7 +420,7 @@ def build_web_page(wb, target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict
             target_sheet.range("A" + str(target_index)).value = ruby_tag
             target_index += 1
             source_index += 1
-    
+
             write_buffer += (ruby_tag + "\n")
             continue
 
@@ -485,7 +485,7 @@ def build_web_page(wb, target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict
             ruby_tag = f"  <ruby><rb>{han_ji}</rb><rt>{piau_im2}</rt><rp>(</rp><{rt_tag}>{piau_im}</{rt_tag}><rp>)</rp></ruby>"
 
         target_sheet.range("A" + str(target_index)).value = ruby_tag
-    
+
         write_buffer += (ruby_tag + "\n")
 
         # =========================================================
@@ -501,7 +501,7 @@ def build_web_page(wb, target_sheet, cu_im_huat, div_class, rt_tag, sing_bu_dict
     html_str = "</p></div>"
     target_sheet.range("A" + str(target_index)).value = html_str
 
-    write_buffer += html_str        
+    write_buffer += html_str
 
     # 返回網頁輸出暫存區
     return write_buffer
@@ -539,7 +539,7 @@ def create_html_file(output_path, content, title='您的標題'):
     print(f"\n輸出網頁檔案：{output_path}")
 
 
-def Iong_TLPA_Cu_Im(wb, sing_bu_dict, un_bu_dict):
+def Iong_TLPA_Zu_Im(wb, sing_bu_dict, un_bu_dict):
     global source_sheet  # 宣告 source_sheet 為全域變數
     global source_sheet_name  # 宣告 source_sheet_name 為全域變數
     global end_of_source_row  # 宣告 end_of_source_row 為全域變數
@@ -603,7 +603,7 @@ def Iong_TLPA_Cu_Im(wb, sing_bu_dict, un_bu_dict):
 
         # 輸出到網頁檔案
         create_html_file(output_path, html_content, web_page_title)
-        
+
         print(f"【{cu_im_piau_e_mia}】網頁製作完畢！")
 
 if __name__ == "__main__":
@@ -632,8 +632,8 @@ if __name__ == "__main__":
     sing_bu = "s"
     un_bu = "i"
     tiau_ho = 5
-    
-    piau_im = TPS_piau_im(sing_bu, un_bu, tiau_ho) 
+
+    piau_im = TPS_piau_im(sing_bu, un_bu, tiau_ho)
     print("測試方音符號注音：")
     print(f"han_ji = {han_ji}")
     print(f"sing_bu = {sing_bu}, un_bu = {un_bu}, tiau_ho = {tiau_ho}")
@@ -643,7 +643,7 @@ if __name__ == "__main__":
     #=====================================================================
     # 雅俗通十五
     #=====================================================================
-    piau_im = SNI_piau_im(sing_bu, un_bu, tiau_ho) 
+    piau_im = SNI_piau_im(sing_bu, un_bu, tiau_ho)
     print("\n測試雅俗通十五音注音：")
     print(f"han_ji = {han_ji}")
     print(f"sing_bu = {sing_bu}, un_bu = {un_bu}, tiau_ho = {tiau_ho}")
@@ -658,7 +658,7 @@ if __name__ == "__main__":
     un_bu = "i"
     tiau_ho = 7
 
-    piau_im = BP_piau_im(sing_bu, un_bu, tiau_ho) 
+    piau_im = BP_piau_im(sing_bu, un_bu, tiau_ho)
     print("\n測試閩拼注音：")
     print(f"han_ji = {han_ji}")
     print(f"sing_bu = {sing_bu}, un_bu = {un_bu}, tiau_ho = {tiau_ho}")
@@ -673,7 +673,7 @@ if __name__ == "__main__":
     un_bu = "uan"
     tiau_ho = 2
 
-    piau_im = POJ_piau_im(sing_bu, un_bu, tiau_ho) 
+    piau_im = POJ_piau_im(sing_bu, un_bu, tiau_ho)
     print("\n測試白話字注音：")
     print(f"han_ji = {han_ji}")
     print(f"sing_bu = {sing_bu}, un_bu = {un_bu}, tiau_ho = {tiau_ho}")
@@ -689,7 +689,7 @@ if __name__ == "__main__":
     un_bu = "uan"
     tiau_ho = 2
 
-    piau_im = TL_piau_im(sing_bu, un_bu, tiau_ho) 
+    piau_im = TL_piau_im(sing_bu, un_bu, tiau_ho)
     print("\n測試白話字注音：")
     print(f"han_ji = {han_ji}")
     print(f"sing_bu = {sing_bu}, un_bu = {un_bu}, tiau_ho = {tiau_ho}")
@@ -701,7 +701,7 @@ if __name__ == "__main__":
     un_bu = "oo"
     tiau_ho = 5
 
-    piau_im = TL_piau_im(sing_bu, un_bu, tiau_ho) 
+    piau_im = TL_piau_im(sing_bu, un_bu, tiau_ho)
     print("\n測試白話字注音：")
     print(f"han_ji = {han_ji}")
     print(f"sing_bu = {sing_bu}, un_bu = {un_bu}, tiau_ho = {tiau_ho}")
