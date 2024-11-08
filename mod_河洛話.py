@@ -87,14 +87,14 @@ def han_ji_ca_piau_im(cursor, han_ji, hue_im="文讀音"):
 
         # 將台羅音標轉換為台語音標
         tai_gi_im = tai_loo_im
-        # 更新 row_dict 中的台語音標
-        row_dict['台語音標'] = tai_gi_im
-
         # 分析台語音標，拆分出聲母、韻母、聲調
         split_result = split_zu_im(tai_gi_im)
         row_dict['聲母'] = split_result[0]
         row_dict['韻母'] = split_result[1]
         row_dict['聲調'] = split_result[2]
+
+        # 更新 row_dict 中的台語音標
+        row_dict['台語音標'] = f'{row_dict["聲母"]}{row_dict["韻母"]}{row_dict["聲調"]}'
 
         # 將結果加入列表
         data.append(row_dict)
