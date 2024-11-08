@@ -1,4 +1,18 @@
 import re
+import sqlite3
+
+
+# =========================================================
+# 判斷是否為標點符號的輔助函數
+# =========================================================
+def is_punctuation(char):
+    # 如果 char 是 None，直接返回 False
+    if char is None:
+        return False
+
+    # 可以根據需要擴充此列表以判斷各種標點符號
+    punctuation_marks = "，。！？；：、（）「」『』《》……"
+    return char in punctuation_marks
 
 
 # =========================================================
@@ -198,3 +212,76 @@ def TLPA_Tng_Zap_Goo_Im(siann_bu, un_bu, siann_tiau, cursor):
         '韻母': zu_im_un_bu,
         '聲調': zu_im_siann_tiau
     }
+
+
+def dict_to_str(zu_im_hu_ho):
+    return f"{zu_im_hu_ho['聲母']}{zu_im_hu_ho['韻母']}{zu_im_hu_ho['聲調']}"
+
+
+def init_piau_im_dict(han_ji_khoo):
+    if han_ji_khoo == "河洛話":
+        db_name = 'Ho_Lok_Ue.db'
+    else:
+        db_name = 'Kong_Un.db'
+
+    conn = sqlite3.connect(db_name)
+    cursor = conn.cursor()
+
+    Sing_Bu_Dict = init_sing_bu_dict(cursor)
+    Un_Bu_Dict = init_un_bu_dict(cursor)
+
+    conn.close()
+
+    return Sing_Bu_Dict, Un_Bu_Dict
+
+
+def init_sing_bu_dict(cursor):
+    # 執行 SQL 查詢
+    cursor.execute("SELECT * FROM 聲母對照表")
+
+    # 獲取所有資料
+    rows = cursor.fetchall()
+
+    # 初始化字典
+    sing_bu_dict = {}
+
+    # 從查詢結果中提取資料並將其整理成一個字典
+    for row in rows:
+        sing_bu_dict[row[1]] = {
+            '國際音標': row[1],
+            '台語音標': row[2],
+            '台羅音標': row[3],
+            '白話字':   row[4],
+            '閩拼方案': row[5],
+            '方音符號': row[6],
+            '十五音':   row[7],
+        }
+
+    return sing_bu_dict
+
+
+def init_un_bu_dict(cursor):
+    # 執行 SQL 查詢
+    cursor.execute("SELECT * FROM 韻母對照表")
+
+    # 獲取所有資料
+    rows = cursor.fetchall()
+
+    # 初始化字典
+    un_bu_dict = {}
+
+    # 從查詢結果中提取資料並將其整理成一個字典
+    for row in rows:
+        un_bu_dict[row[1]] = {
+            '國際音標': row[1],
+            '台語音標': row[2],
+            '台羅音標': row[3],
+            '白話字': row[4],
+            '閩拼方案': row[5],
+            '方音符號': row[6],
+            '十五音': row[7],
+            '十五音舒促聲': row[8],
+            '十五音序': int(row[9]),
+        }
+
+    return un_bu_dict

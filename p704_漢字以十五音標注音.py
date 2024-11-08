@@ -7,7 +7,7 @@ from mod_標音 import is_valid_han_ji, split_zu_im
 
 
 # 十五音標注音
-def zap_goo_im_piau_im(wb, sheet_name='十五音', cell='V3', hue_im="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_標音', function_name='TLPA_Tng_Zap_Goo_Im'):
+def han_ji_piau_im(wb, sheet_name='十五音', cell='V3', hue_im="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_標音', function_name='TLPA_Tng_Zap_Goo_Im'):
     named_range = wb.names['顯示注音輸入']
     named_range.refers_to_range.value = True
 
@@ -36,7 +36,8 @@ def zap_goo_im_piau_im(wb, sheet_name='十五音', cell='V3', hue_im="白話音"
         cell_value = sheet.range((row, col)).value
 
         if not is_valid_han_ji(cell_value):
-            print(f"({row}, {col_name}) = 無效漢字或標音缺失")
+            # print(f"({row}, {col_name}) = 無效漢字或標音缺失")
+            print(f"({row}, {col_name}) = {cell_value}")
             return
 
         lo_ma_im_piau = sheet.range((row - 1, col)).value
@@ -53,13 +54,15 @@ def zap_goo_im_piau_im(wb, sheet_name='十五音', cell='V3', hue_im="白話音"
             print(f"【台語音標】資料格式錯誤於({row - 1}, {col_name}): {e}")
 
     while index < total_length:
+        sheet.range((row, 1)).select()
         for col in range(start, end):
             if index >= total_length:
                 break
             char = v3_value[index]
             if char == "\n":
                 index += 1
-                continue  # 忽略換行符號
+                row += 4
+                break  # 跳出內部 for 迴圈，繼續處理下一列
 
             process_cell(row, col, char)
             index += 1  # 處理下一個漢字
