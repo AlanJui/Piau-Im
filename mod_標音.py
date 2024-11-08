@@ -248,8 +248,8 @@ def init_sing_bu_dict(cursor):
     # 從查詢結果中提取資料並將其整理成一個字典
     for row in rows:
         sing_bu_dict[row[1]] = {
-            '國際音標': row[1],
-            '台語音標': row[2],
+            '台語音標': row[1],
+            '國際音標': row[2],
             '台羅音標': row[3],
             '白話字':   row[4],
             '閩拼方案': row[5],
@@ -273,8 +273,8 @@ def init_un_bu_dict(cursor):
     # 從查詢結果中提取資料並將其整理成一個字典
     for row in rows:
         un_bu_dict[row[1]] = {
-            '國際音標': row[1],
-            '台語音標': row[2],
+            '台語音標': row[1],
+            '國際音標': row[2],
             '台羅音標': row[3],
             '白話字': row[4],
             '閩拼方案': row[5],
@@ -285,3 +285,4 @@ def init_un_bu_dict(cursor):
         }
 
     return un_bu_dict
+

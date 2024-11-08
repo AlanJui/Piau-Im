@@ -20,7 +20,7 @@ from mod_file_access import (
 from mod_廣韻_v3 import init_sing_bu_dict, init_un_bu_dict
 from p500_Import_Source_Sheet import San_Sing_Han_Ji_Tsh_Im_Piau
 from p501_Kong_Un_Cha_Ji_Tian import Kong_Un_Piau_Im
-from p502_TLPA_Cu_Im import Iong_TLPA_Cu_Im
+from p502_TLPA_Cu_Im import Iong_TLPA_Zu_Im
 
 
 def main():
