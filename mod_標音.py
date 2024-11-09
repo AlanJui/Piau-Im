@@ -1,6 +1,7 @@
 import re
 import sqlite3
 
+global Siann_Bu_Dict, Un_Bu_Dict
 
 # =========================================================
 # 判斷是否為標點符號的輔助函數
@@ -227,15 +228,15 @@ def init_piau_im_dict(han_ji_khoo):
     conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
 
-    Sing_Bu_Dict = init_sing_bu_dict(cursor)
+    Siann_Bu_Dict = init_siann_bu_dict(cursor)
     Un_Bu_Dict = init_un_bu_dict(cursor)
 
     conn.close()
 
-    return Sing_Bu_Dict, Un_Bu_Dict
+    return Siann_Bu_Dict, Un_Bu_Dict
 
 
-def init_sing_bu_dict(cursor):
+def init_siann_bu_dict(cursor):
     # 執行 SQL 查詢
     cursor.execute("SELECT * FROM 聲母對照表")
 
@@ -243,21 +244,21 @@ def init_sing_bu_dict(cursor):
     rows = cursor.fetchall()
 
     # 初始化字典
-    sing_bu_dict = {}
+    siann_bu_dict = {}
 
     # 從查詢結果中提取資料並將其整理成一個字典
     for row in rows:
-        sing_bu_dict[row[1]] = {
+        siann_bu_dict[row[1]] = {
             '台語音標': row[1],
             '國際音標': row[2],
-            '台羅音標': row[3],
+            '台羅拼音': row[3],
             '白話字':   row[4],
             '閩拼方案': row[5],
             '方音符號': row[6],
             '十五音':   row[7],
         }
 
-    return sing_bu_dict
+    return siann_bu_dict
 
 
 def init_un_bu_dict(cursor):
@@ -275,7 +276,7 @@ def init_un_bu_dict(cursor):
         un_bu_dict[row[1]] = {
             '台語音標': row[1],
             '國際音標': row[2],
-            '台羅音標': row[3],
+            '台羅拼音': row[3],
             '白話字': row[4],
             '閩拼方案': row[5],
             '方音符號': row[6],

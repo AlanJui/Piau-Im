@@ -152,6 +152,19 @@ def han_ji_ca_piau_im(cursor, han_ji, hue_im="文讀音"):
 #     result += [tiau]
 #     return result
 
+# ==========================================================
+# 查詢語音類型，若未設定則預設為文讀音
+# ==========================================================
+# def get_sound_type(wb):
+#     try:
+#         if '語音類型' in wb.names:
+#             reading_type = wb.names['語音類型'].refers_to_range.value
+#         else:
+#             raise KeyError
+#     except KeyError:
+#         reading_type = "文讀音"
+#     return reading_type
+
 def connect_to_db(db_path):
     # 創建數據庫連接
     conn = sqlite3.connect(db_path)
@@ -165,19 +178,6 @@ def close_db_connection(conn):
     # 關閉數據庫連接
     conn.close()
 
-
-# ==========================================================
-# 查詢語音類型，若未設定則預設為文讀音
-# ==========================================================
-# def get_sound_type(wb):
-#     try:
-#         if '語音類型' in wb.names:
-#             reading_type = wb.names['語音類型'].refers_to_range.value
-#         else:
-#             raise KeyError
-#     except KeyError:
-#         reading_type = "文讀音"
-#     return reading_type
 
 # 使用範例
 if __name__ == "__main__":

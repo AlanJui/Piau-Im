@@ -9,7 +9,7 @@ import xlwings as xw
 from mod_file_access import get_named_value
 from mod_標音 import (
     init_piau_im_dict,
-    init_sing_bu_dict,
+    init_siann_bu_dict,
     init_un_bu_dict,
     is_punctuation,
     split_zu_im,
@@ -78,7 +78,7 @@ TONE_MARKS = {
 #     "h": "ㆷ˙",
 # }
 #================================================================
-def TPS_piau_im(sing_bu, un_bu, tiau_ho):
+def TPS_piau_im(siann_bu, un_bu, tiau_ho):
     piau_im_huat = "方音符號"
     tiau_ho_remap_for_TPS = {
         1: "",
@@ -97,7 +97,7 @@ def TPS_piau_im(sing_bu, un_bu, tiau_ho):
         "ㆡㄧ": "ㆢㄧ",
     }
 
-    siann = Sing_Bu_Dict[sing_bu][piau_im_huat]
+    siann = Siann_Bu_Dict[siann_bu][piau_im_huat]
     un = Un_Bu_Dict[un_bu][piau_im_huat]
     tiau = TONE_MARKS[piau_im_huat][int(tiau_ho)]
     piau_im = f"{siann}{un}{tiau}"
@@ -113,7 +113,7 @@ def TPS_piau_im(sing_bu, un_bu, tiau_ho):
 #================================================================
 # 雅俗通十五音(SNI:Nga-Siok-Thong)
 #================================================================
-def SNI_piau_im(sing_bu, un_bu, tiau_ho):
+def SNI_piau_im(siann_bu, un_bu, tiau_ho):
     piau_im_huat = "十五音"
     tiau_ho_remap_for_sip_ngoo_im = {
         1: "一",
@@ -125,7 +125,7 @@ def SNI_piau_im(sing_bu, un_bu, tiau_ho):
         8: "八",
     }
 
-    siann = Sing_Bu_Dict[sing_bu][piau_im_huat]
+    siann = Siann_Bu_Dict[siann_bu][piau_im_huat]
     un = Un_Bu_Dict[un_bu][piau_im_huat]
     # tiau = tiau_ho_remap_for_sip_ngoo_im[tiau_ho]
     tiau = TONE_MARKS[piau_im_huat][int(tiau_ho)]
@@ -147,17 +147,21 @@ def un_bu_ga_tiau_ho(guan_im, tiau):
         8: "\u030D",
         9: "\u030B",
     }
-    guan_im_u_ga_tiau_ho = f"{guan_im}{tiau_hu_dict[tiau]}"
+    guan_im_u_ga_tiau_ho = f"{guan_im}{tiau_hu_dict[int(tiau)]}"
     return guan_im_u_ga_tiau_ho
 
 #================================================================
 # 台羅拼音（TL）
 # 順序：《o＞e＞a＞u＞i＞ng＞m》；而 ng 標示在字母 n 上。
 #================================================================
-def TL_piau_im(sing_bu, un_bu, tiau_ho):
+def TL_piau_im(siann_bu, un_bu, tiau_ho):
     piau_im_huat = "台羅拼音"
-    siann = Sing_Bu_Dict[sing_bu][piau_im_huat]
-    if siann == None: siann = ""
+
+    if siann_bu == None or siann_bu == "Ø":
+        siann = ""
+    else:
+        siann = Siann_Bu_Dict[siann_bu][piau_im_huat]
+
     un = Un_Bu_Dict[un_bu][piau_im_huat]
     piau_im = f"{siann}{un}"
 
@@ -196,11 +200,14 @@ def TL_piau_im(sing_bu, un_bu, tiau_ho):
 #  - oai、oan、oat、oah 標在 a 上。
 #  - oeh 標在 e 上。
 #================================================================
-def POJ_piau_im(sing_bu, un_bu, tiau_ho):
+def POJ_piau_im(siann_bu, un_bu, tiau_ho):
     piau_im_huat = "白話字"
-    siann = Sing_Bu_Dict[sing_bu][piau_im_huat]
-    if siann == None:
+
+    if siann_bu == None or siann_bu == "Ø":
         siann = ""
+    else:
+        siann = Siann_Bu_Dict[siann_bu][piau_im_huat]
+
     un = Un_Bu_Dict[un_bu][piau_im_huat]
     piau_im = f"{siann}{un}"
 
@@ -269,10 +276,14 @@ def bp_un_bu_ga_tiau_ho(guan_im, tiau):
     }
     return f"{guan_im}{tiau_hu_dict[tiau]}"
 
-def BP_piau_im(sing_bu, un_bu, tiau_ho):
+def BP_piau_im(siann_bu, un_bu, tiau_ho):
     piau_im_huat = "閩拼方案"
-    siann = Sing_Bu_Dict[sing_bu][piau_im_huat]
-    if siann == None: siann = ""
+
+    if siann_bu == None or siann_bu == "Ø":
+        siann = ""
+    else:
+        siann = Siann_Bu_Dict[siann_bu][piau_im_huat]
+
     un = Un_Bu_Dict[un_bu][piau_im_huat]
     piau_im = f"{siann}{un}"
 
@@ -300,7 +311,7 @@ def BP_piau_im(sing_bu, un_bu, tiau_ho):
 
         # 處理韻母加聲調符號
         guan_im = un_chars[idx]
-        tiau = tiau_ho_remap_for_BP[tiau_ho]  # 將「傳統八聲調」轉換成閩拼使用的調號
+        tiau = tiau_ho_remap_for_BP[int(tiau_ho)]  # 將「傳統八聲調」轉換成閩拼使用的調號
         un_chars[idx] = bp_un_bu_ga_tiau_ho(guan_im, tiau)
         un_str = "".join(un_chars)
         piau_im = piau_im.replace(found, un_str)
@@ -353,20 +364,20 @@ def put_picture(wb, source_sheet_name):
     html_str += (div_tag % (title, image_url) + "\n")
     return html_str
 
-def choose_piau_im_method(zu_im_huat, sing_bu, un_bu, tiau_ho):
+def choose_piau_im_method(zu_im_huat, siann_bu, un_bu, tiau_ho):
     """選擇並執行對應的注音方法"""
     if zu_im_huat == "十五音":
-        return SNI_piau_im(sing_bu, un_bu, tiau_ho)
+        return SNI_piau_im(siann_bu, un_bu, tiau_ho)
     elif zu_im_huat == "白話字":
-        return POJ_piau_im(sing_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "台羅音標":
-        return TL_piau_im(sing_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "閩拚方案":
-        return BP_piau_im(sing_bu, un_bu, tiau_ho)
+        return POJ_piau_im(siann_bu, un_bu, tiau_ho)
+    elif zu_im_huat == "台羅拼音":
+        return TL_piau_im(siann_bu, un_bu, tiau_ho)
+    elif zu_im_huat == "閩拼方案":
+        return BP_piau_im(siann_bu, un_bu, tiau_ho)
     elif zu_im_huat == "方音符號":
-        return TPS_piau_im(sing_bu, un_bu, tiau_ho)
+        return TPS_piau_im(siann_bu, un_bu, tiau_ho)
     elif zu_im_huat == "台語音標":
-        siann = Sing_Bu_Dict[sing_bu]["台語音標"] or ""
+        siann = Siann_Bu_Dict[siann_bu]["台語音標"] or ""
         un = Un_Bu_Dict[un_bu]["台語音標"]
         return f"{siann}{un}{tiau_ho}"
     return ""
@@ -380,7 +391,7 @@ def concat_ruby_tag(style, han_ji, tlpa_im_piau, han_ji_piau_im):
     elif style == "SNI":
         ruby_tag = f"  <ruby><rb>{han_ji}</rb><rp>(</rp><rt>{han_ji_piau_im}</rt><rp>)</rp></ruby>"
     else:
-        ruby_tag = f"  <ruby><rb>{han_ji}</rb><rp>(</rp><rt>{tlpa_im_piau}</rt><rp>)</rp></ruby>"
+        ruby_tag = f"  <ruby><rb>{han_ji}</rb><rp>(</rp><rt>{han_ji_piau_im}</rt><rp>)</rp></ruby>"
     return ruby_tag
 
 
@@ -453,13 +464,13 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
                             else:
                                 zu_im_list = split_zu_im(lo_ma_im_piau)
                                 if zu_im_list[0] == "" or zu_im_list[0] == None:
-                                    sian_bu = "Ø"
+                                    siann_bu = "Ø"
                                 else:
-                                    sian_bu = zu_im_list[0]
+                                    siann_bu = zu_im_list[0]
 
                                 han_ji_piau_im = choose_piau_im_method(
                                     piau_im_huat,
-                                    sian_bu,
+                                    siann_bu,
                                     zu_im_list[1],
                                     zu_im_list[2]
                                 )
@@ -495,7 +506,7 @@ def tng_sing_bang_iah(wb, sheet_name='漢字注音', cell='V3', page_type='含�
     global source_sheet  # 宣告 source_sheet 為全域變數
     global source_sheet_name  # 宣告 source_sheet_name 為全域變數
     global total_length  # 宣告 end_of_source_row 為全域變數
-    global Sing_Bu_Dict, Un_Bu_Dict
+    global Siann_Bu_Dict, Un_Bu_Dict
     global Web_Page_Style
 
     # -------------------------------------------------------------------------
@@ -503,7 +514,7 @@ def tng_sing_bang_iah(wb, sheet_name='漢字注音', cell='V3', page_type='含�
     # -------------------------------------------------------------------------
     han_ji_khoo = get_named_value(wb, '漢字庫', '河洛話')
     Web_Page_Style = get_named_value(wb, '網頁格式', 'DBL')
-    Sing_Bu_Dict, Un_Bu_Dict = init_piau_im_dict(han_ji_khoo)
+    Siann_Bu_Dict, Un_Bu_Dict = init_piau_im_dict(han_ji_khoo)
 
     # -------------------------------------------------------------------------
     # 選擇指定的工作表
