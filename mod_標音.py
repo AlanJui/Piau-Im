@@ -1,7 +1,6 @@
 import re
 import sqlite3
 
-global Siann_Bu_Dict, Un_Bu_Dict
 
 # =========================================================
 # 判斷是否為標點符號的輔助函數
@@ -219,71 +218,358 @@ def dict_to_str(zu_im_hu_ho):
     return f"{zu_im_hu_ho['聲母']}{zu_im_hu_ho['韻母']}{zu_im_hu_ho['聲調']}"
 
 
-def init_piau_im_dict(han_ji_khoo):
-    if han_ji_khoo == "河洛話":
-        db_name = 'Ho_Lok_Ue.db'
-    else:
-        db_name = 'Kong_Un.db'
+# ==========================================================
 
-    conn = sqlite3.connect(db_name)
-    cursor = conn.cursor()
+class PiauIm:
 
-    Siann_Bu_Dict = init_siann_bu_dict(cursor)
-    Un_Bu_Dict = init_un_bu_dict(cursor)
+    TONE_MARKS = {
+        "十五音": {
+            1: "一",
+            2: "二",
+            3: "三",
+            4: "四",
+            5: "五",
+            7: "七",
+            8: "八"
+        },
+        "方音符號": {
+            1: "",
+            2: "ˋ",
+            3: "˪",
+            4: "",
+            5: "ˊ",
+            7: "˫",
+            8: "\u02D9"
+        },
+        "閩拼方案": {
+            1: "\u0304",
+            2: "\u0341",
+            3: "\u030C",
+            5: "\u0300",
+            6: "\u0302",
+            7: "\u0304",
+            8: "\u0341"
+        },
+        "台羅拼音": {
+            1: "",
+            2: "\u0301",
+            3: "\u0300",
+            4: "",
+            5: "\u0302",
+            6: "\u030C",
+            7: "\u0304",
+            8: "\u030D"
+        }
+    }
 
-    conn.close()
+    def __init__(self, han_ji_khoo):
+        self.Siann_Bu_Dict = None
+        self.Un_Bu_Dict = None
+        self.init_piau_im_dict(han_ji_khoo)
+        self.pattern1 = re.compile(r"(uai|uan|uah|ueh|ee|ei|oo)", re.I)
+        self.pattern2 = re.compile(r"(o|e|a|u|i|ng|m)", re.I)
 
-    return Siann_Bu_Dict, Un_Bu_Dict
+    def _init_siann_bu_dict(self, cursor):
+        # 執行 SQL 查詢
+        cursor.execute("SELECT * FROM 聲母對照表")
 
+        # 獲取所有資料
+        rows = cursor.fetchall()
 
-def init_siann_bu_dict(cursor):
-    # 執行 SQL 查詢
-    cursor.execute("SELECT * FROM 聲母對照表")
+        # 初始化字典
+        siann_bu_dict = {}
 
-    # 獲取所有資料
-    rows = cursor.fetchall()
+        # 從查詢結果中提取資料並將其整理成一個字典
+        for row in rows:
+            siann_bu_dict[row[1]] = {
+                '台語音標': row[1],
+                '國際音標': row[2],
+                '台羅拼音': row[3],
+                '白話字':   row[4],
+                '閩拼方案': row[5],
+                '方音符號': row[6],
+                '十五音':   row[7],
+            }
+        return siann_bu_dict
 
-    # 初始化字典
-    siann_bu_dict = {}
+    def _init_un_bu_dict(self, cursor):
+        # 執行 SQL 查詢
+        cursor.execute("SELECT * FROM 韻母對照表")
 
-    # 從查詢結果中提取資料並將其整理成一個字典
-    for row in rows:
-        siann_bu_dict[row[1]] = {
-            '台語音標': row[1],
-            '國際音標': row[2],
-            '台羅拼音': row[3],
-            '白話字':   row[4],
-            '閩拼方案': row[5],
-            '方音符號': row[6],
-            '十五音':   row[7],
+        # 獲取所有資料
+        rows = cursor.fetchall()
+
+        # 初始化字典
+        un_bu_dict = {}
+
+        # 從查詢結果中提取資料並將其整理成一個字典
+        for row in rows:
+            un_bu_dict[row[1]] = {
+                '台語音標': row[1],
+                '國際音標': row[2],
+                '台羅拼音': row[3],
+                '白話字': row[4],
+                '閩拼方案': row[5],
+                '方音符號': row[6],
+                '十五音': row[7],
+                '十五音舒促聲': row[8],
+                '十五音序': int(row[9]),
+            }
+        return un_bu_dict
+
+    def init_piau_im_dict(self, han_ji_khoo):
+        if han_ji_khoo == "河洛話":
+            db_name = 'Ho_Lok_Ue.db'
+        else:
+            db_name = 'Kong_Un.db'
+
+        with sqlite3.connect(db_name) as conn:
+            cursor = conn.cursor()
+            self.Siann_Bu_Dict = self._init_siann_bu_dict(cursor)
+            self.Un_Bu_Dict = self._init_un_bu_dict(cursor)
+
+    #================================================================
+    # 在韻母加調號：白話字(POJ)與台羅(TL)同
+    #================================================================
+    def un_bu_ga_tiau_ho(self, guan_im, tiau):
+        tiau_hu_dict = {
+            1: "",
+            2: "\u0301",
+            3: "\u0300",
+            4: "",
+            5: "\u0302",
+            6: "\u030C",
+            7: "\u0304",
+            8: "\u030D",
+            9: "\u030B",
+        }
+        guan_im_u_ga_tiau_ho = f"{guan_im}{tiau_hu_dict[int(tiau)]}"
+        return guan_im_u_ga_tiau_ho
+
+    #================================================================
+    # 在韻母加調號：閩拼方案(BP)
+    #================================================================
+    def bp_un_bu_ga_tiau_ho(self, guan_im, tiau):
+        tiau_hu_dict = {
+            1: "\u0304",  # 陰平
+            2: "\u0341",  # 陽平
+            3: "\u030C",  # 上声
+            5: "\u0300",  # 陰去
+            6: "\u0302",  # 陽去
+            7: "\u0304",  # 陰入
+            8: "\u0341",  # 陽入
+        }
+        return f"{guan_im}{tiau_hu_dict[tiau]}"
+
+    #================================================================
+    # 台羅拼音（TL）
+    # 順序：《o＞e＞a＞u＞i＞ng＞m》；而 ng 標示在字母 n 上。
+    #================================================================
+    def TL_piau_im(self, siann_bu, un_bu, tiau_ho):
+        piau_im_huat = "台羅拼音"
+
+        if siann_bu == None or siann_bu == "Ø":
+            siann = ""
+        else:
+            siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+
+        un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+        piau_im = f"{siann}{un}"
+
+        # 韻母為複元音
+        searchObj = self.pattern1.search(piau_im)
+        if searchObj:
+            found = searchObj.group(1)
+            un_chars = list(found)
+            idx = 0
+            if found == "ee" or found == "ei" or found == "oo":
+                idx = 0
+            else:
+                # found = uai/uan/uah/ueh
+                idx = 1
+            guan_im = un_chars[idx]
+            un_chars[idx] = self.un_bu_ga_tiau_ho(guan_im, tiau_ho)
+            un_str = "".join(un_chars)
+            piau_im = piau_im.replace(found, un_str)
+        else:
+            # 韻母為單元音或鼻音韻
+            searchObj2 = self.pattern2.search(piau_im)
+            if searchObj2:
+                found = searchObj2.group(1)
+                guan_im = found
+                new_un = self.un_bu_ga_tiau_ho(guan_im, tiau_ho)
+                piau_im = piau_im.replace(found, new_un)
+
+        return piau_im
+
+    #================================================================
+    # 白話字（POJ）
+    # 順序：《o＞e＞a＞u＞i＞ng＞m》；而 ng 標示在字母 n 上。
+    # 例外：
+    #  - oai、oan、oat、oah 標在 a 上。
+    #  - oeh 標在 e 上。
+    #================================================================
+    def POJ_piau_im(self, siann_bu, un_bu, tiau_ho):
+        piau_im_huat = "白話字"
+
+        if siann_bu == None or siann_bu == "Ø":
+            siann = ""
+        else:
+            siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+
+        un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+        piau_im = f"{siann}{un}"
+
+        # 韻母為複元音
+        POJ_pattern1 = r"(oai|oan|oah|oeh|ee|ei)"
+        searchObj = re.search(POJ_pattern1, piau_im, re.M | re.I)
+        if searchObj:
+            found = searchObj.group(1)
+            un_chars = list(found)
+            idx = 0
+            if found == "ee" or found == "ei":
+                idx = 0
+            else:
+                # found = oai/oan/oah/oeh
+                idx = 1
+            guan_im = un_chars[idx]
+            un_chars[idx] = self.un_bu_ga_tiau_ho(guan_im, tiau_ho)
+            un_str = "".join(un_chars)
+            piau_im = piau_im.replace(found, un_str)
+        else:
+            # 韻母為單元音或鼻音韻
+            POJ_pattern2 = r"(o|e|a|u|i|ng|m)"
+            searchObj2 = re.search(POJ_pattern2, piau_im, re.M | re.I)
+            if searchObj2:
+                found = searchObj2.group(1)
+                guan_im = found
+                new_un = self.un_bu_ga_tiau_ho(guan_im, tiau_ho)
+                piau_im = piau_im.replace(found, new_un)
+
+        return piau_im
+
+    #================================================================
+    # 閩拼（BP）
+    #
+    # 【調號標示規則】
+    # 當一個音節有多個字母時，調號得標示在響度最大的字母上面（通常在韻腹）。由規則可以判定確切的字母：
+    #
+    #  - 響度優先順序： a > oo > (e = o) > (i = u)〈低元音 > 高元音 > 無擦通音 > 擦音 > 塞音〉
+    #  - 二合字母 iu 及 ui ，調號都標在後一個字母上；因為前一個字母是介音。
+    #  - m 作韻腹時則標於字母 m 上。
+    #  - 二合字母 oo 及 ng，標於前一個字母上；比如 ng 標示在字母 n 上。
+    #  - 三合字母 ere，標於最後的字母 e 上。
+    #================================================================
+    def BP_piau_im(self, siann_bu, un_bu, tiau_ho):
+        piau_im_huat = "閩拼方案"
+        # 將「台羅八聲調」轉換成閩拼使用的調號
+        tiau_ho_remap_for_BP = {
+            1: 1,  # 陰平: 44
+            2: 3,  # 上聲：53
+            3: 5,  # 陰去：21
+            4: 7,  # 上聲：53
+            5: 2,  # 陽平：24
+            7: 6,  # 陰入：3?
+            8: 8,  # 陽入：4?
         }
 
-    return siann_bu_dict
+        if siann_bu == None or siann_bu == "Ø":
+            siann = ""
+        else:
+            siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
 
+        un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+        piau_im = f"{siann}{un}"
 
-def init_un_bu_dict(cursor):
-    # 執行 SQL 查詢
-    cursor.execute("SELECT * FROM 韻母對照表")
+        # 當聲母為「空白」，韻母為：i 或 u 時，調整聲母
+        un_chars = list(un)
+        if siann == "":
+            if un_chars[0] == "i":
+                siann = "y"
+            elif un_chars[0] == "u":
+                siann = "w"
 
-    # 獲取所有資料
-    rows = cursor.fetchall()
+        pattern = r"(a|oo|ere|iu|ui|ng|e|o|i|u|m)"
+        searchObj = re.search(pattern, piau_im, re.M | re.I)
 
-    # 初始化字典
-    un_bu_dict = {}
+        if searchObj:
+            found = searchObj.group(1)
+            un_chars = list(found)
+            idx = 0
+            if found == "iu" or found == "ui":
+                idx = 1
+            elif found == "oo" or found == "ng":
+                idx = 0
+            elif found == "ere":
+                idx = 2
 
-    # 從查詢結果中提取資料並將其整理成一個字典
-    for row in rows:
-        un_bu_dict[row[1]] = {
-            '台語音標': row[1],
-            '國際音標': row[2],
-            '台羅拼音': row[3],
-            '白話字': row[4],
-            '閩拼方案': row[5],
-            '方音符號': row[6],
-            '十五音': row[7],
-            '十五音舒促聲': row[8],
-            '十五音序': int(row[9]),
+            # 處理韻母加聲調符號
+            guan_im = un_chars[idx]
+            tiau = tiau_ho_remap_for_BP[int(tiau_ho)]  # 將「傳統八聲調」轉換成閩拼使用的調號
+            un_chars[idx] = self.bp_un_bu_ga_tiau_ho(guan_im, tiau)
+            un_str = "".join(un_chars)
+            piau_im = piau_im.replace(found, un_str)
+
+        return piau_im
+
+    #================================================================
+    # 方音符號注音（TPS）
+    # TPS_mapping_dict = {
+    #     "p": "ㆴ˙",
+    #     "t": "ㆵ˙",
+    #     "k": "ㆻ˙",
+    #     "h": "ㆷ˙",
+    # }
+    #================================================================
+    def TPS_piau_im(self, siann_bu, un_bu, tiau_ho):
+        piau_im_huat = "方音符號"
+        tiau_ho_remap_for_TPS = {
+            1: "",
+            2: "ˋ",
+            3: "˪",
+            4: "",
+            5: "ˊ",
+            7: "˫",
+            8: "\u02D9",
+        }
+        TPS_piau_im_remap_dict = {
+            "ㄗㄧ": "ㄐㄧ",
+            "ㄘㄧ": "ㄑㄧ",
+            "ㄙㄧ": "ㄒㄧ",
+            "ㆡㄧ": "ㆢㄧ",
         }
 
-    return un_bu_dict
+        siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+        un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+        tiau = self.TONE_MARKS[piau_im_huat][int(tiau_ho)]
+        piau_im = f"{siann}{un}{tiau}"
 
+        pattern = r"(ㄗㄧ|ㄘㄧ|ㄙㄧ|ㆡㄧ)"
+        searchObj = re.search(pattern, piau_im, re.M | re.I)
+        if searchObj:
+            key_value = searchObj.group(1)
+            piau_im = piau_im.replace(key_value, TPS_piau_im_remap_dict[key_value])
+
+        return piau_im
+
+    #================================================================
+    # 雅俗通十五音(SNI:Nga-Siok-Thong)
+    #================================================================
+    def SNI_piau_im(self, siann_bu, un_bu, tiau_ho):
+        piau_im_huat = "十五音"
+        tiau_ho_remap_for_sip_ngoo_im = {
+            1: "一",
+            2: "二",
+            3: "三",
+            4: "四",
+            5: "五",
+            7: "七",
+            8: "八",
+        }
+
+        siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+        un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+        # tiau = tiau_ho_remap_for_sip_ngoo_im[tiau_ho]
+        tiau = self.TONE_MARKS[piau_im_huat][int(tiau_ho)]
+        piau_im = f"{un}{tiau}{siann}"
+        return piau_im
