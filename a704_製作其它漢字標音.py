@@ -38,32 +38,8 @@ piau_im_huat = wb.names['標音方法'].refers_to_range.value
 copy_excel_sheet(wb, '漢字注音', piau_im_huat)
 reset_han_ji_piau_im_cells(wb, piau_im_huat)
 
-# 根據標音方法選擇對應參數
-if piau_im_huat == '十五音':
-    hue_im = "白話音"
-    module_name = 'mod_標音'
-    function_name = 'TLPA_Tng_Zap_Goo_Im'
-elif piau_im_huat == '白話字':
-    # 以下為待完成之虛擬程式碼
-    hue_im = "白話字"
-    module_name = 'mod_白話字'
-    function_name = 'bah_hoat_tng_im'
-elif piau_im_huat == '台羅拼音':
-    # 以下為待完成之虛擬程式碼
-    hue_im = "台羅拼音"
-    module_name = 'mod_台羅拼音'
-    function_name = 'tai_lo_pin_im'
-elif piau_im_huat == '閩拚方案':
-    # 以下為待完成之虛擬程式碼
-    hue_im = "閩拚方案"
-    module_name = 'mod_閩拚方案'
-    function_name = 'min_pian_han_im'
-else:
-    print(f"無法識別的標音方法：{piau_im_huat}")
-    sys.exit(1)
-
 # 呼叫 han_ji_piau_im 函數，並傳入動態參數
-han_ji_piau_im(wb, sheet_name=piau_im_huat, cell='V3', hue_im=hue_im, module_name=module_name, function_name=function_name)
+han_ji_piau_im(wb, sheet_name=piau_im_huat, cell='V3')
 
 # (3) A740: 將【漢字注音】工作表的內容，轉成 HTML 網頁檔案。
 # tng_sing_bang_iah(wb, '漢字注音', 'V3')
