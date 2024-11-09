@@ -258,7 +258,8 @@ class PiauIm:
             5: "\u0302",
             6: "\u030C",
             7: "\u0304",
-            8: "\u030D"
+            8: "\u030D",
+            9: "\u030B"
         }
     }
 
@@ -266,8 +267,10 @@ class PiauIm:
         self.Siann_Bu_Dict = None
         self.Un_Bu_Dict = None
         self.init_piau_im_dict(han_ji_khoo)
-        self.pattern1 = re.compile(r"(uai|uan|uah|ueh|ee|ei|oo)", re.I)
-        self.pattern2 = re.compile(r"(o|e|a|u|i|ng|m)", re.I)
+        self.TL_pattern1 = re.compile(r"(uai|uan|uah|ueh|ee|ei|oo)", re.I)
+        self.TL_pattern2 = re.compile(r"(o|e|a|u|i|n|m)", re.I)
+        self.POJ_pattern1 = re.compile(r"(oai|oan|oah|oeh|ee|ei)", re.I)
+        self.POJ_pattern2 = re.compile(r"(o|e|a|u|i|n|m)", re.I)
 
     def _init_siann_bu_dict(self, cursor):
         # 執行 SQL 查詢
@@ -377,7 +380,7 @@ class PiauIm:
         piau_im = f"{siann}{un}"
 
         # 韻母為複元音
-        searchObj = self.pattern1.search(piau_im)
+        searchObj = self.TL_pattern1.search(piau_im)
         if searchObj:
             found = searchObj.group(1)
             un_chars = list(found)
@@ -393,7 +396,7 @@ class PiauIm:
             piau_im = piau_im.replace(found, un_str)
         else:
             # 韻母為單元音或鼻音韻
-            searchObj2 = self.pattern2.search(piau_im)
+            searchObj2 = self.TL_pattern2.search(piau_im)
             if searchObj2:
                 found = searchObj2.group(1)
                 guan_im = found
@@ -421,8 +424,7 @@ class PiauIm:
         piau_im = f"{siann}{un}"
 
         # 韻母為複元音
-        POJ_pattern1 = r"(oai|oan|oah|oeh|ee|ei)"
-        searchObj = re.search(POJ_pattern1, piau_im, re.M | re.I)
+        searchObj = self.POJ_pattern1.search(piau_im)
         if searchObj:
             found = searchObj.group(1)
             un_chars = list(found)
@@ -438,8 +440,7 @@ class PiauIm:
             piau_im = piau_im.replace(found, un_str)
         else:
             # 韻母為單元音或鼻音韻
-            POJ_pattern2 = r"(o|e|a|u|i|ng|m)"
-            searchObj2 = re.search(POJ_pattern2, piau_im, re.M | re.I)
+            searchObj2 = self.POJ_pattern2.search(piau_im)
             if searchObj2:
                 found = searchObj2.group(1)
                 guan_im = found

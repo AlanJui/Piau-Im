@@ -134,7 +134,8 @@ button:focus {
 }
 
 rt {
-  font-family: Arial;
+  /* font-family: Arial; */
+  font-family: BopomofoRuby;
   color: darkcyan;
   font-size: 45%;
   letter-spacing: 0;
@@ -269,12 +270,21 @@ rtc {
 
 /* 台羅、閩拼、白話字 */
 .pin_yin {
-  font-family: "Noto Serif TC";
+  /* font-family: "Noto Serif TC"; */
+  font-family: BopomofoRuby;
+}
+
+.pin_yin rt {
+  font-family: Arial;
+  color: darkcyan;
+  font-size: 45%;
+  letter-spacing: 0;
 }
 
 /* 白話字 */
 .poj {
-  font-family: "Noto Serif TC";
+  /* font-family: "Noto Serif TC"; */
+  font-family: BopomofoRuby;
   letter-spacing: 0.2em;
 }
 
