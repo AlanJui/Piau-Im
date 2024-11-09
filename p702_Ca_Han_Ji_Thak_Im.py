@@ -4,10 +4,33 @@ import sqlite3
 import xlwings as xw
 
 from mod_file_access import load_module_function
-from mod_標音 import TL_Tng_Zu_Im, is_valid_han_ji, split_zu_im
+from mod_標音 import PiauIm, is_valid_han_ji, split_zu_im
 
+
+def choose_piau_im_method(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
+    """選擇並執行對應的注音方法"""
+    if zu_im_huat == "十五音":
+        return piau_im.SNI_piau_im(siann_bu, un_bu, tiau_ho)
+    elif zu_im_huat == "白話字":
+        return piau_im.POJ_piau_im(siann_bu, un_bu, tiau_ho)
+    elif zu_im_huat == "台羅拼音":
+        return piau_im.TL_piau_im(siann_bu, un_bu, tiau_ho)
+    elif zu_im_huat == "閩拼方案":
+        return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
+    elif zu_im_huat == "方音符號":
+        return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+    elif zu_im_huat == "台語音標":
+        siann = piau_im.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+        un = piau_im.Un_Bu_Dict[un_bu]["台語音標"]
+        return f"{siann}{un}{tiau_ho}"
+    return ""
 
 def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', hue_im="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im'):
+    # 初始化 PiauIm 類別，産生標音物件
+    piau_im = PiauIm(han_ji_khoo=han_ji_khoo)
+    # piau_im_huat = wb.names['標音方法'].refers_to_range.value
+    piau_im_huat = '方音符號'
+
     # 顯示「已輸入之拼音字母及注音符號」
     named_range = wb.names['顯示注音輸入']
     named_range.refers_to_range.value = True
@@ -77,45 +100,76 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', hue_im="白話�
                     if manual_input:
                         if '〔' in manual_input and '〕' in manual_input and '【' in manual_input and '】' in manual_input:
                             lo_ma_im_piau = manual_input.split('〔')[1].split('〕')[0]
-                            zu_im_hu_ho = manual_input.split('【')[1].split('】')[0]
+                            han_ji_piau_im = manual_input.split('【')[1].split('】')[0]
                         else:
-                            zu_im_list = split_zu_im(manual_input)
-                            zu_im_hu_ho = TL_Tng_Zu_Im(
-                                siann_bu=zu_im_list[0],
-                                un_bu=zu_im_list[1],
-                                siann_tiau=zu_im_list[2],
-                                cursor=cursor
-                            )['注音符號']
+                            # zu_im_hu_ho = TL_Tng_Zu_Im(
+                            #     siann_bu=zu_im_list[0],
+                            #     un_bu=zu_im_list[1],
+                            #     siann_tiau=zu_im_list[2],
+                            #     cursor=cursor
+                            # )['注音符號']
                             lo_ma_im_piau = manual_input
+                            piau_im_list = split_zu_im(lo_ma_im_piau)
+                            if piau_im_list[0] == "" or piau_im_list[0] == None:
+                                siann_bu = "Ø"
+                            else:
+                                siann_bu = piau_im_list[0]
+
+                            han_ji_piau_im = choose_piau_im_method(
+                                piau_im,
+                                piau_im_huat,
+                                siann_bu,
+                                piau_im_list[1],
+                                piau_im_list[2]
+                            )
 
                         sheet.range((row - 1, col)).value = lo_ma_im_piau
-                        sheet.range((row + 1, col)).value = zu_im_hu_ho
+                        sheet.range((row + 1, col)).value = han_ji_piau_im
                     else:
                         result = han_ji_ca_piau_im(cursor=cursor, han_ji=han_ji, hue_im=hue_im)
 
                         if result:
                             if han_ji_khoo == "河洛話":
-                                lo_ma_im_piau = result[0]['台語音標']
-                                zu_im_hu_ho = TL_Tng_Zu_Im(
-                                    siann_bu=result[0]['聲母'],
-                                    un_bu=result[0]['韻母'],
-                                    siann_tiau=result[0]['聲調'],
-                                    cursor=cursor
+                                # 將【台語音標】分解為【聲母】、【韻母】、【聲調】
+                                siann_bu, un_bu, tiau_ho = split_zu_im(result[0]['台語音標'])
+                                # lo_ma_im_piau = f'{siann_bu}{un_bu}{tiau_ho}'
+                                # lo_ma_im_piau = siann_bu + un_bu + tiau_ho
+                                lo_ma_im_piau = ''.join([siann_bu, un_bu, tiau_ho])
+
+                                # 將【台語音標】分解為【聲母】、【韻母】、【聲調】
+                                if siann_bu == "" or siann_bu == None:
+                                    siann_bu = "Ø"
+
+                                han_ji_piau_im = choose_piau_im_method(
+                                    piau_im,
+                                    piau_im_huat,
+                                    siann_bu,
+                                    un_bu,
+                                    tiau_ho,
                                 )
                             else:
-                                lo_ma_im_piau = split_zu_im(result[0]['標音'])
-                                zu_im_hu_ho = TL_Tng_Zu_Im(
-                                    siann_bu=lo_ma_im_piau[0],
-                                    un_bu=lo_ma_im_piau[1],
-                                    siann_tiau=lo_ma_im_piau[2],
-                                    cursor=cursor
+                                # 將《廣韻》字庫的【標音】分解為【聲母】、【韻母】、【聲調】
+                                siann_bu, un_bu, tiau_ho = split_zu_im(result[0]['標音'])
+                                lo_ma_im_piau = siann_bu + un_bu + tiau_ho
+
+                                # 將【台語音標】分解為【聲母】、【韻母】、【聲調】
+                                if siann_bu == "" or siann_bu == None:
+                                    siann_bu = "Ø"
+
+                                han_ji_piau_im = choose_piau_im_method(
+                                    piau_im,
+                                    piau_im_huat,
+                                    siann_bu,
+                                    un_bu,
+                                    tiau_ho,
                                 )
-                            sheet.range((row - 1, col)).value = ''.join(lo_ma_im_piau)
-                            sheet.range((row + 1, col)).value = zu_im_hu_ho['注音符號']
+                            # sheet.range((row - 1, col)).value = ''.join(lo_ma_im_piau)
+                            sheet.range((row - 1, col)).value = lo_ma_im_piau
+                            sheet.range((row + 1, col)).value = han_ji_piau_im
                         else:
                             msg = f"【{cell_value}】查無此字！"
-                    if lo_ma_im_piau and zu_im_hu_ho:
-                        print(f"({row}, {col_name}) = {han_ji} [{lo_ma_im_piau}] 【{zu_im_hu_ho}】")
+                    if lo_ma_im_piau and han_ji_piau_im:
+                        print(f"({row}, {col_name}) = {han_ji} [{lo_ma_im_piau}] 【{han_ji_piau_im}】")
                     else:
                         print(f"({row}, {col_name}) = {msg}")
 

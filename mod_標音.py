@@ -542,7 +542,8 @@ class PiauIm:
 
         siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
         un = self.Un_Bu_Dict[un_bu][piau_im_huat]
-        tiau = self.TONE_MARKS[piau_im_huat][int(tiau_ho)]
+        tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
+        tiau = self.TONE_MARKS[piau_im_huat][tiau_ho]
         piau_im = f"{siann}{un}{tiau}"
 
         pattern = r"(ㄗㄧ|ㄘㄧ|ㄙㄧ|ㆡㄧ)"
