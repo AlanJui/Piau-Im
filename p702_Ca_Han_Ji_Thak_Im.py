@@ -4,7 +4,14 @@ import sqlite3
 import xlwings as xw
 
 from mod_file_access import load_module_function
-from mod_標音 import PiauIm, is_valid_han_ji, split_zu_im
+from mod_標音 import (
+    PiauIm,
+    hong_im_tng_tai_gi_im_piau,
+    is_punctuation,
+    split_hong_im_hu_ho,
+    split_tai_gi_im_piau,
+    tlpa_tng_han_ji_piau_im,
+)
 
 
 def choose_piau_im_method(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
@@ -88,7 +95,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', hue_im="白話�
                         break
 
                     cell_value = sheet.range((row, col)).value
-                    if not is_valid_han_ji(cell_value):
+                    if is_punctuation(cell_value):
                         msg = cell_value
                         print(f"({row}, {col_name}) = {msg}")
                         index += 1
@@ -98,29 +105,32 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', hue_im="白話�
 
                     manual_input = sheet.range((row-2, col)).value
                     if manual_input:
-                        if '〔' in manual_input and '〕' in manual_input and '【' in manual_input and '】' in manual_input:
-                            lo_ma_im_piau = manual_input.split('〔')[1].split('〕')[0]
+                        if '〔' in manual_input and '〕' in manual_input:
+                            im_piau = manual_input.split('〔')[1].split('〕')[0]
+                            siann, un, tiau = split_tai_gi_im_piau(im_piau)
+                            lo_ma_im_piau = ''.join([siann, un, tiau])
+                            han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+                                piau_im=piau_im,
+                                piau_im_huat=piau_im_huat,
+                                tai_gi_im_piau=lo_ma_im_piau
+                            )
+                        elif '【' in manual_input and '】' in manual_input:
                             han_ji_piau_im = manual_input.split('【')[1].split('】')[0]
+                            siann, un, tiau = split_hong_im_hu_ho(han_ji_piau_im)
+                            lo_ma_im_piau = hong_im_tng_tai_gi_im_piau(
+                                siann=siann,
+                                un=un,
+                                tiau=tiau,
+                                cursor=cursor,
+                            )['台語音標']
                         else:
-                            # zu_im_hu_ho = TL_Tng_Zu_Im(
-                            #     siann_bu=zu_im_list[0],
-                            #     un_bu=zu_im_list[1],
-                            #     siann_tiau=zu_im_list[2],
-                            #     cursor=cursor
-                            # )['注音符號']
-                            lo_ma_im_piau = manual_input
-                            piau_im_list = split_zu_im(lo_ma_im_piau)
-                            if piau_im_list[0] == "" or piau_im_list[0] == None:
-                                siann_bu = "Ø"
-                            else:
-                                siann_bu = piau_im_list[0]
-
-                            han_ji_piau_im = choose_piau_im_method(
-                                piau_im,
-                                piau_im_huat,
-                                siann_bu,
-                                piau_im_list[1],
-                                piau_im_list[2]
+                            im_piau = manual_input
+                            siann, un, tiau = split_tai_gi_im_piau(im_piau)
+                            lo_ma_im_piau = ''.join([siann, un, tiau])
+                            han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+                                piau_im=piau_im,
+                                piau_im_huat=piau_im_huat,
+                                tai_gi_im_piau=lo_ma_im_piau
                             )
 
                         sheet.range((row - 1, col)).value = lo_ma_im_piau
@@ -131,7 +141,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', hue_im="白話�
                         if result:
                             if han_ji_khoo == "河洛話":
                                 # 將【台語音標】分解為【聲母】、【韻母】、【聲調】
-                                siann_bu, un_bu, tiau_ho = split_zu_im(result[0]['台語音標'])
+                                siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(result[0]['台語音標'])
                                 # lo_ma_im_piau = f'{siann_bu}{un_bu}{tiau_ho}'
                                 # lo_ma_im_piau = siann_bu + un_bu + tiau_ho
                                 lo_ma_im_piau = ''.join([siann_bu, un_bu, tiau_ho])
@@ -149,7 +159,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', hue_im="白話�
                                 )
                             else:
                                 # 將《廣韻》字庫的【標音】分解為【聲母】、【韻母】、【聲調】
-                                siann_bu, un_bu, tiau_ho = split_zu_im(result[0]['標音'])
+                                siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(result[0]['標音'])
                                 lo_ma_im_piau = siann_bu + un_bu + tiau_ho
 
                                 # 將【台語音標】分解為【聲母】、【韻母】、【聲調】
