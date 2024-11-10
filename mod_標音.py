@@ -19,68 +19,20 @@ def replace_superscript_digits(input_str):
     return ''.join(superscript_digit_mapping.get(char, char) for char in input_str)
 
 
-def choose_piau_im_method(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
-    """選擇並執行對應的注音方法"""
-    if zu_im_huat == "十五音":
-        return piau_im.SNI_piau_im(siann_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "白話字":
-        return piau_im.POJ_piau_im(siann_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "台羅拼音":
-        return piau_im.TL_piau_im(siann_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "閩拼方案":
-        return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "方音符號":
-        return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "台語音標":
-        siann = piau_im.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
-        un = piau_im.Un_Bu_Dict[un_bu]["台語音標"]
-        return f"{siann}{un}{tiau_ho}"
-    return ""
-
-
-# ==========================================================
-# 台語音標轉換為【漢字標音】之注音符號或羅馬字音標
-# ==========================================================
-def tlpa_tng_han_ji_piau_im(piau_im, piau_im_huat, tai_gi_im_piau):
-    siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(tai_gi_im_piau)
-
-    if siann_bu == "" or siann_bu == None:
-        siann_bu = "Ø"
-
-    han_ji_piau_im = choose_piau_im_method(
-        piau_im,
-        piau_im_huat,
-        siann_bu,
-        un_bu,
-        tiau_ho
-    )
-    return han_ji_piau_im
-
-
-# =========================================================
-# 判斷是否為標點符號的輔助函數
-# =========================================================
-def is_punctuation(char):
-    # 如果 char 是 None，直接返回 False
-    if char is None:
-        return False
-
-    # 可以根據需要擴充此列表以判斷各種標點符號
-    punctuation_marks = "，。！？；：、（）「」『』《》……"
-    return char in punctuation_marks
-
-
-# =========================================================
-# 判斷是否為標點符號的輔助函數
-# =========================================================
-def is_valid_han_ji(char):
-    if char is None:
-        return False
+def split_tai_lo(input_str):
+    # 將上標數字替換為普通數字
+    input_str = replace_superscript_digits(input_str)
+    # 使用正則表達式匹配聲母、韻母和調號
+    pattern = r'^([ptkhmnljw]?)([aeiouáéíóúâêîôûäëïöü]+)([0-9])?$'
+    match = re.match(pattern, input_str)
+    if match:
+        siann_bu = match.group(1)
+        un_bu = match.group(2)
+        tiau_ho = match.group(3) if match.group(3) else '1'  # 默認調號為1
+        return siann_bu, un_bu, tiau_ho
     else:
-        char = char.strip()
+        return None, None, None
 
-    punctuation_marks = "，。！？；：、（）「」『』《》……"
-    return char not in punctuation_marks
 
 # ==========================================================
 # 自「台語音標+」，分析出：聲母、韻母、聲調
@@ -192,6 +144,7 @@ def split_hong_im_hu_ho(hong_im_hu_ho):
 
     return [sheng_mu, yun_mu, str(tiau_hao)]
 
+
 def split_zu_im(zu_im):
     # 聲母相容性轉換處理（將 tsh 轉換為 c；將 ts 轉換為 z）
     # zu_im = zu_im.replace("tsh", "c")   # 將 tsh 轉換為 c
@@ -230,6 +183,69 @@ def split_zu_im(zu_im):
     result += [un_bu]
     result += [tiau]
     return result
+
+def choose_piau_im_method(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
+    """選擇並執行對應的注音方法"""
+    if zu_im_huat == "十五音":
+        return piau_im.SNI_piau_im(siann_bu, un_bu, tiau_ho)
+    elif zu_im_huat == "白話字":
+        return piau_im.POJ_piau_im(siann_bu, un_bu, tiau_ho)
+    elif zu_im_huat == "台羅拼音":
+        return piau_im.TL_piau_im(siann_bu, un_bu, tiau_ho)
+    elif zu_im_huat == "閩拼方案":
+        return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
+    elif zu_im_huat == "方音符號":
+        return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+    elif zu_im_huat == "台語音標":
+        siann = piau_im.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+        un = piau_im.Un_Bu_Dict[un_bu]["台語音標"]
+        return f"{siann}{un}{tiau_ho}"
+    return ""
+
+
+# ==========================================================
+# 台語音標轉換為【漢字標音】之注音符號或羅馬字音標
+# ==========================================================
+def tlpa_tng_han_ji_piau_im(piau_im, piau_im_huat, tai_gi_im_piau):
+    siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(tai_gi_im_piau)
+
+    if siann_bu == "" or siann_bu == None:
+        siann_bu = "Ø"
+
+    han_ji_piau_im = choose_piau_im_method(
+        piau_im,
+        piau_im_huat,
+        siann_bu,
+        un_bu,
+        tiau_ho
+    )
+    return han_ji_piau_im
+
+
+# =========================================================
+# 判斷是否為標點符號的輔助函數
+# =========================================================
+def is_punctuation(char):
+    # 如果 char 是 None，直接返回 False
+    if char is None:
+        return False
+
+    # 可以根據需要擴充此列表以判斷各種標點符號
+    punctuation_marks = "，。！？；：、（）「」『』《》……"
+    return char in punctuation_marks
+
+
+# =========================================================
+# 判斷是否為標點符號的輔助函數
+# =========================================================
+def is_valid_han_ji(char):
+    if char is None:
+        return False
+    else:
+        char = char.strip()
+
+    punctuation_marks = "，。！？；：、（）「」『』《》……"
+    return char not in punctuation_marks
 
 # 方音符號轉換為【台語音標】
 def hong_im_tng_tai_gi_im_piau(siann, un, tiau, cursor):
