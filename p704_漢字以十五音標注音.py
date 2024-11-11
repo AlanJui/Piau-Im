@@ -3,26 +3,8 @@ import sqlite3
 import xlwings as xw
 
 # from mod_file_access import load_module_function
-from mod_標音 import PiauIm, is_valid_han_ji, split_zu_im
+from mod_標音 import PiauIm, is_punctuation, split_tai_gi_im_piau, tlpa_tng_han_ji_piau_im
 
-
-def choose_piau_im_method(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
-    """選擇並執行對應的注音方法"""
-    if zu_im_huat == "十五音":
-        return piau_im.SNI_piau_im(siann_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "白話字":
-        return piau_im.POJ_piau_im(siann_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "台羅拼音":
-        return piau_im.TL_piau_im(siann_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "閩拼方案":
-        return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "方音符號":
-        return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "台語音標":
-        siann = piau_im.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
-        un = piau_im.Un_Bu_Dict[un_bu]["台語音標"]
-        return f"{siann}{un}{tiau_ho}"
-    return ""
 
 # 十五音標注音
 def han_ji_piau_im(wb, sheet_name='十五音', cell='V3', hue_im="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db'):
@@ -57,28 +39,28 @@ def han_ji_piau_im(wb, sheet_name='十五音', cell='V3', hue_im="白話音", ha
         col_name = xw.utils.col_name(col)
         cell_value = sheet.range((row, col)).value
 
-        if not is_valid_han_ji(cell_value):
+        if is_punctuation(cell_value):
             # 若儲存格內容不是漢字，應是：標點符號或空白，故將其顯示
             print(f"({row}, {col_name}) = {cell_value}")
             return
 
-        lo_ma_im_piau = sheet.range((row - 1, col)).value
-        if not lo_ma_im_piau:
+        im_piau = sheet.range((row - 1, col)).value
+        if not im_piau:
             print(f"缺少【台語音標】於({row - 1}, {col_name})")
             return
 
         try:
-            siann_bu, un_bu, siann_tiau = split_zu_im(lo_ma_im_piau)
+            siann_bu, un_bu, siann_tiau = split_tai_gi_im_piau(im_piau)
 
             if siann_bu == "" or siann_bu == None:
                 siann_bu = "Ø"
 
-            han_ji_piau_im = choose_piau_im_method(
-                piau_im,
-                piau_im_huat,
-                siann_bu,
-                un_bu,
-                siann_tiau
+            tai_gi_im_piau = ''.join([siann_bu, un_bu, siann_tiau])
+            # 依使用者指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
+            han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+                piau_im=piau_im,
+                piau_im_huat=piau_im_huat,
+                tai_gi_im_piau=tai_gi_im_piau
             )
             sheet.range((row + 1, col)).value = han_ji_piau_im
             print(f"({row + 1}, {col_name}) = 【{char}】{han_ji_piau_im}")

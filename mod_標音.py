@@ -35,20 +35,14 @@ def split_tai_lo(input_str):
 
 
 # ==========================================================
-# 自「台語音標+」，分析出：聲母、韻母、聲調
+# 自【台語音標】解構出：聲母、韻母、聲調
 # ----------------------------------------------------------
 # 【台羅音標】到【台語音標】的轉換規則
 # tai_loo_to_tai_gi_mapping = {
 #     'tsh': 'c',
 #     'ts': 'z'
 # }
-# for tai_loo, tai_gi in tai_loo_to_tai_gi_mapping.items():
-#     tai_gi_im = tai_gi_im.replace(tai_loo, tai_gi)
 # ==========================================================
-
-# ----------------------------------------------------------
-# 自「台語音標+」，分析出：聲母、韻母、聲調
-# ----------------------------------------------------------
 def split_tai_gi_im_piau(im_piau):
     # 聲母相容性轉換處理（將 tsh 轉換為 c；將 ts 轉換為 z）
     # zu_im = zu_im.replace("tsh", "c")   # 將 tsh 轉換為 c
@@ -145,45 +139,6 @@ def split_hong_im_hu_ho(hong_im_hu_ho):
     return [sheng_mu, yun_mu, str(tiau_hao)]
 
 
-def split_zu_im(zu_im):
-    # 聲母相容性轉換處理（將 tsh 轉換為 c；將 ts 轉換為 z）
-    # zu_im = zu_im.replace("tsh", "c")   # 將 tsh 轉換為 c
-    # zu_im = zu_im.replace("ts", "z")    # 將 ts  轉換為 z
-    if zu_im.startswith("tsh") or zu_im.startswith("ch"):
-        zu_im = zu_im.replace("tsh", "c", 1).replace("ch", "c", 1)  # 將 tsh, ch 轉換為 c
-    elif zu_im.startswith("ts") or zu_im.startswith("c"):
-        zu_im = zu_im.replace("ts", "z", 1).replace("c", "z", 1)  # 將 ts, c 轉換為 z
-
-    # 定義聲母的正規表示式，包括常見的聲母，但不包括 m 和 ng
-    siann_bu_pattern = re.compile(r"(b|c|z|g|h|j|kh|k|l|m(?!\d)|ng(?!\d)|n|ph|p|s|th|t|Ø)")
-
-    # 韻母為 m 或 ng 這種情況的正規表示式 (m\d 或 ng\d)
-    un_bu_as_m_or_ng_pattern = re.compile(r"(m|ng)\d")
-
-    result = []
-
-    # 首先檢查是否是 m 或 ng 當作韻母的特殊情況
-    if un_bu_as_m_or_ng_pattern.match(zu_im):
-        siann_bu = ""  # 沒有聲母
-        un_bu = zu_im[:-1]  # 韻母是 m 或 ng
-        tiau = zu_im[-1]  # 聲調是最後一個字符
-    else:
-        # 使用正規表示式來匹配聲母
-        siann_bu_match = siann_bu_pattern.match(zu_im)
-        if siann_bu_match:
-            siann_bu = siann_bu_match.group()  # 找到聲母
-            un_bu = zu_im[len(siann_bu):-1]  # 韻母部分
-        else:
-            siann_bu = ""  # 沒有匹配到聲母，聲母為空字串
-            un_bu = zu_im[:-1]  # 韻母是剩下的部分，去掉最後的聲調
-
-        tiau = zu_im[-1]  # 最後一個字符是聲調
-
-    result += [siann_bu]
-    result += [un_bu]
-    result += [tiau]
-    return result
-
 def choose_piau_im_method(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
     """選擇並執行對應的注音方法"""
     if zu_im_huat == "十五音":
@@ -236,16 +191,18 @@ def is_punctuation(char):
 
 
 # =========================================================
+# 想要僅針對漢字進行檢查，而不包括其他語言的字母，可用 Unicode 範圍來判斷。
+# 漢字的 Unicode 範圍： [\u4e00-\u9fff] (包括中日韓越所有漢字)
+# =========================================================
+def is_han_ji(char):
+    return '\u4e00' <= char <= '\u9fff'
+
+
+# =========================================================
 # 判斷是否為標點符號的輔助函數
 # =========================================================
-def is_valid_han_ji(char):
-    if char is None:
-        return False
-    else:
-        char = char.strip()
-
-    punctuation_marks = "，。！？；：、（）「」『』《》……"
-    return char not in punctuation_marks
+# def is_valid_han_ji(char):
+#     return is_punctuation(char) or is_chinese_char(char)
 
 # 方音符號轉換為【台語音標】
 def hong_im_tng_tai_gi_im_piau(siann, un, tiau, cursor):
@@ -351,75 +308,6 @@ def TL_Tng_Zu_Im(siann_bu, un_bu, siann_tiau, cursor):
 
     return {
         '注音符號': f"{zu_im_siann_bu}{zu_im_un_bu}{zu_im_siann_tiau}",
-        '聲母': zu_im_siann_bu,
-        '韻母': zu_im_un_bu,
-        '聲調': zu_im_siann_tiau
-    }
-
-# 台語音標轉換為方音符號
-def TLPA_Tng_Zap_Goo_Im(siann_bu, un_bu, siann_tiau, cursor):
-    """
-    根據傳入的台語音標聲母、韻母、聲調，轉換成對應的方音符號
-    :param siann_bu: 聲母 (台語音標)
-    :param un_bu: 韻母 (台語音標)
-    :param siann_tiau: 聲調 (台語音標中的數字)
-    :param cursor: 數據庫游標
-    :return: 包含方音符號的字典
-    """
-
-    # 如果聲母為 None、空字串或空集合符號(無聲母)，將其設為 '英'
-    if siann_bu in [None, '', '∅']:  # 假設空集合符號用 '∅' 表示
-        zu_im_siann_bu = '英'  # 無聲母的情況
-    else:
-        # 查詢聲母表，將台語音標的聲母轉換成方音符號
-        cursor.execute("SELECT 十五音 FROM 聲母對照表 WHERE 台語音標 = ?", (siann_bu,))
-        siann_bu_result = cursor.fetchone()
-        if siann_bu_result:
-            zu_im_siann_bu = siann_bu_result[0]  # 取得方音符號
-        else:
-            zu_im_siann_bu = '英'  # 無聲母的情況
-
-    # 查詢韻母表，將台語音標的韻母轉換成方音符號
-    cursor.execute("SELECT 十五音 FROM 韻母對照表 WHERE 台語音標 = ?", (un_bu,))
-    un_bu_result = cursor.fetchone()
-    if un_bu_result:
-        zu_im_un_bu = un_bu_result[0]  # 取得方音符號
-    else:
-        zu_im_un_bu = ''
-
-    # 查詢聲調表，將台語音標的聲調轉換成方音符號
-    cursor.execute("SELECT 十五音聲調 FROM 聲調對照表 WHERE 台羅調號 = ?", (siann_tiau,))
-    siann_tiau_result = cursor.fetchone()
-    if siann_tiau_result:
-        zu_im_siann_tiau = siann_tiau_result[0]  # 取得方音符號
-    else:
-        zu_im_siann_tiau = ''
-
-    #=======================================================================
-    # 【聲母】校調
-    #
-    # 齒間音【聲母】：ㄗ、ㄘ、ㄙ、ㆡ，若其後所接【韻母】之第一個符號亦為：ㄧ、ㆪ時，須變改
-    # 為：ㄐ、ㄑ、ㄒ、ㆢ。
-    #-----------------------------------------------------------------------
-    # 參考 RIME 輸入法如下規則：
-    # - xform/ㄗ(ㄧ|ㆪ)/ㄐ$1/
-    # - xform/ㄘ(ㄧ|ㆪ)/ㄑ$1/
-    # - xform/ㄙ(ㄧ|ㆪ)/ㄒ$1/
-    # - xform/ㆡ(ㄧ|ㆪ)/ㆢ$1/
-    #=======================================================================
-
-    # 比對聲母是否為 ㄗ、ㄘ、ㄙ、ㆡ，且韻母的第一個符號是 ㄧ 或 ㆪ
-    if siann_bu == 'z' and (un_bu[0] == 'i' or un_bu == 'inn'):
-        zu_im_siann_bu = 'ㄐ'
-    elif siann_bu == 'c' and (un_bu[0] == 'i' or un_bu == 'inn'):
-        zu_im_siann_bu = 'ㄑ'
-    elif siann_bu == 's' and (un_bu[0] == 'i' or un_bu == 'inn'):
-        zu_im_siann_bu = 'ㄒ'
-    elif siann_bu == 'j' and (un_bu[0] == 'i' or un_bu == 'inn'):
-        zu_im_siann_bu = 'ㆢ'
-
-    return {
-        '漢字標音': f"{zu_im_un_bu}{zu_im_siann_tiau}{zu_im_siann_bu}",
         '聲母': zu_im_siann_bu,
         '韻母': zu_im_un_bu,
         '聲調': zu_im_siann_tiau
@@ -693,7 +581,7 @@ class PiauIm:
     def BP_piau_im(self, siann_bu, un_bu, tiau_ho):
         piau_im_huat = "閩拼方案"
         # 將「台羅八聲調」轉換成閩拼使用的調號
-        tiau_ho_remap_for_BP = {
+        Tiau_Ho_Remap = {
             1: 1,  # 陰平: 44
             2: 3,  # 上聲：53
             3: 5,  # 陰去：21
@@ -739,7 +627,7 @@ class PiauIm:
 
             # 處理韻母加聲調符號
             guan_im = un_chars[idx]
-            tiau = tiau_ho_remap_for_BP[int(tiau_ho)]  # 將「傳統八聲調」轉換成閩拼使用的調號
+            tiau = Tiau_Ho_Remap[tiau_ho]  # 將「傳統八聲調」轉換成閩拼使用的調號
             un_chars[idx] = self.bp_un_bu_ga_tiau_ho(guan_im, tiau)
             un_str = "".join(un_chars)
             piau_im = piau_im.replace(found, un_str)
@@ -757,7 +645,13 @@ class PiauIm:
     #================================================================
     def TPS_piau_im(self, siann_bu, un_bu, tiau_ho):
         piau_im_huat = "方音符號"
-        tiau_ho_remap_for_TPS = {
+        TPS_piau_im_remap_dict = {
+            "ㄗㄧ": "ㄐㄧ",
+            "ㄘㄧ": "ㄑㄧ",
+            "ㄙㄧ": "ㄒㄧ",
+            "ㆡㄧ": "ㆢㄧ",
+        }
+        Tiau_Ho_Remap = {
             1: "",
             2: "ˋ",
             3: "˪",
@@ -766,12 +660,6 @@ class PiauIm:
             7: "˫",
             8: "\u02D9",
         }
-        TPS_piau_im_remap_dict = {
-            "ㄗㄧ": "ㄐㄧ",
-            "ㄘㄧ": "ㄑㄧ",
-            "ㄙㄧ": "ㄒㄧ",
-            "ㆡㄧ": "ㆢㄧ",
-        }
 
         # 將上標數字替換為普通數字
         tiau_ho = replace_superscript_digits(str(tiau_ho))
@@ -779,7 +667,8 @@ class PiauIm:
 
         siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
         un = self.Un_Bu_Dict[un_bu][piau_im_huat]
-        tiau = self.TONE_MARKS[piau_im_huat][tiau_ho]
+        # tiau = self.TONE_MARKS[piau_im_huat][tiau_ho]
+        tiau = Tiau_Ho_Remap[tiau_ho]
         piau_im = f"{siann}{un}{tiau}"
 
         pattern = r"(ㄗㄧ|ㄘㄧ|ㄙㄧ|ㆡㄧ)"
@@ -795,7 +684,7 @@ class PiauIm:
     #================================================================
     def SNI_piau_im(self, siann_bu, un_bu, tiau_ho):
         piau_im_huat = "十五音"
-        tiau_ho_remap_for_sip_ngoo_im = {
+        Tiau_Ho_Remap = {
             1: "一",
             2: "二",
             3: "三",
@@ -805,9 +694,83 @@ class PiauIm:
             8: "八",
         }
 
+        # 將上標數字替換為普通數字
+        tiau_ho = replace_superscript_digits(str(tiau_ho))
+        tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
+
         siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
         un = self.Un_Bu_Dict[un_bu][piau_im_huat]
-        # tiau = tiau_ho_remap_for_sip_ngoo_im[tiau_ho]
-        tiau = self.TONE_MARKS[piau_im_huat][int(tiau_ho)]
+        # tiau = self.TONE_MARKS[piau_im_huat][int(tiau_ho)]
+        tiau = Tiau_Ho_Remap[tiau_ho]
         piau_im = f"{un}{tiau}{siann}"
         return piau_im
+
+#================================================================
+# 台語音標轉換為方音符號
+# def TLPA_Tng_Zap_Goo_Im(siann_bu, un_bu, siann_tiau, cursor):
+#     """
+#     根據傳入的台語音標聲母、韻母、聲調，轉換成對應的方音符號
+#     :param siann_bu: 聲母 (台語音標)
+#     :param un_bu: 韻母 (台語音標)
+#     :param siann_tiau: 聲調 (台語音標中的數字)
+#     :param cursor: 數據庫游標
+#     :return: 包含方音符號的字典
+#     """
+
+#     # 如果聲母為 None、空字串或空集合符號(無聲母)，將其設為 '英'
+#     if siann_bu in [None, '', '∅']:  # 假設空集合符號用 '∅' 表示
+#         zu_im_siann_bu = '英'  # 無聲母的情況
+#     else:
+#         # 查詢聲母表，將台語音標的聲母轉換成方音符號
+#         cursor.execute("SELECT 十五音 FROM 聲母對照表 WHERE 台語音標 = ?", (siann_bu,))
+#         siann_bu_result = cursor.fetchone()
+#         if siann_bu_result:
+#             zu_im_siann_bu = siann_bu_result[0]  # 取得方音符號
+#         else:
+#             zu_im_siann_bu = '英'  # 無聲母的情況
+
+#     # 查詢韻母表，將台語音標的韻母轉換成方音符號
+#     cursor.execute("SELECT 十五音 FROM 韻母對照表 WHERE 台語音標 = ?", (un_bu,))
+#     un_bu_result = cursor.fetchone()
+#     if un_bu_result:
+#         zu_im_un_bu = un_bu_result[0]  # 取得方音符號
+#     else:
+#         zu_im_un_bu = ''
+
+#     # 查詢聲調表，將台語音標的聲調轉換成方音符號
+#     cursor.execute("SELECT 十五音聲調 FROM 聲調對照表 WHERE 台羅調號 = ?", (siann_tiau,))
+#     siann_tiau_result = cursor.fetchone()
+#     if siann_tiau_result:
+#         zu_im_siann_tiau = siann_tiau_result[0]  # 取得方音符號
+#     else:
+#         zu_im_siann_tiau = ''
+
+#     #=======================================================================
+#     # 【聲母】校調
+#     #
+#     # 齒間音【聲母】：ㄗ、ㄘ、ㄙ、ㆡ，若其後所接【韻母】之第一個符號亦為：ㄧ、ㆪ時，須變改
+#     # 為：ㄐ、ㄑ、ㄒ、ㆢ。
+#     #-----------------------------------------------------------------------
+#     # 參考 RIME 輸入法如下規則：
+#     # - xform/ㄗ(ㄧ|ㆪ)/ㄐ$1/
+#     # - xform/ㄘ(ㄧ|ㆪ)/ㄑ$1/
+#     # - xform/ㄙ(ㄧ|ㆪ)/ㄒ$1/
+#     # - xform/ㆡ(ㄧ|ㆪ)/ㆢ$1/
+#     #=======================================================================
+
+#     # 比對聲母是否為 ㄗ、ㄘ、ㄙ、ㆡ，且韻母的第一個符號是 ㄧ 或 ㆪ
+#     if siann_bu == 'z' and (un_bu[0] == 'i' or un_bu == 'inn'):
+#         zu_im_siann_bu = 'ㄐ'
+#     elif siann_bu == 'c' and (un_bu[0] == 'i' or un_bu == 'inn'):
+#         zu_im_siann_bu = 'ㄑ'
+#     elif siann_bu == 's' and (un_bu[0] == 'i' or un_bu == 'inn'):
+#         zu_im_siann_bu = 'ㄒ'
+#     elif siann_bu == 'j' and (un_bu[0] == 'i' or un_bu == 'inn'):
+#         zu_im_siann_bu = 'ㆢ'
+
+#     return {
+#         '漢字標音': f"{zu_im_un_bu}{zu_im_siann_tiau}{zu_im_siann_bu}",
+#         '聲母': zu_im_siann_bu,
+#         '韻母': zu_im_un_bu,
+#         '聲調': zu_im_siann_tiau
+#     }

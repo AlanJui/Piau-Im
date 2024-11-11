@@ -1,9 +1,8 @@
 # 新檔名：mod_河洛話.py
 # 舊檔名：mod_台羅音標漢字庫.py
-import re
 import sqlite3
 
-from mod_標音 import split_zu_im
+from mod_標音 import split_tai_gi_im_piau
 
 
 # ==========================================================
@@ -86,9 +85,7 @@ def han_ji_ca_piau_im(cursor, han_ji, hue_im="文讀音"):
         tai_loo_im = row_dict['台語音標']
 
         # 將台羅音標轉換為台語音標
-        tai_gi_im = tai_loo_im
-        # 分析台語音標，拆分出聲母、韻母、聲調
-        split_result = split_zu_im(tai_gi_im)
+        split_result = split_tai_gi_im_piau(tai_loo_im)
         row_dict['聲母'] = split_result[0]
         row_dict['韻母'] = split_result[1]
         row_dict['聲調'] = split_result[2]
@@ -102,90 +99,27 @@ def han_ji_ca_piau_im(cursor, han_ji, hue_im="文讀音"):
     return data
 
 
-# # ==========================================================
-# # 自「台語音標+」，分析出：聲母、韻母、聲調
-# # ----------------------------------------------------------
-# # 【台羅音標】到【台語音標】的轉換規則
-# # tai_loo_to_tai_gi_mapping = {
-# #     'tsh': 'c',
-# #     'ts': 'z'
-# # }
-# # for tai_loo, tai_gi in tai_loo_to_tai_gi_mapping.items():
-# #     tai_gi_im = tai_gi_im.replace(tai_loo, tai_gi)
-# # ==========================================================
-# def split_zu_im(zu_im):
-#     # 聲母相容性轉換處理（將 tsh 轉換為 c；將 ts 轉換為 z）
-#     # zu_im = zu_im.replace("tsh", "c")   # 將 tsh 轉換為 c
-#     # zu_im = zu_im.replace("ts", "z")    # 將 ts  轉換為 z
-#     if zu_im.startswith("tsh") or zu_im.startswith("ch"):
-#         zu_im = zu_im.replace("tsh", "c", 1).replace("ch", "c", 1)  # 將 tsh, ch 轉換為 c
-#     elif zu_im.startswith("ts") or zu_im.startswith("c"):
-#         zu_im = zu_im.replace("ts", "z", 1).replace("c", "z", 1)  # 將 ts, c 轉換為 z
-
-#     # 定義聲母的正規表示式，包括常見的聲母，但不包括 m 和 ng
-#     siann_bu_pattern = re.compile(r"(b|c|z|g|h|j|kh|k|l|m(?!\d)|ng(?!\d)|n|ph|p|s|th|t|Ø)")
-
-#     # 韻母為 m 或 ng 這種情況的正規表示式 (m\d 或 ng\d)
-#     un_bu_as_m_or_ng_pattern = re.compile(r"(m|ng)\d")
-
-#     result = []
-
-#     # 首先檢查是否是 m 或 ng 當作韻母的特殊情況
-#     if un_bu_as_m_or_ng_pattern.match(zu_im):
-#         siann_bu = ""  # 沒有聲母
-#         un_bu = zu_im[:-1]  # 韻母是 m 或 ng
-#         tiau = zu_im[-1]  # 聲調是最後一個字符
-#     else:
-#         # 使用正規表示式來匹配聲母
-#         siann_bu_match = siann_bu_pattern.match(zu_im)
-#         if siann_bu_match:
-#             siann_bu = siann_bu_match.group()  # 找到聲母
-#             un_bu = zu_im[len(siann_bu):-1]  # 韻母部分
-#         else:
-#             siann_bu = ""  # 沒有匹配到聲母，聲母為空字串
-#             un_bu = zu_im[:-1]  # 韻母是剩下的部分，去掉最後的聲調
-
-#         tiau = zu_im[-1]  # 最後一個字符是聲調
-
-#     result += [siann_bu]
-#     result += [un_bu]
-#     result += [tiau]
-#     return result
-
-# ==========================================================
-# 查詢語音類型，若未設定則預設為文讀音
-# ==========================================================
-# def get_sound_type(wb):
-#     try:
-#         if '語音類型' in wb.names:
-#             reading_type = wb.names['語音類型'].refers_to_range.value
-#         else:
-#             raise KeyError
-#     except KeyError:
-#         reading_type = "文讀音"
-#     return reading_type
-
-def connect_to_db(db_path):
-    # 創建數據庫連接
-    conn = sqlite3.connect(db_path)
-
-    # 創建一個游標
-    cursor = conn.cursor()
-
-    return conn, cursor
-
-def close_db_connection(conn):
-    # 關閉數據庫連接
-    conn.close()
-
 
 # 使用範例
 if __name__ == "__main__":
+    def connect_to_db(db_path):
+        # 創建數據庫連接
+        conn = sqlite3.connect(db_path)
+
+        # 創建一個游標
+        cursor = conn.cursor()
+
+        return conn, cursor
+
+    def close_db_connection(conn):
+        # 關閉數據庫連接
+        conn.close()
+
     # 測試 m, ng 當作韻母的情況
     test_cases = ["m7", "ng7", "tsha1", "thau3", "khong2"]
 
-    for zu_im in test_cases:
-        print(f"{zu_im}: {split_zu_im(zu_im)}")
+    for im_piau in test_cases:
+        print(f"{im_piau}: {split_tai_gi_im_piau(im_piau)}")
 
     # 連接到資料庫
     db_path = "Tai_Loo_Han_Ji_Khoo.db"   # 替換成你的資料庫路徑
