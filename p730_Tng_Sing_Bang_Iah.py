@@ -7,7 +7,7 @@ import sqlite3
 import xlwings as xw
 
 from mod_file_access import get_named_value
-from mod_標音 import PiauIm, is_punctuation, split_zu_im
+from mod_標音 import PiauIm, is_punctuation, split_hong_im_hu_ho
 
 # ==========================================================
 # 注音法設定和共用變數
@@ -167,7 +167,7 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
                             if piau_im_huat == "台語音標":
                                 han_ji_piau_im = lo_ma_im_piau
                             else:
-                                zu_im_list = split_zu_im(lo_ma_im_piau)
+                                zu_im_list = split_hong_im_hu_ho(lo_ma_im_piau)
                                 if zu_im_list[0] == "" or zu_im_list[0] == None:
                                     siann_bu = "Ø"
                                 else:
