@@ -121,6 +121,7 @@ def huan_ciat_ca_piau_im(cursor, siong_ji, ha_ji):
 
 # ==========================================================
 # 台羅音標轉換為【十五音】切韻標音
+# ==========================================================
 def TL_Tng_Sip_Ngoo_Im(siann_bu, un_bu, siann_tiau, cursor):
     """
     根據傳入的台羅音標聲母、韻母、聲調，轉換成對應的十五音切韻標音
@@ -236,8 +237,7 @@ def TL_Tng_Zu_Im(siann_bu, un_bu, siann_tiau, cursor):
     }
 
 
-
-def Kong_Un_Tng_Tai_Loo(廣韻調名):
+def Kong_Un_Siann_Tiau_Tng_Tai_Loo(廣韻調名):
     """
     將【廣韻調名】轉換成【台羅聲調】號
     清平(1)、清上(2)、清去(3)、清入(4)
@@ -259,7 +259,7 @@ def Kong_Un_Tng_Tai_Loo(廣韻調名):
     return 調名對照.get(廣韻調名, None)
 
 
-def Cu_Hong_Im_Hu_Ho(tai_lo_tiau_ho):
+# def Cu_Hong_Im_Hu_Ho(tai_lo_tiau_ho):
     """
     取方音符號：將【台羅調號】轉換成【方音符號調號】
     :param tai_lo_tiau_ho: 台羅調號
