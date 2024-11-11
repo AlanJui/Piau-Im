@@ -371,7 +371,7 @@ class PiauIm:
         "\u02D9": 8,
     }
 
-    def __init__(self, han_ji_khoo):
+    def __init__(self, han_ji_khoo="漢語標音"):
         self.Siann_Bu_Dict = None
         self.Un_Bu_Dict = None
         self.init_piau_im_dict(han_ji_khoo)
@@ -432,8 +432,10 @@ class PiauIm:
     def init_piau_im_dict(self, han_ji_khoo):
         if han_ji_khoo == "河洛話":
             db_name = 'Ho_Lok_Ue.db'
-        else:
+        elif han_ji_khoo == "廣韻":
             db_name = 'Kong_Un.db'
+        else:
+            db_name = 'Han_Ji_Piau_Im.db'
 
         with sqlite3.connect(db_name) as conn:
             cursor = conn.cursor()
@@ -679,6 +681,24 @@ class PiauIm:
 
         return piau_im
 
+    def Cu_Hong_Im_Hu_Ho_Tiau_Hu(self, tai_lo_tiau_ho):
+        """
+        取方音符號：將【台羅調號】轉換成【方音符號調號】
+        :param tai_lo_tiau_ho: 台羅調號
+        :return: 對應的方音符號調號
+        """
+        方音符號調號 = {
+            1: '',
+            2: 'ˋ',
+            3: '˪',
+            4: '',
+            5: 'ˊ',
+            6: 'ˋ',
+            7: '˫',
+            8: '˙'
+        }
+        return 方音符號調號.get(tai_lo_tiau_ho, None)
+
     #================================================================
     # 雅俗通十五音(SNI:Nga-Siok-Thong)
     #================================================================
@@ -704,6 +724,27 @@ class PiauIm:
         tiau = Tiau_Ho_Remap[tiau_ho]
         piau_im = f"{un}{tiau}{siann}"
         return piau_im
+
+    #================================================================
+    # 轉換【漢字標音】
+    #================================================================
+    def han_ji_piau_im_tng_huan(self, piau_im, piau_im_huat, siann_bu, un_bu, tiau_ho):
+        """選擇並執行對應的注音方法"""
+        if piau_im_huat == "十五音":
+            return self.SNI_piau_im(siann_bu, un_bu, tiau_ho)
+        elif piau_im_huat == "白話字":
+            return self.POJ_piau_im(siann_bu, un_bu, tiau_ho)
+        elif piau_im_huat == "台羅拼音":
+            return self.TL_piau_im(siann_bu, un_bu, tiau_ho)
+        elif piau_im_huat == "閩拼方案":
+            return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+        elif piau_im_huat == "方音符號":
+            return self.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+        elif piau_im_huat == "台語音標":
+            siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            un = self.Un_Bu_Dict[un_bu]["台語音標"]
+            return f"{siann}{un}{tiau_ho}"
+        return ""
 
 #================================================================
 # 台語音標轉換為方音符號

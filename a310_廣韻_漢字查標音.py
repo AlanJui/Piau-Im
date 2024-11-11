@@ -5,14 +5,13 @@ import os
 import sqlite3
 import sys
 
-from mod_廣韻 import (
-    Cu_Hong_Im_Hu_Ho,
-    Kong_Un_Tng_Tai_Loo,
-    TL_Tng_Sip_Ngoo_Im,
+from mod_廣韻 import (  # Cu_Hong_Im_Hu_Ho,
+    Kong_Un_Siann_Tiau_Tng_Tai_Loo,
     ca_siann_bu_piau_im,
     ca_un_bu_piau_im,
     han_ji_ca_piau_im,
 )
+from mod_標音 import PiauIm
 
 if __name__ == "__main__":
     # 確認使用者有輸入反切之切語參數
@@ -22,6 +21,10 @@ if __name__ == "__main__":
 
     # 取得使用者之輸入：欲查詢讀音的漢字
     beh_cha_e_han_ji = sys.argv[1]
+
+    # 初始化 PiauIm 類別，産生標音物件
+    # piau_im = PiauIm(han_ji_khoo='廣韻')
+    piau_im = PiauIm()
 
     # 建立資料庫連線
     connection = sqlite3.connect('Kong_Un.db')
@@ -81,9 +84,15 @@ if __name__ == "__main__":
         # 廣韻調名 = record['廣韻調名']
         # 台羅聲調 = record['台羅聲調']
         廣韻調名 = f'{清濁[-1]}{調}'
-        台羅聲調 = Kong_Un_Tng_Tai_Loo(廣韻調名)
-        十五音 = TL_Tng_Sip_Ngoo_Im(聲母標音, 韻母標音, 台羅聲調, cursor)
-        十五音切韻 = 十五音['標音']
+        台羅聲調 = Kong_Un_Siann_Tiau_Tng_Tai_Loo(廣韻調名)     # 將廣韻調名轉換成台羅聲調
+        十五音 = piau_im.han_ji_piau_im_tng_huan(
+            piau_im=piau_im,
+            piau_im_huat='十五音',
+            siann_bu=聲母標音,
+            un_bu=韻母標音,
+            tiau_ho=台羅聲調,
+        )
+        十五音切韻 = 十五音
         print('\n---------------------------------------')
         print('【聲調】：上字辨【清濁】，下字定【四聲】。\n')
         print(f' (1) 清濁：上字得【{清濁[-1]}】聲；')
@@ -93,15 +102,16 @@ if __name__ == "__main__":
             台羅聲調 = 2
             print(f' (4) 台羅聲調：第【6】調，等同第【{台羅聲調}】調。')
 
+        方音符號調符 = piau_im.Cu_Hong_Im_Hu_Ho_Tiau_Hu(台羅聲調)
         if 聲母標音 == 'Ø':  # 若無聲母
             聲母標音 = ''
-            方音符號標音 = f'{韻母方音符號}{Cu_Hong_Im_Hu_Ho(台羅聲調)}'
+            方音符號標音 = f'{韻母方音符號}{方音符號調符}'
         else:
-            方音符號標音 = f'{聲母方音符號}{韻母方音符號}{Cu_Hong_Im_Hu_Ho(台羅聲調)}'
+            方音符號標音 = f'{聲母方音符號}{韻母方音符號}{方音符號調符}'
         print('\n---------------------------------------')
         print(f'【切語拼音】：\n')
         print(f'台語音標：{聲母標音}{韻母標音}{台羅聲調}')
-        print(f'方音符號：{聲母方音符號}{韻母方音符號}{Cu_Hong_Im_Hu_Ho(台羅聲調)}')
+        print(f'方音符號：{聲母方音符號}{韻母方音符號}{方音符號調符}')
         print(f'十五音切韻：{十五音切韻}')
 
     # 關閉資料庫連線
