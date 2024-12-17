@@ -42,7 +42,7 @@ sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
 # (2) A731: 自動為漢字查找讀音，並抄寫到漢字的上方(拼音)及下方(注音)。
 type = get_sound_type(wb)
 han_ji_khoo = get_han_ji_khoo(wb)
-if han_ji_khoo == "河洛話":
+if han_ji_khoo == "河洛話" and type == "白話音":
     ca_han_ji_thak_im(
         wb=wb,
         sheet_name='漢字注音',
@@ -53,7 +53,18 @@ if han_ji_khoo == "河洛話":
         module_name='mod_河洛話',
         function_name='han_ji_ca_piau_im',
     )
-else:
+elif han_ji_khoo == "河洛話" and type == "文讀音":
+    ca_han_ji_thak_im(
+        wb=wb,
+        sheet_name='漢字注音',
+        cell='V3',
+        hue_im="文讀音",
+        han_ji_khoo="河洛話",
+        db_name='Ho_Lok_Ue.db',
+        module_name='mod_河洛話',
+        function_name='han_ji_ca_piau_im',
+    )
+elif han_ji_khoo == "廣韻":
     ca_han_ji_thak_im(
         wb=wb,
         sheet_name='漢字注音',
@@ -64,6 +75,9 @@ else:
         module_name='mod_廣韻',
         function_name='han_ji_ca_piau_im',
     )
+else:
+    print("無法執行漢字標音作業，請確認【env】工作表【語音類型】及【漢字庫】欄位的設定是否正確！")
+    sys.exit(2)
 
 # (3) A740: 將【漢字注音】工作表的內容，轉成 HTML 網頁檔案。
 # tng_sing_bang_iah(wb, '漢字注音', 'V3')
