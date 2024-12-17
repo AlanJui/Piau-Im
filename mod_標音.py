@@ -47,9 +47,9 @@ def split_tai_gi_im_piau(im_piau):
     # 聲母相容性轉換處理（將 tsh 轉換為 c；將 ts 轉換為 z）
     # zu_im = zu_im.replace("tsh", "c")   # 將 tsh 轉換為 c
     # zu_im = zu_im.replace("ts", "z")    # 將 ts  轉換為 z
-    if im_piau.startswith("tsh") or im_piau.startswith("ch"):
+    if im_piau.startswith("tsh"):
         im_piau = im_piau.replace("tsh", "c", 1).replace("ch", "c", 1)  # 將 tsh, ch 轉換為 c
-    elif im_piau.startswith("ts") or im_piau.startswith("c"):
+    elif im_piau.startswith("ts"):
         im_piau = im_piau.replace("ts", "z", 1).replace("c", "z", 1)  # 將 ts, c 轉換為 z
 
     # 定義聲母的正規表示式，包括常見的聲母，但不包括 m 和 ng
