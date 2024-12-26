@@ -11,12 +11,44 @@ from mod_標音 import split_tai_gi_im_piau  # 分解台語音標
 from mod_標音 import tlpa_tng_han_ji_piau_im  # 台語音標轉漢字標音
 from mod_標音 import PiauIm
 
+# ==========================================================
+# 注音法設定和共用變數
+# ==========================================================
+zu_im_huat_list = {
+    "SNI": ["fifteen_yin", "rt", "十五音切語"],
+    "TPS": ["Piau_Im", "rt", "方音符號注音"],
+    "POJ": ["pin_yin", "rt", "白話字拼音"],
+    "TL": ["pin_yin", "rt", "台羅拼音"],
+    "BP": ["pin_yin", "rt", "閩拼標音"],
+    "TLPA_Plus": ["pin_yin", "rt", "台羅改良式"],
+    "DBL": ["Siang_Pai", "rtc", "雙排注音"],
+}
+
+
+def choose_piau_im_method(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
+    """選擇並執行對應的注音方法"""
+    if zu_im_huat == "十五音":
+        return piau_im.SNI_piau_im(siann_bu, un_bu, tiau_ho)
+    elif zu_im_huat == "白話字":
+        return piau_im.POJ_piau_im(siann_bu, un_bu, tiau_ho)
+    elif zu_im_huat == "台羅拼音":
+        return piau_im.TL_piau_im(siann_bu, un_bu, tiau_ho)
+    elif zu_im_huat == "閩拼方案":
+        return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
+    elif zu_im_huat == "方音符號":
+        return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+    elif zu_im_huat == "台語音標":
+        siann = piau_im.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+        un = piau_im.Un_Bu_Dict[un_bu]["台語音標"]
+        return f"{siann}{un}{tiau_ho}"
+    return ""
+
 
 def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', hue_im="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im'):
     # 初始化 PiauIm 類別，産生標音物件
     piau_im = PiauIm(han_ji_khoo=han_ji_khoo)
-    # piau_im_huat = wb.names['標音方法'].refers_to_range.value
-    piau_im_huat = '方音符號'
+    piau_im_huat = wb.names['標音方法'].refers_to_range.value
+    # piau_im_huat = '方音符號'
 
     # 顯示「已輸入之拼音字母及注音符號」
     named_range = wb.names['顯示注音輸入']
@@ -30,7 +62,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', hue_im="白話�
     # 取得 V3 儲存格的字串
     v3_value = sheet.range(cell).value
 
-    # 每頁最多處理 20 列
+    # 取得工作表能處理最多列數： 20 列
     TOTAL_ROWS = int(wb.names['每頁總列數'].refers_to_range.value)
     # 每列最多處理 15 字元
     CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
@@ -145,10 +177,24 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', hue_im="白話�
                                 tai_gi_im_piau = ''.join([siann_bu, un_bu, tiau_ho])
 
                                 # 依使用者指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
-                                han_ji_piau_im = tlpa_tng_han_ji_piau_im(
-                                    piau_im=piau_im,
-                                    piau_im_huat=piau_im_huat,
-                                    tai_gi_im_piau=tai_gi_im_piau
+                                # han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+                                #     piau_im=piau_im,
+                                #     piau_im_huat=piau_im_huat,
+                                #     tai_gi_im_piau=tai_gi_im_piau
+                                # )
+
+                                zu_im_list = split_tai_gi_im_piau(tai_gi_im_piau)
+                                if zu_im_list[0] == "" or zu_im_list[0] == None:
+                                    siann_bu = "Ø"
+                                else:
+                                    siann_bu = zu_im_list[0]
+
+                                han_ji_piau_im = choose_piau_im_method(
+                                    piau_im,
+                                    piau_im_huat,
+                                    siann_bu,
+                                    zu_im_list[1],
+                                    zu_im_list[2]
                                 )
                             else:
                                 #-----------------------------------------------------------------
