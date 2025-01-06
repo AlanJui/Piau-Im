@@ -3,7 +3,7 @@ import sys
 
 import xlwings as xw
 
-from mod_file_access import get_named_value
+from mod_file_access import get_named_value, save_as_new_file
 from p730_Tng_Sing_Bang_Iah import tng_sing_bang_iah
 
 # 指定虛擬環境的 Python 路徑
@@ -41,25 +41,6 @@ han_ji_piau_im_huat = get_named_value(wb, '標音方法')
 tng_sing_bang_iah(wb=wb, sheet_name='漢字注音', cell='V3', page_type='含頁頭')
 
 # (3) A750: 將 Tai_Gi_Zu_Im_Bun.xlsx 檔案，依 env 工作表的設定，另存新檔到指定目錄。
-try:
-    file_name = str(wb.names['TITLE'].refers_to_range.value).strip()
-except KeyError:
-    # print("未找到命名範圍 'TITLE'，使用預設名稱")
-    # file_name = "default_file_name.xlsx"  # 提供一個預設檔案名稱
-    setting_sheet = wb.sheets["env"]
-    file_name = str(
-        setting_sheet.range("C4").value
-    ).strip()
-
-# 設定檔案輸出路徑，存於專案根目錄下的 output2 資料夾
-output_path = wb.names['OUTPUT_PATH'].refers_to_range.value
-new_file_path = os.path.join(
-    ".\\{0}".format(output_path),
-    f"【河洛話注音】{file_name}.xlsx")
-
-# 儲存新建立的工作簿
-wb.save(new_file_path)
-
-# 保存 Excel 檔案
+save_as_new_file(wb=wb)
 # wb.close()
 
