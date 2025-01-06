@@ -141,7 +141,9 @@ def split_hong_im_hu_ho(hong_im_hu_ho):
 
 def choose_piau_im_method(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
     """選擇並執行對應的注音方法"""
-    if zu_im_huat == "十五音":
+    if zu_im_huat == "雅俗通":
+        return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
+    elif zu_im_huat == "十五音":
         return piau_im.SNI_piau_im(siann_bu, un_bu, tiau_ho)
     elif zu_im_huat == "白話字":
         return piau_im.POJ_piau_im(siann_bu, un_bu, tiau_ho)
@@ -700,7 +702,34 @@ class PiauIm:
         return 方音符號調號.get(tai_lo_tiau_ho, None)
 
     #================================================================
-    # 雅俗通十五音(SNI:Nga-Siok-Thong)
+    # 雅俗通十五音(Nga-Siok-Thong)
+    #================================================================
+    def NST_piau_im(self, siann_bu, un_bu, tiau_ho):
+        piau_im_huat = "雅俗通"
+        Tiau_Ho_Remap = {
+            1: "上平",
+            2: "上上",
+            3: "上去",
+            4: "上入",
+            5: "下平",
+            6: "下上",
+            7: "下去",
+            8: "下入",
+        }
+
+        # 將上標數字替換為普通數字
+        tiau_ho = replace_superscript_digits(str(tiau_ho))
+        tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
+
+        siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+        un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+        # tiau = self.TONE_MARKS[piau_im_huat][int(tiau_ho)]
+        tiau = Tiau_Ho_Remap[tiau_ho]
+        piau_im = f"{un}{tiau}{siann}"
+        return piau_im
+
+    #================================================================
+    # 雅俗通十五音(SNI:Sip-Ngoo-Im)
     #================================================================
     def SNI_piau_im(self, siann_bu, un_bu, tiau_ho):
         piau_im_huat = "十五音"
@@ -722,7 +751,7 @@ class PiauIm:
         un = self.Un_Bu_Dict[un_bu][piau_im_huat]
         # tiau = self.TONE_MARKS[piau_im_huat][int(tiau_ho)]
         tiau = Tiau_Ho_Remap[tiau_ho]
-        piau_im = f"{un}{tiau}{siann}"
+        piau_im = f"{siann}{un}{tiau}"
         return piau_im
 
     #================================================================

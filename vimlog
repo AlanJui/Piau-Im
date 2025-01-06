@@ -1,0 +1,3291 @@
+
+無法執行 "$VIM\vimrc"
+無法執行 "$HOME\_vimrc"
+執行 "$HOME\vimfiles\vimrc" 中
+第 15 行: 結束執行 C:\Program Files\Vim\vim91\filetype.vim
+not found in 'runtimepath': "ftdetect/*.vim"
+結束執行 C:\Program Files\Vim\vim91\filetype.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 15 行: 結束執行 C:\Program Files\Vim\vim91\ftplugin.vim
+結束執行 C:\Program Files\Vim\vim91\ftplugin.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 15 行: 結束執行 C:\Program Files\Vim\vim91\indent.vim
+結束執行 C:\Program Files\Vim\vim91\indent.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 16 行: 結束執行 C:\Program Files\Vim\vim91\syntax\syntax.vim
+第 20 行: 結束執行 C:\Program Files\Vim\vim91\syntax\synload.vim
+第 22 行: 結束執行 C:\Program Files\Vim\vim91\syntax\syncolor.vim
+第 37 行: 結束執行 C:\Program Files\Vim\vim91\colors\lists\default.vim
+結束執行 C:\Program Files\Vim\vim91\colors\lists\default.vim
+繼續: C:\Program Files\Vim\vim91\syntax\syncolor.vim
+結束執行 C:\Program Files\Vim\vim91\syntax\syncolor.vim
+繼續: C:\Program Files\Vim\vim91\syntax\synload.vim
+結束執行 C:\Program Files\Vim\vim91\syntax\synload.vim
+繼續: C:\Program Files\Vim\vim91\syntax\syntax.vim
+執行 FileType Autocommands: "*"
+autocommand 0verbose exe "set syntax=" . expand("<amatch>")
+
+結束執行 C:\Program Files\Vim\vim91\syntax\syntax.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 57 行: 結束執行 C:\Users\AlanJui\vimfiles\plugins.vim
+第 20 行: 結束執行 C:\Users\AlanJui\vimfiles\autoload\plug.vim
+結束執行 C:\Users\AlanJui\vimfiles\autoload\plug.vim
+繼續: C:\Users\AlanJui\vimfiles\plugins.vim
+第 14 行: 結束執行 C:\Program Files\Vim\vim91\ftoff.vim
+結束執行 C:\Program Files\Vim\vim91\ftoff.vim
+繼續: plug#end
+第 83 行: 結束執行 C:\Program Files\Vim\vim91\filetype.vim
+第 2917 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-fugitive\ftdetect\fugitive.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-fugitive\ftdetect\fugitive.vim
+繼續: C:\Program Files\Vim\vim91\filetype.vim
+第 2917 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\plantuml-syntax\ftdetect\plantuml.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\plantuml-syntax\ftdetect\plantuml.vim
+繼續: C:\Program Files\Vim\vim91\filetype.vim
+第 2917 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-markdown\ftdetect\markdown.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-markdown\ftdetect\markdown.vim
+繼續: C:\Program Files\Vim\vim91\filetype.vim
+結束執行 C:\Program Files\Vim\vim91\filetype.vim
+繼續: plug#end
+第 83 行: 結束執行 C:\Program Files\Vim\vim91\ftplugin.vim
+結束執行 C:\Program Files\Vim\vim91\ftplugin.vim
+繼續: plug#end
+第 83 行: 結束執行 C:\Program Files\Vim\vim91\indent.vim
+結束執行 C:\Program Files\Vim\vim91\indent.vim
+繼續: plug#end
+結束執行 C:\Users\AlanJui\vimfiles\plugins.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 60 行: 結束執行 C:\Users\AlanJui\vimfiles\config\nerdtree.rc.vim
+結束執行 C:\Users\AlanJui\vimfiles\config\nerdtree.rc.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 61 行: 結束執行 C:\Users\AlanJui\vimfiles\config\ranger.vim
+結束執行 C:\Users\AlanJui\vimfiles\config\ranger.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 62 行: 結束執行 C:\Users\AlanJui\vimfiles\config\fzf.vim
+結束執行 C:\Users\AlanJui\vimfiles\config\fzf.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 63 行: 結束執行 C:\Users\AlanJui\vimfiles\config\surround.vim
+結束執行 C:\Users\AlanJui\vimfiles\config\surround.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 64 行: 結束執行 C:\Users\AlanJui\vimfiles\config\auto-pairs.vim
+結束執行 C:\Users\AlanJui\vimfiles\config\auto-pairs.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 65 行: 結束執行 C:\Users\AlanJui\vimfiles\config\multiple-cursors.vim
+結束執行 C:\Users\AlanJui\vimfiles\config\multiple-cursors.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 66 行: 結束執行 C:\Users\AlanJui\vimfiles\config\simply-fold.vim
+結束執行 C:\Users\AlanJui\vimfiles\config\simply-fold.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 67 行: 結束執行 C:\Users\AlanJui\vimfiles\config\nerd-commenter.vim
+結束執行 C:\Users\AlanJui\vimfiles\config\nerd-commenter.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 68 行: 結束執行 C:\Users\AlanJui\vimfiles\config\change-tag-name.vim
+結束執行 C:\Users\AlanJui\vimfiles\config\change-tag-name.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 69 行: 結束執行 C:\Users\AlanJui\vimfiles\config\live-server.vim
+結束執行 C:\Users\AlanJui\vimfiles\config\live-server.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 70 行: 結束執行 C:\Users\AlanJui\vimfiles\config\markdown-preview.vim
+結束執行 C:\Users\AlanJui\vimfiles\config\markdown-preview.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 71 行: 結束執行 C:\Users\AlanJui\vimfiles\config\window-swap.vim
+結束執行 C:\Users\AlanJui\vimfiles\config\window-swap.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 72 行: 結束執行 C:\Users\AlanJui\vimfiles\config\float-term.vim
+結束執行 C:\Users\AlanJui\vimfiles\config\float-term.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 73 行: 結束執行 C:\Users\AlanJui\vimfiles\config\echodoc.vim
+結束執行 C:\Users\AlanJui\vimfiles\config\echodoc.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 74 行: 結束執行 C:\Users\AlanJui\vimfiles\config\plantuml-previewer.vim
+結束執行 C:\Users\AlanJui\vimfiles\config\plantuml-previewer.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 75 行: 結束執行 C:\Users\AlanJui\vimfiles\config\find-and-replace.vim
+結束執行 C:\Users\AlanJui\vimfiles\config\find-and-replace.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 76 行: 結束執行 C:\Users\AlanJui\vimfiles\config\vim-closetag.vim
+結束執行 C:\Users\AlanJui\vimfiles\config\vim-closetag.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 81 行: 結束執行 C:\Users\AlanJui\vimfiles\global.vim
+結束執行 C:\Users\AlanJui\vimfiles\global.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 86 行: 結束執行 C:\Users\AlanJui\vimfiles\format.vim
+第 12 行: 結束執行 C:\Program Files\Vim\vim91\syntax\syntax.vim
+第 16 行: 結束執行 C:\Program Files\Vim\vim91\syntax/nosyntax.vim
+執行 BufEnter Autocommands: "*"
+autocommand syn clear
+
+autocommand if exists("b:current_syntax") | unlet b:current_syntax | endif
+
+結束執行 C:\Program Files\Vim\vim91\syntax/nosyntax.vim
+繼續: C:\Program Files\Vim\vim91\syntax\syntax.vim
+第 20 行: 結束執行 C:\Program Files\Vim\vim91\syntax\synload.vim
+第 22 行: 結束執行 C:\Program Files\Vim\vim91\syntax\syncolor.vim
+結束執行 C:\Program Files\Vim\vim91\syntax\syncolor.vim
+繼續: C:\Program Files\Vim\vim91\syntax\synload.vim
+結束執行 C:\Program Files\Vim\vim91\syntax\synload.vim
+繼續: C:\Program Files\Vim\vim91\syntax\syntax.vim
+執行 FileType Autocommands: "*"
+autocommand 0verbose exe "set syntax=" . expand("<amatch>")
+
+結束執行 C:\Program Files\Vim\vim91\syntax\syntax.vim
+繼續: C:\Users\AlanJui\vimfiles\format.vim
+第 13 行: 結束執行 C:\Program Files\Vim\vim91\filetype.vim
+結束執行 C:\Program Files\Vim\vim91\filetype.vim
+繼續: C:\Users\AlanJui\vimfiles\format.vim
+第 14 行: 結束執行 C:\Program Files\Vim\vim91\syntax\syncolor.vim
+結束執行 C:\Program Files\Vim\vim91\syntax\syncolor.vim
+繼續: C:\Users\AlanJui\vimfiles\format.vim
+第 24 行: 結束執行 C:\Program Files\Vim\vim91\filetype.vim
+結束執行 C:\Program Files\Vim\vim91\filetype.vim
+繼續: C:\Users\AlanJui\vimfiles\format.vim
+第 24 行: 結束執行 C:\Program Files\Vim\vim91\indent.vim
+結束執行 C:\Program Files\Vim\vim91\indent.vim
+繼續: C:\Users\AlanJui\vimfiles\format.vim
+第 53 行: 結束執行 C:\Program Files\Vim\vim91\filetype.vim
+結束執行 C:\Program Files\Vim\vim91\filetype.vim
+繼續: C:\Users\AlanJui\vimfiles\format.vim
+第 53 行: 結束執行 C:\Program Files\Vim\vim91\ftplugin.vim
+結束執行 C:\Program Files\Vim\vim91\ftplugin.vim
+繼續: C:\Users\AlanJui\vimfiles\format.vim
+第 53 行: 結束執行 C:\Program Files\Vim\vim91\indent.vim
+結束執行 C:\Program Files\Vim\vim91\indent.vim
+繼續: C:\Users\AlanJui\vimfiles\format.vim
+結束執行 C:\Users\AlanJui\vimfiles\format.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 98 行: 結束執行 C:\Users\AlanJui\vimfiles\coc-nvim.vim
+結束執行 C:\Users\AlanJui\vimfiles\coc-nvim.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 99 行: 結束執行 C:\Users\AlanJui\vimfiles\my-coc-config.vim
+結束執行 C:\Users\AlanJui\vimfiles\my-coc-config.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 100 行: 結束執行 C:\Users\AlanJui\vimfiles\config\coc-explorer.vim
+結束執行 C:\Users\AlanJui\vimfiles\config\coc-explorer.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 105 行: 結束執行 C:\Users\AlanJui\vimfiles\keymap.vim
+結束執行 C:\Users\AlanJui\vimfiles\keymap.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 107 行: 結束執行 C:\Users\AlanJui\vimfiles\config\which-key.vim
+第 384 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-which-key\autoload\which_key.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-which-key\autoload\which_key.vim
+繼續: C:\Users\AlanJui\vimfiles\config\which-key.vim
+結束執行 C:\Users\AlanJui\vimfiles\config\which-key.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 112 行: 結束執行 C:\Users\AlanJui\vimfiles\UI.vim
+結束執行 C:\Users\AlanJui\vimfiles\UI.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 127 行: 結束執行 C:\Users\AlanJui\vimfiles\config\color-theme-ccc.vim
+第 4 行: 結束執行 C:\Program Files\Vim\vim91\syntax\syntax.vim
+第 16 行: 結束執行 C:\Program Files\Vim\vim91\syntax/nosyntax.vim
+執行 BufEnter Autocommands: "*"
+autocommand syn clear
+
+autocommand if exists("b:current_syntax") | unlet b:current_syntax | endif
+
+結束執行 C:\Program Files\Vim\vim91\syntax/nosyntax.vim
+繼續: C:\Program Files\Vim\vim91\syntax\syntax.vim
+第 20 行: 結束執行 C:\Program Files\Vim\vim91\syntax\synload.vim
+第 22 行: 結束執行 C:\Program Files\Vim\vim91\syntax\syncolor.vim
+結束執行 C:\Program Files\Vim\vim91\syntax\syncolor.vim
+繼續: C:\Program Files\Vim\vim91\syntax\synload.vim
+結束執行 C:\Program Files\Vim\vim91\syntax\synload.vim
+繼續: C:\Program Files\Vim\vim91\syntax\syntax.vim
+執行 FileType Autocommands: "*"
+autocommand 0verbose exe "set syntax=" . expand("<amatch>")
+
+結束執行 C:\Program Files\Vim\vim91\syntax\syntax.vim
+繼續: C:\Users\AlanJui\vimfiles\config\color-theme-ccc.vim
+第 10 行: 結束執行 C:\Program Files\Vim\vim91\syntax\syncolor.vim
+結束執行 C:\Program Files\Vim\vim91\syntax\syncolor.vim
+繼續: C:\Users\AlanJui\vimfiles\config\color-theme-ccc.vim
+第 18 行: 結束執行 C:\Program Files\Vim\vim91\colors\lists\default.vim
+結束執行 C:\Program Files\Vim\vim91\colors\lists\default.vim
+繼續: C:\Users\AlanJui\vimfiles\config\color-theme-ccc.vim
+第 18 行: 結束執行 C:\Users\AlanJui\vimfiles\colors\OceanicNext.vim
+第 7 行: 結束執行 C:\Program Files\Vim\vim91\syntax\syncolor.vim
+結束執行 C:\Program Files\Vim\vim91\syntax\syncolor.vim
+繼續: C:\Users\AlanJui\vimfiles\colors\OceanicNext.vim
+第 8 行: 結束執行 C:\Program Files\Vim\vim91\syntax\syncolor.vim
+結束執行 C:\Program Files\Vim\vim91\syntax\syncolor.vim
+繼續: C:\Users\AlanJui\vimfiles\colors\OceanicNext.vim
+第 10 行: 結束執行 C:\Program Files\Vim\vim91\syntax\syncolor.vim
+結束執行 C:\Program Files\Vim\vim91\syntax\syncolor.vim
+繼續: C:\Users\AlanJui\vimfiles\colors\OceanicNext.vim
+結束執行 C:\Users\AlanJui\vimfiles\colors\OceanicNext.vim
+繼續: C:\Users\AlanJui\vimfiles\config\color-theme-ccc.vim
+結束執行 C:\Users\AlanJui\vimfiles\config\color-theme-ccc.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 132 行: 結束執行 C:\Users\AlanJui\vimfiles\config\airline-theme.vim
+結束執行 C:\Users\AlanJui\vimfiles\config\airline-theme.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+第 137 行: 結束執行 C:\Users\AlanJui\vimfiles\Misc.vim
+結束執行 C:\Users\AlanJui\vimfiles\Misc.vim
+繼續: C:\Users\AlanJui\vimfiles\vimrc
+結束執行 $HOME\vimfiles\vimrc
+執行 "C:\Users\AlanJui\vimfiles\plugged\coc.nvim\plugin\coc.vim" 中
+第 38 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\coc.nvim\autoload\coc\rpc.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\coc.nvim\autoload\coc\rpc.vim
+繼續: C:\Users\AlanJui\vimfiles\plugged\coc.nvim\plugin\coc.vim
+第 54 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\coc.nvim\autoload\coc\util.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\coc.nvim\autoload\coc\util.vim
+繼續: coc#rpc#start_server
+第 58 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\coc.nvim\autoload\coc\client.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\coc.nvim\autoload\coc\client.vim
+繼續: coc#rpc#start_server
+第 10 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\coc.nvim\autoload\coc\api.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\coc.nvim\autoload\coc\api.vim
+繼續: <SNR>46_Enable
+結束執行 C:\Users\AlanJui\vimfiles\plugged\coc.nvim\plugin\coc.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\vim-system-copy\plugin\system_copy.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-system-copy\plugin\system_copy.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\vim-snippets\plugin\vimsnippets.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-snippets\plugin\vimsnippets.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\auto-pairs\plugin\auto-pairs.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\auto-pairs\plugin\auto-pairs.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\vim-surround\plugin\surround.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-surround\plugin\surround.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\vim-closetag\plugin\closetag.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-closetag\plugin\closetag.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\vim-multiple-cursors\plugin\multiple_cursors.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-multiple-cursors\plugin\multiple_cursors.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\nerdcommenter\plugin\nerdcommenter.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdcommenter\plugin\nerdcommenter.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\echodoc.vim\plugin\echodoc.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\echodoc.vim\plugin\echodoc.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\undotree\plugin\undotree.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\undotree\plugin\undotree.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\tagalong.vim\plugin\tagalong.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\tagalong.vim\plugin\tagalong.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\far.vim\plugin\far.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\far.vim\plugin\far.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\SimpylFold\plugin\SimpylFold.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\SimpylFold\plugin\SimpylFold.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\nerdtree\plugin\NERD_tree.vim" 中
+第 59 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\autoload\nerdtree.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\autoload\nerdtree.vim
+繼續: C:\Users\AlanJui\vimfiles\plugged\nerdtree\plugin\NERD_tree.vim
+第 1 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\path.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\path.vim
+繼續: nerdtree#loadClassFiles
+第 2 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\menu_controller.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\menu_controller.vim
+繼續: nerdtree#loadClassFiles
+第 3 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\menu_item.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\menu_item.vim
+繼續: nerdtree#loadClassFiles
+第 4 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\key_map.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\key_map.vim
+繼續: nerdtree#loadClassFiles
+第 5 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\bookmark.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\bookmark.vim
+繼續: nerdtree#loadClassFiles
+第 6 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\tree_file_node.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\tree_file_node.vim
+繼續: nerdtree#loadClassFiles
+第 7 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\tree_dir_node.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\tree_dir_node.vim
+繼續: nerdtree#loadClassFiles
+第 8 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\opener.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\opener.vim
+繼續: nerdtree#loadClassFiles
+第 9 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\creator.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\creator.vim
+繼續: nerdtree#loadClassFiles
+第 10 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\flag_set.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\flag_set.vim
+繼續: nerdtree#loadClassFiles
+第 11 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\nerdtree.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\nerdtree.vim
+繼續: nerdtree#loadClassFiles
+第 12 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\ui.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\ui.vim
+繼續: nerdtree#loadClassFiles
+第 13 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\event.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\event.vim
+繼續: nerdtree#loadClassFiles
+第 14 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\notifier.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\lib\nerdtree\notifier.vim
+繼續: nerdtree#loadClassFiles
+第 148 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\autoload\nerdtree\ui_glue.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\autoload\nerdtree\ui_glue.vim
+繼續: C:\Users\AlanJui\vimfiles\plugged\nerdtree\plugin\NERD_tree.vim
+第 5 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\nerdtree_plugin\exec_menuitem.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\nerdtree_plugin\exec_menuitem.vim
+繼續: nerdtree#postSourceActions
+第 5 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\nerdtree_plugin\fs_menu.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\nerdtree_plugin\fs_menu.vim
+繼續: nerdtree#postSourceActions
+第 5 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\nerdtree_plugin\vcs.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\nerdtree_plugin\vcs.vim
+繼續: nerdtree#postSourceActions
+第 5 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-devicons\nerdtree_plugin\webdevicons.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-devicons\nerdtree_plugin\webdevicons.vim
+繼續: nerdtree#postSourceActions
+結束執行 C:\Users\AlanJui\vimfiles\plugged\nerdtree\plugin\NERD_tree.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\vim-signify\plugin\signify.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-signify\plugin\signify.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\vim-fugitive\plugin\fugitive.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-fugitive\plugin\fugitive.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\vim-which-key\plugin\which_key.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-which-key\plugin\which_key.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\vim-floaterm\plugin\floaterm.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-floaterm\plugin\floaterm.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\vim-windowswap\plugin\WindowSwap.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-windowswap\plugin\WindowSwap.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\vim-devicons\plugin\webdevicons.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-devicons\plugin\webdevicons.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\defx-icons\plugin\defx_icons.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\defx-icons\plugin\defx_icons.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\vim-airline\plugin\airline.vim" 中
+第 313 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\init.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\init.vim
+繼續: C:\Users\AlanJui\vimfiles\plugged\vim-airline\plugin\airline.vim
+第 165 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\parts.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\parts.vim
+繼續: airline#init#bootstrap
+第 181 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\formatter\short_path.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\formatter\short_path.vim
+繼續: airline#init#bootstrap
+第 75 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\util.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\util.vim
+繼續: <SNR>91_airline_toggle
+No matching autocommands: User AirlineToggledOn
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\plugin\airline.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\vim-airline-themes\plugin\airline-themes.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline-themes\plugin\airline-themes.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\lightline.vim\plugin\lightline.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\lightline.vim\plugin\lightline.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\bracey.vim\plugin\bracey.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\bracey.vim\plugin\bracey.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\open-browser.vim\plugin\openbrowser.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\open-browser.vim\plugin\openbrowser.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\plantuml-previewer.vim\plugin\plantuml-previewer.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\plantuml-previewer.vim\plugin\plantuml-previewer.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\vim-commentary\plugin\commentary.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-commentary\plugin\commentary.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\VimMyTools\plugin\vim_my_tools.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\VimMyTools\plugin\vim_my_tools.vim
+執行 "C:\Program Files\Vim\vim91\plugin\getscriptPlugin.vim" 中
+結束執行 C:\Program Files\Vim\vim91\plugin\getscriptPlugin.vim
+執行 "C:\Program Files\Vim\vim91\plugin\gzip.vim" 中
+結束執行 C:\Program Files\Vim\vim91\plugin\gzip.vim
+執行 "C:\Program Files\Vim\vim91\plugin\logiPat.vim" 中
+結束執行 C:\Program Files\Vim\vim91\plugin\logiPat.vim
+執行 "C:\Program Files\Vim\vim91\plugin\manpager.vim" 中
+結束執行 C:\Program Files\Vim\vim91\plugin\manpager.vim
+執行 "C:\Program Files\Vim\vim91\plugin\matchparen.vim" 中
+結束執行 C:\Program Files\Vim\vim91\plugin\matchparen.vim
+執行 "C:\Program Files\Vim\vim91\plugin\netrwPlugin.vim" 中
+結束執行 C:\Program Files\Vim\vim91\plugin\netrwPlugin.vim
+執行 "C:\Program Files\Vim\vim91\plugin\rrhelper.vim" 中
+結束執行 C:\Program Files\Vim\vim91\plugin\rrhelper.vim
+執行 "C:\Program Files\Vim\vim91\plugin\spellfile.vim" 中
+結束執行 C:\Program Files\Vim\vim91\plugin\spellfile.vim
+執行 "C:\Program Files\Vim\vim91\plugin\tarPlugin.vim" 中
+結束執行 C:\Program Files\Vim\vim91\plugin\tarPlugin.vim
+執行 "C:\Program Files\Vim\vim91\plugin\tohtml.vim" 中
+結束執行 C:\Program Files\Vim\vim91\plugin\tohtml.vim
+執行 "C:\Program Files\Vim\vim91\plugin\vimballPlugin.vim" 中
+結束執行 C:\Program Files\Vim\vim91\plugin\vimballPlugin.vim
+執行 "C:\Program Files\Vim\vim91\plugin\zipPlugin.vim" 中
+結束執行 C:\Program Files\Vim\vim91\plugin\zipPlugin.vim
+執行 "C:\Users\AlanJui\vimfiles\pack\github\start\copilot.vim\plugin\copilot.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\pack\github\start\copilot.vim\plugin\copilot.vim
+執行 "C:\Users\AlanJui\vimfiles\after\plugin\css.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\after\plugin\css.vim
+執行 "C:\Users\AlanJui\vimfiles\after\plugin\htm.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\after\plugin\htm.vim
+執行 "C:\Users\AlanJui\vimfiles\after\plugin\html.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\after\plugin\html.vim
+執行 "C:\Users\AlanJui\vimfiles\after\plugin\javascript.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\after\plugin\javascript.vim
+執行 "C:\Users\AlanJui\vimfiles\after\plugin\json.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\after\plugin\json.vim
+執行 "C:\Users\AlanJui\vimfiles\after\plugin\jsonc.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\after\plugin\jsonc.vim
+執行 "C:\Users\AlanJui\vimfiles\after\plugin\julia.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\after\plugin\julia.vim
+執行 "C:\Users\AlanJui\vimfiles\after\plugin\lua.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\after\plugin\lua.vim
+執行 "C:\Users\AlanJui\vimfiles\after\plugin\markdown.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\after\plugin\markdown.vim
+執行 "C:\Users\AlanJui\vimfiles\after\plugin\py.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\after\plugin\py.vim
+執行 "C:\Users\AlanJui\vimfiles\after\plugin\scss.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\after\plugin\scss.vim
+執行 "C:\Users\AlanJui\vimfiles\after\plugin\tex.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\after\plugin\tex.vim
+執行 "C:\Users\AlanJui\vimfiles\after\plugin\uml.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\after\plugin\uml.vim
+執行 "C:\Users\AlanJui\vimfiles\after\plugin\vim-system-copy.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\after\plugin\vim-system-copy.vim
+執行 "C:\Users\AlanJui\vimfiles\plugged\indentLine\after\plugin\indentLine.vim" 中
+結束執行 C:\Users\AlanJui\vimfiles\plugged\indentLine\after\plugin\indentLine.vim
+Reading viminfo file "C:\Users\AlanJui\_viminfo" 訊息 oldfiles
+執行 BufWinEnter Autocommands: "*"
+autocommand call s:Autocmd('BufWinEnter', +expand('<abuf>'), win_getid())
+
+執行 BufWinEnter Autocommands: "*"
+autocommand call <sid>on_window_changed('BufWinEnter')
+
+第 6 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions.vim
+繼續: <SNR>91_init
+第 16 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\quickfix.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\quickfix.vim
+繼續: airline#extensions#load
+第 1 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline.vim
+繼續: 358
+第 40 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\netrw.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\netrw.vim
+繼續: airline#extensions#load
+第 58 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\term.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\term.vim
+繼續: airline#extensions#load
+第 92 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\undotree.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\undotree.vim
+繼續: airline#extensions#load
+第 108 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\hunks.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\hunks.vim
+繼續: airline#extensions#load
+第 166 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\branch.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\branch.vim
+繼續: airline#extensions#load
+第 179 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\fugitiveline.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\fugitiveline.vim
+繼續: airline#extensions#load
+第 228 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\coc.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\coc.vim
+繼續: airline#extensions#load
+第 238 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\whitespace.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\whitespace.vim
+繼續: airline#extensions#load
+第 253 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\wordcount.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\wordcount.vim
+繼續: airline#extensions#load
+第 258 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\tabline.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\tabline.vim
+繼續: airline#extensions#load
+第 6 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\tabline\autoshow.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\tabline\autoshow.vim
+繼續: <SNR>143_toggle_on
+第 7 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\tabline\tabs.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\tabline\tabs.vim
+繼續: <SNR>143_toggle_on
+第 8 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\tabline\buffers.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\tabline\buffers.vim
+繼續: <SNR>143_toggle_on
+第 313 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\keymap.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\keymap.vim
+繼續: airline#extensions#load
+第 318 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\windowswap.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\windowswap.vim
+繼續: airline#extensions#load
+not found in 'runtimepath': "autoload/vimtex.vim"
+第 341 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\searchcount.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\searchcount.vim
+繼續: airline#extensions#load
+第 3 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\section.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\section.vim
+繼續: airline#init#sections
+第 2 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim
+繼續: <SNR>150_wrap_accent
+第 15 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline-themes\autoload\airline\themes\papercolor.vim
+第 13 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\themes.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\themes.vim
+繼續: C:\Users\AlanJui\vimfiles\plugged\vim-airline-themes\autoload\airline\themes\papercolor.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline-themes\autoload\airline\themes\papercolor.vim
+繼續: <SNR>91_init
+第 14 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline-themes\autoload\airline\themes\papercolor.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline-themes\autoload\airline\themes\papercolor.vim
+繼續: airline#switch_theme
+第 1 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\builder.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\builder.vim
+繼續: <SNR>133_invoke_funcrefs
+第 2 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\default.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\default.vim
+繼續: airline#util#exec_funcrefs
+No matching autocommands: User AirlineAfterTheme
+執行 User Autocommands: "AirlineModeChanged"
+autocommand call airline#mode_changed()
+
+No matching autocommands: User AirlineAfterInit
+執行 BufWinEnter Autocommands: "*"
+autocommand :call vim_my_tools#AddBuffer()
+
+第 0 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\VimMyTools\autoload\vim_my_tools.vim
+                                                                                              處理 BufWinEnter Autocommands: "*"..script C:\Users\AlanJui\vimfiles\plugged\VimMyTools\autoload\vim_my_tools.vim 時發生錯誤:
+行   23:
+AttributeError: type object 'PathFinder' has no attribute 'find_module'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "", line 1, in <module>
+SystemError: initialization of vim raised unreported exception
+AttributeError: type object 'PathFinder' has no attribute 'find_module'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "", line 5, in <module>
+SystemError: initialization of vim raised unreported exception
+結束執行 C:\Users\AlanJui\vimfiles\plugged\VimMyTools\autoload\vim_my_tools.vim
+繼續: BufWinEnter Autocommands: "*"
+處理 BufWinEnter Autocommands: "*"..function vim_my_tools#AddBuffer 時發生錯誤:
+行   17:
+Traceback (most recent call last):
+  File "", line 1, in <module>
+NameError: name 'preparePythonPath' is not defined
+執行 BufWinEnter Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 BufWinEnter Autocommands: "*"
+autocommand call s:IndentLinesDisable() | call s:LeadingSpaceDisable() | call s:Setup()
+
+執行 BufEnter Autocommands: "*"
+autocommand :silent! checktime
+
+執行 BufEnter Autocommands: "*"
+autocommand if (winnr("$") == 1 && &filetype == 'coc-explorer') | q | endif
+
+執行 BufEnter Autocommands: "*"
+autocommand call s:Autocmd('BufEnter', +expand('<abuf>'))
+
+執行 BufEnter Autocommands: "*"
+autocommand :call AutoPairsTryInit()
+
+執行 BufEnter Autocommands: "*"
+autocommand call nerdtree#checkForBrowse(expand('<amatch>'))
+
+執行 BufEnter Autocommands: "*"
+autocommand call lightline#update()
+
+第 0 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\lightline.vim\autoload\lightline.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\lightline.vim\autoload\lightline.vim
+繼續: BufEnter Autocommands: "*"
+第 37 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\lightline.vim\autoload\lightline\tab.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\lightline.vim\autoload\lightline\tab.vim
+繼續: lightline#init
+第 2 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\lightline.vim\autoload\lightline\colorscheme\default.vim
+第 8 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\lightline.vim\autoload\lightline\colorscheme\powerline.vim
+第 28 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\lightline.vim\autoload\lightline\colorscheme.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\lightline.vim\autoload\lightline\colorscheme.vim
+繼續: C:\Users\AlanJui\vimfiles\plugged\lightline.vim\autoload\lightline\colorscheme\powerline.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\lightline.vim\autoload\lightline\colorscheme\powerline.vim
+繼續: C:\Users\AlanJui\vimfiles\plugged\lightline.vim\autoload\lightline\colorscheme\default.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\lightline.vim\autoload\lightline\colorscheme\default.vim
+繼續: lightline#colorscheme
+執行 BufEnter Autocommands: "*"
+autocommand sil call s:LocalBrowse(expand("<amatch>"))
+
+執行 BufEnter Autocommands: "*"
+autocommand if mode() =~# '^[iR]'|call s:Event('InsertEnter')|endif
+
+autocommand call s:Event('BufEnter')
+
+第 2 行: 結束執行 C:\Users\AlanJui\vimfiles\pack\github\start\copilot.vim\autoload\copilot.vim
+結束執行 C:\Users\AlanJui\vimfiles\pack\github\start\copilot.vim\autoload\copilot.vim
+繼續: <SNR>115_Event
+第 2 行: 結束執行 C:\Users\AlanJui\vimfiles\pack\github\start\copilot.vim\autoload\copilot\util.vim
+結束執行 C:\Users\AlanJui\vimfiles\pack\github\start\copilot.vim\autoload\copilot\util.vim
+繼續: copilot#OnBufEnter
+執行 VimEnter Autocommands: "*"
+autocommand call s:VimEnter()
+
+第 1 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\coc.nvim\autoload\coc\highlight.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\coc.nvim\autoload\coc\highlight.vim
+繼續: <SNR>46_Highlight
+第 4 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\coc.nvim\autoload\coc\color.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\coc.nvim\autoload\coc\color.vim
+繼續: coc#highlight#get_contrast
+執行 VimEnter Autocommands: "*"
+autocommand silent! autocmd! FileExplorer
+
+autocommand call nerdtree#checkForBrowse(expand('<amatch>'))
+
+執行 VimEnter Autocommands: "*"
+autocommand call <sid>on_window_changed('VimEnter')
+
+執行 VimEnter Autocommands: "*"
+autocommand call s:ColorScheme()
+
+autocommand call s:MapTab() | call copilot#Init()
+
+執行 VimEnter Autocommands: "*"
+autocommand call s:VimEnter()
+
+SpecialKey     xxx term=bold ctermfg=243 guifg=#65737e
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+EndOfBuffer    xxx ctermfg=251 ctermbg=235 guifg=#c0c5ce guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+NonText        xxx term=bold ctermfg=243 gui=bold guifg=#65737e
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Directory      xxx term=bold ctermfg=68 guifg=#6699cc
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+ErrorMsg       xxx term=standout ctermfg=203 ctermbg=235 guifg=#ec5f67 guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+IncSearch      xxx term=reverse ctermfg=237 ctermbg=209 guifg=#343d46 guibg=#f99157
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 62
+Search         xxx term=reverse ctermfg=243 ctermbg=221 guifg=#65737e guibg=#fac863
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+CurSearch      xxx links to Search
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 8
+MoreMsg        xxx term=bold ctermfg=114 gui=bold guifg=#99c794
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+ModeMsg        xxx term=bold cterm=bold ctermfg=114 gui=bold guifg=#99c794
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+LineNr         xxx term=underline ctermfg=243 ctermbg=235 guifg=#65737e guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+LineNrAbove    xxx cleared
+LineNrBelow    xxx cleared
+CursorLineNr   xxx term=bold cterm=underline ctermfg=243 ctermbg=237 gui=bold guifg=#65737e guibg=#343d46
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+CursorLineSign xxx links to SignColumn
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 8
+CursorLineFold xxx links to FoldColumn
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 8
+Question       xxx term=standout ctermfg=68 gui=bold guifg=#6699cc
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+StatusLine     xxx term=bold,reverse cterm=bold,reverse ctermfg=237 ctermbg=243 gui=bold,reverse guifg=#343d46 guibg=#65737e
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+StatusLineNC   xxx term=reverse cterm=reverse ctermfg=243 ctermbg=237 gui=reverse guifg=#65737e guibg=#343d46
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+VertSplit      xxx term=reverse cterm=reverse ctermfg=235 ctermbg=240 gui=reverse guifg=#1b2b34 guibg=#4f5b66
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+Title          xxx term=bold ctermfg=68 gui=bold guifg=#6699cc
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Visual         xxx term=reverse ctermbg=240 guibg=#4f5b66
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+VisualNOS      xxx term=bold,underline cterm=bold,underline ctermfg=203 gui=bold,underline guifg=#ec5f67
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+WarningMsg     xxx term=standout ctermfg=203 guifg=#ec5f67
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+WildMenu       xxx term=standout ctermfg=253 ctermbg=68 guifg=#d8dee9 guibg=#6699cc
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+Folded         xxx term=standout ctermfg=243 ctermbg=237 guifg=#65737e guibg=#343d46
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+FoldColumn     xxx term=standout ctermfg=68 ctermbg=235 guifg=#6699cc guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+DiffAdd        xxx term=bold ctermfg=114 ctermbg=237 guifg=#99c794 guibg=#343d46
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+DiffChange     xxx term=bold ctermfg=243 ctermbg=237 guifg=#65737e guibg=#343d46
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+DiffDelete     xxx term=bold ctermfg=203 ctermbg=237 gui=bold guifg=#ec5f67 guibg=#343d46
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+DiffText       xxx term=reverse cterm=bold ctermfg=68 ctermbg=237 gui=bold guifg=#6699cc guibg=#343d46
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+SignColumn     xxx term=standout ctermfg=235 ctermbg=235 guifg=#1b2b34 guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+Conceal        xxx ctermfg=239 guifg=Grey30
+	上次設定: ~\vimfiles\plugged\indentLine\after\plugin\indentLine.vim line 88
+SpellBad       xxx term=reverse cterm=undercurl ctermbg=12 gui=undercurl guisp=Red
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 62
+SpellCap       xxx term=reverse cterm=undercurl ctermbg=9 gui=undercurl guisp=Blue
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 62
+SpellRare      xxx term=reverse cterm=undercurl ctermbg=13 gui=undercurl guisp=Magenta
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 62
+SpellLocal     xxx term=underline cterm=undercurl ctermbg=11 gui=undercurl guisp=Cyan
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 62
+Pmenu          xxx ctermfg=145 ctermbg=237 guifg=#a7adba guibg=#343d46
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+PmenuSel       xxx ctermfg=253 ctermbg=68 guifg=#d8dee9 guibg=#6699cc
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+PmenuKind      xxx links to Pmenu
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 8
+PmenuKindSel   xxx links to PmenuSel
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 8
+PmenuExtra     xxx links to Pmenu
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 8
+PmenuExtraSel  xxx links to PmenuSel
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 8
+PmenuSbar      xxx ctermbg=240 guibg=#4f5b66
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+PmenuThumb     xxx ctermbg=253 guibg=#d8dee9
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+TabLine        xxx term=underline cterm=underline ctermfg=243 ctermbg=237 gui=underline guifg=#65737e guibg=#343d46
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+TabLineSel     xxx term=bold cterm=bold ctermfg=114 ctermbg=237 gui=bold guifg=#99c794 guibg=#343d46
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+TabLineFill    xxx term=reverse cterm=reverse ctermfg=243 ctermbg=237 gui=reverse guifg=#65737e guibg=#343d46
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+CursorColumn   xxx term=reverse ctermbg=237 guibg=#343d46
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+CursorLine     xxx term=underline ctermbg=237 guibg=#343d46
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 62
+ColorColumn    xxx term=reverse ctermbg=237 guibg=#343d46
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+QuickFixLine   xxx links to Search
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 8
+StatusLineTerm xxx term=bold,reverse cterm=bold ctermfg=0 ctermbg=10 gui=bold guifg=bg guibg=LightGreen
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 8
+StatusLineTermNC xxx term=reverse ctermfg=0 ctermbg=10 guifg=bg guibg=LightGreen
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 8
+Normal         xxx ctermfg=253 ctermbg=235 guifg=#d8dee9 guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+MatchParen     xxx term=reverse ctermfg=251 ctermbg=243 guifg=#c0c5ce guibg=#65737e
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+ToolbarLine    xxx term=underline ctermbg=8 guibg=Grey50
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 8
+ToolbarButton  xxx cterm=bold ctermfg=0 ctermbg=7 gui=bold guifg=Black guibg=LightGrey
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 8
+Comment        xxx term=bold ctermfg=243 guifg=#65737e
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Constant       xxx term=underline ctermfg=209 guifg=#f99157
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Special        xxx term=bold ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Identifier     xxx term=underline cterm=bold ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Statement      xxx term=bold ctermfg=203 gui=bold guifg=#ec5f67
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+PreProc        xxx term=underline ctermfg=221 guifg=#fac863
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Type           xxx term=underline ctermfg=221 gui=bold guifg=#fac863
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Underlined     xxx term=underline cterm=underline ctermfg=203 gui=underline guifg=#ec5f67
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Ignore         xxx ctermfg=0 guifg=bg
+	上次設定: C:\Program Files\Vim\vim91\syntax\syncolor.vim line 43
+Error          xxx term=reverse ctermfg=15 ctermbg=12 guifg=White guibg=Red
+	上次設定: C:\Program Files\Vim\vim91\syntax\syncolor.vim line 57
+Todo           xxx term=standout ctermfg=221 ctermbg=237 guifg=#fac863 guibg=#343d46
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+String         xxx ctermfg=114 guifg=#99c794
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Character      xxx ctermfg=203 guifg=#ec5f67
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Number         xxx ctermfg=209 guifg=#f99157
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Boolean        xxx ctermfg=209 guifg=#f99157
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Float          xxx ctermfg=209 guifg=#f99157
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Function       xxx ctermfg=68 guifg=#6699cc
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Conditional    xxx ctermfg=176 guifg=#c594c5
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Repeat         xxx ctermfg=221 guifg=#fac863
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Label          xxx ctermfg=221 guifg=#fac863
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Operator       xxx ctermfg=251 guifg=#c0c5ce
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Keyword        xxx ctermfg=176 guifg=#c594c5
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Exception      xxx ctermfg=203 guifg=#ec5f67
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Include        xxx ctermfg=68 guifg=#6699cc
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Define         xxx ctermfg=176 guifg=#c594c5
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Macro          xxx ctermfg=203 guifg=#ec5f67
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+PreCondit      xxx links to PreProc
+	上次設定: C:\Program Files\Vim\vim91\syntax\syncolor.vim line 77
+StorageClass   xxx ctermfg=221 guifg=#fac863
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Structure      xxx ctermfg=176 guifg=#c594c5
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Typedef        xxx ctermfg=221 guifg=#fac863
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Tag            xxx ctermfg=221 guifg=#fac863
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+SpecialChar    xxx ctermfg=137 guifg=#ab7967
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Delimiter      xxx ctermfg=137 guifg=#ab7967
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+SpecialComment xxx links to Special
+	上次設定: C:\Program Files\Vim\vim91\syntax\syncolor.vim line 84
+Debug          xxx ctermfg=203 guifg=#ec5f67
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+EchoDocPopup   xxx links to Pmenu
+	上次設定: ~\vimfiles\plugged\echodoc.vim\plugin\echodoc.vim line 26
+TooLong        xxx ctermfg=203 guifg=#ec5f67
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Cursor         xxx ctermfg=235 ctermbg=251 guifg=#1b2b34 guibg=#c0c5ce
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+helpExample    xxx ctermfg=221 guifg=#fac863
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+helpCommand    xxx ctermfg=221 guifg=#fac863
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+LspDiagnosticsSignError xxx ctermfg=203 guifg=#ec5f67
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+LspDiagnosticsUnderlineError xxx cterm=undercurl gui=undercurl
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 62
+LspDiagnosticsSignWarning xxx ctermfg=221 guifg=#fac863
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+LspDiagnosticsUnderlineWarning xxx cterm=undercurl gui=undercurl
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 62
+LspDiagnosticsSignInformation xxx ctermfg=68 guifg=#6699cc
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+LspDiagnosticsUnderlineInformation xxx cterm=undercurl gui=undercurl
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 62
+LspDiagnosticsSignHint xxx ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+LspDiagnosticsUnderlineHint xxx cterm=undercurl gui=undercurl
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 62
+TSInclude      xxx ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+TSPunctBracket xxx ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+TSPunctDelimiter xxx ctermfg=253 guifg=#d8dee9
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+TSParameter    xxx ctermfg=221 guifg=#fac863
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+TSType         xxx ctermfg=68 guifg=#6699cc
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+TSFunction     xxx ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+TSTagDelimiter xxx ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+TSProperty     xxx ctermfg=221 guifg=#fac863
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+TSMethod       xxx ctermfg=68 guifg=#6699cc
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+TSConstructor  xxx ctermfg=253 guifg=#d8dee9
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+TSVariable     xxx ctermfg=253 guifg=#d8dee9
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+TSOperator     xxx ctermfg=253 guifg=#d8dee9
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+TSTag          xxx ctermfg=253 guifg=#d8dee9
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+TSKeyword      xxx ctermfg=176 guifg=#c594c5
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+TSKeywordOperator xxx ctermfg=176 guifg=#c594c5
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+TSVariableBuiltin xxx ctermfg=203 guifg=#ec5f67
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+TSLabel        xxx ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+csClass        xxx ctermfg=221 guifg=#fac863
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+csAttribute    xxx ctermfg=221 guifg=#fac863
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+csModifier     xxx ctermfg=176 guifg=#c594c5
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+csType         xxx ctermfg=203 guifg=#ec5f67
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+csUnspecifiedStatement xxx ctermfg=68 guifg=#6699cc
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+csContextualStatement xxx ctermfg=176 guifg=#c594c5
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+csNewDecleration xxx ctermfg=203 guifg=#ec5f67
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+cOperator      xxx ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+cPreCondit     xxx ctermfg=176 guifg=#c594c5
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+cssColor       xxx ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+cssBraces      xxx ctermfg=251 guifg=#c0c5ce
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+cssClassName   xxx ctermfg=176 guifg=#c594c5
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+DiffAdded      xxx ctermfg=253 ctermbg=114 guifg=#d8dee9 guibg=#99c794
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+DiffFile       xxx ctermfg=203 ctermbg=235 guifg=#ec5f67 guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+DiffNewFile    xxx ctermfg=114 ctermbg=235 guifg=#99c794 guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+DiffLine       xxx ctermfg=68 ctermbg=235 guifg=#6699cc guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+DiffRemoved    xxx ctermfg=253 ctermbg=203 guifg=#d8dee9 guibg=#ec5f67
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+gitCommitOverflow xxx ctermfg=203 guifg=#ec5f67
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+gitCommitSummary xxx ctermfg=114 guifg=#99c794
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+htmlBold       xxx ctermfg=221 guifg=#fac863
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+htmlItalic     xxx ctermfg=176 guifg=#c594c5
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+htmlTag        xxx ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+htmlEndTag     xxx ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+htmlArg        xxx ctermfg=221 guifg=#fac863
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+htmlTagName    xxx ctermfg=253 guifg=#d8dee9
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+javaScript     xxx ctermfg=251 guifg=#c0c5ce
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+javaScriptNumber xxx ctermfg=209 guifg=#f99157
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+javaScriptBraces xxx ctermfg=251 guifg=#c0c5ce
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+jsonKeyword    xxx ctermfg=114 guifg=#99c794
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+jsonQuote      xxx ctermfg=114 guifg=#99c794
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+markdownCode   xxx ctermfg=114 guifg=#99c794
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+markdownCodeBlock xxx ctermfg=114 guifg=#99c794
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+markdownHeadingDelimiter xxx ctermfg=68 guifg=#6699cc
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+markdownItalic xxx ctermfg=176 guifg=#c594c5
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+markdownBold   xxx ctermfg=221 guifg=#fac863
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+markdownCodeDelimiter xxx ctermfg=137 guifg=#ab7967
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+markdownError  xxx ctermfg=251 ctermbg=235 guifg=#c0c5ce guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+typescriptParens xxx ctermfg=251 guifg=#c0c5ce
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+NeomakeErrorSign xxx ctermfg=203 ctermbg=235 guifg=#ec5f67 guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+NeomakeWarningSign xxx ctermfg=221 ctermbg=235 guifg=#fac863 guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+NeomakeInfoSign xxx ctermfg=15 ctermbg=235 guifg=#ffffff guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+NeomakeError   xxx cterm=underline ctermfg=203 gui=underline guifg=#ec5f67 guisp=#ec5f67
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 65
+NeomakeWarning xxx cterm=underline ctermfg=203 gui=underline guifg=#ec5f67 guisp=#ec5f67
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 65
+ALEErrorSign   xxx ctermfg=203 ctermbg=235 guifg=#ec5f67 guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+ALEWarningSign xxx ctermfg=221 ctermbg=235 guifg=#fac863 guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+ALEInfoSign    xxx ctermfg=15 ctermbg=235 guifg=#ffffff guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+NERDTreeExecFile xxx ctermfg=251 guifg=#c0c5ce
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+NERDTreeDirSlash xxx ctermfg=68 guifg=#6699cc
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+NERDTreeOpenable xxx ctermfg=68 guifg=#6699cc
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+NERDTreeFile   xxx cleared
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+NERDTreeFlags  xxx ctermfg=68 guifg=#6699cc
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+phpComparison  xxx ctermfg=251 guifg=#c0c5ce
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+phpParent      xxx ctermfg=251 guifg=#c0c5ce
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+phpMemberSelector xxx ctermfg=251 guifg=#c0c5ce
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+pythonRepeat   xxx ctermfg=176 guifg=#c594c5
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+pythonOperator xxx ctermfg=176 guifg=#c594c5
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+rubyConstant   xxx ctermfg=221 guifg=#fac863
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+rubySymbol     xxx ctermfg=114 guifg=#99c794
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+rubyAttribute  xxx ctermfg=68 guifg=#6699cc
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+rubyInterpolation xxx ctermfg=114 guifg=#99c794
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+rubyInterpolationDelimiter xxx ctermfg=137 guifg=#ab7967
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+rubyStringDelimiter xxx ctermfg=114 guifg=#99c794
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+rubyRegexp     xxx ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+sassidChar     xxx ctermfg=203 guifg=#ec5f67
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+sassClassChar  xxx ctermfg=209 guifg=#f99157
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+sassInclude    xxx ctermfg=176 guifg=#c594c5
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+sassMixing     xxx ctermfg=176 guifg=#c594c5
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+sassMixinName  xxx ctermfg=68 guifg=#6699cc
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+vimfilerLeaf   xxx ctermfg=251 guifg=#c0c5ce
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+vimfilerNormalFile xxx ctermfg=251 ctermbg=235 guifg=#c0c5ce guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+vimfilerOpenedFile xxx ctermfg=68 guifg=#6699cc
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+vimfilerClosedFile xxx ctermfg=68 guifg=#6699cc
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+GitGutterAdd   xxx ctermfg=114 ctermbg=235 guifg=#99c794 guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+GitGutterChange xxx ctermfg=68 ctermbg=235 guifg=#6699cc guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+GitGutterDelete xxx ctermfg=203 ctermbg=235 guifg=#ec5f67 guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+GitGutterChangeDelete xxx ctermfg=176 ctermbg=235 guifg=#c594c5 guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+SignifySignAdd xxx ctermfg=114 ctermbg=235 guifg=#99c794 guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+SignifySignChange xxx ctermfg=68 ctermbg=235 guifg=#6699cc guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+SignifySignDelete xxx ctermfg=203 ctermbg=235 guifg=#ec5f67 guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+SignifySignChangeDelete xxx ctermfg=176 ctermbg=235 guifg=#c594c5 guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+SignifySignDeleteFirstLine xxx ctermfg=203 ctermbg=235 guifg=#ec5f67 guibg=#1b2b34
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 58
+xmlTag         xxx ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+xmlTagName     xxx ctermfg=251 guifg=#c0c5ce
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+xmlEndTag      xxx ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+Defx_filename_directory xxx ctermfg=68 guifg=#6699cc
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+CocErrorSign   xxx ctermfg=203 guifg=#ec5f67
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+CocWarningSign xxx ctermfg=221 guifg=#fac863
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+CocInfoSign    xxx ctermfg=68 guifg=#6699cc
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+CocHintSign    xxx ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+CocErrorFloat  xxx ctermfg=203 guifg=#ec5f67
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+CocWarningFloat xxx ctermfg=221 guifg=#fac863
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+CocInfoFloat   xxx ctermfg=68 guifg=#6699cc
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+CocHintFloat   xxx ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+CocDiagnosticsError xxx ctermfg=203 guifg=#ec5f67
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+CocDiagnosticsWarning xxx ctermfg=221 guifg=#fac863
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+CocDiagnosticsInfo xxx ctermfg=68 guifg=#6699cc
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+CocDiagnosticsHint xxx ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+CocSelectedText xxx ctermfg=176 guifg=#c594c5
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+CocCodeLens    xxx ctermfg=145 guifg=#a7adba
+	上次設定: ~\vimfiles\colors\OceanicNext.vim line 54
+CocUnderline   xxx term=underline cterm=underline gui=underline guisp=#ebdbb2
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 429
+CocBold        xxx term=bold cterm=bold gui=bold
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 430
+CocItalic      xxx term=italic cterm=italic gui=italic
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 431
+CocStrikeThrough xxx term=strikethrough cterm=strikethrough gui=strikethrough
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 432
+CocMarkdownLink xxx ctermfg=9 guifg=#15aabf
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 433
+CocDisabled    xxx ctermfg=7 guifg=#999999
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 434
+CocSearch      xxx ctermfg=9 guifg=#15aabf
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 435
+CocLink        xxx term=underline cterm=underline gui=underline guisp=#15aabf
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 436
+CocFloatActive xxx links to CocSearch
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 437
+CocFadeOut     xxx links to Conceal
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 438
+CocMarkdownCode xxx links to markdownCode
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 439
+CocMarkdownHeader xxx links to markdownH1
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 440
+markdownH1     xxx cleared
+CocDeprecatedHighlight xxx links to CocStrikeThrough
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 441
+CocUnusedHighlight xxx links to CocFadeOut
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 442
+CocListSearch  xxx links to CocSearch
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 443
+CocListMode    xxx links to ModeMsg
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 444
+CocListPath    xxx links to Comment
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 445
+CocHighlightText xxx links to CursorColumn
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 446
+CocHoverRange  xxx links to Search
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 447
+CocCursorRange xxx links to Search
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 448
+CocLinkedEditing xxx links to CocCursorRange
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 449
+CocHighlightRead xxx links to CocHighlightText
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 450
+CocHighlightWrite xxx links to CocHighlightText
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 451
+CocNotificationProgress xxx ctermfg=9 guifg=#15aabf
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 453
+CocNotificationButton xxx links to CocUnderline
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 454
+CocNotificationError xxx links to CocErrorFloat
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 455
+CocNotificationWarning xxx links to CocWarningFloat
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 456
+CocNotificationInfo xxx links to CocInfoFloat
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 457
+CocSnippetVisual xxx links to Visual
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 459
+CocTreeTitle   xxx links to Title
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 461
+CocTreeDescription xxx links to Comment
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 462
+CocTreeOpenClose xxx links to CocBold
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 463
+CocTreeSelected xxx links to CursorLine
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 464
+CocSelectedRange xxx links to CocHighlightText
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 465
+CocSymbolDefault xxx links to MoreMsg
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 467
+CocPumSearch   xxx links to CocSearch
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 469
+CocPumDetail   xxx links to Comment
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 470
+CocPumMenu     xxx links to CocFloating
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 471
+CocFloating    xxx links to Pmenu
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 490
+CocPumShortcut xxx links to Comment
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 472
+CocPumDeprecated xxx links to CocStrikeThrough
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 473
+CocVirtualText xxx ctermfg=12 guifg=#504945
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 474
+CocPumVirtualText xxx links to CocVirtualText
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 475
+CocInputBoxVirtualText xxx links to CocVirtualText
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 476
+CocFloatDividingLine xxx links to CocVirtualText
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 477
+CocListBlackBlack xxx guifg=#1b2b34 guibg=#1b2b34
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListBlackBlue xxx guifg=#1b2b34 guibg=#6699cc
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListBlackGreen xxx guifg=#1b2b34 guibg=#99c794
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListBlackGrey xxx guifg=#1b2b34 guibg=#65737e
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListBlackWhite xxx guifg=#1b2b34 guibg=#ffffff
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListBlackCyan xxx guifg=#1b2b34 guibg=#62b3b2
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListBlackYellow xxx guifg=#1b2b34 guibg=#fac863
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListBlackMagenta xxx guifg=#1b2b34 guibg=#c594c5
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListBlackRed xxx guifg=#1b2b34 guibg=#ec5f67
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListFgBlack xxx ctermfg=0 guifg=#1b2b34
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 220
+CocListBgBlack xxx ctermbg=0 guibg=#1b2b34
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 221
+CocListBlueBlack xxx guifg=#6699cc guibg=#1b2b34
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListBlueBlue xxx guifg=#6699cc guibg=#6699cc
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListBlueGreen xxx guifg=#6699cc guibg=#99c794
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListBlueGrey xxx guifg=#6699cc guibg=#65737e
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListBlueWhite xxx guifg=#6699cc guibg=#ffffff
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListBlueCyan xxx guifg=#6699cc guibg=#62b3b2
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListBlueYellow xxx guifg=#6699cc guibg=#fac863
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListBlueMagenta xxx guifg=#6699cc guibg=#c594c5
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListBlueRed xxx guifg=#6699cc guibg=#ec5f67
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListFgBlue  xxx ctermfg=9 guifg=#6699cc
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 220
+CocListBgBlue  xxx ctermbg=9 guibg=#6699cc
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 221
+CocListGreenBlack xxx guifg=#99c794 guibg=#1b2b34
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListGreenBlue xxx guifg=#99c794 guibg=#6699cc
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListGreenGreen xxx guifg=#99c794 guibg=#99c794
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListGreenGrey xxx guifg=#99c794 guibg=#65737e
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListGreenWhite xxx guifg=#99c794 guibg=#ffffff
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListGreenCyan xxx guifg=#99c794 guibg=#62b3b2
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListGreenYellow xxx guifg=#99c794 guibg=#fac863
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListGreenMagenta xxx guifg=#99c794 guibg=#c594c5
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListGreenRed xxx guifg=#99c794 guibg=#ec5f67
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListFgGreen xxx ctermfg=10 guifg=#99c794
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 220
+CocListBgGreen xxx ctermbg=10 guibg=#99c794
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 221
+CocListGreyBlack xxx guifg=#65737e guibg=#1b2b34
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListGreyBlue xxx guifg=#65737e guibg=#6699cc
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListGreyGreen xxx guifg=#65737e guibg=#99c794
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListGreyGrey xxx guifg=#65737e guibg=#65737e
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListGreyWhite xxx guifg=#65737e guibg=#ffffff
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListGreyCyan xxx guifg=#65737e guibg=#62b3b2
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListGreyYellow xxx guifg=#65737e guibg=#fac863
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListGreyMagenta xxx guifg=#65737e guibg=#c594c5
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListGreyRed xxx guifg=#65737e guibg=#ec5f67
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListFgGrey  xxx ctermfg=7 guifg=#65737e
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 220
+CocListBgGrey  xxx ctermbg=7 guibg=#65737e
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 221
+CocListWhiteBlack xxx guifg=#ffffff guibg=#1b2b34
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListWhiteBlue xxx guifg=#ffffff guibg=#6699cc
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListWhiteGreen xxx guifg=#ffffff guibg=#99c794
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListWhiteGrey xxx guifg=#ffffff guibg=#65737e
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListWhiteWhite xxx guifg=#ffffff guibg=#ffffff
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListWhiteCyan xxx guifg=#ffffff guibg=#62b3b2
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListWhiteYellow xxx guifg=#ffffff guibg=#fac863
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListWhiteMagenta xxx guifg=#ffffff guibg=#c594c5
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListWhiteRed xxx guifg=#ffffff guibg=#ec5f67
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListFgWhite xxx ctermfg=15 guifg=#ffffff
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 220
+CocListBgWhite xxx ctermbg=15 guibg=#ffffff
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 221
+CocListCyanBlack xxx guifg=#62b3b2 guibg=#1b2b34
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListCyanBlue xxx guifg=#62b3b2 guibg=#6699cc
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListCyanGreen xxx guifg=#62b3b2 guibg=#99c794
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListCyanGrey xxx guifg=#62b3b2 guibg=#65737e
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListCyanWhite xxx guifg=#62b3b2 guibg=#ffffff
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListCyanCyan xxx guifg=#62b3b2 guibg=#62b3b2
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListCyanYellow xxx guifg=#62b3b2 guibg=#fac863
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListCyanMagenta xxx guifg=#62b3b2 guibg=#c594c5
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListCyanRed xxx guifg=#62b3b2 guibg=#ec5f67
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListFgCyan  xxx ctermfg=11 guifg=#62b3b2
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 220
+CocListBgCyan  xxx ctermbg=11 guibg=#62b3b2
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 221
+CocListYellowBlack xxx guifg=#fac863 guibg=#1b2b34
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListYellowBlue xxx guifg=#fac863 guibg=#6699cc
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListYellowGreen xxx guifg=#fac863 guibg=#99c794
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListYellowGrey xxx guifg=#fac863 guibg=#65737e
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListYellowWhite xxx guifg=#fac863 guibg=#ffffff
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListYellowCyan xxx guifg=#fac863 guibg=#62b3b2
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListYellowYellow xxx guifg=#fac863 guibg=#fac863
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListYellowMagenta xxx guifg=#fac863 guibg=#c594c5
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListYellowRed xxx guifg=#fac863 guibg=#ec5f67
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListFgYellow xxx ctermfg=14 guifg=#fac863
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 220
+CocListBgYellow xxx ctermbg=14 guibg=#fac863
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 221
+CocListMagentaBlack xxx guifg=#c594c5 guibg=#1b2b34
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListMagentaBlue xxx guifg=#c594c5 guibg=#6699cc
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListMagentaGreen xxx guifg=#c594c5 guibg=#99c794
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListMagentaGrey xxx guifg=#c594c5 guibg=#65737e
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListMagentaWhite xxx guifg=#c594c5 guibg=#ffffff
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListMagentaCyan xxx guifg=#c594c5 guibg=#62b3b2
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListMagentaYellow xxx guifg=#c594c5 guibg=#fac863
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListMagentaMagenta xxx guifg=#c594c5 guibg=#c594c5
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListMagentaRed xxx guifg=#c594c5 guibg=#ec5f67
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListFgMagenta xxx ctermfg=13 guifg=#c594c5
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 220
+CocListBgMagenta xxx ctermbg=13 guibg=#c594c5
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 221
+CocListRedBlack xxx guifg=#ec5f67 guibg=#1b2b34
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListRedBlue xxx guifg=#ec5f67 guibg=#6699cc
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListRedGreen xxx guifg=#ec5f67 guibg=#99c794
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListRedGrey xxx guifg=#ec5f67 guibg=#65737e
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListRedWhite xxx guifg=#ec5f67 guibg=#ffffff
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListRedCyan xxx guifg=#ec5f67 guibg=#62b3b2
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListRedYellow xxx guifg=#ec5f67 guibg=#fac863
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListRedMagenta xxx guifg=#ec5f67 guibg=#c594c5
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListRedRed  xxx guifg=#ec5f67 guibg=#ec5f67
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 218
+CocListFgRed   xxx ctermfg=12 guifg=#ec5f67
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 220
+CocListBgRed   xxx ctermbg=12 guibg=#ec5f67
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 221
+CocMenuSel     xxx ctermbg=59 guibg=#4b535b
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 492
+CocListLine    xxx links to CursorLine
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 503
+EchoDocFloat   xxx links to Pmenu
+	上次設定: ~\vimfiles\plugged\echodoc.vim\plugin\echodoc.vim line 23
+Floaterm       xxx links to Normal
+	上次設定: ~\vimfiles\plugged\vim-floaterm\plugin\floaterm.vim line 51
+FloatermNC     xxx links to NormalNC
+	上次設定: ~\vimfiles\plugged\vim-floaterm\plugin\floaterm.vim line 52
+NormalNC       xxx cleared
+FloatermBorder xxx links to NormalFloat
+	上次設定: ~\vimfiles\plugged\vim-floaterm\plugin\floaterm.vim line 53
+NormalFloat    xxx cleared
+DefxIconsMarkIcon xxx links to Statement
+	上次設定: ~\vimfiles\plugged\defx-icons\plugin\defx_icons.vim line 226
+DefxIconsCopyIcon xxx links to WarningMsg
+	上次設定: ~\vimfiles\plugged\defx-icons\plugin\defx_icons.vim line 227
+DefxIconsLinkIcon xxx links to WarningMsg
+	上次設定: ~\vimfiles\plugged\defx-icons\plugin\defx_icons.vim line 228
+DefxIconsMoveIcon xxx links to ErrorMsg
+	上次設定: ~\vimfiles\plugged\defx-icons\plugin\defx_icons.vim line 229
+DefxIconsDirectory xxx links to Directory
+	上次設定: ~\vimfiles\plugged\defx-icons\plugin\defx_icons.vim line 230
+DefxIconsParentDirectory xxx links to Directory
+	上次設定: ~\vimfiles\plugged\defx-icons\plugin\defx_icons.vim line 231
+DefxIconsSymlinkDirectory xxx links to Directory
+	上次設定: ~\vimfiles\plugged\defx-icons\plugin\defx_icons.vim line 232
+DefxIconsOpenedTreeIcon xxx links to Directory
+	上次設定: ~\vimfiles\plugged\defx-icons\plugin\defx_icons.vim line 233
+DefxIconsNestedTreeIcon xxx links to Directory
+	上次設定: ~\vimfiles\plugged\defx-icons\plugin\defx_icons.vim line 234
+DefxIconsClosedTreeIcon xxx links to Directory
+	上次設定: ~\vimfiles\plugged\defx-icons\plugin\defx_icons.vim line 235
+CopilotSuggestion xxx ctermfg=244 guifg=#808080
+	上次設定: ~\vimfiles\pack\github\start\copilot.vim\plugin\copilot.vim line 16
+CopilotAnnotation xxx links to MoreMsg
+	上次設定: ~\vimfiles\pack\github\start\copilot.vim\plugin\copilot.vim line 20
+airline_x_inactive xxx ctermfg=240 ctermbg=254 guifg=#585858 guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_x_inactive_bold xxx term=bold cterm=bold ctermfg=240 ctermbg=254 gui=bold guifg=#585858 guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_x_inactive_red xxx ctermfg=81 ctermbg=254 guifg=#66d9ef guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_y_inactive xxx ctermfg=240 ctermbg=254 guifg=#585858 guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_y_inactive_bold xxx term=bold cterm=bold ctermfg=240 ctermbg=254 gui=bold guifg=#585858 guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_y_inactive_red xxx ctermfg=81 ctermbg=254 guifg=#66d9ef guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_z_inactive xxx ctermfg=240 ctermbg=254 guifg=#585858 guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_z_inactive_bold xxx term=bold cterm=bold ctermfg=240 ctermbg=254 gui=bold guifg=#585858 guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_z_inactive_red xxx ctermfg=81 ctermbg=254 guifg=#66d9ef guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_term_inactive xxx ctermfg=85 ctermbg=232 guifg=#9cffd3 guibg=#202020
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_term_inactive_bold xxx term=bold cterm=bold ctermfg=85 ctermbg=232 gui=bold guifg=#9cffd3 guibg=#202020
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_term_inactive_red xxx ctermfg=81 ctermbg=232 guifg=#66d9ef guibg=#202020
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_error_inactive xxx ctermfg=232 ctermbg=160 guifg=#000000 guibg=#990000
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_error_inactive_bold xxx term=bold cterm=bold ctermfg=232 ctermbg=160 gui=bold guifg=#000000 guibg=#990000
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_error_inactive_red xxx ctermfg=81 ctermbg=160 guifg=#66d9ef guibg=#990000
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_a_inactive xxx ctermfg=240 ctermbg=254 guifg=#585858 guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_a_inactive_bold xxx term=bold cterm=bold ctermfg=240 ctermbg=254 gui=bold guifg=#585858 guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_a_inactive_red xxx ctermfg=81 ctermbg=254 guifg=#66d9ef guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_b_inactive xxx ctermfg=240 ctermbg=254 guifg=#585858 guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_b_inactive_bold xxx term=bold cterm=bold ctermfg=240 ctermbg=254 gui=bold guifg=#585858 guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_b_inactive_red xxx ctermfg=81 ctermbg=254 guifg=#66d9ef guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_c_inactive xxx ctermfg=254 ctermbg=31 guifg=#e4e4e4 guibg=#0087af
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_c_inactive_bold xxx term=bold cterm=bold ctermfg=254 ctermbg=31 gui=bold guifg=#e4e4e4 guibg=#0087af
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_c_inactive_red xxx ctermfg=81 ctermbg=31 guifg=#66d9ef guibg=#0087af
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_warning_inactive xxx ctermfg=232 ctermbg=166 guifg=#000000 guibg=#df5f00
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_warning_inactive_bold xxx term=bold cterm=bold ctermfg=232 ctermbg=166 gui=bold guifg=#000000 guibg=#df5f00
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_warning_inactive_red xxx ctermfg=81 ctermbg=166 guifg=#66d9ef guibg=#df5f00
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_x      xxx ctermfg=255 ctermbg=24 guifg=#eeeeee guibg=#005f87
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_x_bold xxx term=bold cterm=bold ctermfg=255 ctermbg=24 gui=bold guifg=#eeeeee guibg=#005f87
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_x_red  xxx ctermfg=81 ctermbg=24 guifg=#66d9ef guibg=#005f87
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_y      xxx ctermfg=254 ctermbg=31 guifg=#e4e4e4 guibg=#0087af
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_y_bold xxx term=bold cterm=bold ctermfg=254 ctermbg=31 gui=bold guifg=#e4e4e4 guibg=#0087af
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_y_red  xxx ctermfg=81 ctermbg=31 guifg=#66d9ef guibg=#0087af
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_z      xxx ctermfg=240 ctermbg=254 guifg=#585858 guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_z_bold xxx term=bold cterm=bold ctermfg=240 ctermbg=254 gui=bold guifg=#585858 guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_z_red  xxx ctermfg=81 ctermbg=254 guifg=#66d9ef guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_term   xxx ctermfg=85 ctermbg=232 guifg=#9cffd3 guibg=#202020
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_term_bold xxx term=bold cterm=bold ctermfg=85 ctermbg=232 gui=bold guifg=#9cffd3 guibg=#202020
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_term_red xxx ctermfg=81 ctermbg=232 guifg=#66d9ef guibg=#202020
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_error  xxx ctermfg=232 ctermbg=160 guifg=#000000 guibg=#990000
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_error_bold xxx term=bold cterm=bold ctermfg=232 ctermbg=160 gui=bold guifg=#000000 guibg=#990000
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_error_red xxx ctermfg=81 ctermbg=160 guifg=#66d9ef guibg=#990000
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_a      xxx ctermfg=240 ctermbg=254 guifg=#585858 guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_a_bold xxx term=bold cterm=bold ctermfg=240 ctermbg=254 gui=bold guifg=#585858 guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_a_red  xxx ctermfg=81 ctermbg=254 guifg=#66d9ef guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_b      xxx ctermfg=254 ctermbg=31 guifg=#e4e4e4 guibg=#0087af
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_b_bold xxx term=bold cterm=bold ctermfg=254 ctermbg=31 gui=bold guifg=#e4e4e4 guibg=#0087af
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_b_red  xxx ctermfg=81 ctermbg=31 guifg=#66d9ef guibg=#0087af
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_c      xxx ctermfg=255 ctermbg=24 guifg=#eeeeee guibg=#005f87
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_c_bold xxx term=bold cterm=bold ctermfg=255 ctermbg=24 gui=bold guifg=#eeeeee guibg=#005f87
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_c_red  xxx ctermfg=81 ctermbg=24 guifg=#66d9ef guibg=#005f87
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_warning xxx ctermfg=232 ctermbg=166 guifg=#000000 guibg=#df5f00
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_warning_bold xxx term=bold cterm=bold ctermfg=232 ctermbg=166 gui=bold guifg=#000000 guibg=#df5f00
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_warning_red xxx ctermfg=81 ctermbg=166 guifg=#66d9ef guibg=#df5f00
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_tablabel xxx ctermfg=254 ctermbg=31 guifg=#e4e4e4 guibg=#0087af
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_tab    xxx ctermfg=254 ctermbg=31 guifg=#e4e4e4 guibg=#0087af
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_tabsel xxx ctermfg=240 ctermbg=254 guifg=#585858 guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_tabtype xxx ctermfg=24 ctermbg=254 guifg=#005f87 guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_tabfill xxx ctermfg=255 ctermbg=24 guifg=#eeeeee guibg=#005f87
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_tabmod xxx ctermfg=240 ctermbg=254 guifg=#585858 guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_tabmod_unsel xxx ctermfg=255 ctermbg=24 guifg=#eeeeee guibg=#005f87
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_tabhid xxx ctermfg=255 ctermbg=24 guifg=#eeeeee guibg=#005f87
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_tablabel_right xxx ctermfg=254 ctermbg=31 guifg=#e4e4e4 guibg=#0087af
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_tab_right xxx ctermfg=254 ctermbg=31 guifg=#e4e4e4 guibg=#0087af
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_tabsel_right xxx ctermfg=240 ctermbg=254 guifg=#585858 guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_tabmod_right xxx ctermfg=240 ctermbg=254 guifg=#585858 guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_tabhid_right xxx ctermfg=255 ctermbg=24 guifg=#eeeeee guibg=#005f87
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_tabmod_unsel_right xxx ctermfg=255 ctermbg=24 guifg=#eeeeee guibg=#005f87
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_a_to_airline_b xxx ctermfg=254 ctermbg=31 guifg=#e4e4e4 guibg=#0087af
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_b_to_airline_c xxx ctermfg=31 ctermbg=24 guifg=#0087af guibg=#005f87
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_c_to_airline_x xxx ctermfg=24 ctermbg=24 guifg=#005f87 guibg=#005f87
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_x_to_airline_y xxx ctermfg=31 ctermbg=24 guifg=#0087af guibg=#005f87
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_y_to_airline_z xxx ctermfg=254 ctermbg=31 guifg=#e4e4e4 guibg=#0087af
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_z_to_airline_warning xxx ctermfg=166 ctermbg=254 guifg=#df5f00 guibg=#e4e4e4
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_warning_to_airline_error xxx ctermfg=160 ctermbg=166 guifg=#990000 guibg=#df5f00
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+airline_c1_inactive xxx ctermfg=254 ctermbg=31 guifg=#e4e4e4 guibg=#0087af
+	上次設定: ~\vimfiles\plugged\vim-airline\autoload\airline\highlighter.vim line 246
+LightlineLeft_normal_0 xxx term=bold cterm=bold ctermfg=22 ctermbg=148 gui=bold guifg=#005f00 guibg=#afdf00
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 285
+LightlineLeft_normal_0_1 xxx ctermfg=148 ctermbg=240 guifg=#afdf00 guibg=#585858
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 290
+LightlineLeft_normal_0_tabsel xxx ctermfg=148 ctermbg=235 guifg=#afdf00 guibg=#262626
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 290
+LightlineLeft_normal_1 xxx ctermfg=231 ctermbg=240 guifg=#ffffff guibg=#585858
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 285
+LightlineLeft_normal_1_2 xxx ctermfg=240 ctermbg=236 guifg=#585858 guibg=#303030
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 290
+LightlineLeft_normal_1_tabsel xxx ctermfg=240 ctermbg=235 guifg=#585858 guibg=#262626
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 290
+LightlineLeft_normal_tabsel xxx ctermfg=250 ctermbg=235 guifg=#bcbcbc guibg=#262626
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 285
+LightlineLeft_normal_tabsel_0 xxx ctermfg=235 ctermbg=148 guifg=#262626 guibg=#afdf00
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 290
+LightlineLeft_normal_tabsel_1 xxx ctermfg=235 ctermbg=240 guifg=#262626 guibg=#585858
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 290
+LightlineLeft_normal_tabsel_2 xxx ctermfg=235 ctermbg=236 guifg=#262626 guibg=#303030
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 290
+LightlineLeft_normal_tabsel_tabsel xxx ctermfg=235 ctermbg=235 guifg=#262626 guibg=#262626
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 290
+LightlineRight_normal_0 xxx ctermfg=241 ctermbg=252 guifg=#606060 guibg=#d0d0d0
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 285
+LightlineRight_normal_0_1 xxx ctermfg=252 ctermbg=240 guifg=#d0d0d0 guibg=#585858
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 290
+LightlineRight_normal_0_tabsel xxx ctermfg=252 ctermbg=235 guifg=#d0d0d0 guibg=#262626
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 290
+LightlineRight_normal_1 xxx ctermfg=250 ctermbg=240 guifg=#bcbcbc guibg=#585858
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 285
+LightlineRight_normal_1_2 xxx ctermfg=240 ctermbg=236 guifg=#585858 guibg=#303030
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 290
+LightlineRight_normal_1_tabsel xxx ctermfg=240 ctermbg=235 guifg=#585858 guibg=#262626
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 290
+LightlineRight_normal_2 xxx ctermfg=247 ctermbg=236 guifg=#9e9e9e guibg=#303030
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 285
+LightlineRight_normal_2_3 xxx ctermfg=236 ctermbg=236 guifg=#303030 guibg=#303030
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 290
+LightlineRight_normal_2_tabsel xxx ctermfg=236 ctermbg=235 guifg=#303030 guibg=#262626
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 290
+LightlineRight_normal_tabsel xxx ctermfg=250 ctermbg=235 guifg=#bcbcbc guibg=#262626
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 285
+LightlineRight_normal_tabsel_0 xxx ctermfg=235 ctermbg=252 guifg=#262626 guibg=#d0d0d0
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 290
+LightlineRight_normal_tabsel_1 xxx ctermfg=235 ctermbg=240 guifg=#262626 guibg=#585858
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 290
+LightlineRight_normal_tabsel_2 xxx ctermfg=235 ctermbg=236 guifg=#262626 guibg=#303030
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 290
+LightlineRight_normal_tabsel_3 xxx ctermfg=235 ctermbg=236 guifg=#262626 guibg=#303030
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 290
+LightlineRight_normal_tabsel_tabsel xxx ctermfg=235 ctermbg=235 guifg=#262626 guibg=#262626
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 290
+LightlineMiddle_normal xxx ctermfg=245 ctermbg=236 guifg=#8a8a8a guibg=#303030
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 295
+LightlineLeft_active_0 xxx links to LightlineLeft_normal_0
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 235
+LightlineLeft_active_0_1 xxx links to LightlineLeft_normal_0_1
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 239
+LightlineLeft_active_0_tabsel xxx links to LightlineLeft_normal_0_tabsel
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 239
+LightlineLeft_active_1 xxx links to LightlineLeft_normal_1
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 235
+LightlineLeft_active_1_2 xxx links to LightlineLeft_normal_1_2
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 239
+LightlineLeft_active_1_tabsel xxx links to LightlineLeft_normal_1_tabsel
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 239
+LightlineLeft_active_tabsel xxx links to LightlineLeft_normal_tabsel
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 235
+LightlineLeft_active_tabsel_0 xxx links to LightlineLeft_normal_tabsel_0
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 239
+LightlineLeft_active_tabsel_1 xxx links to LightlineLeft_normal_tabsel_1
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 239
+LightlineLeft_active_tabsel_2 xxx links to LightlineLeft_normal_tabsel_2
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 239
+LightlineLeft_active_tabsel_tabsel xxx links to LightlineLeft_normal_tabsel_tabsel
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 239
+LightlineRight_active_0 xxx links to LightlineRight_normal_0
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 235
+LightlineRight_active_0_1 xxx links to LightlineRight_normal_0_1
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 239
+LightlineRight_active_0_tabsel xxx links to LightlineRight_normal_0_tabsel
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 239
+LightlineRight_active_1 xxx links to LightlineRight_normal_1
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 235
+LightlineRight_active_1_2 xxx links to LightlineRight_normal_1_2
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 239
+LightlineRight_active_1_tabsel xxx links to LightlineRight_normal_1_tabsel
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 239
+LightlineRight_active_2 xxx links to LightlineRight_normal_2
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 235
+LightlineRight_active_2_3 xxx links to LightlineRight_normal_2_3
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 239
+LightlineRight_active_2_tabsel xxx links to LightlineRight_normal_2_tabsel
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 239
+LightlineRight_active_tabsel xxx links to LightlineRight_normal_tabsel
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 235
+LightlineRight_active_tabsel_0 xxx links to LightlineRight_normal_tabsel_0
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 239
+LightlineRight_active_tabsel_1 xxx links to LightlineRight_normal_tabsel_1
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 239
+LightlineRight_active_tabsel_2 xxx links to LightlineRight_normal_tabsel_2
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 239
+LightlineRight_active_tabsel_3 xxx links to LightlineRight_normal_tabsel_3
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 239
+LightlineRight_active_tabsel_tabsel xxx links to LightlineRight_normal_tabsel_tabsel
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 239
+LightlineMiddle_active xxx links to LightlineMiddle_normal
+	上次設定: ~\vimfiles\plugged\lightline.vim\autoload\lightline.vim line 244
+CocFloatThumb  xxx links to PmenuThumb
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 496
+CocFloatSbar   xxx links to PmenuSbar
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 497
+CocErrorHighlight xxx links to CocUnderline
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 521
+CocErrorVirtualText xxx ctermfg=203 ctermbg=235 guifg=#ec5f67 guibg=#1b2b34
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 231
+CocWarningHighlight xxx links to CocUnderline
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 521
+CocWarningVirtualText xxx ctermfg=221 ctermbg=235 guifg=#fac863 guibg=#1b2b34
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 231
+CocInfoHighlight xxx links to CocUnderline
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 521
+CocInfoVirtualText xxx ctermfg=68 ctermbg=235 guifg=#6699cc guibg=#1b2b34
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 231
+CocHintHighlight xxx links to CocUnderline
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 521
+CocHintVirtualText xxx ctermfg=73 ctermbg=235 guifg=#62b3b2 guibg=#1b2b34
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 231
+CocInlayHint   xxx ctermfg=73 ctermbg=235 guifg=#62b3b2 guibg=#1b2b34
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 231
+CocInlayHintParameter xxx links to CocInlayHint
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 542
+CocInlayHintType xxx links to CocInlayHint
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 542
+CocSemTypeMacro xxx links to Define
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSemTypeEnumMember xxx links to Constant
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSemTypeComment xxx links to Comment
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSemTypeOperator xxx links to Operator
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSemTypeProperty xxx links to Identifier
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSemTypeClass xxx links to Special
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSemTypeStruct xxx links to Identifier
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSemTypeRegexp xxx links to String
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSemTypeBoolean xxx links to Boolean
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSemTypeMethod xxx links to Function
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSemTypeNamespace xxx links to Include
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSemTypeModifier xxx links to StorageClass
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSemTypeNumber xxx links to Number
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSemTypeTypeParameter xxx links to Identifier
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSemTypeKeyword xxx links to Keyword
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSemModDeprecated xxx links to CocDeprecatedHighlight
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSemTypeFunction xxx links to Function
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSemTypeDecorator xxx links to Identifier
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSemTypeEnum xxx links to Type
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSemTypeParameter xxx links to Identifier
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSemTypeType xxx links to Type
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSemTypeString xxx links to String
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSemTypeVariable xxx links to Identifier
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSemTypeInterface xxx links to Type
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSemTypeEvent xxx links to Keyword
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 576
+CocSymbolUnit  xxx ctermfg=114 guifg=#99c794
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolNumber xxx ctermfg=209 guifg=#f99157
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolFunction xxx ctermfg=68 guifg=#6699cc
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolKey   xxx ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolKeyword xxx ctermfg=176 guifg=#c594c5
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolReference xxx ctermfg=209 guifg=#f99157
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolFolder xxx ctermfg=114 guifg=#99c794
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolVariable xxx ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolNull  xxx ctermfg=221 guifg=#fac863
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolValue xxx ctermfg=114 guifg=#99c794
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolConstant xxx ctermfg=209 guifg=#f99157
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolText  xxx ctermfg=114 guifg=#99c794
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolModule xxx ctermfg=203 guifg=#ec5f67
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolPackage xxx ctermfg=203 guifg=#ec5f67
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolClass xxx ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolOperator xxx ctermfg=251 guifg=#c0c5ce
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolStruct xxx ctermfg=176 guifg=#c594c5
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolObject xxx ctermfg=114 guifg=#99c794
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolMethod xxx ctermfg=68 guifg=#6699cc
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolArray xxx ctermfg=114 guifg=#99c794
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolEnum  xxx ctermfg=114 guifg=#99c794
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolField xxx ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolInterface xxx ctermfg=114 guifg=#99c794
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolProperty xxx ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolColor xxx ctermfg=209 guifg=#f99157
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolFile  xxx ctermfg=203 guifg=#ec5f67
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolEvent xxx ctermfg=209 guifg=#f99157
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolTypeParameter xxx ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolConstructor xxx ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolSnippet xxx ctermfg=114 guifg=#99c794
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolBoolean xxx ctermfg=209 guifg=#f99157
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolNamespace xxx ctermfg=68 guifg=#6699cc
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolString xxx ctermfg=114 guifg=#99c794
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSymbolEnumMember xxx ctermfg=73 guifg=#62b3b2
+	上次設定: ~\vimfiles\plugged\coc.nvim\plugin\coc.vim line 618
+CocSelectedLine xxx cleared
+  1 %a   "[No Name]"                    行 1
+執行 ModeChanged Autocommands: "*"
+autocommand :call airline#update_tabline()
+
+
+執行 BufUnload Autocommands: "*"
+autocommand call s:Autocmd('BufUnload', +expand('<abuf>'))
+
+執行 BufUnload Autocommands: "*"
+autocommand call <sid>on_window_changed('BufUnload')
+
+執行 BufUnload Autocommands: "*"
+autocommand call s:Event('BufUnload')
+
+執行 BufUnload Autocommands: "*"
+autocommand call airline#extensions#tabline#buflist#invalidate()
+
+第 0 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\tabline\buflist.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\extensions\tabline\buflist.vim
+繼續: BufUnload Autocommands: "*"
+執行 BufUnload Autocommands: "*"
+autocommand call s:CloseBuffer(+expand('<abuf>'))
+
+執行 BufDelete Autocommands: "*"
+autocommand call airline#extensions#tabline#tabs#invalidate()
+
+執行 BufDelete Autocommands: "*"
+autocommand call airline#extensions#tabline#buflist#clean()
+
+執行 BufDelete Autocommands: "*"
+autocommand call s:RunBufDelete(+expand('<abuf>'))
+
+執行 BufDelete Autocommands: "*"
+autocommand if getbufvar(+expand('<abuf>'), 'buftype') ==# 'terminal' |   if !empty(FugitiveGitDir(+expand('<abuf>'))) |     call fugitive#DidChange(+expand('<abuf>')) |   else |     call fugitive#DidChange(0) |  endif | endif
+
+執行 BufDelete Autocommands: "*"
+autocommand call coc#rpc#notify('doAutocmd', [2, +expand("<abuf>")])
+
+執行 BufWipeout Autocommands: "*"
+autocommand exe s:TempDelete(  +expand('<abuf>'))
+
+執行 BufWipeout Autocommands: "*"
+autocommand call coc#rpc#notify('doAutocmd', [3, +expand("<abuf>")])
+
+執行 BufAdd Autocommands: "*"
+autocommand call airline#extensions#tabline#buflist#invalidate()
+
+執行 BufReadPre Autocommands: "*"
+autocommand exe s:TempReadPre( +expand('<abuf>'))
+
+"vimlog" 
+"vimlog" [noeol] 1770L, 112361B
+Reading viminfo file "C:\Users\AlanJui\_viminfo" 標記
+執行 BufRead Autocommands: "*"
+autocommand if !did_filetype() && expand("<amatch>") !~ g:ft_ignore_pat | runtime! scripts.vim | endif
+
+第 0 行: 結束執行 C:\Program Files\Vim\vim91\scripts.vim
+第 27 行: 結束執行 C:\Program Files\Vim\vim91\autoload\dist\script.vim
+結束執行 C:\Program Files\Vim\vim91\autoload\dist\script.vim
+繼續: C:\Program Files\Vim\vim91\scripts.vim
+結束執行 C:\Program Files\Vim\vim91\scripts.vim
+繼續: BufRead Autocommands: "*"
+執行 BufRead Autocommands: "*"
+autocommand if !did_filetype() && getline(1) =~# '@startuml\>'| setfiletype plantuml | endif
+
+執行 BufRead Autocommands: "*"
+autocommand if !did_filetype() && expand("<amatch>") !~ g:ft_ignore_pat    && (expand("<amatch>") =~# '\.conf$'^I|| getline(1) =~ '^#' || getline(2) =~ '^#'^I|| getline(3) =~ '^#' || getline(4) =~ '^#'^I|| getline(5) =~ '^#') |   setf FALLBACK conf | endif
+AlanJui\vimfiles\plugged\coc.nvim\autoload\coc\float.vim
+繼續: CursorHold Autocommands: "*"
+autocommand call s:Autocmd('CursorHold', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorHold Autocommands: "*"
+autocommand silent! call s:CursorHoldUpdate()
+
+執行 CursorHold Autocommands: "*"
+autocommand call <sid>ws_refresh()
+
+執行 CursorHold Autocommands: "<buffer=1>"
+autocommand call sy#start()
+
+[sy:git] Updating signs.
+[sy:git] sy#repo#get_diff()
+第 1 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\coc.nvim\autoload\coc\cursor.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\coc.nvim\autoload\coc\cursor.vim
+繼續: 17
+第 2 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\coc.nvim\autoload\coc\string.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\coc.nvim\autoload\coc\string.vim
+繼續: coc#cursor#position
+[sy:git] s:handle_diff()
+[sy:git] sy#sign#set_signs()
+[sy:git] Successful exit value, but no diff. Keep VCS for time being.
+執行 CursorHold Autocommands: "*"
+autocommand silent call CocActionAsync('highlight')
+
+autocommand silent call CocActionAsync('highlight')
+
+autocommand silent call CocActionAsync('highlight')
+
+執行 CursorHold Autocommands: "*"
+autocommand call coc#float#check_related()
+
+autocommand call s:Autocmd('CursorHold', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorHold Autocommands: "*"
+autocommand silent! call s:CursorHoldUpdate()
+
+執行 CursorHold Autocommands: "*"
+autocommand call <sid>ws_refresh()
+
+執行 CursorHold Autocommands: "<buffer=1>"
+autocommand call sy#start()
+
+[sy:git] Updating signs.
+[sy:git] sy#repo#get_diff()
+[sy:git] s:handle_diff()
+[sy:git] sy#sign#set_signs()
+[sy:git] Successful exit value, but no diff. Keep VCS for time being.
+執行 ModeChanged Autocommands: "*"
+autocommand :call airline#update_tabline()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+1859 lines yanked
+執行 TextYankPost Autocommands: "*"
+autocommand call coc#rpc#notify('doAutocmd', [1, v:event, +expand('<abuf>'), win_getid()])
+
+執行 ModeChanged Autocommands: "*"
+autocommand :call airline#update_tabline()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorHold Autocommands: "*"
+autocommand silent call CocActionAsync('highlight')
+
+autocommand silent call CocActionAsync('highlight')
+
+autocommand silent call CocActionAsync('highlight')
+
+執行 CursorHold Autocommands: "*"
+autocommand call coc#float#check_related()
+
+autocommand call s:Autocmd('CursorHold', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorHold Autocommands: "*"
+autocommand silent! call s:CursorHoldUpdate()
+
+執行 CursorHold Autocommands: "*"
+autocommand call <sid>ws_refresh()
+
+執行 CursorHold Autocommands: "<buffer=1>"
+autocommand call sy#start()
+
+[sy:git] Updating signs.
+[sy:git] sy#repo#get_diff()
+[sy:git] s:handle_diff()
+[sy:git] sy#sign#set_signs()
+[sy:git] Successful exit value, but no diff. Keep VCS for time being.
+執行 FocusLost Autocommands: "*"
+autocommand :silent! w
+
+"vimlog" 1859L, 116547B 已寫入
+執行 FocusLost Autocommands: "*"
+autocommand call s:Autocmd('FocusLost')
+
+執行 FocusLost Autocommands: "*"
+autocommand call airline#update_statusline_focuslost()
+
+執行 FocusGained Autocommands: "*"
+autocommand :silent! checktime
+
+執行 FocusGained Autocommands: "*"
+autocommand if mode() !~# '^c' | call s:Autocmd('FocusGained') | endif
+
+執行 FocusGained Autocommands: "*"
+autocommand if get(g:, 'fugitive_focus_gained', !has('win32')) |   call fugitive#DidChange(0) | endif
+
+執行 FocusGained Autocommands: "*"
+autocommand call s:on_focus_gained()
+
+執行 User Autocommands: "AirlineBeforeRefresh"
+autocommand call s:sh_autocmd_handler()
+
+autocommand call s:sh_autocmd_handler()
+
+執行 FocusGained Autocommands: "<buffer=1>"
+autocommand SignifyRefresh
+
+[sy:git] Updating signs.
+[sy:git] sy#repo#get_diff()
+執行 User Autocommands: "AirlineModeChanged"
+autocommand call airline#mode_changed()
+
+第 38 行: 結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\async.vim
+結束執行 C:\Users\AlanJui\vimfiles\plugged\vim-airline\autoload\airline\async.vim
+繼續: <SNR>138_update_untracked
+[sy:git] s:handle_diff()
+[sy:git] sy#sign#set_signs()
+[sy:git] Successful exit value, but no diff. Keep VCS for time being.
+執行 CursorHold Autocommands: "*"
+autocommand silent call CocActionAsync('highlight')
+
+autocommand silent call CocActionAsync('highlight')
+
+autocommand silent call CocActionAsync('highlight')
+
+執行 CursorHold Autocommands: "*"
+autocommand call coc#float#check_related()
+
+autocommand call s:Autocmd('CursorHold', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorHold Autocommands: "*"
+autocommand silent! call s:CursorHoldUpdate()
+
+執行 CursorHold Autocommands: "*"
+autocommand call <sid>ws_refresh()
+
+執行 CursorHold Autocommands: "<buffer=1>"
+autocommand call sy#start()
+
+[sy:git] Updating signs.
+[sy:git] sy#repo#get_diff()
+執行 BufReadPre Autocommands: "*"
+autocommand exe s:TempReadPre( +expand('<abuf>'))
+
+"vimlog" 
+"vimlog" [noeol] 1990L, 120773B
+執行 BufRead Autocommands: "*"
+autocommand if !did_filetype() && expand("<amatch>") !~ g:ft_ignore_pat | runtime! scripts.vim | endif
+
+執行 BufRead Autocommands: "*"
+autocommand if !did_filetype() && getline(1) =~# '@startuml\>'| setfiletype plantuml | endif
+
+執行 BufRead Autocommands: "*"
+autocommand if !did_filetype() && expand("<amatch>") !~ g:ft_ignore_pat    && (expand("<amatch>") =~# '\.conf$'^I|| getline(1) =~ '^#' || getline(2) =~ '^#'^I|| getline(3) =~ '^#' || getline(4) =~ '^#'^I|| getline(5) =~ '^#') |   setf FALLBACK conf | endif
+
+執行 BufRead Autocommands: "*"
+autocommand call s:Autocmd('BufCreate', +expand('<abuf>'))
+
+執行 BufRead Autocommands: "*"
+autocommand call undotree#UndotreePersistUndo(0)
+
+執行 BufRead Autocommands: "*"
+autocommand if !get(g:, 'signify_disable_by_default') |   call sy#start({'bufnr': bufnr('')}) | endif
+
+[sy:git] Update is already in progress.
+執行 BufRead Autocommands: "*"
+autocommand if exists('b:git_dir') && b:git_dir =~# '^$\|' . s:bad_git_dir |   unlet b:git_dir | endif
+
+執行 BufRead Autocommands: "*"
+autocommand call s:InitColor()
+
+執行 BufRead Autocommands: "*"
+autocommand exe s:TempReadPost(+expand('<abuf>'))
+
+執行 FileChangedShellPost Autocommands: "*"
+autocommand call lightline#update()
+
+  1 %a   "vimlog"                       行 1
+執行 TextChanged Autocommands: "*"
+autocommand call s:Autocmd('TextChanged', +expand('<abuf>'), getbufvar(+expand('<abuf>'), 'changedtick'))
+
+執行 TextChanged Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 ModeChanged Autocommands: "*"
+autocommand :call airline#update_tabline()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 FocusLost Autocommands: "*"
+autocommand :silent! w
+
+警告: 本檔案自上次讀入後已變動!!!
+確定要寫入嗎 (y/n)?n
+執行 FocusLost Autocommands: "*"
+autocommand call s:Autocmd('FocusLost')
+
+執行 FocusLost Autocommands: "*"
+autocommand call airline#update_statusline_focuslost()
+
+執行 BufReadPre Autocommands: "*"
+autocommand exe s:TempReadPre( +expand('<abuf>'))
+
+"vimlog" 
+"vimlog" [noeol] 3038L, 154589B
+執行 BufRead Autocommands: "*"
+autocommand if !did_filetype() && expand("<amatch>") !~ g:ft_ignore_pat | runtime! scripts.vim | endif
+
+執行 BufRead Autocommands: "*"
+autocommand if !did_filetype() && getline(1) =~# '@startuml\>'| setfiletype plantuml | endif
+
+執行 BufRead Autocommands: "*"
+autocommand if !did_filetype() && expand("<amatch>") !~ g:ft_ignore_pat    && (expand("<amatch>") =~# '\.conf$'^I|| getline(1) =~ '^#' || getline(2) =~ '^#'^I|| getline(3) =~ '^#' || getline(4) =~ '^#'^I|| getline(5) =~ '^#') |   setf FALLBACK conf | endif
+
+執行 BufRead Autocommands: "*"
+autocommand call s:Autocmd('BufCreate', +expand('<abuf>'))
+
+執行 BufRead Autocommands: "*"
+autocommand call undotree#UndotreePersistUndo(0)
+
+執行 BufRead Autocommands: "*"
+autocommand if !get(g:, 'signify_disable_by_default') |   call sy#start({'bufnr': bufnr('')}) | endif
+
+[sy:git] Updating signs.
+[sy:git] sy#repo#get_diff()
+執行 BufRead Autocommands: "*"
+autocommand if exists('b:git_dir') && b:git_dir =~# '^$\|' . s:bad_git_dir |   unlet b:git_dir | endif
+
+執行 BufRead Autocommands: "*"
+autocommand call s:InitColor()
+
+執行 BufRead Autocommands: "*"
+autocommand exe s:TempReadPost(+expand('<abuf>'))
+
+執行 FileChangedShellPost Autocommands: "*"
+autocommand call lightline#update()
+
+  1 %a   "vimlog"                       行 1781
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 TextChanged Autocommands: "*"
+autocommand call s:Autocmd('TextChanged', +expand('<abuf>'), getbufvar(+expand('<abuf>'), 'changedtick'))
+
+執行 TextChanged Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 ModeChanged Autocommands: "*"
+autocommand :call airline#update_tabline()
+
+執行 ModeChanged Autocommands: "*"
+autocommand :call airline#update_tabline()
+
+
+E481: 不可使用範圍指令
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Autocmd('CursorMoved', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorMoved Autocommands: "*"
+autocommand call <sid>on_cursor_moved()
+
+執行 CursorMoved Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:HandleWinScrolled(+expand('<amatch>'))
+
+執行 WinScrolled Autocommands: "*"
+autocommand call s:Highlight_Matching_Pair()
+
+執行 CursorHold Autocommands: "*"
+autocommand silent call CocActionAsync('highlight')
+
+autocommand silent call CocActionAsync('highlight')
+
+autocommand silent call CocActionAsync('highlight')
+
+執行 CursorHold Autocommands: "*"
+autocommand call coc#float#check_related()
+
+autocommand call s:Autocmd('CursorHold', +expand('<abuf>'), [line('.'), col('.')])
+
+執行 CursorHold Autocommands: "*"
+autocommand silent! call s:CursorHoldUpdate()
+
+執行 CursorHold Autocommands: "*"
+autocommand call <sid>ws_refresh()
+
+執行 CursorHold Autocommands: "<buffer=1>"
+autocommand call sy#start()
+
+[sy:git] Updating signs.
+[sy:git] sy#repo#get_diff()
+[sy:git] s:handle_diff()
+[sy:git] sy#sign#set_signs()
+[sy:git] Successful exit value, but no diff. Keep VCS for time being.
+執行 ModeChanged Autocommands: "*"
+autocommand :call airline#update_tabline()
+
+
+執行 BufWinLeave Autocommands: "*"
+autocommand call s:Autocmd('BufWinLeave', +expand('<abuf>'), bufwinid(+expand('<abuf>')))
+
+執行 BufWinLeave Autocommands: "*"
+autocommand if s:can_diffoff(+expand('<abuf>')) && s:diff_window_count() == 2 |   call s:diffoff_all(s:Dir(+expand('<abuf>'))) | endif
+
+執行 BufWinLeave Autocommands: "*"
+autocommand execute getwinvar(+bufwinnr(+expand('<abuf>')), 'fugitive_leave')
+
+執行 BufUnload Autocommands: "*"
+autocommand call s:Autocmd('BufUnload', +expand('<abuf>'))
+
+執行 BufUnload Autocommands: "*"
+autocommand call <sid>on_window_changed('BufUnload')
+
+執行 BufUnload Autocommands: "*"
+autocommand call s:Event('BufUnload')
+
+執行 BufUnload Autocommands: "*"
+autocommand call airline#extensions#tabline#buflist#invalidate()
+
+執行 BufUnload Autocommands: "*"
+autocommand call s:CloseBuffer(+expand('<abuf>'))
+
+執行 VimLeavePre Autocommands: "*"
+autocommand call s:VimLeavePre()
+
+執行 VimLeavePre Autocommands: "*"
+autocommand call s:Event('VimLeavePre')
+
+寫入 viminfo 檔案 "C:\Users\AlanJui\_viminfo" 中
+執行 VimLeave Autocommands: "*"
+autocommand for s:jobbuf in keys(s:edit_jobs) |   call writefile(['Aborting edit due to Vim exit.'], s:edit_jobs[s:jobbuf][0].file . '.exit') |   redraw! |   call call('s:RunWait', remove(s:edit_jobs, s:jobbuf)) | endfor

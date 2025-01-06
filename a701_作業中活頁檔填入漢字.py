@@ -4,7 +4,7 @@ from pathlib import Path
 
 import xlwings as xw
 
-from mod_file_access import get_han_ji_khoo, get_sound_type
+from mod_file_access import get_han_ji_khoo, get_sound_type, save_as_new_file
 from p702_Ca_Han_Ji_Thak_Im import ca_han_ji_thak_im
 from p709_reset_han_ji_cells import reset_han_ji_cells
 from p710_thiam_han_ji import fill_hanji_in_cells
@@ -57,23 +57,4 @@ else:
     # sys.exit(2)
 
 # 將檔案存放路徑設為【專案根目錄】之下
-try:
-    file_name = str(wb.names['TITLE'].refers_to_range.value).strip()
-except KeyError:
-    print("未找到命名範圍 'TITLE'，使用預設名稱")
-    # file_name = "Tai_Gi_Zu_Im_Bun.xlsx"   # 提供一個預設檔案名稱
-    setting_sheet = wb.sheets["env"]
-    file_name = str(
-        setting_sheet.range("C4").value
-    ).strip()
-
-# 設定檔案輸出路徑，存於專案根目錄下的 output2 資料夾
-output_path = wb.names['OUTPUT_PATH'].refers_to_range.value
-new_file_path = os.path.join(
-    ".\\{0}".format(output_path),
-    f"【河洛話注音】{file_name}.xlsx")
-
-# 儲存新建立的工作簿
-wb.save(new_file_path)
-
-print(f"待注音漢字已備妥： {new_file_path}")
+save_as_new_file(wb=wb)

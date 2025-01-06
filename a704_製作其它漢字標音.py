@@ -3,7 +3,11 @@ import sys
 
 import xlwings as xw
 
-from mod_file_access import copy_excel_sheet, reset_han_ji_piau_im_cells
+from mod_file_access import (
+    copy_excel_sheet,
+    reset_han_ji_piau_im_cells,
+    save_as_new_file,
+)
 from p704_漢字以十五音標注音 import han_ji_piau_im
 
 # (0) 取得專案根目錄。
@@ -45,17 +49,4 @@ han_ji_piau_im(wb, sheet_name=piau_im_huat, cell='V3')
 # tng_sing_bang_iah(wb, '漢字注音', 'V3')
 
 # (4) A750: 將 Tai_Gi_Zu_Im_Bun.xlsx 檔案，依 env 工作表的設定，另存新檔到指定目錄。
-try:
-    file_name = str(wb.names['TITLE'].refers_to_range.value).strip()
-except KeyError:
-    setting_sheet = wb.sheets["env"]
-    file_name = str(setting_sheet.range("C4").value).strip()
-
-# 設定檔案輸出路徑，存於專案根目錄下的 output2 資料夾
-output_path = wb.names['OUTPUT_PATH'].refers_to_range.value
-new_file_path = os.path.join(
-    ".\\{0}".format(output_path),
-    f"【{piau_im_huat}】{file_name}.xlsx")
-
-# 儲存新建立的工作簿
-wb.save(new_file_path)
+save_as_new_file(wb=wb)

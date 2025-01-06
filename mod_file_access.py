@@ -19,6 +19,30 @@ def load_module_function(module_name, function_name):
     return getattr(module, function_name)
 
 #----------------------------------------------------------------
+# 依 env 工作表的設定，另存新檔到指定目錄。
+#----------------------------------------------------------------
+def save_as_new_file(wb):
+    try:
+        file_name = str(wb.names['TITLE'].refers_to_range.value).strip()
+    except KeyError:
+        # print("未找到命名範圍 'TITLE'，使用預設名稱")
+        # file_name = "default_file_name.xlsx"  # 提供一個預設檔案名稱
+        setting_sheet = wb.sheets["env"]
+        file_name = str(setting_sheet.range("C4").value).strip()
+
+    # 設定檔案輸出路徑，存於專案根目錄下的 output2 資料夾
+    output_path = wb.names['OUTPUT_PATH'].refers_to_range.value
+    hue_im = wb.names['語音類型'].refers_to_range.value
+    im_piat = hue_im[:2]  # 取 hue_im 前兩個字元
+    new_file_path = os.path.join(
+        ".\\{0}".format(output_path),
+        f"【河洛{im_piat}注音】{file_name}.xlsx")
+
+    # 儲存新建立的工作簿
+    wb.save(new_file_path)
+    print(f"新檔案已儲存至: {new_file_path}")
+
+#----------------------------------------------------------------
 # 查詢語音類型，若未設定則預設為文讀音
 #----------------------------------------------------------------
 def get_sound_type(wb):
