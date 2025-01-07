@@ -139,7 +139,7 @@ def split_hong_im_hu_ho(hong_im_hu_ho):
     return [sheng_mu, yun_mu, str(tiau_hao)]
 
 
-def choose_piau_im_method(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
+def tng_uann_han_ji_piau_im(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
     """選擇並執行對應的注音方法"""
     if zu_im_huat == "雅俗通":
         return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
@@ -169,7 +169,7 @@ def tlpa_tng_han_ji_piau_im(piau_im, piau_im_huat, tai_gi_im_piau):
     if siann_bu == "" or siann_bu == None:
         siann_bu = "Ø"
 
-    han_ji_piau_im = choose_piau_im_method(
+    han_ji_piau_im = tng_uann_han_ji_piau_im(
         piau_im,
         piau_im_huat,
         siann_bu,
@@ -188,7 +188,7 @@ def is_punctuation(char):
         return False
 
     # 可以根據需要擴充此列表以判斷各種標點符號
-    punctuation_marks = "，。！？；：、（）「」『』《》……"
+    punctuation_marks = "，。！！？；：、（）「」『』《》……"
     return char in punctuation_marks
 
 
