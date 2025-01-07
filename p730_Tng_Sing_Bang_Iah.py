@@ -70,8 +70,8 @@ def put_picture(wb, source_sheet_name):
     html_str += (div_tag % (title, image_url) + "\n")
     return html_str
 
-def choose_piau_im_method(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
-    """選擇並執行對應的注音方法"""
+def tng_uann_piau_im(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
+    """根據指定的標音方法，轉換台語音標之羅馬拚音字母"""
     if zu_im_huat == "十五音":
         return piau_im.SNI_piau_im(siann_bu, un_bu, tiau_ho)
     elif zu_im_huat == "白話字":
@@ -88,16 +88,112 @@ def choose_piau_im_method(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
         return f"{siann}{un}{tiau_ho}"
     return ""
 
-def concat_ruby_tag(style, han_ji, tlpa_im_piau, han_ji_piau_im):
+def concat_ruby_tag(wb, piau_im, zu_im_huat, han_ji, tai_gi_im_piau):
     """將漢字、台語音標及台語注音符號，合併成一個 Ruby Tag"""
-    if style == "DBL":
-        ruby_tag = f"  <ruby><rb>{han_ji}</rb><rt>{tlpa_im_piau}</rt><rp>(</rp><rtc>{han_ji_piau_im}</rtc><rp>)</rp></ruby>"
-    elif style == "TPS":
-        ruby_tag = f"  <ruby><rb>{han_ji}</rb><rp>(</rp><rtc>{han_ji_piau_im}</rtc><rp>)</rp></ruby>"
-    elif style == "SNI":
-        ruby_tag = f"  <ruby><rb>{han_ji}</rb><rp>(</rp><rt>{han_ji_piau_im}</rt><rp>)</rp></ruby>"
+    zu_im_list = split_tai_gi_im_piau(tai_gi_im_piau)
+    if zu_im_list[0] == "" or zu_im_list[0] == None:
+        siann_bu = "Ø"
     else:
-        ruby_tag = f"  <ruby><rb>{han_ji}</rb><rp>(</rp><rt>{han_ji_piau_im}</rt><rp>)</rp></ruby>"
+        siann_bu = zu_im_list[0]
+
+    style = wb.names['網頁格式'].refers_to_range.value
+    piau_im_hong_sik = wb.names['標音方式'].refers_to_range.value
+    siong_pinn_piau_im = wb.names['上邊標音'].refers_to_range.value
+    zian_pinn_piau_im = wb.names['右邊標音'].refers_to_range.value
+
+    ruby_tag = ""
+    siong_piau_im = ""
+    zian_piau_im = ""
+
+    # 根據【標音方式】，決定【漢字】之上方或右方，是否該顯示【標音】
+    if piau_im_hong_sik == "預設":
+        if style == "POJ" or style == "TL" or style == "BP" or style == "TLPA_Plus":
+            # 羅馬拼音字母標音法，將標音置於漢字上方
+            siong_piau_im = tng_uann_piau_im(
+                piau_im=piau_im,    # 注音法物件
+                zu_im_huat=siong_pinn_piau_im,
+                siann_bu=siann_bu,
+                un_bu=zu_im_list[1],
+                tiau_ho=zu_im_list[2]
+            )
+        elif style == "SNI":
+            # 十五音反切法，將標音置於漢字右方
+            siong_piau_im = tng_uann_piau_im(
+                piau_im=piau_im,    # 注音法物件
+                zu_im_huat=siong_pinn_piau_im,
+                siann_bu=siann_bu,
+                un_bu=zu_im_list[1],
+                tiau_ho=zu_im_list[2]
+            )
+        elif style == "TPS":
+            # 注音符號標音法，將標音置於漢字右方
+            zian_piau_im = tng_uann_piau_im(
+                piau_im=piau_im,    # 注音法物件
+                zu_im_huat=zian_pinn_piau_im,
+                siann_bu=siann_bu,
+                un_bu=zu_im_list[1],
+                tiau_ho=zu_im_list[2]
+            )
+        elif style == "DBL":
+            # 漢字上方顯示台語音標，下方顯示台語注音符號
+            siong_piau_im = tng_uann_piau_im(
+                piau_im=piau_im,    # 注音法物件
+                zu_im_huat=siong_pinn_piau_im,
+                siann_bu=siann_bu,
+                un_bu=zu_im_list[1],
+                tiau_ho=zu_im_list[2]
+            )
+            zian_piau_im = tng_uann_piau_im(
+                piau_im=piau_im,    # 注音法物件
+                zu_im_huat=zian_pinn_piau_im,
+                siann_bu=siann_bu,
+                un_bu=zu_im_list[1],
+                tiau_ho=zu_im_list[2]
+            )
+    elif piau_im_hong_sik == "上及右":
+        # 漢字上方顯示【上邊標音】，下方顯示【下邊標音】
+        siong_piau_im = tng_uann_piau_im(
+            piau_im=piau_im,    # 注音法物件
+            zu_im_huat=siong_pinn_piau_im,
+            siann_bu=siann_bu,
+            un_bu=zu_im_list[1],
+            tiau_ho=zu_im_list[2]
+        )
+        zian_piau_im = tng_uann_piau_im(
+            piau_im=piau_im,    # 注音法物件
+            zu_im_huat=zian_pinn_piau_im,
+            siann_bu=siann_bu,
+            un_bu=zu_im_list[1],
+            tiau_ho=zu_im_list[2]
+        )
+    elif piau_im_hong_sik == "上":
+        siong_piau_im = tng_uann_piau_im(
+            piau_im=piau_im,    # 注音法物件
+            zu_im_huat=siong_pinn_piau_im,
+            siann_bu=siann_bu,
+            un_bu=zu_im_list[1],
+            tiau_ho=zu_im_list[2]
+        )
+    elif piau_im_hong_sik == "右":
+        zian_piau_im = tng_uann_piau_im(
+            piau_im=piau_im,    # 注音法物件
+            zu_im_huat=zian_pinn_piau_im,
+            siann_bu=siann_bu,
+            un_bu=zu_im_list[1],
+            tiau_ho=zu_im_list[2]
+        )
+
+    # 根據標音法及標音方式，設定 Ruby Tag
+    if siong_piau_im != "" and zian_piau_im == "":
+        # 將標音置於漢字上方
+        ruby_tag = f"  <ruby><rb>{han_ji}</rb><rp>(</rp><rt>{siong_piau_im}</rt><rp>)</rp></ruby>"
+    elif siong_piau_im == "" and zian_piau_im != "":
+        # 將標音置於漢字右方
+        ruby_tag = f"  <ruby><rb>{han_ji}</rb><rp>(</rp><rtc>{zian_piau_im}</rtc><rp>)</rp></ruby>"
+    elif siong_piau_im != "" and zian_piau_im != "":
+        # 將標音置於漢字上方及右方
+        ruby_tag = f"  <ruby><rb>{han_ji}</rb><rt>{siong_piau_im}</rt><rp>(</rp><rtc>{zian_piau_im}</rtc><rp>)</rp></ruby>"
+
     return ruby_tag
 
 
@@ -160,36 +256,23 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
                             print(f"({row}, {col_name}) = {han_ji}")
                         else:
                             # 取得漢字的【台語音標】
-                            lo_ma_im_piau = sheet.range((row - 1, col)).value  # 取得漢字的台語音標
+                            tai_gi_im_piau = sheet.range((row - 1, col)).value  # 取得漢字的台語音標
                             # 當儲存格寫入之資料為 None 情況時之處理作法：給予空字串
-                            lo_ma_im_piau = lo_ma_im_piau if lo_ma_im_piau is not None else ""
+                            tai_gi_im_piau = tai_gi_im_piau if tai_gi_im_piau is not None else ""
 
-                            # zu_im_hu_ho = sheet.range((row + 1, col)).value  # 取得漢字的台語注音符號
-                            if piau_im_huat == "台語音標":
-                                han_ji_piau_im = lo_ma_im_piau
-                            else:
-                                # zu_im_list = split_hong_im_hu_ho(lo_ma_im_piau)
-                                zu_im_list = split_tai_gi_im_piau(lo_ma_im_piau)
-                                if zu_im_list[0] == "" or zu_im_list[0] == None:
-                                    siann_bu = "Ø"
-                                else:
-                                    siann_bu = zu_im_list[0]
-
-                                han_ji_piau_im = choose_piau_im_method(
-                                    piau_im,
-                                    piau_im_huat,
-                                    siann_bu,
-                                    zu_im_list[1],
-                                    zu_im_list[2]
-                                )
-
-                            # 在 Console 顯示目前處理的漢字，以便使用者可知目前進度
-                            print(f"({row}, {col_name}) = {han_ji} [{lo_ma_im_piau}] 【{han_ji_piau_im}】")
                             # =========================================================
                             # 將已注音之漢字加入【漢字注音表】
                             # =========================================================
-                            # ruby_tag = f"<ruby><rb>{han_ji}</rb><rt>{lo_ma_im_piau}</rt><rtc>{han_ji_piau_im}</rtc></ruby>\n"
-                            ruby_tag = concat_ruby_tag(Web_Page_Style, han_ji, lo_ma_im_piau, han_ji_piau_im)
+                            # 在 Console 顯示目前處理的漢字，以便使用者可知目前進度
+                            print(f"({row}, {col_name}) = {han_ji} [{tai_gi_im_piau}]")
+
+                            ruby_tag = concat_ruby_tag(
+                                wb=wb,
+                                piau_im=piau_im,    # 注音法物件
+                                zu_im_huat=piau_im_huat,
+                                han_ji=han_ji,
+                                tai_gi_im_piau=tai_gi_im_piau
+                            )
 
                     write_buffer += ruby_tag
                     index += 1
@@ -261,7 +344,13 @@ def tng_sing_bang_iah(wb, sheet_name='漢字注音', cell='V3', page_type='含�
         # ==========================================================
         print(f"開始製作【漢字注音】網頁！")
         html_content = build_web_page(
-            wb, sheet, source_chars, total_length, page_type, han_ji_piau_im_huat, piau_im
+            wb=wb,
+            sheet=sheet,
+            source_chars=source_chars,
+            total_length=total_length,
+            page_type=page_type,
+            piau_im_huat=han_ji_piau_im_huat,
+            piau_im= piau_im
         )
 
         # 輸出到網頁檔案
