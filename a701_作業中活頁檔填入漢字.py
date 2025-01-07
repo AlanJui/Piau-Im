@@ -5,6 +5,7 @@ from pathlib import Path
 import xlwings as xw
 
 from mod_file_access import get_han_ji_khoo, get_sound_type, save_as_new_file
+from p701_Clear_Cells import clear_han_ji_kap_piau_im
 from p702_Ca_Han_Ji_Thak_Im import ca_han_ji_thak_im
 from p709_reset_han_ji_cells import reset_han_ji_cells
 from p710_thiam_han_ji import fill_hanji_in_cells
@@ -36,6 +37,9 @@ except Exception as e:
 if not wb:
     print("無法執行，可能原因：(1) 未指定輸入檔案；(2) 未找到作用中的 Excel 工作簿")
     sys.exit(2)
+
+# 將儲存格已填入之漢字及標音清除
+clear_han_ji_kap_piau_im(wb)
 
 # 將待注音的【漢字儲存格】，文字顏色重設為黑色（自動 RGB: 0, 0, 0）；填漢顏色重設為無填滿
 reset_han_ji_cells(wb)

@@ -2,7 +2,21 @@
 import xlwings as xw
 
 
-def clear_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
+def clear_han_ji_kap_piau_im(wb, sheet_name='漢字注音'):
+    sheet = wb.sheets[sheet_name]   # 選擇工作表
+    sheet.activate()               # 將「漢字注音」工作表設為作用中工作表
+    sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
+
+    total_rows = wb.names['每頁總列數'].refers_to_range.value
+    cells_per_row = 4
+    end_of_rows = int((total_rows * cells_per_row ) + 2)
+    cells_range = f'D3:R{end_of_rows}'
+
+    sheet.range(cells_range).clear_contents()     # 清除 C3:R{end_of_row} 範圍的內容
+
+
+
+def clear_hanji_in_cells(wb, sheet_name='漢字注音', source_cell='V3', clear_source=False):
     # 選擇指定的工作表
     sheet = wb.sheets[sheet_name]
 
@@ -45,4 +59,6 @@ def clear_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
     # =========================================================================
     # (2) 清除原先已填入的漢字
     # =========================================================================
-    sheet.range("V3").value = ""
+    if clear_source:
+        sheet.range(source_cell).value = ""
+        print(f"清空原先的漢字：{source_cell}")

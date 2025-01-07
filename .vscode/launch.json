@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "p740_Phua_Im_Ji",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "p740_Phua_Im_Ji.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "csv01_更新漢字表資料",
             "type": "debugpy",
             "request": "launch",

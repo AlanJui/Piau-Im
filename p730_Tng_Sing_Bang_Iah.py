@@ -88,11 +88,12 @@ def tng_uann_piau_im(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
         return f"{siann}{un}{tiau_ho}"
     return ""
 
-def concat_ruby_tag(wb, piau_im, zu_im_huat, han_ji, tai_gi_im_piau):
+
+def concat_ruby_tag(wb, piau_im, han_ji, tai_gi_im_piau):
     """將漢字、台語音標及台語注音符號，合併成一個 Ruby Tag"""
     zu_im_list = split_tai_gi_im_piau(tai_gi_im_piau)
     if zu_im_list[0] == "" or zu_im_list[0] == None:
-        siann_bu = "Ø"
+        siann_bu = "ø"
     else:
         siann_bu = zu_im_list[0]
 
@@ -263,16 +264,14 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
                             # =========================================================
                             # 將已注音之漢字加入【漢字注音表】
                             # =========================================================
-                            # 在 Console 顯示目前處理的漢字，以便使用者可知目前進度
-                            print(f"({row}, {col_name}) = {han_ji} [{tai_gi_im_piau}]")
-
                             ruby_tag = concat_ruby_tag(
                                 wb=wb,
                                 piau_im=piau_im,    # 注音法物件
-                                zu_im_huat=piau_im_huat,
                                 han_ji=han_ji,
                                 tai_gi_im_piau=tai_gi_im_piau
                             )
+                            # 在 Console 顯示目前處理的漢字，以便使用者可知目前進度
+                            print(f"({row}, {col_name}) = {han_ji} [{tai_gi_im_piau}]")
 
                     write_buffer += ruby_tag
                     index += 1
