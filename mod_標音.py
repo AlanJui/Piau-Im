@@ -844,3 +844,35 @@ class PiauIm:
 #         '韻母': zu_im_un_bu,
 #         '聲調': zu_im_siann_tiau
 #     }
+
+# # ==========================================================
+# # 注音法設定和共用變數
+# # ==========================================================
+# zu_im_huat_list = {
+#     "SNI": ["fifteen_yin", "rt", "十五音切語"],
+#     "TPS": ["Piau_Im", "rt", "方音符號注音"],
+#     "POJ": ["pin_yin", "rt", "白話字拼音"],
+#     "TL": ["pin_yin", "rt", "台羅拼音"],
+#     "BP": ["pin_yin", "rt", "閩拼標音"],
+#     "TLPA_Plus": ["pin_yin", "rt", "台羅改良式"],
+#     "DBL": ["Siang_Pai", "rtc", "雙排注音"],
+# }
+
+
+# def choose_piau_im_method(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
+#     """選擇並執行對應的注音方法"""
+#     if zu_im_huat == "十五音":
+#         return piau_im.SNI_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif zu_im_huat == "白話字":
+#         return piau_im.POJ_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif zu_im_huat == "台羅拼音":
+#         return piau_im.TL_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif zu_im_huat == "閩拼方案":
+#         return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif zu_im_huat == "方音符號":
+#         return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif zu_im_huat == "台語音標":
+#         siann = piau_im.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+#         un = piau_im.Un_Bu_Dict[un_bu]["台語音標"]
+#         return f"{siann}{un}{tiau_ho}"
+#     return ""
