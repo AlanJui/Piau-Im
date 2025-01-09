@@ -87,7 +87,7 @@ def split_tai_gi_im_piau(im_piau):
     return result
 
 
-def split_hong_im_hu_ho(hong_im_hu_ho):
+def split_hong_im_hu_ho(hong_im_piau_im):
     # 定義調符對應的字典
     Hong_Im_Tiau_Hu_Dict = {
         "ˋ": 2,
@@ -98,13 +98,13 @@ def split_hong_im_hu_ho(hong_im_hu_ho):
     }
 
     # 編譯調符的正則表達式模式
-    HongImTiauHu = re.compile(r"[ˋ˪ˊ˫˙]", re.I)
+    Hong_Im_Tiau_Hu = re.compile(r"[ˋ˪ˊ˫˙]", re.I)
 
-    # 定義表示第四聲的尾字元集合
-    tone_4_endings = {'ㆴ', 'ㆵ', 'ㆻ', 'ㆷ'}
+    # 入声韻尾
+    Jip_Siann_Un_Bue = {'ㆴ', 'ㆵ', 'ㆻ', 'ㆷ'}
 
     # 定義聲母的集合
-    sheng_mu_ji = {
+    Siann_Mu_Ji = {
         'ㄅ', 'ㄆ', 'ㆠ', 'ㄇ',
         'ㄉ', 'ㄊ', 'ㄋ', 'ㄌ',
         'ㄍ', 'ㄎ', 'ㆣ', 'ㄏ', 'ㄫ',
@@ -114,29 +114,34 @@ def split_hong_im_hu_ho(hong_im_hu_ho):
         'ㄭ', 'ㄪ', 'ㄬ', 'ㄈ',
     }
 
-    # 步驟一：檢查最後一個字元是否為調符
-    if HongImTiauHu.match(hong_im_hu_ho[-1]):
-        tiau_fu = hong_im_hu_ho[-1]
-        tiau_hao = Hong_Im_Tiau_Hu_Dict[tiau_fu]
-        # 移除調符，獲得無調符的方音符號
-        wu_tiau_fu_hong_im_hu_ho = hong_im_hu_ho[:-1]
+    # 步驟一：辨識【方音標音】中的【調號】值，並輸出僅有【聲母】和【韻母】的【無調號方音標音】
+    if Hong_Im_Tiau_Hu.match(hong_im_piau_im[-1]):
+        # 有【声調符號】的【方音標音】
+        tiau_fu = hong_im_piau_im[-1]
+        tiau_ho = Hong_Im_Tiau_Hu_Dict[tiau_fu]
+        # 無【調號】，只有【聲母】和【韻母】的【方音標音】
+        siann_ka_un_piau_im = hong_im_piau_im[:-1]
     else:
-        # 最後沒有調符，判斷是第一聲還是第四聲
-        if hong_im_hu_ho[-1] in tone_4_endings:
-            tiau_hao = 4
+        # 無【声調符號】的【方音標音】，其【調號】值可為1或4，需依【方音標音】尾字，進行【辨識】
+        if hong_im_piau_im[-1] in Jip_Siann_Un_Bue:
+            # 【方音標音】最後一字為【入聲韻尾】，其【調號】值為4
+            tiau_ho = 4
         else:
-            tiau_hao = 1
-        wu_tiau_fu_hong_im_hu_ho = hong_im_hu_ho
+            # 【方音標音】最後一字非【入聲韻尾】，其【調號】值為1
+            tiau_ho = 1
+        siann_ka_un_piau_im = hong_im_piau_im
 
-    # 步驟四：提取聲母和韻母
-    if wu_tiau_fu_hong_im_hu_ho and wu_tiau_fu_hong_im_hu_ho[0] in sheng_mu_ji:
-        sheng_mu = wu_tiau_fu_hong_im_hu_ho[0]
-        yun_mu = wu_tiau_fu_hong_im_hu_ho[1:]
+    # 步驟四：自【無調號方音標音】，取【聲母】和【韻母】
+    if siann_ka_un_piau_im and siann_ka_un_piau_im[0] in Siann_Mu_Ji:
+        # 有【聲母】
+        siann_mu = siann_ka_un_piau_im[0]
+        un_mu = siann_ka_un_piau_im[1:]
     else:
-        sheng_mu = ''
-        yun_mu = wu_tiau_fu_hong_im_hu_ho
+        # 無【聲母】
+        siann_mu = ''
+        un_mu = siann_ka_un_piau_im
 
-    return [sheng_mu, yun_mu, str(tiau_hao)]
+    return [siann_mu, un_mu, str(tiau_ho)]
 
 
 def tng_uann_han_ji_piau_im(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
@@ -705,16 +710,26 @@ class PiauIm:
     # 雅俗通十五音(Nga-Siok-Thong)
     #================================================================
     def NST_piau_im(self, siann_bu, un_bu, tiau_ho):
-        piau_im_huat = "雅俗通"
+        # piau_im_huat = "雅俗通"
+        # Tiau_Ho_Remap = {
+        #     1: "上平",
+        #     2: "上上",
+        #     3: "上去",
+        #     4: "上入",
+        #     5: "下平",
+        #     6: "下上",
+        #     7: "下去",
+        #     8: "下入",
+        # }
+        piau_im_huat = "十五音"
         Tiau_Ho_Remap = {
-            1: "上平",
-            2: "上上",
-            3: "上去",
-            4: "上入",
-            5: "下平",
-            6: "下上",
-            7: "下去",
-            8: "下入",
+            1: "一",
+            2: "二",
+            3: "三",
+            4: "四",
+            5: "五",
+            7: "七",
+            8: "八",
         }
 
         # 將上標數字替換為普通數字
@@ -729,7 +744,7 @@ class PiauIm:
         return piau_im
 
     #================================================================
-    # 雅俗通十五音(SNI:Sip-Ngoo-Im)
+    # 十五音(SNI:Sip-Ngoo-Im)
     #================================================================
     def SNI_piau_im(self, siann_bu, un_bu, tiau_ho):
         piau_im_huat = "十五音"
