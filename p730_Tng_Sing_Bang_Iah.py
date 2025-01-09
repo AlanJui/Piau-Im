@@ -10,19 +10,6 @@ from mod_file_access import get_named_value
 from mod_標音 import split_tai_gi_im_piau  # 分解台語音標
 from mod_標音 import PiauIm, is_punctuation, split_hong_im_hu_ho
 
-# ==========================================================
-# 注音法設定和共用變數
-# ==========================================================
-zu_im_huat_list = {
-    "SNI": ["fifteen_yin", "rt", "十五音切語"],
-    "TPS": ["Piau_Im", "rt", "方音符號注音"],
-    "POJ": ["pin_yin", "rt", "白話字拼音"],
-    "TL": ["pin_yin", "rt", "台羅拼音"],
-    "BP": ["pin_yin", "rt", "閩拼標音"],
-    "TLPA_Plus": ["pin_yin", "rt", "台羅改良式"],
-    "DBL": ["Siang_Pai", "rtc", "雙排注音"],
-}
-
 
 def create_html_file(output_path, content, title='您的標題'):
     template = f"""
@@ -74,6 +61,8 @@ def tng_uann_piau_im(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
     """根據指定的標音方法，轉換台語音標之羅馬拚音字母"""
     if zu_im_huat == "十五音":
         return piau_im.SNI_piau_im(siann_bu, un_bu, tiau_ho)
+    elif zu_im_huat == "雅俗通":
+        return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
     elif zu_im_huat == "白話字":
         return piau_im.POJ_piau_im(siann_bu, un_bu, tiau_ho)
     elif zu_im_huat == "台羅拼音":
@@ -106,8 +95,42 @@ def concat_ruby_tag(wb, piau_im, han_ji, tai_gi_im_piau):
     siong_piau_im = ""
     zian_piau_im = ""
 
-    # 根據【標音方式】，決定【漢字】之上方或右方，是否該顯示【標音】
-    if piau_im_hong_sik == "預設":
+    # 根據【網頁格式】，決定【漢字】之上方或右方，是否該顯示【標音】
+    if style == "無預設":
+        # 若【網頁格式】設定為【無預設】，則根據【標音方式】決定漢字之上方及右方，是否需要放置標音
+        if piau_im_hong_sik == "上及右":
+            # 漢字上方顯示【上邊標音】，下方顯示【下邊標音】
+            siong_piau_im = tng_uann_piau_im(
+                piau_im=piau_im,    # 注音法物件
+                zu_im_huat=siong_pinn_piau_im,
+                siann_bu=siann_bu,
+                un_bu=zu_im_list[1],
+                tiau_ho=zu_im_list[2]
+            )
+            zian_piau_im = tng_uann_piau_im(
+                piau_im=piau_im,    # 注音法物件
+                zu_im_huat=zian_pinn_piau_im,
+                siann_bu=siann_bu,
+                un_bu=zu_im_list[1],
+                tiau_ho=zu_im_list[2]
+            )
+        elif piau_im_hong_sik == "上":
+            siong_piau_im = tng_uann_piau_im(
+                piau_im=piau_im,    # 注音法物件
+                zu_im_huat=siong_pinn_piau_im,
+                siann_bu=siann_bu,
+                un_bu=zu_im_list[1],
+                tiau_ho=zu_im_list[2]
+            )
+        elif piau_im_hong_sik == "右":
+            zian_piau_im = tng_uann_piau_im(
+                piau_im=piau_im,    # 注音法物件
+                zu_im_huat=zian_pinn_piau_im,
+                siann_bu=siann_bu,
+                un_bu=zu_im_list[1],
+                tiau_ho=zu_im_list[2]
+            )
+    else:
         if style == "POJ" or style == "TL" or style == "BP" or style == "TLPA_Plus":
             # 羅馬拼音字母標音法，將標音置於漢字上方
             siong_piau_im = tng_uann_piau_im(
@@ -118,7 +141,7 @@ def concat_ruby_tag(wb, piau_im, han_ji, tai_gi_im_piau):
                 tiau_ho=zu_im_list[2]
             )
         elif style == "SNI":
-            # 十五音反切法，將標音置於漢字右方
+            # 十五音反切法，將標音置於漢字上方
             siong_piau_im = tng_uann_piau_im(
                 piau_im=piau_im,    # 注音法物件
                 zu_im_huat=siong_pinn_piau_im,
@@ -151,40 +174,8 @@ def concat_ruby_tag(wb, piau_im, han_ji, tai_gi_im_piau):
                 un_bu=zu_im_list[1],
                 tiau_ho=zu_im_list[2]
             )
-    elif piau_im_hong_sik == "上及右":
-        # 漢字上方顯示【上邊標音】，下方顯示【下邊標音】
-        siong_piau_im = tng_uann_piau_im(
-            piau_im=piau_im,    # 注音法物件
-            zu_im_huat=siong_pinn_piau_im,
-            siann_bu=siann_bu,
-            un_bu=zu_im_list[1],
-            tiau_ho=zu_im_list[2]
-        )
-        zian_piau_im = tng_uann_piau_im(
-            piau_im=piau_im,    # 注音法物件
-            zu_im_huat=zian_pinn_piau_im,
-            siann_bu=siann_bu,
-            un_bu=zu_im_list[1],
-            tiau_ho=zu_im_list[2]
-        )
-    elif piau_im_hong_sik == "上":
-        siong_piau_im = tng_uann_piau_im(
-            piau_im=piau_im,    # 注音法物件
-            zu_im_huat=siong_pinn_piau_im,
-            siann_bu=siann_bu,
-            un_bu=zu_im_list[1],
-            tiau_ho=zu_im_list[2]
-        )
-    elif piau_im_hong_sik == "右":
-        zian_piau_im = tng_uann_piau_im(
-            piau_im=piau_im,    # 注音法物件
-            zu_im_huat=zian_pinn_piau_im,
-            siann_bu=siann_bu,
-            un_bu=zu_im_list[1],
-            tiau_ho=zu_im_list[2]
-        )
 
-    # 根據標音法及標音方式，設定 Ruby Tag
+    # 根據標音方式，設定 Ruby Tag
     if siong_piau_im != "" and zian_piau_im == "":
         # 將標音置於漢字上方
         ruby_tag = f"  <ruby><rb>{han_ji}</rb><rp>(</rp><rt>{siong_piau_im}</rt><rp>)</rp></ruby>"
@@ -202,6 +193,19 @@ def concat_ruby_tag(wb, piau_im, han_ji, tai_gi_im_piau):
 # 依據指定的【注音方法】，輸出含 Ruby Tags 之 HTML 網頁
 # =========================================================
 def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭', piau_im_huat='方音符號', piau_im=None):
+    # ==========================================================
+    # 注音法設定和共用變數
+    # ==========================================================
+    zu_im_huat_list = {
+        "SNI": ["fifteen_yin", "rt", "十五音切語"],
+        "TPS": ["Piau_Im", "rt", "方音符號注音"],
+        "POJ": ["pin_yin", "rt", "白話字拼音"],
+        "TL": ["pin_yin", "rt", "台羅拼音"],
+        "BP": ["pin_yin", "rt", "閩拼標音"],
+        "TLPA_Plus": ["pin_yin", "rt", "台羅改良式"],
+        "DBL": ["Siang_Pai", "rtc", "雙排注音"],
+        "無預設": ["Siang_Pai", "rtc", "雙排注音"],
+    }
     write_buffer = ""
 
     # =========================================================
