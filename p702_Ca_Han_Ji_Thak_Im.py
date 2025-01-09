@@ -54,6 +54,13 @@ def za_ji_kiat_ko_cut_piau_im(result, han_ji_khoo, piau_im, piau_im_huat):
 
 def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', hue_im="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im'):
     """查漢字讀音：依【漢字】查找【台語音標】，並依指定之【標音方法】輸出【漢字標音】"""
+    # 動態載入查找函數
+    han_ji_ca_piau_im = load_module_function(module_name, function_name)
+
+    # 連接指定資料庫
+    conn = sqlite3.connect(db_name)
+    cursor = conn.cursor()
+
     # 初始化 PiauIm 類別，産生標音物件
     piau_im = PiauIm(han_ji_khoo=han_ji_khoo)
     piau_im_huat = wb.names['標音方法'].refers_to_range.value
@@ -69,134 +76,130 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', hue_im="白話�
     sheet.activate()
     sheet.range('A1').select()
 
-    # 取得 V3 儲存格的字串
-    v3_value = sheet.range(cell).value
-
     # 取得工作表能處理最多列數： 20 列
-    TOTAL_ROWS = int(wb.names['每頁總列數'].refers_to_range.value)
+    TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
+    row = 5
+
     # 每列最多處理 15 字元
     CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
     # 設定起始及結束的欄位  （【D欄=4】到【R欄=18】）
     start = 4
     end = start + CHARS_PER_ROW
 
-    total_length = len(v3_value)
-
-    # 動態載入查找函數
-    han_ji_ca_piau_im = load_module_function(module_name, function_name)
-
-    # 連接指定資料庫
-    conn = sqlite3.connect(db_name)
-    cursor = conn.cursor()
-
     # 逐字處理字串，並填入對應的儲存格
-    row = 5
-    while row < TOTAL_ROWS:
+    EOF = False
+    line = 1
+    while line < TOTAL_LINES and not EOF:
         # 設定【作用儲存格】為列首
         sheet.range((row, 1)).select()
         for col in range(start, end):
             msg = ""
+            col_name = xw.utils.col_name(col)
 
             # 取得當前字元
+            han_ji_u_piau_im = False
             cell_value = sheet.range((row, col)).value
 
-            if cell_value == '\n':
+            if cell_value == 'φ':
+                EOF = True
                 break
+            elif cell_value == '\n':
+                break
+            else:
+                # 若不為【標點符號】，則以【漢字】處理
+                if is_punctuation(cell_value):
+                    msg = f"{cell_value}"
+                else:
+                    # 查找漢字讀音
+                    han_ji = cell_value
 
-            # 若不為【標點符號】，則以【漢字】處理
-            if not is_punctuation(cell_value):
-                # 查找漢字讀音
-                han_ji = cell_value
-                han_ji_u_piau_im = False
+                    # 依據【人工標音】欄是否有輸入，決定【漢字標音】之處理方式
+                    manual_input = sheet.range((row-2, col)).value
 
-                # 依據【人工標音】欄是否有輸入，決定【漢字標音】之處理方式
-                manual_input = sheet.range((row-2, col)).value
-
-                if manual_input:    # 若有人工輸入之處理作業
-                    if '〔' in manual_input and '〕' in manual_input:
-                        # 將人工輸入的〔台語音標〕轉換成【方音符號】
-                        im_piau = manual_input.split('〔')[1].split('〕')[0]
-                        siann, un, tiau = split_tai_gi_im_piau(im_piau)
-                        tai_gi_im_piau = ''.join([siann, un, tiau])
-                        # 依使用者指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
-                        han_ji_piau_im = tlpa_tng_han_ji_piau_im(
-                            piau_im=piau_im,
-                            piau_im_huat=piau_im_huat,
-                            tai_gi_im_piau=tai_gi_im_piau
-                        )
-                        han_ji_u_piau_im = True
-                    elif '【' in manual_input and '】' in manual_input:
-                        # 將人工輸入的【方音符號】轉換成【台語音標】
-                        han_ji_piau_im = manual_input.split('【')[1].split('】')[0]
-                        siann, un, tiau = split_hong_im_hu_ho(han_ji_piau_im)
-                        # 依使用者指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
-                        tai_gi_im_piau = hong_im_tng_tai_gi_im_piau(
-                            siann=siann,
-                            un=un,
-                            tiau=tiau,
-                            cursor=cursor,
-                        )['台語音標']
-                        han_ji_u_piau_im = True
-                    else:
-                        # 將人工輸入的【台語音標】，解構為【聲母】、【韻母】、【聲調】
-                        tai_gi_im_piau = manual_input
-                        siann, un, tiau = split_tai_gi_im_piau(tai_gi_im_piau)
-                        # 依指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
-                        han_ji_piau_im = tng_uann_han_ji_piau_im(
-                            piau_im,
-                            piau_im_huat,
-                            siann,
-                            un,
-                            tiau
-                        )
-                        han_ji_u_piau_im = True
-
-                    # 將人工輸入的【台語音標】置入【破音字庫】Dict
-                    phua_im_ji.ka_phua_im_ji(han_ji, tai_gi_im_piau)
-                else:               # 無人工輸入，則自【漢字庫】查找作業
-                    # 查找【破音字庫】，確認是否有此漢字
-                    found = phua_im_ji.ca_phua_im_ji(han_ji)
-                    # 若【破音字庫】有此漢字
-                    if found:
-                        siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(found)
-                        tai_gi_im_piau = siann_bu + un_bu + tiau_ho
-                        han_ji_piau_im = tng_uann_han_ji_piau_im(
-                            piau_im,
-                            piau_im_huat,
-                            siann_bu,
-                            un_bu,
-                            tiau_ho
-                        )
-                        han_ji_u_piau_im = True
-                        sheet.range((row, col)).font.color = (255, 0, 0)    # 將文字顏色設為【紅色】
-                        sheet.range((row, col)).color = (255, 255, 0)       # 將底色設為【黄色】
-                        print(f"漢字：【{han_ji}】之注音【{tai_gi_im_piau}】取自【人工注音字典】。")
-                    # 若【破音字庫】無此漢字，則在資料庫中查找
-                    else:
-                        result = han_ji_ca_piau_im(cursor=cursor, han_ji=han_ji, hue_im=hue_im)
-                        if not result:
-                            msg = f"【{han_ji}】查無此字！"
-                        else:
-                            # 依【漢字庫】查找結果，輸出【台語音標】和【漢字標音】
-                            tai_gi_im_piau, han_ji_piau_im = za_ji_kiat_ko_cut_piau_im(
-                                result=result,
-                                han_ji_khoo=han_ji_khoo,
+                    if manual_input:    # 若有人工輸入之處理作業
+                        if '〔' in manual_input and '〕' in manual_input:
+                            # 將人工輸入的〔台語音標〕轉換成【方音符號】
+                            im_piau = manual_input.split('〔')[1].split('〕')[0]
+                            siann, un, tiau = split_tai_gi_im_piau(im_piau)
+                            tai_gi_im_piau = ''.join([siann, un, tiau])
+                            # 依使用者指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
+                            han_ji_piau_im = tlpa_tng_han_ji_piau_im(
                                 piau_im=piau_im,
-                                piau_im_huat=piau_im_huat
+                                piau_im_huat=piau_im_huat,
+                                tai_gi_im_piau=tai_gi_im_piau
+                            )
+                            han_ji_u_piau_im = True
+                        elif '【' in manual_input and '】' in manual_input:
+                            # 將人工輸入的【方音符號】轉換成【台語音標】
+                            han_ji_piau_im = manual_input.split('【')[1].split('】')[0]
+                            siann, un, tiau = split_hong_im_hu_ho(han_ji_piau_im)
+                            # 依使用者指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
+                            tai_gi_im_piau = hong_im_tng_tai_gi_im_piau(
+                                siann=siann,
+                                un=un,
+                                tiau=tiau,
+                                cursor=cursor,
+                            )['台語音標']
+                            han_ji_u_piau_im = True
+                        else:
+                            # 將人工輸入的【台語音標】，解構為【聲母】、【韻母】、【聲調】
+                            tai_gi_im_piau = manual_input
+                            siann, un, tiau = split_tai_gi_im_piau(tai_gi_im_piau)
+                            # 依指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
+                            han_ji_piau_im = tng_uann_han_ji_piau_im(
+                                piau_im,
+                                piau_im_huat,
+                                siann,
+                                un,
+                                tiau
                             )
                             han_ji_u_piau_im = True
 
-                    if han_ji_u_piau_im:
-                        sheet.range((row - 1, col)).value = tai_gi_im_piau
-                        sheet.range((row + 1, col)).value = han_ji_piau_im
-                        msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
+                        # 將人工輸入的【台語音標】置入【破音字庫】Dict
+                        phua_im_ji.ka_phua_im_ji(han_ji, tai_gi_im_piau)
+                    else:               # 無人工輸入，則自【漢字庫】查找作業
+                        # 查找【破音字庫】，確認是否有此漢字
+                        found = phua_im_ji.ca_phua_im_ji(han_ji)
+                        # 若【破音字庫】有此漢字
+                        if found:
+                            siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(found)
+                            tai_gi_im_piau = siann_bu + un_bu + tiau_ho
+                            han_ji_piau_im = tng_uann_han_ji_piau_im(
+                                piau_im,
+                                piau_im_huat,
+                                siann_bu,
+                                un_bu,
+                                tiau_ho
+                            )
+                            han_ji_u_piau_im = True
+                            sheet.range((row, col)).font.color = (255, 0, 0)    # 將文字顏色設為【紅色】
+                            sheet.range((row, col)).color = (255, 255, 0)       # 將底色設為【黄色】
+                            print(f"漢字：【{han_ji}】之注音【{tai_gi_im_piau}】取自【人工注音字典】。")
+                        # 若【破音字庫】無此漢字，則在資料庫中查找
+                        else:
+                            result = han_ji_ca_piau_im(cursor=cursor, han_ji=han_ji, hue_im=hue_im)
+                            if not result:
+                                msg = f"【{han_ji}】查無此字！"
+                            else:
+                                # 依【漢字庫】查找結果，輸出【台語音標】和【漢字標音】
+                                tai_gi_im_piau, han_ji_piau_im = za_ji_kiat_ko_cut_piau_im(
+                                    result=result,
+                                    han_ji_khoo=han_ji_khoo,
+                                    piau_im=piau_im,
+                                    piau_im_huat=piau_im_huat
+                                )
+                                han_ji_u_piau_im = True
 
-                    col_name = xw.utils.col_name(col)
-                    print(f"({row}, {col_name}) = {msg}")
+                if han_ji_u_piau_im:
+                    sheet.range((row - 1, col)).value = tai_gi_im_piau
+                    sheet.range((row + 1, col)).value = han_ji_piau_im
+                    msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
+
+                print(f"({row}, {col_name}) = {msg}")
 
         # 每處理 15 個字元後，換到下一行
-        row += 4
         print("\n")
+        row += 4
 
     print("已完成【台語音標】和【方音符號】標注工作。")
 

@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "p740_Phua_Im_Ji",
+            "name": "p750_將儲存格漢字另存成文字檔",
             "type": "debugpy",
             "request": "launch",
-            "program": "p740_Phua_Im_Ji.py",
+            "program": "p750_將儲存格漢字另存成文字檔.py",
             "console": "integratedTerminal",
         },
         {
