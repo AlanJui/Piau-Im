@@ -89,6 +89,7 @@ def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
             print("\n")
             row += 4
 
+    sheet.range((row, start)).value = "φ"
     # 保存 Excel 檔案
     wb.save()
 
