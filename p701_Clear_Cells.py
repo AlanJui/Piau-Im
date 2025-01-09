@@ -21,7 +21,7 @@ def clear_hanji_in_cells(wb, sheet_name='漢字注音', source_cell='V3', clear_
     sheet = wb.sheets[sheet_name]
 
     # 取得 V3 儲存格的字串
-    v3_value = sheet.range(cell).value
+    v3_value = sheet.range(source_cell).value
 
     # 計算字串的總長度
     total_length = len(v3_value)
