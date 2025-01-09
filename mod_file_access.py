@@ -33,10 +33,11 @@ def save_as_new_file(wb):
     # 設定檔案輸出路徑，存於專案根目錄下的 output2 資料夾
     output_path = wb.names['OUTPUT_PATH'].refers_to_range.value
     hue_im = wb.names['語音類型'].refers_to_range.value
+    piau_im_huat = wb.names['標音方法'].refers_to_range.value
     im_piat = hue_im[:2]  # 取 hue_im 前兩個字元
     new_file_path = os.path.join(
         ".\\{0}".format(output_path),
-        f"【河洛{im_piat}注音】{file_name}.xlsx")
+        f"【河洛{im_piat}注音-{piau_im_huat}】{file_name}.xlsx")
 
     # 儲存新建立的工作簿
     wb.save(new_file_path)

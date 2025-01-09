@@ -38,7 +38,7 @@ def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
         row = 5
         index = 0  # 用來追蹤目前處理到的字元位置
 
-        # 逐字處理字串 
+        # 逐字處理字串
         while index < total_length:     # 使用 while 而非 for，確保處理完整個字串
             # 設定當前作用儲存格，根據 `row` 和 `col` 動態選取
             sheet.range((row, 1)).select()
@@ -60,9 +60,15 @@ def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
                         print(f"自動填入【hiu2】於 {xw.utils.col_name(col)}{row - 2}")
 
                     if char == "\n":
-                        # 若遇到換行字元，直接跳過
-                        index += 1
-                        break  
+                        char = "=CHAR(10)"  # 換行字元
+
+                    # 重置儲存格：文字顏色（黑色）及填滿色彩（無填滿）
+                    sheet.range((row-2, col), (row+1, col)).color = None
+                    sheet.range((row, col)).font.color = (0, 0, 0)
+                    sheet.range((row, col)).font.color = (0, 0, 0)
+                    sheet.range((row-2, col)).font.color = (255, 0, 0)
+                    sheet.range((row-1, col)).font.color = 0x3399FF # 藍色
+                    sheet.range((row+1, col)).font.color = 0x009900 # 綠色
 
                     # 將字元填入對應的儲存格
                     sheet.range((row, col)).value = char
@@ -72,6 +78,10 @@ def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
 
                     # 更新索引，處理下一個字元
                     index += 1
+
+                    # 換行：列數加一，並從下一列的第一個字元開始
+                    if char == "=CHAR(10)":
+                        break
                 else:
                     break  # 若字串已處理完畢，退出迴圈
 
