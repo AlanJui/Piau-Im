@@ -45,38 +45,98 @@ def logging_process_step(msg):
     logging.info(msg)
 
 # =========================================================================
+# Local Function
+# =========================================================================
+def dump_txt_file(file_path):
+    """
+    在螢幕 Dump 純文字檔內容。
+    """
+    print("\n【文字檔內容】：")
+    print("========================================\n")
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+            print(content)
+    except FileNotFoundError:
+        print(f"無法找到檔案：{file_path}")
+
+# =========================================================================
 # 本程式主要處理作業程序
 # =========================================================================
 def process(wb):
+    """
+    將 Excel 工作表中指定區域的漢字取出，儲存為一個純文字檔。
+    """
+    # 選擇工作表
+    sheet = wb.sheets['漢字注音']
+    sheet.activate()
     #--------------------------------------------------------------------------
-    # 將儲存格內的舊資料清除
+    # 自【env】設定工作表，取得處理作業所需參數
     #--------------------------------------------------------------------------
-    sheet = wb.sheets['漢字注音']   # 選擇工作表
-    sheet.activate()               # 將「漢字注音」工作表設為作用中工作表
-    sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
 
-    total_rows = wb.names['每頁總列數'].refers_to_range.value
-    cells_per_row = 4
-    end_of_rows = int((total_rows * cells_per_row ) + 2)
-    cells_range = f'D3:R{end_of_rows}'
+    # 設定起始及結束的【列】位址（【第5列】、【第9列】、【第13列】等列）
+    TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
+    ROWS_PER_LINE = 4
+    start_row = 5
+    end_row = start_row + (TOTAL_LINES * ROWS_PER_LINE)
 
-    sheet.range(cells_range).clear_contents()     # 清除 C3:R{end_of_row} 範圍的內容
-
-    # 獲取 V3 儲存格的合併範圍
-    merged_range = sheet.range('V3').merge_area
-    # 清空合併儲存格的內容
-    merged_range.clear_contents()
+    # 設定起始及結束的【欄】位址（【D欄=4】到【R欄=18】）
+    CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
+    start_col = 4
+    end_col = start_col + CHARS_PER_ROW
 
     #--------------------------------------------------------------------------
-    # 將待注音的【漢字儲存格】，文字顏色重設為黑色（自動 RGB: 0, 0, 0）；填漢顏色重設為無填滿
+    # 作業處理：逐列取出漢字，組合成純文字檔
     #--------------------------------------------------------------------------
-    logging_process_step(f"開始【漢字注音】工作表的清空、重置！")
-    if reset_han_ji_cells(wb) == EXIT_CODE_SUCCESS:
-        logging_process_step(f"完成【漢字注音】工作表的清空、重置！")
-    else:
-        logging_process_step(f"【漢字注音】工作表的清空、重置失敗！")
-        return EXIT_CODE_PROCESS_FAILURE
+    logging_process_step(f"開始【處理作業】...")
+    han_ji_text = ""
+    end_of_file = False
+    line = 1
 
+    # 逐列處理作業
+    for row in range(start_row, end_row, ROWS_PER_LINE):
+        if end_of_file or line > TOTAL_LINES:
+            break
+
+        # 設定【作用儲存格】為列首
+        sheet.range((row, 1)).select()
+
+        # 逐欄取出儲存格內容
+        for col in range(start_col, end_col):
+            col_name = xw.utils.col_name(col)   # 取得欄位名稱
+            cell_value = sheet.range((row, col)).value
+            if cell_value == 'φ':       # 讀到【結尾標示】
+                end_of_file = True
+                break
+            elif cell_value == '\n':    # 讀到【換行標示】
+                han_ji_text += '\n'
+                break
+            elif cell_value == None:    # 讀到【空白】
+                print(f"({row}, {col_name}) = 《空白》")
+            else:                       # 讀到：漢字或標點符號
+                han_ji_text += cell_value
+                print(f"({row}, {col_name}) = {cell_value}")
+
+        # 已到【結尾處】之作業結束處理
+        if end_of_file:
+            print(f"第 {row} 列為檔案結尾處，結束處理作業。")
+            break
+
+        # 換行處理：(1)每處理完 15 字後，換下一行 ；(2) 讀到【換行標示】
+        line += 1
+        print(f"({row}, {col_name}) = 《換行》")
+
+    # 將所有漢字寫入文字檔
+    output_file = 'tmp.txt'
+    with open(output_file, 'w', encoding='utf-8') as f:
+        f.write(han_ji_text)
+    logging_process_step(f"已成功將漢字輸出至檔案：{output_file}")
+
+    # 螢幕 Dump 檔案內容
+    dump_txt_file(output_file)
+
+    # 作業結束前處理
+    logging_process_step(f"完成【處理作業】...")
     return EXIT_CODE_SUCCESS
 
 

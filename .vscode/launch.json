@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "p750_將儲存格漢字另存成文字檔",
+            "name": "a705_輸出己標音漢字",
             "type": "debugpy",
             "request": "launch",
-            "program": "p750_將儲存格漢字另存成文字檔.py",
+            "program": "a705_輸出己標音漢字.py",
             "console": "integratedTerminal",
         },
         {

@@ -32,3 +32,114 @@ pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, Non
 2025-01-10 13:17:26,908 - INFO - 開始標音作業 - 河洛話: 白話音
 2025-01-10 13:17:46,412 - INFO - 標音作業完成 - 河洛話: 白話音
 2025-01-10 13:17:46,761 - INFO - 檔案已成功儲存
+2025-01-10 13:57:20,329 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-10 13:57:20,504 - INFO - 開始【漢字注音】工作表的清空、重置！
+2025-01-10 13:57:26,854 - INFO - 【漢字注音】工作表的清空、重置失敗！
+2025-01-10 13:57:26,854 - ERROR - 作業正常完成！
+2025-01-10 13:59:14,756 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-10 13:59:14,892 - INFO - 開始【漢字注音】工作表的清空、重置！
+2025-01-10 14:00:45,144 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-10 14:00:45,279 - INFO - 開始【漢字注音】工作表的清空、重置！
+2025-01-10 14:01:02,787 - INFO - 完成【漢字注音】工作表的清空、重置！
+2025-01-10 14:01:10,139 - INFO - 【漢字注音】工作表已清空、重置！
+2025-01-10 14:01:35,427 - ERROR - 作業正常完成！
+2025-01-10 14:25:19,037 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-10 14:25:19,128 - ERROR - 執行過程中發生未知錯誤: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a700_重置漢字標音工作表.py", line 119, in main
+    result_code = process(wb)
+  File "a700_重置漢字標音工作表.py", line 63, in process
+    sheet.range(cells_range).clear_contents()     # 清除 C3:R{end_of_row} 範圍的內容
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2048, in clear_contents
+    return self.impl.clear_contents()
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1213, in clear_contents
+    self.xl.ClearContents()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject Range>", line 2, in ClearContents
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-01-10 14:25:19,195 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-10 14:25:43,418 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-10 14:25:43,548 - INFO - 開始【漢字注音】工作表的清空、重置！
+2025-01-10 14:26:04,791 - INFO - 完成【漢字注音】工作表的清空、重置！
+2025-01-10 14:26:04,869 - INFO - 【漢字注音】工作表已清空、重置！
+2025-01-10 14:26:04,929 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-10 14:26:04,929 - INFO - 作業成功完成！
+2025-01-10 14:28:10,604 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-10 14:28:10,749 - INFO - 開始【漢字注音】工作表的清空、重置！
+2025-01-10 14:28:23,303 - INFO - 完成【漢字注音】工作表的清空、重置！
+2025-01-10 14:28:23,365 - INFO - 【漢字注音】工作表已清空、重置！
+2025-01-10 14:28:23,423 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-10 14:28:23,423 - INFO - 作業成功完成！
+2025-01-10 14:32:13,418 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-10 14:32:13,563 - INFO - 開始【漢字注音】工作表的清空、重置！
+2025-01-10 14:32:19,974 - INFO - 完成【漢字注音】工作表的清空、重置！
+2025-01-10 14:32:20,042 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-10 14:32:20,042 - INFO - 作業成功完成！
+2025-01-10 14:32:59,851 - INFO - 作業開始
+2025-01-10 14:32:59,852 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-10 14:32:59,884 - WARNING - 【待注音漢字】儲存格為空
+2025-01-10 14:32:59,884 - ERROR - 作業正常完成！
+2025-01-10 14:34:03,005 - INFO - 作業開始
+2025-01-10 14:34:03,006 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-10 14:34:03,039 - INFO - 【待注音漢字】總字數為: 143
+2025-01-10 14:34:03,172 - INFO - 儲存格清除完畢
+2025-01-10 14:34:10,047 - INFO - 儲存格格式重設完畢
+2025-01-10 14:34:22,636 - INFO - 填入待注音漢字完成
+2025-01-10 14:34:22,676 - INFO - 開始標音作業 - 河洛話: 白話音
+2025-01-10 14:34:36,680 - INFO - 標音作業完成 - 河洛話: 白話音
+2025-01-10 14:34:36,988 - INFO - 檔案已成功儲存
+2025-01-10 14:34:36,989 - ERROR - 作業正常完成！
+2025-01-10 16:11:19,417 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-10 16:11:19,491 - INFO - 開始【處理作業】...
+2025-01-10 16:11:19,492 - ERROR - 執行過程中發生未知錯誤: cannot access local variable 'end_of_file' where it is not associated with a value
+Traceback (most recent call last):
+  File "a705_輸出己標音漢字.py", line 170, in main
+    result_code = process(wb)
+  File "a705_輸出己標音漢字.py", line 98, in process
+    if end_of_file:
+       ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'end_of_file' where it is not associated with a value
+2025-01-10 16:11:19,562 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-10 16:15:27,758 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-10 16:15:27,846 - INFO - 開始【處理作業】...
+2025-01-10 16:15:30,051 - ERROR - 執行過程中發生未知錯誤: can only concatenate str (not "NoneType") to str
+Traceback (most recent call last):
+  File "a705_輸出己標音漢字.py", line 170, in main
+    result_code = process(wb)
+  File "a705_輸出己標音漢字.py", line 114, in process
+    han_ji_text += cell_value
+TypeError: can only concatenate str (not "NoneType") to str
+2025-01-10 16:15:30,122 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-10 16:16:28,279 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-10 16:16:28,355 - INFO - 開始【處理作業】...
+2025-01-10 16:19:25,587 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-10 16:19:25,699 - INFO - 開始【處理作業】...
+2025-01-10 16:21:40,265 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-10 16:21:40,343 - INFO - 開始【處理作業】...
+2025-01-10 16:22:58,939 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-10 16:22:59,025 - INFO - 開始【處理作業】...
+2025-01-10 16:26:27,700 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-10 16:26:27,775 - INFO - 開始【處理作業】...
+2025-01-10 16:27:25,352 - ERROR - 執行過程中發生未知錯誤: can only concatenate str (not "NoneType") to str
+Traceback (most recent call last):
+  File "a705_輸出己標音漢字.py", line 173, in main
+    result_code = process(wb)
+  File "a705_輸出己標音漢字.py", line 115, in process
+    han_ji_text += cell_value
+TypeError: can only concatenate str (not "NoneType") to str
+2025-01-10 16:27:25,430 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-10 16:30:48,776 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-10 16:31:36,491 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-10 16:31:36,565 - INFO - 開始【處理作業】...
+2025-01-10 16:31:44,530 - INFO - 已成功將漢字輸出至檔案：tmp.txt
+2025-01-10 16:31:44,537 - INFO - 完成【處理作業】...
+2025-01-10 16:31:44,605 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-10 16:31:44,605 - INFO - 作業成功完成！
