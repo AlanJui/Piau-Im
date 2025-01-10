@@ -25,8 +25,6 @@ def save_as_new_file(wb):
     try:
         file_name = str(wb.names['TITLE'].refers_to_range.value).strip()
     except KeyError:
-        # print("未找到命名範圍 'TITLE'，使用預設名稱")
-        # file_name = "default_file_name.xlsx"  # 提供一個預設檔案名稱
         setting_sheet = wb.sheets["env"]
         file_name = str(setting_sheet.range("C4").value).strip()
 
@@ -41,7 +39,7 @@ def save_as_new_file(wb):
 
     # 儲存新建立的工作簿
     wb.save(new_file_path)
-    print(f"新檔案已儲存至: {new_file_path}")
+    return f"{new_file_path}"
 
 #----------------------------------------------------------------
 # 查詢語音類型，若未設定則預設為文讀音
