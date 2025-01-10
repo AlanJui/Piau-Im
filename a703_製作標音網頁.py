@@ -45,17 +45,6 @@ EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 
 
 def process(wb):
-    # 指定虛擬環境的 Python 路徑
-    venv_python = os.path.join(".venv", "Scripts", "python.exe") if sys.platform == "win32" else os.path.join(".venv", "bin", "python")
-
-    # 獲取活頁簿的完整檔案路徑
-    file_path = wb.fullname
-    print(f"完整檔案路徑: {file_path}")
-
-    # 獲取活頁簿的檔案名稱（不包括路徑）
-    file_name = wb.name
-    print(f"檔案名稱: {file_name}")
-
     # (1) 指定作業使用：【漢字注音】工作表
     sheet = wb.sheets['漢字注音']   # 選擇工作表
     sheet.activate()               # 將「漢字注音」工作表設為作用中工作表
@@ -73,11 +62,14 @@ def process(wb):
         return result_code
 
     # (3) 依 env 工作表之設定，將檔案儲存至指定目錄。
-    save_as_new_file(wb=wb)
-    logging_process_step(f"儲存檔案至路徑：{file_path}")
-
-    # 作業正常結束
-    return EXIT_CODE_SUCCESS
+    file_path = save_as_new_file(wb=wb)
+    if not file_path:
+        logging.error("儲存檔案失敗！")
+        return EXIT_CODE_PROCESS_FAILURE
+    else:
+        logging_process_step(f"儲存檔案至路徑：{file_path}")
+        # 作業正常結束
+        return EXIT_CODE_SUCCESS
 
 
 def main():
@@ -131,7 +123,7 @@ def main():
 if __name__ == "__main__":
     exit_code = main()
     if exit_code == EXIT_CODE_SUCCESS:
-        print("作業正常完成！")
+        print("作業正常結束！")
     else:
         print(f"作業異常終結，異常碼為: {exit_code}")
     sys.exit(exit_code)
