@@ -4,7 +4,7 @@ import sys
 import xlwings as xw
 
 from mod_file_access import ensure_extension_name
-from p730_Tng_Sing_Bang_Iah import tng_sing_bang_iah
+from p730_Tng_Sing_Bang_Iah_R1 import tng_sing_bang_iah
 
 # 指定虛擬環境的 Python 路徑
 venv_python = os.path.join(".venv", "Scripts", "python.exe") if sys.platform == "win32" else os.path.join(".venv", "bin", "python")
@@ -14,7 +14,7 @@ directory = r"C:\work\Piau-Im\output2"
 
 # 所有檔案名稱
 files = [
-    '【河洛話注音】金剛般若波羅蜜經001',         
+    '【河洛話注音】金剛般若波羅蜜經001',
     '【河洛話注音】金剛般若波羅蜜經002',
     '【河洛話注音】金剛般若波羅蜜經003',
     '【河洛話注音】金剛般若波羅蜜經004',
@@ -56,7 +56,7 @@ for file_name in files:
     # 打開 Excel 檔案
     wb = xw.Book(file_path)
 
-    # 顯示「已輸入之拼音字母及注音符號」 
+    # 顯示「已輸入之拼音字母及注音符號」
     named_range = wb.names['顯示注音輸入']  # 選擇名為 "顯示注音輸入" 的命名範圍# 選擇名為 "顯示注音輸入" 的命名範圍
     named_range.refers_to_range.value = True
 
@@ -75,9 +75,9 @@ for file_name in files:
         ).strip()
 
     # 設定檔案輸出路徑，存於專案根目錄下的 output2 資料夾
-    output_path = wb.names['OUTPUT_PATH'].refers_to_range.value 
+    output_path = wb.names['OUTPUT_PATH'].refers_to_range.value
     new_file_path = os.path.join(
-        ".\\{0}".format(output_path), 
+        ".\\{0}".format(output_path),
         f"【河洛話注音】{file_name}.xlsx")
 
     # 儲存新建立的工作簿

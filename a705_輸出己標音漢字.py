@@ -28,6 +28,10 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 
+def logging_process_step(msg):
+    print(msg)
+    logging.info(msg)
+
 # =========================================================================
 # 定義 Exit Code
 # =========================================================================
@@ -36,13 +40,6 @@ EXIT_CODE_NO_FILE = 1  # 無法找到檔案
 EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
 EXIT_CODE_PROCESS_FAILURE = 3  # 過程失敗
 EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
-
-# =========================================================================
-# 定義 Exit Code
-# =========================================================================
-def logging_process_step(msg):
-    print(msg)
-    logging.info(msg)
 
 # =========================================================================
 # Local Function

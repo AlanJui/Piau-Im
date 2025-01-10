@@ -206,97 +206,85 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
         "DBL": ["Siang_Pai", "rtc", "雙排注音"],
         "無預設": ["Siang_Pai", "rtc", "雙排注音"],
     }
-
-    # 選擇工作表
-    sheet = wb.sheets['漢字注音']
-    sheet.activate()
     write_buffer = ""
 
-    #--------------------------------------------------------------------------
+    # =========================================================
     # 輸出放置圖片的 HTML Tag
-    #--------------------------------------------------------------------------
+    # =========================================================
     # 寫入文章附圖
     if page_type == '含頁頭':
         write_buffer += put_picture(wb, sheet.name)
-
-    #--------------------------------------------------------------------------
+    # =========================================================
     # 輸出 <div> tag
-    #--------------------------------------------------------------------------
+    # =========================================================
     div_class = zu_im_huat_list[Web_Page_Style][0]
     html_str = f"<div class='{div_class}'><p>"
     write_buffer += (html_str + "\n")
 
-    #--------------------------------------------------------------------------
-    # 作業處理：逐列取出漢字，組合成純文字檔
-    #--------------------------------------------------------------------------
-    # 設定起始及結束的【列】位址（【第5列】、【第9列】、【第13列】等列）
-    TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
-    ROWS_PER_LINE = 4
-    start_row = 5
-    end_row = start_row + (TOTAL_LINES * ROWS_PER_LINE)
-    line = 1    # 處理行號指示器
+    # 每頁最多處理 20 列
+    TOTAL_ROWS = int(wb.names['每頁總列數'].refers_to_range.value) # 自名稱為【每頁總列數】之儲存格，取得【每頁最多處理幾列】之值
+    # 每列最多處理 15 字元
+    CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)  # 自名稱為【每列總字數】之儲存格，取得【每列最多處理幾個字元】之值
+    # 設定起始及結束的欄位  （【D欄=4】到【R欄=18】）
+    start = 4
+    end = start + CHARS_PER_ROW
 
-    # 設定起始及結束的【欄】位址（【D欄=4】到【R欄=18】）
-    CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
-    start_col = 4
-    end_col = start_col + CHARS_PER_ROW
+    if total_length and total_length < (CHARS_PER_ROW * TOTAL_ROWS):
+        row = 5
+        index = 0  # 用來追蹤處理到哪個字元
 
-    # 逐列處理作業
-    end_of_file = False
-    for row in range(start_row, end_row, ROWS_PER_LINE):
-        if end_of_file or line > TOTAL_LINES:
-            break
+        # 在 Console 顯示待處理的字串
+        print(f"待處理的漢字 = {source_chars}")
 
-        # 設定【作用儲存格】為列首
-        sheet.range((row, 1)).select()
+        # 逐字處理字串
+        while index < total_length:
+            # 設定當前作用儲存格，根據 `row` 和 `col` 動態選取
+            sheet.range((row, 1)).select()
 
-        # 逐欄取出儲存格內容
-        for col in range(start_col, end_col):
-            col_name = xw.utils.col_name(col)   # 取得欄位名稱
-            ruby_tag = ""
+            for col in range(start, end):  # 【D欄=4】到【R欄=18】
+                col_name = xw.utils.col_name(col)
+                if index < total_length:
+                    ruby_tag = ""
+                    src_char = source_chars[index]  # 取得目前欲處理的【漢字】
+                    if src_char == "\n":
+                        # 若遇到換行字元，退出迴圈
+                        write_buffer += ("</p><p>\n")
+                        index += 1
+                        print("\n")
+                        break
+                    else:
+                        han_ji = sheet.range((row, col)).value  # 取得漢字
+                        # 當 han_ji 是標點符號時，不需要注音
+                        if is_punctuation(han_ji):
+                            ruby_tag = f"<span>{han_ji}</span>\n"
+                            # 在 Console 顯示目前處理的漢字，以便使用者可知目前進度
+                            print(f"({row}, {col_name}) = {han_ji}")
+                        else:
+                            # 取得漢字的【台語音標】
+                            tai_gi_im_piau = sheet.range((row - 1, col)).value  # 取得漢字的台語音標
+                            # 當儲存格寫入之資料為 None 情況時之處理作法：給予空字串
+                            tai_gi_im_piau = tai_gi_im_piau if tai_gi_im_piau is not None else ""
 
-            cell_value = sheet.range((row, col)).value
-            if cell_value == 'φ':       # 讀到【結尾標示】
-                end_of_file = True
-                break
-            elif cell_value == '\n':    # 讀到【換行標示】
-                # 若遇到換行字元，退出迴圈
-                write_buffer += "</p><p>\n"
-                print("\n")
-                break
-            elif cell_value == None:    # 讀到【空白】
-                msg = f"({row}, {col_name}) = 《空白》"
-            else:                       # 讀到：漢字或標點符號
-                # 當 han_ji 是標點符號時，不需要注音
-                if is_punctuation(cell_value):
-                    ruby_tag = f"<span>{han_ji}</span>\n"
-                    msg = f"({row}, {col_name}) = {cell_value}"
+                            # =========================================================
+                            # 將已注音之漢字加入【漢字注音表】
+                            # =========================================================
+                            ruby_tag = concat_ruby_tag(
+                                wb=wb,
+                                piau_im=piau_im,    # 注音法物件
+                                han_ji=han_ji,
+                                tai_gi_im_piau=tai_gi_im_piau
+                            )
+                            # 在 Console 顯示目前處理的漢字，以便使用者可知目前進度
+                            print(f"({row}, {col_name}) = {han_ji} [{tai_gi_im_piau}]")
+
+                    write_buffer += ruby_tag
+                    index += 1
                 else:
-                    han_ji = cell_value  # 取得漢字
-                    # 取得漢字的【台語音標】
-                    tai_gi_im_piau = sheet.range((row - 1, col)).value  # 取得漢字的台語音標
-                    # 當儲存格寫入之資料為 None 情況時之處理作法：給予空字串
-                    tai_gi_im_piau = tai_gi_im_piau if tai_gi_im_piau is not None else ""
-                    # 將已注音之漢字加入【漢字注音表】
-                    ruby_tag = concat_ruby_tag(
-                        wb=wb,
-                        piau_im=piau_im,    # 注音法物件
-                        han_ji=han_ji,
-                        tai_gi_im_piau=tai_gi_im_piau
-                    )
-                    msg =f"({row}, {col_name}) = {han_ji} [{tai_gi_im_piau}]"
+                    break  # 若已處理完畢，退出欄位迴圈
 
-            write_buffer += ruby_tag
-            print(msg)
-
-        # 已到【結尾處】之作業結束處理
-        if end_of_file:
-            print(f"第 {row} 列為檔案結尾處，結束處理作業。")
-            break
-
-        # 換行處理：(1)每處理完 15 字後，換下一行 ；(2) 讀到【換行標示】
-        line += 1
-        print(f"({row}, {col_name}) = 《換行》")
+            # 每處理一行後，換到下一行
+            print("\n")
+            row += 4
 
         # =========================================================
         # 輸出 </div>
@@ -308,7 +296,7 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
     return write_buffer
 
 
-def tng_sing_bang_iah(wb, sheet_name='漢字注音', han_ji_source='V3', page_type='含頁頭'):
+def tng_sing_bang_iah(wb, sheet_name='漢字注音', cell='V3', page_type='含頁頭'):
     global source_sheet  # 宣告 source_sheet 為全域變數
     global source_sheet_name  # 宣告 source_sheet_name 為全域變數
     global total_length  # 宣告 total_length 為全域變數
@@ -317,8 +305,8 @@ def tng_sing_bang_iah(wb, sheet_name='漢字注音', han_ji_source='V3', page_ty
     # -------------------------------------------------------------------------
     # 連接指定資料庫
     # -------------------------------------------------------------------------
-    han_ji_khoo = wb.names['漢字庫'].refers_to_range.value
-    Web_Page_Style = wb.names['網頁格式'].refers_to_range.value
+    han_ji_khoo = get_named_value(wb, '漢字庫', '河洛話')
+    Web_Page_Style = get_named_value(wb, '網頁格式', 'DBL')
     piau_im = PiauIm(han_ji_khoo)
 
     # -------------------------------------------------------------------------
@@ -334,11 +322,14 @@ def tng_sing_bang_iah(wb, sheet_name='漢字注音', han_ji_source='V3', page_ty
     # -----------------------------------------------------
     # 產生 HTML 網頁用文字檔
     # -----------------------------------------------------
-    title = wb.names['TITLE'].refers_to_range.value
+    title = wb.sheets["env"].range("TITLE").value
+    # web_page_title = f"《{title}》【{source_sheet_name}】"
     web_page_title = f"{title}"
 
     # 確保 output 子目錄存在
+    siann_lui = get_named_value(wb, '語音類型', '文讀音')
     output_dir = 'docs'
+    # output_file = f"{title}_{siann_lui}.html"
     output_file = f"{title}_{han_ji_piau_im_huat}.html"
     output_path = os.path.join(output_dir, output_file)
 
@@ -346,8 +337,9 @@ def tng_sing_bang_iah(wb, sheet_name='漢字注音', han_ji_source='V3', page_ty
     f = open(output_path, 'w', encoding='utf-8')
 
     # 取得 V3 儲存格的字串
-    source_chars = sheet.range(han_ji_source).value
+    source_chars = sheet.range(cell).value
     if source_chars:
+
         # 計算字串的總長度
         total_length = len(source_chars)
 
@@ -367,6 +359,7 @@ def tng_sing_bang_iah(wb, sheet_name='漢字注音', han_ji_source='V3', page_ty
 
         # 輸出到網頁檔案
         create_html_file(output_path, html_content, web_page_title)
+
         print(f"【漢字注音】網頁製作完畢！")
 
     return 0

@@ -7,7 +7,7 @@ from mod_file_access import ensure_extension_name
 from mod_河洛話 import get_sound_type
 from p702_Ca_Han_Ji_Thak_Im import ca_han_ji_thak_im
 from p710_thiam_han_ji import fill_hanji_in_cells
-from p730_Tng_Sing_Bang_Iah import tng_sing_bang_iah
+from p730_Tng_Sing_Bang_Iah_R1 import tng_sing_bang_iah
 
 # 指定虛擬環境的 Python 路徑
 venv_python = os.path.join(".venv", "Scripts", "python.exe") if sys.platform == "win32" else os.path.join(".venv", "bin", "python")
