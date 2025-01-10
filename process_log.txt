@@ -1,0 +1,34 @@
+2025-01-10 13:16:10,153 - INFO - 作業開始
+2025-01-10 13:16:10,154 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-10 13:16:10,192 - INFO - 【待注音漢字】總字數為: 143
+2025-01-10 13:16:10,286 - ERROR - 執行過程中發生未知錯誤: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a701_作業中活頁檔填入漢字.py", line 91, in main
+    clear_han_ji_kap_piau_im(wb)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "c:\work\Piau-Im\p701_Clear_Cells.py", line 15, in clear_han_ji_kap_piau_im
+    sheet.range(cells_range).clear_contents()     # 清除 C3:R{end_of_row} 範圍的內容
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2048, in clear_contents
+    return self.impl.clear_contents()
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1213, in clear_contents
+    self.xl.ClearContents()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject Range>", line 2, in ClearContents
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-01-10 13:17:02,147 - INFO - 作業開始
+2025-01-10 13:17:02,148 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-10 13:17:02,184 - INFO - 【待注音漢字】總字數為: 143
+2025-01-10 13:17:02,368 - INFO - 儲存格清除完畢
+2025-01-10 13:17:10,237 - INFO - 儲存格格式重設完畢
+2025-01-10 13:17:26,865 - INFO - 填入待注音漢字完成
+2025-01-10 13:17:26,908 - INFO - 開始標音作業 - 河洛話: 白話音
+2025-01-10 13:17:46,412 - INFO - 標音作業完成 - 河洛話: 白話音
+2025-01-10 13:17:46,761 - INFO - 檔案已成功儲存
