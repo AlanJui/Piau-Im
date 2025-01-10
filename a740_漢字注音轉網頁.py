@@ -4,7 +4,7 @@ import sys
 import xlwings as xw
 
 import settings
-from p730_Tng_Sing_Bang_Iah import tng_sing_bang_iah
+from p730_Tng_Sing_Bang_Iah_R1 import tng_sing_bang_iah
 
 
 def get_input_and_output_options(argv):
@@ -79,7 +79,7 @@ if __name__ == "__main__":
     #     setting_sheet.range("C4").value
     # ).strip()
     # new_file_path = os.path.join(
-    #     ".\\output", 
+    #     ".\\output",
     #     f"【河洛話注音】{new_file_name}" + ".xlsx")
 
     # # 儲存新建立的工作簿

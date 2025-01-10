@@ -1,46 +1,137 @@
+import logging
 import os
 import sys
+from pathlib import Path
 
+# 載入第三方套件
 import xlwings as xw
+from dotenv import load_dotenv
 
+# 載入自訂模組
 from mod_file_access import get_named_value, save_as_new_file
-from p730_Tng_Sing_Bang_Iah import tng_sing_bang_iah
+from p730_Tng_Sing_Bang_Iah_R1 import tng_sing_bang_iah
 
-# 指定虛擬環境的 Python 路徑
-venv_python = os.path.join(".venv", "Scripts", "python.exe") if sys.platform == "win32" else os.path.join(".venv", "bin", "python")
+# =========================================================================
+# 載入環境變數
+# =========================================================================
+load_dotenv()
 
-# (0) 取得專案根目錄。
-# 使用已打開且處於作用中的 Excel 工作簿
-try:
-    wb = xw.apps.active.books.active
-except Exception as e:
-    print(f"發生錯誤: {e}")
-    print("無法找到作用中的 Excel 工作簿")
-    sys.exit(2)
+# 預設檔案名稱從環境變數讀取
+DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
+DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
 
-# 獲取活頁簿的完整檔案路徑
-file_path = wb.fullname
-print(f"完整檔案路徑: {file_path}")
+# =========================================================================
+# 設定日誌
+# =========================================================================
+logging.basicConfig(
+    filename='process_log.txt',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
-# 獲取活頁簿的檔案名稱（不包括路徑）
-file_name = wb.name
-print(f"檔案名稱: {file_name}")
+def logging_process_step(msg):
+    print(msg)
+    logging.info(msg)
 
-# 顯示「已輸入之拼音字母及注音符號」
-# named_range = wb.names['顯示注音輸入']  # 選擇名為 "顯示注音輸入" 的命名範圍# 選擇名為 "顯示注音輸入" 的命名範圍
-# named_range.refers_to_range.value = True
-named_range = get_named_value(wb, '顯示注音輸入', True)
+# =========================================================================
+# 常數定義
+# =========================================================================
+# 定義 Exit Code
+EXIT_CODE_SUCCESS = 0  # 成功
+EXIT_CODE_NO_FILE = 1  # 無法找到檔案
+EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
+EXIT_CODE_PROCESS_FAILURE = 3  # 過程失敗
+EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 
-# (1) A720: 將 V3 儲存格內的漢字，逐個填入標音用方格。
-sheet = wb.sheets['漢字注音']   # 選擇工作表
-sheet.activate()               # 將「漢字注音」工作表設為作用中工作表
-sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
 
-# (2) A740: 將【漢字注音】工作表的內容，轉成 HTML 網頁檔案。
-han_ji_piau_im_huat = get_named_value(wb, '標音方法')
-tng_sing_bang_iah(wb=wb, sheet_name='漢字注音', cell='V3', page_type='含頁頭')
+def process(wb):
+    # 指定虛擬環境的 Python 路徑
+    venv_python = os.path.join(".venv", "Scripts", "python.exe") if sys.platform == "win32" else os.path.join(".venv", "bin", "python")
 
-# (3) A750: 將 Tai_Gi_Zu_Im_Bun.xlsx 檔案，依 env 工作表的設定，另存新檔到指定目錄。
-save_as_new_file(wb=wb)
-# wb.close()
+    # 獲取活頁簿的完整檔案路徑
+    file_path = wb.fullname
+    print(f"完整檔案路徑: {file_path}")
 
+    # 獲取活頁簿的檔案名稱（不包括路徑）
+    file_name = wb.name
+    print(f"檔案名稱: {file_name}")
+
+    # (1) 指定作業使用：【漢字注音】工作表
+    sheet = wb.sheets['漢字注音']   # 選擇工作表
+    sheet.activate()               # 將「漢字注音」工作表設為作用中工作表
+    sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
+
+    # (2) 將【漢字注音】工作表中的標音漢字，轉成 HTML 網頁檔案。
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+        sheet_name='漢字注音',
+        cell='V3',
+        page_type='含頁頭'
+    )
+    if result_code != EXIT_CODE_SUCCESS:
+        logging.error("標音漢字轉換為 HTML 網頁檔案失敗！")
+        return result_code
+
+    # (3) 依 env 工作表之設定，將檔案儲存至指定目錄。
+    save_as_new_file(wb=wb)
+    logging_process_step(f"儲存檔案至路徑：{file_path}")
+
+    # 作業正常結束
+    return EXIT_CODE_SUCCESS
+
+
+def main():
+    logging.info("作業開始")
+
+    # =========================================================================
+    # (1) 取得專案根目錄
+    # =========================================================================
+    current_file_path = Path(__file__).resolve()
+    project_root = current_file_path.parent
+    print(f"專案根目錄為: {project_root}")
+    logging.info(f"專案根目錄為: {project_root}")
+
+    # =========================================================================
+    # (2) 嘗試獲取當前作用中的 Excel 工作簿
+    # =========================================================================
+    wb = None
+    try:
+        wb = xw.apps.active.books.active
+    except Exception as e:
+        logging.error(f"無法找到作用中的 Excel 工作簿: {e}", exc_info=True)
+        print("無法找到作用中的 Excel 工作簿")
+        return EXIT_CODE_NO_FILE
+
+    if not wb:
+        print("無法作業，原因可能為：(1) 未指定輸入檔案；(2) 未找到作用中的 Excel 工作簿！")
+        logging.error("無法作業，未指定輸入檔案或 Excel 無效。")
+        return EXIT_CODE_NO_FILE
+
+    # =========================================================================
+    # (3) 處理作業
+    # =========================================================================
+    try:
+        result_code = process(wb)
+        if result_code != EXIT_CODE_SUCCESS:
+            logging.error("處理作業失敗，過程中出錯！")
+            return result_code
+
+    except Exception as e:
+        print(f"執行過程中發生未知錯誤: {e}")
+        logging.error(f"執行過程中發生未知錯誤: {e}", exc_info=True)
+        return EXIT_CODE_UNKNOWN_ERROR
+
+    finally:
+        if wb:
+            logging_process_step(f"製作【漢字標音】網頁己完成！")
+
+    return EXIT_CODE_SUCCESS
+
+
+if __name__ == "__main__":
+    exit_code = main()
+    if exit_code == EXIT_CODE_SUCCESS:
+        print("作業正常完成！")
+    else:
+        print(f"作業異常終結，異常碼為: {exit_code}")
+    sys.exit(exit_code)
