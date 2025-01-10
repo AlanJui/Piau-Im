@@ -58,24 +58,32 @@ merged_range.clear_contents()
 #--------------------------------------------------------------------------
 reset_han_ji_cells(wb)
 
-# 將檔案存放路徑設為【專案根目錄】之下
-try:
-    file_name = str(wb.names['TITLE'].refers_to_range.value).strip()
-except KeyError:
-    print("未找到命名範圍 'TITLE'，使用預設名稱")
-    # file_name = "Tai_Gi_Zu_Im_Bun.xlsx"   # 提供一個預設檔案名稱
-    setting_sheet = wb.sheets["env"]
-    file_name = str(
-        setting_sheet.range("C4").value
-    ).strip()
-
-# 設定檔案輸出路徑，存於專案根目錄下的 output2 資料夾
-output_path = wb.names['OUTPUT_PATH'].refers_to_range.value
-new_file_path = os.path.join(
-    ".\\{0}".format(output_path),
-    f"【河洛話注音】{file_name}.xlsx")
-
 # 儲存新建立的工作簿
-wb.save(new_file_path)
+wb.save()
 
-print(f"待注音漢字已備妥： {new_file_path}")
+print(f"【漢字注音】工作表已清空、重置！")
+#--------------------------------------------------------------------------
+# 另存新檔
+#--------------------------------------------------------------------------
+# 將待注音的【漢字儲存格】，文字顏色重設為黑色（自動 RGB: 0, 0, 0）；填漢顏色重設為無填滿
+# # 將檔案存放路徑設為【專案根目錄】之下
+# try:
+#     file_name = str(wb.names['TITLE'].refers_to_range.value).strip()
+# except KeyError:
+#     print("未找到命名範圍 'TITLE'，使用預設名稱")
+#     # file_name = "Tai_Gi_Zu_Im_Bun.xlsx"   # 提供一個預設檔案名稱
+#     setting_sheet = wb.sheets["env"]
+#     file_name = str(
+#         setting_sheet.range("C4").value
+#     ).strip()
+
+# # 設定檔案輸出路徑，存於專案根目錄下的 output2 資料夾
+# output_path = wb.names['OUTPUT_PATH'].refers_to_range.value
+# new_file_path = os.path.join(
+#     ".\\{0}".format(output_path),
+#     f"【河洛話注音】{file_name}.xlsx")
+
+# # 儲存新建立的工作簿
+# wb.save(new_file_path)
+
+# print(f"待注音漢字已備妥： {new_file_path}")
