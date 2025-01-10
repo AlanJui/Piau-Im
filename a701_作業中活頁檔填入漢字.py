@@ -135,7 +135,8 @@ def main():
     finally:
         if wb:
             # 是否關閉 Excel 視窗可根據需求決定
-            xw.apps.active.quit()  # 確保 Excel 被釋放資源，避免開啟殘留
+            # xw.apps.active.quit()  # 確保 Excel 被釋放資源，避免開啟殘留
+            logging.error(f"作業正常完成！")
 
     return EXIT_CODE_SUCCESS
 

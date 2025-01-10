@@ -29,3 +29,5 @@ def reset_han_ji_cells(wb, sheet_name='漢字注音'):
             cell.color = None
 
     print("漢字儲存格已成功重置，文字顏色設為自動，填滿色彩設為無填滿。")
+
+    return 0
