@@ -62,10 +62,10 @@ def main():
         type = get_sound_type(wb)
         han_ji_khoo = get_han_ji_khoo(wb)
         if han_ji_khoo == "河洛話" and type in ["白話音", "文讀音"]:
-            ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', hue_im=type, han_ji_khoo="河洛話",
+            ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat=type, han_ji_khoo="河洛話",
                               db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im')
         elif han_ji_khoo == "廣韻":
-            ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', hue_im="文讀音", han_ji_khoo="廣韻",
+            ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="文讀音", han_ji_khoo="廣韻",
                               db_name='Kong_Un.db', module_name='mod_廣韻', function_name='han_ji_ca_piau_im')
         else:
             print("無法執行漢字標音作業，請確認【env】工作表【語音類型】及【漢字庫】欄位的設定是否正確！")
