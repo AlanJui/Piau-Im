@@ -92,6 +92,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
     while line < TOTAL_LINES and not EOF:
         # 設定【作用儲存格】為列首
         sheet.range((row, 1)).select()
+        Two_Empty_Cells = 0
         for col in range(start, end):
             msg = ""
             col_name = xw.utils.col_name(col)
@@ -102,11 +103,15 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
 
             if cell_value == 'φ':
                 EOF = True
-                break
+                msg = "【文字終結】"
             elif cell_value == '\n':
                 msg = "【換行】"
             elif cell_value == None:
-                msg = "【空白】"
+                if Two_Empty_Cells == 0:
+                    Two_Empty_Cells += 1
+                elif Two_Empty_Cells == 1:
+                    EOF = True
+                msg = "【缺空】"    # 表【儲存格】未填入任何字/符，不同於【空白】字元
             else:
                 # 若不為【標點符號】，則以【漢字】處理
                 if is_punctuation(cell_value):
@@ -200,11 +205,11 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
             # 顯示處理進度
             print(f"({row}, {col_name}) = {msg}")
 
-            # 若讀到【換行】，跳出逐欄取字迴圈
-            if msg == "【換行】":
+            # 若讀到【換行】或【文字終結】，跳出逐欄取字迴圈
+            if msg == "【換行】" or EOF:
                 break
 
-        # 每處理 15 個字元後，換到下一行
+        # 每當處理一行 15 個漢字後，亦換到下一行
         print("\n")
         row += 4
 
