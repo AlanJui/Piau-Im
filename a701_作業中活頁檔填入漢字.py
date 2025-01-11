@@ -11,7 +11,7 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 # 載入自訂模組
-from mod_file_access import get_han_ji_khoo, get_sound_type, save_as_new_file
+from mod_file_access import save_as_new_file
 from p701_Clear_Cells import clear_han_ji_kap_piau_im
 from p702_Ca_Han_Ji_Thak_Im import ca_han_ji_thak_im
 from p709_reset_han_ji_cells import reset_han_ji_cells
@@ -86,13 +86,12 @@ def process(wb):
     # ---------------------------------------------------------------------
     # 為漢字查找標音
     # ---------------------------------------------------------------------
-    type = get_sound_type(wb)
-    han_ji_khoo = get_han_ji_khoo(wb)
+    ue_im_lui_piat = wb.names['語音類型'].refers_to_range.value
+    han_ji_khoo = wb.names['漢字庫'].refers_to_range.value
 
     if han_ji_khoo in ["河洛話", "廣韻"]:
         db_name = DB_HO_LOK_UE if han_ji_khoo == "河洛話" else DB_KONG_UN
         module_name = 'mod_河洛話' if han_ji_khoo == "河洛話" else 'mod_廣韻'
-        ue_im_lui_piat = type if han_ji_khoo == "白話音" else "文讀音"
 
         # 查找漢字標音
         logging.info(f"開始【漢字標音作業】 - {han_ji_khoo}: {type}")

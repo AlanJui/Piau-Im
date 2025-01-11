@@ -736,7 +736,10 @@ class PiauIm:
         tiau_ho = replace_superscript_digits(str(tiau_ho))
         tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
 
-        siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+        if siann_bu == "" or siann_bu == None or siann_bu == "Ø":
+            siann = "英"
+        else:
+            siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
         un = self.Un_Bu_Dict[un_bu][piau_im_huat]
         # tiau = self.TONE_MARKS[piau_im_huat][int(tiau_ho)]
         tiau = Tiau_Ho_Remap[tiau_ho]
@@ -762,7 +765,10 @@ class PiauIm:
         tiau_ho = replace_superscript_digits(str(tiau_ho))
         tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
 
-        siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+        if siann_bu == "" or siann_bu == None or siann_bu == "Ø":
+            siann = "英"
+        else:
+            siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
         un = self.Un_Bu_Dict[un_bu][piau_im_huat]
         # tiau = self.TONE_MARKS[piau_im_huat][int(tiau_ho)]
         tiau = Tiau_Ho_Remap[tiau_ho]
