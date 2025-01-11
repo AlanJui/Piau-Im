@@ -40,8 +40,9 @@ def logging_process_step(msg):
     logging.info(msg)
 
 # =========================================================================
-# 定義 Exit Code
+# 常數定義
 # =========================================================================
+# 定義 Exit Code
 EXIT_CODE_SUCCESS = 0  # 成功
 EXIT_CODE_NO_FILE = 1  # 無法找到檔案
 EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
@@ -110,9 +111,12 @@ def process(wb):
     # 作業結尾處理
     # ---------------------------------------------------------------------
     file_path = save_as_new_file(wb=wb)
-    logging.info("己存檔至路徑：{file_path}")
-    return EXIT_CODE_SUCCESS
-
+    if not file_path:
+        logging.error("儲存檔案失敗！")
+        return EXIT_CODE_PROCESS_FAILURE    # 作業異當終止：無法儲存檔案
+    else:
+        logging_process_step(f"儲存檔案至路徑：{file_path}")
+        return EXIT_CODE_SUCCESS    # 作業正常結束
 
 # =============================================================================
 # 程式主流程

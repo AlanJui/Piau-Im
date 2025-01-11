@@ -5,13 +5,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "a705_輸出己標音漢字",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a705_輸出己標音漢字.py",
-            "console": "integratedTerminal",
-        },
-        {
             "name": "csv01_更新漢字表資料",
             "type": "debugpy",
             "request": "launch",
@@ -51,6 +44,13 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a704_製作其它漢字標音.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "a705_輸出己標音漢字",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a705_輸出己標音漢字.py",
             "console": "integratedTerminal",
         },
         {

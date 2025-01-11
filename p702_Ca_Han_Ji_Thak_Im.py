@@ -67,38 +67,39 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
     # piau_im_huat = '方音符號'
     phua_im_ji = PhuaImJi()
 
-    # 顯示「已輸入之拼音字母及注音符號」
-    named_range = wb.names['顯示注音輸入']
-    named_range.refers_to_range.value = True
-
     # 選擇工作表
     sheet = wb.sheets[sheet_name]
     sheet.activate()
     sheet.range('A1').select()
 
-    # 取得工作表能處理最多列數： 20 列
+    # 設定起始及結束的【列】位址（【第5列】、【第9列】、【第13列】等列）
     TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
-    row = 5
-
-    # 每列最多處理 15 字元
-    CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
-    # 設定起始及結束的欄位  （【D欄=4】到【R欄=18】）
-    start = 4
-    end = start + CHARS_PER_ROW
-
-    # 逐字處理字串，並填入對應的儲存格
-    EOF = False
+    ROWS_PER_LINE = 4
+    start_row = 5
+    end_row = start_row + (TOTAL_LINES * ROWS_PER_LINE)
     line = 1
-    while line < TOTAL_LINES and not EOF:
-        # 設定【作用儲存格】為列首
-        sheet.range((row, 1)).select()
-        Two_Empty_Cells = 0
-        for col in range(start, end):
-            msg = ""
-            col_name = xw.utils.col_name(col)
 
-            # 取得當前字元
+    # 設定起始及結束的【欄】位址（【D欄=4】到【R欄=18】）
+    CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
+    start_col = 4
+    end_col = start_col + CHARS_PER_ROW
+
+    # 逐列處理作業
+    EOF = False
+    for row in range(start_row, end_row, ROWS_PER_LINE):
+        # 若已到【結尾】或【超過總行數】，則跳出迴圈
+        if EOF or line > TOTAL_LINES:
+            break
+
+        # 設定【作用儲存格】為列首
+        Two_Empty_Cells = 0
+        sheet.range((row, 1)).select()
+
+        # 逐欄取出漢字處理
+        for col in range(start_col, end_col):
+            # 取得當前儲存格內含值
             han_ji_u_piau_im = False
+            msg = ""
             cell_value = sheet.range((row, col)).value
 
             if cell_value == 'φ':
@@ -203,6 +204,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                     msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
 
             # 顯示處理進度
+            col_name = xw.utils.col_name(col)   # 取得欄位名稱
             print(f"({row}, {col_name}) = {msg}")
 
             # 若讀到【換行】或【文字終結】，跳出逐欄取字迴圈
@@ -211,8 +213,12 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
 
         # 每當處理一行 15 個漢字後，亦換到下一行
         print("\n")
+        line += 1
         row += 4
 
+    #----------------------------------------------------------------------
+    # 作業處理用的 row 迴圈與 col 迴圈己終結
+    #----------------------------------------------------------------------
     print("已完成【台語音標】和【漢字標音】標注工作。")
 
     # 關閉資料庫連線
