@@ -185,7 +185,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                             print(f"漢字：【{han_ji}】之注音【{tai_gi_im_piau}】取自【人工注音字典】。")
                         # 若【破音字庫】無此漢字，則在資料庫中查找
                         else:
-                            result = han_ji_ca_piau_im(cursor=cursor, han_ji=han_ji, hue_im=ue_im_lui_piat)
+                            result = han_ji_ca_piau_im(cursor=cursor, han_ji=han_ji, ue_im_lui_piat=ue_im_lui_piat)
                             if not result:
                                 msg = f"【{han_ji}】查無此字！"
                             else:

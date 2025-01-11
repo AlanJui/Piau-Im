@@ -47,10 +47,10 @@
             "console": "integratedTerminal",
         },
         {
-            "name": "a705_輸出己標音漢字",
+            "name": "a705_依漢字注音工作表內容更新待注音漢字",
             "type": "debugpy",
             "request": "launch",
-            "program": "a705_輸出己標音漢字.py",
+            "program": "a705_依漢字注音工作表內容更新待注音漢字.py",
             "console": "integratedTerminal",
         },
         {
