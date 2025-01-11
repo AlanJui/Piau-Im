@@ -1,3 +1,6 @@
+# =========================================================================
+# 載入程式所需套件/模組/函式庫
+# =========================================================================
 import logging
 import os
 import sys
@@ -8,6 +11,7 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 # 載入自訂模組
+from mod_file_access import save_as_new_file
 from p709_reset_han_ji_cells import reset_han_ji_cells
 
 # =========================================================================
@@ -33,13 +37,15 @@ def logging_process_step(msg):
     logging.info(msg)
 
 # =========================================================================
-# 定義 Exit Code
+# 常數定義
 # =========================================================================
+# 定義 Exit Code
 EXIT_CODE_SUCCESS = 0  # 成功
 EXIT_CODE_NO_FILE = 1  # 無法找到檔案
 EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
 EXIT_CODE_PROCESS_FAILURE = 3  # 過程失敗
 EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
+
 
 # =========================================================================
 # Local Function
@@ -76,6 +82,7 @@ def process(wb):
     ROWS_PER_LINE = 4
     start_row = 5
     end_row = start_row + (TOTAL_LINES * ROWS_PER_LINE)
+    line = 1
 
     # 設定起始及結束的【欄】位址（【D欄=4】到【R欄=18】）
     CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
@@ -87,41 +94,50 @@ def process(wb):
     #--------------------------------------------------------------------------
     logging_process_step(f"開始【處理作業】...")
     han_ji_text = ""
-    end_of_file = False
-    line = 1
+    EOF = False
 
     # 逐列處理作業
     for row in range(start_row, end_row, ROWS_PER_LINE):
-        if end_of_file or line > TOTAL_LINES:
+        # 若已到【結尾】或【超過總行數】，則跳出迴圈
+        if EOF or line > TOTAL_LINES:
             break
 
         # 設定【作用儲存格】為列首
+        Two_Empty_Cells = 0
         sheet.range((row, 1)).select()
 
-        # 逐欄取出儲存格內容
+        # 逐欄取出漢字處理
         for col in range(start_col, end_col):
-            col_name = xw.utils.col_name(col)   # 取得欄位名稱
+            # 取得當前儲存格內含值
             cell_value = sheet.range((row, col)).value
             if cell_value == 'φ':       # 讀到【結尾標示】
-                end_of_file = True
-                break
+                EOF = True
+                msg = "【文字終結】"
             elif cell_value == '\n':    # 讀到【換行標示】
                 han_ji_text += '\n'
-                break
+                msg = "【換行】"
             elif cell_value == None:    # 讀到【空白】
-                print(f"({row}, {col_name}) = 《空白》")
+                if Two_Empty_Cells == 0:
+                    Two_Empty_Cells += 1
+                elif Two_Empty_Cells == 1:
+                    EOF = True
+                msg = "【缺空】"    # 表【儲存格】未填入任何字/符，不同於【空白】字元
             else:                       # 讀到：漢字或標點符號
                 han_ji_text += cell_value
-                print(f"({row}, {col_name}) = {cell_value}")
+                msg = cell_value
 
-        # 已到【結尾處】之作業結束處理
-        if end_of_file:
-            print(f"第 {row} 列為檔案結尾處，結束處理作業。")
-            break
+            # 顯示處理進度
+            col_name = xw.utils.col_name(col)   # 取得欄位名稱
+            print(f"({row}, {col_name}) = {msg}")
 
-        # 換行處理：(1)每處理完 15 字後，換下一行 ；(2) 讀到【換行標示】
+            # 若讀到【換行】或【文字終結】，跳出逐欄取字迴圈
+            if msg == "【換行】" or EOF:
+                break
+
+        # 每當處理一行 15 個漢字後，亦換到下一行
+        print("\n")
         line += 1
-        print(f"({row}, {col_name}) = 《換行》")
+        row += 4
 
     # 將所有漢字寫入文字檔
     output_file = 'tmp.txt'
