@@ -52,7 +52,7 @@ def za_ji_kiat_ko_cut_piau_im(result, han_ji_khoo, piau_im, piau_im_huat):
     return tai_gi_im_piau, han_ji_piau_im
 
 
-def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', hue_im="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im'):
+def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im'):
     """查漢字讀音：依【漢字】查找【台語音標】，並依指定之【標音方法】輸出【漢字標音】"""
     # 動態載入查找函數
     han_ji_ca_piau_im = load_module_function(module_name, function_name)
@@ -104,7 +104,9 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', hue_im="白話�
                 EOF = True
                 break
             elif cell_value == '\n':
-                break
+                msg = "【換行】"
+            elif cell_value == None:
+                msg = "【空白】"
             else:
                 # 若不為【標點符號】，則以【漢字】處理
                 if is_punctuation(cell_value):
@@ -177,7 +179,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', hue_im="白話�
                             print(f"漢字：【{han_ji}】之注音【{tai_gi_im_piau}】取自【人工注音字典】。")
                         # 若【破音字庫】無此漢字，則在資料庫中查找
                         else:
-                            result = han_ji_ca_piau_im(cursor=cursor, han_ji=han_ji, hue_im=hue_im)
+                            result = han_ji_ca_piau_im(cursor=cursor, han_ji=han_ji, hue_im=ue_im_lui_piat)
                             if not result:
                                 msg = f"【{han_ji}】查無此字！"
                             else:
@@ -195,7 +197,12 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', hue_im="白話�
                     sheet.range((row + 1, col)).value = han_ji_piau_im
                     msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
 
-                print(f"({row}, {col_name}) = {msg}")
+            # 顯示處理進度
+            print(f"({row}, {col_name}) = {msg}")
+
+            # 若讀到【換行】，跳出逐欄取字迴圈
+            if msg == "【換行】":
+                break
 
         # 每處理 15 個字元後，換到下一行
         print("\n")
