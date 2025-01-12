@@ -1,8 +1,10 @@
 # 查找漢字讀音，並標註台語音標和注音符號
+import logging
 import sqlite3
 
 import xlwings as xw
 
+from mod_excel_access import get_han_ji_khoo, get_tai_gi_by_han_ji, maintain_han_ji_koo
 from mod_file_access import load_module_function
 from mod_標音 import hong_im_tng_tai_gi_im_piau  # 方音符號轉台語音標
 from mod_標音 import is_punctuation  # 是否為標點符號
@@ -13,7 +15,33 @@ from mod_標音 import tng_uann_han_ji_piau_im  # 台語音標轉台語音標
 from mod_標音 import PiauIm
 from p740_Phua_Im_Ji import PhuaImJi
 
+# =========================================================================
+# 常數定義
+# =========================================================================
+# 定義 Exit Code
+EXIT_CODE_SUCCESS = 0  # 成功
+EXIT_CODE_NO_FILE = 1  # 無法找到檔案
+EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
+EXIT_CODE_PROCESS_FAILURE = 3  # 過程失敗
+EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 
+# =========================================================================
+# 設定日誌
+# =========================================================================
+logging.basicConfig(
+    filename='process_log.txt',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
+def logging_process_step(msg):
+    print(msg)
+    logging.info(msg)
+
+
+# =========================================================================
+# 程式函數
+# =========================================================================
 def za_ji_kiat_ko_cut_piau_im(result, han_ji_khoo, piau_im, piau_im_huat):
     """查字結果出標音：查詢【漢字庫】取得之【查找結果】，將之切分：聲、韻、調"""
     if han_ji_khoo == "河洛話":
@@ -54,6 +82,10 @@ def za_ji_kiat_ko_cut_piau_im(result, han_ji_khoo, piau_im, piau_im_huat):
 
 def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im'):
     """查漢字讀音：依【漢字】查找【台語音標】，並依指定之【標音方法】輸出【漢字標音】"""
+    # 取得【漢字庫】工作表物件
+    han_ji_koo_sheet = get_han_ji_khoo(wb)
+    jin_kang_piau_im = get_han_ji_khoo(wb, sheet_name='人工標音字庫')
+
     # 動態載入查找函數
     han_ji_ca_piau_im = load_module_function(module_name, function_name)
 
@@ -164,10 +196,16 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                             han_ji_u_piau_im = True
 
                         # 將人工輸入的【台語音標】置入【破音字庫】Dict
-                        phua_im_ji.ka_phua_im_ji(han_ji, tai_gi_im_piau)
+                        # phua_im_ji.ka_phua_im_ji(han_ji, tai_gi_im_piau)
+                        maintain_han_ji_koo(sheet=jin_kang_piau_im,
+                                            han_ji=han_ji,
+                                            tai_gi=tai_gi_im_piau,
+                                            show_msg=False)
                     else:               # 無人工輸入，則自【漢字庫】查找作業
                         # 查找【破音字庫】，確認是否有此漢字
-                        found = phua_im_ji.ca_phua_im_ji(han_ji)
+                        # found = phua_im_ji.ca_phua_im_ji(han_ji)
+                        tai_gi_im_piau = get_tai_gi_by_han_ji(jin_kang_piau_im, han_ji)
+                        found = tai_gi_im_piau if tai_gi_im_piau else False
                         # 若【破音字庫】有此漢字
                         if found:
                             siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(found)
@@ -199,6 +237,10 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                                 han_ji_u_piau_im = True
 
                 if han_ji_u_piau_im:
+                    maintain_han_ji_koo(sheet=han_ji_koo_sheet,
+                                        han_ji=han_ji,
+                                        tai_gi=tai_gi_im_piau,
+                                        show_msg=False)
                     sheet.range((row - 1, col)).value = tai_gi_im_piau
                     sheet.range((row + 1, col)).value = han_ji_piau_im
                     msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
@@ -219,9 +261,93 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
     #----------------------------------------------------------------------
     # 作業處理用的 row 迴圈與 col 迴圈己終結
     #----------------------------------------------------------------------
-    print("已完成【台語音標】和【漢字標音】標注工作。")
-
     # 關閉資料庫連線
     conn.close()
 
+    # 作業結束前處理
     wb.save()
+    print("已完成【台語音標】和【漢字標音】標注工作。")
+    return EXIT_CODE_SUCCESS
+
+
+
+def update_han_ji_piau_im(wb, han_ji_koo_sheet_name='漢字庫', han_ji_piau_im_sheet_name='漢字注音'):
+    """
+    更新【漢字注音】表中【台語音標】儲存格的內容，依據【漢字庫】中的【校正】欄位進行更新。
+    wb: Excel 活頁簿物件
+    han_ji_koo_sheet_name: 【漢字庫】工作表名稱
+    han_ji_zhu_yin_sheet_name: 【漢字注音】工作表名稱
+    """
+    # 取得工作表
+    han_ji_koo_sheet = wb.sheets[han_ji_koo_sheet_name]
+    han_ji_piau_im_sheet = wb.sheets[han_ji_piau_im_sheet_name]
+
+    # 取得【漢字庫】表格範圍的所有資料
+    data = han_ji_koo_sheet.range("A2").expand("table").value
+
+    if data is None:
+        print("【漢字庫】工作表無資料")
+        return EXIT_CODE_INVALID_INPUT
+
+    # 確保資料為 2D 列表
+    if not isinstance(data[0], list):
+        data = [data]
+
+    # 將資料轉為字典格式，key: 漢字, value: (台語音標, 校正, 次數)
+    han_ji_dict = {}
+    for row in data:
+        han_ji = row[0] or ""
+        tai_gi_im_piau = row[1] or ""
+        total_count = int(row[2]) if len(row) > 2 and isinstance(row[2], (int, float)) else 0
+        corrected_tai_gi = row[3] if len(row) > 3 else ""  # 若無 D 欄資料則設為空字串
+
+        if corrected_tai_gi and (corrected_tai_gi != tai_gi_im_piau):
+            han_ji_dict[han_ji] = (tai_gi_im_piau, corrected_tai_gi, total_count)
+
+    # 若無需更新的資料，結束函數
+    if not han_ji_dict:
+        print("【漢字庫】工作表中，【校正音標】欄，均未填入需更新之台語音標！")
+        return EXIT_CODE_SUCCESS
+
+    # 逐列處理【漢字注音】表
+    TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
+    ROWS_PER_LINE = 4
+    CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
+
+    start_row = 5
+    end_row = start_row + (TOTAL_LINES * ROWS_PER_LINE)
+    start_col = 4
+    end_col = start_col + CHARS_PER_ROW
+
+    for row in range(start_row, end_row, ROWS_PER_LINE):
+        for col in range(start_col, end_col):
+            han_ji_cell = han_ji_piau_im_sheet.range((row, col))
+            han_ji = han_ji_cell.value or ""
+
+            if han_ji in han_ji_dict:
+                _, corrected_tai_gi, total_count = han_ji_dict[han_ji]
+                tai_gi_cell = han_ji_piau_im_sheet.range((row - 1, col))
+                original_tai_gi = tai_gi_cell.value or ""
+
+                # 更新多次，直到總數用完
+                if corrected_tai_gi != original_tai_gi and total_count > 0:
+                    tai_gi_cell.value = corrected_tai_gi  # 更新儲存格
+                    han_ji_cell.color = (255, 255, 0)       # 將底色設為【黄色】
+                    han_ji_cell.font.color = (255, 0, 0)    # 將文字顏色設為【紅色】
+
+                    msg = f"({row}, {xw.utils.col_name(col)}) = {han_ji}，台語音標由【{original_tai_gi}】改為【{corrected_tai_gi}】"
+                    print(msg)
+                    total_count -= 1  # 減少剩餘更新次數
+
+                    # 更新完畢後，減少【漢字庫】的總數
+                    han_ji_koo_sheet.range(f"C{row + 1}").value = total_count
+                    if total_count == 0:
+                        print(f"漢字【{han_ji}】的更新次數已用完")
+
+    print("【漢字注音】表的台語音標更新作業已完成")
+
+    # 作業結束前處理
+    wb.save()
+    print("已完成【漢字注音】工作表，漢字之【台語音標】更新作業。")
+    return EXIT_CODE_SUCCESS
+
