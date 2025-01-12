@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "mod_excel",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "mod_excel.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "csv01_更新漢字表資料",
             "type": "debugpy",
             "request": "launch",
