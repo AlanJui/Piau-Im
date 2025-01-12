@@ -56,7 +56,24 @@ DEFAULT_SHEET_LIST = [
 # =========================================================================
 # 程式用函式
 # =========================================================================
-def maintain_han_ji_koo(wb, sheet_name, han_ji, tai_gi):
+def get_han_ji_khoo(wb, sheet_name="漢字庫"):
+    """
+    從 Excel 工作表中取得漢字庫
+    wb: Excel 活頁簿物件
+    sheet_name: 工作表名稱
+    """
+    # 取得或新增工作表
+    if sheet_name not in [s.name for s in wb.sheets]:
+        sheet = wb.sheets.add(sheet_name, after=wb.sheets['漢字注音'])
+        print(f"已新增工作表：{sheet_name}")
+        # 新增標題列
+        sheet.range("A1").value = ["漢字", "台語音標", "總數", "校正音標"]
+    else:
+        sheet = wb.sheets[sheet_name]
+
+    return sheet
+
+def maintain_han_ji_koo(sheet, han_ji, tai_gi, show_msg=False):
     """
     維護【漢字庫】工作表，新增或更新漢字及台語音標
     wb: Excel 活頁簿物件
@@ -64,14 +81,6 @@ def maintain_han_ji_koo(wb, sheet_name, han_ji, tai_gi):
     han_ji: 要新增的漢字
     tai_gi: 對應的台語音標
     """
-    # 取得或新增工作表
-    if sheet_name not in [s.name for s in wb.sheets]:
-        sheet = wb.sheets.add(sheet_name)
-        print(f"已新增工作表：{sheet_name}")
-        # 新增標題列
-        sheet.range("A1").value = ["漢字", "台語音標", "存在總數"]
-    else:
-        sheet = wb.sheets[sheet_name]
 
     # 取得 A、B、C 欄的所有值
     data = sheet.range("A2").expand("table").value
@@ -92,21 +101,49 @@ def maintain_han_ji_koo(wb, sheet_name, han_ji, tai_gi):
         if row[0] == han_ji and row[1] == tai_gi:
             row[2] = (row[2] if isinstance(row[2], (int, float)) else 0) + 1  # 確保存在總數是數字
             found = True
-            print(f"漢字：【{han_ji}（{tai_gi}）】已存在，總數為： {int(row[2])}")
+            if show_msg: print(f"漢字：【{han_ji}（{tai_gi}）】已存在，總數為： {int(row[2])}")
             break
 
     # 若未找到則新增一筆資料
     if not found:
         records.append([han_ji, tai_gi, 1])
-        print(f"新增漢字：【{han_ji}（{tai_gi}）】")
+        if show_msg: print(f"新增漢字：【{han_ji}（{tai_gi}）】")
 
 
     # 更新工作表的內容
     sheet.range("A2").expand("table").clear_contents()  # 清空舊資料
     sheet.range("A2").value = records  # 寫入更新後的資料
 
-    # print(f"已完成【漢字庫】工作表的更新！")
+    if show_msg: print(f"已完成【漢字庫】工作表的更新！")
 
+def get_tai_gi_by_han_ji(sheet, han_ji, show_msg=False):
+    """
+    根據漢字取得台語音標
+    wb: Excel 活頁簿物件
+    sheet_name: 工作表名稱
+    han_ji: 欲查詢的漢字
+    """
+    # 取得 A、B 欄的所有值
+    data = sheet.range("A2").expand("table").value
+
+    if data is None:  # 如果工作表中沒有資料
+        if show_msg: print("【漢字庫】工作表中沒有任何資料")
+        return None
+
+    # 確保資料為 2D 列表
+    if not isinstance(data[0], list):
+        data = [data]
+
+    # 將資料轉換為標準格式，並查找對應的台語音標
+    for row in data:
+        han_ji_cell = row[0] if row[0] is not None else ""
+        tai_gi_cell = row[1] if row[1] is not None else ""
+        if han_ji_cell == han_ji:
+            if show_msg: print(f"找到台語音標：【{tai_gi_cell}】")
+            return tai_gi_cell
+
+    if show_msg: print(f"漢字：【{han_ji}】不存在於【漢字庫】")
+    return None
 
 def get_sheet_by_name(wb, sheet_name="工作表1"):
     try:
@@ -165,14 +202,34 @@ def get_total_rows_in_sheet(wb, sheet_name):
 # 單元測試
 # =========================================================================
 def ut_maintain_han_ji_koo(wb=None):
+    wb = xw.Book('Test_Case_Sample.xlsx')
+    sheet = get_han_ji_khoo(wb, "漢字庫")
+
     # 漢字庫工作表不存在：工作表將新增，且新增一筆紀錄，加入【說】字，【總數】為 1
-    maintain_han_ji_koo(wb, "漢字庫", "說", "sue3")
+    maintain_han_ji_koo(sheet, "說", "sue3", show_msg=True)
     # 再次要求在漢字庫加入【說】：工作表會被選取，不會為【說】添增新紀錄，但【總數】更新為 2
-    maintain_han_ji_koo(wb, "漢字庫", "說", "sue3")
-    maintain_han_ji_koo(wb, "漢字庫", "說", "sue3")
-    maintain_han_ji_koo(wb, "漢字庫", "說", "uat4")
-    maintain_han_ji_koo(wb, "漢字庫", "花", "hua1")
-    maintain_han_ji_koo(wb, "漢字庫", "說", "uat4")
+    maintain_han_ji_koo(sheet, "說", "sue3", show_msg=True)
+    maintain_han_ji_koo(sheet, "說", "sue3", show_msg=True)
+    maintain_han_ji_koo(sheet, "說", "uat4", show_msg=True)
+    maintain_han_ji_koo(sheet, "花", "hua1", show_msg=True)
+    maintain_han_ji_koo(sheet, "說", "uat4", show_msg=True)
+
+    # 查詢【漢字】的台語音標
+    print("\n===================================================")
+    han_ji = "說"
+    tai_gi = get_tai_gi_by_han_ji(sheet, han_ji)
+    if tai_gi:
+        print(f"查到【{han_ji}】的台語音標為：{tai_gi}")
+    else:
+        print(f"查不到【{han_ji}】的台語音標！")
+
+    print("\n===================================================")
+    han_ji = "龓"
+    tai_gi = get_tai_gi_by_han_ji(sheet, han_ji)
+    if tai_gi:
+        print(f"查到【{han_ji}】的台語音標為：{tai_gi}")
+    else:
+        print(f"查不到【{han_ji}】的台語音標！")
 
     return EXIT_CODE_SUCCESS
 

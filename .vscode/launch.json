@@ -5,10 +5,17 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "a000",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a000.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "mod_excel",
             "type": "debugpy",
             "request": "launch",
-            "program": "mod_excel.py",
+            "program": "mod_excel_access.py",
             "console": "integratedTerminal",
         },
         {
