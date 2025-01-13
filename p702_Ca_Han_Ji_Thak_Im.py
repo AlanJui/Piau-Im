@@ -8,10 +8,10 @@ from mod_excel_access import get_han_ji_khoo, get_tai_gi_by_han_ji, maintain_han
 from mod_file_access import load_module_function
 from mod_標音 import hong_im_tng_tai_gi_im_piau  # 方音符號轉台語音標
 from mod_標音 import is_punctuation  # 是否為標點符號
+from mod_標音 import siann_un_tiau_tng_piau_im  # 台語音標轉台語音標
 from mod_標音 import split_hong_im_hu_ho  # 分解漢字標音
 from mod_標音 import split_tai_gi_im_piau  # 分解台語音標
 from mod_標音 import tlpa_tng_han_ji_piau_im  # 台語音標轉漢字標音
-from mod_標音 import tng_uann_han_ji_piau_im  # 台語音標轉台語音標
 from mod_標音 import PiauIm
 from p740_Phua_Im_Ji import PhuaImJi
 
@@ -70,7 +70,7 @@ def za_ji_kiat_ko_cut_piau_im(result, han_ji_khoo, piau_im, piau_im_huat):
     # 標音法為：【十五音】或【雅俗通】，且【聲母】為空值，則將【聲母】設為【ø】
     if (piau_im_huat == "十五音" or piau_im_huat == "雅俗通") and (siann_bu == "" or siann_bu == None):
         siann_bu = "ø"
-    han_ji_piau_im = tng_uann_han_ji_piau_im(
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
         piau_im,
         piau_im_huat,
         siann_bu,
@@ -186,7 +186,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                             tai_gi_im_piau = manual_input
                             siann, un, tiau = split_tai_gi_im_piau(tai_gi_im_piau)
                             # 依指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
-                            han_ji_piau_im = tng_uann_han_ji_piau_im(
+                            han_ji_piau_im = siann_un_tiau_tng_piau_im(
                                 piau_im,
                                 piau_im_huat,
                                 siann,
@@ -210,7 +210,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                         if found:
                             siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(found)
                             tai_gi_im_piau = siann_bu + un_bu + tiau_ho
-                            han_ji_piau_im = tng_uann_han_ji_piau_im(
+                            han_ji_piau_im = siann_un_tiau_tng_piau_im(
                                 piau_im,
                                 piau_im_huat,
                                 siann_bu,

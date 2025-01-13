@@ -43,7 +43,7 @@ def split_tai_lo(input_str):
 #     'ts': 'z'
 # }
 # ==========================================================
-def split_tai_gi_im_piau(im_piau):
+def split_tai_gi_im_piau(im_piau: str):
     # 聲母相容性轉換處理（將 tsh 轉換為 c；將 ts 轉換為 z）
     # zu_im = zu_im.replace("tsh", "c")   # 將 tsh 轉換為 c
     # zu_im = zu_im.replace("ts", "z")    # 將 ts  轉換為 z
@@ -144,7 +144,7 @@ def split_hong_im_hu_ho(hong_im_piau_im):
     return [siann_mu, un_mu, str(tiau_ho)]
 
 
-def tng_uann_han_ji_piau_im(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
+def siann_un_tiau_tng_piau_im(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
     """選擇並執行對應的注音方法"""
     if zu_im_huat == "雅俗通":
         return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
@@ -174,7 +174,7 @@ def tlpa_tng_han_ji_piau_im(piau_im, piau_im_huat, tai_gi_im_piau):
     if siann_bu == "" or siann_bu == None:
         siann_bu = "Ø"
 
-    han_ji_piau_im = tng_uann_han_ji_piau_im(
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
         piau_im,
         piau_im_huat,
         siann_bu,

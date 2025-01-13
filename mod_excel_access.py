@@ -56,6 +56,16 @@ DEFAULT_SHEET_LIST = [
 # =========================================================================
 # 程式用函式
 # =========================================================================
+def get_value_by_name(wb, name):
+    try:
+        if name in wb.names:
+            value = wb.names[name].refers_to_range.value
+        else:
+            raise KeyError
+    except KeyError:
+        value = None
+    return value
+
 def get_han_ji_khoo(wb, sheet_name="漢字庫"):
     """
     從 Excel 工作表中取得漢字庫
