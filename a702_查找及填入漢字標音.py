@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 
 # 載入自訂模組
 from mod_excel_access import (
+    delete_sheet_by_name,
     get_han_ji_khoo,
     get_tai_gi_by_han_ji,
     get_value_by_name,
@@ -63,6 +64,60 @@ EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 # =========================================================================
 # 作業程序
 # =========================================================================
+def reset_han_ji_cells(wb, sheet_name='漢字注音'):
+    sheet = wb.sheets[sheet_name]
+    sheet.activate()
+
+    # 設定起始及結束的【列】位址（【第5列】、【第9列】、【第13列】等列）
+    TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
+    ROWS_PER_LINE = 4
+    start_row = 5
+    end_row = start_row + (TOTAL_LINES * ROWS_PER_LINE)
+
+    # 設定起始及結束的【欄】位址（【D欄=4】到【R欄=18】）
+    CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
+    start_col = 4
+    end_col = start_col + CHARS_PER_ROW
+
+    # 重設【漢字】儲存格文字及底色格式
+    EOF = False
+    line = 1
+    for row in range(start_row, end_row, ROWS_PER_LINE):
+        # 若已到【結尾】或【超過總行數】，則跳出迴圈
+        if EOF or line > TOTAL_LINES:
+            break
+
+        # 設定【作用儲存格】為列首
+        Two_Empty_Cells = 0
+        sheet.range((row, 1)).select()
+
+        # 逐欄取出漢字處理
+        for col in range(start_col, end_col):
+            cell_value = sheet.range((row, col)).value
+            if cell_value == 'φ':
+                EOF = True
+                break
+            elif cell_value == '\n':
+                break
+            elif cell_value == None:
+                if Two_Empty_Cells == 0:
+                    Two_Empty_Cells += 1
+                elif Two_Empty_Cells == 1:
+                    EOF = True
+                break
+            else:
+                sheet.range((row, col)).font.color = (0, 0, 0)    # 將文字顏色設為【黑色】
+                sheet.range((row, col)).color = (255, 255, 255)       # 將底色設為【白色】
+
+            # 若讀到【換行】或【文字終結】，跳出逐欄取字迴圈
+            if cell_value == '\n' or EOF:
+                break
+
+        # 每當處理一行 15 個漢字後，亦換到下一行
+        line += 1
+        row += 4
+
+
 def ca_ji_kiat_ko_tng_piau_im(result, han_ji_khoo: str, piau_im: PiauIm, piau_im_huat: str):
     """查字結果出標音：查詢【漢字庫】取得之【查找結果】，將之切分：聲、韻、調"""
     if han_ji_khoo == "河洛話":
@@ -111,24 +166,36 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
     cursor = conn.cursor()
 
     # 建置 PiauIm 物件，供作漢字拼音轉換作業
-    han_ji_khoo = get_value_by_name(wb=wb, name='漢字庫')
-    piau_im = PiauIm(han_ji_khoo=han_ji_khoo)
-    piau_im_huat = get_value_by_name(wb=wb, name='標音方法')
+    han_ji_khoo_field = '漢字庫'
+    han_ji_khoo_name = get_value_by_name(wb=wb, name=han_ji_khoo_field)
+    piau_im = PiauIm(han_ji_khoo=han_ji_khoo_name)            # 指定漢字自動查找使用的【漢字庫】
+    piau_im_huat = get_value_by_name(wb=wb, name='標音方法')    # 指定【台語音標】轉換成【漢字標音】的方法
 
-    # 建置自動及人工漢字標音字庫工作表：（1）【漢字庫工作表】；（2）【人工標音字庫工作表】
-    han_ji_koo_sheet = get_han_ji_khoo(wb=wb, sheet_name='漢字庫')
-    jin_kang_piau_im = get_han_ji_khoo(wb=wb, sheet_name='人工標音字庫')
+    # 建置自動及人工漢字標音字庫工作表：（1）【漢字庫工作表】；（2）【人工標音字庫工作表】；（3）【缺字表】
+    piau_im_sheet_name = '標音字庫'
+    delete_sheet_by_name(wb=wb, sheet_name=piau_im_sheet_name)
+    han_ji_koo_sheet = get_han_ji_khoo(wb=wb, sheet_name=piau_im_sheet_name)
+
+    jin_kang_piau_im_sheet_name='人工標音字庫'
+    delete_sheet_by_name(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
+    jin_kang_piau_im_sheet = get_han_ji_khoo(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
+
+    khuat_ji_piau_name = '缺字表'
+    delete_sheet_by_name(wb=wb, sheet_name=khuat_ji_piau_name)
+    khuat_ji_piau_sheet = get_han_ji_khoo(wb=wb, sheet_name=khuat_ji_piau_name)
 
     # 指定【漢字注音】工作表為【作用工作表】
     sheet = wb.sheets[sheet_name]
     sheet.activate()
+
+    # 重設【漢字】儲存格文字及底色格式
+    reset_han_ji_cells(wb=wb)
 
     # 設定起始及結束的【列】位址（【第5列】、【第9列】、【第13列】等列）
     TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
     ROWS_PER_LINE = 4
     start_row = 5
     end_row = start_row + (TOTAL_LINES * ROWS_PER_LINE)
-    line = 1
 
     # 設定起始及結束的【欄】位址（【D欄=4】到【R欄=18】）
     CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
@@ -137,6 +204,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
 
     # 逐列處理作業
     EOF = False
+    line = 1
     for row in range(start_row, end_row, ROWS_PER_LINE):
         # 若已到【結尾】或【超過總行數】，則跳出迴圈
         if EOF or line > TOTAL_LINES:
@@ -211,13 +279,13 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                             han_ji_u_piau_im = True
 
                         # 將人工輸入的【台語音標】置入【破音字庫】Dict
-                        maintain_han_ji_koo(sheet=jin_kang_piau_im,
+                        maintain_han_ji_koo(sheet=jin_kang_piau_im_sheet,
                                             han_ji=han_ji,
                                             tai_gi=tai_gi_im_piau,
                                             show_msg=False)
                     else:               # 無人工輸入，則自【漢字庫】查找作業
                         # 查找【人工標音字庫】，確認是否有此漢字
-                        tai_gi_im_piau = get_tai_gi_by_han_ji(jin_kang_piau_im, han_ji)
+                        tai_gi_im_piau = get_tai_gi_by_han_ji(jin_kang_piau_im_sheet, han_ji)
                         found = True if tai_gi_im_piau else False
                         # 若【破音字庫】有此漢字
                         if found:
@@ -231,15 +299,18 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                                 tiau_ho
                             )
                             han_ji_u_piau_im = True
-                            sheet.range((row, col)).font.color = (255, 0, 0)    # 將文字顏色設為【紅色】
-                            sheet.range((row, col)).color = (255, 255, 0)       # 將底色設為【黄色】
                             print(f"漢字：【{han_ji}】之注音【{tai_gi_im_piau}】取自【人工注音字典】。")
                         # 若【人工標音字庫】無此漢字，則在資料庫中查找
                         else:
                             result = han_ji_ca_piau_im(cursor=cursor,
                                                        han_ji=han_ji,
                                                        ue_im_lui_piat=ue_im_lui_piat)
+                            # 若【漢字庫】查無此字，登錄至【缺字表】
                             if not result:
+                                maintain_han_ji_koo(sheet=khuat_ji_piau_sheet,
+                                                    han_ji=han_ji,
+                                                    tai_gi='',
+                                                    show_msg=False)
                                 msg = f"【{han_ji}】查無此字！"
                             else:
                                 # 依【漢字庫】查找結果，輸出【台語音標】和【漢字標音】
@@ -258,6 +329,9 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                                         show_msg=False)
                     sheet.range((row - 1, col)).value = tai_gi_im_piau
                     sheet.range((row + 1, col)).value = han_ji_piau_im
+                    if manual_input:
+                        sheet.range((row, col)).font.color = (255, 0, 0)    # 將文字顏色設為【紅色】
+                        sheet.range((row, col)).color = (255, 255, 0)       # 將底色設為【黄色】
                     msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
 
             # 顯示處理進度
@@ -274,52 +348,53 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
         row += 4
 
     #----------------------------------------------------------------------
-    # 作業處理用的 row 迴圈與 col 迴圈己終結
+    # 作業結束前處理
     #----------------------------------------------------------------------
     # 關閉資料庫連線
     conn.close()
-
-    # 作業結束前處理
-    wb.save()
     print("已完成【台語音標】和【漢字標音】標注工作。")
     return EXIT_CODE_SUCCESS
 
 
 def process(wb):
-    # ------------------------------------------------------------------------------
-    # 指定【作業工作表】為【漢字注音】工作表
-    # ------------------------------------------------------------------------------
-    sheet = wb.sheets["漢字注音"]  # 選擇工作表
-    sheet.activate()  # 將「漢字注音」工作表設為作用中工作表
+    # 動態載入查找函數
+    module_name='mod_河洛話'
+    function_name='han_ji_ca_piau_im'
+
+    # ---------------------------------------------------------------------
+    # 連上資料庫
+    # ---------------------------------------------------------------------
+    han_ji_khoo_field = '漢字庫'
+    han_ji_khoo_name = get_value_by_name(wb=wb, name=han_ji_khoo_field) # 取得【漢字庫】名稱：河洛話、廣韻
+    ue_im_lui_piat = get_value_by_name(wb, '語音類型')  # 取得【語音類型】，判別使用【白話音】或【文讀音】何者。
+    db_name = 'Ho_Lok_Ue.db' if han_ji_khoo_name == '河洛話' else 'Kong_Un.db'
 
     # ------------------------------------------------------------------------------
     # 為漢字查找讀音，漢字上方填：【台語音標】；漢字下方填使用者指定之【漢字標音】
     # ------------------------------------------------------------------------------
-    type = get_value_by_name(wb, '語音類型')  # 取得【語音類型】，判別使用【白話音】或【文讀音】何者。
-    han_ji_khoo = get_value_by_name(wb, '漢字庫')
-    if han_ji_khoo == "河洛話" and type == "白話音":
+    if han_ji_khoo_name == "河洛話" and ue_im_lui_piat == "白話音":
         ca_han_ji_thak_im(
             wb=wb,
             sheet_name="漢字注音",
             cell="V3",
-            ue_im_lui_piat=type,
-            han_ji_khoo="河洛話",
-            db_name="Ho_Lok_Ue.db",
-            module_name="mod_河洛話",
-            function_name="han_ji_ca_piau_im",
+            ue_im_lui_piat=ue_im_lui_piat,  # "白話音"
+            han_ji_khoo=han_ji_khoo_name,   # "河洛話",
+            db_name=db_name,                # "Ho_Lok_Ue.db",
+            module_name=module_name,        # "mod_河洛話",
+            function_name=function_name     # "han_ji_ca_piau_im",
         )
-    elif han_ji_khoo == "河洛話" and type == "文讀音":
+    elif han_ji_khoo_name == "河洛話" and ue_im_lui_piat == "文讀音":
         ca_han_ji_thak_im(
             wb=wb,
             sheet_name="漢字注音",
             cell="V3",
-            ue_im_lui_piat=type,
-            han_ji_khoo="河洛話",
-            db_name="Ho_Lok_Ue.db",
-            module_name="mod_河洛話",
-            function_name="han_ji_ca_piau_im",
+            ue_im_lui_piat=ue_im_lui_piat,  # "文讀音"
+            han_ji_khoo=han_ji_khoo_name,   # "河洛話",
+            db_name=db_name,                # "Ho_Lok_Ue.db",
+            module_name=module_name,        # "mod_河洛話",
+            function_name=function_name     # "han_ji_ca_piau_im",
         )
-    elif han_ji_khoo == "廣韻":
+    elif han_ji_khoo_name == "廣韻":
         ca_han_ji_thak_im(
             wb=wb,
             sheet_name="漢字注音",
