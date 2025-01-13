@@ -59,94 +59,7 @@ EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 # =========================================================================
 # 本程式主要處理作業程序
 # =========================================================================
-def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im'):
-    """
-    將 Excel 工作表中指定區域的漢字取出，儲存為一個純文字檔。
-    """
-    # 取得【漢字庫】工作表物件
-    han_ji_koo_sheet = get_han_ji_khoo(wb)
-
-    # 選擇工作表
-    sheet = wb.sheets['漢字注音']
-    sheet.activate()
-    #--------------------------------------------------------------------------
-    # 自【env】設定工作表，取得處理作業所需參數
-    #--------------------------------------------------------------------------
-
-    # 設定起始及結束的【列】位址（【第5列】、【第9列】、【第13列】等列）
-    TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
-    ROWS_PER_LINE = 4
-    start_row = 5
-    end_row = start_row + (TOTAL_LINES * ROWS_PER_LINE)
-    line = 1
-
-    # 設定起始及結束的【欄】位址（【D欄=4】到【R欄=18】）
-    CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
-    start_col = 4
-    end_col = start_col + CHARS_PER_ROW
-
-    #--------------------------------------------------------------------------
-    # 作業處理：逐列取出漢字，組合成純文字檔
-    #--------------------------------------------------------------------------
-    logging_process_step(f"開始【處理作業】...")
-    han_ji_text = ""
-    EOF = False
-
-    # 逐列處理作業
-    for row in range(start_row, end_row, ROWS_PER_LINE):
-        # 若已到【結尾】或【超過總行數】，則跳出迴圈
-        if EOF or line > TOTAL_LINES:
-            break
-
-        # 設定【作用儲存格】為列首
-        Two_Empty_Cells = 0
-        sheet.range((row, 1)).select()
-
-        # 逐欄取出漢字處理
-        for col in range(start_col, end_col):
-            # 取得當前儲存格內含值
-            cell_value = sheet.range((row, col)).value
-            if cell_value == 'φ':       # 讀到【結尾標示】
-                EOF = True
-                msg = "【文字終結】"
-            elif cell_value == '\n':    # 讀到【換行標示】
-                han_ji_text += '\n'
-                msg = "【換行】"
-            elif cell_value == None:    # 讀到【空白】
-                if Two_Empty_Cells == 0:
-                    Two_Empty_Cells += 1
-                elif Two_Empty_Cells == 1:
-                    EOF = True
-                msg = "【缺空】"    # 表【儲存格】未填入任何字/符，不同於【空白】字元
-            else:                       # 讀到：漢字或標點符號
-                han_ji_text += cell_value
-                msg = cell_value
-                if not is_punctuation(cell_value):
-                    han_ji = cell_value
-                    tai_gi = sheet.range((row - 1, col)).value
-                    maintain_han_ji_koo(sheet=han_ji_koo_sheet,
-                                        han_ji=han_ji, tai_gi=tai_gi,
-                                        show_msg=False)
-
-            # 顯示處理進度
-            col_name = xw.utils.col_name(col)   # 取得欄位名稱
-            print(f"({row}, {col_name}) = {msg}")
-
-            # 若讀到【換行】或【文字終結】，跳出逐欄取字迴圈
-            if msg == "【換行】" or EOF:
-                break
-
-        # 每當處理一行 15 個漢字後，亦換到下一行
-        print("\n")
-        line += 1
-        row += 4
-
-    # 作業結束前處理
-    logging_process_step(f"完成【作業程序】：查找漢字注音...")
-    return EXIT_CODE_SUCCESS
-
-
-def update_han_ji_piau_im(wb, han_ji_koo_sheet_name='漢字庫', han_ji_piau_im_sheet_name='漢字注音'):
+def update_han_ji_piau_im(wb, han_ji_khoo_sheet_name='漢字庫', jin_kang_piau_im_sheet_name='人工標音字庫'):
     """
     更新【漢字注音】表中【台語音標】儲存格的內容，依據【漢字庫】中的【校正】欄位進行更新。
     wb: Excel 活頁簿物件
@@ -154,11 +67,12 @@ def update_han_ji_piau_im(wb, han_ji_koo_sheet_name='漢字庫', han_ji_piau_im_
     han_ji_zhu_yin_sheet_name: 【漢字注音】工作表名稱
     """
     # 取得工作表
-    han_ji_koo_sheet = wb.sheets[han_ji_koo_sheet_name]
-    han_ji_piau_im_sheet = wb.sheets[han_ji_piau_im_sheet_name]
+    han_ji_piau_im_sheet = wb.sheets['漢字注音']
+    han_ji_khoo_sheet = wb.sheets[han_ji_khoo_sheet_name]
+    jin_kang_piau_im_sheet = wb.sheets[jin_kang_piau_im_sheet_name]
 
     # 取得【漢字庫】表格範圍的所有資料
-    data = han_ji_koo_sheet.range("A2").expand("table").value
+    data = han_ji_khoo_sheet.range("A2").expand("table").value
 
     if data is None:
         print("【漢字庫】工作表無資料")
@@ -203,19 +117,25 @@ def update_han_ji_piau_im(wb, han_ji_koo_sheet_name='漢字庫', han_ji_piau_im_
                 _, corrected_tai_gi, total_count = han_ji_dict[han_ji]
                 tai_gi_cell = han_ji_piau_im_sheet.range((row - 1, col))
                 original_tai_gi = tai_gi_cell.value or ""
+                jin_kang_piau_im_cell = han_ji_piau_im_sheet.range((row + 2, col))
+                jin_kang_piau_im = jin_kang_piau_im_cell.value or ""
 
                 # 更新多次，直到總數用完
                 if corrected_tai_gi != original_tai_gi and total_count > 0:
-                    tai_gi_cell.value = corrected_tai_gi  # 更新儲存格
-                    han_ji_cell.color = (255, 255, 0)       # 將底色設為【黄色】
-                    han_ji_cell.font.color = (255, 0, 0)    # 將文字顏色設為【紅色】
+                    if jin_kang_piau_im:
+                        # 若【人工標音】已有標音，則不進行更新
+                        msg = f"({row}, {xw.utils.col_name(col)}) = {han_ji}，已有人工標音【{jin_kang_piau_im}】，故無更新"
+                    else:
+                        tai_gi_cell.value = corrected_tai_gi  # 更新儲存格
+                        han_ji_cell.color = (255, 255, 0)       # 將底色設為【黄色】
+                        han_ji_cell.font.color = (255, 0, 0)    # 將文字顏色設為【紅色】
+                        msg = f"({row}, {xw.utils.col_name(col)}) = {han_ji}，台語音標由【{original_tai_gi}】改為【{corrected_tai_gi}】"
 
-                    msg = f"({row}, {xw.utils.col_name(col)}) = {han_ji}，台語音標由【{original_tai_gi}】改為【{corrected_tai_gi}】"
                     print(msg)
                     total_count -= 1  # 減少剩餘更新次數
 
                     # 更新完畢後，減少【漢字庫】的總數
-                    han_ji_koo_sheet.range(f"C{row + 1}").value = total_count
+                    han_ji_khoo_sheet.range(f"C{row + 1}").value = total_count
                     if total_count == 0:
                         print(f"漢字【{han_ji}】的更新次數已用完")
 
@@ -227,11 +147,6 @@ def update_han_ji_piau_im(wb, han_ji_koo_sheet_name='漢字庫', han_ji_piau_im_
 
 
 def process(wb):
-    # return_code = ca_han_ji_thak_im(wb)
-    # if return_code != EXIT_CODE_SUCCESS:
-    #     logging_process_step("處理作業失敗，過程中出錯！")
-    #     return return_code
-
     return_code = update_han_ji_piau_im(wb)
     if return_code != EXIT_CODE_SUCCESS:
         logging_process_step("處理作業失敗，過程中出錯！")
