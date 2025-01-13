@@ -56,6 +56,24 @@ DEFAULT_SHEET_LIST = [
 # =========================================================================
 # 程式用函式
 # =========================================================================
+def delete_sheet_by_name(wb, sheet_name: str, show_msg: bool=False):
+    """
+    刪除指定名稱的工作表
+    wb: Excel 活頁簿物件
+    sheet_name: 要刪除的工作表名稱
+    """
+    try:
+        # 檢查工作表是否存在
+        if sheet_name in [sheet.name for sheet in wb.sheets]:
+            sheet = wb.sheets[sheet_name]
+            sheet.delete()  # 刪除工作表
+            if show_msg: print(f"已成功刪除工作表：{sheet_name}")
+        else:
+            if show_msg: print(f"無法刪除，工作表 {sheet_name} 不存在")
+    except Exception as e:
+        if show_msg: print(f"刪除工作表時發生錯誤：{e}")
+
+
 def get_value_by_name(wb, name):
     try:
         if name in wb.names:
@@ -66,7 +84,7 @@ def get_value_by_name(wb, name):
         value = None
     return value
 
-def get_han_ji_khoo(wb, sheet_name="漢字庫"):
+def get_han_ji_khoo(wb, sheet_name="標音字庫"):
     """
     從 Excel 工作表中取得漢字庫
     wb: Excel 活頁簿物件
