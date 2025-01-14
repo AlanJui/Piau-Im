@@ -1604,3 +1604,600 @@ pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, Non
 2025-01-13 20:18:13,020 - INFO - 完成【處理作業】...
 2025-01-13 20:18:13,082 - INFO - 釋放 Excel 資源，處理完成。
 2025-01-13 20:18:13,083 - INFO - 作業成功完成！
+2025-01-14 11:07:33,528 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 11:07:33,675 - INFO - 處理作業失敗，過程中出錯！
+2025-01-14 11:07:33,675 - INFO - 處理作業失敗，過程中出錯！
+2025-01-14 11:07:34,218 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 11:09:15,136 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 11:09:15,322 - INFO - 完成【處理作業】...
+2025-01-14 11:09:15,456 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 11:09:15,456 - INFO - 作業成功完成！
+2025-01-14 11:11:33,346 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 11:12:05,026 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 11:12:26,853 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 11:19:26,854 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 11:20:26,177 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 11:29:41,477 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 11:29:49,628 - ERROR - 執行過程中發生未知錯誤: '十五音'
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 295, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 254, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 186, in update_han_ji_piau_im
+    han_ji_piau_im = jin_kang_piau_im_cu_tai_gi(wb=wb,
+                                                han_ji=han_ji,
+                                                jin_kang_piau_im=jin_kang_piau_im,
+                                                piau_im=piau_im,
+                                                piau_im_huat=piau_im_huat)
+  File "a706_手動更正漢字標音.py", line 96, in jin_kang_piau_im_cu_tai_gi
+    han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+        piau_im=piau_im,
+        piau_im_huat=piau_im_huat,
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "c:\work\Piau-Im\mod_標音.py", line 177, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
+        piau_im,
+    ...<3 lines>...
+        tiau_ho
+    )
+  File "c:\work\Piau-Im\mod_標音.py", line 150, in siann_un_tiau_tng_piau_im
+    return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 768, in NST_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+KeyError: '十五音'
+2025-01-14 11:29:49,747 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 11:31:10,533 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 11:32:49,740 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 11:34:16,980 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 11:34:47,587 - ERROR - 執行過程中發生未知錯誤: '十五音'
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 295, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 254, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 186, in update_han_ji_piau_im
+    han_ji_piau_im = jin_kang_piau_im_cu_tai_gi(wb=wb,
+                                                han_ji=han_ji,
+                                                jin_kang_piau_im=jin_kang_piau_im,
+                                                piau_im=piau_im,
+                                                piau_im_huat=piau_im_huat)
+  File "a706_手動更正漢字標音.py", line 96, in jin_kang_piau_im_cu_tai_gi
+    han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+        piau_im=piau_im,
+        piau_im_huat=piau_im_huat,
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "c:\work\Piau-Im\mod_標音.py", line 177, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
+        piau_im,
+    ...<3 lines>...
+        tiau_ho
+    )
+  File "c:\work\Piau-Im\mod_標音.py", line 150, in siann_un_tiau_tng_piau_im
+    return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 768, in NST_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+KeyError: '十五音'
+2025-01-14 11:34:47,721 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 11:36:29,641 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 11:36:52,539 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 11:37:02,865 - ERROR - 執行過程中發生未知錯誤: '十五音'
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 295, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 254, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 186, in update_han_ji_piau_im
+    han_ji_piau_im = jin_kang_piau_im_cu_tai_gi(wb=wb,
+                                                han_ji=han_ji,
+                                                jin_kang_piau_im=jin_kang_piau_im,
+                                                piau_im=piau_im,
+                                                piau_im_huat=piau_im_huat)
+  File "a706_手動更正漢字標音.py", line 96, in jin_kang_piau_im_cu_tai_gi
+    han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+        piau_im=piau_im,
+        piau_im_huat=piau_im_huat,
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "c:\work\Piau-Im\mod_標音.py", line 177, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
+        piau_im,
+    ...<3 lines>...
+        tiau_ho
+    )
+  File "c:\work\Piau-Im\mod_標音.py", line 150, in siann_un_tiau_tng_piau_im
+    return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 768, in NST_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+KeyError: '十五音'
+2025-01-14 11:37:03,202 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 11:37:46,652 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 11:41:33,411 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 11:43:27,461 - ERROR - 執行過程中發生未知錯誤: '十五音'
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 295, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 254, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 186, in update_han_ji_piau_im
+    han_ji_piau_im = jin_kang_piau_im_cu_tai_gi(wb=wb,
+                                                han_ji=han_ji,
+                                                jin_kang_piau_im=jin_kang_piau_im,
+                                                piau_im=piau_im,
+                                                piau_im_huat=piau_im_huat)
+  File "a706_手動更正漢字標音.py", line 96, in jin_kang_piau_im_cu_tai_gi
+    han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+        piau_im=piau_im,
+        piau_im_huat=piau_im_huat,
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "c:\work\Piau-Im\mod_標音.py", line 177, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
+        piau_im,
+    ...<3 lines>...
+        tiau_ho
+    )
+  File "c:\work\Piau-Im\mod_標音.py", line 150, in siann_un_tiau_tng_piau_im
+    return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 768, in NST_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+KeyError: '十五音'
+2025-01-14 11:43:27,613 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 11:45:14,303 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 11:47:04,533 - ERROR - 執行過程中發生未知錯誤: '十五音'
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 295, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 254, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 186, in update_han_ji_piau_im
+    han_ji_piau_im = jin_kang_piau_im_cu_tai_gi(wb=wb,
+                                                han_ji=han_ji,
+                                                jin_kang_piau_im=jin_kang_piau_im,
+                                                piau_im=piau_im,
+                                                piau_im_huat=piau_im_huat)
+  File "a706_手動更正漢字標音.py", line 96, in jin_kang_piau_im_cu_tai_gi
+    han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+        piau_im=piau_im,
+        piau_im_huat=piau_im_huat,
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "c:\work\Piau-Im\mod_標音.py", line 177, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
+        piau_im,
+    ...<3 lines>...
+        tiau_ho
+    )
+  File "c:\work\Piau-Im\mod_標音.py", line 150, in siann_un_tiau_tng_piau_im
+    return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 768, in NST_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+KeyError: '十五音'
+2025-01-14 11:47:04,663 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 11:59:14,454 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 11:59:14,511 - ERROR - 執行過程中發生未知錯誤: no such table: 聲母對照表
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 298, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 257, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 122, in update_han_ji_piau_im
+    piau_im = PiauIm(han_ji_khoo=han_ji_khoo_name, cursor=cursor)
+  File "c:\work\Piau-Im\mod_標音.py", line 386, in __init__
+    self.init_piau_im_dict(han_ji_khoo)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 474, in init_piau_im_dict
+    self.Siann_Bu_Dict = self._init_siann_bu_dict()
+                         ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\mod_標音.py", line 436, in _init_siann_bu_dict
+    self.cursor.execute("SELECT * FROM 聲母對照表")
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: 聲母對照表
+2025-01-14 11:59:14,636 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 11:59:30,481 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 11:59:30,537 - ERROR - 執行過程中發生未知錯誤: no such table: 聲母對照表
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 298, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 257, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 122, in update_han_ji_piau_im
+    piau_im = PiauIm(han_ji_khoo=han_ji_khoo_name, cursor=cursor)
+  File "c:\work\Piau-Im\mod_標音.py", line 386, in __init__
+    self.init_piau_im_dict(han_ji_khoo)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 474, in init_piau_im_dict
+    self.Siann_Bu_Dict = self._init_siann_bu_dict()
+                         ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\mod_標音.py", line 436, in _init_siann_bu_dict
+    self.cursor.execute("SELECT * FROM 聲母對照表")
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: 聲母對照表
+2025-01-14 11:59:30,659 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 12:00:47,648 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 12:03:19,614 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 12:09:21,791 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 12:27:50,786 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 12:27:51,017 - ERROR - 執行過程中發生未知錯誤: cannot access local variable 'han_ji_piau_im' where it is not associated with a value
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 302, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 261, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 241, in update_han_ji_piau_im
+    print(f"({row}, {xw.utils.col_name(col)}) = {han_ji}，台語音標【{tai_gi_piau_im}】/【{han_ji_piau_im}】{msg_tail}")
+                                                                                          ^^^^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'han_ji_piau_im' where it is not associated with a value
+2025-01-14 12:27:51,163 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 12:28:16,114 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 12:28:16,348 - ERROR - 執行過程中發生未知錯誤: cannot access local variable 'han_ji_piau_im' where it is not associated with a value
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 302, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 261, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 241, in update_han_ji_piau_im
+    print(f"({row}, {xw.utils.col_name(col)}) = {han_ji}，台語音標【{tai_gi_piau_im}】/【{han_ji_piau_im}】{msg_tail}")
+                                                                                          ^^^^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'han_ji_piau_im' where it is not associated with a value
+2025-01-14 12:28:16,489 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 12:30:08,149 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 12:30:47,326 - ERROR - 執行過程中發生未知錯誤: cannot access local variable 'han_ji_piau_im' where it is not associated with a value
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 302, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 261, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 241, in update_han_ji_piau_im
+    print(f"({row}, {xw.utils.col_name(col)}) = {han_ji}，台語音標【{tai_gi_piau_im}】/【{han_ji_piau_im}】{msg_tail}")
+                                                                                          ^^^^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'han_ji_piau_im' where it is not associated with a value
+2025-01-14 12:30:47,481 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 12:32:19,499 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 13:11:00,041 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 13:11:00,241 - ERROR - 執行過程中發生未知錯誤: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 321, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 280, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 172, in update_han_ji_piau_im
+    sheet.range((row, 1)).select()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2815, in select
+    self.impl.select()
+    ~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1500, in select
+    return self.xl.Select()
+           ~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject <unknown>>", line 2, in Select
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+2025-01-14 13:11:00,404 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 13:11:23,031 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 13:11:23,212 - ERROR - 執行過程中發生未知錯誤: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 321, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 280, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 172, in update_han_ji_piau_im
+    sheet.range((row, 1)).select()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2815, in select
+    self.impl.select()
+    ~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1500, in select
+    return self.xl.Select()
+           ~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject <unknown>>", line 2, in Select
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+2025-01-14 13:11:23,339 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 13:12:07,419 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 13:12:21,870 - ERROR - 執行過程中發生未知錯誤: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 321, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 280, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 172, in update_han_ji_piau_im
+    sheet.range((row, 1)).select()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2815, in select
+    self.impl.select()
+    ~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1500, in select
+    return self.xl.Select()
+           ~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject <unknown>>", line 2, in Select
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+2025-01-14 13:12:22,010 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 13:13:33,776 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 13:14:08,245 - ERROR - 執行過程中發生未知錯誤: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 321, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 280, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 172, in update_han_ji_piau_im
+    sheet.range((row, 1)).select()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2815, in select
+    self.impl.select()
+    ~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1500, in select
+    return self.xl.Select()
+           ~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject <unknown>>", line 2, in Select
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+2025-01-14 13:14:08,401 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 13:16:57,141 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 13:17:06,990 - ERROR - 執行過程中發生未知錯誤: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 321, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 280, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 172, in update_han_ji_piau_im
+    sheet.range((row, 1)).select()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2815, in select
+    self.impl.select()
+    ~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1500, in select
+    return self.xl.Select()
+           ~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject <unknown>>", line 2, in Select
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+2025-01-14 13:17:07,123 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 13:18:12,853 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 13:24:28,437 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 13:27:03,839 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 13:31:22,827 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 13:32:53,238 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 13:33:45,925 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 13:35:37,531 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 13:37:42,151 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 13:40:13,342 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 13:40:57,233 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 13:42:20,890 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 13:46:07,372 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 13:47:54,035 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 13:48:26,488 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 13:51:19,399 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 13:57:02,635 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 14:01:19,915 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 14:03:57,154 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 14:04:54,099 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 14:06:56,930 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 14:15:57,377 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 14:17:19,378 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 14:19:38,118 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 14:19:53,474 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 14:21:31,321 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 14:21:57,000 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 14:22:42,880 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 14:24:28,205 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 14:27:22,922 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 14:28:24,526 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 14:33:38,644 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 14:35:58,776 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 14:37:24,492 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 14:40:11,114 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 14:41:41,894 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 14:50:06,048 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 14:50:06,271 - ERROR - 執行過程中發生未知錯誤: 'bool' object is not callable
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 332, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 291, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 193, in update_han_ji_piau_im
+    if is_punctuation(han_ji):
+       ~~~~~~~~~~~~~~^^^^^^^^
+TypeError: 'bool' object is not callable
+2025-01-14 14:50:06,420 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 14:53:34,356 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 14:56:33,825 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 15:00:08,193 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 15:02:09,097 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 15:04:00,497 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 15:07:29,353 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 15:10:34,519 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 15:12:02,643 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 15:13:09,453 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 15:13:25,628 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-14 15:13:25,628 - INFO - 完成【處理作業】...
+2025-01-14 15:13:25,813 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 15:13:25,813 - INFO - 作業成功完成！
+2025-01-14 15:13:45,460 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 15:14:11,836 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-14 15:14:11,836 - INFO - 完成【處理作業】...
+2025-01-14 15:14:12,045 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 15:14:12,045 - INFO - 作業成功完成！
+2025-01-14 15:15:55,174 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 15:16:16,804 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-14 15:16:16,805 - INFO - 完成【處理作業】...
+2025-01-14 15:16:16,985 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 15:16:16,985 - INFO - 作業成功完成！
+2025-01-14 15:17:08,152 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 15:17:08,333 - ERROR - 執行過程中發生未知錯誤: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 334, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 293, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 170, in update_han_ji_piau_im
+    han_ji_piau_im_sheet.range((row, 1)).select()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2815, in select
+    self.impl.select()
+    ~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1500, in select
+    return self.xl.Select()
+           ~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject <unknown>>", line 2, in Select
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+2025-01-14 15:17:08,481 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 15:18:16,909 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 15:18:28,388 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-14 15:18:28,389 - INFO - 完成【處理作業】...
+2025-01-14 15:18:28,545 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 15:18:28,545 - INFO - 作業成功完成！
+2025-01-14 15:19:00,112 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 15:19:10,548 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-14 15:19:10,548 - INFO - 完成【處理作業】...
+2025-01-14 15:19:10,720 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 15:19:10,720 - INFO - 作業成功完成！
+2025-01-14 15:54:34,895 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 15:54:45,516 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-14 15:54:45,516 - INFO - 完成【處理作業】...
+2025-01-14 15:54:45,674 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 15:54:45,674 - INFO - 作業成功完成！
+2025-01-14 15:56:40,528 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 15:56:40,920 - ERROR - 執行過程中發生未知錯誤: 'str' object has no attribute 'value' and no __dict__ for setting new attributes
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 337, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 296, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 252, in update_han_ji_piau_im
+    jin_kang_piau_im.value = corrected_tai_gi  # 更新【人工標音】儲存格
+    ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'value' and no __dict__ for setting new attributes
+2025-01-14 15:56:41,078 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 15:59:20,146 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 15:59:30,625 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-14 15:59:30,625 - INFO - 完成【處理作業】...
+2025-01-14 15:59:30,813 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 15:59:30,813 - INFO - 作業成功完成！
+2025-01-14 16:02:20,636 - INFO - 作業開始
+2025-01-14 16:02:20,637 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 16:03:21,293 - INFO - 己存檔至路徑：{file_path}
+2025-01-14 16:03:21,293 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-14 16:03:21,293 - INFO - 作業完成！
+2025-01-14 16:08:47,416 - INFO - 作業開始
+2025-01-14 16:08:47,417 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 16:09:46,383 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-14 16:10:11,081 - INFO - 作業開始
+2025-01-14 16:10:11,082 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 16:11:10,355 - INFO - 己存檔至路徑：{file_path}
+2025-01-14 16:11:10,355 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-14 16:11:10,355 - INFO - 作業完成！
+2025-01-14 16:13:49,550 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 16:13:58,819 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-14 16:13:58,820 - INFO - 完成【處理作業】...
+2025-01-14 16:13:58,895 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 16:13:58,895 - INFO - 作業成功完成！
+2025-01-14 16:14:17,637 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 16:14:27,598 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-14 16:14:27,598 - INFO - 完成【處理作業】...
+2025-01-14 16:14:27,671 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 16:14:27,671 - INFO - 作業成功完成！
+2025-01-14 16:15:34,597 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 16:15:44,502 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-14 16:15:44,502 - INFO - 完成【處理作業】...
+2025-01-14 16:15:44,581 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 16:15:44,581 - INFO - 作業成功完成！
+2025-01-14 16:16:40,231 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 16:16:50,102 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-14 16:16:50,102 - INFO - 完成【處理作業】...
+2025-01-14 16:16:50,177 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 16:16:50,177 - INFO - 作業成功完成！
+2025-01-14 16:19:25,391 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 16:19:35,062 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-14 16:19:35,062 - INFO - 完成【處理作業】...
+2025-01-14 16:19:35,144 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 16:19:35,144 - INFO - 作業成功完成！
+2025-01-14 16:20:19,947 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 16:20:29,948 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-14 16:20:29,948 - INFO - 完成【處理作業】...
+2025-01-14 16:20:30,032 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 16:20:30,032 - INFO - 作業成功完成！
+2025-01-14 16:29:15,044 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 16:29:24,256 - ERROR - 執行過程中發生未知錯誤: cannot access local variable 'jin_kang_piau_im_cell' where it is not associated with a value
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 341, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 300, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 202, in update_han_ji_piau_im
+    if han_ji_cell.color == (0, 255, 200) and jin_kang_piau_im_cell.value == tai_gi_cell.value:
+                                              ^^^^^^^^^^^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'jin_kang_piau_im_cell' where it is not associated with a value
+2025-01-14 16:29:24,318 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 16:31:49,655 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 16:34:40,292 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 16:35:33,827 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 16:36:17,909 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 16:36:28,342 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-14 16:36:28,342 - INFO - 完成【處理作業】...
+2025-01-14 16:36:28,413 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 16:36:28,413 - INFO - 作業成功完成！
+2025-01-14 16:36:42,856 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 16:36:52,688 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-14 16:36:52,689 - INFO - 完成【處理作業】...
+2025-01-14 16:36:52,760 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 16:36:52,760 - INFO - 作業成功完成！
+2025-01-14 16:37:08,328 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 16:37:19,124 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-14 16:37:19,124 - INFO - 完成【處理作業】...
+2025-01-14 16:37:19,207 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 16:37:19,207 - INFO - 作業成功完成！
+2025-01-14 16:38:09,805 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 16:38:19,995 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-14 16:38:19,996 - INFO - 完成【處理作業】...
+2025-01-14 16:38:20,067 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 16:38:20,067 - INFO - 作業成功完成！
+2025-01-14 16:38:53,854 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-14 16:39:04,773 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-14 16:39:04,774 - INFO - 完成【處理作業】...
+2025-01-14 16:39:04,853 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-14 16:39:04,853 - INFO - 作業成功完成！

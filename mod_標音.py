@@ -144,21 +144,21 @@ def split_hong_im_hu_ho(hong_im_piau_im):
     return [siann_mu, un_mu, str(tiau_ho)]
 
 
-def siann_un_tiau_tng_piau_im(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
+def siann_un_tiau_tng_piau_im(piau_im, piau_im_huat, siann_bu, un_bu, tiau_ho):
     """選擇並執行對應的注音方法"""
-    if zu_im_huat == "雅俗通":
+    if piau_im_huat == "雅俗通":
         return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "十五音":
+    elif piau_im_huat == "十五音":
         return piau_im.SNI_piau_im(siann_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "白話字":
+    elif piau_im_huat == "白話字":
         return piau_im.POJ_piau_im(siann_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "台羅拼音":
+    elif piau_im_huat == "台羅拼音":
         return piau_im.TL_piau_im(siann_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "閩拼方案":
+    elif piau_im_huat == "閩拼方案":
         return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "方音符號":
+    elif piau_im_huat == "方音符號":
         return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "台語音標":
+    elif piau_im_huat == "台語音標":
         siann = piau_im.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
         un = piau_im.Un_Bu_Dict[un_bu]["台語音標"]
         return f"{siann}{un}{tiau_ho}"
@@ -378,15 +378,31 @@ class PiauIm:
         "\u02D9": 8,
     }
 
-    def __init__(self, han_ji_khoo="漢語標音"):
+    # def __init__(self, han_ji_khoo="漢語標音"):
+    def __init__(self, han_ji_khoo="漢語標音", cursor=None):
         self.Siann_Bu_Dict = None
         self.Un_Bu_Dict = None
+        self.cursor = cursor  # 將 cursor 存入物件屬性
         self.init_piau_im_dict(han_ji_khoo)
         self.TL_pattern1 = re.compile(r"(uai|uan|uah|ueh|ee|ei|oo)", re.I)
         self.TL_pattern2 = re.compile(r"(o|e|a|u|i|n|m)", re.I)
         self.POJ_pattern1 = re.compile(r"(oai|oan|oah|oeh|ee|ei)", re.I)
         self.POJ_pattern2 = re.compile(r"(o|e|a|u|i|n|m)", re.I)
         self.HongImTiauHu = re.compile(r"ˋ|˪|ˊ|˫|\u02D9", re.I)
+
+    def set_cursor(self, cursor):
+        """
+        設定資料庫 cursor 物件
+        :param cursor: 資料庫 cursor 物件
+        """
+        self.cursor = cursor
+
+    def get_cursor(self):
+        """
+        取得資料庫 cursor 物件
+        :return: cursor 物件
+        """
+        return self.cursor
 
     def _init_siann_bu_dict(self, cursor):
         # 執行 SQL 查詢
@@ -411,16 +427,45 @@ class PiauIm:
             }
         return siann_bu_dict
 
-    def _init_un_bu_dict(self, cursor):
-        # 執行 SQL 查詢
-        cursor.execute("SELECT * FROM 韻母對照表")
+    def _init_siann_bu_dict(self):
+        """
+        初始化聲母對照表，使用 cursor 進行 SQL 查詢
+        """
+        if not self.cursor:
+            raise ValueError("資料庫 cursor 未設定，無法執行查詢")
+        self.cursor.execute("SELECT * FROM 聲母對照表")
+        rows = self.cursor.fetchall()
+        #------------------------------------------------------------------
+        # 從查詢結果中提取資料並將其整理成一個字典
+        #------------------------------------------------------------------
+        # siann_bu_dict = {row[1]: {'台語音標': row[1], '國際音標': row[2]} for row in rows}
+        siann_bu_dict = {}          # 初始化字典
+        for row in rows:
+            siann_bu_dict[row[1]] = {
+                '台語音標': row[1],
+                '國際音標': row[2],
+                '台羅拼音': row[3],
+                '白話字':   row[4],
+                '閩拼方案': row[5],
+                '方音符號': row[6],
+                '十五音':   row[7],
+            }
+        return siann_bu_dict
 
-        # 獲取所有資料
-        rows = cursor.fetchall()
-
+    def _init_un_bu_dict(self):
+        """
+        初始化韻母對照表，使用 cursor 進行 SQL 查詢
+        """
+        if not self.cursor:
+            raise ValueError("資料庫 cursor 未設定，無法執行查詢")
+        self.cursor.execute("SELECT * FROM 韻母對照表")
+        rows = self.cursor.fetchall()
+        #------------------------------------------------------------------
+        # 設定【韻母對照表】用字典
+        # un_bu_dict = {row[1]: {'台語音標': row[1], '國際音標': row[2]} for row in rows}
+        #------------------------------------------------------------------
         # 初始化字典
         un_bu_dict = {}
-
         # 從查詢結果中提取資料並將其整理成一個字典
         for row in rows:
             un_bu_dict[row[1]] = {
@@ -437,17 +482,15 @@ class PiauIm:
         return un_bu_dict
 
     def init_piau_im_dict(self, han_ji_khoo):
-        if han_ji_khoo == "河洛話":
-            db_name = 'Ho_Lok_Ue.db'
-        elif han_ji_khoo == "廣韻":
-            db_name = 'Kong_Un.db'
-        else:
-            db_name = 'Han_Ji_Piau_Im.db'
-
+        """
+        初始化聲母與韻母字典
+        :param han_ji_khoo: 標音類型
+        """
+        db_name = 'Ho_Lok_Ue.db' if han_ji_khoo == "河洛話" else 'Han_Ji_Piau_Im.db'
         with sqlite3.connect(db_name) as conn:
-            cursor = conn.cursor()
-            self.Siann_Bu_Dict = self._init_siann_bu_dict(cursor)
-            self.Un_Bu_Dict = self._init_un_bu_dict(cursor)
+            self.cursor = conn.cursor() if not self.cursor else self.cursor
+            self.Siann_Bu_Dict = self._init_siann_bu_dict()
+            self.Un_Bu_Dict = self._init_un_bu_dict()
 
     #================================================================
     # 在韻母加調號：白話字(POJ)與台羅(TL)同
