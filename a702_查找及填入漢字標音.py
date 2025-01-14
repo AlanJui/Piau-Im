@@ -93,6 +93,7 @@ def reset_han_ji_cells(wb, sheet_name='漢字注音'):
 
         # 逐欄取出漢字處理
         for col in range(start_col, end_col):
+            sheet.range((row-2, col)).value = ''
             cell_value = sheet.range((row, col)).value
             if cell_value == 'φ':
                 EOF = True
