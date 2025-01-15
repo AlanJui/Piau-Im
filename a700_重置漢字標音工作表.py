@@ -144,8 +144,13 @@ def main():
     # =========================================================================
     # 結束作業
     # =========================================================================
-    logging.info("作業完成！")
-    return EXIT_CODE_SUCCESS
+    file_path = save_as_new_file(wb=wb, input_file_name='_working')
+    if not file_path:
+        logging.error("儲存檔案失敗！")
+        return EXIT_CODE_PROCESS_FAILURE    # 作業異當終止：無法儲存檔案
+    else:
+        logging_process_step(f"儲存檔案至路徑：{file_path}")
+        return EXIT_CODE_SUCCESS    # 作業正常結束
 
 
 if __name__ == "__main__":

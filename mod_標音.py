@@ -15,6 +15,95 @@ superscript_digit_mapping = {
     '⁹': '9',
 }
 
+# 韻母轉換字典
+un_bu_tng_huan_map_dict = {
+    'ee': 'e',          # ee（ㄝ）= [ɛ]
+    'er': 'o',          # er（ㄜ）= [ə]
+    'or': 'o',          # or（ㄜ）= [ə]
+    'ere': 'ue',        # ere = [əe]
+    'ir': 'i',          # ir（ㆨ）= [ɯ] / [ɨ]
+    'eng': 'ing',       # 白話字：eng ==> 閩南語：ing
+    'oa': 'ua',         # 白話字：oa ==> 閩南語：ua
+    'oe': 'ue',         # 白話字：oe ==> 閩南語：ue
+    'oai': 'uai',       # 白話字：oai ==> 閩南語：uai
+    'ei': 'e',          # 雅俗通十五音：稽
+    'ou': 'oo',         # 雅俗通十五音：沽
+    'onn': 'oonn',      # 雅俗通十五音：扛
+    'uei': 'ue',        # 雅俗通十五音：檜
+    'ueinn': 'uenn',    # 雅俗通十五音：檜
+}
+
+# =========================================================
+# 判斷是否為標點符號的輔助函數
+# =========================================================
+def is_punctuation(char):
+    # 如果 char 是 None，直接返回 False
+    if char is None:
+        return False
+
+    # 可以根據需要擴充此列表以判斷各種標點符號
+    punctuation_marks = "，。！！？；：、（）「」『』《》……"
+    return char in punctuation_marks
+
+
+# =========================================================
+# 判斷是否為標點符號的輔助函數
+# =========================================================
+def is_valid_han_ji(char):
+    if char is None:
+        return False
+    else:
+        char = char.strip()
+
+    punctuation_marks = "，。！？；：、（）「」『』《》……"
+    return char not in punctuation_marks
+
+# =========================================================
+# 想要僅針對漢字進行檢查，而不包括其他語言的字母，可用 Unicode 範圍來判斷。
+# 漢字的 Unicode 範圍： [\u4e00-\u9fff] (包括中日韓越所有漢字)
+# =========================================================
+def is_han_ji(char):
+    return '\u4e00' <= char <= '\u9fff'
+
+
+def un_bu_tng_huan(un_bu: str) -> str:
+    """
+    將輸入的韻母依照轉換字典進行轉換
+    :param un_bu: str - 韻母輸入
+    :return: str - 轉換後的韻母結果
+    """
+
+    # 韻母轉換，若不存在於字典中則返回原始韻母
+    return un_bu_tng_huan_map_dict.get(un_bu, un_bu)
+
+
+def tai_gi_im_piau_tng_un_bu(tai_gi_im_piau: str) -> str:
+    """
+    將輸入的整體【台語音標】依韻母轉換字典進行韻母轉換
+    :param tai_gi_im_piau: str - 整體台語音標 (例如 "kere1")
+    :return: str - 韻母轉換後的台語音標 (例如 "kue1")
+    """
+
+    # 使用正則表達式拆解聲母、韻母、聲調
+    match = re.match(r"([ptkghmnzcsjlrw]?)([a-z]+)(\d?)", tai_gi_im_piau, re.I)
+    if match:
+        siann_bu = match.group(1)  # 聲母
+        un_bu = match.group(2)     # 韻母
+        tiau_ho = match.group(3)   # 聲調
+
+        # 韻母轉換
+        converted_un_bu = un_bu_tng_huan_map_dict.get(un_bu, un_bu)
+
+        # 合併轉換後的台語音標
+        converted_tai_gi_im_piau = f"{siann_bu}{converted_un_bu}{tiau_ho}"
+        return converted_tai_gi_im_piau
+
+    # 若無法解析，返回原始輸入
+    return tai_gi_im_piau
+
+# ============================================================================
+
+
 def replace_superscript_digits(input_str):
     return ''.join(superscript_digit_mapping.get(char, char) for char in input_str)
 
@@ -76,6 +165,9 @@ def split_tai_gi_im_piau(im_piau: str):
             un_bu = im_piau[:-1]  # 韻母是剩下的部分，去掉最後的聲調
 
         tiau = im_piau[-1]  # 最後一個字符是聲調
+
+    # 轉換韻母
+    un_bu = un_bu_tng_huan(un_bu)
 
     # 將上標數字替換為普通數字
     tiau = replace_superscript_digits(str(tiau))
@@ -182,27 +274,6 @@ def tlpa_tng_han_ji_piau_im(piau_im, piau_im_huat, tai_gi_im_piau):
         tiau_ho
     )
     return han_ji_piau_im
-
-
-# =========================================================
-# 判斷是否為標點符號的輔助函數
-# =========================================================
-def is_punctuation(char):
-    # 如果 char 是 None，直接返回 False
-    if char is None:
-        return False
-
-    # 可以根據需要擴充此列表以判斷各種標點符號
-    punctuation_marks = "，。！！？；：、（）「」『』《》……"
-    return char in punctuation_marks
-
-
-# =========================================================
-# 想要僅針對漢字進行檢查，而不包括其他語言的字母，可用 Unicode 範圍來判斷。
-# 漢字的 Unicode 範圍： [\u4e00-\u9fff] (包括中日韓越所有漢字)
-# =========================================================
-def is_han_ji(char):
-    return '\u4e00' <= char <= '\u9fff'
 
 
 # =========================================================
@@ -839,104 +910,39 @@ class PiauIm:
             return f"{siann}{un}{tiau_ho}"
         return ""
 
-#================================================================
-# 台語音標轉換為方音符號
-# def TLPA_Tng_Zap_Goo_Im(siann_bu, un_bu, siann_tiau, cursor):
-#     """
-#     根據傳入的台語音標聲母、韻母、聲調，轉換成對應的方音符號
-#     :param siann_bu: 聲母 (台語音標)
-#     :param un_bu: 韻母 (台語音標)
-#     :param siann_tiau: 聲調 (台語音標中的數字)
-#     :param cursor: 數據庫游標
-#     :return: 包含方音符號的字典
-#     """
 
-#     # 如果聲母為 None、空字串或空集合符號(無聲母)，將其設為 '英'
-#     if siann_bu in [None, '', '∅']:  # 假設空集合符號用 '∅' 表示
-#         zu_im_siann_bu = '英'  # 無聲母的情況
-#     else:
-#         # 查詢聲母表，將台語音標的聲母轉換成方音符號
-#         cursor.execute("SELECT 十五音 FROM 聲母對照表 WHERE 台語音標 = ?", (siann_bu,))
-#         siann_bu_result = cursor.fetchone()
-#         if siann_bu_result:
-#             zu_im_siann_bu = siann_bu_result[0]  # 取得方音符號
-#         else:
-#             zu_im_siann_bu = '英'  # 無聲母的情況
-
-#     # 查詢韻母表，將台語音標的韻母轉換成方音符號
-#     cursor.execute("SELECT 十五音 FROM 韻母對照表 WHERE 台語音標 = ?", (un_bu,))
-#     un_bu_result = cursor.fetchone()
-#     if un_bu_result:
-#         zu_im_un_bu = un_bu_result[0]  # 取得方音符號
-#     else:
-#         zu_im_un_bu = ''
-
-#     # 查詢聲調表，將台語音標的聲調轉換成方音符號
-#     cursor.execute("SELECT 十五音聲調 FROM 聲調對照表 WHERE 台羅調號 = ?", (siann_tiau,))
-#     siann_tiau_result = cursor.fetchone()
-#     if siann_tiau_result:
-#         zu_im_siann_tiau = siann_tiau_result[0]  # 取得方音符號
-#     else:
-#         zu_im_siann_tiau = ''
-
-#     #=======================================================================
-#     # 【聲母】校調
-#     #
-#     # 齒間音【聲母】：ㄗ、ㄘ、ㄙ、ㆡ，若其後所接【韻母】之第一個符號亦為：ㄧ、ㆪ時，須變改
-#     # 為：ㄐ、ㄑ、ㄒ、ㆢ。
-#     #-----------------------------------------------------------------------
-#     # 參考 RIME 輸入法如下規則：
-#     # - xform/ㄗ(ㄧ|ㆪ)/ㄐ$1/
-#     # - xform/ㄘ(ㄧ|ㆪ)/ㄑ$1/
-#     # - xform/ㄙ(ㄧ|ㆪ)/ㄒ$1/
-#     # - xform/ㆡ(ㄧ|ㆪ)/ㆢ$1/
-#     #=======================================================================
-
-#     # 比對聲母是否為 ㄗ、ㄘ、ㄙ、ㆡ，且韻母的第一個符號是 ㄧ 或 ㆪ
-#     if siann_bu == 'z' and (un_bu[0] == 'i' or un_bu == 'inn'):
-#         zu_im_siann_bu = 'ㄐ'
-#     elif siann_bu == 'c' and (un_bu[0] == 'i' or un_bu == 'inn'):
-#         zu_im_siann_bu = 'ㄑ'
-#     elif siann_bu == 's' and (un_bu[0] == 'i' or un_bu == 'inn'):
-#         zu_im_siann_bu = 'ㄒ'
-#     elif siann_bu == 'j' and (un_bu[0] == 'i' or un_bu == 'inn'):
-#         zu_im_siann_bu = 'ㆢ'
-
-#     return {
-#         '漢字標音': f"{zu_im_un_bu}{zu_im_siann_tiau}{zu_im_siann_bu}",
-#         '聲母': zu_im_siann_bu,
-#         '韻母': zu_im_un_bu,
-#         '聲調': zu_im_siann_tiau
-#     }
-
-# # ==========================================================
-# # 注音法設定和共用變數
-# # ==========================================================
-# zu_im_huat_list = {
-#     "SNI": ["fifteen_yin", "rt", "十五音切語"],
-#     "TPS": ["Piau_Im", "rt", "方音符號注音"],
-#     "POJ": ["pin_yin", "rt", "白話字拼音"],
-#     "TL": ["pin_yin", "rt", "台羅拼音"],
-#     "BP": ["pin_yin", "rt", "閩拼標音"],
-#     "TLPA_Plus": ["pin_yin", "rt", "台羅改良式"],
-#     "DBL": ["Siang_Pai", "rtc", "雙排注音"],
-# }
+def ut001():
+    """測試：台語音標轉換韻母"""
+    tai_gi_im_piau = 'kere1'
+    tsing_khak_kiat_ko = 'kue1'
+    print(f'轉換漢字【雞】的【漢字標音】：{tai_gi_im_piau}')
+    result = tai_gi_im_piau_tng_un_bu(tai_gi_im_piau)
+    print(f'轉換後應為：{tsing_khak_kiat_ko}')
+    print(f'實際結果為：{result}')
+    if result == tsing_khak_kiat_ko:
+        print('測試成功')
+    else:
+        print('測試失敗')
 
 
-# def choose_piau_im_method(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
-#     """選擇並執行對應的注音方法"""
-#     if zu_im_huat == "十五音":
-#         return piau_im.SNI_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif zu_im_huat == "白話字":
-#         return piau_im.POJ_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif zu_im_huat == "台羅拼音":
-#         return piau_im.TL_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif zu_im_huat == "閩拼方案":
-#         return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif zu_im_huat == "方音符號":
-#         return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif zu_im_huat == "台語音標":
-#         siann = piau_im.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
-#         un = piau_im.Un_Bu_Dict[un_bu]["台語音標"]
-#         return f"{siann}{un}{tiau_ho}"
-#     return ""
+def ut002():
+    """測試：韻母之台語音標轉換"""
+    un_bu = 'ir'
+    tsing_khak_un_bu = un_bu_tng_huan_map_dict[un_bu]
+    print(f'韻母【{un_bu}】')
+    result = un_bu_tng_huan(un_bu)
+    print(f'轉換後應為：{tsing_khak_un_bu}')
+    print(f'實際結果為：{result}')
+    if result == tsing_khak_un_bu:
+        print('測試成功')
+    else:
+        print('測試失敗')
+
+
+if __name__ == "__main__":
+    print('==================================================================')
+    # 測試：將【雞】kere1 轉換為【kue1】
+    ut001()
+    print('==================================================================')
+    # 測試：將【ir】轉換為【kue1】
+    ut002()

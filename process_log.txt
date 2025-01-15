@@ -2201,3 +2201,542 @@ UnboundLocalError: cannot access local variable 'jin_kang_piau_im_cell' where it
 2025-01-14 16:39:04,774 - INFO - 完成【處理作業】...
 2025-01-14 16:39:04,853 - INFO - 釋放 Excel 資源，處理完成。
 2025-01-14 16:39:04,853 - INFO - 作業成功完成！
+2025-01-15 11:21:34,007 - INFO - 作業開始
+2025-01-15 11:21:34,009 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-15 11:21:34,045 - INFO - 【待注音漢字】總字數為: 143
+2025-01-15 11:21:34,154 - INFO - 儲存格內容清除完畢
+2025-01-15 11:21:41,774 - INFO - 儲存格格式重設完畢
+2025-01-15 11:21:53,851 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-01-15 11:21:53,887 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-01-15 11:22:43,537 - INFO - 完成【漢字標音作業】 - 河洛話: <class 'type'>
+2025-01-15 11:22:45,558 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-雅俗通】《TestCase》.xlsx
+2025-01-15 11:22:45,558 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-01-15 11:23:01,238 - INFO - 作業開始
+2025-01-15 11:23:01,240 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-15 11:23:01,388 - INFO - 開始【漢字注音】工作表的清空、重置！
+2025-01-15 11:23:07,559 - INFO - 完成【漢字注音】工作表的清空、重置！
+2025-01-15 11:23:07,741 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-雅俗通】《TestCase》.xlsx
+2025-01-15 11:23:07,741 - INFO - a700_重罝漢字標音工作表.py 程式已執行完畢！
+2025-01-15 11:23:30,214 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-雅俗通】_working.xlsx.xlsx
+2025-01-15 12:01:11,568 - INFO - 作業開始
+2025-01-15 12:01:11,569 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-15 12:01:11,603 - INFO - 【待注音漢字】總字數為: 448
+2025-01-15 12:01:11,695 - INFO - 儲存格內容清除完畢
+2025-01-15 12:01:17,865 - INFO - 儲存格格式重設完畢
+2025-01-15 12:01:49,825 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-01-15 12:01:49,865 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-01-15 12:02:50,534 - ERROR - 作業過程發生未知的異常錯誤: 'ir'
+Traceback (most recent call last):
+  File "a701_作業中活頁檔填入漢字.py", line 154, in main
+    result_code = process(wb)
+  File "a701_作業中活頁檔填入漢字.py", line 98, in process
+    ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3',
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      ue_im_lui_piat=ue_im_lui_piat,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      han_ji_khoo=han_ji_khoo, db_name=db_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      module_name=module_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+                      function_name='han_ji_ca_piau_im')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\p702_Ca_Han_Ji_Thak_Im.py", line 231, in ca_han_ji_thak_im
+    tai_gi_im_piau, han_ji_piau_im = za_ji_kiat_ko_cut_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\work\Piau-Im\p702_Ca_Han_Ji_Thak_Im.py", line 73, in za_ji_kiat_ko_cut_piau_im
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
+        piau_im,
+    ...<3 lines>...
+        tiau_ho
+    )
+  File "c:\work\Piau-Im\mod_標音.py", line 150, in siann_un_tiau_tng_piau_im
+    return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 786, in NST_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'ir'
+2025-01-15 12:02:50,539 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-01-15 13:43:56,793 - INFO - 作業開始
+2025-01-15 13:43:56,795 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-15 13:43:56,829 - INFO - 【待注音漢字】總字數為: 448
+2025-01-15 13:43:56,924 - INFO - 儲存格內容清除完畢
+2025-01-15 13:44:03,133 - INFO - 儲存格格式重設完畢
+2025-01-15 13:44:34,248 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-01-15 13:44:34,284 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-01-15 13:46:53,322 - INFO - 完成【漢字標音作業】 - 河洛話: <class 'type'>
+2025-01-15 13:46:53,517 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-雅俗通】《岳陽樓記》.xlsx
+2025-01-15 13:46:53,517 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-01-15 14:07:13,486 - INFO - 作業開始
+2025-01-15 14:07:13,488 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-15 14:08:17,628 - ERROR - 作業過程發生未知的異常錯誤: All elements of a 2d list or tuple must be of the same length
+Traceback (most recent call last):
+  File "a702_查找及填入漢字標音.py", line 459, in main
+    result_code = process(wb)
+  File "a702_查找及填入漢字標音.py", line 388, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name     # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a702_查找及填入漢字標音.py", line 311, in ca_han_ji_thak_im
+    maintain_han_ji_koo(sheet=khuat_ji_piau_im_sheet,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        han_ji=han_ji,
+                        ^^^^^^^^^^^^^^
+                        tai_gi='',
+                        ^^^^^^^^^^
+                        show_msg=False)
+                        ^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_excel_access.py", line 143, in maintain_han_ji_koo
+    sheet.range("A2").value = records  # 寫入更新後的資料
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2482, in value
+    conversion.write(data, self, self._options)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\conversion\__init__.py", line 94, in write
+    raise Exception(
+        "All elements of a 2d list or tuple must be of the same length"
+    )
+Exception: All elements of a 2d list or tuple must be of the same length
+2025-01-15 14:08:17,646 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-15 15:00:40,574 - INFO - 作業開始
+2025-01-15 15:00:40,575 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-15 15:01:45,028 - ERROR - 作業過程發生未知的異常錯誤: All elements of a 2d list or tuple must be of the same length
+Traceback (most recent call last):
+  File "a702_查找及填入漢字標音.py", line 459, in main
+    result_code = process(wb)
+  File "a702_查找及填入漢字標音.py", line 388, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name     # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a702_查找及填入漢字標音.py", line 311, in ca_han_ji_thak_im
+    maintain_han_ji_koo(sheet=khuat_ji_piau_im_sheet,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        han_ji=han_ji,
+                        ^^^^^^^^^^^^^^
+                        tai_gi='',
+                        ^^^^^^^^^^
+                        show_msg=False)
+                        ^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_excel_access.py", line 143, in maintain_han_ji_koo
+    sheet.range("A2").value = records  # 寫入更新後的資料
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2482, in value
+    conversion.write(data, self, self._options)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\conversion\__init__.py", line 94, in write
+    raise Exception(
+        "All elements of a 2d list or tuple must be of the same length"
+    )
+Exception: All elements of a 2d list or tuple must be of the same length
+2025-01-15 15:01:45,034 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-15 15:04:04,993 - INFO - 作業開始
+2025-01-15 15:04:04,994 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-15 15:05:09,025 - ERROR - 作業過程發生未知的異常錯誤: All elements of a 2d list or tuple must be of the same length
+Traceback (most recent call last):
+  File "a702_查找及填入漢字標音.py", line 459, in main
+    result_code = process(wb)
+  File "a702_查找及填入漢字標音.py", line 388, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name     # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a702_查找及填入漢字標音.py", line 311, in ca_han_ji_thak_im
+    maintain_han_ji_koo(sheet=khuat_ji_piau_im_sheet,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        han_ji=han_ji,
+                        ^^^^^^^^^^^^^^
+                        tai_gi='',
+                        ^^^^^^^^^^
+                        show_msg=False)
+                        ^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_excel_access.py", line 143, in maintain_han_ji_koo
+    sheet.range("A2").value = records  # 寫入更新後的資料
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2482, in value
+    conversion.write(data, self, self._options)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\conversion\__init__.py", line 94, in write
+    raise Exception(
+        "All elements of a 2d list or tuple must be of the same length"
+    )
+Exception: All elements of a 2d list or tuple must be of the same length
+2025-01-15 15:05:09,030 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-15 15:10:26,550 - INFO - 作業開始
+2025-01-15 15:10:26,551 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-15 15:11:31,008 - ERROR - 作業過程發生未知的異常錯誤: All elements of a 2d list or tuple must be of the same length
+Traceback (most recent call last):
+  File "a702_查找及填入漢字標音.py", line 459, in main
+    result_code = process(wb)
+  File "a702_查找及填入漢字標音.py", line 388, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name     # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a702_查找及填入漢字標音.py", line 311, in ca_han_ji_thak_im
+    maintain_han_ji_koo(sheet=khuat_ji_piau_im_sheet,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        han_ji=han_ji,
+                        ^^^^^^^^^^^^^^
+                        tai_gi='',
+                        ^^^^^^^^^^
+                        show_msg=False)
+                        ^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_excel_access.py", line 143, in maintain_han_ji_koo
+    sheet.range("A2").value = records  # 寫入更新後的資料
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2482, in value
+    conversion.write(data, self, self._options)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\conversion\__init__.py", line 94, in write
+    raise Exception(
+        "All elements of a 2d list or tuple must be of the same length"
+    )
+Exception: All elements of a 2d list or tuple must be of the same length
+2025-01-15 15:11:31,013 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-15 15:12:23,186 - INFO - 作業開始
+2025-01-15 15:12:23,187 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-15 15:13:27,519 - ERROR - 作業過程發生未知的異常錯誤: All elements of a 2d list or tuple must be of the same length
+Traceback (most recent call last):
+  File "a702_查找及填入漢字標音.py", line 459, in main
+    result_code = process(wb)
+  File "a702_查找及填入漢字標音.py", line 388, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name     # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a702_查找及填入漢字標音.py", line 311, in ca_han_ji_thak_im
+    maintain_han_ji_koo(sheet=khuat_ji_piau_im_sheet,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        han_ji=han_ji,
+                        ^^^^^^^^^^^^^^
+                        tai_gi='',
+                        ^^^^^^^^^^
+                        show_msg=False)
+                        ^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_excel_access.py", line 143, in maintain_han_ji_koo
+    sheet.range("A2").value = records  # 寫入更新後的資料
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2482, in value
+    conversion.write(data, self, self._options)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\conversion\__init__.py", line 94, in write
+    raise Exception(
+        "All elements of a 2d list or tuple must be of the same length"
+    )
+Exception: All elements of a 2d list or tuple must be of the same length
+2025-01-15 15:13:27,524 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-15 15:17:20,142 - INFO - 作業開始
+2025-01-15 15:17:20,144 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-15 15:18:24,321 - ERROR - 作業過程發生未知的異常錯誤: All elements of a 2d list or tuple must be of the same length
+Traceback (most recent call last):
+  File "a702_查找及填入漢字標音.py", line 459, in main
+    result_code = process(wb)
+  File "a702_查找及填入漢字標音.py", line 388, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name     # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a702_查找及填入漢字標音.py", line 311, in ca_han_ji_thak_im
+    maintain_han_ji_koo(sheet=khuat_ji_piau_im_sheet,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        han_ji=han_ji,
+                        ^^^^^^^^^^^^^^
+                        tai_gi='',
+                        ^^^^^^^^^^
+                        show_msg=False)
+                        ^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_excel_access.py", line 143, in maintain_han_ji_koo
+    sheet.range("A2").value = records  # 寫入更新後的資料
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2482, in value
+    conversion.write(data, self, self._options)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\conversion\__init__.py", line 94, in write
+    raise Exception(
+        "All elements of a 2d list or tuple must be of the same length"
+    )
+Exception: All elements of a 2d list or tuple must be of the same length
+2025-01-15 15:18:24,326 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-15 22:30:23,605 - INFO - 作業開始
+2025-01-15 22:30:23,606 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-15 22:31:42,013 - ERROR - 作業過程發生未知的異常錯誤: All elements of a 2d list or tuple must be of the same length
+Traceback (most recent call last):
+  File "a702_查找及填入漢字標音.py", line 459, in main
+    result_code = process(wb)
+  File "a702_查找及填入漢字標音.py", line 388, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name     # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a702_查找及填入漢字標音.py", line 311, in ca_han_ji_thak_im
+    maintain_han_ji_koo(sheet=khuat_ji_piau_im_sheet,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        han_ji=han_ji,
+                        ^^^^^^^^^^^^^^
+                        tai_gi='',
+                        ^^^^^^^^^^
+                        show_msg=False)
+                        ^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_excel_access.py", line 143, in maintain_han_ji_koo
+    sheet.range("A2").value = records  # 寫入更新後的資料
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2482, in value
+    conversion.write(data, self, self._options)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\conversion\__init__.py", line 94, in write
+    raise Exception(
+        "All elements of a 2d list or tuple must be of the same length"
+    )
+Exception: All elements of a 2d list or tuple must be of the same length
+2025-01-15 22:31:42,019 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-15 22:37:43,462 - INFO - 作業開始
+2025-01-15 22:37:43,463 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-15 22:38:28,815 - ERROR - 作業過程發生未知的異常錯誤: han_ji_ca_piau_im() got an unexpected keyword argument 'wb'
+Traceback (most recent call last):
+  File "a702_查找及填入漢字標音.py", line 463, in main
+    result_code = process(wb)
+  File "a702_查找及填入漢字標音.py", line 392, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name     # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+TypeError: han_ji_ca_piau_im() got an unexpected keyword argument 'wb'
+2025-01-15 22:48:16,526 - INFO - 作業開始
+2025-01-15 22:48:16,527 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-15 22:49:41,047 - INFO - 作業開始
+2025-01-15 22:49:41,049 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-15 22:50:59,909 - ERROR - 作業過程發生未知的異常錯誤: All elements of a 2d list or tuple must be of the same length
+Traceback (most recent call last):
+  File "a702_查找及填入漢字標音.py", line 461, in main
+    result_code = process(wb)
+  File "a702_查找及填入漢字標音.py", line 390, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name     # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a702_查找及填入漢字標音.py", line 311, in ca_han_ji_thak_im
+    maintain_han_ji_koo(sheet=khuat_ji_piau_im_sheet,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        han_ji=han_ji,
+                        ^^^^^^^^^^^^^^
+                        tai_gi='',
+                        ^^^^^^^^^^
+                        show_msg=False)
+                        ^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_excel_access.py", line 143, in maintain_han_ji_koo
+    sheet.range("A2").value = records  # 寫入更新後的資料
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2482, in value
+    conversion.write(data, self, self._options)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\conversion\__init__.py", line 94, in write
+    raise Exception(
+        "All elements of a 2d list or tuple must be of the same length"
+    )
+Exception: All elements of a 2d list or tuple must be of the same length
+2025-01-15 22:50:59,914 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-15 22:55:02,692 - INFO - 作業開始
+2025-01-15 22:55:02,693 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-15 22:59:57,798 - ERROR - 作業過程發生未知的異常錯誤: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a702_查找及填入漢字標音.py", line 461, in main
+    result_code = process(wb)
+  File "a702_查找及填入漢字標音.py", line 390, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name     # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a702_查找及填入漢字標音.py", line 216, in ca_han_ji_thak_im
+    sheet.range((row, 1)).select()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2815, in select
+    self.impl.select()
+    ~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1500, in select
+    return self.xl.Select()
+           ~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject <unknown>>", line 2, in Select
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+2025-01-15 22:59:57,836 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-15 23:00:25,881 - INFO - 作業開始
+2025-01-15 23:00:25,882 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-15 23:06:29,506 - INFO - 作業開始
+2025-01-15 23:06:29,507 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-15 23:12:05,386 - INFO - 作業開始
+2025-01-15 23:12:05,387 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-15 23:15:18,011 - INFO - 作業開始
+2025-01-15 23:15:18,012 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-15 23:16:46,311 - ERROR - 作業過程發生未知的異常錯誤: All elements of a 2d list or tuple must be of the same length
+Traceback (most recent call last):
+  File "a702_查找及填入漢字標音.py", line 459, in main
+    result_code = process(wb)
+  File "a702_查找及填入漢字標音.py", line 388, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name     # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a702_查找及填入漢字標音.py", line 307, in ca_han_ji_thak_im
+    maintain_han_ji_koo(sheet=khuat_ji_piau_sheet,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        han_ji=han_ji,
+                        ^^^^^^^^^^^^^^
+                        tai_gi='',
+                        ^^^^^^^^^^
+                        show_msg=False)
+                        ^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_excel_access.py", line 143, in maintain_han_ji_koo
+    sheet.range("A2").value = records  # 寫入更新後的資料
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2482, in value
+    conversion.write(data, self, self._options)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\conversion\__init__.py", line 94, in write
+    raise Exception(
+        "All elements of a 2d list or tuple must be of the same length"
+    )
+Exception: All elements of a 2d list or tuple must be of the same length
+2025-01-15 23:16:46,317 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-15 23:22:17,973 - INFO - 作業開始
+2025-01-15 23:22:17,974 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-15 23:25:44,025 - ERROR - 作業過程發生未知的異常錯誤: All elements of a 2d list or tuple must be of the same length
+Traceback (most recent call last):
+  File "a702_查找及填入漢字標音.py", line 457, in main
+    result_code = process(wb)
+  File "a702_查找及填入漢字標音.py", line 386, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name     # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a702_查找及填入漢字標音.py", line 303, in ca_han_ji_thak_im
+    maintain_han_ji_koo(sheet=khuat_ji_piau_sheet,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        han_ji=han_ji,
+                        ^^^^^^^^^^^^^^
+                        tai_gi='',
+                        ^^^^^^^^^^
+                        show_msg=False)
+                        ^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_excel_access.py", line 143, in maintain_han_ji_koo
+    sheet.range("A2").value = records  # 寫入更新後的資料
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2482, in value
+    conversion.write(data, self, self._options)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\conversion\__init__.py", line 94, in write
+    raise Exception(
+        "All elements of a 2d list or tuple must be of the same length"
+    )
+Exception: All elements of a 2d list or tuple must be of the same length
+2025-01-15 23:25:44,032 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-15 23:25:55,022 - INFO - 作業開始
+2025-01-15 23:25:55,023 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-15 23:29:08,191 - ERROR - 作業過程發生未知的異常錯誤: All elements of a 2d list or tuple must be of the same length
+Traceback (most recent call last):
+  File "a702_查找及填入漢字標音.py", line 457, in main
+    result_code = process(wb)
+  File "a702_查找及填入漢字標音.py", line 386, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name     # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a702_查找及填入漢字標音.py", line 303, in ca_han_ji_thak_im
+    maintain_han_ji_koo(sheet=khuat_ji_piau_sheet,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        han_ji=han_ji,
+                        ^^^^^^^^^^^^^^
+                        tai_gi='',
+                        ^^^^^^^^^^
+                        show_msg=False)
+                        ^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_excel_access.py", line 143, in maintain_han_ji_koo
+    sheet.range("A2").value = records  # 寫入更新後的資料
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2482, in value
+    conversion.write(data, self, self._options)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\conversion\__init__.py", line 94, in write
+    raise Exception(
+        "All elements of a 2d list or tuple must be of the same length"
+    )
+Exception: All elements of a 2d list or tuple must be of the same length
+2025-01-15 23:29:08,197 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！

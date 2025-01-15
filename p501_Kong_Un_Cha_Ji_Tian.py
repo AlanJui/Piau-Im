@@ -129,7 +129,7 @@ def Kong_Un_Piau_Im(wb, db_cursor):
         piau_im_tsong_soo = len(kong_un_piau_im)
         piau_im = kong_un_piau_im[0]
         han_ji_id = piau_im['漢字識別號']
-        
+
         # =========================================================
         # 若是漢字注音碼有異常狀況，在【缺字表】做記錄
         # =========================================================

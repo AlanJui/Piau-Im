@@ -19,7 +19,7 @@ from mod_excel_access import (
     get_value_by_name,
     maintain_han_ji_koo,
 )
-from mod_file_access import get_sound_type, load_module_function, save_as_new_file
+from mod_file_access import load_module_function, save_as_new_file
 from mod_標音 import PiauIm  # 漢字標音物件
 from mod_標音 import hong_im_tng_tai_gi_im_piau  # 方音符號轉台語音標
 from mod_標音 import is_punctuation  # 是否為標點符號
@@ -84,8 +84,8 @@ def reset_han_ji_cells(wb, sheet_name='漢字注音'):
     line = 1
     for row in range(start_row, end_row, ROWS_PER_LINE):
         # 若已到【結尾】或【超過總行數】，則跳出迴圈
-        if EOF or line > TOTAL_LINES:
-            break
+        # if EOF or line > TOTAL_LINES:
+        #     break
 
         # 設定【作用儲存格】為列首
         Two_Empty_Cells = 0
@@ -116,7 +116,6 @@ def reset_han_ji_cells(wb, sheet_name='漢字注音'):
 
         # 每當處理一行 15 個漢字後，亦換到下一行
         line += 1
-        row += 4
 
 
 def ca_ji_kiat_ko_tng_piau_im(result, han_ji_khoo: str, piau_im: PiauIm, piau_im_huat: str):
@@ -159,7 +158,7 @@ def ca_ji_kiat_ko_tng_piau_im(result, han_ji_khoo: str, piau_im: PiauIm, piau_im
 
 def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im'):
     """查漢字讀音：依【漢字】查找【台語音標】，並依指定之【標音方法】輸出【漢字標音】"""
-    # 動態載入查找函數
+    # 載入【漢字庫】查找函數
     han_ji_ca_piau_im = load_module_function(module_name, function_name)
 
     # 連接指定資料庫
@@ -189,9 +188,6 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
     sheet = wb.sheets[sheet_name]
     sheet.activate()
 
-    # 重設【漢字】儲存格文字及底色格式
-    reset_han_ji_cells(wb=wb)
-
     # 設定起始及結束的【列】位址（【第5列】、【第9列】、【第13列】等列）
     TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
     ROWS_PER_LINE = 4
@@ -207,10 +203,6 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
     EOF = False
     line = 1
     for row in range(start_row, end_row, ROWS_PER_LINE):
-        # 若已到【結尾】或【超過總行數】，則跳出迴圈
-        if EOF or line > TOTAL_LINES:
-            break
-
         # 設定【作用儲存格】為列首
         Two_Empty_Cells = 0
         sheet.range((row, 1)).select()
@@ -343,10 +335,12 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
             if msg == "【換行】" or EOF:
                 break
 
+        # =================================================================
         # 每當處理一行 15 個漢字後，亦換到下一行
-        print("\n")
         line += 1
-        row += 4
+        # 若已到【結尾】或【超過總行數】，則跳出迴圈
+        if EOF or line > TOTAL_LINES:
+            break
 
     #----------------------------------------------------------------------
     # 作業結束前處理
@@ -358,21 +352,25 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
 
 
 def process(wb):
-    # 動態載入查找函數
-    module_name='mod_河洛話'
-    function_name='han_ji_ca_piau_im'
+    # ---------------------------------------------------------------------
+    # 重設【漢字】儲存格文字及底色格式
+    # ---------------------------------------------------------------------
+    # reset_han_ji_cells(wb=wb)
 
-    # ---------------------------------------------------------------------
-    # 連上資料庫
-    # ---------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
+    # 為漢字查找讀音，漢字上方填：【台語音標】；漢字下方填使用者指定之【漢字標音】
+    # ------------------------------------------------------------------------------
     han_ji_khoo_field = '漢字庫'
     han_ji_khoo_name = get_value_by_name(wb=wb, name=han_ji_khoo_field) # 取得【漢字庫】名稱：河洛話、廣韻
     ue_im_lui_piat = get_value_by_name(wb, '語音類型')  # 取得【語音類型】，判別使用【白話音】或【文讀音】何者。
     db_name = 'Ho_Lok_Ue.db' if han_ji_khoo_name == '河洛話' else 'Kong_Un.db'
 
-    # ------------------------------------------------------------------------------
-    # 為漢字查找讀音，漢字上方填：【台語音標】；漢字下方填使用者指定之【漢字標音】
-    # ------------------------------------------------------------------------------
+    if han_ji_khoo_name == '河洛話':
+        module_name = 'mod_河洛話'
+    else:
+        module_name = 'mod_廣韻'
+    function_name = 'han_ji_ca_piau_im'
+
     if han_ji_khoo_name == "河洛話" and ue_im_lui_piat == "白話音":
         ca_han_ji_thak_im(
             wb=wb,
