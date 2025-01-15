@@ -6,13 +6,14 @@ import xlwings as xw
 
 from mod_excel_access import get_han_ji_khoo, get_tai_gi_by_han_ji, maintain_han_ji_koo
 from mod_file_access import load_module_function
+from mod_標音 import PiauIm  # 漢字之【漢字標音】轉換物件
 from mod_標音 import hong_im_tng_tai_gi_im_piau  # 方音符號轉台語音標
 from mod_標音 import is_punctuation  # 是否為標點符號
 from mod_標音 import siann_un_tiau_tng_piau_im  # 台語音標轉台語音標
 from mod_標音 import split_hong_im_hu_ho  # 分解漢字標音
 from mod_標音 import split_tai_gi_im_piau  # 分解台語音標
 from mod_標音 import tlpa_tng_han_ji_piau_im  # 台語音標轉漢字標音
-from mod_標音 import PiauIm
+from mod_標音 import tai_gi_im_piau_tng_un_bu, un_bu_tng_huan  # 韻母轉換
 from p740_Phua_Im_Ji import PhuaImJi
 
 # =========================================================================
@@ -85,6 +86,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
     # 取得【漢字庫】工作表物件
     han_ji_koo_sheet = get_han_ji_khoo(wb)
     jin_kang_piau_im = get_han_ji_khoo(wb, sheet_name='人工標音字庫')
+    khuat_ji_piau_sheet = get_han_ji_khoo(wb, sheet_name='缺字表')
 
     # 動態載入查找函數
     han_ji_ca_piau_im = load_module_function(module_name, function_name)
@@ -97,7 +99,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
     piau_im = PiauIm(han_ji_khoo=han_ji_khoo)
     piau_im_huat = wb.names['標音方法'].refers_to_range.value
     # piau_im_huat = '方音符號'
-    phua_im_ji = PhuaImJi()
+    # phua_im_ji = PhuaImJi()
 
     # 選擇工作表
     sheet = wb.sheets[sheet_name]
@@ -195,18 +197,18 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                             )
                             han_ji_u_piau_im = True
 
-                        # 將人工輸入的【台語音標】置入【破音字庫】Dict
+                        # 將人工輸入的【台語音標】置入【標音字庫】Dict
                         # phua_im_ji.ka_phua_im_ji(han_ji, tai_gi_im_piau)
                         maintain_han_ji_koo(sheet=jin_kang_piau_im,
                                             han_ji=han_ji,
                                             tai_gi=tai_gi_im_piau,
                                             show_msg=False)
                     else:               # 無人工輸入，則自【漢字庫】查找作業
-                        # 查找【破音字庫】，確認是否有此漢字
+                        # 查找【標音字庫】，確認是否有此漢字
                         # found = phua_im_ji.ca_phua_im_ji(han_ji)
                         tai_gi_im_piau = get_tai_gi_by_han_ji(jin_kang_piau_im, han_ji)
                         found = tai_gi_im_piau if tai_gi_im_piau else False
-                        # 若【破音字庫】有此漢字
+                        # 若【標音字庫】有此漢字
                         if found:
                             siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(found)
                             tai_gi_im_piau = siann_bu + un_bu + tiau_ho
@@ -221,10 +223,14 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                             sheet.range((row, col)).font.color = (255, 0, 0)    # 將文字顏色設為【紅色】
                             sheet.range((row, col)).color = (255, 255, 0)       # 將底色設為【黄色】
                             print(f"漢字：【{han_ji}】之注音【{tai_gi_im_piau}】取自【人工注音字典】。")
-                        # 若【破音字庫】無此漢字，則在資料庫中查找
+                        # 若【標音字庫】無此漢字，則在資料庫中查找
                         else:
                             result = han_ji_ca_piau_im(cursor=cursor, han_ji=han_ji, ue_im_lui_piat=ue_im_lui_piat)
                             if not result:
+                                maintain_han_ji_koo(sheet=khuat_ji_piau_sheet,
+                                                    han_ji=han_ji,
+                                                    tai_gi='',
+                                                    show_msg=False)
                                 msg = f"【{han_ji}】查無此字！"
                             else:
                                 # 依【漢字庫】查找結果，輸出【台語音標】和【漢字標音】

@@ -21,12 +21,19 @@ def load_module_function(module_name, function_name):
 #----------------------------------------------------------------
 # 依 env 工作表的設定，另存新檔到指定目錄。
 #----------------------------------------------------------------
-def save_as_new_file(wb):
-    try:
-        file_name = str(wb.names['TITLE'].refers_to_range.value).strip()
-    except KeyError:
-        setting_sheet = wb.sheets["env"]
-        file_name = str(setting_sheet.range("C4").value).strip()
+def save_as_new_file(wb, input_file_name=None):
+    # 取得檔案名稱
+    if input_file_name:
+        file_name = '_working'
+        # 檢查檔案名稱是否已包含副檔名
+        file_name = ensure_xlsx_extension(file_name)
+    else:
+        # 自 env 工作表取得檔案名稱
+        try:
+            file_name = str(wb.names['TITLE'].refers_to_range.value).strip()
+        except KeyError:
+            setting_sheet = wb.sheets["env"]
+            file_name = str(setting_sheet.range("C4").value).strip()
 
     # 設定檔案輸出路徑，存於專案根目錄下的 output2 資料夾
     output_path = wb.names['OUTPUT_PATH'].refers_to_range.value
