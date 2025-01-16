@@ -4,7 +4,7 @@ import sqlite3
 
 import xlwings as xw
 
-from mod_excel_access import get_han_ji_khoo, get_tai_gi_by_han_ji, maintain_han_ji_koo
+from mod_excel_access import get_ji_khoo, get_tai_gi_by_han_ji, maintain_ji_khoo
 from mod_file_access import load_module_function
 from mod_標音 import PiauIm  # 漢字之【漢字標音】轉換物件
 from mod_標音 import hong_im_tng_tai_gi_im_piau  # 方音符號轉台語音標
@@ -84,9 +84,9 @@ def za_ji_kiat_ko_cut_piau_im(result, han_ji_khoo, piau_im, piau_im_huat):
 def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im'):
     """查漢字讀音：依【漢字】查找【台語音標】，並依指定之【標音方法】輸出【漢字標音】"""
     # 取得【漢字庫】工作表物件
-    han_ji_koo_sheet = get_han_ji_khoo(wb)
-    jin_kang_piau_im = get_han_ji_khoo(wb, sheet_name='人工標音字庫')
-    khuat_ji_piau_sheet = get_han_ji_khoo(wb, sheet_name='缺字表')
+    han_ji_koo_sheet = get_ji_khoo(wb)
+    jin_kang_piau_im = get_ji_khoo(wb, sheet_name='人工標音字庫')
+    khuat_ji_piau_sheet = get_ji_khoo(wb, sheet_name='缺字表')
 
     # 動態載入查找函數
     han_ji_ca_piau_im = load_module_function(module_name, function_name)
@@ -199,7 +199,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
 
                         # 將人工輸入的【台語音標】置入【標音字庫】Dict
                         # phua_im_ji.ka_phua_im_ji(han_ji, tai_gi_im_piau)
-                        maintain_han_ji_koo(sheet=jin_kang_piau_im,
+                        maintain_ji_khoo(sheet=jin_kang_piau_im,
                                             han_ji=han_ji,
                                             tai_gi=tai_gi_im_piau,
                                             show_msg=False)
@@ -227,7 +227,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                         else:
                             result = han_ji_ca_piau_im(cursor=cursor, han_ji=han_ji, ue_im_lui_piat=ue_im_lui_piat)
                             if not result:
-                                maintain_han_ji_koo(sheet=khuat_ji_piau_sheet,
+                                maintain_ji_khoo(sheet=khuat_ji_piau_sheet,
                                                     han_ji=han_ji,
                                                     tai_gi='',
                                                     show_msg=False)
@@ -243,7 +243,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                                 han_ji_u_piau_im = True
 
                 if han_ji_u_piau_im:
-                    maintain_han_ji_koo(sheet=han_ji_koo_sheet,
+                    maintain_ji_khoo(sheet=han_ji_koo_sheet,
                                         han_ji=han_ji,
                                         tai_gi=tai_gi_im_piau,
                                         show_msg=False)

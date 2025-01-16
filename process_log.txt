@@ -2777,3 +2777,49 @@ Traceback (most recent call last):
     )
 Exception: All elements of a 2d list or tuple must be of the same length
 2025-01-15 23:36:18,136 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-16 10:23:33,511 - INFO - 作業開始
+2025-01-16 10:23:33,513 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 10:24:45,509 - INFO - 作業開始
+2025-01-16 10:24:45,511 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 10:27:13,391 - INFO - 作業開始
+2025-01-16 10:27:13,392 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 10:30:05,879 - INFO - 己存檔至路徑：{file_path}
+2025-01-16 10:30:05,879 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-16 10:30:05,879 - INFO - 作業完成！
+2025-01-16 10:50:36,845 - INFO - 作業開始
+2025-01-16 10:50:36,846 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 10:50:41,728 - ERROR - 作業過程發生未知的異常錯誤: No such file: 'Test_Case_Sample.xlsx'
+Traceback (most recent call last):
+  File "mod_excel_access.py", line 419, in main
+    result_code = process(wb)
+  File "mod_excel_access.py", line 362, in process
+    return_code = ut_khuat_ji_piau(wb=wb)
+  File "mod_excel_access.py", line 233, in ut_khuat_ji_piau
+    wb = xw.Book('Test_Case_Sample.xlsx')
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 933, in __init__
+    impl = app.books.open(
+           ~~~~~~~~~~~~~~^
+        fullname,
+        ^^^^^^^^^
+    ...<13 lines>...
+        corrupt_load,
+        ^^^^^^^^^^^^^
+    ).impl
+    ^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 5157, in open
+    raise FileNotFoundError("No such file: '%s'" % fullname)
+FileNotFoundError: No such file: 'Test_Case_Sample.xlsx'
+2025-01-16 10:50:41,733 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-01-16 10:53:22,021 - INFO - 作業開始
+2025-01-16 10:53:22,022 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 11:30:17,597 - INFO - 作業開始
+2025-01-16 11:30:17,598 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 11:30:56,788 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-01-16 11:31:53,851 - INFO - 作業開始
+2025-01-16 11:31:53,852 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 11:31:59,211 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-01-16 11:33:23,114 - INFO - 作業開始
+2025-01-16 11:33:23,115 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 11:36:19,031 - INFO - 己存檔至路徑：{file_path}
+2025-01-16 11:36:19,031 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-16 11:36:19,031 - INFO - 作業完成！
