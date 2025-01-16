@@ -84,7 +84,7 @@ def get_value_by_name(wb, name):
         value = None
     return value
 
-def get_han_ji_khoo(wb, sheet_name="標音字庫"):
+def get_ji_khoo(wb, sheet_name="標音字庫"):
     """
     從 Excel 工作表中取得漢字庫
     wb: Excel 活頁簿物件
@@ -101,7 +101,7 @@ def get_han_ji_khoo(wb, sheet_name="標音字庫"):
 
     return sheet
 
-def maintain_han_ji_koo(sheet, han_ji, tai_gi, show_msg=False):
+def maintain_ji_khoo(sheet, han_ji, tai_gi, show_msg=False):
     """
     維護【漢字庫】工作表，新增或更新漢字及台語音標
     wb: Excel 活頁簿物件
@@ -109,6 +109,8 @@ def maintain_han_ji_koo(sheet, han_ji, tai_gi, show_msg=False):
     han_ji: 要新增的漢字
     tai_gi: 對應的台語音標
     """
+    # 如果台語音標為空字串，設置為"NA"（或其他標示值）
+    tai_gi = tai_gi if tai_gi.strip() else "NA"
 
     # 取得 A、B、C 欄的所有值
     data = sheet.range("A2").expand("table").value
@@ -129,20 +131,20 @@ def maintain_han_ji_koo(sheet, han_ji, tai_gi, show_msg=False):
         if row[0] == han_ji and row[1] == tai_gi:
             row[2] = (row[2] if isinstance(row[2], (int, float)) else 0) + 1  # 確保存在總數是數字
             found = True
-            if show_msg: print(f"漢字：【{han_ji}（{tai_gi}）】已存在，總數為： {int(row[2])}")
+            if show_msg: print(f"漢字：【{han_ji}（{tai_gi}）】紀錄己有，總數為： {int(row[2])}")
             break
 
     # 若未找到則新增一筆資料
     if not found:
         records.append([han_ji, tai_gi, 1])
-        if show_msg: print(f"新增漢字：【{han_ji}（{tai_gi}）】")
+        if show_msg: print(f"新增漢字：【{han_ji}】（{tai_gi}）")
 
 
     # 更新工作表的內容
     sheet.range("A2").expand("table").clear_contents()  # 清空舊資料
     sheet.range("A2").value = records  # 寫入更新後的資料
 
-    if show_msg: print(f"已完成【漢字庫】工作表的更新！")
+    # if show_msg: print(f"已完成【漢字庫】工作表的更新！")
 
 def get_tai_gi_by_han_ji(sheet, han_ji, show_msg=False):
     """
@@ -229,18 +231,42 @@ def get_total_rows_in_sheet(wb, sheet_name):
 # =========================================================================
 # 單元測試
 # =========================================================================
+def ut_khuat_ji_piau(wb=None):
+    """缺字表登錄單元測試"""
+    wb = xw.Book('Test_Case_Sample.xlsx')
+    delete_sheet_by_name(wb, "缺字表", show_msg=True)
+    sheet = get_ji_khoo(wb, "缺字表")
+    sheet.activate()
+
+    try:
+        # 當【缺字表】工作表，尚不存在任何查找不到【標音】的【漢字】，新增一筆紀錄
+        maintain_ji_khoo(sheet, "銜", "", show_msg=True)
+        # 當【缺字表】已有一筆紀錄，新增第二筆紀錄
+        maintain_ji_khoo(sheet, "暉", "", show_msg=True)
+        # 在【缺字表】新增第三紀錄
+        maintain_ji_khoo(sheet, "霪", "", show_msg=True)
+    except Exception as e:
+        print(e)
+        return EXIT_CODE_UNKNOWN_ERROR
+
+    # 檢查【缺字表】工作表的內容
+    for row in sheet.range("A2").expand("table").value:
+        print(row)
+    return EXIT_CODE_SUCCESS
+
+
 def ut_maintain_han_ji_koo(wb=None):
     wb = xw.Book('Test_Case_Sample.xlsx')
-    sheet = get_han_ji_khoo(wb, "漢字庫")
+    sheet = get_ji_khoo(wb, "漢字庫")
 
     # 漢字庫工作表不存在：工作表將新增，且新增一筆紀錄，加入【說】字，【總數】為 1
-    maintain_han_ji_koo(sheet, "說", "sue3", show_msg=True)
+    maintain_ji_khoo(sheet, "說", "sue3", show_msg=True)
     # 再次要求在漢字庫加入【說】：工作表會被選取，不會為【說】添增新紀錄，但【總數】更新為 2
-    maintain_han_ji_koo(sheet, "說", "sue3", show_msg=True)
-    maintain_han_ji_koo(sheet, "說", "sue3", show_msg=True)
-    maintain_han_ji_koo(sheet, "說", "uat4", show_msg=True)
-    maintain_han_ji_koo(sheet, "花", "hua1", show_msg=True)
-    maintain_han_ji_koo(sheet, "說", "uat4", show_msg=True)
+    maintain_ji_khoo(sheet, "說", "sue3", show_msg=True)
+    maintain_ji_khoo(sheet, "說", "sue3", show_msg=True)
+    maintain_ji_khoo(sheet, "說", "uat4", show_msg=True)
+    maintain_ji_khoo(sheet, "花", "hua1", show_msg=True)
+    maintain_ji_khoo(sheet, "說", "uat4", show_msg=True)
 
     # 查詢【漢字】的台語音標
     print("\n===================================================")
@@ -339,9 +365,14 @@ def ut_get_total_rows_in_sheet(wb=None, sheet_name="字庫表"):
 # 作業程序
 # =========================================================================
 def process(wb):
-    return_code = ut_maintain_han_ji_koo(wb=wb)
+    # ---------------------------------------------------------------------
+    return_code = ut_khuat_ji_piau(wb=wb)
     if return_code != EXIT_CODE_SUCCESS:
         return return_code
+    # ---------------------------------------------------------------------
+    # return_code = ut_maintain_han_ji_koo(wb=wb)
+    # if return_code != EXIT_CODE_SUCCESS:
+    #     return return_code
     # ---------------------------------------------------------------------
     # return_code = ut_prepare_working_sheets(wb=wb)
     # if return_code != EXIT_CODE_SUCCESS:

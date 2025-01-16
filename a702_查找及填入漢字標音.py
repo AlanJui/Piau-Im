@@ -14,10 +14,10 @@ from dotenv import load_dotenv
 # 載入自訂模組
 from mod_excel_access import (
     delete_sheet_by_name,
-    get_han_ji_khoo,
+    get_ji_khoo,
     get_tai_gi_by_han_ji,
     get_value_by_name,
-    maintain_han_ji_koo,
+    maintain_ji_khoo,
 )
 from mod_file_access import load_module_function, save_as_new_file
 from mod_標音 import PiauIm  # 漢字標音物件
@@ -27,7 +27,8 @@ from mod_標音 import siann_un_tiau_tng_piau_im  # 声、韻、調轉台語音�
 from mod_標音 import split_hong_im_hu_ho  # 分解漢字標音
 from mod_標音 import split_tai_gi_im_piau  # 分解台語音標
 from mod_標音 import tlpa_tng_han_ji_piau_im  # 台語音標轉台語音標
-from p740_Phua_Im_Ji import PhuaImJi  # 破音字物件
+
+# from p740_Phua_Im_Ji import PhuaImJi  # 破音字物件
 
 # =========================================================================
 # 載入環境變數
@@ -174,15 +175,15 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
     # 建置自動及人工漢字標音字庫工作表：（1）【漢字庫工作表】；（2）【人工標音字庫工作表】；（3）【缺字表】
     piau_im_sheet_name = '標音字庫'
     delete_sheet_by_name(wb=wb, sheet_name=piau_im_sheet_name)
-    han_ji_koo_sheet = get_han_ji_khoo(wb=wb, sheet_name=piau_im_sheet_name)
+    han_ji_koo_sheet = get_ji_khoo(wb=wb, sheet_name=piau_im_sheet_name)
 
     jin_kang_piau_im_sheet_name='人工標音字庫'
     delete_sheet_by_name(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
-    jin_kang_piau_im_sheet = get_han_ji_khoo(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
+    jin_kang_piau_im_sheet = get_ji_khoo(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
 
     khuat_ji_piau_name = '缺字表'
     delete_sheet_by_name(wb=wb, sheet_name=khuat_ji_piau_name)
-    khuat_ji_piau_sheet = get_han_ji_khoo(wb=wb, sheet_name=khuat_ji_piau_name)
+    khuat_ji_piau_sheet = get_ji_khoo(wb=wb, sheet_name=khuat_ji_piau_name)
 
     # 指定【漢字注音】工作表為【作用工作表】
     sheet = wb.sheets[sheet_name]
@@ -272,7 +273,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                             han_ji_u_piau_im = True
 
                         # 將人工輸入的【台語音標】置入【破音字庫】Dict
-                        maintain_han_ji_koo(sheet=jin_kang_piau_im_sheet,
+                        maintain_ji_khoo(sheet=jin_kang_piau_im_sheet,
                                             han_ji=han_ji,
                                             tai_gi=tai_gi_im_piau,
                                             show_msg=False)
@@ -300,7 +301,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                                                        ue_im_lui_piat=ue_im_lui_piat)
                             # 若【漢字庫】查無此字，登錄至【缺字表】
                             if not result:
-                                maintain_han_ji_koo(sheet=khuat_ji_piau_sheet,
+                                maintain_ji_khoo(sheet=khuat_ji_piau_sheet,
                                                     han_ji=han_ji,
                                                     tai_gi='',
                                                     show_msg=False)
@@ -316,7 +317,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                                 han_ji_u_piau_im = True
 
                 if han_ji_u_piau_im:
-                    maintain_han_ji_koo(sheet=han_ji_koo_sheet,
+                    maintain_ji_khoo(sheet=han_ji_koo_sheet,
                                         han_ji=han_ji,
                                         tai_gi=tai_gi_im_piau,
                                         show_msg=False)

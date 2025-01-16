@@ -20,7 +20,7 @@ from a701_作業中活頁檔填入漢字 import process as fill_hanji_in_cells
 from a702_查找及填入漢字標音 import reset_han_ji_cells
 
 # 載入自訂模組/函式
-from mod_excel_access import get_han_ji_khoo, get_value_by_name, maintain_han_ji_koo
+from mod_excel_access import get_ji_khoo, get_value_by_name, maintain_ji_khoo
 from mod_file_access import load_module_function, save_as_new_file
 from mod_標音 import PiauIm  # 漢字標音物件
 from mod_標音 import hong_im_tng_tai_gi_im_piau  # 方音符號轉台語音標
@@ -101,7 +101,7 @@ def jin_kang_piau_im_cu_tai_gi(wb, han_ji: str, jin_kang_piau_im: str, piau_im: 
         )
 
     # 將人工輸入的【台語音標】置入【破音字庫】Dict
-    maintain_han_ji_koo(sheet=jin_kang_piau_im_sheet,
+    maintain_ji_khoo(sheet=jin_kang_piau_im_sheet,
                         han_ji=han_ji,
                         tai_gi=tai_gi_im_piau,
                         show_msg=False)
@@ -123,7 +123,7 @@ def update_han_ji_piau_im(wb):
     han_ji_piau_im_sheet = wb.sheets['漢字注音']
     han_ji_piau_im_sheet.activate()
     piau_im_sheet_name = '標音字庫'
-    piau_im_ji_khoo_sheet = get_han_ji_khoo(wb=wb, sheet_name=piau_im_sheet_name)
+    piau_im_ji_khoo_sheet = get_ji_khoo(wb=wb, sheet_name=piau_im_sheet_name)
 
     # 取得【標音字庫】表格範圍的所有資料
     data = piau_im_ji_khoo_sheet.range("A2").expand("table").value
