@@ -11,9 +11,12 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 # 載入自訂模組
+# from p702_Ca_Han_Ji_Thak_Im import ca_han_ji_thak_im
+from a702_查找及填入漢字標音 import ca_han_ji_thak_im
+
+# 載入自訂模組
 from mod_file_access import save_as_new_file
 from p701_Clear_Cells import clear_han_ji_kap_piau_im
-from p702_Ca_Han_Ji_Thak_Im import ca_han_ji_thak_im
 from p709_reset_han_ji_cells import reset_han_ji_cells
 from p710_thiam_han_ji import fill_hanji_in_cells
 

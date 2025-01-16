@@ -5,6 +5,7 @@ import logging
 import os
 import sys
 from pathlib import Path
+from typing import Optional
 
 # 載入第三方套件
 import xlwings as xw
@@ -175,6 +176,45 @@ def get_tai_gi_by_han_ji(sheet, han_ji, show_msg=False):
     if show_msg: print(f"漢字：【{han_ji}】不存在於【漢字庫】")
     return None
 
+def create_dict_by_sheet(wb, sheet_name: str, allow_empty_correction: bool = False) -> Optional[dict]:
+    """
+    更新【標音字庫】表中的【台語音標】欄位內容，依據【漢字注音】表中的【人工標音】欄位進行更新，並將【人工標音】覆蓋至原【台語音標】。
+    """
+    # 取得工作表
+    ji_khoo_sheet = wb.sheets[sheet_name]
+    ji_khoo_sheet.activate()
+
+    # 取得【標音字庫】表格範圍的所有資料
+    data = ji_khoo_sheet.range("A2").expand("table").value
+
+    if data is None:
+        print(f"【{sheet_name}】工作表無資料")
+        return None
+
+    # 確保資料為 2D 列表
+    if not isinstance(data[0], list):
+        data = [data]
+
+    # 將資料轉為字典格式，key: 漢字, value: (台語音標, 校正音標, 次數)
+    han_ji_dict = {}
+    for i, row in enumerate(data, start=2):
+        han_ji = row[0] or ""
+        tai_gi_im_piau = row[1] or ""
+        total_count = int(row[2]) if len(row) > 2 and isinstance(row[2], (int, float)) else 0
+        corrected_tai_gi = row[3] if len(row) > 3 else ""  # 若無 D 欄資料則設為空字串
+
+        # 在 dict 新增一筆紀錄：（1）已填入校正音標，且校正音標不同於現有之台語音標；（2）允許校正音標為空時也加入字典
+        if allow_empty_correction or (corrected_tai_gi and corrected_tai_gi != tai_gi_im_piau):
+            han_ji_dict[han_ji] = (tai_gi_im_piau, corrected_tai_gi, total_count, i)  # i 為資料列索引
+
+    # 若 han_ji_dict 為空，表查找不到【漢字】對應的【台語音標】
+    if not han_ji_dict:
+        print(f"無法依據【{sheet_name}】工作表，建置【字庫】字典")
+        return None
+
+    return han_ji_dict
+
+
 def get_sheet_by_name(wb, sheet_name="工作表1"):
     try:
         # 嘗試取得工作表
@@ -234,6 +274,7 @@ def get_total_rows_in_sheet(wb, sheet_name):
 def ut_khuat_ji_piau(wb=None):
     """缺字表登錄單元測試"""
     wb = xw.Book('Test_Case_Sample.xlsx')
+    wb.activate()
     delete_sheet_by_name(wb, "缺字表", show_msg=True)
     sheet = get_ji_khoo(wb, "缺字表")
     sheet.activate()
@@ -253,7 +294,6 @@ def ut_khuat_ji_piau(wb=None):
     for row in sheet.range("A2").expand("table").value:
         print(row)
     return EXIT_CODE_SUCCESS
-
 
 def ut_maintain_han_ji_koo(wb=None):
     wb = xw.Book('Test_Case_Sample.xlsx')
@@ -286,7 +326,6 @@ def ut_maintain_han_ji_koo(wb=None):
         print(f"查不到【{han_ji}】的台語音標！")
 
     return EXIT_CODE_SUCCESS
-
 
 def ut_prepare_working_sheets(wb=None):
     if not wb:
@@ -369,6 +408,15 @@ def process(wb):
     return_code = ut_khuat_ji_piau(wb=wb)
     if return_code != EXIT_CODE_SUCCESS:
         return return_code
+    han_ji_dict = create_dict_by_sheet(wb=wb, sheet_name='缺字表', allow_empty_correction=True)
+    han_ji = '霪'
+    if han_ji_dict and han_ji in han_ji_dict:
+        original_tai_gi, corrected_tai_gi, total_count, row_index_in_ji_khoo = han_ji_dict[han_ji]
+        if not corrected_tai_gi:
+            corrected_tai_gi = "NA"
+        print(f"【{han_ji}】的台語音標為：{original_tai_gi}，校正音標為：{corrected_tai_gi}，總數：{total_count}，列索引：{row_index_in_ji_khoo}")
+    else:
+        return EXIT_CODE_PROCESS_FAILURE
     # ---------------------------------------------------------------------
     # return_code = ut_maintain_han_ji_koo(wb=wb)
     # if return_code != EXIT_CODE_SUCCESS:
@@ -436,7 +484,7 @@ def main():
     finally:
         if wb:
             # xw.apps.active.quit()  # 確保 Excel 被釋放資源，避免開啟殘留
-            logging.info("a701_作業中活頁簿填入漢字.py 程式已執行完畢！")
+            print("程式已執行完畢！")
 
     return EXIT_CODE_SUCCESS
 

@@ -2823,3 +2823,391 @@ FileNotFoundError: No such file: 'Test_Case_Sample.xlsx'
 2025-01-16 11:36:19,031 - INFO - 己存檔至路徑：{file_path}
 2025-01-16 11:36:19,031 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
 2025-01-16 11:36:19,031 - INFO - 作業完成！
+2025-01-16 12:47:28,585 - INFO - 作業開始
+2025-01-16 12:47:28,586 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 12:47:28,626 - INFO - 【待注音漢字】總字數為: 448
+2025-01-16 12:47:28,877 - INFO - 儲存格內容清除完畢
+2025-01-16 12:47:36,149 - INFO - 儲存格格式重設完畢
+2025-01-16 12:48:16,801 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-01-16 12:48:16,839 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-01-16 12:51:33,760 - INFO - 完成【漢字標音作業】 - 河洛話: <class 'type'>
+2025-01-16 12:51:34,021 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-雅俗通】《岳陽樓記》.xlsx
+2025-01-16 12:51:34,022 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-01-16 13:50:17,556 - INFO - 作業開始
+2025-01-16 13:50:17,557 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 13:50:18,345 - INFO - 作業異常終止！
+2025-01-16 13:50:18,345 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-01-16 13:51:11,359 - INFO - 作業開始
+2025-01-16 13:51:11,360 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 13:52:36,432 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-01-16 13:53:27,174 - INFO - 作業開始
+2025-01-16 13:53:27,175 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 13:53:49,737 - INFO - 作業開始
+2025-01-16 13:53:49,738 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 13:59:16,307 - INFO - 作業開始
+2025-01-16 13:59:16,308 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 13:59:16,923 - INFO - 作業異常終止！
+2025-01-16 13:59:52,781 - INFO - 作業開始
+2025-01-16 13:59:52,782 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 13:59:53,289 - INFO - 作業異常終止！
+2025-01-16 14:00:46,515 - INFO - 作業開始
+2025-01-16 14:00:46,516 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 14:00:47,026 - INFO - 作業異常終止！
+2025-01-16 14:01:18,722 - INFO - 作業開始
+2025-01-16 14:01:18,723 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 14:02:32,874 - INFO - 作業開始
+2025-01-16 14:02:32,876 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 14:04:31,825 - INFO - 作業開始
+2025-01-16 14:04:31,826 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 14:04:41,758 - INFO - 作業異常終止！
+2025-01-16 14:05:26,646 - INFO - 作業開始
+2025-01-16 14:05:26,647 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 14:06:40,849 - INFO - 作業開始
+2025-01-16 14:06:40,850 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 14:07:10,028 - ERROR - 作業過程發生未知的異常錯誤: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147352565), None)
+Traceback (most recent call last):
+  File "mod_excel_access.py", line 471, in main
+    result_code = process(wb)
+  File "mod_excel_access.py", line 410, in process
+    han_ji_dict = create_dict_by_sheet(wb, "缺字庫")
+                  ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "mod_excel_access.py", line 184, in create_dict_by_sheet
+    ji_khoo_sheet = wb.sheets[sheet_name]
+                    ~~~~~~~~~^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 89, in __getitem__
+    return self(key)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 5218, in __call__
+    return Sheet(impl=self.impl(name_or_index))
+                      ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 943, in __call__
+    return Sheet(xl=self.xl(name_or_index))
+                    ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147352565), None)
+2025-01-16 14:07:41,756 - INFO - 作業開始
+2025-01-16 14:07:41,757 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 14:09:50,196 - INFO - 作業開始
+2025-01-16 14:09:50,197 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 14:10:17,717 - ERROR - 作業過程發生未知的異常錯誤: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147352565), None)
+Traceback (most recent call last):
+  File "mod_excel_access.py", line 471, in main
+    result_code = process(wb)
+  File "mod_excel_access.py", line 410, in process
+    han_ji_dict = create_dict_by_sheet(wb, "缺字庫")
+                  ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "mod_excel_access.py", line 184, in create_dict_by_sheet
+    ji_khoo_sheet = wb.sheets[sheet_name]
+                    ~~~~~~~~~^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 89, in __getitem__
+    return self(key)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 5218, in __call__
+    return Sheet(impl=self.impl(name_or_index))
+                      ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 943, in __call__
+    return Sheet(xl=self.xl(name_or_index))
+                    ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147352565), None)
+2025-01-16 14:11:40,686 - INFO - 作業開始
+2025-01-16 14:11:40,687 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 14:11:55,981 - ERROR - 作業過程發生未知的異常錯誤: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147352565), None)
+Traceback (most recent call last):
+  File "mod_excel_access.py", line 471, in main
+    result_code = process(wb)
+  File "mod_excel_access.py", line 410, in process
+    han_ji_dict = create_dict_by_sheet(wb=wb, sheet_name='缺字庫')
+                  ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "mod_excel_access.py", line 184, in create_dict_by_sheet
+    ji_khoo_sheet = wb.sheets[sheet_name]
+                    ~~~~~~~~~^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 89, in __getitem__
+    return self(key)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 5218, in __call__
+    return Sheet(impl=self.impl(name_or_index))
+                      ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 943, in __call__
+    return Sheet(xl=self.xl(name_or_index))
+                    ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147352565), None)
+2025-01-16 14:12:06,857 - INFO - 作業開始
+2025-01-16 14:12:06,858 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 14:14:25,605 - INFO - 作業開始
+2025-01-16 14:14:25,606 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 14:15:50,511 - INFO - 作業開始
+2025-01-16 14:15:50,512 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 14:37:19,104 - INFO - 作業開始
+2025-01-16 14:37:19,105 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 14:38:33,325 - INFO - 作業開始
+2025-01-16 14:38:33,326 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 14:40:55,917 - INFO - 作業開始
+2025-01-16 14:40:55,918 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 14:42:04,902 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 14:42:05,255 - ERROR - 執行過程中發生未知錯誤: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 325, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 284, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 153, in update_han_ji_piau_im
+    han_ji_piau_im_sheet.range((row, 1)).select()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2815, in select
+    self.impl.select()
+    ~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1500, in select
+    return self.xl.Select()
+           ~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject <unknown>>", line 2, in Select
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+2025-01-16 14:42:05,346 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-16 15:12:32,247 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 15:13:06,916 - ERROR - 執行過程中發生未知錯誤: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147352565), None)
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 325, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 284, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 135, in update_han_ji_piau_im
+    han_ji_dict = create_dict_by_sheet(wb=wb, sheet_name='人工標音字庫')
+                  ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_excel_access.py", line 184, in create_dict_by_sheet
+    ji_khoo_sheet = wb.sheets[sheet_name]
+                    ~~~~~~~~~^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 89, in __getitem__
+    return self(key)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 5218, in __call__
+    return Sheet(impl=self.impl(name_or_index))
+                      ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 943, in __call__
+    return Sheet(xl=self.xl(name_or_index))
+                    ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147352565), None)
+2025-01-16 15:13:07,034 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-16 15:14:38,794 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 17:14:19,565 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 17:14:25,951 - ERROR - 執行過程中發生未知錯誤: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 342, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 301, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 158, in update_han_ji_piau_im
+    han_ji_piau_im_sheet.range((row, 1)).select()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2815, in select
+    self.impl.select()
+    ~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1500, in select
+    return self.xl.Select()
+           ~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject <unknown>>", line 2, in Select
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+2025-01-16 17:14:26,018 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-16 17:14:35,143 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 17:14:58,777 - ERROR - 執行過程中發生未知錯誤: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 342, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 301, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 158, in update_han_ji_piau_im
+    han_ji_piau_im_sheet.range((row, 1)).select()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2815, in select
+    self.impl.select()
+    ~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1500, in select
+    return self.xl.Select()
+           ~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject <unknown>>", line 2, in Select
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+2025-01-16 17:14:58,850 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-16 17:16:18,746 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 17:16:44,825 - ERROR - 執行過程中發生未知錯誤: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 342, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 301, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 158, in update_han_ji_piau_im
+    han_ji_piau_im_sheet.range((row, 1)).select()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2815, in select
+    self.impl.select()
+    ~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1500, in select
+    return self.xl.Select()
+           ~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject <unknown>>", line 2, in Select
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+2025-01-16 17:16:44,889 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-16 17:18:29,046 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 17:22:05,870 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 17:23:17,106 - ERROR - 執行過程中發生未知錯誤: string index out of range
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 343, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 302, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 219, in update_han_ji_piau_im
+    han_ji_piau_im_cell.value = tlpa_tng_han_ji_piau_im(piau_im=piau_im,
+                                ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+                                                        piau_im_huat=piau_im_huat,
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                                        tai_gi_im_piau=corrected_tai_gi)
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 264, in tlpa_tng_han_ji_piau_im
+    siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(tai_gi_im_piau)
+                               ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 167, in split_tai_gi_im_piau
+    tiau = im_piau[-1]  # 最後一個字符是聲調
+           ~~~~~~~^^^^
+IndexError: string index out of range
+2025-01-16 17:23:17,177 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-16 17:23:54,302 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 17:24:22,000 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 17:26:16,728 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 17:36:34,516 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 17:38:01,290 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 17:44:34,738 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 17:45:52,475 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-16 17:45:52,476 - INFO - 完成【處理作業】...
+2025-01-16 17:45:52,556 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-16 17:45:52,556 - INFO - 作業成功完成！
+2025-01-16 18:29:45,304 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 18:30:15,208 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-16 18:30:15,208 - INFO - 完成【處理作業】...
+2025-01-16 18:30:15,284 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-16 18:30:15,284 - INFO - 作業成功完成！
+2025-01-16 18:30:39,730 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 18:31:11,033 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-16 18:31:11,034 - INFO - 完成【處理作業】...
+2025-01-16 18:31:11,109 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-16 18:31:11,109 - INFO - 作業成功完成！
+2025-01-16 19:47:11,419 - INFO - 作業開始
+2025-01-16 19:47:11,420 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 19:47:11,453 - INFO - 【待注音漢字】總字數為: 448
+2025-01-16 19:47:11,529 - INFO - 儲存格內容清除完畢
+2025-01-16 19:47:18,329 - INFO - 儲存格格式重設完畢
+2025-01-16 19:47:50,343 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-01-16 19:47:50,379 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-01-16 19:50:09,141 - INFO - 完成【漢字標音作業】 - 河洛話: <class 'type'>
+2025-01-16 19:50:09,330 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-雅俗通】《岳陽樓記》.xlsx
+2025-01-16 19:50:09,330 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-01-16 19:56:27,825 - INFO - 作業開始
+2025-01-16 19:56:27,827 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 19:56:27,860 - INFO - 【待注音漢字】總字數為: 448
+2025-01-16 19:56:28,035 - INFO - 儲存格內容清除完畢
+2025-01-16 19:56:34,187 - INFO - 儲存格格式重設完畢
+2025-01-16 19:57:06,332 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-01-16 19:57:06,369 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-01-16 19:59:26,091 - INFO - 完成【漢字標音作業】 - 河洛話: <class 'type'>
+2025-01-16 19:59:26,317 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-雅俗通】《岳陽樓記》.xlsx
+2025-01-16 19:59:26,318 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-01-16 20:00:32,420 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 20:01:01,214 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-16 20:01:01,214 - INFO - 完成【處理作業】...
+2025-01-16 20:01:01,308 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-16 20:01:01,308 - INFO - 作業成功完成！
+2025-01-16 20:04:37,053 - INFO - 作業開始
+2025-01-16 20:04:37,053 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 20:04:37,087 - INFO - 【待注音漢字】總字數為: 448
+2025-01-16 20:04:37,188 - INFO - 儲存格內容清除完畢
+2025-01-16 20:04:43,380 - INFO - 儲存格格式重設完畢
+2025-01-16 20:05:16,100 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-01-16 20:05:16,137 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-01-16 20:07:36,157 - INFO - 完成【漢字標音作業】 - 河洛話: <class 'type'>
+2025-01-16 20:07:36,366 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-雅俗通】《岳陽樓記》.xlsx
+2025-01-16 20:07:36,366 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-01-16 20:07:44,077 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 20:10:57,379 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 20:11:58,150 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 20:16:42,309 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 20:20:06,196 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 20:22:00,319 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 20:23:25,816 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 20:26:27,624 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 20:28:51,332 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 20:31:04,880 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 20:33:12,914 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 20:36:43,432 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 20:39:55,557 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 20:41:23,712 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 20:43:08,376 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-16 20:43:08,377 - INFO - 完成【處理作業】...
+2025-01-16 20:43:08,457 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-16 20:43:08,457 - INFO - 作業成功完成！
+2025-01-16 20:44:13,101 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 20:45:34,342 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 20:49:07,569 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 20:50:30,367 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-16 20:50:30,368 - INFO - 完成【處理作業】...
+2025-01-16 20:50:30,442 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-16 20:50:30,442 - INFO - 作業成功完成！
+2025-01-16 20:51:01,499 - INFO - 作業開始
+2025-01-16 20:51:01,500 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 20:51:01,535 - INFO - 【待注音漢字】總字數為: 448
+2025-01-16 20:51:01,677 - INFO - 儲存格內容清除完畢
+2025-01-16 20:51:08,107 - INFO - 儲存格格式重設完畢
+2025-01-16 20:51:40,192 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-01-16 20:51:40,228 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-01-16 20:53:59,436 - INFO - 完成【漢字標音作業】 - 河洛話: <class 'type'>
+2025-01-16 20:53:59,639 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-雅俗通】《岳陽樓記》.xlsx
+2025-01-16 20:53:59,639 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-01-16 20:55:12,977 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 20:56:15,724 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 21:03:16,557 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 21:12:32,610 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 21:16:36,489 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 21:17:25,355 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 21:19:18,675 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 21:26:35,215 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 21:47:25,513 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 21:49:34,378 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 22:06:26,561 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-16 22:08:21,023 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-16 22:08:21,023 - INFO - 完成【處理作業】...
+2025-01-16 22:08:21,128 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-16 22:08:21,128 - INFO - 作業成功完成！
