@@ -17,6 +17,7 @@ from a701_作業中活頁檔填入漢字 import process as fill_hanji_in_cells
 
 # 載入自訂模組/函式
 # from p709_reset_han_ji_cells import reset_han_ji_cells
+# from mod_file_access import load_module_function, save_as_new_file
 from a702_查找及填入漢字標音 import reset_han_ji_cells
 
 # 載入自訂模組/函式
@@ -26,7 +27,6 @@ from mod_excel_access import (
     get_value_by_name,
     maintain_ji_khoo,
 )
-from mod_file_access import load_module_function, save_as_new_file
 from mod_標音 import PiauIm  # 漢字標音物件
 from mod_標音 import hong_im_tng_tai_gi_im_piau  # 方音符號轉台語音標
 from mod_標音 import is_punctuation  # 是否為標點符號
