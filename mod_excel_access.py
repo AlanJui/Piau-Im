@@ -56,6 +56,22 @@ DEFAULT_SHEET_LIST = [
 # =========================================================================
 # 程式用函式
 # =========================================================================
+def ensure_sheet_exists(wb, sheet_name):
+    """
+    確保指定名稱的工作表存在，如果不存在則新增。
+    :param wb: Excel 活頁簿物件。
+    :param sheet_name: 工作表名稱。
+    :return: 新增或取得的工作表物件。
+    """
+    try:
+        # 嘗試取得工作表
+        sheet = wb.sheets[sheet_name]
+    except KeyError:
+        # 如果工作表不存在，新增一個
+        sheet = wb.sheets.add(sheet_name)
+    return sheet
+
+
 def delete_sheet_by_name(wb, sheet_name: str, show_msg: bool=False):
     """
     刪除指定名稱的工作表
