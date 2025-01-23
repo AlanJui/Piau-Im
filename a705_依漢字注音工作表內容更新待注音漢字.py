@@ -10,10 +10,13 @@ from pathlib import Path
 import xlwings as xw
 from dotenv import load_dotenv
 
+# 載入自訂模組
 from a701_作業中活頁檔填入漢字 import process as fill_hanji_in_cells
+from mod_excel_access import delete_sheet_by_name
 
 # 載入自訂模組
 from mod_file_access import save_as_new_file
+from mod_字庫 import JiKhooDict  # 漢字字庫物件
 
 # =========================================================================
 # 載入環境變數
@@ -90,6 +93,19 @@ def process(wb):
     start_col = 4
     end_col = start_col + CHARS_PER_ROW
 
+    # 建置自動及人工漢字標音字庫工作表：（1）【標音字庫】；（2）【人工標音字】；（3）【缺字表】
+    piau_im_sheet_name = '標音字庫'
+    delete_sheet_by_name(wb=wb, sheet_name=piau_im_sheet_name)
+    piau_im_ji_khoo = JiKhooDict()
+
+    jin_kang_piau_im_sheet_name='人工標音字庫'
+    delete_sheet_by_name(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
+    jin_kang_piau_im_ji_khoo = JiKhooDict()
+
+    khuat_ji_piau_name = '缺字表'
+    delete_sheet_by_name(wb=wb, sheet_name=khuat_ji_piau_name)
+    khuat_ji_piau_ji_khoo = JiKhooDict()
+
     #--------------------------------------------------------------------------
     # 作業處理：逐列取出漢字，組合成純文字檔
     #--------------------------------------------------------------------------
@@ -139,6 +155,13 @@ def process(wb):
         print("\n")
         line += 1
         row += 4
+
+    #--------------------------------------------------------------------------
+    # 將【標音字庫】、【人工標音字庫】、【缺字表】三個字典，寫入 Excel 工作表
+    #--------------------------------------------------------------------------
+    piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=piau_im_sheet_name)
+    jin_kang_piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
+    khuat_ji_piau_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=khuat_ji_piau_name)
 
     #--------------------------------------------------------------------------
     # 更新【待注音漢字】儲存格內容

@@ -1,4 +1,4 @@
-from mod_excel_access import ensure_sheet_exists
+from mod_excel_access import ensure_sheet_exists, get_total_rows_in_sheet
 
 
 class JiKhooDict:
@@ -18,6 +18,8 @@ class JiKhooDict:
         :param coordinates: 漢字在【漢字注音】工作表中的座標 (row, col)。
         """
         if han_ji not in self.ji_khoo_dict:
+            if tai_gi_im_piau is None or tai_gi_im_piau == "":
+                tai_gi_im_piau = "N/A"
             # 如果漢字不存在，初始化資料結構
             self.ji_khoo_dict[han_ji] = [1, tai_gi_im_piau, 'N/A', [coordinates]]
         else:
@@ -52,6 +54,51 @@ class JiKhooDict:
         else:
             raise ValueError(f"漢字 '{han_ji}' 不存在於字典中。")
 
+
+    def get_value_by_key(self, han_ji: str, key: str):
+        """
+        使用【漢字】取用其【台語音標】、【總數】、【座標】欄的值。
+
+        :param han_ji: 漢字。
+        :param key: 欄位名稱。
+        :return: 欄位值。
+        """
+        if han_ji in self.ji_khoo_dict:
+            if key == "台語音標":
+                return self.ji_khoo_dict[han_ji][1]
+            elif key == "校正音標":
+                return self.ji_khoo_dict[han_ji][2]
+            elif key == "總數":
+                return self.ji_khoo_dict[han_ji][0]
+            elif key == "座標":
+                return self.ji_khoo_dict[han_ji][3]
+            else:
+                raise ValueError(f"無法識別的欄位名稱 '{key}'。")
+        else:
+            raise ValueError(f"漢字 '{han_ji}' 不存在於字典中。")
+
+
+    def update_value_by_key(self, han_ji: str, key: str, value):
+        """
+        使用【漢字】更新其【台語音標】、【總數】、【座標】欄的值。
+
+        :param han_ji: 漢字。
+        :param key: 欄位名稱。
+        :param value: 新的欄位值。
+        """
+        if han_ji in self.ji_khoo_dict:
+            if key == "台語音標":
+                self.ji_khoo_dict[han_ji][1] = value
+            elif key == "校正音標":
+                self.ji_khoo_dict[han_ji][2] = value
+            elif key == "總數":
+                self.ji_khoo_dict[han_ji][0] = value
+            elif key == "座標":
+                self.ji_khoo_dict[han_ji][3] = value
+            else:
+                raise ValueError(f"無法識別的欄位名稱 '{key}'。")
+        else:
+            raise ValueError(f"漢字 '{han_ji}' 不存在於字典中。")
 
     def add_or_update_entry(self, han_ji: str, tai_gi_im_piau: str, coordinates: tuple):
         """
@@ -111,6 +158,12 @@ class JiKhooDict:
         :param sheet_name: 工作表名稱。
         :return: JiKhooDict 物件。
         """
+        if not ensure_sheet_exists(wb, sheet_name):
+            raise ValueError(f"無法找到工作表 '{sheet_name}'。")
+        if get_total_rows_in_sheet(wb, sheet_name) <= 1:
+            # raise ValueError(f"工作表 '{sheet_name}' 為空。")
+            return None
+
         try:
             sheet = wb.sheets[sheet_name]
         except Exception as e:
@@ -265,8 +318,67 @@ def ut03():
     print(f"座標3：({third_coordinate[0]}, {third_coordinate[1]})")
 
 
+def ut04():
+    import xlwings as xw
+
+    # 測試用 Excel 活頁簿
+    wb = xw.Book('output7\\a702_Test_Case.xlsx')
+
+    # 初始化 JiKhooDict
+    khuat_ji_piau = JiKhooDict.create_ji_khoo_dict(wb, "缺字表")
+
+    # 新增或更新資料
+    han_ji = "郁"
+    tai_gi_im_piau = khuat_ji_piau[han_ji][1]
+    hau_zing_im_piau = khuat_ji_piau[han_ji][2]
+    cells_list = khuat_ji_piau[han_ji][3]
+    # tai_gi_im_piau, hau_zing_im_piau, cells_list = khuat_ji_piau[han_ji]
+    print(f"台語音標：{tai_gi_im_piau}")
+    print(f"校正音標：{hau_zing_im_piau}")
+    print(f"座標：{cells_list}")
+
+    # 使用 get_entry 方法
+    han_ji = "郁"
+    entry = khuat_ji_piau.get_entry(han_ji)
+    tai_gi_im_piau = entry[1]
+    hau_zing_im_piau = entry[2]
+    cells_list = entry[3]
+    print(f"台語音標：{tai_gi_im_piau}")
+    print(f"校正音標：{hau_zing_im_piau}")
+    print(f"座標：{cells_list}")
+
+
+def ut05():
+    import xlwings as xw
+
+    # 測試用 Excel 活頁簿
+    wb = xw.Book('output7\\a702_Test_Case.xlsx')
+
+    # 初始化 JiKhooDict
+    khuat_ji_piau = JiKhooDict.create_ji_khoo_dict(wb, "缺字表")
+
+    # 新增或更新資料
+    han_ji = "郁"
+    tai_gi_im_piau = khuat_ji_piau.get_value_by_key(han_ji, "台語音標")
+    hau_zing_im_piau = khuat_ji_piau.get_value_by_key(han_ji, "校正音標")
+    total = khuat_ji_piau.get_value_by_key(han_ji, "總數")
+    cells_list = khuat_ji_piau.get_value_by_key(han_ji, "座標")
+    print(f"台語音標：{tai_gi_im_piau}")
+    print(f"校正音標：{hau_zing_im_piau}")
+    print(f"座標：{cells_list}")
+
+    # 更新資料
+    print(f"總數：{total}")
+    total -= 1
+    khuat_ji_piau.update_value_by_key(han_ji, "總數", total)
+    print(khuat_ji_piau.get_value_by_key(han_ji, "總數"))
+    print('--------------------------------------------------------')
+
+
 # 單元測試
 if __name__ == "__main__":
     # ut01()
     # ut02()
-    ut03()
+    # ut03()
+    # ut04()
+    ut05()

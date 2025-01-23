@@ -3266,3 +3266,170 @@ FileNotFoundError: No such file: 'Test_Case_Sample.xlsx'
 2025-01-23 14:02:32,100 - INFO - 己存檔至路徑：{file_path}
 2025-01-23 14:02:32,100 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
 2025-01-23 14:02:32,100 - INFO - 作業完成！
+2025-01-23 20:40:05,795 - INFO - 作業開始
+2025-01-23 20:40:05,796 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-23 20:41:03,923 - ERROR - 作業過程發生未知的異常錯誤: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', '您不能使用這個檔名存檔，因為已經有同樣檔名的檔案或增益集被開啟了。請選用其他的檔名，或將那個同名的檔案或增益集關閉。', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a702_查找及填入漢字標音.py", line 394, in main
+    result_code = process(wb)
+  File "a702_查找及填入漢字標音.py", line 353, in process
+    save_as_new_file(wb=wb)
+    ~~~~~~~~~~~~~~~~^^^^^^^
+  File "c:\work\Piau-Im\mod_file_access.py", line 48, in save_as_new_file
+    wb.save(new_file_path)
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 1169, in save
+    self.impl.save(path, password=password)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 894, in save
+    self.xl.SaveAs(
+    ~~~~~~~~~~~~~~^
+        os.path.realpath(path), FileFormat=file_format, Password=password
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject <unknown>>", line 4, in SaveAs
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', '您不能使用這個檔名存檔，因為已經有同樣檔名的檔案或增益集被開啟了。請選用其他的檔名，或將那個同名的檔案或增益集關閉。', 'xlmain11.chm', 0, -2146827284), None)
+2025-01-23 20:41:03,947 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-23 20:44:39,947 - INFO - 作業開始
+2025-01-23 20:44:39,948 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-23 20:45:22,074 - ERROR - 作業過程發生未知的異常錯誤: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', '您不能使用這個檔名存檔，因為已經有同樣檔名的檔案或增益集被開啟了。請選用其他的檔名，或將那個同名的檔案或增益集關閉。', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a702_查找及填入漢字標音.py", line 394, in main
+    result_code = process(wb)
+  File "a702_查找及填入漢字標音.py", line 353, in process
+    save_as_new_file(wb=wb)
+    ~~~~~~~~~~~~~~~~^^^^^^^
+  File "c:\work\Piau-Im\mod_file_access.py", line 48, in save_as_new_file
+    wb.save(new_file_path)
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 1169, in save
+    self.impl.save(path, password=password)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 894, in save
+    self.xl.SaveAs(
+    ~~~~~~~~~~~~~~^
+        os.path.realpath(path), FileFormat=file_format, Password=password
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject <unknown>>", line 4, in SaveAs
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', '您不能使用這個檔名存檔，因為已經有同樣檔名的檔案或增益集被開啟了。請選用其他的檔名，或將那個同名的檔案或增益集關閉。', 'xlmain11.chm', 0, -2146827284), None)
+2025-01-23 20:45:22,081 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-23 20:52:45,214 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-23 20:52:45,477 - ERROR - 執行過程中發生未知錯誤: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 411, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 370, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 148, in update_han_ji_piau_im
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict(wb=wb, sheet_name=jin_kang_piau_im_name)
+  File "c:\work\Piau-Im\mod_字庫.py", line 173, in create_ji_khoo_dict
+    if not isinstance(data[0], list):
+                      ~~~~^^^
+TypeError: 'NoneType' object is not subscriptable
+2025-01-23 20:52:45,563 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-23 20:53:07,721 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-23 20:53:07,977 - ERROR - 執行過程中發生未知錯誤: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 411, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 370, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 148, in update_han_ji_piau_im
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict(wb=wb, sheet_name=jin_kang_piau_im_name)
+  File "c:\work\Piau-Im\mod_字庫.py", line 173, in create_ji_khoo_dict
+    if not isinstance(data[0], list):
+                      ~~~~^^^
+TypeError: 'NoneType' object is not subscriptable
+2025-01-23 20:53:08,061 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-23 20:53:59,441 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-23 20:56:27,708 - ERROR - 執行過程中發生未知錯誤: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 411, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 370, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 148, in update_han_ji_piau_im
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict(wb=wb, sheet_name=jin_kang_piau_im_name)
+  File "c:\work\Piau-Im\mod_字庫.py", line 173, in create_ji_khoo_dict
+    if not isinstance(data[0], list):
+                      ~~~~^^^
+TypeError: 'NoneType' object is not subscriptable
+2025-01-23 20:56:27,804 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-23 20:58:29,562 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-23 21:03:16,919 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-23 21:04:36,012 - ERROR - 執行過程中發生未知錯誤: 工作表 '人工標音字庫' 為空。
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 411, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 370, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 148, in update_han_ji_piau_im
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict(wb=wb, sheet_name=jin_kang_piau_im_name)
+  File "c:\work\Piau-Im\mod_字庫.py", line 164, in create_ji_khoo_dict
+    raise ValueError(f"工作表 '{sheet_name}' 為空。")
+ValueError: 工作表 '人工標音字庫' 為空。
+2025-01-23 21:04:36,123 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-23 21:05:07,156 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-23 21:06:31,345 - ERROR - 執行過程中發生未知錯誤: 工作表 '人工標音字庫' 為空。
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 411, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 370, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 148, in update_han_ji_piau_im
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict(wb=wb, sheet_name=jin_kang_piau_im_name)
+  File "c:\work\Piau-Im\mod_字庫.py", line 164, in create_ji_khoo_dict
+    raise ValueError(f"工作表 '{sheet_name}' 為空。")
+ValueError: 工作表 '人工標音字庫' 為空。
+2025-01-23 21:06:31,445 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-23 21:08:21,453 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-23 21:09:15,077 - ERROR - 執行過程中發生未知錯誤: "漢字 '0' 不存在於字典中。"
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 411, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 370, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 225, in update_han_ji_piau_im
+    if khuat_ji_piau_ji_khoo and han_ji in khuat_ji_piau_ji_khoo:
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_字庫.py", line 212, in __getitem__
+    raise KeyError(f"漢字 '{han_ji}' 不存在於字典中。")
+KeyError: "漢字 '0' 不存在於字典中。"
+2025-01-23 21:09:15,182 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-23 21:13:32,455 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-23 21:14:58,864 - ERROR - 執行過程中發生未知錯誤: "漢字 '0' 不存在於字典中。"
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 411, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 370, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 225, in update_han_ji_piau_im
+    if khuat_ji_piau_ji_khoo and han_ji in khuat_ji_piau_ji_khoo:
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_字庫.py", line 212, in __getitem__
+    raise KeyError(f"漢字 '{han_ji}' 不存在於字典中。")
+KeyError: "漢字 '0' 不存在於字典中。"
+2025-01-23 21:14:58,987 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-23 21:15:09,334 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-23 21:15:52,401 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-23 21:16:06,356 - ERROR - 執行過程中發生未知錯誤: "漢字 '0' 不存在於字典中。"
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 411, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 370, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 225, in update_han_ji_piau_im
+    if khuat_ji_piau_ji_khoo and han_ji in khuat_ji_piau_ji_khoo:
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_字庫.py", line 212, in __getitem__
+    raise KeyError(f"漢字 '{han_ji}' 不存在於字典中。")
+KeyError: "漢字 '0' 不存在於字典中。"
+2025-01-23 21:16:06,480 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-23 21:16:14,598 - INFO - 專案根目錄為: C:\work\Piau-Im
