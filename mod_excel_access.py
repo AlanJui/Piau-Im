@@ -100,6 +100,7 @@ def get_value_by_name(wb, name):
         value = None
     return value
 
+
 def get_ji_khoo(wb, sheet_name="標音字庫"):
     """
     從 Excel 工作表中取得漢字庫
@@ -116,6 +117,7 @@ def get_ji_khoo(wb, sheet_name="標音字庫"):
         sheet = wb.sheets[sheet_name]
 
     return sheet
+
 
 def maintain_ji_khoo(sheet, han_ji, tai_gi, show_msg=False):
     """
@@ -162,6 +164,7 @@ def maintain_ji_khoo(sheet, han_ji, tai_gi, show_msg=False):
 
     # if show_msg: print(f"已完成【漢字庫】工作表的更新！")
 
+
 def get_tai_gi_by_han_ji(sheet, han_ji, show_msg=False):
     """
     根據漢字取得台語音標
@@ -190,6 +193,7 @@ def get_tai_gi_by_han_ji(sheet, han_ji, show_msg=False):
 
     if show_msg: print(f"漢字：【{han_ji}】不存在於【漢字庫】")
     return None
+
 
 def create_dict_by_sheet(wb, sheet_name: str, allow_empty_correction: bool = False) -> Optional[dict]:
     """
@@ -244,6 +248,7 @@ def get_sheet_by_name(wb, sheet_name="工作表1"):
     # 傳回 sheet 物件
     return sheet
 
+
 def prepare_working_sheets(wb, sheet_list=DEFAULT_SHEET_LIST):
     # 確認作業用工作表已存在；若無，則建置
     for sheet_name in sheet_list:
@@ -261,6 +266,7 @@ def prepare_working_sheets(wb, sheet_list=DEFAULT_SHEET_LIST):
             # 新增程式需使用之工作表
             print(f"工作表 {sheet_name} 不存在，正在新增...")
             wb.sheets.add(name=sheet_name)
+
 
 def get_total_rows_in_sheet(wb, sheet_name):
     try:

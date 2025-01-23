@@ -53,6 +53,25 @@ class JiKhooDict:
             raise ValueError(f"漢字 '{han_ji}' 不存在於字典中。")
 
 
+    def add_or_update_entry(self, han_ji: str, tai_gi_im_piau: str, coordinates: tuple):
+        """
+        新增或更新一筆【漢字】的資料。
+
+        - 如果漢字已存在，將更新總數並新增座標。
+        - 如果漢字不存在，將新建一筆資料。
+
+        :param han_ji: 漢字。
+        :param tai_gi_im_piau: 台語音標。
+        :param coordinates: 漢字在【漢字注音】工作表中的座標 (row, col)。
+        """
+        if han_ji in self.ji_khoo_dict:
+            # 如果漢字已存在，使用 update_entry 更新
+            self.update_entry(han_ji, coordinates)
+        else:
+            # 如果漢字不存在，使用 add_entry 新增
+            self.add_entry(han_ji, tai_gi_im_piau, coordinates)
+
+
     def write_to_excel_sheet(self, wb, sheet_name: str) -> int:
         """
         將【字典】寫入 Excel 工作表。
@@ -205,8 +224,49 @@ def ut02():
     third_coordinate = entry[3][2]  # 取得第三個座標
     print(f"座標3：({third_coordinate[0]}, {third_coordinate[1]})")
 
+    entry2 = new_ji_khoo.get_entry("慶")  # 獲取 '不存在的漢字' 的資料
+    print(f'entry2: {entry2}')
+    print(f'entry2[1]: {entry2[1]}')
+
+    # entry3 = new_ji_khoo["動"]  # 獲取 '不存在的漢字' 的資料
+    entry3 = new_ji_khoo.get_entry("動")  # 獲取 '不存在的漢字' 的資料
+    if entry3:
+        print(entry3)
+
+
+def ut03():
+    import xlwings as xw
+
+    # 測試用 Excel 活頁簿
+    wb = xw.Book()
+
+    # 初始化 JiKhooDict
+    ji_khoo = JiKhooDict()
+
+    # 新增或更新資料
+    ji_khoo.add_or_update_entry("慶", "khing3", (5, 3))
+    ji_khoo.add_or_update_entry("人", "jin5", (5, 6))
+    ji_khoo.add_or_update_entry("慶", "khing3", (133, 11))
+    ji_khoo.add_or_update_entry("慶", "khing3", (145, 7))
+    ji_khoo.add_or_update_entry("人", "jin5", (97, 9))
+
+    # 寫入 Excel
+    ji_khoo.write_to_excel_sheet(wb, "漢字庫")
+
+    # 從 Excel 建立字典
+    new_ji_khoo = JiKhooDict.create_ji_khoo_dict(wb, "漢字庫")
+
+    # 查看整個字典
+    print(new_ji_khoo)
+
+    # 獲取第三個座標
+    entry = new_ji_khoo["慶"]
+    third_coordinate = entry[3][2]
+    print(f"座標3：({third_coordinate[0]}, {third_coordinate[1]})")
+
 
 # 單元測試
 if __name__ == "__main__":
     # ut01()
-    ut02()
+    # ut02()
+    ut03()

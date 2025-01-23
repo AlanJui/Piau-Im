@@ -3216,3 +3216,53 @@ IndexError: string index out of range
 2025-01-18 11:47:02,586 - INFO - 己存檔至路徑：{file_path}
 2025-01-18 11:47:02,586 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
 2025-01-18 11:47:02,586 - INFO - 作業完成！
+2025-01-23 11:16:16,839 - INFO - 作業開始
+2025-01-23 11:16:16,841 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-23 11:16:16,842 - ERROR - 無法找到作用中的 Excel 工作簿: 'NoneType' object has no attribute 'books'
+Traceback (most recent call last):
+  File "mod_excel_access.py", line 530, in main
+    wb = xw.apps.active.books.active    # 取得 Excel 作用中的活頁簿檔案
+         ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'books'
+2025-01-23 11:19:12,111 - INFO - 作業開始
+2025-01-23 11:19:15,153 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-23 11:20:26,360 - ERROR - 無法找到作用中的 Excel 工作簿: 'NoneType' object has no attribute 'books'
+Traceback (most recent call last):
+  File "mod_excel_access.py", line 530, in main
+    wb = xw.apps.active.books.active    # 取得 Excel 作用中的活頁簿檔案
+         ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'books'
+2025-01-23 11:22:59,514 - INFO - 作業開始
+2025-01-23 11:22:59,516 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-23 11:22:59,541 - ERROR - 作業過程發生未知的異常錯誤: No such file: 'Test_Case_Sample.xlsx'
+Traceback (most recent call last):
+  File "mod_excel_access.py", line 544, in main
+    result_code = process(wb)
+  File "mod_excel_access.py", line 478, in process
+    return_code = ut_khuat_ji_piau(wb=wb)
+  File "mod_excel_access.py", line 346, in ut_khuat_ji_piau
+    wb = xw.Book('Test_Case_Sample.xlsx')
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 933, in __init__
+    impl = app.books.open(
+           ~~~~~~~~~~~~~~^
+        fullname,
+        ^^^^^^^^^
+    ...<13 lines>...
+        corrupt_load,
+        ^^^^^^^^^^^^^
+    ).impl
+    ^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 5157, in open
+    raise FileNotFoundError("No such file: '%s'" % fullname)
+FileNotFoundError: No such file: 'Test_Case_Sample.xlsx'
+2025-01-23 13:35:51,118 - INFO - 作業開始
+2025-01-23 13:35:51,119 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-23 13:46:27,529 - INFO - 作業開始
+2025-01-23 13:46:27,530 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-23 13:52:24,984 - INFO - 作業開始
+2025-01-23 13:52:24,985 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-23 13:59:10,848 - INFO - 作業開始
+2025-01-23 13:59:10,849 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-23 14:02:32,100 - INFO - 己存檔至路徑：{file_path}
+2025-01-23 14:02:32,100 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-23 14:02:32,100 - INFO - 作業完成！
