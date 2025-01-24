@@ -159,8 +159,13 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
             # 取得當前儲存格內含值
             han_ji_u_piau_im = False
             msg = ""
-            cell_value = sheet.range((row, col)).value
+            cell = sheet.range((row, col))
+            # 將文字顏色設為【自動】（黑色）
+            cell.font.color = (0, 0, 0)  # 設定為黑色
+            # 將儲存格的填滿色彩設為【無填滿】
+            cell.color = None
 
+            cell_value = cell.value
             if cell_value == 'φ':
                 EOF = True
                 msg = "【文字終結】"

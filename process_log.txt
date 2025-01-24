@@ -3433,3 +3433,124 @@ Traceback (most recent call last):
 KeyError: "漢字 '0' 不存在於字典中。"
 2025-01-23 21:16:06,480 - INFO - 釋放 Excel 資源，處理完成。
 2025-01-23 21:16:14,598 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 11:22:10,154 - INFO - 作業開始
+2025-01-24 11:22:10,155 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 11:22:59,256 - INFO - 己存檔至路徑：{file_path}
+2025-01-24 11:22:59,256 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-24 11:22:59,256 - INFO - 作業完成！
+2025-01-24 11:25:35,071 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 11:27:26,311 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 11:36:16,282 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 11:39:48,941 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 11:43:28,528 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 11:44:21,028 - ERROR - 執行過程中發生未知錯誤: '銜'
+Traceback (most recent call last):
+  File "a706_手動更正漢字標音.py", line 450, in main
+    result_code = process(wb)
+  File "a706_手動更正漢字標音.py", line 409, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a706_手動更正漢字標音.py", line 135, in update_han_ji_piau_im
+    piau_im_ji_khoo.write_to_han_ji_zu_im_sheet(wb=wb,
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+                                                sheet_name='漢字注音',
+                                                ^^^^^^^^^^^^^^^^^^^^^^
+                                                ji_khoo_dict=khuat_ji_piau_ji_khoo)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_字庫.py", line 215, in write_to_han_ji_zu_im_sheet
+    self.ji_khoo_dict[han_ji][0] -= 1
+    ~~~~~~~~~~~~~~~~~^^^^^^^^
+KeyError: '銜'
+2025-01-24 11:44:21,100 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-24 11:45:01,513 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 13:49:16,692 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 14:05:44,994 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 14:08:26,185 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 14:13:13,789 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 14:19:31,307 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 14:23:43,819 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 14:25:47,462 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-24 14:25:47,463 - INFO - 完成【處理作業】...
+2025-01-24 14:25:47,600 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-24 14:25:47,600 - INFO - 作業成功完成！
+2025-01-24 14:26:11,784 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 14:26:41,477 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-24 14:26:41,477 - INFO - 完成【處理作業】...
+2025-01-24 14:26:41,608 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-24 14:26:41,608 - INFO - 作業成功完成！
+2025-01-24 16:37:04,834 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 16:40:40,560 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 16:44:03,526 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 16:46:00,838 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 16:48:50,984 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 16:53:05,208 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 16:54:27,576 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-24 16:54:27,577 - INFO - 完成【處理作業】...
+2025-01-24 16:54:27,652 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-24 16:54:27,652 - INFO - 作業成功完成！
+2025-01-24 16:56:04,889 - INFO - 作業開始
+2025-01-24 16:56:04,890 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 16:56:43,523 - INFO - 己存檔至路徑：{file_path}
+2025-01-24 16:56:43,523 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-24 16:56:43,523 - INFO - 作業完成！
+2025-01-24 17:07:04,827 - INFO - 作業開始
+2025-01-24 17:07:04,828 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 17:07:05,366 - ERROR - 作業過程發生未知的異常錯誤: 'str' object has no attribute 'font'
+Traceback (most recent call last):
+  File "a702_查找及填入漢字標音.py", line 397, in main
+    result_code = process(wb)
+  File "a702_查找及填入漢字標音.py", line 326, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name     # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a702_查找及填入漢字標音.py", line 163, in ca_han_ji_thak_im
+    cell_value.font.color = (0, 0, 0)    # 將文字顏色設為【黑色】
+    ^^^^^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'font'
+2025-01-24 17:07:05,370 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-24 17:07:28,116 - INFO - 作業開始
+2025-01-24 17:07:28,117 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 17:07:28,322 - ERROR - 作業過程發生未知的異常錯誤: 'str' object has no attribute 'font'
+Traceback (most recent call last):
+  File "a702_查找及填入漢字標音.py", line 397, in main
+    result_code = process(wb)
+  File "a702_查找及填入漢字標音.py", line 326, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name     # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a702_查找及填入漢字標音.py", line 163, in ca_han_ji_thak_im
+    cell_value.font.color = (0, 0, 0)    # 將文字顏色設為【黑色】
+    ^^^^^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'font'
+2025-01-24 17:07:28,326 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-24 17:11:57,807 - INFO - 作業開始
+2025-01-24 17:11:57,808 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 17:12:39,478 - INFO - 己存檔至路徑：{file_path}
+2025-01-24 17:12:39,478 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-24 17:12:39,478 - INFO - 作業完成！
+2025-01-24 17:19:51,980 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 17:20:13,802 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-24 17:20:13,802 - INFO - 完成【處理作業】...
+2025-01-24 17:20:13,932 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-24 17:20:13,932 - INFO - 作業成功完成！
+2025-01-24 17:26:53,451 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 17:27:17,581 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-24 17:27:17,582 - INFO - 完成【處理作業】...
+2025-01-24 17:27:17,689 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-24 17:27:17,689 - INFO - 作業成功完成！
+2025-01-24 17:28:27,715 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-24 17:28:50,275 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-01-24 17:28:50,275 - INFO - 完成【處理作業】...
+2025-01-24 17:28:50,389 - INFO - 釋放 Excel 資源，處理完成。
+2025-01-24 17:28:50,389 - INFO - 作業成功完成！

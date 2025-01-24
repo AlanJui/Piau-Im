@@ -157,7 +157,7 @@ class JiKhooDict:
         return 0
 
 
-    def write_khuat_ji_piau_to_sheet(self, wb, sheet_name: str, khuat_ji_piau: dict):
+    def write_ji_khoo_dict_to_sheet(self, wb, sheet_name: str, ji_khoo_dict: dict):
         """
         將 khuat_ji_piau 字典的資料寫回【缺字表】工作表。
 
@@ -181,14 +181,14 @@ class JiKhooDict:
 
         # 寫入字典內容
         data = []
-        for han_ji, (total_count, tai_gi_im_piau, kenn_ziann_im_piau, coordinates) in khuat_ji_piau.items():
+        for han_ji, (total_count, tai_gi_im_piau, kenn_ziann_im_piau, coordinates) in ji_khoo_dict.items():
             coords_str = "; ".join([f"({row}, {col})" for row, col in coordinates])
             data.append([han_ji, total_count, tai_gi_im_piau, kenn_ziann_im_piau, coords_str])
 
         sheet.range("A2").value = data
 
 
-    def write_to_han_ji_zu_im_sheet(self, wb, sheet_name: str, khuat_ji_piau: dict):
+    def write_to_han_ji_zu_im_sheet(self, wb, sheet_name: str, ji_khoo_dict: dict):
         """
         將字典中的所有漢字資料寫入 Excel 的「漢字注音」工作表。
 
@@ -203,7 +203,8 @@ class JiKhooDict:
             raise ValueError(f"無法找到或建立工作表 '{sheet_name}'：{e}")
 
         # 遍歷字典中的每個漢字
-        for han_ji, (total_count, tai_gi_im_piau, kenn_ziann_im_piau, coordinates) in self.ji_khoo_dict.items():
+        # for han_ji, (total_count, tai_gi_im_piau, kenn_ziann_im_piau, coordinates) in self.ji_khoo_dict.items():
+        for han_ji, (total_count, tai_gi_im_piau, kenn_ziann_im_piau, coordinates) in ji_khoo_dict.items():
             # 遍歷每個座標
             for row, col in coordinates:
                 # 將漢字和台語音標寫入指定座標
@@ -211,10 +212,11 @@ class JiKhooDict:
                 # sheet.range((row, col)).value = han_ji
                 sheet.range((row-1, col)).value = tai_gi_im_piau
                 # 每寫入一次，total_count 減 1
-                self.ji_khoo_dict[han_ji][0] -= 1
+                # self.ji_khoo_dict[han_ji][0] -= 1
+                ji_khoo_dict[han_ji][0] -= 1
 
         # 將 khuat_ji_piau 字典寫回【缺字表】工作表
-        self.write_khuat_ji_piau_to_sheet(wb, "缺字表", khuat_ji_piau)
+        self.write_ji_khoo_dict_to_sheet(wb, "缺字表", ji_khoo_dict)
 
         print(f"已成功將字典資料寫入工作表 '{sheet_name}'。")
 
