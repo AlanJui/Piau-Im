@@ -227,6 +227,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                         jin_kang_piau_im_ji_khoo.add_or_update_entry(
                             han_ji=han_ji,
                             tai_gi_im_piau=tai_gi_im_piau,
+                            kenn_ziann_im_piau='N/A',
                             coordinates=(row, col)
                         )
                     else:               # 無人工輸入，則自【漢字庫】查找作業
@@ -238,6 +239,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                             khuat_ji_piau_ji_khoo.add_or_update_entry(
                                 han_ji=han_ji,
                                 tai_gi_im_piau='',
+                                kenn_ziann_im_piau='N/A',
                                 coordinates=(row, col)
                             )
                             msg = f"【{han_ji}】查無此字！"
@@ -253,6 +255,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                             piau_im_ji_khoo.add_or_update_entry(
                                 han_ji=han_ji,
                                 tai_gi_im_piau=tai_gi_im_piau,
+                                kenn_ziann_im_piau='N/A',
                                 coordinates=(row, col)
                             )
                             han_ji_u_piau_im = True

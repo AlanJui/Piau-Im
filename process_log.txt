@@ -4135,3 +4135,119 @@ TypeError: 'NoneType' object is not subscriptable
 2025-01-25 13:25:24,142 - INFO - 專案根目錄為: C:\work\Piau-Im
 2025-01-25 13:28:08,798 - INFO - 作業開始
 2025-01-25 13:28:08,800 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-25 23:15:15,821 - INFO - 作業開始
+2025-01-25 23:15:15,822 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-25 23:15:15,960 - INFO - 開始【漢字注音】工作表的清空、重置！
+2025-01-25 23:15:22,703 - INFO - 完成【漢字注音】工作表的清空、重置！
+2025-01-25 23:15:22,972 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-雅俗通】《岳陽樓記》.xlsx
+2025-01-25 23:15:22,972 - INFO - a700_重罝漢字標音工作表.py 程式已執行完畢！
+2025-01-25 23:15:23,294 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-雅俗通】_working.xlsx.xlsx
+2025-01-25 23:21:21,139 - INFO - 作業開始
+2025-01-25 23:21:21,139 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-25 23:21:21,171 - INFO - 【待注音漢字】總字數為: 396
+2025-01-25 23:21:21,251 - INFO - 儲存格內容清除完畢
+2025-01-25 23:21:27,789 - INFO - 儲存格格式重設完畢
+2025-01-25 23:22:01,720 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-01-25 23:22:01,759 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-01-25 23:22:02,190 - ERROR - 作業過程發生未知的異常錯誤: JiKhooDict.add_or_update_entry() missing 1 required positional argument: 'kenn_ziann_im_piau'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a701_作業中活頁檔填入漢字.py", line 260, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a701_作業中活頁檔填入漢字.py", line 204, in process
+    ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3',
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      ue_im_lui_piat=ue_im_lui_piat,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      han_ji_khoo=han_ji_khoo, db_name=db_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      module_name=module_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+                      function_name='han_ji_ca_piau_im')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\a702_查找及填入漢字標音.py", line 253, in ca_han_ji_thak_im
+    piau_im_ji_khoo.add_or_update_entry(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+        tai_gi_im_piau=tai_gi_im_piau,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        coordinates=(row, col)
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+TypeError: JiKhooDict.add_or_update_entry() missing 1 required positional argument: 'kenn_ziann_im_piau'
+2025-01-25 23:22:02,205 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-01-25 23:22:36,106 - INFO - 作業開始
+2025-01-25 23:22:36,106 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-25 23:22:36,355 - ERROR - 作業過程發生未知的異常錯誤: JiKhooDict.add_or_update_entry() missing 1 required positional argument: 'kenn_ziann_im_piau'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a702_查找及填入漢字標音.py", line 399, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a702_查找及填入漢字標音.py", line 328, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name     # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\a702_查找及填入漢字標音.py", line 253, in ca_han_ji_thak_im
+    piau_im_ji_khoo.add_or_update_entry(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+        tai_gi_im_piau=tai_gi_im_piau,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        coordinates=(row, col)
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+TypeError: JiKhooDict.add_or_update_entry() missing 1 required positional argument: 'kenn_ziann_im_piau'
+2025-01-25 23:22:36,357 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-25 23:28:16,510 - INFO - 作業開始
+2025-01-25 23:28:16,510 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-25 23:28:16,546 - INFO - 【待注音漢字】總字數為: 396
+2025-01-25 23:28:16,618 - INFO - 儲存格內容清除完畢
+2025-01-25 23:28:23,384 - INFO - 儲存格格式重設完畢
+2025-01-25 23:29:00,018 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-01-25 23:29:00,062 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-01-25 23:29:00,320 - ERROR - 作業過程發生未知的異常錯誤: JiKhooDict.add_or_update_entry() missing 1 required positional argument: 'kenn_ziann_im_piau'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a701_作業中活頁檔填入漢字.py", line 260, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a701_作業中活頁檔填入漢字.py", line 204, in process
+    ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3',
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      ue_im_lui_piat=ue_im_lui_piat,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      han_ji_khoo=han_ji_khoo, db_name=db_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      module_name=module_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+                      function_name='han_ji_ca_piau_im')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\a702_查找及填入漢字標音.py", line 254, in ca_han_ji_thak_im
+    piau_im_ji_khoo.add_or_update_entry(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+        tai_gi_im_piau=tai_gi_im_piau,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        coordinates=(row, col)
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+TypeError: JiKhooDict.add_or_update_entry() missing 1 required positional argument: 'kenn_ziann_im_piau'
+2025-01-25 23:29:00,323 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-01-25 23:33:14,398 - INFO - 作業開始
+2025-01-25 23:33:14,399 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-25 23:33:14,431 - INFO - 【待注音漢字】總字數為: 396
+2025-01-25 23:33:14,518 - INFO - 儲存格內容清除完畢
+2025-01-25 23:33:21,261 - INFO - 儲存格格式重設完畢
+2025-01-25 23:33:55,896 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-01-25 23:33:55,942 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-01-25 23:34:39,290 - INFO - 完成【漢字標音作業】 - 河洛話: <class 'type'>
+2025-01-25 23:34:39,579 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-雅俗通】《蘭亭集序》.xlsx
+2025-01-25 23:34:39,579 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
