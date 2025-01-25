@@ -4133,3 +4133,5 @@ TypeError: 'NoneType' object is not subscriptable
 2025-01-25 13:23:57,175 - INFO - 專案根目錄為: C:\work\Piau-Im
 2025-01-25 13:25:24,141 - INFO - 作業開始
 2025-01-25 13:25:24,142 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-25 13:28:08,798 - INFO - 作業開始
+2025-01-25 13:28:08,800 - INFO - 專案根目錄為: C:\work\Piau-Im
