@@ -56,6 +56,19 @@ DEFAULT_SHEET_LIST = [
 # =========================================================================
 # 程式用函式
 # =========================================================================
+def get_sheet_data(sheet, start_cell):
+    """
+    從指定工作表讀取資料，並確保返回 2D 列表。
+    :param sheet: 工作表物件。
+    :param start_cell: 起始儲存格（例如 "A2"）。
+    :return: 2D 列表，若無資料則返回空列表。
+    """
+    data = sheet.range(start_cell).expand("table").value
+    if data is None:
+        return []
+    return data if isinstance(data[0], list) else [data]
+
+
 def ensure_sheet_exists(wb, sheet_name):
     """
     確保指定名稱的工作表存在，如果不存在則新增。
@@ -341,6 +354,15 @@ def clear_han_ji_kap_piau_im(wb, sheet_name='漢字注音'):
 # =========================================================================
 # 單元測試
 # =========================================================================
+def ut_get_sheet_data(wb=None):
+    if not wb:
+        wb = xw.Book('Test_Case_Sample.xlsx')
+    sheet = wb.sheets['漢字注音']
+    data = get_sheet_data(sheet, 'D5')
+    for row in data:
+        print(row)
+    return EXIT_CODE_SUCCESS
+
 def ut_khuat_ji_piau(wb=None):
     """缺字表登錄單元測試"""
     wb = xw.Book('Test_Case_Sample.xlsx')
@@ -474,19 +496,22 @@ def ut_get_total_rows_in_sheet(wb=None, sheet_name="字庫表"):
 # 作業程序
 # =========================================================================
 def process(wb):
-    # ---------------------------------------------------------------------
-    return_code = ut_khuat_ji_piau(wb=wb)
+    return_code = ut_get_sheet_data(wb=wb)
     if return_code != EXIT_CODE_SUCCESS:
         return return_code
-    han_ji_dict = create_dict_by_sheet(wb=wb, sheet_name='缺字表', allow_empty_correction=True)
-    han_ji = '霪'
-    if han_ji_dict and han_ji in han_ji_dict:
-        original_tai_gi, corrected_tai_gi, total_count, row_index_in_ji_khoo = han_ji_dict[han_ji]
-        if not corrected_tai_gi:
-            corrected_tai_gi = "NA"
-        print(f"【{han_ji}】的台語音標為：{original_tai_gi}，校正音標為：{corrected_tai_gi}，總數：{total_count}，列索引：{row_index_in_ji_khoo}")
-    else:
-        return EXIT_CODE_PROCESS_FAILURE
+    # ---------------------------------------------------------------------
+    # return_code = ut_khuat_ji_piau(wb=wb)
+    # if return_code != EXIT_CODE_SUCCESS:
+    #     return return_code
+    # han_ji_dict = create_dict_by_sheet(wb=wb, sheet_name='缺字表', allow_empty_correction=True)
+    # han_ji = '霪'
+    # if han_ji_dict and han_ji in han_ji_dict:
+    #     original_tai_gi, corrected_tai_gi, total_count, row_index_in_ji_khoo = han_ji_dict[han_ji]
+    #     if not corrected_tai_gi:
+    #         corrected_tai_gi = "NA"
+    #     print(f"【{han_ji}】的台語音標為：{original_tai_gi}，校正音標為：{corrected_tai_gi}，總數：{total_count}，列索引：{row_index_in_ji_khoo}")
+    # else:
+    #     return EXIT_CODE_PROCESS_FAILURE
     # ---------------------------------------------------------------------
     # return_code = ut_maintain_han_ji_koo(wb=wb)
     # if return_code != EXIT_CODE_SUCCESS:
