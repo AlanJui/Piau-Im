@@ -107,16 +107,10 @@ def jin_kang_piau_im_cu_han_ji_piau_im(wb, han_ji: str, jin_kang_piau_im: str, p
             tai_gi_im_piau=tai_gi_im_piau
         )
 
-    # 將人工輸入的【台語音標】置入【破音字庫】Dict
-    maintain_ji_khoo(sheet=jin_kang_piau_im_sheet,
-                        han_ji=han_ji,
-                        tai_gi=tai_gi_im_piau,
-                        show_msg=False)
-
     return han_ji_piau_im
 
 
-def write_ji_khoo_dict_to_sheet(wb, sheet_name: str, ji_khoo_dict: dict):
+def write_ji_khoo_dict_to_sheet(wb, sheet_name: str, ji_khoo_dict: JiKhooDict):
     """
     將 khuat_ji_piau 字典的資料寫回【缺字表】工作表。
 
@@ -147,65 +141,7 @@ def write_ji_khoo_dict_to_sheet(wb, sheet_name: str, ji_khoo_dict: dict):
     sheet.range("A2").value = data
 
 
-def update_by_piau_im_ji_khoo(wb, sheet_name: str, ji_khoo_dict: dict, piau_im: PiauIm, piau_im_huat: str):
-    """
-    依【標音字庫】中的【校正音標】欄位進行更新，並將【校正音標】覆蓋至原【台語音標】。
-    """
-    try:
-        # 確保工作表存在
-        han_ji_piau_im_sheet_name = '漢字注音'
-        ensure_sheet_exists(wb, han_ji_piau_im_sheet_name)
-        han_ji_piau_im_sheet = wb.sheets[han_ji_piau_im_sheet_name]
-    except Exception as e:
-        raise ValueError(f"無法找到或建立工作表 '{sheet_name}'：{e}")
-
-    # 遍歷字典中的每個漢字
-    for han_ji, (total_count, tai_gi_im_piau, kenn_ziann_im_piau, coordinates) in ji_khoo_dict.items():
-        # 遍歷每個座標
-        for row, col in coordinates:
-            # 將漢字和台語音標寫入指定座標
-            han_ji_piau_im_sheet.range((row, col)).select()
-            original_total_count = total_count
-            # 取得【漢字注音】表中的【漢字】儲存格內容
-            han_ji_cell = han_ji_piau_im_sheet.range((row, col))
-            # 使用【校正音標】，更新【漢字注音】工作表中的【台語音標】儲存格內容
-            tai_gi_cell = han_ji_piau_im_sheet.range((row - 1, col))
-            tai_gi_im_piau = kenn_ziann_im_piau
-            # 取得【漢字注音】表中的【漢字標音】儲存格
-            han_ji_piau_im_cell = han_ji_piau_im_sheet.range((row + 1, col))
-            han_ji_piau_im = han_ji_piau_im_cell.value or ""
-
-            # 檢查是否符合更新條件：
-            # 若【校正音標】儲存格其值不為“N/A”，則用【台語音標】生成【漢字標音】
-            if kenn_ziann_im_piau != 'N/A' and total_count > 0:
-                # 將【台語音標】寫入【漢字注音】表的【台語音標】儲存格
-                # han_ji_piau_im_sheet.range((row-1, col)).value = tai_gi_im_piau
-                tai_gi_cell.value = kenn_ziann_im_piau
-                # 重置【漢字】儲存格的底色和文字顏色
-                han_ji_cell.color = (0, 255, 255)       # 將底色設為【黄色】
-                han_ji_cell.font.color = (255, 0, 0)    # 將文字顏色設為【紅色】
-                # 依指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
-                han_ji_piau_im_cell.value = tlpa_tng_han_ji_piau_im(
-                    piau_im=piau_im,
-                    piau_im_huat=piau_im_huat,
-                    tai_gi_im_piau=tai_gi_im_piau
-                )
-                # 減少剩餘更新次數，並同步回缺字表
-                total_count -= 1
-                # 每寫入一次，total_count 減 1
-                ji_khoo_dict[han_ji][0] = total_count
-                # 顯示更新訊息
-                print(f"({row}, {xw.utils.col_name(col)}) = {han_ji} ==> 自【標音字庫】工作表之【校正音標】，校正【漢字注音】工作表中的【台語音標】及【漢字標音】："
-                    f"{tai_gi_cell.value} / {han_ji_piau_im_cell.value} "
-                    f"（原有：{original_total_count} 字；尚有 {total_count} 字待補上）")
-
-    # 將 ji_khoo_dict 字典寫回【標音字庫】工作表
-    write_ji_khoo_dict_to_sheet(wb=wb, sheet_name=sheet_name, ji_khoo_dict=ji_khoo_dict)
-
-    print(f"已利用【{sheet_name}】工作表中的【校正音標】，置入【漢字注音】工作表中【台語音標】儲存格。")
-
-
-def khuat_ji_piau_thiam_tai_gi_im_piau(wb, sheet_name: str, ji_khoo_dict: dict, piau_im: PiauIm, piau_im_huat: str):
+def update_by_khuat_ji_piau(wb, sheet_name: str, ji_khoo_dict: JiKhooDict, piau_im: PiauIm, piau_im_huat: str):
     """
     將字典中的所有漢字資料寫入 Excel 的「漢字注音」工作表。
 
@@ -221,7 +157,15 @@ def khuat_ji_piau_thiam_tai_gi_im_piau(wb, sheet_name: str, ji_khoo_dict: dict, 
         raise ValueError(f"無法找到或建立工作表 '{sheet_name}'：{e}")
 
     # 遍歷字典中的每個漢字
+    print("======================================================================")
+    print(f"使用【{sheet_name}】工作表中的【校正音標】，更正【台語音標】儲存格：")
+    print("======================================================================")
     for han_ji, (total_count, tai_gi_im_piau, kenn_ziann_im_piau, coordinates) in ji_khoo_dict.items():
+        # 若【校正音標】為空，則略過
+        if total_count == 0:
+            row_no, col_no = coordinates[0]
+            print(f"（{row_no}, {xw.utils.col_name(col_no)}）= {han_ji}【{tai_gi_im_piau}】/ 【{kenn_ziann_im_piau}】：待校正【總數】為 {total_count}，故無需校正【台語音標】，略過！")
+            continue
         # 遍歷每個座標
         for row, col in coordinates:
             # 將漢字和台語音標寫入指定座標
@@ -259,14 +203,192 @@ def khuat_ji_piau_thiam_tai_gi_im_piau(wb, sheet_name: str, ji_khoo_dict: dict, 
                 han_ji_cell.color = (255, 255, 0)       # 將底色設為【黄色】
                 han_ji_cell.font.color = (255, 0, 0)    # 將文字顏色設為【紅色】
             # 顯示更新訊息
-            print(f"({row}, {xw.utils.col_name(col)}) = {han_ji} ==> 自【缺字表】補填【台語音標】及【漢字標音】："
-                f"{tai_gi_cell.value} / {han_ji_piau_im_cell.value} "
+            print(f"({row}, {xw.utils.col_name(col)}) = {han_ji}：【{tai_gi_im_piau}】/【{kenn_ziann_im_piau}】"
                 f"（原有：{original_total_count} 字；尚有 {total_count} 字待補上）")
 
     # 將 khuat_ji_piau 字典寫回【缺字表】工作表
     write_ji_khoo_dict_to_sheet(wb=wb, sheet_name=sheet_name, ji_khoo_dict=ji_khoo_dict)
 
-    print(f"已將【{sheet_name}】工作表中的【台語音標】，置入【漢字注音】工作表中【台語音標】儲存格。")
+
+def update_by_piau_im_ji_khoo(wb, sheet_name: str, ji_khoo_dict: JiKhooDict, piau_im: PiauIm, piau_im_huat: str):
+    """
+    依【標音字庫】中的【校正音標】欄位進行更新，並將【校正音標】覆蓋至原【台語音標】。
+    """
+    try:
+        # 確保工作表存在
+        han_ji_piau_im_sheet_name = '漢字注音'
+        ensure_sheet_exists(wb, han_ji_piau_im_sheet_name)
+        han_ji_piau_im_sheet = wb.sheets[han_ji_piau_im_sheet_name]
+    except Exception as e:
+        raise ValueError(f"無法找到或建立工作表 '{sheet_name}'：{e}")
+
+    # 遍歷字典中的每個漢字
+    print("================================================================================")
+    print(f"使用【{sheet_name}】工作表中的【校正音標】，更新【漢字注音】工作表中的【台語音標】：")
+    print("================================================================================")
+    for han_ji, (total_count, tai_gi_im_piau, kenn_ziann_im_piau, coordinates) in ji_khoo_dict.items():
+        # 若【總數】為 0，則跳過
+        if kenn_ziann_im_piau == 'N/A' or kenn_ziann_im_piau == '':
+            row_no, col_no = coordinates[0]
+            print(f"（{row_no}, {xw.utils.col_name(col_no)}）= {han_ji}【{tai_gi_im_piau}】/ 【{kenn_ziann_im_piau}】：【校正音標】儲存格為 {kenn_ziann_im_piau}，無需校正【台語音標】，略過！")
+            continue
+        # 遍歷每個座標
+        for row, col in coordinates:
+            # 將漢字和台語音標寫入指定座標
+            han_ji_piau_im_sheet.range((row, col)).select()
+            original_total_count = total_count
+            # 取得【漢字注音】表中的【漢字】儲存格內容
+            han_ji_cell = han_ji_piau_im_sheet.range((row, col))
+            # 使用【校正音標】，更新【漢字注音】工作表中的【台語音標】儲存格內容
+            tai_gi_cell = han_ji_piau_im_sheet.range((row - 1, col))
+            tai_gi_im_piau = kenn_ziann_im_piau
+            # 取得【漢字注音】表中的【漢字標音】儲存格
+            han_ji_piau_im_cell = han_ji_piau_im_sheet.range((row + 1, col))
+            han_ji_piau_im = han_ji_piau_im_cell.value or ""
+
+            # 檢查是否符合更新條件：
+            # 若【校正音標】儲存格其值不為“N/A”，則用【台語音標】生成【漢字標音】
+            if kenn_ziann_im_piau != 'N/A' and total_count > 0:
+                # 將【台語音標】寫入【漢字注音】表的【台語音標】儲存格
+                # han_ji_piau_im_sheet.range((row-1, col)).value = tai_gi_im_piau
+                tai_gi_cell.value = kenn_ziann_im_piau
+                # 重置【漢字】儲存格的底色和文字顏色
+                han_ji_cell.color = (0, 255, 255)       # 將底色設為【黄色】
+                han_ji_cell.font.color = (255, 0, 0)    # 將文字顏色設為【紅色】
+                # 依指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
+                han_ji_piau_im_cell.value = tlpa_tng_han_ji_piau_im(
+                    piau_im=piau_im,
+                    piau_im_huat=piau_im_huat,
+                    tai_gi_im_piau=tai_gi_im_piau
+                )
+                # 減少剩餘更新次數，並同步回缺字表
+                total_count -= 1
+                # 每寫入一次，total_count 減 1
+                ji_khoo_dict[han_ji][0] = total_count
+
+                # 顯示更新訊息
+                print(f"({row}, {xw.utils.col_name(col)}) = {han_ji}：【{tai_gi_im_piau}】/【{kenn_ziann_im_piau}】"
+                    f"（原有：{original_total_count} 字；尚有 {total_count} 字待補上）")
+
+    # 將 ji_khoo_dict 字典寫回【標音字庫】工作表
+    write_ji_khoo_dict_to_sheet(wb=wb, sheet_name=sheet_name, ji_khoo_dict=ji_khoo_dict)
+
+
+def update_by_jin_kang_piau_im(wb, sheet_name: str, ji_khoo_dict: JiKhooDict, piau_im: PiauIm, piau_im_huat: str):
+    """
+    更新【漢字注音】表中【台語音標】儲存格的內容，依據【標音字庫】中的【校正音標】欄位進行更新，並將【校正音標】覆蓋至原【台語音標】。
+    """
+    try:
+        # 確保工作表存在
+        han_ji_piau_im_sheet_name = '漢字注音'
+        ensure_sheet_exists(wb, han_ji_piau_im_sheet_name)
+        han_ji_piau_im_sheet = wb.sheets[han_ji_piau_im_sheet_name]
+    except Exception as e:
+        raise ValueError(f"無法找到或建立工作表 '{sheet_name}'：{e}")
+
+    # 逐列處理【漢字注音】表
+    TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
+    CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
+    ROWS_PER_LINE = 4
+
+    start_row = 5
+    end_row = start_row + (TOTAL_LINES * ROWS_PER_LINE)
+    start_col = 4
+    end_col = start_col + CHARS_PER_ROW
+
+    # 選擇工作表
+    print("================================================================================")
+    print(f"使用【漢字注音】工作表中的【人工標音】儲存格內容，更新【台語音標】：")
+    print("================================================================================")
+    EOF = False # 是否已到達【漢字注音】表的結尾
+    line = 1
+    for row in range(start_row, end_row, ROWS_PER_LINE):
+        # 設定【作用儲存格】為列首
+        Empty_Cells_Total = 0
+        han_ji_piau_im_sheet.activate()
+        han_ji_piau_im_sheet.range((row, 1)).select()
+
+        # 逐欄取出漢字處理
+        for col in range(start_col, end_col):
+            status = ""
+            # 取得【漢字注音】表中的【漢字】儲存格內容
+            han_ji_cell = han_ji_piau_im_sheet.range((row, col))
+            tai_gi_cell = han_ji_piau_im_sheet.range((row - 1, col))
+            jin_kang_piau_im_cell = han_ji_piau_im_sheet.range((row - 2, col))
+            han_ji = han_ji_cell.value
+            if han_ji == 'φ':
+                EOF = True
+                break
+            elif han_ji == '\n':
+                break
+            elif han_ji == None or han_ji == "":
+                print(f"({row}, {xw.utils.col_name(col)}) = 《儲存格無值》")
+                Empty_Cells_Total += 1
+                if Empty_Cells_Total >= 2:
+                    EOF = True
+                    break
+                else:
+                    continue
+            else:
+                # 若不為【標點符號】，則以【漢字】處理
+                if is_punctuation(han_ji):
+                    status = f"（標點符號不處理）"
+                    print(f"({row}, {xw.utils.col_name(col)}) = {han_ji}：標點符號不處理")
+                    continue
+                else:
+                    if han_ji_cell.color == (0, 255, 200) and jin_kang_piau_im_cell.value == tai_gi_cell.value:
+                        jin_kang_piau_im_cell.value = ""
+                        han_ji_cell.color = (255, 255, 255)       # 將底色設為【白色】
+                        han_ji_cell.font.color = (0, 0, 0)    # 將文字顏色設為【黑色】
+
+                    # 取得【漢字注音】表中的【人工標音】儲存格內容
+                    jin_kang_piau_im_cell = han_ji_piau_im_sheet.range((row - 2, col))
+                    jin_kang_piau_im = jin_kang_piau_im_cell.value or ""
+                    # 取得【漢字注音】表中的【台語音標】儲存格內容
+                    tai_gi_cell = han_ji_piau_im_sheet.range((row - 1, col))
+                    tai_gi_piau_im = tai_gi_cell.value or ""
+                    # 取得【漢字注音】表中的【漢字標音】儲存格
+                    han_ji_piau_im_cell = han_ji_piau_im_sheet.range((row + 1, col))
+                    han_ji_piau_im = han_ji_piau_im_cell.value or ""
+
+                    # 將【漢字】儲存格重置：儲存格底色設為【白色】，文字顏色設為【黑色】
+                    han_ji_cell.color = (255, 255, 255)       # 將底色設為【白色】
+                    han_ji_cell.font.color = (0, 0, 0)    # 將文字顏色設為【黑色】
+                    # ---------------------------------------------------------
+                    # 自【人工標音】儲存格取出【台語音標】，並更新【漢字標音】
+                    # ---------------------------------------------------------
+                    if jin_kang_piau_im and jin_kang_piau_im != tai_gi_piau_im:
+                        status = "以人工標音更新【台語音標】及【漢字標音】"
+                        # 依【人工標音】取得【台語音標】
+                        han_ji_piau_im = jin_kang_piau_im_cu_han_ji_piau_im(wb=wb,
+                                            han_ji=han_ji_cell.value,
+                                            jin_kang_piau_im=jin_kang_piau_im_cell.value,
+                                            piau_im=piau_im,
+                                            piau_im_huat=piau_im_huat)
+                        han_ji_piau_im_cell.value = han_ji_piau_im  # 填入【漢字標音】儲存格
+                        tai_gi_cell.value = jin_kang_piau_im    # 以【人工標音】更新【台語音標】儲存格
+                        # 將【漢字】儲存格做醒目標記：儲存格底色設為【黄色】，文字顏色設為【紅色】
+                        han_ji_cell.color = (255, 255, 0)       # 將底色設為【黄色】
+                        han_ji_cell.font.color = (255, 0, 0)    # 將文字顏色設為【紅色】
+                        # 更新【人工標音字庫】
+                        ji_khoo_dict.add_or_update_entry(han_ji=han_ji,
+                                                         tai_gi_im_piau=tai_gi_piau_im,
+                                                         kenn_ziann_im_piau='N/A',
+                                                         coordinates=(row, col))
+            # 每欄結束前處理作業
+            msg_tail = f"：《{status}》" if status else f"：不處理"
+            print(f"({row}, {xw.utils.col_name(col)}) = {han_ji}【{tai_gi_piau_im}】/【{han_ji_piau_im}】{msg_tail}")
+
+        # 每列結束前處理作業
+        line += 1
+        if EOF or line > TOTAL_LINES: break
+    # 將 khuat_ji_piau 字典寫回【缺字表】工作表
+    write_ji_khoo_dict_to_sheet(wb=wb, sheet_name=sheet_name, ji_khoo_dict=ji_khoo_dict)
+
+    # 作業結束前處理
+    han_ji_piau_im_sheet.range('A1').select()
+    logging_process_step(f"完成【作業程序】：更新漢字標音並同步【標音字庫】內容...")
+    return EXIT_CODE_SUCCESS
 
 
 def update_han_ji_piau_im(wb):
@@ -287,17 +409,18 @@ def update_han_ji_piau_im(wb):
     khuat_ji_piau_ji_khoo = JiKhooDict.create_ji_khoo_dict(wb=wb, sheet_name=khuat_ji_piau_sheet_name)
     piau_im_sheet_name = '標音字庫'
     piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict(wb=wb, sheet_name=piau_im_sheet_name)
-    # jin_kang_piau_im_sheet_name = '人工標音字庫'
-    # jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
+    jin_kang_piau_im_sheet_name = '人工標音字庫'
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
 
     #-------------------------------------------------------------------------
     # 根據【缺字表】工作表更新【漢字注音】工作表中缺【台語音標】的【漢字】
     #-------------------------------------------------------------------------
-    khuat_ji_piau_thiam_tai_gi_im_piau(wb=wb,
-                                       sheet_name='缺字表',
-                                       ji_khoo_dict=khuat_ji_piau_ji_khoo,
-                                       piau_im=piau_im,
-                                       piau_im_huat=piau_im_huat)
+    update_by_khuat_ji_piau(wb=wb,
+                            sheet_name='缺字表',
+                            ji_khoo_dict=khuat_ji_piau_ji_khoo,
+                            piau_im=piau_im,
+                            piau_im_huat=piau_im_huat)
+    print("--------------------------------------------")
     print("【缺字表】中的【台語音標】已更新至【漢字注音】表")
     #-------------------------------------------------------------------------
     # 根據【標音字庫】工作表更新【漢字注音】工作表中的【台語音標】
@@ -307,11 +430,23 @@ def update_han_ji_piau_im(wb):
                               ji_khoo_dict=piau_im_ji_khoo,
                               piau_im=piau_im,
                               piau_im_huat=piau_im_huat)
+    print("--------------------------------------------")
     print("【標音字庫】中的【台語音標】已用【校正音標】更新！")
+    #-------------------------------------------------------------------------
+    # 根據【漢字注音】工作表之【人工標音】儲存格內容更新【台語音標】儲存格
+    #-------------------------------------------------------------------------
+    update_by_jin_kang_piau_im(wb=wb,
+                               sheet_name='人工標音字庫',
+                               ji_khoo_dict=jin_kang_piau_im_ji_khoo,
+                               piau_im=piau_im,
+                               piau_im_huat=piau_im_huat)
+    print("--------------------------------------------")
+    print("根據【漢字注音】工作表之【人工標音】儲存格內容更新【台語音標】儲存格")
     #-------------------------------------------------------------------------
     # 作業結束前處理
     #-------------------------------------------------------------------------
     han_ji_piau_im_sheet.range('A1').select()
+    print("--------------------------------------------")
     print("【漢字注音】表的台語音標更新作業已完成")
 
     logging_process_step(f"完成【作業程序】：更新漢字標音並同步【標音字庫】內容...")

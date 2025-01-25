@@ -16,7 +16,7 @@ class JiKhooDict:
         return self.ji_khoo_dict.items()
 
 
-    def add_entry(self, han_ji: str, tai_gi_im_piau: str, coordinates: tuple):
+    def add_entry(self, han_ji: str, tai_gi_im_piau: str, kenn_ziann_im_piau: str, coordinates: tuple):
         """
         新建一筆【漢字】的資料。
 
@@ -28,7 +28,8 @@ class JiKhooDict:
             if tai_gi_im_piau is None or tai_gi_im_piau == "":
                 tai_gi_im_piau = "N/A"
             # 如果漢字不存在，初始化資料結構
-            self.ji_khoo_dict[han_ji] = [1, tai_gi_im_piau, 'N/A', [coordinates]]
+            kenn_ziann_im_piau = "N/A" if kenn_ziann_im_piau is None or kenn_ziann_im_piau == "" else kenn_ziann_im_piau
+            self.ji_khoo_dict[han_ji] = [1, tai_gi_im_piau, kenn_ziann_im_piau, [coordinates]]
         else:
             raise ValueError(f"漢字 '{han_ji}' 已存在，請使用 update_entry 方法來更新資料。")
 
@@ -49,7 +50,7 @@ class JiKhooDict:
             raise ValueError(f"漢字 '{han_ji}' 不存在，請先使用 add_entry 方法新增資料。")
 
 
-    def add_or_update_entry(self, han_ji: str, tai_gi_im_piau: str, coordinates: tuple):
+    def add_or_update_entry(self, han_ji: str, tai_gi_im_piau: str, kenn_ziann_im_piau: str, coordinates: tuple):
         """
         新增或更新一筆【漢字】的資料。
 
@@ -65,7 +66,7 @@ class JiKhooDict:
             self.update_entry(han_ji, coordinates)
         else:
             # 如果漢字不存在，使用 add_entry 新增
-            self.add_entry(han_ji, tai_gi_im_piau, coordinates)
+            self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
 
 
     def get_entry(self, han_ji: str):
@@ -232,9 +233,10 @@ class JiKhooDict:
         """
         if not ensure_sheet_exists(wb, sheet_name):
             raise ValueError(f"無法找到工作表 '{sheet_name}'。")
-        if get_total_rows_in_sheet(wb, sheet_name) <= 1:
-            # raise ValueError(f"工作表 '{sheet_name}' 為空。")
-            return None
+        # total_rows = get_total_rows_in_sheet(wb, sheet_name)
+        # if total_rows <= 1:
+        #     # raise ValueError(f"工作表 '{sheet_name}' 為空。")
+        #     return None
 
         try:
             sheet = wb.sheets[sheet_name]
@@ -246,6 +248,10 @@ class JiKhooDict:
 
         # 初始化 JiKhooDict
         ji_khoo = cls()
+
+        # 檢查 data 是否為 None 或空列表
+        if data is None:
+            return ji_khoo  # 返回空的 JiKhooDict 物件
 
         # 確保資料為 2D 列表
         if not isinstance(data[0], list):
