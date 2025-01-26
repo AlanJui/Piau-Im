@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "a800_缺字表回填字典資料庫",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a800_缺字表回填字典資料庫.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "a000",
             "type": "debugpy",
             "request": "launch",
