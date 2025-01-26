@@ -222,13 +222,13 @@ def concat_ruby_tag(wb, piau_im, han_ji, tai_gi_im_piau):
     # 根據標音方式，設定 Ruby Tag
     if siong_piau_im != "" and zian_piau_im == "":
         # 將標音置於漢字上方
-        ruby_tag = f"  <ruby><rb>{han_ji}</rb><rp>(</rp><rt>{siong_piau_im}</rt><rp>)</rp></ruby>"
+        ruby_tag = f"  <ruby><rb>{han_ji}</rb><rp>(</rp><rt>{siong_piau_im}</rt><rp>)</rp></ruby>\n"
     elif siong_piau_im == "" and zian_piau_im != "":
         # 將標音置於漢字右方
-        ruby_tag = f"  <ruby><rb>{han_ji}</rb><rp>(</rp><rtc>{zian_piau_im}</rtc><rp>)</rp></ruby>"
+        ruby_tag = f"  <ruby><rb>{han_ji}</rb><rp>(</rp><rtc>{zian_piau_im}</rtc><rp>)</rp></ruby>\n"
     elif siong_piau_im != "" and zian_piau_im != "":
         # 將標音置於漢字上方及右方
-        ruby_tag = f"  <ruby><rb>{han_ji}</rb><rt>{siong_piau_im}</rt><rp>(</rp><rtc>{zian_piau_im}</rtc><rp>)</rp></ruby>"
+        ruby_tag = f"  <ruby><rb>{han_ji}</rb><rt>{siong_piau_im}</rt><rp>(</rp><rtc>{zian_piau_im}</rtc><rp>)</rp></ruby>\n"
 
     return ruby_tag
 
@@ -267,8 +267,9 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
     # 輸出 <div> tag
     #--------------------------------------------------------------------------
     div_class = zu_im_huat_list[Web_Page_Style][0]
-    html_str = f"<div class='{div_class}'><p>"
-    write_buffer += (html_str + "\n")
+    # html_str = f"<div class='{div_class}'><p>\n"
+    # write_buffer += html_str
+    write_buffer += f"<div class='{div_class}'><p>\n"
 
     #--------------------------------------------------------------------------
     # 作業處理：逐列取出漢字，組合成純文字檔
@@ -305,15 +306,14 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
                 break
             elif cell_value == '\n':    # 讀到【換行標示】
                 # 若遇到換行字元，退出迴圈
-                write_buffer += "</p><p>\n"
-                print("\n")
                 break
             elif cell_value == None:    # 讀到【空白】
                 msg = f"({row}, {col_name}) = 《空白》"
             else:                       # 讀到：漢字或標點符號
                 # 當 han_ji 是標點符號時，不需要注音
                 if is_punctuation(cell_value):
-                    ruby_tag = f"<span>{han_ji}</span>\n"
+                    # ruby_tag = f"  {cell_value}\n"
+                    ruby_tag = f"  <span>{cell_value}</span>\n"
                     msg = f"({row}, {col_name}) = {cell_value}"
                 else:
                     han_ji = cell_value  # 取得漢字
@@ -333,22 +333,23 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
             write_buffer += ruby_tag
             print(msg)
 
-        # 已到【結尾處】之作業結束處理
-        if end_of_file:
-            print(f"第 {row} 列為檔案結尾處，結束處理作業。")
-            break
-
+        # =========================================================
         # 換行處理：(1)每處理完 15 字後，換下一行 ；(2) 讀到【換行標示】
-        line += 1
-        print(f"({row}, {col_name}) = 《換行》")
+        # =========================================================
 
-        # =========================================================
-        # 輸出 </div>
-        # =========================================================
-        html_str = "</p></div>"
-        write_buffer += html_str
+        # 已到【行尾】作業處理
+        # print(f"第 {row} 列為檔案結尾處，結束處理作業。")
+        print(f"({row}, {col_name}) = 《行尾》")
+
+        # 讀到【換行標示】，需要結束目前【段落】，並開始新的【段落】
+        if cell_value == '\n':
+            write_buffer += f"</p><p>\n"
+            print('\n')
+
+        line += 1
 
     # 返回網頁輸出暫存區
+    write_buffer += "</div>"
     return write_buffer
 
 
