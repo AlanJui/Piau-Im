@@ -289,26 +289,31 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
     # 逐列處理作業
     end_of_file = False
     for row in range(start_row, end_row, ROWS_PER_LINE):
-        if end_of_file or line > TOTAL_LINES:
-            break
-
+        Empty_Cells_Total = 0
         # 設定【作用儲存格】為列首
         sheet.range((row, 1)).select()
 
         # 逐欄取出儲存格內容
         for col in range(start_col, end_col):
-            col_name = xw.utils.col_name(col)   # 取得欄位名稱
             ruby_tag = ""
 
             cell_value = sheet.range((row, col)).value
             if cell_value == 'φ':       # 讀到【結尾標示】
                 end_of_file = True
+                print(f"({row}, {xw.utils.col_name(col)}) = 《文章終止》")
                 break
             elif cell_value == '\n':    # 讀到【換行標示】
+                print(f"({row}, {xw.utils.col_name(col)}) = 《換行》")
                 # 若遇到換行字元，退出迴圈
                 break
-            elif cell_value == None:    # 讀到【空白】
-                msg = f"({row}, {col_name}) = 《空白》"
+            elif cell_value == None or cell_value == '':    # 讀到【空白】
+                print(f"({row}, {xw.utils.col_name(col)}) = 《空格》")
+                Empty_Cells_Total += 1
+                if Empty_Cells_Total >= 2:
+                    EOF = True
+                    break
+                else:
+                    continue
             else:                       # 讀到：漢字或標點符號
                 # 當 han_ji 是標點符號時，不需要注音
                 if is_punctuation(cell_value):
@@ -328,6 +333,7 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
                         han_ji=han_ji,
                         tai_gi_im_piau=tai_gi_im_piau
                     )
+                    col_name = xw.utils.col_name(col)   # 取得欄位名稱
                     msg =f"({row}, {col_name}) = {han_ji} [{tai_gi_im_piau}]"
 
             write_buffer += ruby_tag
@@ -338,18 +344,17 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
         # =========================================================
 
         # 已到【行尾】作業處理
-        # print(f"第 {row} 列為檔案結尾處，結束處理作業。")
-        print(f"({row}, {col_name}) = 《行尾》")
+        # print(f"({row}, {col_name}) = 《行尾》")
 
         # 讀到【換行標示】，需要結束目前【段落】，並開始新的【段落】
         if cell_value == '\n':
             write_buffer += f"</p><p>\n"
-            print('\n')
 
         line += 1
+        if end_of_file or line > TOTAL_LINES: break
 
     # 返回網頁輸出暫存區
-    write_buffer += "</div>"
+    write_buffer += "</p></div>"
     return write_buffer
 
 
