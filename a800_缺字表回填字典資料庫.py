@@ -12,6 +12,15 @@ from pathlib import Path
 import xlwings as xw
 from dotenv import load_dotenv
 
+# 載入自訂模組/函式
+from mod_excel_access import (
+    create_dict_by_sheet,
+    ensure_sheet_exists,
+    get_ji_khoo,
+    get_value_by_name,
+    maintain_ji_khoo,
+)
+
 # =========================================================================
 # 載入環境變數
 # =========================================================================
@@ -47,7 +56,7 @@ EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 # =========================================================================
 # 作業程序
 # =========================================================================
-def insert_or_update_to_db(db_path, table_name, han_ji, tai_gi_im_piau):
+def insert_or_update_to_db(db_path, table_name: str, han_ji: str, tai_gi_im_piau: str, piau_im_huat: str):
     """
     將【漢字】與【台語音標】插入或更新至資料庫。
 
@@ -76,6 +85,7 @@ def insert_or_update_to_db(db_path, table_name, han_ji, tai_gi_im_piau):
     cursor.execute(f"SELECT 識別號 FROM {table_name} WHERE 漢字 = ?", (han_ji,))
     row = cursor.fetchone()
 
+    siong_iong_too = 0.8 if piau_im_huat == "文讀音" else 0.6
     if row:
         # 更新資料
         cursor.execute(f"""
@@ -84,11 +94,11 @@ def insert_or_update_to_db(db_path, table_name, han_ji, tai_gi_im_piau):
         WHERE 識別號 = ?;
         """, (tai_gi_im_piau, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), row[0]))
     else:
-        # 插入資料，並設定【常用度】為 0.8
+        # 若語音類型為：【文讀音】，設定【常用度】欄位值為 0.8
         cursor.execute(f"""
         INSERT INTO {table_name} (漢字, 台羅音標, 常用度, 摘要說明)
         VALUES (?, ?, ?, NULL);
-        """, (han_ji, tai_gi_im_piau, 0.8))
+        """, (han_ji, tai_gi_im_piau, siong_iong_too))
 
     conn.commit()
     conn.close()
@@ -105,6 +115,7 @@ def process_excel_to_db(wb, sheet_name, db_path, table_name):
     """
     # wb = xw.Book(excel_path)
     sheet = wb.sheets[sheet_name]
+    piau_im_huat = get_value_by_name(wb=wb, name="語音類型")
 
     # 讀取資料表範圍
     data = sheet.range("A2").expand("table").value
@@ -118,9 +129,9 @@ def process_excel_to_db(wb, sheet_name, db_path, table_name):
         tai_gi_im_piau = row[2]
 
         if han_ji and tai_gi_im_piau:
-            insert_or_update_to_db(db_path, table_name, han_ji, tai_gi_im_piau)
+            insert_or_update_to_db(db_path, table_name, han_ji, tai_gi_im_piau, piau_im_huat)
 
-    print(f"【缺字表】中的資料已成功回填至資料庫 {db_path} 的 {table_name} 資料表中。")
+    print(f"【缺字表】中的資料已成功回填至資料庫： {db_path} 的【{table_name}】資料表中。")
 
 
 # =============================================================================
@@ -134,6 +145,7 @@ def process(wb):
     table_name = "漢字庫"         # 替換為你的資料表名稱
 
     process_excel_to_db(wb, sheet_name, db_path, table_name)
+    return EXIT_CODE_SUCCESS
 
 
 # =============================================================================
