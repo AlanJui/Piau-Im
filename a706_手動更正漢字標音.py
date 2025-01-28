@@ -351,8 +351,8 @@ def update_by_jin_kang_piau_im(wb, sheet_name: str, ji_khoo_dict: JiKhooDict, pi
                     han_ji_piau_im = han_ji_piau_im_cell.value or ""
 
                     # 將【漢字】儲存格重置：儲存格底色設為【白色】，文字顏色設為【黑色】
-                    han_ji_cell.color = (255, 255, 255)       # 將底色設為【白色】
-                    han_ji_cell.font.color = (0, 0, 0)    # 將文字顏色設為【黑色】
+                    # han_ji_cell.color = (255, 255, 255)       # 將底色設為【白色】
+                    # han_ji_cell.font.color = (0, 0, 0)    # 將文字顏色設為【黑色】
                     # ---------------------------------------------------------
                     # 自【人工標音】儲存格取出【台語音標】，並更新【漢字標音】
                     # ---------------------------------------------------------
