@@ -140,8 +140,8 @@ def process_excel_to_db(wb, sheet_name, db_path, table_name):
 def process(wb):
     # excel_path = "缺字表.xlsx"  # 替換為你的 Excel 檔案路徑
     sheet_name = "缺字表"      # 替換為你的工作表名稱
-    # db_path = "Ho_Lok_ue.sqlite"  # 替換為你的資料庫檔案路徑
-    db_path = "QA.sqlite"  # 替換為你的資料庫檔案路徑
+    db_path = "Ho_Lok_Ue.db"  # 替換為你的資料庫檔案路徑
+    # db_path = "QA.sqlite"  # 替換為你的資料庫檔案路徑
     table_name = "漢字庫"         # 替換為你的資料表名稱
 
     process_excel_to_db(wb, sheet_name, db_path, table_name)

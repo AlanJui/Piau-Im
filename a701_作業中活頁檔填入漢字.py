@@ -82,70 +82,55 @@ def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
         total_length = len(v3_value)
         print(f" {total_length} 個字元")
 
-        # 每頁最多處理 20 列
-        TOTAL_ROWS = int(wb.names['每頁總列數'].refers_to_range.value) # 自名稱為【每頁總列數】之儲存格，取得【每頁最多處理幾列】之值
-        # 每列最多處理 15 字元
-        CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)  # 自名稱為【每列總字數】之儲存格，取得【每列最多處理幾個字元】之值
-        # 設定起始及結束的欄位  （【D欄=4】到【R欄=18】）
-        start = 4
-        end = start + CHARS_PER_ROW
+        # 設定起始及結束的【列】位址（【第5列】、【第9列】、【第13列】等列）
+        TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
+        ROWS_PER_LINE = 4
+        start_row = 5
+        end_row = start_row + (TOTAL_LINES * ROWS_PER_LINE)
 
-        # 逐字處理字串，並填入對應的儲存格
-        row = 5
+        # 設定起始及結束的【欄】位址（【D欄=4】到【R欄=18】）
+        CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
+        start_col = 4
+        end_col = start_col + CHARS_PER_ROW
+
         index = 0  # 用來追蹤目前處理到的字元位置
+        row = 5
 
         # 逐字處理字串
         while index < total_length:     # 使用 while 而非 for，確保處理完整個字串
             # 設定當前作用儲存格，根據 `row` 和 `col` 動態選取
             sheet.range((row, 1)).select()
 
-            for col in range(start, end):  # 【D欄=4】到【R欄=18】
-                # 確認是否還有字元可以處理
-                if index < total_length:
-                    # 取得當前字元
-                    char = v3_value[index]
-
-                    # 檢查下一個字元（確保 index + 1 在範圍內）
-                    next_char = v3_value[index + 1] if index + 1 < total_length else None
-
-                    # 自動檢查是否為【不】字，且下一個字元為【？】
-                    if char == '不' and next_char == '？':
-                        # 在【人工標音】欄自動輸入【hiu2】
-                        # 【人工標音】欄位為漢字上方的儲存格（如 D3）
-                        sheet.range((row - 2, col)).value = "hiu2"
-                        print(f"自動填入【hiu2】於 {xw.utils.col_name(col)}{row - 2}")
-
-                    if char == "\n":
-                        char = "=CHAR(10)"  # 換行字元
-
-                    # 重置儲存格：文字顏色（黑色）及填滿色彩（無填滿）
-                    sheet.range((row-2, col), (row+1, col)).color = None
-                    sheet.range((row, col)).font.color = (0, 0, 0)
-                    sheet.range((row, col)).font.color = (0, 0, 0)
-                    sheet.range((row-2, col)).font.color = (255, 0, 0)
-                    sheet.range((row-1, col)).font.color = 0x3399FF # 藍色
-                    sheet.range((row+1, col)).font.color = 0x009900 # 綠色
-
-                    # 將字元填入對應的儲存格
-                    sheet.range((row, col)).value = char
-
-                    col_name = xw.utils.col_name(col)
-                    print(f"【{row} 列， {col_name} 欄】：{char}")
-
-                    # 更新索引，處理下一個字元
-                    index += 1
-
-                    # 換行：列數加一，並從下一列的第一個字元開始
-                    if char == "=CHAR(10)":
-                        break
-                else:
-                    break  # 若字串已處理完畢，退出迴圈
+            for col in range(start_col, end_col):  # 【D欄=4】到【R欄=18】
+                # 取得當前字元
+                char = v3_value[index]
+                # 換行：列數加一，並從下一列的第一個字元開始
+                char = '=CHAR(10)' if char == '\n' else char
+                # 將字元填入對應的儲存格
+                sheet.range((row, col)).value = char
+                # 顯示當前字元
+                col_name = xw.utils.col_name(col)
+                print(f"({row} 列, {col_name} 欄)：{char}")
+                # 重置儲存格：文字顏色（黑色）及填滿色彩（無填滿）
+                sheet.range((row-2, col), (row+1, col)).color = None
+                sheet.range((row, col)).font.color = (0, 0, 0)
+                sheet.range((row-2, col)).font.color = (255, 0, 0)
+                sheet.range((row-1, col)).font.color = 0x3399FF # 藍色
+                sheet.range((row+1, col)).font.color = 0x009900 # 綠色
+                # 更新索引，處理下一個字元
+                index += 1
+                if index == total_length:  # 若已處理完整個字串，則跳出迴圈
+                    break
+                if char == '=CHAR(10)':  # 若為換行字元，則跳出迴圈
+                    break
 
             # 每處理 15 個字元後，換到下一行
-            print("\n")
+            if col == end_col - 1: print("\n")
             row += 4
+            if row >= end_row or index >= total_length:
+                sheet.range((row, start_col)).value = "φ"
+                break
 
-    sheet.range((row, start)).value = "φ"
     # 保存 Excel 檔案
     wb.save()
 

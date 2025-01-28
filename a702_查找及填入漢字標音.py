@@ -176,7 +176,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                     Two_Empty_Cells += 1
                 elif Two_Empty_Cells == 1:
                     EOF = True
-                msg = "【缺空】"    # 表【儲存格】未填入任何字/符，不同於【空白】字元
+                msg = "【空缺】"    # 表【儲存格】未填入任何字/符，不同於【空白】字元
             else:
                 # 若不為【標點符號】，則以【漢字】處理
                 if is_punctuation(cell_value):
@@ -278,6 +278,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
 
         # =================================================================
         # 每當處理一行 15 個漢字後，亦換到下一行
+        if col == end_col - 1: print('\n')
         line += 1
         # 若已到【結尾】或【超過總行數】，則跳出迴圈
         if EOF or line > TOTAL_LINES:
