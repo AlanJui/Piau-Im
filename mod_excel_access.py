@@ -3,6 +3,7 @@
 # =========================================================================
 import logging
 import os
+import re
 import sys
 from pathlib import Path
 from typing import Optional
@@ -56,6 +57,74 @@ DEFAULT_SHEET_LIST = [
 # =========================================================================
 # 程式用函式
 # =========================================================================
+def convert_to_excel_address(coord_str):
+    """
+    轉換 `(row, col)` 格式為 Excel 座標 (如 `(9, 4)` 轉換為 "D9")
+
+    :param coord_str: 例如 "(9, 4)"
+    :return: Excel 座標字串，例如 "D9"
+    """
+    coord_str = coord_str.strip("()")  # 去除括號
+    try:
+        row, col = map(int, coord_str.split(", "))
+        return f"{chr(64 + col)}{row}"  # 轉換成 Excel 座標
+    except ValueError:
+        return ""  # 避免解析錯誤
+
+
+def excel_address_to_row_col(cell_address):
+    """
+    將 Excel 儲存格地址 (如 'D9') 轉換為 (row, col) 格式。
+
+    :param cell_address: Excel 儲存格地址 (如 'D9', 'AA15')
+    :return: (row, col) 元組，例如 (9, 4)
+    """
+    match = re.match(r"([A-Z]+)(\d+)", cell_address)  # 用 regex 拆分字母(列) 和 數字(行)
+
+    if not match:
+        raise ValueError(f"無效的 Excel 儲存格地址: {cell_address}")
+
+    col_letters, row_number = match.groups()
+
+    # 將 Excel 字母列轉換成數字，例如 A -> 1, B -> 2, ..., Z -> 26, AA -> 27
+    col_number = 0
+    for letter in col_letters:
+        col_number = col_number * 26 + (ord(letter) - ord("A") + 1)
+
+    return int(row_number), col_number
+
+
+def get_active_cell(wb):
+    """
+    獲取目前作用中的 Excel 儲存格 (Active Cell)
+
+    :param wb: Excel 活頁簿物件 (xlwings.Book)
+    :return: (工作表名稱, 儲存格地址)，如 ("漢字注音", "D9")
+    """
+    active_cell = wb.app.selection  # 獲取目前作用中的儲存格
+    sheet_name = active_cell.sheet.name  # 獲取所在的工作表名稱
+    cell_address = active_cell.address.replace("$", "")  # 取得 Excel 格式地址 (去掉 "$")
+
+    return sheet_name, cell_address
+
+
+def set_active_cell(wb, sheet_name, cell_address):
+    """
+    設定 Excel 作用儲存格位置。
+
+    :param wb: Excel 活頁簿物件 (xlwings.Book)
+    :param sheet_name: 目標工作表名稱 (str)
+    :param cell_address: 目標儲存格位址 (如 "F33")
+    """
+    try:
+        sheet = wb.sheets[sheet_name]  # 獲取指定工作表
+        sheet.activate()  # 確保工作表為作用中的表單
+        sheet.range(cell_address).select()  # 設定作用儲存格
+        print(f"✅ 已將作用儲存格設為：{sheet_name} -> {cell_address}")
+    except Exception as e:
+        print(f"❌ 設定作用儲存格失敗: {e}")
+
+
 def get_sheet_data(sheet, start_cell):
     """
     從指定工作表讀取資料，並確保返回 2D 列表。
@@ -387,6 +456,7 @@ def ut_khuat_ji_piau(wb=None):
         print(row)
     return EXIT_CODE_SUCCESS
 
+
 def ut_maintain_han_ji_koo(wb=None):
     wb = xw.Book('Test_Case_Sample.xlsx')
     sheet = get_ji_khoo(wb, "漢字庫")
@@ -492,13 +562,72 @@ def ut_get_total_rows_in_sheet(wb=None, sheet_name="字庫表"):
 
     return EXIT_CODE_SUCCESS
 
+def ut01_取得當前作用儲存格(wb):
+    # 作業流程：獲取當前作用中的 Excel 儲存格
+    sheet_name, cell_address = get_active_cell(wb)
+    print(f"✅ 目前作用中的儲存格：{sheet_name} 工作表 -> {cell_address}")
+
+    # 將 Excel 儲存格地址轉換為 (row, col) 格式
+    row, col = excel_address_to_row_col(cell_address)
+    print(f"📌 Excel 位址 {cell_address} 轉換為 (row, col): ({row}, {col})")
+
+    # 取得作用中儲存格的值
+    active_cell = wb.sheets[sheet_name].range(cell_address)
+    cell_value = active_cell.value
+    print(f"📌 作用儲存格{cell_address}的值為：{cell_value}")
+
+    # 將 (row, col) 格式轉換為 Excel 儲存格地址
+    # new_cell_address = convert_to_excel_address(f"({row}, {col})")
+    new_cell_address = convert_to_excel_address(cell_value)
+    print(f"📌 {cell_value} 座標，其 Excel 位址為：{new_cell_address}")
+
+    # 利用 Excel 儲存格地址，將【標音字庫】工作表的 Excel 儲存格位置設為作用儲存格
+    target_sheet = "漢字注音"
+    target_cell_address = new_cell_address
+    set_active_cell(wb, target_sheet, target_cell_address)
+
+
+    return EXIT_CODE_SUCCESS
+
+
+def ut02_利用列欄座標值定位漢字注音儲存格(wb):
+    sheet_name = "人工標音字庫"
+    cell_address = "E2"
+    set_active_cell(wb, sheet_name, cell_address)
+
+    # 取得作用中儲存格的值
+    active_cell = wb.sheets[sheet_name].range(cell_address)
+    cell_value = active_cell.value
+    print(f"📌 作用儲存格{cell_address}的值為：{cell_value}")
+
+    # 將 (row, col) 格式轉換為 Excel 儲存格地址
+    new_cell_address = convert_to_excel_address(cell_value)
+    print(f"📌 {cell_value} 座標，其 Excel 位址為：{new_cell_address}")
+
+    # 利用 Excel 儲存格地址，將【標音字庫】工作表的 Excel 儲存格位置設為作用儲存格
+    target_sheet = "漢字注音"
+    target_cell_address = new_cell_address
+    set_active_cell(wb, target_sheet, target_cell_address)
+
+
+    return EXIT_CODE_SUCCESS
+
+
 # =========================================================================
 # 作業程序
 # =========================================================================
 def process(wb):
-    return_code = ut_get_sheet_data(wb=wb)
+    return_code = ut02_利用列欄座標值定位漢字注音儲存格(wb=wb)
     if return_code != EXIT_CODE_SUCCESS:
         return return_code
+    # ---------------------------------------------------------------------
+    # return_code = ut01_取得當前作用儲存格(wb=wb)
+    # if return_code != EXIT_CODE_SUCCESS:
+    #     return return_code
+    # ---------------------------------------------------------------------
+    # return_code = ut_get_sheet_data(wb=wb)
+    # if return_code != EXIT_CODE_SUCCESS:
+    #     return return_code
     # ---------------------------------------------------------------------
     # return_code = ut_khuat_ji_piau(wb=wb)
     # if return_code != EXIT_CODE_SUCCESS:

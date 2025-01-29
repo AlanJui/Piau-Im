@@ -4907,3 +4907,150 @@ IndexError: string index out of range
 2025-01-28 21:49:10,431 - INFO - 完成【處理作業】...
 2025-01-28 21:49:10,525 - INFO - 釋放 Excel 資源，處理完成。
 2025-01-28 21:49:10,525 - INFO - 作業成功完成！
+2025-01-29 11:22:14,985 - INFO - 作業開始
+2025-01-29 11:22:14,986 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 11:31:10,151 - INFO - 作業開始
+2025-01-29 11:31:10,152 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 11:34:24,586 - INFO - 作業開始
+2025-01-29 11:34:24,587 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 11:34:24,626 - ERROR - 作業過程發生未知的異常錯誤: name 're' is not defined
+Traceback (most recent call last):
+  File "a000_test.py", line 211, in main
+    result_code = process(wb)
+  File "a000_test.py", line 170, in process
+    row, col = excel_address_to_row_col(cell_address)
+               ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "a000_test.py", line 120, in excel_address_to_row_col
+    match = re.match(r"([A-Z]+)(\d+)", cell_address)  # 用 regex 拆分字母(列) 和 數字(行)
+            ^^
+NameError: name 're' is not defined. Did you forget to import 're'?
+2025-01-29 11:34:24,630 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-29 11:36:23,202 - INFO - 作業開始
+2025-01-29 11:36:23,204 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 12:08:20,291 - INFO - 作業開始
+2025-01-29 12:08:20,292 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 12:24:52,823 - INFO - 作業開始
+2025-01-29 12:24:52,824 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 12:25:50,729 - INFO - 作業開始
+2025-01-29 12:25:50,730 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 12:26:49,295 - INFO - 作業異常終止！
+2025-01-29 12:26:49,296 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-29 12:27:37,612 - INFO - 作業開始
+2025-01-29 12:27:37,613 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 12:29:18,670 - INFO - 作業開始
+2025-01-29 12:29:18,672 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 12:30:00,094 - INFO - 作業開始
+2025-01-29 12:30:00,095 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 12:30:43,540 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-01-29 12:30:43,540 - INFO - 作業完成！
+2025-01-29 12:32:03,155 - INFO - 作業開始
+2025-01-29 12:32:03,156 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 13:21:51,188 - INFO - 作業開始
+2025-01-29 13:21:51,189 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 13:21:51,222 - ERROR - 作業過程發生未知的異常錯誤: name 're' is not defined
+Traceback (most recent call last):
+  File "mod_excel_access.py", line 636, in main
+    result_code = process(wb)
+  File "mod_excel_access.py", line 562, in process
+    return_code = ut01(wb=wb)
+  File "mod_excel_access.py", line 552, in ut01
+    row, col = excel_address_to_row_col(cell_address)
+               ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "mod_excel_access.py", line 81, in excel_address_to_row_col
+    match = re.match(r"([A-Z]+)(\d+)", cell_address)  # 用 regex 拆分字母(列) 和 數字(行)
+            ^^
+NameError: name 're' is not defined. Did you forget to import 're'?
+2025-01-29 13:23:41,338 - INFO - 作業開始
+2025-01-29 13:23:41,339 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 13:25:48,540 - ERROR - 作業過程發生未知的異常錯誤: name 're' is not defined
+Traceback (most recent call last):
+  File "mod_excel_access.py", line 636, in main
+    result_code = process(wb)
+  File "mod_excel_access.py", line 562, in process
+    return_code = ut01_取得當前作用儲存格(wb=wb)
+                  ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "mod_excel_access.py", line 552, in ut01_取得當前作用儲存格
+    row, col = excel_address_to_row_col(cell_address)
+               ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "mod_excel_access.py", line 81, in excel_address_to_row_col
+    match = re.match(r"([A-Z]+)(\d+)", cell_address)  # 用 regex 拆分字母(列) 和 數字(行)
+            ^^
+NameError: name 're' is not defined. Did you forget to import 're'?
+2025-01-29 13:28:04,252 - INFO - 作業開始
+2025-01-29 13:28:04,253 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 13:30:41,387 - INFO - 作業開始
+2025-01-29 13:30:41,388 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 13:31:39,948 - INFO - 作業開始
+2025-01-29 13:31:39,949 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 13:33:40,512 - INFO - 作業開始
+2025-01-29 13:33:40,513 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 13:34:44,652 - INFO - 作業開始
+2025-01-29 13:34:44,653 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 13:38:53,139 - INFO - 作業開始
+2025-01-29 13:38:53,140 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 13:38:53,206 - ERROR - 作業過程發生未知的異常錯誤: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "mod_excel_access.py", line 650, in main
+    result_code = process(wb)
+  File "mod_excel_access.py", line 576, in process
+    return_code = ut01_取得當前作用儲存格(wb=wb)
+                  ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "mod_excel_access.py", line 567, in ut01_取得當前作用儲存格
+    wb.sheets['標音字庫'].range(new_cell_address).select()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2815, in select
+    self.impl.select()
+    ~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1500, in select
+    return self.xl.Select()
+           ~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject Range>", line 2, in Select
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+2025-01-29 13:39:16,756 - INFO - 作業開始
+2025-01-29 13:39:16,758 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 13:39:30,004 - INFO - 作業開始
+2025-01-29 13:39:30,005 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 13:39:31,538 - ERROR - 作業過程發生未知的異常錯誤: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "mod_excel_access.py", line 650, in main
+    result_code = process(wb)
+  File "mod_excel_access.py", line 576, in process
+    return_code = ut01_取得當前作用儲存格(wb=wb)
+                  ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "mod_excel_access.py", line 567, in ut01_取得當前作用儲存格
+    wb.sheets['標音字庫'].range(new_cell_address).select()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2815, in select
+    self.impl.select()
+    ~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1500, in select
+    return self.xl.Select()
+           ~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject Range>", line 2, in Select
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+2025-01-29 13:45:09,907 - INFO - 作業開始
+2025-01-29 13:45:09,908 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 13:46:36,873 - INFO - 作業開始
+2025-01-29 13:46:36,875 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 13:47:28,534 - INFO - 作業開始
+2025-01-29 13:47:28,536 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 13:47:34,201 - INFO - 作業開始
+2025-01-29 13:47:34,202 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 13:52:04,813 - INFO - 作業開始
+2025-01-29 13:52:04,814 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 13:56:40,957 - INFO - 作業開始
+2025-01-29 13:56:40,958 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-01-29 14:01:37,847 - INFO - 作業開始
+2025-01-29 14:01:37,848 - INFO - 專案根目錄為: C:\work\Piau-Im
