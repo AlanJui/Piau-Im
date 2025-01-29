@@ -20,6 +20,7 @@ from mod_excel_access import (
     get_ji_khoo,
     get_value_by_name,
     maintain_ji_khoo,
+    set_active_cell,
 )
 
 # =========================================================================
@@ -145,12 +146,16 @@ def check_and_update_pronunciation(wb, han_ji, position, artificial_pronounce):
 
             # 確認該座標是否存在於【標音字庫】中
             if convert_to_excel_address(str(position)) in parsed_coords:
-                # 檢查標正音標是否為 'N/A'
-                if correction_pronounce_cell.value == "N/A":
-                    # 更新【校正音標】為【人工標音】
-                    correction_pronounce_cell.value = artificial_pronounce
-                    print(f"✅ 更新成功: {han_ji} ({position}) -> {artificial_pronounce}")
-                    return True
+                # 更新【校正音標】為【人工標音】
+                correction_pronounce_cell.value = artificial_pronounce
+                print(f"✅ 更新成功: {han_ji} ({position}) -> {artificial_pronounce}")
+                return True
+                # # 檢查標正音標是否為 'N/A'
+                # if correction_pronounce_cell.value == "N/A":
+                #     # 更新【校正音標】為【人工標音】
+                #     correction_pronounce_cell.value = artificial_pronounce
+                #     print(f"✅ 更新成功: {han_ji} ({position}) -> {artificial_pronounce}")
+                #     return True
 
     print(f"❌ 未找到匹配的資料或不符合更新條件: {han_ji} ({position})")
     return False
@@ -174,7 +179,7 @@ def convert_to_excel_address(coord_str):
 # =============================================================================
 # 作業主流程
 # =============================================================================
-def process(wb):
+def process_bak(wb):
     """
     作業流程：
     1. 取得當前 Excel 作用儲存格 (漢字、座標)
@@ -194,6 +199,29 @@ def process(wb):
 
     return EXIT_CODE_SUCCESS if success else EXIT_CODE_FAILURE
 
+def process(wb):
+    """
+    作業流程：
+    1. 取得當前 Excel 作用儲存格 (漢字、座標)
+    2. 計算【人工標音】位置與值
+    3. 查詢【標音字庫】確認該座標是否已登錄
+    4. 若【校正音標】為 'N/A'，則更新為【人工標音】
+    """
+    sheet_name = "漢字注音"
+    cell_address = "D9"
+    set_active_cell(wb, sheet_name, cell_address)
+
+    # 取得當前 Excel 作用儲存格資訊
+    sheet_name, han_ji, position, artificial_pronounce, artificial_position = get_active_cell_info(wb)
+
+    print(f"📌 作用儲存格: {sheet_name} -> {position}")
+    print(f"📌 漢字: {han_ji}, 作用座標: {position}")
+    print(f"📌 人工標音: {artificial_pronounce} (來自 {artificial_position})")
+
+    # 執行檢查與更新
+    success = check_and_update_pronunciation(wb, han_ji, position, artificial_pronounce)
+
+    return EXIT_CODE_SUCCESS if success else EXIT_CODE_FAILURE
 
 # =============================================================================
 # 程式主流程
