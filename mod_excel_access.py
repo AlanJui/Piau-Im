@@ -141,18 +141,29 @@ def get_sheet_data(sheet, start_cell):
 def ensure_sheet_exists(wb, sheet_name):
     """
     確保指定名稱的工作表存在，如果不存在則新增。
+
     :param wb: Excel 活頁簿物件。
     :param sheet_name: 工作表名稱。
-    :return: 新增或取得的工作表物件。
+    :return: 確保存在的工作表物件。
     """
     try:
-        # 嘗試取得工作表
-        sheet = wb.sheets[sheet_name]
-    except KeyError:
-        # 如果工作表不存在，新增一個
-        sheet = wb.sheets.add(sheet_name)
-    return sheet
+        # 先確保 `wb` 不是 None，並且 `wb.sheets` 可以被存取
+        if not wb or not wb.sheets:
+            raise ValueError("Excel 活頁簿 `wb` 無效或未正確開啟！")
 
+        # **使用 `name` 屬性來檢查是否存在該工作表**
+        sheet_names = [sheet.name for sheet in wb.sheets]
+
+        if sheet_name in sheet_names:
+            sheet = wb.sheets[sheet_name]  # 取得現有工作表
+        else:
+            sheet = wb.sheets.add(sheet_name)  # 新增工作表
+
+        return sheet
+
+    except Exception as e:
+        print(f"⚠️ 無法確保工作表存在: {e}")
+        return None  # 若發生錯誤，返回 None
 
 def delete_sheet_by_name(wb, sheet_name: str, show_msg: bool=False):
     """
