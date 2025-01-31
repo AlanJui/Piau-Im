@@ -25,7 +25,7 @@
             "program": "a801_依據漢字的人工標音更新標音字庫工作表中的校正音標.py",
             "console": "integratedTerminal",
             "args": [
-                "2",
+                "5",
             ]
         },
         {

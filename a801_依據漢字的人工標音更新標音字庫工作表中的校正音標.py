@@ -23,7 +23,7 @@ from mod_excel_access import (
 # =========================================================================
 load_dotenv()
 
-DB_HO_LOK_UE = os.getenv('DB_HO_LOK_Ue', 'Ho_Lok_Ue.db')
+DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
 
 # =========================================================================
 # 設定日誌
@@ -43,23 +43,18 @@ EXIT_CODE_INVALID_INPUT = 2
 EXIT_CODE_PROCESS_FAILURE = 3
 EXIT_CODE_UNKNOWN_ERROR = 99
 
+
 # =========================================================================
 # 台羅拼音 → 台語音標（TL → TLPA）轉換函數
 # =========================================================================
 def convert_tl_to_tlpa(im_piau):
     """
     轉換台羅拼音（TL）為台語音標（TLPA）。
-
-    :param im_piau: 台羅拼音 (如 "tsua7")
-    :return: 台語音標 (如 "zua7")
     """
     if not im_piau:
         return ""
-
-    # 先替換較長的 "tsh" → "c"，避免 "ts" 被誤轉換
     im_piau = re.sub(r'\btsh', 'c', im_piau)  # tsh → c
     im_piau = re.sub(r'\bts', 'z', im_piau)   # ts → z
-
     return im_piau
 
 
@@ -180,14 +175,15 @@ def export_database_to_excel(wb):
 
     try:
         # 讀取資料庫內容
-        cursor.execute("SELECT 識別號, 漢字, 台羅音標, 常用度, 更新時間 FROM 漢字庫;")
+        # cursor.execute("SELECT 識別號, 漢字, 台羅音標, 常用度, 摘要說明, 更新時間 FROM 漢字庫;")
+        cursor.execute("SELECT 識別號, 漢字, 台羅音標, 常用度, 摘要說明, 更新時間 FROM 漢字庫R1;")
         rows = cursor.fetchall()
 
         # 清空舊內容
         sheet.clear()
 
         # 寫入標題列
-        sheet.range("A1").value = ["識別號", "漢字", "台羅音標", "常用度", "更新時間"]
+        sheet.range("A1").value = ["識別號", "漢字", "台羅音標", "常用度", "摘要說明" "更新時間"]
 
         # 寫入資料
         sheet.range("A2").value = rows
@@ -204,13 +200,152 @@ def export_database_to_excel(wb):
 
 
 # =========================================================================
+# 功能 4：重建 `漢字庫` 資料表（補上 `摘要說明` 欄位）
+# =========================================================================
+def rebuild_database_from_excel(wb):
+    """
+    依據 Excel【漢字庫】工作表，重建 `漢字庫` 資料表（包含 `摘要說明` 欄位）。
+
+    :param wb: Excel 活頁簿物件
+    :return: EXIT_CODE_SUCCESS or EXIT_CODE_FAILURE
+    """
+    sheet_name = "漢字庫"
+    ensure_sheet_exists(wb, sheet_name)
+    sheet = wb.sheets[sheet_name]
+
+    conn = sqlite3.connect(DB_HO_LOK_UE)
+    cursor = conn.cursor()
+
+    try:
+        # **1️⃣ 刪除現有 `漢字庫` 資料表**
+        cursor.execute("DROP TABLE IF EXISTS 漢字庫")
+
+        # **2️⃣ 重新建立 `漢字庫` 資料表**
+        cursor.execute("""
+        CREATE TABLE 漢字庫 (
+            識別號 INTEGER PRIMARY KEY AUTOINCREMENT,
+            漢字 TEXT NOT NULL,
+            台羅音標 TEXT NOT NULL,
+            常用度 REAL DEFAULT 0.1,
+            摘要說明 TEXT DEFAULT 'NA',
+            更新時間 TEXT DEFAULT (DATETIME('now', 'localtime')) NOT NULL
+        );
+        """)
+
+        # **3️⃣ 讀取 Excel `漢字庫` 工作表**
+        data = sheet.range("A2").expand("table").value
+        if not isinstance(data[0], list):
+            data = [data]
+
+        # **4️⃣ 新增資料**
+        for idx, row_data in enumerate(data, start=2):
+            han_ji = row_data[1]  # B 欄
+            tai_lo_im_piau = row_data[2]  # C 欄
+            siong_iong_too = row_data[3] if isinstance(row_data[3], (int, float)) else 0.1  # D 欄
+            summary = row_data[4] if isinstance(row_data[4], str) else "NA"  # E 欄（摘要）
+            updated_time = row_data[5] if isinstance(row_data[5], str) else datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+            # **Console Debug 訊息**
+            print(f"📌 正在處理第 {idx-1} 筆資料 (Excel 第 {idx} 列): 漢字='{han_ji}', 台羅音標='{tai_lo_im_piau}', 更新時間='{updated_time}'")
+
+            # **確保 `漢字` 和 `台羅音標` 務必要有資料**
+            if not han_ji or not tai_lo_im_piau:
+                print(f"⚠️ 跳過無效資料: Excel 第 {idx} 列：缺【漢字】或【台羅音標】")
+                # **將錯誤記錄寫入 `error_log.txt`**
+                with open("error_log.txt", "a", encoding="utf-8") as log_file:
+                    log_file.write(f"❌ 無效資料（Excel 第 {idx} 列）: {row_data}\n")
+                continue  # 跳過無效資料
+
+            # **檢查 `台羅音標` 是否為有效字串**
+            if not han_ji or not isinstance(tai_lo_im_piau, str) or not tai_lo_im_piau.strip():
+                print(f"⚠️ 跳過無效資料: Excel 第 {idx} 列 (台羅音標格式錯誤)")
+                # **將錯誤記錄寫入 `error_log.txt`**
+                with open("error_log.txt", "a", encoding="utf-8") as log_file:
+                    log_file.write(f"❌ 無效資料（Excel 第 {idx} 列）: {row_data}\n")
+                continue  # **跳過此筆錯誤資料**
+
+            # 轉換台羅拼音（TL）→ 台語音標（TLPA）
+            # tlpa_pinyin = convert_tl_to_tlpa(tai_lo_im_piau)
+
+            cursor.execute("""
+                INSERT INTO 漢字庫 (漢字, 台羅音標, 常用度, 摘要說明, 更新時間)
+                VALUES (?, ?, ?, ?, ?);
+            """, (han_ji, tai_lo_im_piau, siong_iong_too, summary, updated_time))
+
+        # **5️⃣ 建立 `UNIQUE INDEX` 確保無重複**
+        cursor.execute("CREATE UNIQUE INDEX idx_漢字_台羅音標 ON 漢字庫 (漢字, 台羅音標);")
+
+        conn.commit()
+        print("✅ `漢字庫` 資料表已成功重建！")
+        return EXIT_CODE_SUCCESS
+
+    except Exception as e:
+        print(f"❌ 重建 `漢字庫` 失敗: {e}")
+        return EXIT_CODE_FAILURE
+
+    finally:
+        conn.close()
+
+
+# =========================================================================
+# 功能 5：匯出成 RIME 輸入法字典
+# =========================================================================
+def export_to_rime_dict():
+    """
+    將 `漢字庫` 資料表轉換成 RIME 輸入法字典格式（YAML）。
+    """
+    conn = sqlite3.connect(DB_HO_LOK_UE)
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("SELECT 漢字, 台羅音標, 常用度, 摘要說明, 更新時間 FROM 漢字庫;")
+        rows = cursor.fetchall()
+
+        dict_filename = "tl_ji_khoo_peh_ue.dict.yaml"
+        with open(dict_filename, "w", encoding="utf-8") as file:
+            # 寫入 RIME 字典檔頭
+            file.write("# Rime dictionary\n")
+            file.write("# encoding: utf-8\n")
+            file.write("#\n# 河洛白話音\n#\n")
+            file.write("---\n")
+            file.write("name: tl_ji_khoo_peh_ue\n")
+            file.write("version: \"v0.1.0.0\"\n")
+            file.write("sort: by_weight\n")
+            file.write("use_preset_vocabulary: false\n")
+            file.write("columns:\n")
+            file.write("  - text    # 漢字\n")
+            file.write("  - code    # 台灣音標（TLPA）拼音\n")
+            file.write("  - weight  # 常用度（優先顯示度）\n")
+            file.write("  - stem    # 用法舉例\n")
+            file.write("  - create  # 建立時間\n")
+            file.write("import_tables:\n")
+            file.write("  - tl_ji_khoo_kah_kut_bun\n")
+            file.write("...\n")
+
+            # **寫入字典內容**
+            for han_ji, tai_lo_pinyin, weight, summary, create_time in rows:
+                file.write(f"{han_ji}\t{tai_lo_pinyin}\t{weight}\t{summary}\t{create_time}\n")
+
+        print(f"✅ RIME 字典 `{dict_filename}` 匯出完成！")
+        return EXIT_CODE_SUCCESS
+    except Exception as e:
+        print(f"❌ 匯出 RIME 字典失敗: {e}")
+        return EXIT_CODE_FAILURE
+    finally:
+        conn.close()
+
+
+# =========================================================================
 # 主程式執行
 # =========================================================================
 def main():
     if len(sys.argv) > 1:
         mode = sys.argv[1]
     else:
-        mode = "1"
+        mode = "3"
+
+    if mode == "5":
+        return export_to_rime_dict()
 
     wb = xw.apps.active.books.active
 
@@ -220,8 +355,10 @@ def main():
         return update_database_from_excel(wb)
     elif mode == "3":
         return export_database_to_excel(wb)
+    elif mode == "4":
+        return rebuild_database_from_excel(wb)
     else:
-        print("❌ 錯誤：請輸入有效模式 (1, 2, 3)")
+        print("❌ 錯誤：請輸入有效模式 (1, 2, 3, 4, 5)")
         return EXIT_CODE_INVALID_INPUT
 
 

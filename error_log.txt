@@ -1,0 +1,3 @@
+❌ 無效資料（Excel 第 4514 列）: [4555.0, '閏', datetime.datetime(2025, 6, 7, 0, 0), 0.01, 'NA', datetime.datetime(2024, 10, 11, 11, 3, 43)]
+❌ 無效資料（Excel 第 4533 列）: [4575.0, '韌', datetime.datetime(2025, 6, 7, 0, 0), 0.01, 'NA', datetime.datetime(2024, 10, 11, 11, 3, 43)]
+❌ 無效資料（Excel 第 5428 列）: [5483.0, '潤', datetime.datetime(2025, 6, 7, 0, 0), 0.01, 'NA', datetime.datetime(2024, 10, 11, 11, 3, 43)]
