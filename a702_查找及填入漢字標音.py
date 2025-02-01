@@ -167,14 +167,13 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
             # 將儲存格的填滿色彩設為【無填滿】
             cell.color = None
 
-            # cell_value = cell.value
-            cell_value = cell.value.strip() if cell.value else None
+            cell_value = cell.value
             if cell_value == 'φ':
                 EOF = True
                 msg = "【文字終結】"
             elif cell_value == '\n':
                 msg = "【換行】"
-            elif cell_value == None or cell_value == "" or cell_value == " ":  # 若儲存格內無值
+            elif cell_value == None or cell_value.strip() == "":  # 若儲存格內無值
                 if Two_Empty_Cells == 0:
                     Two_Empty_Cells += 1
                 elif Two_Empty_Cells == 1:

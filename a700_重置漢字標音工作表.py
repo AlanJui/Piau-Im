@@ -135,8 +135,7 @@ def main():
     # =========================================================================
     # 結束作業
     # =========================================================================
-    # file_path = save_as_new_file(wb=wb, input_file_name='_working')
-    file_path = save_as_new_file(wb=wb)
+    file_path = save_as_new_file(wb=wb, input_file_name='_working')
     if not file_path:
         logging.error("儲存檔案失敗！")
         return EXIT_CODE_PROCESS_FAILURE    # 作業異當終止：無法儲存檔案

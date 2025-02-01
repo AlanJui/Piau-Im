@@ -23,8 +23,8 @@ def load_module_function(module_name, function_name):
 #----------------------------------------------------------------
 def save_as_new_file(wb, input_file_name=None):
     # 取得檔案名稱
-    if not input_file_name:
-        file_name = '_working'
+    if input_file_name == '_working':
+        file_name = input_file_name
     else:
         # 自 env 工作表取得檔案名稱
         try:
