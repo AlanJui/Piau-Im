@@ -19,21 +19,12 @@ from a701_作業中活頁檔填入漢字 import process as fill_hanji_in_cells
 # from p709_reset_han_ji_cells import reset_han_ji_cells
 # from mod_file_access import load_module_function, save_as_new_file
 from a702_查找及填入漢字標音 import reset_han_ji_cells
-from a801_依據漢字的人工標音更新標音字庫工作表中的校正音標 import (
-    check_and_update_pronunciation,
-    convert_to_excel_address,
-    excel_address_to_row_col,
-    get_active_cell_info,
-)
 
 # 載入自訂模組/函式
 from mod_excel_access import (
-    create_dict_by_sheet,
+    check_and_update_pronunciation,
     ensure_sheet_exists,
-    get_ji_khoo,
     get_value_by_name,
-    maintain_ji_khoo,
-    set_active_cell,
 )
 from mod_字庫 import JiKhooDict  # 漢字字庫物件
 from mod_標音 import PiauIm  # 漢字標音物件
@@ -331,7 +322,7 @@ def update_by_jin_kang_piau_im(wb, sheet_name: str, jin_kang_piau_im_ji_khoo: Ji
                             # 更新【標音字庫】工作表【校正音標】內容
                             piau_im_ji_khoo[han_ji][2] = jin_kang_piau_im_cell.value
                             # 【人工標音】儲存格內容清空
-                            jin_kang_piau_im_cell.value = ''
+                            # jin_kang_piau_im_cell.value = ''
                             han_ji_cell.color = (255, 255, 0)       # 將底色設為【黄色】
                             han_ji_cell.font.color = (255, 0, 0)    # 將文字顏色設為【紅色】
                             # 顯示目前處理進度、狀態

@@ -75,20 +75,11 @@ def process(wb):
     logging_process_step(f"開始【漢字注音】工作表的清空、重置！")
     if reset_han_ji_cells(wb) == EXIT_CODE_SUCCESS:
         logging_process_step(f"完成【漢字注音】工作表的清空、重置！")
+        return EXIT_CODE_SUCCESS
     else:
         logging_process_step(f"【漢字注音】工作表的清空、重置失敗！")
         return EXIT_CODE_PROCESS_FAILURE
 
-    #--------------------------------------------------------------------------
-    # 作業結尾處理
-    #--------------------------------------------------------------------------
-    file_path = save_as_new_file(wb=wb)
-    if not file_path:
-        logging.error("儲存檔案失敗！")
-        return EXIT_CODE_PROCESS_FAILURE    # 作業異當終止：無法儲存檔案
-    else:
-        logging_process_step(f"儲存檔案至路徑：{file_path}")
-        return EXIT_CODE_SUCCESS    # 作業正常結束
 
 # =============================================================================
 # 程式主流程
@@ -144,7 +135,8 @@ def main():
     # =========================================================================
     # 結束作業
     # =========================================================================
-    file_path = save_as_new_file(wb=wb, input_file_name='_working')
+    # file_path = save_as_new_file(wb=wb, input_file_name='_working')
+    file_path = save_as_new_file(wb=wb)
     if not file_path:
         logging.error("儲存檔案失敗！")
         return EXIT_CODE_PROCESS_FAILURE    # 作業異當終止：無法儲存檔案

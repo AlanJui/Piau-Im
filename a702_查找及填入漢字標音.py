@@ -28,6 +28,7 @@ from mod_標音 import is_punctuation  # 是否為標點符號
 from mod_標音 import siann_un_tiau_tng_piau_im  # 声、韻、調轉台語音標
 from mod_標音 import split_hong_im_hu_ho  # 分解漢字標音
 from mod_標音 import split_tai_gi_im_piau  # 分解台語音標
+from mod_標音 import tai_gi_im_piau_tng_un_bu  # 台語音標轉韻部(方音轉強勢音)
 from mod_標音 import tlpa_tng_han_ji_piau_im  # 台語音標轉台語音標
 
 # =========================================================================
@@ -74,6 +75,7 @@ def ca_ji_kiat_ko_tng_piau_im(result, han_ji_khoo: str, piau_im: PiauIm, piau_im
         # 將【台語音標】分解為【聲母】、【韻母】、【聲調】
         siann_bu = result[0]['聲母']
         un_bu = result[0]['韻母']
+        un_bu = tai_gi_im_piau_tng_un_bu(un_bu)
         tiau_ho = result[0]['聲調']
         if tiau_ho == "6":
             # 若【聲調】為【6】，則將【聲調】改為【7】
@@ -165,13 +167,14 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
             # 將儲存格的填滿色彩設為【無填滿】
             cell.color = None
 
-            cell_value = cell.value
+            # cell_value = cell.value
+            cell_value = cell.value.strip() if cell.value else None
             if cell_value == 'φ':
                 EOF = True
                 msg = "【文字終結】"
             elif cell_value == '\n':
                 msg = "【換行】"
-            elif cell_value == None:
+            elif cell_value == None or cell_value == "" or cell_value == " ":  # 若儲存格內無值
                 if Two_Empty_Cells == 0:
                     Two_Empty_Cells += 1
                 elif Two_Empty_Cells == 1:

@@ -126,7 +126,7 @@ def concat_ruby_tag(wb, piau_im, han_ji, tai_gi_im_piau):
     """將漢字、台語音標及台語注音符號，合併成一個 Ruby Tag"""
     zu_im_list = split_tai_gi_im_piau(tai_gi_im_piau)
     if zu_im_list[0] == "" or zu_im_list[0] == None:
-        siann_bu = "ø"
+        siann_bu = "ø"  # 無聲母: ø
     else:
         siann_bu = zu_im_list[0]
 
@@ -303,10 +303,11 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
                 print(f"({row}, {xw.utils.col_name(col)}) = 《文章終止》")
                 break
             elif cell_value == '\n':    # 讀到【換行標示】
+                ruby_tag = f"</p><p>\n"
                 print(f"({row}, {xw.utils.col_name(col)}) = 《換行》")
                 # 若遇到換行字元，退出迴圈
                 break
-            elif cell_value == None or cell_value == '':    # 讀到【空白】
+            elif cell_value == None or cell_value.strip() == '':    # 讀到【空白】
                 print(f"({row}, {xw.utils.col_name(col)}) = 《空格》")
                 Empty_Cells_Total += 1
                 if Empty_Cells_Total >= 2:
@@ -319,9 +320,9 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
                 if is_punctuation(cell_value):
                     # ruby_tag = f"  {cell_value}\n"
                     ruby_tag = f"  <span>{cell_value}</span>\n"
-                    msg = f"({row}, {col_name}) = {cell_value}"
+                    msg = f"({row}, {xw.utils.col_name(col)}) = {cell_value}"
                 else:
-                    han_ji = cell_value  # 取得漢字
+                    han_ji = cell_value.strip()  # 取得漢字
                     # 取得漢字的【台語音標】
                     tai_gi_im_piau = sheet.range((row - 1, col)).value  # 取得漢字的台語音標
                     # 當儲存格寫入之資料為 None 情況時之處理作法：給予空字串
@@ -333,8 +334,7 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
                         han_ji=han_ji,
                         tai_gi_im_piau=tai_gi_im_piau
                     )
-                    col_name = xw.utils.col_name(col)   # 取得欄位名稱
-                    msg =f"({row}, {col_name}) = {han_ji} [{tai_gi_im_piau}]"
+                    msg =f"({row}, {xw.utils.col_name(col)}) = {han_ji} [{tai_gi_im_piau}]"
 
             write_buffer += ruby_tag
             print(msg)
@@ -342,10 +342,6 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
         # =========================================================
         # 換行處理：(1)每處理完 15 字後，換下一行 ；(2) 讀到【換行標示】
         # =========================================================
-
-        # 已到【行尾】作業處理
-        # print(f"({row}, {col_name}) = 《行尾》")
-
         # 讀到【換行標示】，需要結束目前【段落】，並開始新的【段落】
         if cell_value == '\n':
             write_buffer += f"</p><p>\n"

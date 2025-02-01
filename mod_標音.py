@@ -18,9 +18,11 @@ superscript_digit_mapping = {
 # 韻母轉換字典
 un_bu_tng_huan_map_dict = {
     'ee': 'e',          # ee（ㄝ）= [ɛ]
-    'er': 'o',          # er（ㄜ）= [ə]
+    'er': 'e',          # er（ㄜ）= [ə]
+    'erh': 'eh',        # er（ㄜ）= [ə]
     'or': 'o',          # or（ㄜ）= [ə]
     'ere': 'ue',        # ere = [əe]
+    'ereh': 'ueh',      # ereh = [əeh]
     'ir': 'i',          # ir（ㆨ）= [ɯ] / [ɨ]
     'eng': 'ing',       # 白話字：eng ==> 閩南語：ing
     'oa': 'ua',         # 白話字：oa ==> 閩南語：ua
@@ -31,6 +33,7 @@ un_bu_tng_huan_map_dict = {
     'onn': 'oonn',      # 雅俗通十五音：扛
     'uei': 'ue',        # 雅俗通十五音：檜
     'ueinn': 'uenn',    # 雅俗通十五音：檜
+    'ur': 'u',          # 雅俗通十五音：艍
 }
 
 # =========================================================
@@ -264,7 +267,8 @@ def tlpa_tng_han_ji_piau_im(piau_im, piau_im_huat, tai_gi_im_piau):
     siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(tai_gi_im_piau)
 
     if siann_bu == "" or siann_bu == None:
-        siann_bu = "Ø"
+        # siann_bu = "Ø"
+        siann_bu = 'ø'
 
     han_ji_piau_im = siann_un_tiau_tng_piau_im(
         piau_im,
@@ -607,7 +611,7 @@ class PiauIm:
         tiau_ho = replace_superscript_digits(str(tiau_ho))
         tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
 
-        if siann_bu == None or siann_bu == "Ø":
+        if siann_bu == "" or siann_bu == None or siann_bu == "Ø" or siann_bu == "ø":
             siann = ""
         else:
             siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
@@ -655,7 +659,7 @@ class PiauIm:
         tiau_ho = replace_superscript_digits(str(tiau_ho))
         tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
 
-        if siann_bu == None or siann_bu == "Ø":
+        if siann_bu == "" or siann_bu == None or siann_bu == "Ø" or siann_bu == "ø":
             siann = ""
         else:
             siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
@@ -718,7 +722,7 @@ class PiauIm:
         tiau_ho = replace_superscript_digits(str(tiau_ho))
         tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
 
-        if siann_bu == None or siann_bu == "Ø":
+        if siann_bu == "" or siann_bu == None or siann_bu == "Ø" or siann_bu == "ø":
             siann = ""
         else:
             siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
@@ -788,6 +792,7 @@ class PiauIm:
         tiau_ho = replace_superscript_digits(str(tiau_ho))
         tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
 
+        siann_bu = 'ø' if siann_bu == 'Ø' else siann_bu
         siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
         un = self.Un_Bu_Dict[un_bu][piau_im_huat]
         # tiau = self.TONE_MARKS[piau_im_huat][tiau_ho]
@@ -850,7 +855,7 @@ class PiauIm:
         tiau_ho = replace_superscript_digits(str(tiau_ho))
         tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
 
-        if siann_bu == "" or siann_bu == None or siann_bu == "Ø":
+        if siann_bu == "" or siann_bu == None or siann_bu == "Ø" or siann_bu == 'ø':
             siann = "英"
         else:
             siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
@@ -879,7 +884,7 @@ class PiauIm:
         tiau_ho = replace_superscript_digits(str(tiau_ho))
         tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
 
-        if siann_bu == "" or siann_bu == None or siann_bu == "Ø":
+        if siann_bu == "" or siann_bu == None or siann_bu == "Ø" or siann_bu == "ø":
             siann = "英"
         else:
             siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]

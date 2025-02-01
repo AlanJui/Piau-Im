@@ -128,10 +128,10 @@ def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
             if col == end_col - 1: print("\n")
             row += 4
             if row >= end_row or index >= total_length:
-                sheet.range((row, start_col)).value = "φ"
                 break
 
     # 保存 Excel 檔案
+    sheet.range((row, start_col)).value = "φ"
     wb.save()
 
     # 選擇名為 "顯示注音輸入" 的命名範圍

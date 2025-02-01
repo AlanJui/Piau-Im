@@ -5261,3 +5261,989 @@ sqlite3.OperationalError: table 漢字庫 has no column named 摘要說明
 2025-01-31 14:09:19,154 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
 2025-01-31 14:14:52,996 - INFO - 🔹 作業開始
 2025-01-31 14:15:45,253 - INFO - 🔹 作業開始
+2025-02-01 10:19:54,771 - INFO - 作業開始
+2025-02-01 10:19:54,772 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 10:19:55,708 - INFO - 開始【漢字注音】工作表的清空、重置！
+2025-02-01 10:20:04,563 - INFO - 完成【漢字注音】工作表的清空、重置！
+2025-02-01 10:20:04,993 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-雅俗通】《牽絲戲》.xlsx
+2025-02-01 10:20:04,995 - INFO - a700_重罝漢字標音工作表.py 程式已執行完畢！
+2025-02-01 10:20:05,404 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-雅俗通】_working.xlsx.xlsx
+2025-02-01 10:21:54,473 - INFO - 作業開始
+2025-02-01 10:21:54,474 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 10:21:54,629 - INFO - 開始【漢字注音】工作表的清空、重置！
+2025-02-01 10:22:02,313 - INFO - 完成【漢字注音】工作表的清空、重置！
+2025-02-01 10:24:12,435 - INFO - 作業開始
+2025-02-01 10:24:12,436 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 10:24:12,575 - INFO - 開始【漢字注音】工作表的清空、重置！
+2025-02-01 10:24:20,145 - INFO - 完成【漢字注音】工作表的清空、重置！
+2025-02-01 10:26:16,093 - INFO - 作業開始
+2025-02-01 10:26:16,094 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 10:26:16,254 - INFO - 開始【漢字注音】工作表的清空、重置！
+2025-02-01 10:26:24,620 - INFO - 完成【漢字注音】工作表的清空、重置！
+2025-02-01 10:26:38,903 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-雅俗通】_working.xlsx.xlsx
+2025-02-01 10:26:38,903 - INFO - a700_重罝漢字標音工作表.py 程式已執行完畢！
+2025-02-01 10:31:14,190 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-雅俗通】《牽絲戲》.xlsx
+2025-02-01 10:31:22,416 - INFO - 作業開始
+2025-02-01 10:31:22,417 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 10:31:22,568 - INFO - 開始【漢字注音】工作表的清空、重置！
+2025-02-01 10:31:32,505 - INFO - 完成【漢字注音】工作表的清空、重置！
+2025-02-01 10:31:32,506 - INFO - 作業異常終止！
+2025-02-01 10:31:50,812 - INFO - a700_重罝漢字標音工作表.py 程式已執行完畢！
+2025-02-01 10:32:20,749 - INFO - 作業開始
+2025-02-01 10:32:20,750 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 10:32:20,873 - INFO - 開始【漢字注音】工作表的清空、重置！
+2025-02-01 10:33:56,359 - INFO - 作業開始
+2025-02-01 10:33:56,360 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 10:33:56,512 - INFO - 開始【漢字注音】工作表的清空、重置！
+2025-02-01 10:34:07,336 - INFO - 完成【漢字注音】工作表的清空、重置！
+2025-02-01 10:34:19,637 - INFO - a700_重罝漢字標音工作表.py 程式已執行完畢！
+2025-02-01 10:38:45,643 - INFO - 作業開始
+2025-02-01 10:38:45,644 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 10:38:45,790 - INFO - 開始【漢字注音】工作表的清空、重置！
+2025-02-01 10:38:52,505 - INFO - 完成【漢字注音】工作表的清空、重置！
+2025-02-01 10:39:02,467 - INFO - a700_重罝漢字標音工作表.py 程式已執行完畢！
+2025-02-01 10:39:32,722 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-雅俗通】_working.xlsx
+2025-02-01 10:44:45,149 - INFO - 作業開始
+2025-02-01 10:44:45,150 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 10:44:45,184 - INFO - 【待注音漢字】總字數為: 1575
+2025-02-01 10:44:45,277 - INFO - 儲存格內容清除完畢
+2025-02-01 10:44:51,798 - INFO - 儲存格格式重設完畢
+2025-02-01 10:45:55,958 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-02-01 10:45:55,996 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-01 10:45:56,909 - ERROR - 作業過程發生未知的異常錯誤: 'ø'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a701_作業中活頁檔填入漢字.py", line 245, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a701_作業中活頁檔填入漢字.py", line 189, in process
+    ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3',
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      ue_im_lui_piat=ue_im_lui_piat,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      han_ji_khoo=han_ji_khoo, db_name=db_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      module_name=module_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+                      function_name='han_ji_ca_piau_im')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\a702_查找及填入漢字標音.py", line 248, in ca_han_ji_thak_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\a702_查找及填入漢字標音.py", line 96, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
+        piau_im,
+    ...<3 lines>...
+        tiau_ho
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 242, in siann_un_tiau_tng_piau_im
+    return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 856, in NST_piau_im
+    siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'ø'
+2025-02-01 10:45:56,913 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-02-01 10:51:35,168 - INFO - 作業開始
+2025-02-01 10:51:35,168 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 10:51:35,384 - INFO - 開始【漢字注音】工作表的清空、重置！
+2025-02-01 10:51:54,426 - INFO - 完成【漢字注音】工作表的清空、重置！
+2025-02-01 10:51:54,427 - INFO - a700_重罝漢字標音工作表.py 程式已執行完畢！
+2025-02-01 10:51:54,747 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-雅俗通】_working.xlsx
+2025-02-01 10:55:10,538 - INFO - 作業開始
+2025-02-01 10:55:10,538 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 10:55:10,571 - INFO - 【待注音漢字】總字數為: 1575
+2025-02-01 10:55:10,640 - INFO - 儲存格內容清除完畢
+2025-02-01 10:55:23,427 - INFO - 儲存格格式重設完畢
+2025-02-01 10:57:26,870 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-02-01 10:57:26,908 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-01 10:57:27,586 - ERROR - 作業過程發生未知的異常錯誤: 'ø'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a701_作業中活頁檔填入漢字.py", line 245, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a701_作業中活頁檔填入漢字.py", line 189, in process
+    ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3',
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      ue_im_lui_piat=ue_im_lui_piat,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      han_ji_khoo=han_ji_khoo, db_name=db_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      module_name=module_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+                      function_name='han_ji_ca_piau_im')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\a702_查找及填入漢字標音.py", line 248, in ca_han_ji_thak_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\a702_查找及填入漢字標音.py", line 96, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
+        piau_im,
+    ...<3 lines>...
+        tiau_ho
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 242, in siann_un_tiau_tng_piau_im
+    return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 856, in NST_piau_im
+    siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'ø'
+2025-02-01 10:57:27,589 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-02-01 11:02:45,600 - INFO - 作業開始
+2025-02-01 11:02:45,601 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 11:02:45,634 - INFO - 【待注音漢字】總字數為: 1570
+2025-02-01 11:02:45,703 - INFO - 儲存格內容清除完畢
+2025-02-01 11:03:01,187 - INFO - 儲存格格式重設完畢
+2025-02-01 11:07:12,006 - INFO - 作業開始
+2025-02-01 11:07:12,007 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 11:07:12,040 - INFO - 【待注音漢字】總字數為: 1570
+2025-02-01 11:07:12,166 - INFO - 儲存格內容清除完畢
+2025-02-01 11:07:24,746 - INFO - 儲存格格式重設完畢
+2025-02-01 11:10:07,678 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-02-01 11:10:13,140 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-01 11:10:13,727 - ERROR - 作業過程發生未知的異常錯誤: 'ø'
+Traceback (most recent call last):
+  File "a701_作業中活頁檔填入漢字.py", line 245, in main
+    result_code = process(wb)
+  File "a701_作業中活頁檔填入漢字.py", line 189, in process
+    ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3',
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      ue_im_lui_piat=ue_im_lui_piat,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      han_ji_khoo=han_ji_khoo, db_name=db_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      module_name=module_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+                      function_name='han_ji_ca_piau_im')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\a702_查找及填入漢字標音.py", line 248, in ca_han_ji_thak_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\work\Piau-Im\a702_查找及填入漢字標音.py", line 96, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
+        piau_im,
+    ...<3 lines>...
+        tiau_ho
+    )
+  File "c:\work\Piau-Im\mod_標音.py", line 242, in siann_un_tiau_tng_piau_im
+    return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 856, in NST_piau_im
+    siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'ø'
+2025-02-01 11:10:13,732 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-02-01 11:12:40,491 - INFO - 作業開始
+2025-02-01 11:12:40,492 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 11:13:06,396 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-01 11:15:58,333 - ERROR - 作業過程發生未知的異常錯誤: 'ø'
+Traceback (most recent call last):
+  File "a701_作業中活頁檔填入漢字.py", line 245, in main
+    result_code = process(wb)
+  File "a701_作業中活頁檔填入漢字.py", line 189, in process
+    ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3',
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      ue_im_lui_piat=ue_im_lui_piat,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      han_ji_khoo=han_ji_khoo, db_name=db_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      module_name=module_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+                      function_name='han_ji_ca_piau_im')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\a702_查找及填入漢字標音.py", line 248, in ca_han_ji_thak_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\work\Piau-Im\a702_查找及填入漢字標音.py", line 96, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
+        piau_im,
+    ...<3 lines>...
+        tiau_ho
+    )
+  File "c:\work\Piau-Im\mod_標音.py", line 242, in siann_un_tiau_tng_piau_im
+    return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 856, in NST_piau_im
+    siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'ø'
+2025-02-01 11:15:58,339 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-02-01 11:17:34,517 - INFO - 作業開始
+2025-02-01 11:17:34,518 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 11:17:40,212 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-01 11:18:42,364 - ERROR - 作業過程發生未知的異常錯誤: 'ø'
+Traceback (most recent call last):
+  File "a701_作業中活頁檔填入漢字.py", line 245, in main
+    result_code = process(wb)
+  File "a701_作業中活頁檔填入漢字.py", line 189, in process
+    ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3',
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      ue_im_lui_piat=ue_im_lui_piat,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      han_ji_khoo=han_ji_khoo, db_name=db_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      module_name=module_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+                      function_name='han_ji_ca_piau_im')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\a702_查找及填入漢字標音.py", line 248, in ca_han_ji_thak_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\work\Piau-Im\a702_查找及填入漢字標音.py", line 96, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
+        piau_im,
+    ...<3 lines>...
+        tiau_ho
+    )
+  File "c:\work\Piau-Im\mod_標音.py", line 242, in siann_un_tiau_tng_piau_im
+    return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 856, in NST_piau_im
+    siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'ø'
+2025-02-01 11:18:42,370 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-02-01 11:19:05,434 - INFO - 作業開始
+2025-02-01 11:19:05,435 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 11:19:09,404 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-01 11:25:43,043 - INFO - 作業開始
+2025-02-01 11:25:43,044 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 11:25:45,876 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-01 11:26:38,009 - ERROR - 作業過程發生未知的異常錯誤: 'ur'
+Traceback (most recent call last):
+  File "a701_作業中活頁檔填入漢字.py", line 245, in main
+    result_code = process(wb)
+  File "a701_作業中活頁檔填入漢字.py", line 189, in process
+    ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3',
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      ue_im_lui_piat=ue_im_lui_piat,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      han_ji_khoo=han_ji_khoo, db_name=db_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      module_name=module_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+                      function_name='han_ji_ca_piau_im')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\a702_查找及填入漢字標音.py", line 248, in ca_han_ji_thak_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\work\Piau-Im\a702_查找及填入漢字標音.py", line 96, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
+        piau_im,
+    ...<3 lines>...
+        tiau_ho
+    )
+  File "c:\work\Piau-Im\mod_標音.py", line 242, in siann_un_tiau_tng_piau_im
+    return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 857, in NST_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'ur'
+2025-02-01 11:26:38,014 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-02-01 11:29:08,752 - INFO - 作業開始
+2025-02-01 11:29:08,753 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 11:29:14,932 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-01 11:29:31,571 - ERROR - 作業過程發生未知的異常錯誤: 'erh'
+Traceback (most recent call last):
+  File "a701_作業中活頁檔填入漢字.py", line 245, in main
+    result_code = process(wb)
+  File "a701_作業中活頁檔填入漢字.py", line 189, in process
+    ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3',
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      ue_im_lui_piat=ue_im_lui_piat,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      han_ji_khoo=han_ji_khoo, db_name=db_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      module_name=module_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+                      function_name='han_ji_ca_piau_im')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\a702_查找及填入漢字標音.py", line 248, in ca_han_ji_thak_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\work\Piau-Im\a702_查找及填入漢字標音.py", line 96, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
+        piau_im,
+    ...<3 lines>...
+        tiau_ho
+    )
+  File "c:\work\Piau-Im\mod_標音.py", line 242, in siann_un_tiau_tng_piau_im
+    return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 857, in NST_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'erh'
+2025-02-01 11:29:31,576 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-02-01 11:45:17,196 - INFO - 作業開始
+2025-02-01 11:45:17,198 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 11:45:17,256 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-01 11:46:14,381 - ERROR - 作業過程發生未知的異常錯誤: 'ereh'
+Traceback (most recent call last):
+  File "a701_作業中活頁檔填入漢字.py", line 245, in main
+    result_code = process(wb)
+  File "a701_作業中活頁檔填入漢字.py", line 189, in process
+    ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3',
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      ue_im_lui_piat=ue_im_lui_piat,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      han_ji_khoo=han_ji_khoo, db_name=db_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      module_name=module_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+                      function_name='han_ji_ca_piau_im')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\a702_查找及填入漢字標音.py", line 250, in ca_han_ji_thak_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\work\Piau-Im\a702_查找及填入漢字標音.py", line 98, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
+        piau_im,
+    ...<3 lines>...
+        tiau_ho
+    )
+  File "c:\work\Piau-Im\mod_標音.py", line 243, in siann_un_tiau_tng_piau_im
+    return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 858, in NST_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'ereh'
+2025-02-01 11:46:14,386 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-02-01 11:49:25,145 - INFO - 作業開始
+2025-02-01 11:49:25,147 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 11:49:25,213 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-01 11:52:40,855 - INFO - 完成【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-01 11:52:41,148 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-雅俗通】_working.xlsx
+2025-02-01 11:52:41,148 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-02-01 12:10:16,253 - INFO - 作業開始
+2025-02-01 12:10:16,255 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 12:10:16,288 - INFO - 【待注音漢字】總字數為: 1570
+2025-02-01 12:10:16,443 - INFO - 儲存格內容清除完畢
+2025-02-01 12:10:28,641 - INFO - 儲存格格式重設完畢
+2025-02-01 12:12:17,143 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-02-01 12:12:17,178 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-01 12:14:48,622 - INFO - 完成【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-01 12:14:48,918 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-雅俗通】_working.xlsx
+2025-02-01 12:14:48,918 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-02-01 12:46:03,108 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 12:48:52,204 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-01 12:48:52,205 - INFO - 完成【處理作業】...
+2025-02-01 12:48:52,304 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-01 12:48:52,304 - INFO - 作業成功完成！
+2025-02-01 13:00:34,510 - INFO - 作業開始
+2025-02-01 13:00:34,510 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 13:00:34,808 - ERROR - 執行過程中發生未知錯誤: cannot access local variable 'col_name' where it is not associated with a value
+Traceback (most recent call last):
+  File "c:\work\Piau-Im\a703_製作標音網頁.py", line 491, in main
+    result_code = process(wb)
+  File "c:\work\Piau-Im\a703_製作標音網頁.py", line 432, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "c:\work\Piau-Im\a703_製作標音網頁.py", line 408, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "c:\work\Piau-Im\a703_製作標音網頁.py", line 322, in build_web_page
+    msg = f"({row}, {col_name}) = {cell_value}"
+                     ^^^^^^^^
+UnboundLocalError: cannot access local variable 'col_name' where it is not associated with a value
+2025-02-01 13:00:34,810 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-01 13:01:16,439 - INFO - 作業開始
+2025-02-01 13:01:16,440 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 13:01:16,763 - ERROR - 執行過程中發生未知錯誤: cannot access local variable 'col_name' where it is not associated with a value
+Traceback (most recent call last):
+  File "a703_製作標音網頁.py", line 491, in main
+    result_code = process(wb)
+  File "a703_製作標音網頁.py", line 432, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a703_製作標音網頁.py", line 408, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a703_製作標音網頁.py", line 322, in build_web_page
+    msg = f"({row}, {col_name}) = {cell_value}"
+                     ^^^^^^^^
+UnboundLocalError: cannot access local variable 'col_name' where it is not associated with a value
+2025-02-01 13:01:16,767 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-01 13:02:09,843 - INFO - 作業開始
+2025-02-01 13:02:09,844 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 13:02:10,120 - ERROR - 執行過程中發生未知錯誤: cannot access local variable 'col_name' where it is not associated with a value
+Traceback (most recent call last):
+  File "a703_製作標音網頁.py", line 491, in main
+    result_code = process(wb)
+  File "a703_製作標音網頁.py", line 432, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a703_製作標音網頁.py", line 408, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a703_製作標音網頁.py", line 322, in build_web_page
+    msg = f"({row}, {col_name}) = {cell_value}"
+                     ^^^^^^^^
+UnboundLocalError: cannot access local variable 'col_name' where it is not associated with a value
+2025-02-01 13:02:10,123 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-01 13:02:50,292 - INFO - 作業開始
+2025-02-01 13:02:50,293 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 13:02:50,568 - ERROR - 執行過程中發生未知錯誤: cannot access local variable 'col_name' where it is not associated with a value
+Traceback (most recent call last):
+  File "a703_製作標音網頁.py", line 491, in main
+    result_code = process(wb)
+  File "a703_製作標音網頁.py", line 432, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a703_製作標音網頁.py", line 408, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a703_製作標音網頁.py", line 322, in build_web_page
+    msg = f"({row}, {col_name}) = {cell_value}"
+                     ^^^^^^^^
+UnboundLocalError: cannot access local variable 'col_name' where it is not associated with a value
+2025-02-01 13:02:50,572 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-01 13:03:32,218 - INFO - 作業開始
+2025-02-01 13:03:32,219 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 13:04:22,045 - ERROR - 執行過程中發生未知錯誤: cannot access local variable 'col_name' where it is not associated with a value
+Traceback (most recent call last):
+  File "a703_製作標音網頁.py", line 491, in main
+    result_code = process(wb)
+  File "a703_製作標音網頁.py", line 432, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a703_製作標音網頁.py", line 408, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a703_製作標音網頁.py", line 322, in build_web_page
+    msg = f"({row}, {col_name}) = {cell_value}"
+                     ^^^^^^^^
+UnboundLocalError: cannot access local variable 'col_name' where it is not associated with a value
+2025-02-01 13:04:22,049 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-01 13:04:45,235 - INFO - 作業開始
+2025-02-01 13:04:45,236 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 13:07:21,947 - INFO - 作業開始
+2025-02-01 13:07:21,948 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 13:07:33,591 - ERROR - 執行過程中發生未知錯誤: cannot access local variable 'col_name' where it is not associated with a value
+Traceback (most recent call last):
+  File "a703_製作標音網頁.py", line 491, in main
+    result_code = process(wb)
+  File "a703_製作標音網頁.py", line 432, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a703_製作標音網頁.py", line 408, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a703_製作標音網頁.py", line 322, in build_web_page
+    msg = f"({row}, {col_name}) = {cell_value}"
+                     ^^^^^^^^
+UnboundLocalError: cannot access local variable 'col_name' where it is not associated with a value
+2025-02-01 13:07:33,595 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-01 13:08:00,054 - INFO - 作業開始
+2025-02-01 13:08:00,056 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 13:10:19,084 - INFO - 作業開始
+2025-02-01 13:10:19,085 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 13:10:30,029 - ERROR - 執行過程中發生未知錯誤: 'ø'
+Traceback (most recent call last):
+  File "a703_製作標音網頁.py", line 490, in main
+    result_code = process(wb)
+  File "a703_製作標音網頁.py", line 431, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a703_製作標音網頁.py", line 407, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a703_製作標音網頁.py", line 330, in build_web_page
+    ruby_tag = concat_ruby_tag(
+        wb=wb,
+    ...<2 lines>...
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "a703_製作標音網頁.py", line 154, in concat_ruby_tag
+    zian_piau_im = tng_uann_piau_im(
+        piau_im=piau_im,    # 注音法物件
+    ...<3 lines>...
+        tiau_ho=zu_im_list[2]
+    )
+  File "a703_製作標音網頁.py", line 117, in tng_uann_piau_im
+    return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 794, in TPS_piau_im
+    siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'ø'
+2025-02-01 13:10:30,033 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-01 13:19:46,358 - INFO - 作業開始
+2025-02-01 13:19:46,359 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 13:19:47,102 - ERROR - 執行過程中發生未知錯誤: 'ø'
+Traceback (most recent call last):
+  File "a703_製作標音網頁.py", line 490, in main
+    result_code = process(wb)
+  File "a703_製作標音網頁.py", line 431, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a703_製作標音網頁.py", line 407, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a703_製作標音網頁.py", line 330, in build_web_page
+    ruby_tag = concat_ruby_tag(
+        wb=wb,
+    ...<2 lines>...
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "a703_製作標音網頁.py", line 154, in concat_ruby_tag
+    zian_piau_im = tng_uann_piau_im(
+        piau_im=piau_im,    # 注音法物件
+    ...<3 lines>...
+        tiau_ho=zu_im_list[2]
+    )
+  File "a703_製作標音網頁.py", line 117, in tng_uann_piau_im
+    return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 795, in TPS_piau_im
+    siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'ø'
+2025-02-01 13:19:47,106 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-01 13:19:58,388 - INFO - 作業開始
+2025-02-01 13:19:58,389 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 13:19:59,151 - ERROR - 執行過程中發生未知錯誤: 'ø'
+Traceback (most recent call last):
+  File "a703_製作標音網頁.py", line 490, in main
+    result_code = process(wb)
+  File "a703_製作標音網頁.py", line 431, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a703_製作標音網頁.py", line 407, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a703_製作標音網頁.py", line 330, in build_web_page
+    ruby_tag = concat_ruby_tag(
+        wb=wb,
+    ...<2 lines>...
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "a703_製作標音網頁.py", line 154, in concat_ruby_tag
+    zian_piau_im = tng_uann_piau_im(
+        piau_im=piau_im,    # 注音法物件
+    ...<3 lines>...
+        tiau_ho=zu_im_list[2]
+    )
+  File "a703_製作標音網頁.py", line 117, in tng_uann_piau_im
+    return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 795, in TPS_piau_im
+    siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'ø'
+2025-02-01 13:19:59,155 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-01 13:22:16,748 - INFO - 作業開始
+2025-02-01 13:22:16,750 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 13:22:17,520 - ERROR - 執行過程中發生未知錯誤: 'ø'
+Traceback (most recent call last):
+  File "a703_製作標音網頁.py", line 490, in main
+    result_code = process(wb)
+  File "a703_製作標音網頁.py", line 431, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a703_製作標音網頁.py", line 407, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a703_製作標音網頁.py", line 330, in build_web_page
+    ruby_tag = concat_ruby_tag(
+        wb=wb,
+    ...<2 lines>...
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "a703_製作標音網頁.py", line 154, in concat_ruby_tag
+    zian_piau_im = tng_uann_piau_im(
+        piau_im=piau_im,    # 注音法物件
+    ...<3 lines>...
+        tiau_ho=zu_im_list[2]
+    )
+  File "a703_製作標音網頁.py", line 117, in tng_uann_piau_im
+    return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 795, in TPS_piau_im
+    siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'ø'
+2025-02-01 13:22:17,524 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-01 13:23:31,111 - INFO - 作業開始
+2025-02-01 13:23:31,112 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 13:30:22,931 - ERROR - 執行過程中發生未知錯誤: 'ø'
+Traceback (most recent call last):
+  File "a703_製作標音網頁.py", line 490, in main
+    result_code = process(wb)
+  File "a703_製作標音網頁.py", line 431, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a703_製作標音網頁.py", line 407, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a703_製作標音網頁.py", line 330, in build_web_page
+    ruby_tag = concat_ruby_tag(
+        wb=wb,
+    ...<2 lines>...
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "a703_製作標音網頁.py", line 154, in concat_ruby_tag
+    zian_piau_im = tng_uann_piau_im(
+        piau_im=piau_im,    # 注音法物件
+    ...<3 lines>...
+        tiau_ho=zu_im_list[2]
+    )
+  File "a703_製作標音網頁.py", line 117, in tng_uann_piau_im
+    return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 795, in TPS_piau_im
+    siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'ø'
+2025-02-01 13:30:22,936 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-01 13:35:35,813 - INFO - 作業開始
+2025-02-01 13:35:35,814 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 13:36:12,626 - ERROR - 執行過程中發生未知錯誤: 'ø'
+Traceback (most recent call last):
+  File "a703_製作標音網頁.py", line 490, in main
+    result_code = process(wb)
+  File "a703_製作標音網頁.py", line 431, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a703_製作標音網頁.py", line 407, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a703_製作標音網頁.py", line 330, in build_web_page
+    ruby_tag = concat_ruby_tag(
+        wb=wb,
+    ...<2 lines>...
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "a703_製作標音網頁.py", line 154, in concat_ruby_tag
+    zian_piau_im = tng_uann_piau_im(
+        piau_im=piau_im,    # 注音法物件
+    ...<3 lines>...
+        tiau_ho=zu_im_list[2]
+    )
+  File "a703_製作標音網頁.py", line 117, in tng_uann_piau_im
+    return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 796, in TPS_piau_im
+    siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'ø'
+2025-02-01 13:36:12,632 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-01 13:37:37,202 - INFO - 作業開始
+2025-02-01 13:37:37,203 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 13:37:44,750 - ERROR - 執行過程中發生未知錯誤: 'NoneType' object has no attribute 'strip'
+Traceback (most recent call last):
+  File "a703_製作標音網頁.py", line 490, in main
+    result_code = process(wb)
+  File "a703_製作標音網頁.py", line 431, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a703_製作標音網頁.py", line 407, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a703_製作標音網頁.py", line 300, in build_web_page
+    cell_value = sheet.range((row, col)).value.strip()
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strip'
+2025-02-01 13:37:44,754 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-01 13:39:41,371 - INFO - 作業開始
+2025-02-01 13:39:41,372 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 13:42:14,552 - ERROR - 執行過程中發生未知錯誤: string index out of range
+Traceback (most recent call last):
+  File "a703_製作標音網頁.py", line 491, in main
+    result_code = process(wb)
+  File "a703_製作標音網頁.py", line 432, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a703_製作標音網頁.py", line 408, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a703_製作標音網頁.py", line 331, in build_web_page
+    ruby_tag = concat_ruby_tag(
+        wb=wb,
+    ...<2 lines>...
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "a703_製作標音網頁.py", line 127, in concat_ruby_tag
+    zu_im_list = split_tai_gi_im_piau(tai_gi_im_piau)
+  File "c:\work\Piau-Im\mod_標音.py", line 170, in split_tai_gi_im_piau
+    tiau = im_piau[-1]  # 最後一個字符是聲調
+           ~~~~~~~^^^^
+IndexError: string index out of range
+2025-02-01 13:42:14,557 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-01 14:19:31,097 - INFO - 作業開始
+2025-02-01 14:19:31,099 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 14:21:50,886 - ERROR - 執行過程中發生未知錯誤: string index out of range
+Traceback (most recent call last):
+  File "a703_製作標音網頁.py", line 491, in main
+    result_code = process(wb)
+  File "a703_製作標音網頁.py", line 432, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a703_製作標音網頁.py", line 408, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a703_製作標音網頁.py", line 331, in build_web_page
+    ruby_tag = concat_ruby_tag(
+        wb=wb,
+    ...<2 lines>...
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "a703_製作標音網頁.py", line 127, in concat_ruby_tag
+    zu_im_list = split_tai_gi_im_piau(tai_gi_im_piau)
+  File "c:\work\Piau-Im\mod_標音.py", line 170, in split_tai_gi_im_piau
+    tiau = im_piau[-1]  # 最後一個字符是聲調
+           ~~~~~~~^^^^
+IndexError: string index out of range
+2025-02-01 14:21:50,898 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-01 14:23:38,038 - INFO - 作業開始
+2025-02-01 14:23:38,039 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 14:25:56,624 - ERROR - 執行過程中發生未知錯誤: string index out of range
+Traceback (most recent call last):
+  File "a703_製作標音網頁.py", line 491, in main
+    result_code = process(wb)
+  File "a703_製作標音網頁.py", line 432, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a703_製作標音網頁.py", line 408, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a703_製作標音網頁.py", line 331, in build_web_page
+    ruby_tag = concat_ruby_tag(
+        wb=wb,
+    ...<2 lines>...
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "a703_製作標音網頁.py", line 127, in concat_ruby_tag
+    zu_im_list = split_tai_gi_im_piau(tai_gi_im_piau)
+  File "c:\work\Piau-Im\mod_標音.py", line 170, in split_tai_gi_im_piau
+    tiau = im_piau[-1]  # 最後一個字符是聲調
+           ~~~~~~~^^^^
+IndexError: string index out of range
+2025-02-01 14:25:56,628 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-01 14:28:02,106 - INFO - 作業開始
+2025-02-01 14:28:02,107 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 14:33:51,698 - INFO - 作業開始
+2025-02-01 14:33:51,699 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 14:37:52,798 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-雅俗通】_working.xlsx
+2025-02-01 14:37:52,799 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-01 14:37:52,799 - INFO - 作業完成！
+2025-02-01 14:43:37,441 - INFO - 作業開始
+2025-02-01 14:43:37,442 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 14:46:23,253 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-雅俗通】_working.xlsx
+2025-02-01 14:46:23,254 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-01 14:46:23,254 - INFO - 作業完成！
+2025-02-01 14:51:29,155 - INFO - 作業開始
+2025-02-01 14:51:29,156 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 14:53:27,211 - INFO - 作業開始
+2025-02-01 14:53:27,212 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 14:53:58,958 - INFO - 作業開始
+2025-02-01 14:53:58,959 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 14:55:51,784 - INFO - 作業開始
+2025-02-01 14:55:51,785 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 14:58:28,574 - INFO - 作業開始
+2025-02-01 14:58:28,575 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 15:00:04,291 - INFO - 作業開始
+2025-02-01 15:00:04,292 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 15:02:40,681 - ERROR - 執行過程中發生未知錯誤: string index out of range
+Traceback (most recent call last):
+  File "a703_製作標音網頁.py", line 491, in main
+    result_code = process(wb)
+  File "a703_製作標音網頁.py", line 432, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a703_製作標音網頁.py", line 408, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a703_製作標音網頁.py", line 331, in build_web_page
+    ruby_tag = concat_ruby_tag(
+        wb=wb,
+    ...<2 lines>...
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "a703_製作標音網頁.py", line 127, in concat_ruby_tag
+    zu_im_list = split_tai_gi_im_piau(tai_gi_im_piau)
+  File "c:\work\Piau-Im\mod_標音.py", line 170, in split_tai_gi_im_piau
+    tiau = im_piau[-1]  # 最後一個字符是聲調
+           ~~~~~~~^^^^
+IndexError: string index out of range
+2025-02-01 15:02:40,685 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-01 15:04:26,659 - INFO - 作業開始
+2025-02-01 15:04:26,660 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 15:06:59,013 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-雅俗通】_working.xlsx
+2025-02-01 15:06:59,014 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-01 15:06:59,014 - INFO - 作業完成！
+2025-02-01 15:08:41,463 - INFO - 作業開始
+2025-02-01 15:08:41,464 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 15:11:07,979 - INFO - 作業開始
+2025-02-01 15:11:07,980 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 15:14:03,185 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-雅俗通】_working.xlsx
+2025-02-01 15:14:03,186 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-01 15:14:03,186 - INFO - 作業完成！
+2025-02-01 16:10:13,259 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 16:12:47,157 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-01 16:12:47,158 - INFO - 完成【處理作業】...
+2025-02-01 16:12:47,268 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-01 16:12:47,269 - INFO - 作業成功完成！
+2025-02-01 16:13:20,831 - INFO - 作業開始
+2025-02-01 16:13:20,832 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-01 16:15:33,502 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-雅俗通】_working.xlsx
+2025-02-01 16:15:33,502 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-01 16:15:33,502 - INFO - 作業完成！
