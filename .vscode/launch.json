@@ -78,6 +78,41 @@
             ]
         },
         {
+            "name": "a810_缺字表更新漢字典資料庫",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a810_缺字表更新漢字典資料庫.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "a820_用標音字庫之校正音標更新漢字庫",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a820_用標音字庫之校正音標更新漢字庫.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "a830_匯出製成中州韻輸入法字典檔",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a830_匯出製成中州韻輸入法字典檔.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "a840_匯出漢字庫至Excel",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a840_匯出漢字庫至Exccel.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "a850_使用Excel重建漢字庫",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a850_使用Excel重建漢字庫.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "a501_缺字表回填字典資料庫",
             "type": "debugpy",
             "request": "launch",

@@ -74,26 +74,26 @@ def get_active_cell_info(wb):
     return sheet_name, han_ji, (row, col), artificial_pronounce, (artificial_row, col)
 
 
-def excel_address_to_row_col(cell_address):
-    """
-    將 Excel 儲存格地址 (如 'D9') 轉換為 (row, col) 格式。
+# def excel_address_to_row_col(cell_address):
+#     """
+#     將 Excel 儲存格地址 (如 'D9') 轉換為 (row, col) 格式。
 
-    :param cell_address: Excel 儲存格地址 (如 'D9', 'AA15')
-    :return: (row, col) 元組，例如 (9, 4)
-    """
-    match = re.match(r"([A-Z]+)(\d+)", cell_address)  # 用 regex 拆分字母(列) 和 數字(行)
+#     :param cell_address: Excel 儲存格地址 (如 'D9', 'AA15')
+#     :return: (row, col) 元組，例如 (9, 4)
+#     """
+#     match = re.match(r"([A-Z]+)(\d+)", cell_address)  # 用 regex 拆分字母(列) 和 數字(行)
 
-    if not match:
-        raise ValueError(f"無效的 Excel 儲存格地址: {cell_address}")
+#     if not match:
+#         raise ValueError(f"無效的 Excel 儲存格地址: {cell_address}")
 
-    col_letters, row_number = match.groups()
+#     col_letters, row_number = match.groups()
 
-    # 將 Excel 字母列轉換成數字，例如 A -> 1, B -> 2, ..., Z -> 26, AA -> 27
-    col_number = 0
-    for letter in col_letters:
-        col_number = col_number * 26 + (ord(letter) - ord("A") + 1)
+#     # 將 Excel 字母列轉換成數字，例如 A -> 1, B -> 2, ..., Z -> 26, AA -> 27
+#     col_number = 0
+#     for letter in col_letters:
+#         col_number = col_number * 26 + (ord(letter) - ord("A") + 1)
 
-    return int(row_number), col_number
+#     return int(row_number), col_number
 
 
 def check_and_update_pronunciation(wb, han_ji, position, artificial_pronounce):
