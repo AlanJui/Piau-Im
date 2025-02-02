@@ -13,12 +13,7 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 # 載入自訂模組/函式
-from a701_作業中活頁檔填入漢字 import process as fill_hanji_in_cells
-
-# 載入自訂模組/函式
-# from p709_reset_han_ji_cells import reset_han_ji_cells
-# from mod_file_access import load_module_function, save_as_new_file
-from a702_查找及填入漢字標音 import reset_han_ji_cells
+from a100_作業中活頁檔填入漢字 import process as fill_hanji_in_cells
 
 # 載入自訂模組/函式
 from mod_excel_access import (

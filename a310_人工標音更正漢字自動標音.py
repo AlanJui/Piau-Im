@@ -15,8 +15,10 @@ from dotenv import load_dotenv
 
 # 載入自訂模組/函式
 from mod_excel_access import (
+    check_and_update_pronunciation,
     create_dict_by_sheet,
     ensure_sheet_exists,
+    get_active_cell_info,
     get_ji_khoo,
     get_value_by_name,
     maintain_ji_khoo,
@@ -49,6 +51,7 @@ def logging_process_step(msg):
 # =========================================================================
 # 定義 Exit Code
 EXIT_CODE_SUCCESS = 0  # 成功
+EXIT_CODE_FAILURE = 1  # 失敗
 EXIT_CODE_NO_FILE = 1  # 無法找到檔案
 EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
 EXIT_CODE_PROCESS_FAILURE = 3  # 過程失敗
@@ -184,14 +187,14 @@ def process(wb):
     4. 若【標正音標】為 'N/A'，則更新為【人工標音】
     """
     # 取得當前 Excel 作用儲存格資訊
-    sheet_name, han_ji, active_cell, position, artificial_pronounce = get_active_cell_info(wb)
+    sheet_name, han_ji, active_cell, artificial_pronounce, position = get_active_cell_info(wb)
 
-    print(f"📌 作用儲存格: {sheet_name} -> {active_cell.address}")
-    print(f"📌 漢字: {han_ji}, 作用座標: {position}")
-    print(f"📌 人工標音: {artificial_pronounce}")
+    print(f"📌 作用儲存格：{active_cell}，位於【{sheet_name}】工作表")
+    print(f"📌 漢字：{han_ji}，漢字儲存格座標：{active_cell}")
+    print(f"📌 人工標音：{artificial_pronounce}，人工標音儲存格座標：{position}")
 
     # 執行檢查與更新
-    success = check_and_update_pronunciation(wb, han_ji, position, artificial_pronounce)
+    success = check_and_update_pronunciation(wb, han_ji, active_cell, artificial_pronounce)
 
     return EXIT_CODE_SUCCESS if success else EXIT_CODE_FAILURE
 

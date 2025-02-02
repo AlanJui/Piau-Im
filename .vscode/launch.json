@@ -5,30 +5,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "a000_test",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a000_test.py",
-            "console": "integratedTerminal",
-        },
-        {
-            "name": "a800_缺字表回填字典資料庫",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a800_缺字表回填字典資料庫.py",
-            "console": "integratedTerminal",
-        },
-        {
-            "name": "a801_依據漢字的人工標音更新標音字庫工作表中的校正音標",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a801_依據漢字的人工標音更新標音字庫工作表中的校正音標.py",
-            "console": "integratedTerminal",
-            "args": [
-                "5",
-            ]
-        },
-        {
             "name": "a000",
             "type": "debugpy",
             "request": "launch",
@@ -50,31 +26,62 @@
             "console": "integratedTerminal",
         },
         {
-            "name": "a700_重置漢字標音工作表",
+            "name": "a000_重置漢字標音工作表",
             "type": "debugpy",
             "request": "launch",
-            "program": "a700_重置漢字標音工作表.py",
+            "program": "a000_重置漢字標音工作表.py",
             "console": "integratedTerminal",
         },
         {
-            "name": "a701_作業中活頁檔填入漢字",
+            "name": "a100_作業中活頁檔填入漢字",
             "type": "debugpy",
             "request": "launch",
-            "program": "a701_作業中活頁檔填入漢字.py",
+            "program": "a100_作業中活頁檔填入漢字.py",
             "console": "integratedTerminal",
         },
         {
-            "name": "a702_查找及填入漢字標音",
+            "name": "a200_查找及填入漢字標音",
             "type": "debugpy",
             "request": "launch",
-            "program": "a702_查找及填入漢字標音.py",
+            "program": "a200_查找及填入漢字標音.py",
             "console": "integratedTerminal",
         },
         {
-            "name": "a703_製作標音網頁",
+            "name": "a300_手動更正漢字標音",
             "type": "debugpy",
             "request": "launch",
-            "program": "a703_製作標音網頁.py",
+            "program": "a300_手動更正漢字標音.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "a310_人工標音更正漢字自動標音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a310_人工標音更正漢字自動標音.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "a400_製作標音網頁",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a400_製作標音網頁.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "a500_依據漢字的人工標音更新標音字庫工作表中的校正音標",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a500_依據漢字的人工標音更新標音字庫工作表中的校正音標.py",
+            "console": "integratedTerminal",
+            "args": [
+                "5",
+            ]
+        },
+        {
+            "name": "a501_缺字表回填字典資料庫",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a501_缺字表回填字典資料庫.py",
             "console": "integratedTerminal",
         },
         {
@@ -89,13 +96,6 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a705_依漢字注音工作表內容更新待注音漢字.py",
-            "console": "integratedTerminal",
-        },
-        {
-            "name": "a706_手動更正漢字標音",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a706_手動更正漢字標音.py",
             "console": "integratedTerminal",
         },
         {

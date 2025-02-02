@@ -12,14 +12,7 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 # 載入自訂模組
-from mod_excel_access import (
-    delete_sheet_by_name,
-    get_ji_khoo,
-    get_tai_gi_by_han_ji,
-    get_value_by_name,
-    maintain_ji_khoo,
-    reset_han_ji_cells,
-)
+from mod_excel_access import delete_sheet_by_name, get_value_by_name
 from mod_file_access import load_module_function, save_as_new_file
 from mod_字庫 import JiKhooDict  # 漢字字庫物件
 from mod_標音 import PiauIm  # 漢字標音物件

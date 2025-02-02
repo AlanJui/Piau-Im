@@ -15,8 +15,6 @@ from mod_file_access import save_as_new_file
 from mod_標音 import split_tai_gi_im_piau  # 分解台語音標
 from mod_標音 import PiauIm, is_punctuation
 
-# from p730_Tng_Sing_Bang_Iah import tng_sing_bang_iah
-
 # =========================================================================
 # 載入環境變數
 # =========================================================================

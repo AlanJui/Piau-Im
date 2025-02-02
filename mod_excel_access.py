@@ -116,7 +116,9 @@ def check_and_update_pronunciation(wb, han_ji, position, artificial_pronounce):
             parsed_coords = {convert_to_excel_address(coord) for coord in coord_list}
 
             # 確認該座標是否存在於【標音字庫】中
-            if convert_to_excel_address(str(position)) in parsed_coords:
+            # if convert_to_excel_address(str(position)) in parsed_coords:
+            position_address = convert_to_excel_address(str(position))
+            if position_address in parsed_coords:
                 # 檢查標正音標是否為 'N/A'
                 if correction_pronounce_cell.value == "N/A":
                     # 更新【校正音標】為【人工標音】
