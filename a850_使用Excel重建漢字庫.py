@@ -143,14 +143,14 @@ def main():
     if len(sys.argv) > 1:
         mode = sys.argv[1]
     else:
-        mode = "4"
+        mode = "5"
 
     wb = xw.apps.active.books.active
 
-    if mode == "4":
+    if mode == "5":
         return rebuild_database_from_excel(wb)
     else:
-        print("❌ 錯誤：請輸入有效模式 (4)")
+        print("❌ 錯誤：請輸入有效模式 (5)")
         return EXIT_CODE_INVALID_INPUT
 
 if __name__ == "__main__":
