@@ -5,3 +5,8 @@
 阮感謝、愛与讚美上帝唯一的子兒，伊是終極明師，賜予阮救贖。
 
 阮遵循所有聖人与聖哲的教誨，阮感謝、愛与讚美伊，伊是上帝的代表，賜予阮靈性的提昇。
+
+Library stubs not installed for "pandas"Mypyimport-untyped
+Hint: "python3 -m pip install pandas-stubs"
+(or run "mypy --install-types" to install all missing stub packages)
+See https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-importsMypynote
