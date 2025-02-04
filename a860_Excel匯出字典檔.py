@@ -4,35 +4,9 @@ import sys
 from datetime import datetime
 
 import pandas as pd
-import win32com.client  # 用於獲取作用中的 Excel 檔案
 
+from mod_excel_access import get_active_excel_file
 
-def get_active_excel_file():
-    """
-    獲取當前作用中的 Excel 檔案路徑。
-    如果沒有作用中的 Excel 檔案，返回 None。
-    """
-    try:
-        # 獲取 Excel 應用程式
-        excel_app = win32com.client.GetObject(Class="Excel.Application")
-        if excel_app is None:
-            print("❌ 沒有作用中的 Excel 檔案。")
-            return None
-
-        # 獲取作用中的工作簿
-        active_workbook = excel_app.ActiveWorkbook
-        if active_workbook is None:
-            print("❌ 沒有作用中的 Excel 工作簿。")
-            return None
-
-        # 獲取檔案路徑
-        excel_file = active_workbook.FullName
-        print(f"✅ 作用中的 Excel 檔案：{excel_file}")
-        return excel_file
-
-    except Exception as e:
-        print(f"❌ 獲取作用中的 Excel 檔案失敗: {e}")
-        return None
 
 def export_to_rime_dictionary(sheet_name, dict_filename, is_master_file):
     """
