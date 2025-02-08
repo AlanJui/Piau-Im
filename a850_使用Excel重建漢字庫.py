@@ -140,19 +140,36 @@ def rebuild_database_from_excel(wb, sheet_name="漢字庫"):
 # 主程式執行
 # =========================================================================
 def main():
+    # 檢查是否有指定工作表名稱
     if len(sys.argv) > 1:
-        mode = sys.argv[1]
+        sheet_name = sys.argv[1]
     else:
-        mode = "5"
+        sheet_name = "漢字庫"  # 預設工作表名稱
 
-    wb = xw.apps.active.books.active
+    # 取得當前作用中的 Excel 活頁簿
+    try:
+        wb = xw.books.active
+    except Exception as e:
+        print(f"❌ 無法取得作用中的 Excel 活頁簿: {e}")
+        return EXIT_CODE_FAILURE
 
-    if mode == "5":
-        return rebuild_database_from_excel(wb)
-    else:
-        print("❌ 錯誤：請輸入有效模式 (5)")
-        return EXIT_CODE_INVALID_INPUT
+    # 呼叫匯入資料函式
+    return rebuild_database_from_excel(wb, sheet_name)
 
 if __name__ == "__main__":
     exit_code = main()
     sys.exit(exit_code)
+
+# def main():
+#     if len(sys.argv) > 1:
+#         mode = sys.argv[1]
+#     else:
+#         mode = "5"
+
+#     wb = xw.apps.active.books.active
+
+#     if mode == "5":
+#         return rebuild_database_from_excel(wb)
+#     else:
+#         print("❌ 錯誤：請輸入有效模式 (5)")
+#         return EXIT_CODE_INVALID_INPUT

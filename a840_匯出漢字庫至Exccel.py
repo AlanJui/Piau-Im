@@ -1,3 +1,7 @@
+# WSL2: /mnt/c/Users/AlanJui/AppData/Roaming/Rime
+# C:\Users\AlanJui\AppData\Roaming\Rime
+# WSL2: /mnt/z/home/alanjui/workspace/rime/rime-tlpa
+# Z:\home\alanjui\workspace\rime\rime-tlpa
 # =========================================================================
 # 載入程式所需套件/模組/函式庫
 # =========================================================================

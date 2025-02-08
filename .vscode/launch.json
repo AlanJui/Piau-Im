@@ -8,10 +8,7 @@
             "name": "Python Debugger: Python File",
             "type": "debugpy",
             "request": "launch",
-            "program": "${file}",
-            "args": [
-                "--kah-kut-bun",
-            ]
+            "program": "${file}"
         },
         {
             "name": "a000",

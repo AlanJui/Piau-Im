@@ -1,4 +1,7 @@
+# WSL2: /mnt/c/Users/AlanJui/AppData/Roaming/Rime
 # C:\Users\AlanJui\AppData\Roaming\Rime
+# WSL2: /mnt/z/home/alanjui/workspace/rime/rime-tlpa
+# Z:\home\alanjui\workspace\rime\rime-tlpa
 import argparse
 import sys
 from datetime import datetime

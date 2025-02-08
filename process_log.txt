@@ -6439,3 +6439,15 @@ AttributeError: 'tuple' object has no attribute 'value'
 2025-02-02 13:41:44,414 - INFO - 專案根目錄為: C:\work\Piau-Im
 2025-02-02 13:41:44,662 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
 2025-02-02 13:41:44,662 - INFO - 作業完成！
+2025-02-07 15:04:00,746 - INFO - RIME dictionary exported: tl_ji_khoo_peh_ue.yaml
+2025-02-07 15:04:00,763 - INFO - RIME dictionary copied to: C:\Users\AlanJui\AppData\Roaming\Rime\tl_ji_khoo_peh_ue.yaml
+2025-02-07 15:04:00,785 - INFO - RIME dictionary copied to: Z:\home\alanjui\workspace\rime\rime-tlpa\tl_ji_khoo_peh_ue.yaml
+2025-02-07 15:07:05,899 - INFO - RIME dictionary exported: tl_ji_khoo_peh_ue.yaml
+2025-02-07 15:07:05,915 - INFO - RIME dictionary copied to: C:\Users\AlanJui\AppData\Roaming\Rime\tl_ji_khoo_peh_ue.yaml
+2025-02-07 15:07:05,936 - INFO - RIME dictionary copied to: Z:\home\alanjui\workspace\rime\rime-tlpa\tl_ji_khoo_peh_ue.yaml
+2025-02-07 15:58:30,461 - INFO - RIME dictionary exported: tl_ji_khoo_peh_ue.dict.yaml
+2025-02-07 15:58:30,475 - INFO - RIME dictionary copied to: C:\Users\AlanJui\AppData\Roaming\Rime\tl_ji_khoo_peh_ue.dict.yaml
+2025-02-07 15:58:30,497 - INFO - RIME dictionary copied to: Z:\home\alanjui\workspace\rime\rime-tlpa\tl_ji_khoo_peh_ue.dict.yaml
+2025-02-08 14:24:42,410 - INFO - RIME dictionary exported: tl_ji_khoo_peh_ue.dict.yaml
+2025-02-08 14:24:42,424 - INFO - RIME dictionary copied to: C:\Users\AlanJui\AppData\Roaming\Rime\tl_ji_khoo_peh_ue.dict.yaml
+2025-02-08 14:24:42,453 - INFO - RIME dictionary copied to: Z:\home\alanjui\workspace\rime\rime-tlpa\tl_ji_khoo_peh_ue.dict.yaml
