@@ -128,8 +128,8 @@ def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
 
     # 保存 Excel 檔案
     # sheet.range((row, start_col)).value = "φ"
-    if col  < end_col:
-        last_col = col
+    if col + 1  < end_col:
+        last_col = col + 1
     else:
         last_col = start_col
     sheet.range((row, last_col)).value = "φ"
