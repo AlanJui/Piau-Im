@@ -280,6 +280,10 @@ def siann_un_tiau_tng_piau_im(piau_im, piau_im_huat, siann_bu, un_bu, tiau_ho):
         return piau_im.TL_piau_im(siann_bu, un_bu, tiau_ho)
     elif piau_im_huat == "閩拼方案":
         return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
+    elif piau_im_huat == "閩拼調號":
+        return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
+    elif piau_im_huat == "閩拼調符":
+        return piau_im.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
     elif piau_im_huat == "方音符號":
         return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
     elif piau_im_huat == "台語音標":
@@ -722,6 +726,46 @@ class PiauIm:
 
         return piau_im
 
+
+    def BP_piau_im(self, siann_bu, un_bu, tiau_ho):
+        piau_im_huat = "閩拼方案"
+        # 將「台羅八聲調」轉換成閩拼使用的調號
+        Tiau_Ho_Remap = {
+            1: 1,  # 陰平: 44
+            2: 3,  # 上聲：53
+            3: 5,  # 陰去：21
+            4: 7,  # 上聲：53
+            5: 2,  # 陽平：24
+            7: 6,  # 陰入：3?
+            8: 8,  # 陽入：4?
+        }
+
+        # 將上標數字替換為普通數字
+        tiau_ho = replace_superscript_digits(str(tiau_ho))
+        tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
+
+        if siann_bu == "" or siann_bu is None or siann_bu == "Ø" or siann_bu == "ø":
+            siann = ""
+        else:
+            siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+
+        un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+        piau_im = f"{siann}{un}"
+
+        # 當聲母為「空白」，韻母為：i 或 u 時，調整聲母
+        un_chars = list(un)
+        if siann == "":
+            if un_chars[0] == "i":
+                siann = "y"
+            elif un_chars[0] == "u":
+                siann = "w"
+
+        # 直接將調號附加到音標的末尾
+        tiau = Tiau_Ho_Remap[tiau_ho]  # 將「傳統八聲調」轉換成閩拼使用的調號
+        piau_im = f"{piau_im}{tiau}"
+
+        return piau_im
+
     #================================================================
     # 閩拼（BP）
     #
@@ -734,7 +778,7 @@ class PiauIm:
     #  - 二合字母 oo 及 ng，標於前一個字母上；比如 ng 標示在字母 n 上。
     #  - 三合字母 ere，標於最後的字母 e 上。
     #================================================================
-    def BP_piau_im(self, siann_bu, un_bu, tiau_ho):
+    def BP_piau_im_with_tiau_hu(self, siann_bu, un_bu, tiau_ho):
         piau_im_huat = "閩拼方案"
         # 將「台羅八聲調」轉換成閩拼使用的調號
         Tiau_Ho_Remap = {
@@ -934,8 +978,10 @@ class PiauIm:
             return self.POJ_piau_im(siann_bu, un_bu, tiau_ho)
         elif piau_im_huat == "台羅拼音":
             return self.TL_piau_im(siann_bu, un_bu, tiau_ho)
-        elif piau_im_huat == "閩拼方案":
+        elif piau_im_huat == "閩拼調號":
             return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+        elif piau_im_huat == "閩拼調符":
+            return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
         elif piau_im_huat == "方音符號":
             return self.TPS_piau_im(siann_bu, un_bu, tiau_ho)
         elif piau_im_huat == "台語音標":
