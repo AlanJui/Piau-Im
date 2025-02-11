@@ -58,7 +58,7 @@ def create_html_file(output_path, content, title='您的標題'):
 <head>
     <title>{title}</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="assets/styles/styles.css">
+    <link rel="stylesheet" href="assets/styles/styles2.css">
 </head>
 <body>
     {content}
@@ -93,7 +93,7 @@ def put_picture(wb, source_sheet_name):
     )
     # 寫入文章附圖
     # html_str = f"《{title}》【{source_sheet_name}】\n"
-    html_str = f"{title}\n"
+    html_str = f"<p class='title'>{title}</p>\n"
     # html_str += div_tag % (title, image_url)
     html_str += (div_tag % (title, image_url) + "\n")
     return html_str
@@ -269,8 +269,6 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
     # 輸出 <div> tag
     #--------------------------------------------------------------------------
     div_class = zu_im_huat_list[Web_Page_Style][0]
-    # html_str = f"<div class='{div_class}'><p>\n"
-    # write_buffer += html_str
     write_buffer += f"<div class='{div_class}'><p>\n"
 
     #--------------------------------------------------------------------------
@@ -288,8 +286,14 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
     start_col = 4
     end_col = start_col + CHARS_PER_ROW
 
+    # 取得【網頁每列字數】設定值
+    total_chars_per_line = wb.names['網頁每列字數'].refers_to_range.value
+    if total_chars_per_line == "預設":
+        total_chars_per_line = None
+
     # 逐列處理作業
     end_of_file = False
+    char_count = 0  # 用於計算每列的字數
     for row in range(start_row, end_row, ROWS_PER_LINE):
         Empty_Cells_Total = 0
         # 設定【作用儲存格】為列首
@@ -320,7 +324,6 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
             else:                       # 讀到：漢字或標點符號
                 # 當 han_ji 是標點符號時，不需要注音
                 if is_punctuation(cell_value):
-                    # ruby_tag = f"  {cell_value}\n"
                     ruby_tag = f"  <span>{cell_value}</span>\n"
                     msg = f"({row}, {xw.utils.col_name(col)}) = {cell_value}"
                 else:
@@ -338,6 +341,14 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
                     )
                     msg =f"({row}, {xw.utils.col_name(col)}) = {han_ji} [{tai_gi_im_piau}]"
 
+                # 檢查是否需要插入換行標籤
+                if total_chars_per_line and total_chars_per_line != "預設":
+                    char_count += 1
+                    if char_count >= total_chars_per_line:
+                        ruby_tag += "</br>\n"
+                        char_count = 0  # 重置字數計數器
+                        print('《--- 插入【人工斷行】--》')
+
             write_buffer += ruby_tag
             print(msg)
 
@@ -347,6 +358,10 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
         # 讀到【換行標示】，需要結束目前【段落】，並開始新的【段落】
         if cell_value == '\n':
             write_buffer += f"</p><p>\n"
+            # 檢查是否需要插入換行標籤
+            if total_chars_per_line and total_chars_per_line != "預設":
+                char_count = 0  # 重置字數計數器
+
 
         line += 1
         if end_of_file or line > TOTAL_LINES: break
@@ -354,7 +369,6 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
     # 返回網頁輸出暫存區
     write_buffer += "</p></div>"
     return write_buffer
-
 
 def tng_sing_bang_iah(wb, sheet_name='漢字注音', han_ji_source='V3', page_type='含頁頭'):
     global source_sheet  # 宣告 source_sheet 為全域變數

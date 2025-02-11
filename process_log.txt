@@ -6627,3 +6627,290 @@ AttributeError: 'Book' object has no attribute 'sheet'. Did you mean: 'sheets'?
 2025-02-11 12:36:32,727 - INFO - 己存檔至路徑：{file_path}
 2025-02-11 12:36:32,727 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
 2025-02-11 12:36:32,727 - INFO - 作業完成！
+2025-02-11 13:53:55,703 - INFO - 作業開始
+2025-02-11 13:53:55,705 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 13:54:35,292 - ERROR - 作業過程發生未知的異常錯誤: 'erng'
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 401, in main
+    result_code = process(wb)
+  File "a200_查找及填入漢字標音.py", line 327, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name     # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a200_查找及填入漢字標音.py", line 243, in ca_han_ji_thak_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a200_查找及填入漢字標音.py", line 91, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
+        piau_im,
+    ...<3 lines>...
+        tiau_ho
+    )
+  File "c:\work\Piau-Im\mod_標音.py", line 282, in siann_un_tiau_tng_piau_im
+    return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 752, in BP_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'erng'
+2025-02-11 13:54:35,296 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-02-11 13:57:37,268 - INFO - 作業開始
+2025-02-11 13:57:37,269 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 13:58:23,854 - INFO - 己存檔至路徑：{file_path}
+2025-02-11 13:58:23,855 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-02-11 13:58:23,855 - INFO - 作業完成！
+2025-02-11 14:02:51,037 - INFO - 作業開始
+2025-02-11 14:02:51,038 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 14:03:26,469 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼方案】《般若波羅蜜多心經》.xlsx
+2025-02-11 14:03:26,470 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 14:03:26,470 - INFO - 作業完成！
+2025-02-11 16:10:01,954 - INFO - 作業開始
+2025-02-11 16:10:01,955 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 16:10:32,309 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《般若波羅蜜多心經》.xlsx
+2025-02-11 16:10:32,309 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 16:10:32,309 - INFO - 作業完成！
+2025-02-11 16:15:07,470 - INFO - 作業開始
+2025-02-11 16:15:07,471 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 16:15:37,910 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《般若波羅蜜多心經》.xlsx
+2025-02-11 16:15:37,910 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 16:15:37,910 - INFO - 作業完成！
+2025-02-11 16:16:18,193 - INFO - 作業開始
+2025-02-11 16:16:18,194 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 16:16:47,832 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《般若波羅蜜多心經》.xlsx
+2025-02-11 16:16:47,832 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 16:16:47,832 - INFO - 作業完成！
+2025-02-11 16:45:39,208 - INFO - 作業開始
+2025-02-11 16:45:39,209 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 16:45:39,503 - ERROR - 執行過程中發生未知錯誤: not enough values to unpack (expected 2, got 1)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 435, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 376, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 352, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 275, in build_web_page
+    han_ji, tai_gi_im_piau = char_info  # 解析漢字與台語拼音
+    ^^^^^^^^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 2, got 1)
+2025-02-11 16:45:39,506 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 16:46:50,203 - INFO - 作業開始
+2025-02-11 16:46:50,204 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 16:53:33,398 - ERROR - 執行過程中發生未知錯誤: not enough values to unpack (expected 2, got 1)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 435, in main
+    if not wb:
+    
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 376, in process
+    
+    
+    ...<4 lines>...
+    def process(wb):
+    ^^^^^
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 352, in tng_sing_bang_iah
+    source_chars = sheet.range(han_ji_source).value
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+        print(f"開始製作【漢字注音】網頁！")
+        ^
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 275, in build_web_page
+    # 逐字處理
+ValueError: not enough values to unpack (expected 2, got 1)
+2025-02-11 16:53:33,403 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 16:53:43,140 - INFO - 作業開始
+2025-02-11 16:53:43,141 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 16:54:21,532 - INFO - 作業開始
+2025-02-11 16:54:21,533 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 16:55:32,278 - ERROR - 執行過程中發生未知錯誤: string index out of range
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 444, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 385, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 361, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 288, in build_web_page
+    ruby_tag = concat_ruby_tag(
+        wb=wb,
+    ...<2 lines>...
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 129, in concat_ruby_tag
+    zu_im_list = split_tai_gi_im_piau(tai_gi_im_piau)
+  File "C:\work\Piau-Im\mod_標音.py", line 199, in split_tai_gi_im_piau
+    tiau = im_piau[-1]  # 最後一個字符是聲調
+           ~~~~~~~^^^^
+IndexError: string index out of range
+2025-02-11 16:55:32,282 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 17:04:23,125 - INFO - 作業開始
+2025-02-11 17:04:23,127 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 17:04:55,822 - ERROR - 執行過程中發生未知錯誤: string index out of range
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 451, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 392, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 368, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 290, in build_web_page
+    ruby_tag = concat_ruby_tag(
+        wb=wb,
+    ...<2 lines>...
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 129, in concat_ruby_tag
+    zu_im_list = split_tai_gi_im_piau(tai_gi_im_piau)
+  File "C:\work\Piau-Im\mod_標音.py", line 199, in split_tai_gi_im_piau
+    tiau = im_piau[-1]  # 最後一個字符是聲調
+           ~~~~~~~^^^^
+IndexError: string index out of range
+2025-02-11 17:04:55,826 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 17:10:02,833 - INFO - 作業開始
+2025-02-11 17:10:02,834 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 17:16:06,476 - ERROR - 執行過程中發生未知錯誤: string index out of range
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 451, in main
+    logging.error("無法作業，未指定輸入檔案或 Excel 無效。")
+                  ^^^^^^^^^
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 392, in process
+    # =========================================================================
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        # 將【漢字注音】工作表中的標音漢字，轉成 HTML 網頁檔案。
+        ^
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 368, in tng_sing_bang_iah
+    # 計算字串的總長度
+                ^^^^^^
+    ...<7 lines>...
+        wb=wb,
+    
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 290, in build_web_page
+    if is_punctuation(cell_value):  # 標點符號
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        ruby_tag = concat_ruby_tag(
+        ^
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 129, in concat_ruby_tag
+    zu_im_list = split_tai_gi_im_piau(tai_gi_im_piau)
+  File "C:\work\Piau-Im\mod_標音.py", line 199, in split_tai_gi_im_piau
+    tiau = im_piau[-1]  # 最後一個字符是聲調
+           ~~~~~~~^^^^
+IndexError: string index out of range
+2025-02-11 17:16:06,481 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 17:16:18,899 - INFO - 作業開始
+2025-02-11 17:16:18,900 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 17:18:05,908 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《般若波羅蜜多心經》.xlsx
+2025-02-11 17:18:05,909 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 17:18:05,909 - INFO - 作業完成！
+2025-02-11 17:23:43,900 - INFO - 作業開始
+2025-02-11 17:23:43,902 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 17:24:14,564 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《般若波羅蜜多心經》.xlsx
+2025-02-11 17:24:14,564 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 17:24:14,564 - INFO - 作業完成！
+2025-02-11 17:27:41,233 - INFO - 作業開始
+2025-02-11 17:27:41,234 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 17:28:10,757 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《般若波羅蜜多心經》.xlsx
+2025-02-11 17:28:10,757 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 17:28:10,757 - INFO - 作業完成！
+2025-02-11 17:30:47,907 - INFO - 作業開始
+2025-02-11 17:30:47,909 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 17:31:16,896 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《般若波羅蜜多心經》.xlsx
+2025-02-11 17:31:16,897 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 17:31:16,897 - INFO - 作業完成！
+2025-02-11 17:38:20,233 - INFO - 作業開始
+2025-02-11 17:38:20,234 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 17:38:49,309 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《般若波羅蜜多心經》.xlsx
+2025-02-11 17:38:49,309 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 17:38:49,309 - INFO - 作業完成！
+2025-02-11 17:41:22,341 - INFO - 作業開始
+2025-02-11 17:41:22,342 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 17:41:51,932 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《般若波羅蜜多心經》.xlsx
+2025-02-11 17:41:51,932 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 17:41:51,932 - INFO - 作業完成！
+2025-02-11 17:43:42,243 - INFO - 作業開始
+2025-02-11 17:43:42,244 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 17:47:58,248 - INFO - 作業開始
+2025-02-11 17:47:58,249 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 17:48:56,532 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《般若波羅蜜多心經》.xlsx
+2025-02-11 17:48:56,532 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 17:48:56,532 - INFO - 作業完成！
+2025-02-11 17:50:22,585 - INFO - 作業開始
+2025-02-11 17:50:22,586 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 17:50:51,584 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《般若波羅蜜多心經》.xlsx
+2025-02-11 17:50:51,584 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 17:50:51,584 - INFO - 作業完成！
+2025-02-11 17:56:10,346 - INFO - 作業開始
+2025-02-11 17:56:10,347 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 17:56:39,404 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《般若波羅蜜多心經》.xlsx
+2025-02-11 17:56:39,405 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 17:56:39,405 - INFO - 作業完成！
+2025-02-11 18:00:32,619 - INFO - 作業開始
+2025-02-11 18:00:32,620 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 18:01:01,674 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《般若波羅蜜多心經》.xlsx
+2025-02-11 18:01:01,674 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 18:01:01,674 - INFO - 作業完成！
+2025-02-11 18:07:53,371 - INFO - 作業開始
+2025-02-11 18:07:53,372 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 18:08:26,459 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《般若波羅蜜多心經》.xlsx
+2025-02-11 18:08:26,459 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 18:08:26,459 - INFO - 作業完成！
+2025-02-11 18:17:33,262 - INFO - 作業開始
+2025-02-11 18:17:33,263 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 18:18:06,481 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《般若波羅蜜多心經》.xlsx
+2025-02-11 18:18:06,481 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 18:18:06,481 - INFO - 作業完成！
+2025-02-11 21:34:08,606 - INFO - 作業開始
+2025-02-11 21:34:08,607 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 21:34:33,773 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 21:35:22,715 - INFO - 作業開始
+2025-02-11 21:35:22,716 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 21:35:52,167 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《般若波羅蜜多心經》.xlsx
+2025-02-11 21:35:52,167 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 21:35:52,167 - INFO - 作業完成！
+2025-02-11 21:46:02,505 - INFO - 作業開始
+2025-02-11 21:46:02,507 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 21:46:32,463 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《般若波羅蜜多心經》.xlsx
+2025-02-11 21:46:32,463 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 21:46:32,463 - INFO - 作業完成！
+2025-02-11 21:49:45,719 - INFO - 作業開始
+2025-02-11 21:49:45,720 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-11 21:50:15,157 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《般若波羅蜜多心經》.xlsx
+2025-02-11 21:50:15,157 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-11 21:50:15,157 - INFO - 作業完成！

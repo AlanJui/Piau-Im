@@ -58,7 +58,7 @@ def create_html_file(output_path, content, title='您的標題'):
 <head>
     <title>{title}</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="assets/styles/styles.css">
+    <link rel="stylesheet" href="assets/styles/styles2.css">
 </head>
 <body>
     {content}
@@ -239,120 +239,89 @@ def concat_ruby_tag(wb, piau_im, han_ji, tai_gi_im_piau):
 # 依據指定的【注音方法】，輸出含 Ruby Tags 之 HTML 網頁
 # =========================================================
 def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭', piau_im_huat='方音符號', piau_im=None):
-    # ==========================================================
-    # 注音法設定和共用變數
-    # ==========================================================
-    zu_im_huat_list = {
-        "SNI": ["fifteen_yin", "rt", "十五音切語"],
-        "TPS": ["Piau_Im", "rt", "方音符號注音"],
-        "POJ": ["pin_yin", "rt", "白話字拼音"],
-        "TL": ["pin_yin", "rt", "台羅拼音"],
-        "BP": ["pin_yin", "rt", "閩拼標音"],
-        "TLPA_Plus": ["pin_yin", "rt", "台羅改良式"],
-        "DBL": ["Siang_Pai", "rtc", "雙排注音"],
-        "無預設": ["Siang_Pai", "rtc", "雙排注音"],
-    }
+    """
+    依據指定的【注音方法】，輸出含 Ruby Tags 之 HTML 網頁，並根據【網頁每列字數】來決定是否手動插入換行 <br> 標籤。
+    同時，保留 Console 顯示目前處理狀態，以便 Debug。
+    """
+    # 取得「網頁每列字數」的設定值
+    total_chars_per_line = wb.names['網頁每列字數'].refers_to_range.value
+    if total_chars_per_line == "預設":
+        total_chars_per_line = None  # 不做人工斷行
+    else:
+        total_chars_per_line = int(total_chars_per_line)  # 確保為整數
 
-    # 選擇工作表
-    sheet = wb.sheets['漢字注音']
-    sheet.activate()
+    # 取得「標音方法」
+    han_ji_piau_im_huat = wb.names['標音方法'].refers_to_range.value
+
+    # 取得「漢字庫」
+    han_ji_khoo = wb.names['漢字庫'].refers_to_range.value
+    piau_im = PiauIm(han_ji_khoo)
+
+    # 取得輸出格式
+    web_page_style = wb.names['網頁格式'].refers_to_range.value
+
+    # 初始化 HTML 內容
     write_buffer = ""
 
-    #--------------------------------------------------------------------------
-    # 輸出放置圖片的 HTML Tag
-    #--------------------------------------------------------------------------
-    # 寫入文章附圖
+    # 加入標題圖片
     if page_type == '含頁頭':
         write_buffer += put_picture(wb, sheet.name)
 
-    #--------------------------------------------------------------------------
-    # 輸出 <div> tag
-    #--------------------------------------------------------------------------
-    div_class = zu_im_huat_list[Web_Page_Style][0]
-    # html_str = f"<div class='{div_class}'><p>\n"
-    # write_buffer += html_str
-    write_buffer += f"<div class='{div_class}'><p>\n"
+    # 加入 <div> 容器
+    write_buffer += "<div class='Siang_Pai'><p>\n"
 
-    #--------------------------------------------------------------------------
-    # 作業處理：逐列取出漢字，組合成純文字檔
-    #--------------------------------------------------------------------------
-    # 設定起始及結束的【列】位址（【第5列】、【第9列】、【第13列】等列）
-    TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
-    ROWS_PER_LINE = 4
-    start_row = 5
-    end_row = start_row + (TOTAL_LINES * ROWS_PER_LINE)
-    line = 1    # 處理行號指示器
+    # 記錄當前行的字數
+    current_line_char_count = 0
 
-    # 設定起始及結束的【欄】位址（【D欄=4】到【R欄=18】）
-    CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
-    start_col = 4
-    end_col = start_col + CHARS_PER_ROW
+    # 逐字處理
+    EndOfFile = False
+    for row in range(5, sheet.used_range.last_cell.row + 1, 4):  # 逐段處理，每段 4 行
+        for col in range(4, sheet.used_range.last_cell.column + 1):
+            cell_value = sheet.range((row, col)).value
+            if cell_value is None or cell_value.strip() == '':
+                continue
+            elif cell_value == "φ":
+                EndOfFile = True
+                print('讀到文章終止符號 φ')
+                break
 
-    # 逐列處理作業
-    end_of_file = False
-    for row in range(start_row, end_row, ROWS_PER_LINE):
-        Empty_Cells_Total = 0
-        # 設定【作用儲存格】為列首
-        sheet.range((row, 1)).select()
-
-        # 逐欄取出儲存格內容
-        for col in range(start_col, end_col):
             ruby_tag = ""
 
-            cell_value = sheet.range((row, col)).value
-            if cell_value == 'φ':       # 讀到【結尾標示】
-                end_of_file = True
-                print(f"({row}, {xw.utils.col_name(col)}) = 《文章終止》")
-                break
-            elif cell_value == '\n':    # 讀到【換行標示】
-                ruby_tag = f"</p><p>\n"
-                print(f"({row}, {xw.utils.col_name(col)}) = 《換行》")
-                # 若遇到換行字元，退出迴圈
-                break
-            elif cell_value == None or cell_value.strip() == '':    # 讀到【空白】
-                print(f"({row}, {xw.utils.col_name(col)}) = 《空格》")
-                Empty_Cells_Total += 1
-                if Empty_Cells_Total >= 2:
-                    EOF = True
-                    break
-                else:
-                    continue
-            else:                       # 讀到：漢字或標點符號
-                # 當 han_ji 是標點符號時，不需要注音
-                if is_punctuation(cell_value):
-                    # ruby_tag = f"  {cell_value}\n"
-                    ruby_tag = f"  <span>{cell_value}</span>\n"
-                    msg = f"({row}, {xw.utils.col_name(col)}) = {cell_value}"
-                else:
-                    han_ji = cell_value.strip()  # 取得漢字
-                    # 取得漢字的【台語音標】
-                    tai_gi_im_piau = sheet.range((row - 1, col)).value  # 取得漢字的台語音標
-                    # 當儲存格寫入之資料為 None 情況時之處理作法：給予空字串
-                    tai_gi_im_piau = tai_gi_im_piau if tai_gi_im_piau is not None else ""
-                    # 將已注音之漢字加入【漢字注音表】
-                    ruby_tag = concat_ruby_tag(
-                        wb=wb,
-                        piau_im=piau_im,    # 注音法物件
-                        han_ji=han_ji,
-                        tai_gi_im_piau=tai_gi_im_piau
-                    )
-                    msg =f"({row}, {xw.utils.col_name(col)}) = {han_ji} [{tai_gi_im_piau}]"
+            if is_punctuation(cell_value):  # 標點符號
+                ruby_tag = f"  <span>{cell_value}</span>\n"
+                console_msg = f"({row}, {xw.utils.col_name(col)}) = {cell_value}"
+            else:  # 漢字
+                tai_gi_im_piau = sheet.range((row - 1, col)).value or ""
+                ruby_tag = concat_ruby_tag(
+                    wb=wb,
+                    piau_im=piau_im,
+                    han_ji=cell_value,
+                    tai_gi_im_piau=tai_gi_im_piau
+                )
+                console_msg = f"({row}, {xw.utils.col_name(col)}) = {cell_value} [{tai_gi_im_piau}]"
 
-            write_buffer += ruby_tag
-            print(msg)
+            # 顯示目前處理進度
+            print(console_msg)
 
-        # =========================================================
-        # 換行處理：(1)每處理完 15 字後，換下一行 ；(2) 讀到【換行標示】
-        # =========================================================
-        # 讀到【換行標示】，需要結束目前【段落】，並開始新的【段落】
-        if cell_value == '\n':
-            write_buffer += f"</p><p>\n"
+            # 計算當前行字數（漢字 + 標點符號）
+            current_line_char_count += 1
 
-        line += 1
-        if end_of_file or line > TOTAL_LINES: break
+            # 若有設定【網頁每列字數】，且已達設定字數，則手動換行
+            if total_chars_per_line and current_line_char_count >= total_chars_per_line:
+                write_buffer += ruby_tag
+                write_buffer += "  </br>\n"  # 插入換行
+                print(">>> 插入換行 <br>")  # Console 顯示換行點
+                current_line_char_count = 0  # 重設行字數
+            else:
+                write_buffer += ruby_tag
 
-    # 返回網頁輸出暫存區
+        write_buffer += "</p><p>\n"  # 段落結束，開始新段落
+        if EndOfFile:
+            break
+
+    # 關閉 HTML 結構
     write_buffer += "</p></div>"
+
     return write_buffer
 
 
