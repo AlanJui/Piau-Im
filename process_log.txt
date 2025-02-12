@@ -6914,3 +6914,215 @@ IndexError: string index out of range
 2025-02-11 21:50:15,157 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《般若波羅蜜多心經》.xlsx
 2025-02-11 21:50:15,157 - INFO - 製作【漢字標音】網頁己完成！
 2025-02-11 21:50:15,157 - INFO - 作業完成！
+2025-02-12 10:45:32,463 - INFO - 作業開始
+2025-02-12 10:45:32,463 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 10:45:32,740 - ERROR - 執行過程中發生未知錯誤: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 503, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 444, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 420, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 290, in build_web_page
+    total_chars_per_line = wb.names['網頁每列字數'].refers_to_range.value
+                           ~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4622, in __getitem__
+    return self(item)
+  File "C:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4581, in __call__
+    return Name(impl=self.impl(name_or_index))
+                     ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2286, in __call__
+    return Name(xl=self.xl(name_or_index))
+                   ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "C:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-02-12 10:45:32,781 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-12 10:49:42,960 - INFO - 作業開始
+2025-02-12 10:49:42,961 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 10:49:43,241 - ERROR - 執行過程中發生未知錯誤: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 503, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 444, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 420, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 290, in build_web_page
+    total_chars_per_line = wb.names['網頁每列字數'].refers_to_range.value
+                           ~~~~~~~~^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4622, in __getitem__
+    return self(item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4581, in __call__
+    return Name(impl=self.impl(name_or_index))
+                     ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2286, in __call__
+    return Name(xl=self.xl(name_or_index))
+                   ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-02-12 10:49:43,247 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-12 10:51:36,985 - INFO - 作業開始
+2025-02-12 10:51:36,986 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 10:51:37,198 - ERROR - 執行過程中發生未知錯誤: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 503, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 444, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 420, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 290, in build_web_page
+    total_chars_per_line = wb.names['網頁每列字數'].refers_to_range.value
+                           ~~~~~~~~^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4622, in __getitem__
+    return self(item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4581, in __call__
+    return Name(impl=self.impl(name_or_index))
+                     ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2286, in __call__
+    return Name(xl=self.xl(name_or_index))
+                   ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-02-12 10:51:37,203 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-12 10:52:12,600 - INFO - 作業開始
+2025-02-12 10:52:12,601 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 10:52:24,989 - INFO - 作業開始
+2025-02-12 10:52:24,990 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 10:52:46,292 - ERROR - 執行過程中發生未知錯誤: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 503, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 444, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 420, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 290, in build_web_page
+    total_chars_per_line = wb.names['網頁每列字數'].refers_to_range.value
+                           ~~~~~~~~^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4622, in __getitem__
+    return self(item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4581, in __call__
+    return Name(impl=self.impl(name_or_index))
+                     ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2286, in __call__
+    return Name(xl=self.xl(name_or_index))
+                   ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-02-12 10:52:46,299 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-12 10:52:52,799 - INFO - 作業開始
+2025-02-12 10:52:52,800 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 10:54:13,885 - ERROR - 執行過程中發生未知錯誤: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 503, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 444, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 420, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "C:\work\Piau-Im\a401_人工斷行製作網頁.py", line 290, in build_web_page
+    total_chars_per_line = wb.names['網頁每列字數'].refers_to_range.value
+                           ~~~~~~~~^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4622, in __getitem__
+    return self(item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4581, in __call__
+    return Name(impl=self.impl(name_or_index))
+                     ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2286, in __call__
+    return Name(xl=self.xl(name_or_index))
+                   ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-02-12 10:54:13,891 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-12 10:54:45,073 - INFO - 作業開始
+2025-02-12 10:54:45,074 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 10:55:23,004 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《春曉》.xlsx
+2025-02-12 10:55:23,004 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-12 10:55:23,004 - INFO - 作業完成！
+2025-02-12 12:32:05,737 - INFO - 作業開始
+2025-02-12 12:32:05,738 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 12:32:08,712 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《春曉》.xlsx
+2025-02-12 12:32:08,713 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-12 12:32:08,713 - INFO - 作業完成！
+2025-02-12 12:35:05,287 - INFO - 作業開始
+2025-02-12 12:35:05,288 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 12:35:08,247 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《春曉》.xlsx
+2025-02-12 12:35:08,247 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-12 12:35:08,247 - INFO - 作業完成！
+2025-02-12 12:37:14,743 - INFO - 作業開始
+2025-02-12 12:37:14,744 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 12:37:17,685 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《春曉》.xlsx
+2025-02-12 12:37:17,685 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-12 12:37:17,685 - INFO - 作業完成！
+2025-02-12 12:38:56,304 - INFO - 作業開始
+2025-02-12 12:38:56,305 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 12:38:59,279 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《春曉》.xlsx
+2025-02-12 12:38:59,279 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-12 12:38:59,279 - INFO - 作業完成！
+2025-02-12 12:40:32,136 - INFO - 作業開始
+2025-02-12 12:40:32,137 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 12:40:35,111 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《春曉》.xlsx
+2025-02-12 12:40:35,111 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-12 12:40:35,111 - INFO - 作業完成！

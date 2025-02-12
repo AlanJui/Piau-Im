@@ -11,6 +11,15 @@
             "program": "${file}"
         },
         {
+            "name": "Python Debugger: with Args",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "args": [
+                "docs/《春曉》_閩拼調號.html"
+            ]
+        },
+        {
             "name": "a000",
             "type": "debugpy",
             "request": "launch",

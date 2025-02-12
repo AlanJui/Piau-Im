@@ -11,6 +11,7 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 # 載入自訂模組
+from mod_excel_access import get_value_by_name
 from mod_file_access import save_as_new_file
 from mod_標音 import split_tai_gi_im_piau  # 分解台語音標
 from mod_標音 import PiauIm, is_punctuation
@@ -51,13 +52,13 @@ EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 # =========================================================================
 # 程式區域函式
 # =========================================================================
-def create_html_file(output_path, content, title='您的標題'):
-    template = f"""
-<!DOCTYPE html>
+def create_html_file(output_path, content, title='您的標題', head_extra=""):
+    template = f"""<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <title>{title}</title>
     <meta charset="UTF-8">
+    {head_extra}
     <link rel="stylesheet" href="assets/styles/styles2.css">
 </head>
 <body>
@@ -65,12 +66,8 @@ def create_html_file(output_path, content, title='您的標題'):
 </body>
 </html>
     """
-
-    # Write to HTML file
     with open(output_path, 'w', encoding='utf-8') as file:
         file.write(template)
-
-    # 顯示輸出之網頁檔案及其存放目錄路徑
     print(f"\n輸出網頁檔案：{output_path}")
 
 
@@ -427,8 +424,17 @@ def tng_sing_bang_iah(wb, sheet_name='漢字注音', han_ji_source='V3', page_ty
             piau_im= piau_im
         )
 
-        # 輸出到網頁檔案
-        create_html_file(output_path, html_content, web_page_title)
+        # 取得 env 工作表的設定值並組合 meta 標籤字串
+        env_keys = ["FILE_NAME", "TITLE", "IMAGE_URL", "OUTPUT_PATH", "章節序號",
+                    "顯示注音輸入", "每頁總列數", "每列總字數", "語音類型",
+                    "漢字庫", "標音方法", "網頁格式", "標音方式", "上邊標音", "右邊標音", "網頁每列字數"]
+        head_extra = ""
+        for key in env_keys:
+            value = get_value_by_name(wb, key)
+            head_extra += f'    <meta name="{key}" content="{value}" />\n'
+
+        # 輸出到網頁檔案：建立 HTML 檔案時傳入 head_extra
+        create_html_file(output_path, html_content, web_page_title, head_extra)
         print(f"【漢字注音】網頁製作完畢！")
 
     return 0
