@@ -17,6 +17,8 @@
             "program": "${file}",
             "args": [
                 "docs/《春曉》_閩拼調號.html"
+                // "output7/【河洛文讀注音-閩拼調號】《春曉》.txt"
+                // "output7/tmp.txt"
             ]
         },
         {
@@ -83,14 +85,28 @@
             "console": "integratedTerminal",
         },
         {
-            "name": "a500_依據漢字的人工標音更新標音字庫工作表中的校正音標",
+            "name": "a401_人工斷行製作網頁",
             "type": "debugpy",
             "request": "launch",
-            "program": "a500_依據漢字的人工標音更新標音字庫工作表中的校正音標.py",
+            "program": "a401_人工斷行製作網頁.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "a500_漢字庫工具",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a500_漢字庫工具.py",
             "console": "integratedTerminal",
             "args": [
-                "5",
+                "2"
             ]
+        },
+        {
+            "name": "a501_缺字表回填字典資料庫",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a501_缺字表回填字典資料庫.py",
+            "console": "integratedTerminal",
         },
         {
             "name": "a810_缺字表更新漢字典資料庫",
@@ -125,13 +141,6 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a850_使用Excel重建漢字庫.py",
-            "console": "integratedTerminal",
-        },
-        {
-            "name": "a501_缺字表回填字典資料庫",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a501_缺字表回填字典資料庫.py",
             "console": "integratedTerminal",
         },
         {

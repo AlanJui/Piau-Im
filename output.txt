@@ -1,0 +1,55 @@
+{
+  "FILE_NAME": "Tai_Gi_Zu_Im_Bun.xlsx",
+  "TITLE": "《春曉》",
+  "IMAGE_URL": "https://imgs.guwendianji.com/wp-content/uploads/2016/08/01-25.jpg",
+  "OUTPUT_PATH": "output7",
+  "章節序號": "NA",
+  "顯示注音輸入": true,
+  "每頁總列數": 120.0,
+  "每列總字數": 15.0,
+  "語音類型": "文讀音",
+  "漢字庫": "河洛話",
+  "標音方法": "閩拼調號",
+  "網頁格式": "無預設",
+  "標音方式": "上及右",
+  "上邊標音": "閩拼調符",
+  "右邊標音": "閩拼調符",
+  "網頁每列字數": 6.0
+}
+《 | 
+春 | cūn
+曉 | hǐao
+》 | 
+
+
+
+
+春 | cūn
+眠 | bbían
+不 | būt
+覺 | gāk
+曉 | hǐao
+， | 
+處 | cǔ
+處 | cǔ
+聞 | bbún
+啼 | té
+鳥 | zǐao
+。 | 
+
+
+
+
+夜 | îa
+來 | lái
+風 | hōng
+雨 | ǔ
+聲 | sīng
+， | 
+花 | hūa
+落 | lók
+知 | dī
+多 | dō
+少 | sǐao
+？ | 
+

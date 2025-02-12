@@ -116,6 +116,7 @@ def tng_uann_piau_im(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
         return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
     elif zu_im_huat == "台語音標":
         siann = piau_im.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+        siann = siann if siann != "ø" else ""
         un = piau_im.Un_Bu_Dict[un_bu]["台語音標"]
         return f"{siann}{un}{tiau_ho}"
     return ""

@@ -1,4 +1,4 @@
-# import json
+import json
 import sys
 
 import xlwings as xw
@@ -22,7 +22,8 @@ def import_html_to_excel(wb, html_file_path):
       - 台語音標：<ruby> 中的 <rt>
       - 漢字標音：<ruby> 中的 <rtc>（或 <crt>）
       - 標點符號：<span> 的文字
-    另外，每讀到一個 <p> 標籤的結尾，於「漢字注音」工作表的對應儲存格填入公式 =CHAR(10)
+    另外，每讀到一個 <p> 標籤結尾時，於「漢字注音」工作表的對應儲存格填入公式 =CHAR(10)。
+    填入動作後會在 Console 輸出進度訊息。
     """
     # -------------------------------
     # 1. 讀取並解析 HTML 檔案
@@ -55,6 +56,7 @@ def import_html_to_excel(wb, html_file_path):
     for key, value in env_data.items():
         try:
             wb.names[key].refers_to_range.value = value
+            print(f"[env] 已更新 '{key}'：{value}")
         except Exception as e:
             print(f"無法更新 env 參數 {key}：{e}")
 
@@ -127,33 +129,43 @@ def import_html_to_excel(wb, html_file_path):
     current_row = start_row
     current_col = start_col
 
+    processed_count = 0  # 記錄已處理的元素數量
+
     for entry in elements:
         if entry['type'] in ('line_break', 'p_end'):
-            # 如果是段落結尾（p_end），先在該儲存格填入公式 =CHAR(10)
             if entry['type'] == 'p_end':
+                # 在目前 cell 填入公式 =CHAR(10)
                 sheet.range((current_row, current_col)).formula = "=CHAR(10)"
+                print(f"已填入公式 =CHAR(10) 至 cell ({current_row}, {current_col}) [p_end]")
+                processed_count += 1
             # 換行：移動到下一個區塊
             current_row += rows_per_block
             current_col = start_col
+            print(f"換行到下一區塊：現在起始 cell 為 ({current_row}, {current_col})")
             continue
+
         if entry['type'] == 'ruby':
-            # 將 <rb> 的內容填入漢字儲存格
             sheet.range((current_row, current_col)).value = entry['rb']
-            # 將 <rt> 的內容填入漢字上方（台語音標儲存格）：假設位於 (current_row - 1, current_col)
             sheet.range((current_row - 1, current_col)).value = entry['rt']
-            # 將 <rtc> 的內容填入漢字下方（漢字標音儲存格）：假設位於 (current_row + 1, current_col)
             sheet.range((current_row + 1, current_col)).value = entry['rtc']
+            print(f"已填入 ruby：漢字 '{entry['rb']}', 台語音標 '{entry['rt']}', 漢字標音 '{entry['rtc']}' 至 cell ({current_row}, {current_col})")
+            processed_count += 1
         elif entry['type'] in ('span', 'text'):
-            # 標點符號或其他純文字直接填入漢字儲存格
             sheet.range((current_row, current_col)).value = entry.get('text', '')
+            print(f"已填入 {entry['type']}：'{entry.get('text','')}' 至 cell ({current_row}, {current_col})")
+            processed_count += 1
+
         # 移動到下一個欄位
         current_col += 1
         if current_col >= start_col + chars_per_row:
-            # 當欄位超出一行時，自動換到下一區塊
             current_row += rows_per_block
             current_col = start_col
+            print(f"自動換行：已達每列總字數，換至下一區塊，現在 cell 為 ({current_row}, {current_col})")
 
-    print("回填 Excel 完成！")
+    EndOfText = 'φ'
+    sheet.range((current_row, current_col)).value = EndOfText
+    print(f"({current_row}, {current_col})：填入【文章終結符號】（{EndOfText}）")
+    print(f"回填 Excel 完成，共處理 {processed_count} 個填入動作！")
 
 if __name__ == "__main__":
     # 利用 sys.argv 取得命令列參數，第一個參數應為 HTML 檔案路徑

@@ -11,11 +11,11 @@
 }
 
 body {
-    width: 90%;
+    width: 82%;
     margin: 0 auto;
     color: #333;
-    font-size: 300%;
-    line-height: 1.6;
+    line-height: 1.4;
+    font-size: 220%;
     font-family: 'Noto Sans TC', sans-serif !important;
 }
 

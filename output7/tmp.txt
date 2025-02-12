@@ -1,0 +1,18 @@
+{
+  "FILE_NAME": "Tai_Gi_Zu_Im_Bun.xlsx",
+  "TITLE": "《般若波羅蜜多心經》",
+  "IMAGE_URL": "https://img.shoplineapp.com/media/image_clips/5ced0f1bd62fc3392bb34287/original.jpg?1559039769",
+  "OUTPUT_PATH": "output7",
+  "章節序號": 1,
+  "顯示注音輸入": true,
+  "每頁總列數": 60,
+  "每列總字數": 15,
+  "語音類型": "文讀音",
+  "漢字庫": "河洛話",
+  "標音方法": "閩拼調號",
+  "網頁格式": "無預設",
+  "標音方式": "上及右",
+  "上邊標音": "閩拼調符",
+  "右邊標音": "閩拼調符",
+  "網頁每列字數": "預設"
+}

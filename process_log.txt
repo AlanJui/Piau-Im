@@ -7126,3 +7126,244 @@ pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, Non
 2025-02-12 12:40:35,111 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《春曉》.xlsx
 2025-02-12 12:40:35,111 - INFO - 製作【漢字標音】網頁己完成！
 2025-02-12 12:40:35,111 - INFO - 作業完成！
+2025-02-12 15:48:13,139 - INFO - 作業開始
+2025-02-12 15:48:13,139 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 15:48:47,753 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《般若波羅蜜多心經》.xlsx
+2025-02-12 15:48:47,753 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-12 15:48:47,753 - INFO - 作業完成！
+2025-02-12 23:10:07,273 - INFO - 作業開始
+2025-02-12 23:10:07,274 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 23:10:45,734 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《般若波羅蜜多心經》.xlsx
+2025-02-12 23:10:45,734 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-12 23:10:45,735 - INFO - 作業完成！
+2025-02-12 23:17:40,771 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 23:17:41,238 - ERROR - 執行過程中發生未知錯誤: invalid literal for int() with base 10: 'A'
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 552, in main
+    result_code = process(wb)
+  File "a300_手動更正漢字標音.py", line 511, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a300_手動更正漢字標音.py", line 459, in update_han_ji_piau_im
+    update_by_khuat_ji_piau(wb=wb,
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+                            sheet_name=sheet_name,
+                            ^^^^^^^^^^^^^^^^^^^^^^
+                            ji_khoo_dict=khuat_ji_piau_ji_khoo,
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                            piau_im=piau_im,
+                            ^^^^^^^^^^^^^^^^
+                            piau_im_huat=piau_im_huat)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a300_手動更正漢字標音.py", line 202, in update_by_khuat_ji_piau
+    han_ji_piau_im_cell.value = tlpa_tng_han_ji_piau_im(
+                                ~~~~~~~~~~~~~~~~~~~~~~~^
+        piau_im=piau_im,
+        ^^^^^^^^^^^^^^^^
+        piau_im_huat=piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+        tai_gi_im_piau=original_tai_gi
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\work\Piau-Im\mod_標音.py", line 306, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
+        piau_im,
+    ...<3 lines>...
+        tiau_ho
+    )
+  File "c:\work\Piau-Im\mod_標音.py", line 284, in siann_un_tiau_tng_piau_im
+    return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 745, in BP_piau_im
+    tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
+                   ~~~^^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'A'
+2025-02-12 23:17:41,299 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-12 23:18:45,478 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 23:19:58,160 - ERROR - 執行過程中發生未知錯誤: invalid literal for int() with base 10: 'A'
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 552, in main
+    result_code = process(wb)
+  File "a300_手動更正漢字標音.py", line 511, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a300_手動更正漢字標音.py", line 459, in update_han_ji_piau_im
+    update_by_khuat_ji_piau(wb=wb,
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+                            sheet_name=sheet_name,
+                            ^^^^^^^^^^^^^^^^^^^^^^
+                            ji_khoo_dict=khuat_ji_piau_ji_khoo,
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                            piau_im=piau_im,
+                            ^^^^^^^^^^^^^^^^
+                            piau_im_huat=piau_im_huat)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a300_手動更正漢字標音.py", line 202, in update_by_khuat_ji_piau
+    han_ji_piau_im_cell.value = tlpa_tng_han_ji_piau_im(
+                                ~~~~~~~~~~~~~~~~~~~~~~~^
+        piau_im=piau_im,
+        ^^^^^^^^^^^^^^^^
+        piau_im_huat=piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+        tai_gi_im_piau=original_tai_gi
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\work\Piau-Im\mod_標音.py", line 306, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
+        piau_im,
+    ...<3 lines>...
+        tiau_ho
+    )
+  File "c:\work\Piau-Im\mod_標音.py", line 284, in siann_un_tiau_tng_piau_im
+    return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 745, in BP_piau_im
+    tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
+                   ~~~^^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'A'
+2025-02-12 23:19:58,232 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-12 23:20:04,963 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 23:22:32,449 - ERROR - 執行過程中發生未知錯誤: invalid literal for int() with base 10: 'A'
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 552, in main
+    result_code = process(wb)
+  File "a300_手動更正漢字標音.py", line 511, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a300_手動更正漢字標音.py", line 459, in update_han_ji_piau_im
+    update_by_khuat_ji_piau(wb=wb,
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+                            sheet_name=sheet_name,
+                            ^^^^^^^^^^^^^^^^^^^^^^
+                            ji_khoo_dict=khuat_ji_piau_ji_khoo,
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                            piau_im=piau_im,
+                            ^^^^^^^^^^^^^^^^
+                            piau_im_huat=piau_im_huat)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a300_手動更正漢字標音.py", line 202, in update_by_khuat_ji_piau
+    han_ji_piau_im_cell.value = tlpa_tng_han_ji_piau_im(
+                                ~~~~~~~~~~~~~~~~~~~~~~~^
+        piau_im=piau_im,
+        ^^^^^^^^^^^^^^^^
+        piau_im_huat=piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+        tai_gi_im_piau=original_tai_gi
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\work\Piau-Im\mod_標音.py", line 306, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
+        piau_im,
+    ...<3 lines>...
+        tiau_ho
+    )
+  File "c:\work\Piau-Im\mod_標音.py", line 284, in siann_un_tiau_tng_piau_im
+    return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 745, in BP_piau_im
+    tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
+                   ~~~^^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'A'
+2025-02-12 23:22:32,529 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-12 23:22:40,226 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 23:22:45,534 - ERROR - 執行過程中發生未知錯誤: invalid literal for int() with base 10: 'A'
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 552, in main
+    result_code = process(wb)
+  File "a300_手動更正漢字標音.py", line 511, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "a300_手動更正漢字標音.py", line 459, in update_han_ji_piau_im
+    update_by_khuat_ji_piau(wb=wb,
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+                            sheet_name=sheet_name,
+                            ^^^^^^^^^^^^^^^^^^^^^^
+                            ji_khoo_dict=khuat_ji_piau_ji_khoo,
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                            piau_im=piau_im,
+                            ^^^^^^^^^^^^^^^^
+                            piau_im_huat=piau_im_huat)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a300_手動更正漢字標音.py", line 202, in update_by_khuat_ji_piau
+    han_ji_piau_im_cell.value = tlpa_tng_han_ji_piau_im(
+                                ~~~~~~~~~~~~~~~~~~~~~~~^
+        piau_im=piau_im,
+        ^^^^^^^^^^^^^^^^
+        piau_im_huat=piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+        tai_gi_im_piau=original_tai_gi
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\work\Piau-Im\mod_標音.py", line 306, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
+        piau_im,
+    ...<3 lines>...
+        tiau_ho
+    )
+  File "c:\work\Piau-Im\mod_標音.py", line 284, in siann_un_tiau_tng_piau_im
+    return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_標音.py", line 745, in BP_piau_im
+    tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
+                   ~~~^^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'A'
+2025-02-12 23:22:45,602 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-12 23:22:51,785 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 23:26:31,683 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 23:27:47,150 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-12 23:27:47,151 - INFO - 完成【處理作業】...
+2025-02-12 23:27:47,218 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-12 23:27:47,219 - INFO - 作業成功完成！
+2025-02-12 23:29:42,016 - INFO - 作業開始
+2025-02-12 23:29:42,017 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 23:30:11,266 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《般若波羅蜜多心經》.xlsx
+2025-02-12 23:30:11,266 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-12 23:30:11,266 - INFO - 作業完成！
+2025-02-12 23:34:22,828 - INFO - 作業開始
+2025-02-12 23:34:22,829 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 23:38:29,704 - INFO - 作業開始
+2025-02-12 23:38:29,705 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 23:39:16,957 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《般若波羅蜜多心經》.xlsx
+2025-02-12 23:39:16,958 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-12 23:39:16,958 - INFO - 作業完成！
+2025-02-12 23:42:28,257 - INFO - 作業開始
+2025-02-12 23:42:28,258 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 23:42:28,427 - INFO - 開始【漢字注音】工作表的清空、重置！
+2025-02-12 23:42:56,108 - INFO - 完成【漢字注音】工作表的清空、重置！
+2025-02-12 23:42:56,109 - INFO - a700_重罝漢字標音工作表.py 程式已執行完畢！
+2025-02-12 23:42:56,366 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】_working.xlsx
+2025-02-12 23:46:21,885 - INFO - 作業開始
+2025-02-12 23:46:21,886 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 23:46:21,921 - INFO - 【待注音漢字】總字數為: 120
+2025-02-12 23:46:22,068 - INFO - 儲存格內容清除完畢
+2025-02-12 23:46:43,601 - INFO - 儲存格格式重設完畢
+2025-02-12 23:47:00,430 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-02-12 23:47:00,484 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-12 23:47:12,719 - INFO - 完成【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-12 23:47:13,086 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《定風波》.xlsx
+2025-02-12 23:47:13,086 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-02-12 23:54:26,794 - INFO - 作業開始
+2025-02-12 23:54:26,795 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 23:54:44,460 - INFO - 己存檔至路徑：{file_path}
+2025-02-12 23:54:44,461 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-02-12 23:54:44,461 - INFO - 作業完成！
+2025-02-12 23:55:15,460 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-12 23:55:27,422 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-12 23:55:27,424 - INFO - 完成【處理作業】...
+2025-02-12 23:55:27,554 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-12 23:55:27,555 - INFO - 作業成功完成！
+2025-02-13 00:19:41,329 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 00:20:00,158 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-13 00:20:00,160 - INFO - 完成【處理作業】...
+2025-02-13 00:20:00,308 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-13 00:20:00,308 - INFO - 作業成功完成！
+2025-02-13 00:32:21,171 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 00:32:36,372 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-13 00:32:36,372 - INFO - 完成【處理作業】...
+2025-02-13 00:32:36,489 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-13 00:32:36,489 - INFO - 作業成功完成！
+2025-02-13 00:33:02,166 - INFO - 作業開始
+2025-02-13 00:33:02,167 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 00:33:12,784 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《定風波》.xlsx
+2025-02-13 00:33:12,784 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-13 00:33:12,784 - INFO - 作業完成！
