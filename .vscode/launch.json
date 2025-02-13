@@ -102,6 +102,16 @@
             ]
         },
         {
+            "name": "a500-2_漢字庫工具",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a500_漢字庫工具.py",
+            "console": "integratedTerminal",
+            "args": [
+                "2"
+            ]
+        },
+        {
             "name": "a501_缺字表回填字典資料庫",
             "type": "debugpy",
             "request": "launch",

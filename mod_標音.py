@@ -40,29 +40,55 @@ un_bu_tng_huan_map_dict = {
 # =========================================================================
 # 台語音標 → 台羅拼音（TLPA → TL）轉換函數
 # =========================================================================
-def convert_tlpa_to_tl(tai_gi_im_piau):
+# def convert_tlpa_to_tl(tai_gi_im_piau):
+#     """
+#     轉換台語音標（TLPA）為台羅拼音（TL）。
+#     """
+#     if not tai_gi_im_piau:
+#         return ""
+#     tai_lo_im_piau = re.sub(r'\bc', 'tsh', tai_gi_im_piau)  # c → tsh
+#     tai_lo_im_piau = re.sub(r'\bz', 'ts', tai_gi_im_piau)   # z → ts
+#     return tai_lo_im_piau
+def convert_tlpa_to_tl(tai_gi_im_piau: str) -> str:
     """
     轉換台語音標（TLPA）為台羅拼音（TL）。
     """
     if not tai_gi_im_piau:
         return ""
-    tai_lo_im_piau = re.sub(r'\bc', 'tsh', tai_gi_im_piau)  # c → tsh
-    tai_lo_im_piau = re.sub(r'\bz', 'ts', tai_gi_im_piau)   # z → ts
-    return tai_lo_im_piau
 
+    # 第一次替換：c → tsh
+    tai_lo_im_piau = re.sub(r'\bc', 'tsh', tai_gi_im_piau)
+    # 第二次替換：z → ts，使用上一次替換之後的 tai_lo_im_piau
+    tai_lo_im_piau = re.sub(r'\bz', 'ts', tai_lo_im_piau)
+
+    return tai_lo_im_piau
 
 # =========================================================================
 # 台羅拼音 → 台語音標（TL → TLPA）轉換函數
 # =========================================================================
-def convert_tl_to_tlpa(im_piau):
+# def convert_tl_to_tlpa(im_piau):
+#     """
+#     轉換台羅拼音（TL）為台語音標（TLPA）。
+#     """
+#     if not im_piau:
+#         return ""
+#     im_piau = re.sub(r'\btsh', 'c', im_piau)  # tsh → c
+#     im_piau = re.sub(r'\bts', 'z', im_piau)   # ts → z
+#     return im_piau
+def convert_tl_to_tlpa(tai_lo_im_piau: str) -> str:
     """
-    轉換台羅拼音（TL）為台語音標（TLPA）。
+    轉換台羅（TL）為台語音標（TLPA），只在單字邊界進行替換。
     """
-    if not im_piau:
+    if not tai_lo_im_piau:
         return ""
-    im_piau = re.sub(r'\btsh', 'c', im_piau)  # tsh → c
-    im_piau = re.sub(r'\bts', 'z', im_piau)   # ts → z
-    return im_piau
+
+    # 第一次替換：tsh → c
+    tai_gi_im_piau = re.sub(r'\btsh\b', 'c', tai_lo_im_piau)
+
+    # 第二次替換：ts → z
+    tai_gi_im_piau = re.sub(r'\bts\b', 'z', tai_gi_im_piau)
+
+    return tai_gi_im_piau
 
 
 # =========================================================

@@ -179,10 +179,38 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                 else:
                     # 查找漢字讀音
                     han_ji = cell_value
+                    # 自【漢字庫】查找作業
+                    result = han_ji_ca_piau_im(cursor=cursor,
+                                                han_ji=han_ji,
+                                                ue_im_lui_piat=ue_im_lui_piat)
+                    # 若【漢字庫】查無此字，登錄至【缺字表】
+                    if not result:
+                        khuat_ji_piau_ji_khoo.add_or_update_entry(
+                            han_ji=han_ji,
+                            tai_gi_im_piau='',
+                            kenn_ziann_im_piau='N/A',
+                            coordinates=(row, col)
+                        )
+                        msg = f"【{han_ji}】查無此字！"
+                    else:
+                        # 依【漢字庫】查找結果，輸出【台語音標】和【漢字標音】
+                        tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                            result=result,
+                            han_ji_khoo=han_ji_khoo,
+                            piau_im=piau_im,
+                            piau_im_huat=piau_im_huat
+                        )
+                        # 【標音字庫】添加或更新【漢字】資料
+                        piau_im_ji_khoo.add_or_update_entry(
+                            han_ji=han_ji,
+                            tai_gi_im_piau=tai_gi_im_piau,
+                            kenn_ziann_im_piau='N/A',
+                            coordinates=(row, col)
+                        )
+                        han_ji_u_piau_im = True
 
                     # 依據【人工標音】欄是否有輸入，決定【漢字標音】之處理方式
                     manual_input = sheet.range((row-2, col)).value
-
                     if manual_input:    # 若有人工輸入之處理作業
                         if '〔' in manual_input and '〕' in manual_input:
                             # 將人工輸入的〔台語音標〕轉換成【方音符號】
@@ -225,35 +253,6 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                             kenn_ziann_im_piau='N/A',
                             coordinates=(row, col)
                         )
-                    else:               # 無人工輸入，則自【漢字庫】查找作業
-                        result = han_ji_ca_piau_im(cursor=cursor,
-                                                    han_ji=han_ji,
-                                                    ue_im_lui_piat=ue_im_lui_piat)
-                        # 若【漢字庫】查無此字，登錄至【缺字表】
-                        if not result:
-                            khuat_ji_piau_ji_khoo.add_or_update_entry(
-                                han_ji=han_ji,
-                                tai_gi_im_piau='',
-                                kenn_ziann_im_piau='N/A',
-                                coordinates=(row, col)
-                            )
-                            msg = f"【{han_ji}】查無此字！"
-                        else:
-                            # 依【漢字庫】查找結果，輸出【台語音標】和【漢字標音】
-                            tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
-                                result=result,
-                                han_ji_khoo=han_ji_khoo,
-                                piau_im=piau_im,
-                                piau_im_huat=piau_im_huat
-                            )
-                            # 【標音字庫】添加或更新【漢字】資料
-                            piau_im_ji_khoo.add_or_update_entry(
-                                han_ji=han_ji,
-                                tai_gi_im_piau=tai_gi_im_piau,
-                                kenn_ziann_im_piau='N/A',
-                                coordinates=(row, col)
-                            )
-                            han_ji_u_piau_im = True
 
                 if han_ji_u_piau_im:
                     sheet.range((row - 1, col)).value = tai_gi_im_piau

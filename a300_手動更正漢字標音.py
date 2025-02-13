@@ -300,19 +300,20 @@ def update_by_jin_kang_piau_im(wb, sheet_name: str, jin_kang_piau_im_ji_khoo: Ji
                     # 取得【漢字注音】表中的【漢字標音】儲存格
                     han_ji_piau_im_cell = han_ji_piau_im_sheet.range((row + 1, col))
                     han_ji_piau_im = han_ji_piau_im_cell.value or ""
+
+                    # ---------------------------------------------------------
+                    # 確認【漢輓】有【人工標音】時之處理作業
                     # ---------------------------------------------------------
                     # 檢查【漢字】是否有標注【人工標音】
-                    # ---------------------------------------------------------
-                    if jin_kang_piau_im and jin_kang_piau_im != tai_gi_im_piau:
-                        # ---------------------------------------------------------
+                    # if jin_kang_piau_im and jin_kang_piau_im != tai_gi_im_piau:
+                    if jin_kang_piau_im:
                         # 檢查【漢字】的【人工標音】，是否【標音字庫】亦有相對映之【漢字】
-                        # ---------------------------------------------------------
-                        # 確定【漢字】存在【標音字庫】工作表中
-                        if han_ji_ti_piau_im_ji_khoo(
-                            wb=wb,
-                            position=(row, col),
-                            han_ji=han_ji,
-                            jin_kang_piau_im=jin_kang_piau_im):
+                        u_khat_ting = han_ji_ti_piau_im_ji_khoo(
+                                        wb=wb,
+                                        position=(row, col),
+                                        han_ji=han_ji,
+                                        jin_kang_piau_im=jin_kang_piau_im)
+                        if u_khat_ting:
 
                             # 更新【標音字庫】工作表【校正音標】內容
                             piau_im_ji_khoo[han_ji][2] = jin_kang_piau_im_cell.value

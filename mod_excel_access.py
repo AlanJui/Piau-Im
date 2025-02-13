@@ -110,7 +110,7 @@ def excel_address_to_row_col(cell_address):
     return int(row_number), col_number
 
 
-def check_and_update_pronunciation(wb, han_ji, position, artificial_pronounce):
+def check_and_update_pronunciation(wb, han_ji, position, jin_kang_piau_im):
     """
     查詢【標音字庫】工作表，確認是否有該【漢字】與【座標】，
     且【校正音標】是否為 'N/A'，若符合則更新為【人工標音】。
@@ -151,10 +151,12 @@ def check_and_update_pronunciation(wb, han_ji, position, artificial_pronounce):
             # if convert_to_excel_address(str(position)) in parsed_coords:
             position_address = convert_to_excel_address(str(position))
             if position_address in parsed_coords:
-                # 更新【校正音標】為【人工標音】
-                correction_pronounce_cell.value = artificial_pronounce
-                print(f"✅ {position}【{han_ji}】： 台語音標 {tai_gi_im_piau} -> 校正標音 {artificial_pronounce}")
-                return True
+                # 檢查【漢字】標注之【人工標音】是否與【台語音標】不同
+                if jin_kang_piau_im != tai_gi_im_piau:
+                    # 更新【校正音標】為【人工標音】
+                    correction_pronounce_cell.value = jin_kang_piau_im
+                    print(f"✅ {position}【{han_ji}】： 台語音標 {tai_gi_im_piau} -> 校正標音 {jin_kang_piau_im}")
+                    return True
                 # # 檢查標正音標是否為 'N/A'
                 # if correction_pronounce_cell.value == "N/A":
                 #     # 更新【校正音標】為【人工標音】

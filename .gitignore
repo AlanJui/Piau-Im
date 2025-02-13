@@ -39,3 +39,4 @@ config.local.js
 basement_dist
 ~$*
 docs/tmp.csv
+process_log.txt
