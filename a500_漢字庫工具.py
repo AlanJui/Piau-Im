@@ -17,6 +17,7 @@ from mod_excel_access import (
     ensure_sheet_exists,
     excel_address_to_row_col,
 )
+from mod_標音 import convert_tlpa_to_tl
 
 # =========================================================================
 # 載入環境變數
@@ -72,28 +73,6 @@ def get_active_cell_info(wb):
     artificial_pronounce = artificial_cell.value  # 取得人工標音的值
 
     return sheet_name, han_ji, (row, col), artificial_pronounce, (artificial_row, col)
-
-
-# def excel_address_to_row_col(cell_address):
-#     """
-#     將 Excel 儲存格地址 (如 'D9') 轉換為 (row, col) 格式。
-
-#     :param cell_address: Excel 儲存格地址 (如 'D9', 'AA15')
-#     :return: (row, col) 元組，例如 (9, 4)
-#     """
-#     match = re.match(r"([A-Z]+)(\d+)", cell_address)  # 用 regex 拆分字母(列) 和 數字(行)
-
-#     if not match:
-#         raise ValueError(f"無效的 Excel 儲存格地址: {cell_address}")
-
-#     col_letters, row_number = match.groups()
-
-#     # 將 Excel 字母列轉換成數字，例如 A -> 1, B -> 2, ..., Z -> 26, AA -> 27
-#     col_number = 0
-#     for letter in col_letters:
-#         col_number = col_number * 26 + (ord(letter) - ord("A") + 1)
-
-#     return int(row_number), col_number
 
 
 def check_and_update_pronunciation(wb, han_ji, position, artificial_pronounce):
@@ -227,23 +206,23 @@ def update_database_from_excel(wb):
     try:
         for idx, row_data in enumerate(data, start=2):  # Excel A2 起始，Python Index 2
             han_ji = row_data[0]  # A 欄
-            tai_lo_im_piau = row_data[3]  # D 欄 (校正音標)
+            tai_gi_im_piau = row_data[3]  # D 欄 (校正音標)
 
-            if not han_ji or not tai_lo_im_piau or tai_lo_im_piau == "N/A":
+            if not han_ji or not tai_gi_im_piau or tai_gi_im_piau == "N/A":
                 continue  # 跳過無效資料
 
-            # **轉換台羅拼音（TL）→ 台語音標（TLPA）**
-            tlpa_im_piau = convert_tl_to_tlpa(tai_lo_im_piau)
+            # 將 Excel 工作表存放的【台語音標（TLPA）】，改成資料庫保存的【台羅拼音（TL）】
+            tai_lo_im_piau = convert_tlpa_to_tl(tai_gi_im_piau)
 
             # **在 INSERT 之前，顯示 Console 訊息**
-            print(f"📌 寫入資料庫: 漢字='{han_ji}', 台羅拼音='{tai_lo_im_piau}', 轉換後 TLPA='{tlpa_im_piau}', Excel 第 {idx} 列")
+            print(f"📌 寫入資料庫: 漢字='{han_ji}', 台羅拼音='{tai_gi_im_piau}', 轉換後 TLPA='{tai_lo_im_piau}', Excel 第 {idx} 列")
 
             cursor.execute("""
                 INSERT INTO 漢字庫 (漢字, 台羅音標, 常用度, 更新時間)
                 VALUES (?, ?, ?, CURRENT_TIMESTAMP)
                 ON CONFLICT(漢字, 台羅音標) DO UPDATE
                 SET 更新時間=CURRENT_TIMESTAMP;
-            """, (han_ji, tlpa_im_piau, 0.8))  # 常用度固定為 0.8
+            """, (han_ji, tai_lo_im_piau, 0.8))  # 常用度固定為 0.8
 
         conn.commit()
         print("✅ 資料庫更新完成！")
@@ -341,16 +320,16 @@ def rebuild_database_from_excel(wb):
         # **4️⃣ 新增資料**
         for idx, row_data in enumerate(data, start=2):
             han_ji = row_data[1]  # B 欄
-            tai_lo_im_piau = row_data[2]  # C 欄
+            tai_gi_im_piau = row_data[2]  # C 欄
             siong_iong_too = row_data[3] if isinstance(row_data[3], (int, float)) else 0.1  # D 欄
             summary = row_data[4] if isinstance(row_data[4], str) else "NA"  # E 欄（摘要）
             updated_time = row_data[5] if isinstance(row_data[5], str) else datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
             # **Console Debug 訊息**
-            print(f"📌 正在處理第 {idx-1} 筆資料 (Excel 第 {idx} 列): 漢字='{han_ji}', 台羅音標='{tai_lo_im_piau}', 更新時間='{updated_time}'")
+            print(f"📌 正在處理第 {idx-1} 筆資料 (Excel 第 {idx} 列): 漢字='{han_ji}', 台語音標='{tai_gi_im_piau}', 更新時間='{updated_time}'")
 
             # **確保 `漢字` 和 `台羅音標` 務必要有資料**
-            if not han_ji or not tai_lo_im_piau:
+            if not han_ji or not tai_gi_im_piau:
                 print(f"⚠️ 跳過無效資料: Excel 第 {idx} 列：缺【漢字】或【台羅音標】")
                 # **將錯誤記錄寫入 `error_log.txt`**
                 with open("error_log.txt", "a", encoding="utf-8") as log_file:
@@ -358,15 +337,15 @@ def rebuild_database_from_excel(wb):
                 continue  # 跳過無效資料
 
             # **檢查 `台羅音標` 是否為有效字串**
-            if not han_ji or not isinstance(tai_lo_im_piau, str) or not tai_lo_im_piau.strip():
+            if not han_ji or not isinstance(tai_gi_im_piau, str) or not tai_gi_im_piau.strip():
                 print(f"⚠️ 跳過無效資料: Excel 第 {idx} 列 (台羅音標格式錯誤)")
                 # **將錯誤記錄寫入 `error_log.txt`**
                 with open("error_log.txt", "a", encoding="utf-8") as log_file:
                     log_file.write(f"❌ 無效資料（Excel 第 {idx} 列）: {row_data}\n")
                 continue  # **跳過此筆錯誤資料**
 
-            # 轉換台羅拼音（TL）→ 台語音標（TLPA）
-            # tlpa_pinyin = convert_tl_to_tlpa(tai_lo_im_piau)
+            # 將 Excel 工作表存放的【台語音標（TLPA）】，改成資料庫保存的【台羅拼音（TL）】
+            tai_lo_im_piau = convert_tlpa_to_tl(tai_gi_im_piau)
 
             cursor.execute("""
                 INSERT INTO 漢字庫 (漢字, 台羅音標, 常用度, 摘要說明, 更新時間)

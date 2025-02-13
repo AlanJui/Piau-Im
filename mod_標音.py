@@ -40,15 +40,15 @@ un_bu_tng_huan_map_dict = {
 # =========================================================================
 # 台語音標 → 台羅拼音（TLPA → TL）轉換函數
 # =========================================================================
-def convert_tlpa_to_tl(im_piau):
+def convert_tlpa_to_tl(tai_gi_im_piau):
     """
     轉換台語音標（TLPA）為台羅拼音（TL）。
     """
-    if not im_piau:
+    if not tai_gi_im_piau:
         return ""
-    im_piau = re.sub(r'\bc', 'tsh', im_piau)  # c → tsh
-    im_piau = re.sub(r'\bz', 'ts', im_piau)   # z → ts
-    return im_piau
+    tai_lo_im_piau = re.sub(r'\bc', 'tsh', tai_gi_im_piau)  # c → tsh
+    tai_lo_im_piau = re.sub(r'\bz', 'ts', tai_gi_im_piau)   # z → ts
+    return tai_lo_im_piau
 
 
 # =========================================================================
