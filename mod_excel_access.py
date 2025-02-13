@@ -139,6 +139,7 @@ def check_and_update_pronunciation(wb, han_ji, position, artificial_pronounce):
     for idx, row in enumerate(data):
         row_han_ji = row[0]  # A 欄: 漢字
         correction_pronounce_cell = sheet.range(f"D{idx+2}")  # D 欄: 校正音標
+        tai_gi_im_piau = row[2]  # E 欄: 座標 (可能是 "(9, 4); (25, 9)" 這類格式)
         coordinates = row[4]  # E 欄: 座標 (可能是 "(9, 4); (25, 9)" 這類格式)
 
         if row_han_ji == han_ji and coordinates:
@@ -150,12 +151,16 @@ def check_and_update_pronunciation(wb, han_ji, position, artificial_pronounce):
             # if convert_to_excel_address(str(position)) in parsed_coords:
             position_address = convert_to_excel_address(str(position))
             if position_address in parsed_coords:
-                # 檢查標正音標是否為 'N/A'
-                if correction_pronounce_cell.value == "N/A":
-                    # 更新【校正音標】為【人工標音】
-                    correction_pronounce_cell.value = artificial_pronounce
-                    print(f"✅ 更新成功: {han_ji} ({position}) -> {artificial_pronounce}")
-                    return True
+                # 更新【校正音標】為【人工標音】
+                correction_pronounce_cell.value = artificial_pronounce
+                print(f"✅ {position}【{han_ji}】： 台語音標 {tai_gi_im_piau} -> 校正標音 {artificial_pronounce}")
+                return True
+                # # 檢查標正音標是否為 'N/A'
+                # if correction_pronounce_cell.value == "N/A":
+                #     # 更新【校正音標】為【人工標音】
+                #     correction_pronounce_cell.value = artificial_pronounce
+                #     print(f"✅ 更新成功: {han_ji} ({position}) -> {artificial_pronounce}")
+                #     return True
 
     print(f"❌ 未找到匹配的資料或不符合更新條件: {han_ji} ({position})")
     return False
@@ -174,43 +179,6 @@ def convert_to_excel_address(coord_str):
         return f"{chr(64 + col)}{row}"  # 轉換成 Excel 座標
     except ValueError:
         return ""  # 避免解析錯誤
-
-
-# def convert_to_excel_address(coord_str):
-#     """
-#     轉換 `(row, col)` 格式為 Excel 座標 (如 `(9, 4)` 轉換為 "D9")
-
-#     :param coord_str: 例如 "(9, 4)"
-#     :return: Excel 座標字串，例如 "D9"
-#     """
-#     coord_str = coord_str.strip("()")  # 去除括號
-#     try:
-#         row, col = map(int, coord_str.split(", "))
-#         return f"{chr(64 + col)}{row}"  # 轉換成 Excel 座標
-#     except ValueError:
-#         return ""  # 避免解析錯誤
-
-
-# def excel_address_to_row_col(cell_address):
-#     """
-#     將 Excel 儲存格地址 (如 'D9') 轉換為 (row, col) 格式。
-
-#     :param cell_address: Excel 儲存格地址 (如 'D9', 'AA15')
-#     :return: (row, col) 元組，例如 (9, 4)
-#     """
-#     match = re.match(r"([A-Z]+)(\d+)", cell_address)  # 用 regex 拆分字母(列) 和 數字(行)
-
-#     if not match:
-#         raise ValueError(f"無效的 Excel 儲存格地址: {cell_address}")
-
-#     col_letters, row_number = match.groups()
-
-#     # 將 Excel 字母列轉換成數字，例如 A -> 1, B -> 2, ..., Z -> 26, AA -> 27
-#     col_number = 0
-#     for letter in col_letters:
-#         col_number = col_number * 26 + (ord(letter) - ord("A") + 1)
-
-#     return int(row_number), col_number
 
 
 def get_active_cell_info(wb):

@@ -7367,3 +7367,345 @@ ValueError: invalid literal for int() with base 10: 'A'
 2025-02-13 00:33:12,784 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《定風波》.xlsx
 2025-02-13 00:33:12,784 - INFO - 製作【漢字標音】網頁己完成！
 2025-02-13 00:33:12,784 - INFO - 作業完成！
+2025-02-13 11:52:32,657 - INFO - 作業開始
+2025-02-13 11:52:32,658 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 11:52:33,189 - ERROR - 執行過程中發生未知錯誤: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a401_人工斷行製作網頁.py", line 538, in main
+    result_code = process(wb)
+  File "a401_人工斷行製作網頁.py", line 451, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a401_人工斷行製作網頁.py", line 418, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a401_人工斷行製作網頁.py", line 288, in build_web_page
+    total_chars_per_line = wb.names['網頁每列字數'].refers_to_range.value
+                           ~~~~~~~~^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4622, in __getitem__
+    return self(item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4581, in __call__
+    return Name(impl=self.impl(name_or_index))
+                     ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2286, in __call__
+    return Name(xl=self.xl(name_or_index))
+                   ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-02-13 11:52:33,221 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-13 11:53:13,488 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 11:53:37,726 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-13 11:53:37,726 - INFO - 完成【處理作業】...
+2025-02-13 11:53:37,780 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-13 11:53:37,780 - INFO - 作業成功完成！
+2025-02-13 11:54:48,056 - INFO - 作業開始
+2025-02-13 11:54:48,057 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 11:54:48,306 - ERROR - 執行過程中發生未知錯誤: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a401_人工斷行製作網頁.py", line 538, in main
+    result_code = process(wb)
+  File "a401_人工斷行製作網頁.py", line 451, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a401_人工斷行製作網頁.py", line 418, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a401_人工斷行製作網頁.py", line 288, in build_web_page
+    total_chars_per_line = wb.names['網頁每列字數'].refers_to_range.value
+                           ~~~~~~~~^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4622, in __getitem__
+    return self(item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4581, in __call__
+    return Name(impl=self.impl(name_or_index))
+                     ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2286, in __call__
+    return Name(xl=self.xl(name_or_index))
+                   ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-02-13 11:54:48,311 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-13 11:55:29,292 - INFO - 作業開始
+2025-02-13 11:55:29,294 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 11:58:28,888 - INFO - 作業開始
+2025-02-13 11:58:28,889 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 12:03:32,544 - INFO - 作業開始
+2025-02-13 12:03:32,545 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 12:11:10,058 - INFO - 作業開始
+2025-02-13 12:11:10,060 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 12:12:40,692 - INFO - 儲存檔案至路徑：.\output7\《《春曉》》【文讀音：閩拼調符＋閩拼調符】.html
+2025-02-13 12:13:21,268 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-13 12:13:21,268 - INFO - 作業完成！
+2025-02-13 12:14:37,103 - INFO - 作業開始
+2025-02-13 12:14:37,105 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 12:22:44,951 - INFO - 作業開始
+2025-02-13 12:22:44,952 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 12:23:04,924 - INFO - 儲存檔案至路徑：.\docs\《《春曉》》【文讀音：閩拼調符＋閩拼調符】.html
+2025-02-13 12:23:04,924 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-13 12:23:04,925 - INFO - 作業完成！
+2025-02-13 12:25:12,040 - INFO - 作業開始
+2025-02-13 12:25:12,041 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 12:25:16,085 - INFO - 儲存檔案至路徑：.\docs\《春曉》【文讀音：閩拼調符＋閩拼調符】.html
+2025-02-13 12:25:16,085 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-13 12:25:16,085 - INFO - 作業完成！
+2025-02-13 12:27:26,344 - INFO - 作業開始
+2025-02-13 12:27:26,346 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 12:27:30,107 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-13 12:27:30,108 - INFO - 作業完成！
+2025-02-13 12:41:26,648 - INFO - 作業開始
+2025-02-13 12:41:26,649 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 12:41:26,884 - ERROR - 執行過程中發生未知錯誤: [Errno 13] Permission denied: 'docs\\《春曉》【文讀音：閩拼調符＋閩拼調符】.html'
+Traceback (most recent call last):
+  File "a401_人工斷行製作網頁.py", line 523, in main
+    result_code = process(wb)
+  File "a401_人工斷行製作網頁.py", line 465, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a401_人工斷行製作網頁.py", line 420, in tng_sing_bang_iah
+    f = open(output_path, 'w', encoding='utf-8')
+PermissionError: [Errno 13] Permission denied: 'docs\\《春曉》【文讀音：閩拼調符＋閩拼調符】.html'
+2025-02-13 12:41:26,887 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-13 12:42:47,136 - INFO - 作業開始
+2025-02-13 12:42:47,138 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 12:43:37,054 - ERROR - 執行過程中發生未知錯誤: [Errno 13] Permission denied: 'docs\\《春曉》【文讀音：閩拼調符＋閩拼調符】.html'
+Traceback (most recent call last):
+  File "a401_人工斷行製作網頁.py", line 523, in main
+    result_code = process(wb)
+  File "a401_人工斷行製作網頁.py", line 465, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a401_人工斷行製作網頁.py", line 420, in tng_sing_bang_iah
+    f = open(output_path, 'w', encoding='utf-8')
+PermissionError: [Errno 13] Permission denied: 'docs\\《春曉》【文讀音：閩拼調符＋閩拼調符】.html'
+2025-02-13 12:43:37,058 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-13 12:45:02,578 - INFO - 作業開始
+2025-02-13 12:45:02,579 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 12:45:09,396 - ERROR - 執行過程中發生未知錯誤: [Errno 13] Permission denied: 'docs\\《春曉》【文讀音：閩拼調符＋閩拼調符】.html'
+Traceback (most recent call last):
+  File "a401_人工斷行製作網頁.py", line 523, in main
+    result_code = process(wb)
+  File "a401_人工斷行製作網頁.py", line 465, in process
+    result_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a401_人工斷行製作網頁.py", line 420, in tng_sing_bang_iah
+    f = open(output_path, 'w', encoding='utf-8')
+PermissionError: [Errno 13] Permission denied: 'docs\\《春曉》【文讀音：閩拼調符＋閩拼調符】.html'
+2025-02-13 12:45:09,400 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-13 12:45:23,384 - INFO - 作業開始
+2025-02-13 12:45:23,386 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 12:48:02,292 - INFO - 作業開始
+2025-02-13 12:48:02,293 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 12:48:57,223 - INFO - 作業開始
+2025-02-13 12:48:57,224 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 12:50:15,664 - INFO - 作業開始
+2025-02-13 12:50:15,666 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 12:50:24,294 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】春曉.xlsx
+2025-02-13 12:50:24,294 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-13 12:50:24,294 - INFO - 作業完成！
+2025-02-13 12:52:14,271 - INFO - 作業開始
+2025-02-13 12:52:14,272 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 12:52:17,644 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-台語音標】春曉.xlsx
+2025-02-13 12:52:17,645 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-13 12:52:17,645 - INFO - 作業完成！
+2025-02-13 12:56:10,293 - INFO - 作業開始
+2025-02-13 12:56:10,295 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 12:56:20,907 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】定風波.xlsx
+2025-02-13 12:56:20,907 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-13 12:56:20,907 - INFO - 作業完成！
+2025-02-13 13:03:03,146 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 13:03:19,462 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-13 13:03:19,464 - INFO - 完成【處理作業】...
+2025-02-13 13:03:19,607 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-13 13:03:19,607 - INFO - 作業成功完成！
+2025-02-13 13:03:38,846 - INFO - 作業開始
+2025-02-13 13:03:38,847 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 13:03:49,600 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-台語音標】《定風波》.xlsx
+2025-02-13 13:03:49,600 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-13 13:03:49,600 - INFO - 作業完成！
+2025-02-13 13:09:03,044 - INFO - 作業開始
+2025-02-13 13:09:03,044 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 13:09:04,457 - ERROR - 作業過程發生未知的異常錯誤: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a200_查找及填入漢字標音.py", line 401, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a200_查找及填入漢字標音.py", line 327, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name     # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\a200_查找及填入漢字標音.py", line 243, in ca_han_ji_thak_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\a200_查找及填入漢字標音.py", line 91, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
+        piau_im,
+    ...<3 lines>...
+        tiau_ho
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 290, in siann_un_tiau_tng_piau_im
+    siann = piau_im.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-02-13 13:09:04,460 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-02-13 13:11:25,352 - INFO - 作業開始
+2025-02-13 13:11:25,353 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 13:12:43,515 - ERROR - 作業過程發生未知的異常錯誤: ''
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 401, in main
+    result_code = process(wb)
+  File "a200_查找及填入漢字標音.py", line 327, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name     # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a200_查找及填入漢字標音.py", line 243, in ca_han_ji_thak_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a200_查找及填入漢字標音.py", line 91, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
+        piau_im,
+    ...<3 lines>...
+        tiau_ho
+    )
+  File "c:\work\Piau-Im\mod_標音.py", line 290, in siann_un_tiau_tng_piau_im
+    siann = piau_im.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-02-13 13:12:43,521 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-02-13 13:12:50,071 - INFO - 作業開始
+2025-02-13 13:12:50,072 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 13:23:25,260 - INFO - 作業開始
+2025-02-13 13:23:25,262 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 13:24:06,168 - INFO - 己存檔至路徑：{file_path}
+2025-02-13 13:24:06,168 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-02-13 13:24:06,169 - INFO - 作業完成！
+2025-02-13 13:25:26,435 - INFO - 作業開始
+2025-02-13 13:25:26,435 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 13:25:36,905 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-台語音標】《定風波》.xlsx
+2025-02-13 13:25:36,905 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-13 13:25:36,905 - INFO - 作業完成！
+2025-02-13 13:27:59,969 - INFO - 作業開始
+2025-02-13 13:27:59,969 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 13:28:13,296 - INFO - 己存檔至路徑：{file_path}
+2025-02-13 13:28:13,296 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-02-13 13:28:13,296 - INFO - 作業完成！
+2025-02-13 14:51:37,340 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 14:51:57,430 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-13 14:51:57,432 - INFO - 完成【處理作業】...
+2025-02-13 14:51:57,564 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-13 14:51:57,565 - INFO - 作業成功完成！
+2025-02-13 14:52:29,048 - INFO - 作業開始
+2025-02-13 14:52:29,049 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 14:52:40,113 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-台語音標】《定風波》.xlsx
+2025-02-13 14:52:40,113 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-13 14:52:40,113 - INFO - 作業完成！
+2025-02-13 14:54:58,819 - INFO - 作業開始
+2025-02-13 14:54:58,820 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 14:55:22,639 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-台語音標】《定風波》.xlsx
+2025-02-13 14:55:22,639 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-13 14:55:22,639 - INFO - 作業完成！
+2025-02-13 14:55:50,116 - INFO - 作業開始
+2025-02-13 14:55:50,117 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 14:56:00,979 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-台語音標】《定風波》.xlsx
+2025-02-13 14:56:00,980 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-13 14:56:00,980 - INFO - 作業完成！
+2025-02-13 15:07:33,225 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 15:07:46,376 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-13 15:07:46,378 - INFO - 完成【處理作業】...
+2025-02-13 15:07:46,520 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-13 15:07:46,520 - INFO - 作業成功完成！
+2025-02-13 15:07:51,150 - INFO - 作業開始
+2025-02-13 15:07:51,150 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 15:08:01,065 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-台語音標】《定風波》.xlsx
+2025-02-13 15:08:01,065 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-13 15:08:01,065 - INFO - 作業完成！
+2025-02-13 15:10:16,150 - INFO - 作業開始
+2025-02-13 15:10:16,150 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 15:10:26,152 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-台語音標】《定風波》.xlsx
+2025-02-13 15:10:26,152 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-13 15:10:26,152 - INFO - 作業完成！
+2025-02-13 15:10:41,979 - INFO - 作業開始
+2025-02-13 15:10:41,979 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 15:10:51,927 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-台語音標】《定風波》.xlsx
+2025-02-13 15:10:51,927 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-13 15:10:51,928 - INFO - 作業完成！
+2025-02-13 15:14:53,859 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 15:15:07,595 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-13 15:15:07,597 - INFO - 完成【處理作業】...
+2025-02-13 15:15:07,697 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-13 15:15:07,697 - INFO - 作業成功完成！
+2025-02-13 15:18:19,562 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 15:21:18,334 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 18:41:46,268 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 18:55:47,638 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 19:07:22,310 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 19:10:45,909 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 19:11:31,896 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 19:12:42,054 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 19:13:35,451 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-13 19:13:35,451 - INFO - 完成【處理作業】...
+2025-02-13 19:13:35,550 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-13 19:13:35,551 - INFO - 作業成功完成！
+2025-02-13 19:14:53,555 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 19:15:20,096 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 19:15:45,385 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-13 19:15:45,385 - INFO - 完成【處理作業】...
+2025-02-13 19:15:45,466 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-13 19:15:45,466 - INFO - 作業成功完成！
+2025-02-13 19:16:16,350 - INFO - 作業開始
+2025-02-13 19:16:16,351 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-13 19:16:27,637 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-台語音標】《定風波》.xlsx
+2025-02-13 19:16:27,637 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-13 19:16:27,637 - INFO - 作業完成！

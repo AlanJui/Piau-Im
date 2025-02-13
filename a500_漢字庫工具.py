@@ -196,6 +196,8 @@ def update_database_from_excel(wb):
     sheet_name = "標音字庫"
     sheet = wb.sheets[sheet_name]
     data = sheet.range("A2").expand("table").value
+    hue_im = wb.names['語音類型'].refers_to_range.value
+    siong_iong_too = 0.8  if hue_im == "文讀音" else 0.6
 
     if not isinstance(data[0], list):
         data = [data]
@@ -215,14 +217,14 @@ def update_database_from_excel(wb):
             tai_lo_im_piau = convert_tlpa_to_tl(tai_gi_im_piau)
 
             # **在 INSERT 之前，顯示 Console 訊息**
-            print(f"📌 寫入資料庫: 漢字='{han_ji}', 台羅拼音='{tai_gi_im_piau}', 轉換後 TLPA='{tai_lo_im_piau}', Excel 第 {idx} 列")
+            print(f"📌 寫入資料庫: 漢字='{han_ji}', 台語音標='{tai_gi_im_piau}', 轉換後 台羅拼音='{tai_lo_im_piau}', Excel 第 {idx} 列")
 
             cursor.execute("""
                 INSERT INTO 漢字庫 (漢字, 台羅音標, 常用度, 更新時間)
                 VALUES (?, ?, ?, CURRENT_TIMESTAMP)
                 ON CONFLICT(漢字, 台羅音標) DO UPDATE
                 SET 更新時間=CURRENT_TIMESTAMP;
-            """, (han_ji, tai_lo_im_piau, 0.8))  # 常用度固定為 0.8
+            """, (han_ji, tai_lo_im_piau, siong_iong_too))  # 常用度固定為 0.8
 
         conn.commit()
         print("✅ 資料庫更新完成！")
