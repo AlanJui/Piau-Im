@@ -398,8 +398,22 @@ def tng_sing_bang_iah(wb, sheet_name='漢字注音', han_ji_source='V3', page_ty
     web_page_title = f"{title}"
 
     # 確保 output 子目錄存在
+    # output_file = f"{title}_{han_ji_piau_im_huat}.html"
+    hue_im = wb.names['語音類型'].refers_to_range.value
+    piau_im_huat = wb.names['標音方法'].refers_to_range.value
+    piau_im_format = wb.names['標音方式'].refers_to_range.value
+    if piau_im_format == "無預設":
+        im_piau = piau_im_huat
+    elif piau_im_format == "上":
+        im_piau = wb.names['上邊標音'].refers_to_range.value
+    elif piau_im_format == "右":
+        im_piau = wb.names['右邊標音'].refers_to_range.value
+    else:
+        im_piau = f"{wb.names['上邊標音'].refers_to_range.value}＋{wb.names['右邊標音'].refers_to_range.value}"
+    # 檢查檔案名稱是否已包含副檔名
+    output_file = f"《{title}》【{hue_im}】{im_piau}.html"
+
     output_dir = 'docs'
-    output_file = f"{title}_{han_ji_piau_im_huat}.html"
     output_path = os.path.join(output_dir, output_file)
 
     # 開啟文字檔，準備寫入網頁內容
@@ -468,7 +482,6 @@ def process(wb):
     else:
         logging_process_step(f"儲存檔案至路徑：{file_path}")
         return EXIT_CODE_SUCCESS    # 作業正常結束
-
 
 # =============================================================================
 # 程式主流程

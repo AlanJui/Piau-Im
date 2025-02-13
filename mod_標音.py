@@ -287,7 +287,10 @@ def siann_un_tiau_tng_piau_im(piau_im, piau_im_huat, siann_bu, un_bu, tiau_ho):
     elif piau_im_huat == "方音符號":
         return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
     elif piau_im_huat == "台語音標":
-        siann = piau_im.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+        if siann_bu == "" or siann_bu == "Ø":
+            siann = ''
+        else:
+            siann = piau_im.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
         un = piau_im.Un_Bu_Dict[un_bu]["台語音標"]
         return f"{siann}{un}{tiau_ho}"
     return ""

@@ -1,5 +1,6 @@
 import argparse
 import importlib
+import logging
 import os
 import os.path
 import time
@@ -10,6 +11,29 @@ import xlwings as xw
 
 # 指定虛擬環境的 Python 路徑
 # venv_python = os.path.join(".venv", "Scripts", "python.exe") if sys.platform == "win32" else os.path.join(".venv", "bin", "python")
+
+# =========================================================================
+# 常數定義
+# =========================================================================
+# 定義 Exit Code
+EXIT_CODE_SUCCESS = 0  # 成功
+EXIT_CODE_NO_FILE = 1  # 無法找到檔案
+EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
+EXIT_CODE_PROCESS_FAILURE = 3  # 過程失敗
+EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
+
+# =========================================================================
+# 設定日誌
+# =========================================================================
+logging.basicConfig(
+    filename='process_log.txt',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
+def logging_process_step(msg):
+    print(msg)
+    logging.info(msg)
 
 #----------------------------------------------------------------
 # 動態載入模組和函數
@@ -28,7 +52,8 @@ def save_as_new_file(wb, input_file_name=None):
     else:
         # 自 env 工作表取得檔案名稱
         try:
-            file_name = str(wb.names['TITLE'].refers_to_range.value).strip()
+            title = str(wb.names['TITLE'].refers_to_range.value).strip()
+            file_name = f"《{title}》"
         except KeyError:
             setting_sheet = wb.sheets["env"]
             file_name = str(setting_sheet.range("C4").value).strip()
@@ -47,6 +72,85 @@ def save_as_new_file(wb, input_file_name=None):
     # 儲存新建立的工作簿
     wb.save(new_file_path)
     return f"{new_file_path}"
+
+#----------------------------------------------------------------
+# 依 env 工作表的設定，將【漢字注音】輸出成網頁檔案。
+#----------------------------------------------------------------
+def save_as_html_file(wb, dir_path=None):
+    # 自 env 工作表取得檔案名稱
+    try:
+        title = str(wb.names['TITLE'].refers_to_range.value).strip()
+    except KeyError:
+        setting_sheet = wb.sheets["env"]
+        title = str(setting_sheet.range("C4").value).strip()
+
+    # 設定檔案輸出路徑，存於【專案根目錄】下的【子目錄】
+    # output_path = wb.names['OUTPUT_PATH'].refers_to_range.value
+    output_path = "docs"
+    hue_im = wb.names['語音類型'].refers_to_range.value
+    piau_im_huat = wb.names['標音方法'].refers_to_range.value
+    piau_im_format = wb.names['標音方式'].refers_to_range.value
+    if piau_im_format == "無預設":
+        im_piau = piau_im_huat
+    elif piau_im_format == "上":
+        im_piau = wb.names['上邊標音'].refers_to_range.value
+    elif piau_im_format == "右":
+        im_piau = wb.names['右邊標音'].refers_to_range.value
+    else:
+        im_piau = f"{wb.names['上邊標音'].refers_to_range.value}＋{wb.names['右邊標音'].refers_to_range.value}"
+    # 檢查檔案名稱是否已包含副檔名
+    file_path = os.path.join(
+        ".\\{0}".format(output_path),
+        f"《{title}》【{hue_im}】{im_piau}.html")
+
+    # 儲存新建立的工作簿
+    try:
+        wb.save(file_path)
+    except Exception as e:
+        logging.error(f"儲存檔案失敗！錯誤訊息：{e}", exc_info=True)
+        return EXIT_CODE_PROCESS_FAILURE
+
+    logging_process_step(f"儲存檔案至路徑：{file_path}")
+    return EXIT_CODE_SUCCESS    # 作業正常結束
+
+#----------------------------------------------------------------
+# 將 Excel 檔案，另存成網頁檔案。
+#----------------------------------------------------------------
+def save_excel_as_html_file(wb):
+    # 自 env 工作表取得檔案名稱
+    try:
+        title = str(wb.names['TITLE'].refers_to_range.value).strip()
+    except KeyError:
+        setting_sheet = wb.sheets["env"]
+        title = str(setting_sheet.range("C4").value).strip()
+
+    # 設定檔案輸出路徑，存於【專案根目錄】下的【子目錄】
+    output_path = wb.names['OUTPUT_PATH'].refers_to_range.value
+    hue_im = wb.names['語音類型'].refers_to_range.value
+    piau_im_huat = wb.names['標音方法'].refers_to_range.value
+    piau_im_format = wb.names['標音方式'].refers_to_range.value
+    if piau_im_format == "無預設":
+        im_piau = piau_im_huat
+    elif piau_im_format == "上":
+        im_piau = wb.names['上邊標音'].refers_to_range.value
+    elif piau_im_format == "右":
+        im_piau = wb.names['右邊標音'].refers_to_range.value
+    else:
+        im_piau = f"{wb.names['上邊標音'].refers_to_range.value}＋{wb.names['右邊標音'].refers_to_range.value}"
+    # 檢查檔案名稱是否已包含副檔名
+    file_path = os.path.join(
+        ".\\{0}".format(output_path),
+        f"《{title}》【{hue_im}-{im_piau}】.html")
+    # 儲存新建立的工作簿
+    try:
+        wb.save(file_path)
+    except Exception as e:
+        logging.error(f"儲存檔案失敗！錯誤訊息：{e}", exc_info=True)
+        return EXIT_CODE_PROCESS_FAILURE
+
+    logging_process_step(f"儲存檔案至路徑：{file_path}")
+    return EXIT_CODE_SUCCESS    # 作業正常結束
+
 
 #----------------------------------------------------------------
 # 查詢語音類型，若未設定則預設為文讀音
