@@ -72,6 +72,19 @@ c 開頭的台羅音標：將 c 替換為 tsh。
 z 開頭的台羅音標：將 z 替換為 ts。
 
 ```sql
+UPDATE OR REPLACE 漢字庫
+SET 台羅音標 =
+    CASE
+        WHEN 台羅音標 LIKE 'c%' THEN 'tsh' || SUBSTR(台羅音標, 2)
+        WHEN 台羅音標 LIKE 'z%' THEN 'ts' || SUBSTR(台羅音標, 2)
+        ELSE 台羅音標
+    END
+WHERE 台羅音標 LIKE 'c%' OR 台羅音標 LIKE 'z%'
+```
+
+【註】：使用下述 Script 會發生【索引】有問題之執行錯誤。
+
+```sql
 UPDATE 漢字庫
 SET 台羅音標 =
     CASE
@@ -91,3 +104,48 @@ WHERE 台羅音標 LIKE 'c%' OR 台羅音標 LIKE 'z%';
 ```
 
 
+## 小工具
+
+### 統計誤用台語音標總數
+
+```sql
+SELECT 漢字,
+       台羅音標,
+       CASE
+           WHEN 台羅音標 LIKE 'c%' THEN 'tsh' || SUBSTR(台羅音標, 2)
+           WHEN 台羅音標 LIKE 'z%' THEN 'ts' || SUBSTR(台羅音標, 2)
+           ELSE 台羅音標
+       END AS 更新後音標
+FROM 漢字庫
+WHERE 台羅音標 LIKE 'c%' OR 台羅音標 LIKE 'z%'
+GROUP BY 漢字, 更新後音標
+HAVING COUNT(*) > 1;
+```
+
+### 檢視那些漢字誤用台語音標
+
+```sql
+SELECT 漢字,
+       台羅音標,
+       CASE
+           WHEN 台羅音標 LIKE 'c%' THEN 'tsh' || SUBSTR(台羅音標, 2)
+           WHEN 台羅音標 LIKE 'z%' THEN 'ts' || SUBSTR(台羅音標, 2)
+           ELSE 台羅音標
+       END AS 更新後音標
+FROM 漢字庫
+WHERE 台羅音標 LIKE 'c%' OR 台羅音標 LIKE 'z%'
+GROUP BY 漢字, 更新後音標
+HAVING COUNT(*) > 1;
+```
+
+### 以【時戳】改正【常用度】錯誤
+
+```sql
+UPDATE 漢字庫
+SET 常用度 = 0.6
+WHERE 更新時間 = '2025-02-12 16:43:41'
+```
+
+### 向 AI 請教之參考
+
+[ChatGPT 4o](https://chatgpt.com/share/67ad5e29-caf4-8005-8997-67e07380d0a2)
