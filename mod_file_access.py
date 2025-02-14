@@ -3,7 +3,9 @@ import importlib
 import logging
 import os
 import os.path
+import subprocess
 import time
+from pathlib import Path
 
 import xlwings as xw
 
@@ -523,3 +525,28 @@ def San_Sing_Han_Ji_Zu_Im_Piau(wb):
 def s(x):
     """轉成字串並去除頭尾空白，若空則回傳 None"""
     return None if (x is None or str(x).strip() == "") else str(x).strip()
+
+# 可用 git 指令取得專案根目錄
+def get_git_root():
+    try:
+        return subprocess.check_output(["git", "rev-parse", "--show-toplevel"], text=True).strip()
+    except subprocess.CalledProcessError:
+        return None  # 若不是 git repo，則返回 None
+
+#🔍 使用 pyproject.toml 或 setup.py 來尋找根目錄
+def find_project_root():
+    current_dir = Path(__file__).resolve().parent
+    for parent in current_dir.parents:
+        if (parent / "pyproject.toml").exists() or (parent / "setup.py").exists():
+            return parent
+    return None  # 未找到專案根目錄
+
+# 可以正確區分空白字符和換行符，從而避免將 \n 誤判為空白
+def s(x):
+    """轉成字串並去除頭尾空白，若空則回傳 None，但保留換行符 \n"""
+    if x is None:
+        return None
+    x_str = str(x)
+    if x_str.strip() == "" and x_str != "\n":  # 空白但不是換行符
+        return None
+    return x_str.strip() if x_str != "\n" else "\n"  # 保留換行符

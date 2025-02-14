@@ -16,8 +16,9 @@
             "request": "launch",
             "program": "${file}",
             "args": [
-                "2",
-                "output7/《春曉》【文讀音】雅俗通＋方音符號.jsonc"
+                "2"
+                // "2",
+                // "output7/《春曉》【文讀音】雅俗通＋方音符號.jsonc"
                 // "docs/《春曉》_閩拼調號.html"
                 // "output7/【河洛文讀注音-閩拼調號】《春曉》.txt"
                 // "output7/tmp.txt"

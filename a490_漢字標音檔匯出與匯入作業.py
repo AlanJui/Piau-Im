@@ -3,6 +3,7 @@ import logging
 import os
 import sys
 from collections import OrderedDict
+from pathlib import Path
 
 import xlwings as xw
 from dotenv import load_dotenv
@@ -103,7 +104,7 @@ def save_to_han_ji_piau_im_file(wb, output_data):
 # =========================================================================
 # 匯出：將 Excel 中的 env 和「漢字注音」工作表內容，轉成「一行一筆」字串寫進 body array
 # =========================================================================
-def export_to_text_file(wb):
+def export_to_text_file(wb, output_file_name=None):
     # 1) 先組出 head 資料
     env_sheet = wb.sheets['env']
     env_data = OrderedDict({
@@ -186,24 +187,28 @@ def export_to_text_file(wb):
     except KeyError:
         title = "__working__"
 
-    output_path = wb.names['OUTPUT_PATH'].refers_to_range.value
-    hue_im = wb.names['語音類型'].refers_to_range.value
-    piau_im_huat = wb.names['標音方法'].refers_to_range.value
-    piau_im_format = wb.names['標音方式'].refers_to_range.value
-
-    if piau_im_format == "無預設":
-        im_piau = piau_im_huat
-    elif piau_im_format == "上":
-        im_piau = wb.names['上邊標音'].refers_to_range.value
-    elif piau_im_format == "右":
-        im_piau = wb.names['右邊標音'].refers_to_range.value
+    if output_file_name == None:
+        project_root = Path(sys.path[0]).resolve()
+        output_file_path = project_root / 'han_ji_piau_im.jsonc'
     else:
-        im_piau = f"{wb.names['上邊標音'].refers_to_range.value}＋{wb.names['右邊標音'].refers_to_range.value}"
+        output_path = wb.names['OUTPUT_PATH'].refers_to_range.value
+        hue_im = wb.names['語音類型'].refers_to_range.value
+        piau_im_huat = wb.names['標音方法'].refers_to_range.value
+        piau_im_format = wb.names['標音方式'].refers_to_range.value
 
-    output_file_path = os.path.join(
-        ".\\{0}".format(output_path),
-        f"《{title}》【{hue_im}】{im_piau}.jsonc"
-    )
+        if piau_im_format == "無預設":
+            im_piau = piau_im_huat
+        elif piau_im_format == "上":
+            im_piau = wb.names['上邊標音'].refers_to_range.value
+        elif piau_im_format == "右":
+            im_piau = wb.names['右邊標音'].refers_to_range.value
+        else:
+            im_piau = f"{wb.names['上邊標音'].refers_to_range.value}＋{wb.names['右邊標音'].refers_to_range.value}"
+
+        output_file_path = os.path.join(
+            ".\\{0}".format(output_path),
+            f"《{title}》【{hue_im}】{im_piau}.jsonc"
+        )
 
     # 5) 將 head 先寫入，再以 append 方式把 body_lines 寫到尾端
     with open(output_file_path, 'w', encoding='utf-8') as f:
@@ -218,28 +223,51 @@ def export_to_text_file(wb):
 # =========================================================
 # 漢字標音檔匯入作業
 # =========================================================
-def import_from_text_file(wb, input_path):
+def import_from_text_file(wb, input_path=None):
+    if input_path is None:
+        project_root = Path(sys.path[0]).resolve()
+        input_path = project_root / 'han_ji_piau_im.jsonc'
+
     # 讀取漢字標音檔
-    with open(input_path, 'r', encoding='utf-8') as file:
-        data = json.load(file)
+    try:
+        with open(input_path, 'r', encoding='utf-8') as file:
+            data = json.load(file)
+    except Exception as e:
+        logging.error(f"❌ 讀取檔案失敗！請提供匯入檔案路徑！錯誤訊息：{e}", exc_info=True)
+        return EXIT_CODE_NO_FILE
+        # return EXIT_CODE_INVALID_INPUT
 
     # 回填到 env 工作表
     env_sheet = wb.sheets['env']
     for key, value in data["head"].items():
         env_sheet.range(key).value = value
 
+    # 可以正確區分空白字符和換行符，從而避免將 \n 誤判為空白
+    def s(x):
+        """轉成字串並去除頭尾空白，若空則回傳 None，但保留換行符 \n"""
+        if x is None:
+            return None
+        x_str = str(x)
+        if x_str.strip() == "" and x_str != "\n":  # 空白但不是換行符
+            return None
+        return x_str.strip() if x_str != "\n" else "\n"  # 保留換行符
+
     # 回填到 漢字注音 工作表
     han_ji_sheet = wb.sheets['漢字注音']
     start_row = 5
     start_col = 4
+    end_col = start_col + int(env_sheet.range("每列總字數").value)
     current_row = start_row
     current_col = start_col
 
     article_text = ""
     for item in data["body"]:
+        han_ji_sheet.range((current_row, current_col)).select()
         han_ji = item["char"]
         piau_im_data = item["piau_im"]
-        if han_ji != 'φ':
+        han_ji = s(han_ji)
+        if han_ji != 'φ' and han_ji != None:
+            # article_text += han_ji
             article_text += han_ji
 
         # 控制台輸出目前處理進度狀態
@@ -257,7 +285,9 @@ def import_from_text_file(wb, input_path):
         print(f"({current_row}, {xw.utils.col_name(current_col)}) {console}")
 
         # 匯入資料回填【漢字注音】工作表
-        if han_ji == "φ":  # 文章結束
+        if han_ji == None:  # 空白
+            continue
+        elif han_ji == "φ":  # 文章結束
             han_ji_sheet.range((current_row, current_col)).value = "φ"
             break
         elif han_ji == "\n":  # 換行
@@ -278,7 +308,7 @@ def import_from_text_file(wb, input_path):
                 han_ji_sheet.range((current_row + 1, current_col)).value = han_ji_piau_im
 
             current_col += 1
-            if current_col > start_col + int(env_sheet.range("每列總字數").value):
+            if current_col == end_col:
                 current_row += 4
                 current_col = start_col
 
@@ -317,8 +347,11 @@ def main():
         return export_to_text_file(wb=wb)
     elif mode == "2":
         # 匯入
-        file_path = sys.argv[2]
-        return import_from_text_file(wb, file_path)
+        if len(sys.argv) == 3:
+            file_path = sys.argv[2]
+            return import_from_text_file(wb, file_path)
+        else:
+            return import_from_text_file(wb)
     else:
         print("❌ 錯誤：請輸入有效模式：1（匯出）；2（匯入）")
         return EXIT_CODE_INVALID_INPUT
