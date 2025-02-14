@@ -520,37 +520,6 @@ def San_Sing_Han_Ji_Zu_Im_Piau(wb):
         print("找不到：〖漢字注音表〗工作表。")
         return False
 
-    # ==========================================================
-    # (1)
-    # ==========================================================
-    # 自【工作表1】的每一列，讀入一個「段落」的漢字。然後將整個段
-    # 落拆成「單字」，存到【漢字注音表】；在【漢字注音表】的每個
-    # 儲存格，只存放一個「單字」。
-    # ==========================================================
-
-    # source_row_index = 1
-    # target_row_index = 1  # index for target sheet
-    # # for row in range(1, source_rows):
-    # while source_row_index <= source_row_no:
-    #     # 自【工作表1】取得「一行漢字」
-    #     tsit_hang_ji = str(source_sheet.range("A" + str(source_row_index)).value)
-    #     hang_ji_str = tsit_hang_ji.strip()
-
-    #     # 讀到空白行
-    #     if hang_ji_str == "None":
-    #         hang_ji_str = "\n"
-    #     else:
-    #         hang_ji_str = f"{tsit_hang_ji}\n"
-
-    #     han_ji_range = convert_string_to_chars_list(hang_ji_str)
-
-    #     # =========================================================
-    #     # 讀到的整段文字，以「單字」形式寫入【漢字注音表】。
-    #     # =========================================================
-    #     han_ji_tsu_im_paiu.range("A" + str(target_row_index)).options(
-    #         transpose=True
-    #     ).value = han_ji_range
-
-    #     ji_soo = len(han_ji_range)
-    #     target_row_index += ji_soo
-    #     source_row_index += 1
+def s(x):
+    """轉成字串並去除頭尾空白，若空則回傳 None"""
+    return None if (x is None or str(x).strip() == "") else str(x).strip()

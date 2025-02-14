@@ -142,42 +142,39 @@ def export_to_text_file(wb):
     body_lines = []  # 改為 list 收集，每一行會有正確縮排
     EndOfArticle = False
 
-    def s(x):
-        """轉成字串並去除頭尾空白，若空則回傳 None"""
-        return None if (x is None or str(x).strip() == "") else str(x).strip()
-
     for row in range(start_row, end_row, 4):
         for col in range(start_col, end_col):
             han_ji = han_ji_sheet.range((row, col)).value
-            tai_gi_im_piau = s(han_ji_sheet.range((row - 1, col)).value)
-            jin_kang_piau_im = s(han_ji_sheet.range((row - 2, col)).value)
-            han_ji_piau_im = s(han_ji_sheet.range((row + 1, col)).value)
-
             if han_ji == 'φ':
-                line_str = '    "φ": []'
-                body_lines.append(line_str)
+                body_lines.append({ "char": "φ", "piau_im": [] })
                 EndOfArticle = True
                 print(f'({row},{xw.utils.col_name(col)}) => 《文章終止》')
                 break
             elif han_ji == '\n':
-                line_str = '    "\\n": []'
-                body_lines.append(line_str)
+                body_lines.append({ "char": "\n", "piau_im": [] })
                 print(f'({row},{xw.utils.col_name(col)}) => 《換行》')
                 break
             elif is_punctuation(han_ji):
-                line_str = f'    "{han_ji}": []'
-                body_lines.append(line_str)
+                body_lines.append({ "char": han_ji, "piau_im": [] })
                 print(f'({row},{xw.utils.col_name(col)}) => {han_ji}')
             else:
+                def s(x):
+                    """轉成字串並去除頭尾空白，若空則回傳 None"""
+                    return None if (x is None or str(x).strip() == "") else str(x).strip()
+                tai_gi_im_piau = s(han_ji_sheet.range((row - 1, col)).value)
+                jin_kang_piau_im = s(han_ji_sheet.range((row - 2, col)).value)
+                han_ji_piau_im = s(han_ji_sheet.range((row + 1, col)).value)
+
                 def val_or_empty(x):
                     return "" if x is None else x
-
-                line_str = (
-                    f'    "{han_ji}": [ "{val_or_empty(tai_gi_im_piau)}", '
-                    f'"{val_or_empty(jin_kang_piau_im)}", '
-                    f'"{val_or_empty(han_ji_piau_im)}" ]'
-                )
-                body_lines.append(line_str)
+                body_lines.append({
+                    "char": han_ji,
+                    "piau_im": [
+                        val_or_empty(tai_gi_im_piau),
+                        val_or_empty(jin_kang_piau_im),
+                        val_or_empty(han_ji_piau_im)
+                    ]
+                })
                 print(f'({row},{xw.utils.col_name(col)}) => {han_ji}：{tai_gi_im_piau}，{jin_kang_piau_im}，{han_ji_piau_im}')
 
         if EndOfArticle:
@@ -211,13 +208,12 @@ def export_to_text_file(wb):
     # 5) 將 head 先寫入，再以 append 方式把 body_lines 寫到尾端
     with open(output_file_path, 'w', encoding='utf-8') as f:
         f.write(head_json_str)  # 寫入 head 的 JSON，但不關閉大括號
-        f.write(",\n  \"body\": {\n")  # "body" 開頭，縮排 2 個空白
-        f.write(",\n".join(body_lines))  # 寫入 body 每一行，縮排 4 個空白
-        f.write("\n  }\n}")  # 關閉 "body" 和最外層大括號
+        f.write(",\n  \"body\": [\n")  # "body" 開頭，縮排 2 個空白
+        f.write(",\n".join([json.dumps(line, ensure_ascii=False) for line in body_lines]))  # 寫入 body 每一行
+        f.write("\n  ]\n}")  # 關閉 "body" 和最外層大括號
 
     print(f"已輸出至 {output_file_path}")
     return 0
-
 
 # =========================================================
 # 漢字標音檔匯入作業
@@ -239,12 +235,18 @@ def import_from_text_file(wb, input_path):
     current_row = start_row
     current_col = start_col
 
-    for han_ji, piau_im_data in data["body"].items():
+    article_text = ""
+    for item in data["body"]:
+        han_ji = item["char"]
+        piau_im_data = item["piau_im"]
+        if han_ji != 'φ':
+            article_text += han_ji
+
         # 控制台輸出目前處理進度狀態
         console = ""
         if han_ji == 'φ':
             console = '《文章終止》'
-        if han_ji == '\n':
+        elif han_ji == '\n':
             console = '《換行》'
         elif is_punctuation(han_ji):  # 標點符號
             console = f"【 {han_ji} 】"
@@ -260,8 +262,9 @@ def import_from_text_file(wb, input_path):
             break
         elif han_ji == "\n":  # 換行
             han_ji_sheet.range((current_row, current_col)).value = "=CHAR(10)"
-            current_row += 4
             current_col = start_col
+            current_row += 4
+            continue
         else:
             if is_punctuation(han_ji):  # 標點符號
                 han_ji_sheet.range((current_row, current_col)).value = han_ji
@@ -274,12 +277,16 @@ def import_from_text_file(wb, input_path):
                 han_ji_sheet.range((current_row - 2, current_col)).value = ren_gong_piau_im
                 han_ji_sheet.range((current_row + 1, current_col)).value = han_ji_piau_im
 
-        current_col += 1
-        if current_col > start_col + int(env_sheet.range("每列總字數").value):
-            current_row += 4
-            current_col = start_col
+            current_col += 1
+            if current_col > start_col + int(env_sheet.range("每列總字數").value):
+                current_row += 4
+                current_col = start_col
 
     # 寫入檔案
+    def get_excel_address(row, col):
+        return f"{xw.utils.col_name(col)}{row}"
+    excel_address = get_excel_address(3, 22)
+    han_ji_sheet.range(excel_address).value = article_text
     try:
         save_as_new_file(wb)
     except Exception as e:
@@ -288,7 +295,6 @@ def import_from_text_file(wb, input_path):
 
     print("漢字標音檔匯入完成！")
     return EXIT_CODE_SUCCESS
-
 
 # =========================================================================
 # 主程式

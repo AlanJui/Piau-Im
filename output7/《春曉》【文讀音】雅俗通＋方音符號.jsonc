@@ -18,109 +18,41 @@
     "上邊標音": "雅俗通",
     "右邊標音": "方音符號",
     "網頁每列字數": 7.0
-  },
-  "body": {
-    "《": [],
-    "春": [
-      "cun1",
-      null,
-      "cun1"
-    ],
-    "曉": [
-      "hiau2",
-      null,
-      "hiao3"
-    ],
-    "》": [],
-    "\n": [],
-    "眠": [
-      "bian5",
-      null,
-      "bbian2"
-    ],
-    "不": [
-      "put4",
-      null,
-      "but7"
-    ],
-    "覺": [
-      "kak4",
-      null,
-      "gak7"
-    ],
-    "，": [],
-    "處": [
-      "cu2",
-      null,
-      "cu3"
-    ],
-    "聞": [
-      "bun5",
-      null,
-      "bbun2"
-    ],
-    "啼": [
-      "the5",
-      null,
-      "te2"
-    ],
-    "鳥": [
-      "ziau2",
-      null,
-      "ziao3"
-    ],
-    "。": [],
-    "夜": [
-      "ia7",
-      null,
-      "ia6"
-    ],
-    "來": [
-      "lai5",
-      null,
-      "lai2"
-    ],
-    "風": [
-      "hong1",
-      null,
-      "hong1"
-    ],
-    "雨": [
-      "u2",
-      null,
-      "u3"
-    ],
-    "聲": [
-      "sing1",
-      null,
-      "sing1"
-    ],
-    "花": [
-      "hua1",
-      null,
-      "hua1"
-    ],
-    "落": [
-      "lok8",
-      null,
-      "lok8"
-    ],
-    "知": [
-      "ti1",
-      null,
-      "di1"
-    ],
-    "多": [
-      "to1",
-      null,
-      "do1"
-    ],
-    "少": [
-      "siau2",
-      null,
-      "siao3"
-    ],
-    "？": [],
-    "φ": []
   }
+,
+  "body": [
+{"char": "《", "piau_im": []},
+{"char": "春", "piau_im": ["cun1", "", "cun1"]},
+{"char": "曉", "piau_im": ["hiau2", "", "hiao3"]},
+{"char": "》", "piau_im": []},
+{"char": "\n", "piau_im": []},
+{"char": "\n", "piau_im": []},
+{"char": "春", "piau_im": ["cun1", "", "cun1"]},
+{"char": "眠", "piau_im": ["bian5", "", "bbian2"]},
+{"char": "不", "piau_im": ["put4", "", "but7"]},
+{"char": "覺", "piau_im": ["kak4", "", "gak7"]},
+{"char": "曉", "piau_im": ["hiau2", "", "hiao3"]},
+{"char": "，", "piau_im": []},
+{"char": "處", "piau_im": ["cu2", "", "cu3"]},
+{"char": "處", "piau_im": ["cu2", "", "cu3"]},
+{"char": "聞", "piau_im": ["bun5", "", "bbun2"]},
+{"char": "啼", "piau_im": ["the5", "", "te2"]},
+{"char": "鳥", "piau_im": ["ziau2", "", "ziao3"]},
+{"char": "。", "piau_im": []},
+{"char": "\n", "piau_im": []},
+{"char": "\n", "piau_im": []},
+{"char": "夜", "piau_im": ["ia7", "", "ia6"]},
+{"char": "來", "piau_im": ["lai5", "", "lai2"]},
+{"char": "風", "piau_im": ["hong1", "", "hong1"]},
+{"char": "雨", "piau_im": ["u2", "", "u3"]},
+{"char": "聲", "piau_im": ["sing1", "", "sing1"]},
+{"char": "，", "piau_im": []},
+{"char": "花", "piau_im": ["hua1", "", "hua1"]},
+{"char": "落", "piau_im": ["lok8", "", "lok8"]},
+{"char": "知", "piau_im": ["ti1", "", "di1"]},
+{"char": "多", "piau_im": ["to1", "", "do1"]},
+{"char": "少", "piau_im": ["siau2", "", "siao3"]},
+{"char": "？", "piau_im": []},
+{"char": "φ", "piau_im": []}
+  ]
 }
