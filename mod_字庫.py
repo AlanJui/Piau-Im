@@ -121,24 +121,26 @@ class JiKhooDict:
         else:
             raise ValueError(f"漢字 '{han_ji}' 不存在，請先使用 add_entry 方法新增資料。")
 
-    # def add_or_update_entry(self, han_ji: str, tai_gi_im_piau: str, kenn_ziann_im_piau: str, coordinates: tuple):
-    #     """
-    #     新增或更新一筆【漢字】的資料。
-
-    #     - 如果漢字已存在，將更新總數並新增座標。
-    #     - 如果漢字不存在，將新建一筆資料。
-
-    #     :param han_ji: 漢字。
-    #     :param tai_gi_im_piau: 台語音標。
-    #     :param coordinates: 漢字在【漢字注音】工作表中的座標 (row, col)。
-    #     """
-    #     if han_ji in self.ji_khoo_dict:
-    #         # 如果漢字已存在，使用 update_entry 更新
-    #         self.update_entry(han_ji, kenn_ziann_im_piau, coordinates)
-    #     else:
-    #         # 如果漢字不存在，使用 add_entry 新增
-    #         self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
     def add_or_update_entry(self, han_ji: str, tai_gi_im_piau: str, kenn_ziann_im_piau: str, coordinates: tuple):
+        """
+        新增或更新一筆【漢字】的資料。
+
+        - 如果漢字已存在，將更新總數並新增座標。
+        - 如果漢字不存在，將新建一筆資料。
+
+        :param han_ji: 漢字。
+        :param tai_gi_im_piau: 台語音標。
+        :param coordinates: 漢字在【漢字注音】工作表中的座標 (row, col)。
+        """
+        if han_ji in self.ji_khoo_dict:
+            # 如果漢字已存在，使用 update_entry 更新
+            self.update_entry(han_ji, kenn_ziann_im_piau, coordinates)
+        else:
+            # 如果漢字不存在，使用 add_entry 新增
+            self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
+
+
+    def update_kau_ziang_im_piau(self, han_ji: str, tai_gi_im_piau: str, kenn_ziann_im_piau: str, coordinates: tuple):
         """
         新增或更新一筆【漢字】的資料。
 
@@ -152,14 +154,13 @@ class JiKhooDict:
         """
         # 檢查漢字是否已存在於字典中
         if han_ji in self.ji_khoo_dict:
-            self.update_entry(han_ji, kenn_ziann_im_piau, coordinates)
-            # # 檢查該漢字是否確實存在於指定的座標中
-            # if self._is_han_ji_at_coordinates(han_ji, coordinates):
-            #     # 如果漢字已存在且座標正確，使用 update_entry 更新
-            #     self.update_entry(han_ji, kenn_ziann_im_piau, coordinates)
-            # else:
-            #     # 如果漢字存在但座標不正確，視為新增一筆資料
-            #     self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
+            # 檢查該漢字是否確實存在於指定的座標中
+            if self._is_han_ji_at_coordinates(han_ji, coordinates):
+                # 如果漢字已存在且座標正確，使用 update_entry 更新
+                self.update_entry(han_ji, kenn_ziann_im_piau, coordinates)
+            else:
+                # 如果漢字存在但座標不正確，視為新增一筆資料
+                self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
         else:
             # 如果漢字不存在，使用 add_entry 新增
             self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)

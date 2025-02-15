@@ -7965,3 +7965,506 @@ TypeError: update_by_khuat_ji_piau() got an unexpected keyword argument 'ji_khoo
 2025-02-15 16:45:11,993 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
 2025-02-15 16:45:12,053 - INFO - 釋放 Excel 資源，處理完成。
 2025-02-15 16:45:12,053 - INFO - 作業成功完成！
+2025-02-15 17:18:30,516 - INFO - 作業開始
+2025-02-15 17:18:30,517 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 17:18:40,411 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《定風波》.xlsx
+2025-02-15 17:18:40,411 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-15 17:18:40,411 - INFO - 作業完成！
+2025-02-15 17:28:32,289 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 17:29:22,286 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-15 17:29:22,354 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-15 17:29:22,354 - INFO - 作業成功完成！
+2025-02-15 17:29:38,097 - INFO - 作業開始
+2025-02-15 17:29:38,097 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 17:29:48,005 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《定風波》.xlsx
+2025-02-15 17:29:48,005 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-15 17:29:48,005 - INFO - 作業完成！
+2025-02-15 19:02:11,115 - INFO - 作業開始
+2025-02-15 19:02:11,117 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 19:02:11,154 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 19:02:11,222 - INFO - 儲存格內容清除完畢
+2025-02-15 19:02:25,050 - INFO - 儲存格格式重設完畢
+2025-02-15 19:02:34,196 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-02-15 19:02:34,242 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-15 19:02:35,794 - ERROR - 作業過程發生未知的異常錯誤: 漢字 '雨' 已存在，請使用 update_entry 方法來更新資料。
+Traceback (most recent call last):
+  File "a100_作業中活頁檔填入漢字.py", line 251, in main
+    result_code = process(wb)
+  File "a100_作業中活頁檔填入漢字.py", line 192, in process
+    ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3',
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      ue_im_lui_piat=ue_im_lui_piat,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      han_ji_khoo=han_ji_khoo, db_name=db_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      module_name=module_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+                      function_name='han_ji_ca_piau_im')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\a200_查找及填入漢字標音.py", line 204, in ca_han_ji_thak_im
+    piau_im_ji_khoo.add_or_update_entry(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        coordinates=(row, col)
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\work\Piau-Im\mod_字庫.py", line 161, in add_or_update_entry
+    self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_字庫.py", line 86, in add_entry
+    raise ValueError(f"漢字 '{han_ji}' 已存在，請使用 update_entry 方法來更新資料。")
+ValueError: 漢字 '雨' 已存在，請使用 update_entry 方法來更新資料。
+2025-02-15 19:02:35,798 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-02-15 19:06:10,915 - INFO - 作業開始
+2025-02-15 19:06:10,917 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 19:06:10,961 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 19:06:11,028 - INFO - 儲存格內容清除完畢
+2025-02-15 19:06:24,826 - INFO - 儲存格格式重設完畢
+2025-02-15 19:07:37,564 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-02-15 19:07:37,608 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-15 19:07:39,050 - ERROR - 作業過程發生未知的異常錯誤: 漢字 '雨' 已存在，請使用 update_entry 方法來更新資料。
+Traceback (most recent call last):
+  File "a100_作業中活頁檔填入漢字.py", line 253, in main
+    result_code = process(wb)
+  File "a100_作業中活頁檔填入漢字.py", line 194, in process
+    ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3',
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      ue_im_lui_piat=ue_im_lui_piat,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      han_ji_khoo=han_ji_khoo, db_name=db_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      module_name=module_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+                      function_name='han_ji_ca_piau_im')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\a200_查找及填入漢字標音.py", line 204, in ca_han_ji_thak_im
+    piau_im_ji_khoo.add_or_update_entry(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        coordinates=(row, col)
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\work\Piau-Im\mod_字庫.py", line 161, in add_or_update_entry
+    self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_字庫.py", line 86, in add_entry
+    raise ValueError(f"漢字 '{han_ji}' 已存在，請使用 update_entry 方法來更新資料。")
+ValueError: 漢字 '雨' 已存在，請使用 update_entry 方法來更新資料。
+2025-02-15 19:07:39,055 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-02-15 19:09:15,183 - INFO - 作業開始
+2025-02-15 19:09:15,185 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 19:09:15,220 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 19:09:15,301 - INFO - 儲存格內容清除完畢
+2025-02-15 19:09:29,103 - INFO - 儲存格格式重設完畢
+2025-02-15 19:13:21,068 - INFO - 作業開始
+2025-02-15 19:13:21,070 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 19:13:21,106 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 19:13:21,192 - INFO - 儲存格內容清除完畢
+2025-02-15 19:13:34,975 - INFO - 儲存格格式重設完畢
+2025-02-15 19:15:05,705 - INFO - 作業開始
+2025-02-15 19:15:05,707 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 19:15:05,745 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 19:15:05,815 - INFO - 儲存格內容清除完畢
+2025-02-15 19:15:19,666 - INFO - 儲存格格式重設完畢
+2025-02-15 19:16:12,484 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-02-15 19:16:12,524 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-15 19:16:13,928 - ERROR - 作業過程發生未知的異常錯誤: 漢字 '雨' 已存在，請使用 update_entry 方法來更新資料。
+Traceback (most recent call last):
+  File "a100_作業中活頁檔填入漢字.py", line 255, in main
+    result_code = process(wb)
+  File "a100_作業中活頁檔填入漢字.py", line 196, in process
+    ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3',
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      ue_im_lui_piat=ue_im_lui_piat,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      han_ji_khoo=han_ji_khoo, db_name=db_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      module_name=module_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+                      function_name='han_ji_ca_piau_im')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\a200_查找及填入漢字標音.py", line 204, in ca_han_ji_thak_im
+    piau_im_ji_khoo.add_or_update_entry(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        coordinates=(row, col)
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\work\Piau-Im\mod_字庫.py", line 161, in add_or_update_entry
+    self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_字庫.py", line 86, in add_entry
+    raise ValueError(f"漢字 '{han_ji}' 已存在，請使用 update_entry 方法來更新資料。")
+ValueError: 漢字 '雨' 已存在，請使用 update_entry 方法來更新資料。
+2025-02-15 19:16:13,933 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-02-15 19:19:28,718 - INFO - 作業開始
+2025-02-15 19:19:28,719 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 19:19:28,819 - ERROR - 作業過程發生未知的異常錯誤: JiKhooDict.create_ji_khoo_dict_from_sheet() missing 2 required positional arguments: 'wb' and 'sheet_name'
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 400, in main
+    result_code = process(wb)
+  File "a200_查找及填入漢字標音.py", line 315, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name     # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a200_查找及填入漢字標音.py", line 119, in ca_han_ji_thak_im
+    piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet()
+TypeError: JiKhooDict.create_ji_khoo_dict_from_sheet() missing 2 required positional arguments: 'wb' and 'sheet_name'
+2025-02-15 19:19:28,822 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-02-15 19:21:25,765 - INFO - 作業開始
+2025-02-15 19:21:25,767 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 19:21:25,830 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 19:21:25,943 - INFO - 儲存格內容清除完畢
+2025-02-15 19:21:40,378 - INFO - 儲存格格式重設完畢
+2025-02-15 19:21:49,085 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-02-15 19:21:49,126 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-15 19:21:51,042 - ERROR - 作業過程發生未知的異常錯誤: 漢字 '雨' 已存在，請使用 update_entry 方法來更新資料。
+Traceback (most recent call last):
+  File "a100_作業中活頁檔填入漢字.py", line 255, in main
+    result_code = process(wb)
+  File "a100_作業中活頁檔填入漢字.py", line 196, in process
+    ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3',
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      ue_im_lui_piat=ue_im_lui_piat,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      han_ji_khoo=han_ji_khoo, db_name=db_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      module_name=module_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+                      function_name='han_ji_ca_piau_im')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\a200_查找及填入漢字標音.py", line 210, in ca_han_ji_thak_im
+    piau_im_ji_khoo.add_or_update_entry(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        coordinates=(row, col)
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\work\Piau-Im\mod_字庫.py", line 161, in add_or_update_entry
+    self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_字庫.py", line 86, in add_entry
+    raise ValueError(f"漢字 '{han_ji}' 已存在，請使用 update_entry 方法來更新資料。")
+ValueError: 漢字 '雨' 已存在，請使用 update_entry 方法來更新資料。
+2025-02-15 19:21:51,046 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-02-15 19:22:14,970 - INFO - 作業開始
+2025-02-15 19:22:14,971 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 19:22:16,458 - ERROR - 作業過程發生未知的異常錯誤: 漢字 '雨' 已存在，請使用 update_entry 方法來更新資料。
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 406, in main
+    result_code = process(wb)
+  File "a200_查找及填入漢字標音.py", line 321, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name     # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a200_查找及填入漢字標音.py", line 210, in ca_han_ji_thak_im
+    piau_im_ji_khoo.add_or_update_entry(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        coordinates=(row, col)
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\work\Piau-Im\mod_字庫.py", line 161, in add_or_update_entry
+    self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\mod_字庫.py", line 86, in add_entry
+    raise ValueError(f"漢字 '{han_ji}' 已存在，請使用 update_entry 方法來更新資料。")
+ValueError: 漢字 '雨' 已存在，請使用 update_entry 方法來更新資料。
+2025-02-15 19:22:16,461 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-02-15 19:23:11,299 - INFO - 作業開始
+2025-02-15 19:23:11,300 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 19:23:23,099 - INFO - 作業開始
+2025-02-15 19:23:23,100 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 19:47:25,385 - ERROR - 作業過程發生未知的異常錯誤: 漢字 '雨' 已存在，請使用 update_entry 方法來更新資料。
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 406, in main
+    result_code = process(wb)
+  File "a200_查找及填入漢字標音.py", line 321, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name     # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a200_查找及填入漢字標音.py", line 210, in ca_han_ji_thak_im
+    piau_im_ji_khoo.add_or_update_entry(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        coordinates=(row, col)
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\work\Piau-Im\mod_字庫.py", line 161, in add_or_update_entry
+    #     # 如果漢字存在但座標不正確，視為新增一筆資料
+  File "c:\work\Piau-Im\mod_字庫.py", line 86, in add_entry
+    raise ValueError(f"漢字 '{han_ji}' 已存在，請使用 update_entry 方法來更新資料。")
+ValueError: 漢字 '雨' 已存在，請使用 update_entry 方法來更新資料。
+2025-02-15 19:47:25,390 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-02-15 19:47:30,412 - INFO - 作業開始
+2025-02-15 19:47:30,414 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 19:48:43,807 - INFO - 作業開始
+2025-02-15 19:48:43,808 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 19:48:56,862 - INFO - 己存檔至路徑：{file_path}
+2025-02-15 19:48:56,863 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-02-15 19:48:56,863 - INFO - 作業完成！
+2025-02-15 19:49:22,171 - INFO - 作業開始
+2025-02-15 19:49:22,173 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 19:49:22,205 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 19:49:22,273 - INFO - 儲存格內容清除完畢
+2025-02-15 19:49:34,207 - INFO - 儲存格格式重設完畢
+2025-02-15 19:49:42,123 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-02-15 19:49:42,157 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-15 19:49:49,437 - INFO - 完成【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-15 19:55:43,707 - INFO - 作業開始
+2025-02-15 19:55:43,709 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 19:55:43,741 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 19:55:43,858 - INFO - 儲存格內容清除完畢
+2025-02-15 19:55:56,104 - INFO - 儲存格格式重設完畢
+2025-02-15 19:58:44,411 - INFO - 作業開始
+2025-02-15 19:58:44,413 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 19:58:44,446 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 19:58:44,526 - INFO - 儲存格內容清除完畢
+2025-02-15 19:58:56,577 - INFO - 儲存格格式重設完畢
+2025-02-15 19:59:55,379 - INFO - 作業開始
+2025-02-15 19:59:55,381 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 19:59:55,415 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 19:59:55,499 - INFO - 儲存格內容清除完畢
+2025-02-15 20:00:07,846 - INFO - 儲存格格式重設完畢
+2025-02-15 20:02:38,781 - INFO - 作業開始
+2025-02-15 20:02:38,783 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 20:02:38,816 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 20:02:38,895 - INFO - 儲存格內容清除完畢
+2025-02-15 20:02:51,009 - INFO - 儲存格格式重設完畢
+2025-02-15 20:08:11,971 - INFO - 作業開始
+2025-02-15 20:08:11,972 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 20:08:12,006 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 20:08:12,082 - INFO - 儲存格內容清除完畢
+2025-02-15 20:08:24,126 - INFO - 儲存格格式重設完畢
+2025-02-15 20:08:53,655 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-02-15 20:08:53,690 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-15 20:09:01,105 - INFO - 完成【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-15 20:10:16,697 - INFO - 作業開始
+2025-02-15 20:10:16,699 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 20:10:16,732 - INFO - 【待注音漢字】總字數為: 120
+2025-02-15 20:10:16,792 - INFO - 儲存格內容清除完畢
+2025-02-15 20:11:01,721 - INFO - 作業開始
+2025-02-15 20:11:01,723 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 20:11:01,755 - INFO - 【待注音漢字】總字數為: 120
+2025-02-15 20:11:01,823 - INFO - 儲存格內容清除完畢
+2025-02-15 20:11:13,788 - INFO - 儲存格格式重設完畢
+2025-02-15 20:11:21,820 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-02-15 20:11:21,854 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-15 20:11:29,097 - INFO - 完成【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-15 20:15:07,234 - INFO - 作業開始
+2025-02-15 20:15:07,236 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 20:15:07,268 - INFO - 【待注音漢字】總字數為: 120
+2025-02-15 20:15:07,339 - INFO - 儲存格內容清除完畢
+2025-02-15 20:15:19,694 - INFO - 儲存格格式重設完畢
+2025-02-15 20:32:59,049 - INFO - 作業開始
+2025-02-15 20:32:59,051 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 20:32:59,086 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 20:32:59,147 - INFO - 儲存格內容清除完畢
+2025-02-15 20:33:11,312 - INFO - 儲存格格式重設完畢
+2025-02-15 20:53:07,934 - INFO - 作業開始
+2025-02-15 20:53:07,936 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 20:53:07,972 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 20:53:08,050 - INFO - 儲存格內容清除完畢
+2025-02-15 20:53:20,065 - INFO - 儲存格格式重設完畢
+2025-02-15 20:54:34,715 - INFO - 作業開始
+2025-02-15 20:54:34,717 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 20:54:34,750 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 20:54:34,815 - INFO - 儲存格內容清除完畢
+2025-02-15 20:54:47,543 - INFO - 儲存格格式重設完畢
+2025-02-15 21:01:40,579 - INFO - 作業開始
+2025-02-15 21:01:40,581 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 21:01:40,613 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 21:01:40,676 - INFO - 儲存格內容清除完畢
+2025-02-15 21:01:52,722 - INFO - 儲存格格式重設完畢
+2025-02-15 21:03:01,578 - INFO - 作業開始
+2025-02-15 21:03:01,580 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 21:03:01,613 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 21:03:01,688 - INFO - 儲存格內容清除完畢
+2025-02-15 21:03:13,947 - INFO - 儲存格格式重設完畢
+2025-02-15 21:03:57,663 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-02-15 21:03:57,699 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-15 21:03:59,343 - INFO - 完成【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-15 21:06:48,406 - INFO - 作業開始
+2025-02-15 21:06:48,408 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 21:06:48,441 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 21:06:48,508 - INFO - 儲存格內容清除完畢
+2025-02-15 21:07:00,606 - INFO - 儲存格格式重設完畢
+2025-02-15 21:07:49,206 - INFO - 作業開始
+2025-02-15 21:07:49,208 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 21:07:49,242 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 21:07:49,317 - INFO - 儲存格內容清除完畢
+2025-02-15 21:08:02,073 - INFO - 儲存格格式重設完畢
+2025-02-15 21:09:20,174 - INFO - 作業開始
+2025-02-15 21:09:20,176 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 21:09:20,208 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 21:09:20,275 - INFO - 儲存格內容清除完畢
+2025-02-15 21:09:32,439 - INFO - 儲存格格式重設完畢
+2025-02-15 21:10:24,870 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-02-15 21:10:24,905 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-15 21:10:35,546 - INFO - 完成【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-15 21:51:06,094 - INFO - 作業開始
+2025-02-15 21:51:06,096 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 21:51:06,132 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 21:51:06,219 - INFO - 儲存格內容清除完畢
+2025-02-15 21:51:21,350 - INFO - 儲存格格式重設完畢
+2025-02-15 21:55:54,349 - INFO - 作業開始
+2025-02-15 21:55:54,351 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 21:55:54,390 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 21:55:54,501 - INFO - 儲存格內容清除完畢
+2025-02-15 21:56:54,106 - INFO - 作業開始
+2025-02-15 21:56:54,108 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 21:56:54,144 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 21:56:54,183 - ERROR - 作業過程發生未知的異常錯誤: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a100_作業中活頁檔填入漢字.py", line 265, in main
+    result_code = process(wb)
+  File "a100_作業中活頁檔填入漢字.py", line 183, in process
+    clear_han_ji_kap_piau_im(wb)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "c:\work\Piau-Im\mod_excel_access.py", line 559, in clear_han_ji_kap_piau_im
+    sheet.range(cells_range).clear_contents()     # 清除 C3:R{end_of_row} 範圍的內容
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2048, in clear_contents
+    return self.impl.clear_contents()
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1213, in clear_contents
+    self.xl.ClearContents()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject Range>", line 2, in ClearContents
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-02-15 21:56:54,205 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-02-15 21:58:14,895 - INFO - 作業開始
+2025-02-15 21:58:14,897 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 21:58:14,933 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 21:58:14,971 - ERROR - 作業過程發生未知的異常錯誤: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a100_作業中活頁檔填入漢字.py", line 265, in main
+    result_code = process(wb)
+  File "a100_作業中活頁檔填入漢字.py", line 183, in process
+    clear_han_ji_kap_piau_im(wb)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "c:\work\Piau-Im\mod_excel_access.py", line 559, in clear_han_ji_kap_piau_im
+    sheet.range(cells_range).clear_contents()     # 清除 C3:R{end_of_row} 範圍的內容
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2048, in clear_contents
+    return self.impl.clear_contents()
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1213, in clear_contents
+    self.xl.ClearContents()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject Range>", line 2, in ClearContents
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-02-15 21:58:14,977 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-02-15 21:58:34,227 - INFO - 作業開始
+2025-02-15 21:58:34,229 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 21:58:34,266 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 21:58:34,324 - INFO - 儲存格內容清除完畢
+2025-02-15 21:58:48,167 - INFO - 儲存格格式重設完畢
+2025-02-15 21:59:23,266 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-02-15 21:59:23,308 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-15 21:59:35,488 - INFO - 完成【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-15 21:59:46,721 - INFO - 作業開始
+2025-02-15 21:59:46,723 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 21:59:46,760 - INFO - 【待注音漢字】總字數為: 121
+2025-02-15 21:59:46,828 - INFO - 儲存格內容清除完畢
+2025-02-15 22:00:05,164 - INFO - 儲存格格式重設完畢
+2025-02-15 22:00:15,094 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-02-15 22:00:15,147 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-15 22:00:28,346 - INFO - 完成【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-15 22:00:28,544 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《定風波》.xlsx
+2025-02-15 22:00:28,544 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-02-15 22:03:12,732 - INFO - 作業開始
+2025-02-15 22:03:12,734 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 22:03:24,644 - INFO - 己存檔至路徑：{file_path}
+2025-02-15 22:03:24,644 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-02-15 22:03:24,644 - INFO - 作業完成！
+2025-02-15 22:04:16,214 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 22:22:42,480 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 22:23:45,028 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-15 22:23:45,110 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-15 22:23:45,111 - INFO - 作業成功完成！
+2025-02-15 22:36:16,975 - INFO - 作業開始
+2025-02-15 22:36:16,975 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 22:36:29,674 - INFO - 己存檔至路徑：{file_path}
+2025-02-15 22:36:29,674 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-02-15 22:36:29,674 - INFO - 作業完成！
+2025-02-15 22:36:59,231 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 22:37:48,858 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-15 22:37:48,923 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-15 22:37:48,923 - INFO - 作業成功完成！
+2025-02-15 23:37:13,622 - INFO - 作業開始
+2025-02-15 23:37:13,623 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 23:37:23,887 - INFO - 己存檔至路徑：{file_path}
+2025-02-15 23:37:23,887 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-02-15 23:37:23,887 - INFO - 作業完成！
+2025-02-15 23:38:17,742 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 23:38:44,558 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-15 23:38:44,621 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-15 23:38:44,621 - INFO - 作業成功完成！
+2025-02-15 23:39:57,382 - INFO - 作業開始
+2025-02-15 23:39:57,383 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 23:40:07,785 - INFO - 己存檔至路徑：{file_path}
+2025-02-15 23:40:07,786 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-02-15 23:40:07,786 - INFO - 作業完成！
+2025-02-15 23:42:10,495 - INFO - 作業開始
+2025-02-15 23:42:10,496 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 23:42:20,843 - INFO - 己存檔至路徑：{file_path}
+2025-02-15 23:42:20,843 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-02-15 23:42:20,843 - INFO - 作業完成！
+2025-02-15 23:43:14,575 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 23:43:48,281 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-15 23:43:48,350 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-15 23:43:48,350 - INFO - 作業成功完成！
+2025-02-15 23:53:27,354 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 00:02:51,944 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 00:07:02,062 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-16 00:07:02,124 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-16 00:07:02,124 - INFO - 作業成功完成！
