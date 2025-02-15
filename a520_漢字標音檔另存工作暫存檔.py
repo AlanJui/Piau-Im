@@ -86,7 +86,7 @@ if __name__ == "__main__":
         source_path = "output2"
         old_file_path = os.path.join(
             project_root,
-            "{0}".format(source_path), 
+            "{0}".format(source_path),
             f"{input_file}")
         wb = xw.Book(f"{old_file_path}")
     else:
@@ -104,8 +104,10 @@ if __name__ == "__main__":
         sys.exit(2)
 
     # 將檔案存放路徑設為【專案根目錄】之下
+    dir_path = 'output'
     new_file_path = os.path.join(
         project_root,
+        f"{dir_path}",
         f"{output_file}"
     )
 

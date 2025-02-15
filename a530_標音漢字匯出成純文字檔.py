@@ -140,8 +140,10 @@ def process(wb):
         row += 4
 
     # 將所有漢字寫入文字檔
+    output_dir_path = wb.names['OUTPUT_PATH'].refers_to_range.value
     output_file = 'tmp.txt'
-    with open(output_file, 'w', encoding='utf-8') as f:
+    output_file_path = os.path.join(output_dir_path, output_file)
+    with open(output_file_path, 'w', encoding='utf-8') as f:
         f.write(han_ji_text)
     logging_process_step(f"已成功將漢字輸出至檔案：{output_file}")
 

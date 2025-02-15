@@ -7823,3 +7823,145 @@ KeyError: 'iin'
 2025-02-15 10:37:30,378 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《寒窯賦》.xlsx
 2025-02-15 10:37:30,378 - INFO - 製作【漢字標音】網頁己完成！
 2025-02-15 10:37:30,378 - INFO - 作業完成！
+2025-02-15 10:50:54,589 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 10:50:54,679 - INFO - 開始【處理作業】...
+2025-02-15 10:51:07,545 - INFO - 已成功將漢字輸出至檔案：tmp.txt
+2025-02-15 10:51:07,554 - INFO - 完成【處理作業】...
+2025-02-15 10:51:07,632 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-15 10:51:07,633 - INFO - 作業成功完成！
+2025-02-15 11:18:05,418 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 11:18:05,581 - INFO - 開始【處理作業】...
+2025-02-15 11:18:37,735 - INFO - 已成功將漢字輸出至檔案：tmp.txt
+2025-02-15 11:18:37,736 - INFO - 完成【處理作業】...
+2025-02-15 11:18:37,849 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-15 11:18:37,849 - INFO - 作業成功完成！
+2025-02-15 11:48:14,787 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 11:48:40,121 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-15 11:48:40,123 - INFO - 完成【處理作業】...
+2025-02-15 11:48:40,263 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-15 11:48:40,263 - INFO - 作業成功完成！
+2025-02-15 11:54:17,564 - INFO - 作業開始
+2025-02-15 11:54:17,565 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 11:54:30,927 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《定風波》.xlsx
+2025-02-15 11:54:30,927 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-15 11:54:30,927 - INFO - 作業完成！
+2025-02-15 12:00:05,297 - INFO - 作業開始
+2025-02-15 12:00:05,297 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 12:00:18,683 - INFO - 己存檔至路徑：{file_path}
+2025-02-15 12:00:18,683 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-02-15 12:00:18,683 - INFO - 作業完成！
+2025-02-15 12:01:13,732 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 12:01:35,824 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-15 12:01:35,825 - INFO - 完成【處理作業】...
+2025-02-15 12:01:35,894 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-15 12:01:35,895 - INFO - 作業成功完成！
+2025-02-15 13:29:03,264 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 13:30:29,533 - ERROR - 執行過程中發生未知錯誤: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147352565), None)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a300_手動更正漢字標音.py", line 567, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a300_手動更正漢字標音.py", line 526, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "C:\work\Piau-Im\a300_手動更正漢字標音.py", line 488, in update_han_ji_piau_im
+    update_by_jin_kang_piau_im(wb=wb,
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+                               sheet_name='人工標音字庫',
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+                               piau_im=piau_im,
+                               ^^^^^^^^^^^^^^^^
+                               piau_im_huat=piau_im_huat)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\a300_手動更正漢字標音.py", line 347, in update_by_jin_kang_piau_im
+    han_ji_piau_im = jin_kang_piau_im_cu_han_ji_piau_im(wb=wb,
+                        han_ji=han_ji_cell.value,
+                        jin_kang_piau_im=jin_kang_piau_im_cell.value,
+                        piau_im=piau_im,
+                        piau_im_huat=piau_im_huat)
+  File "C:\work\Piau-Im\a300_手動更正漢字標音.py", line 89, in jin_kang_piau_im_cu_han_ji_piau_im
+    jin_kang_piau_im_sheet = wb.sheets['人工標音字庫']  # 取得【人工標音字庫】工作表
+                             ~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 89, in __getitem__
+    return self(key)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 5218, in __call__
+    return Sheet(impl=self.impl(name_or_index))
+                      ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 943, in __call__
+    return Sheet(xl=self.xl(name_or_index))
+                    ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147352565), None)
+2025-02-15 13:30:29,625 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-15 13:32:06,080 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 13:33:20,247 - INFO - 作業開始
+2025-02-15 13:33:20,247 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 13:33:32,319 - INFO - 己存檔至路徑：{file_path}
+2025-02-15 13:33:32,319 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-02-15 13:33:32,319 - INFO - 作業完成！
+2025-02-15 15:42:20,715 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 15:42:20,798 - ERROR - 執行過程中發生未知錯誤: type object 'JiKhooDict' has no attribute 'create_ji_khoo_dict'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a300_手動更正漢字標音.py", line 601, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a300_手動更正漢字標音.py", line 560, in process
+    return_code = update_han_ji_piau_im(wb=wb)
+  File "C:\work\Piau-Im\a300_手動更正漢字標音.py", line 494, in update_han_ji_piau_im
+    khuat_ji_piau_ji_khoo = JiKhooDict.create_ji_khoo_dict(wb=wb, sheet_name=khuat_ji_piau_sheet_name)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'JiKhooDict' has no attribute 'create_ji_khoo_dict'
+2025-02-15 15:42:20,861 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-15 15:43:48,370 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 15:46:36,324 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 15:52:14,830 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 16:03:44,903 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 16:06:16,337 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-15 16:06:16,338 - INFO - 完成【處理作業】...
+2025-02-15 16:06:16,385 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-15 16:06:16,385 - INFO - 作業成功完成！
+2025-02-15 16:10:03,364 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 16:19:28,580 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 16:29:04,459 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 16:29:04,778 - ERROR - 執行過程中發生未知錯誤: update_by_khuat_ji_piau() got an unexpected keyword argument 'ji_khoo_dict'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a300_手動更正漢字標音.py", line 679, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a300_手動更正漢字標音.py", line 601, in process
+    update_by_khuat_ji_piau(wb=wb,
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+                            sheet_name=sheet_name,
+                            ^^^^^^^^^^^^^^^^^^^^^^
+                            ji_khoo_dict=khuat_ji_piau_ji_khoo,
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                            piau_im=piau_im,
+                            ^^^^^^^^^^^^^^^^
+                            piau_im_huat=piau_im_huat)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: update_by_khuat_ji_piau() got an unexpected keyword argument 'ji_khoo_dict'
+2025-02-15 16:29:04,833 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-15 16:31:41,567 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 16:31:41,936 - ERROR - 執行過程中發生未知錯誤: update_by_khuat_ji_piau() got an unexpected keyword argument 'ji_khoo_dict'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a300_手動更正漢字標音.py", line 679, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a300_手動更正漢字標音.py", line 601, in process
+    update_by_khuat_ji_piau(wb=wb,
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+                            sheet_name=sheet_name,
+                            ^^^^^^^^^^^^^^^^^^^^^^
+                            ji_khoo_dict=khuat_ji_piau_ji_khoo,
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                            piau_im=piau_im,
+                            ^^^^^^^^^^^^^^^^
+                            piau_im_huat=piau_im_huat)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: update_by_khuat_ji_piau() got an unexpected keyword argument 'ji_khoo_dict'
+2025-02-15 16:31:41,988 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-15 16:36:53,489 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 16:42:54,874 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-15 16:45:11,993 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-15 16:45:12,053 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-15 16:45:12,053 - INFO - 作業成功完成！

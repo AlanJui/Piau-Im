@@ -16,7 +16,7 @@
             "request": "launch",
             "program": "${file}",
             "args": [
-                "2"
+                "1"
                 // "2",
                 // "output7/《春曉》【文讀音】雅俗通＋方音符號.jsonc"
                 // "docs/《春曉》_閩拼調號.html"
@@ -105,7 +105,7 @@
             ]
         },
         {
-            "name": "a500-2_漢字庫工具",
+            "name": "a500-2 將【標音字庫】資料存入資料庫",
             "type": "debugpy",
             "request": "launch",
             "program": "a500_漢字庫工具.py",
