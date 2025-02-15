@@ -152,13 +152,14 @@ class JiKhooDict:
         """
         # 檢查漢字是否已存在於字典中
         if han_ji in self.ji_khoo_dict:
-            # 檢查該漢字是否確實存在於指定的座標中
-            if self._is_han_ji_at_coordinates(han_ji, coordinates):
-                # 如果漢字已存在且座標正確，使用 update_entry 更新
-                self.update_entry(han_ji, kenn_ziann_im_piau, coordinates)
-            else:
-                # 如果漢字存在但座標不正確，視為新增一筆資料
-                self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
+            self.update_entry(han_ji, kenn_ziann_im_piau, coordinates)
+            # # 檢查該漢字是否確實存在於指定的座標中
+            # if self._is_han_ji_at_coordinates(han_ji, coordinates):
+            #     # 如果漢字已存在且座標正確，使用 update_entry 更新
+            #     self.update_entry(han_ji, kenn_ziann_im_piau, coordinates)
+            # else:
+            #     # 如果漢字存在但座標不正確，視為新增一筆資料
+            #     self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
         else:
             # 如果漢字不存在，使用 add_entry 新增
             self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)

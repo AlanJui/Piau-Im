@@ -540,13 +540,3 @@ def find_project_root():
         if (parent / "pyproject.toml").exists() or (parent / "setup.py").exists():
             return parent
     return None  # 未找到專案根目錄
-
-# 可以正確區分空白字符和換行符，從而避免將 \n 誤判為空白
-def is_blank(x):
-    """轉成字串並去除頭尾空白，若空則回傳 None，但保留換行符 \n"""
-    if x is None:
-        return None
-    x_str = str(x)
-    if x_str.strip() == "" and x_str != "\n":  # 空白但不是換行符
-        return None
-    return x_str.strip() if x_str != "\n" else "\n"  # 保留換行符

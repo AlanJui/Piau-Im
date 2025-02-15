@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 from a200_查找及填入漢字標音 import ca_han_ji_thak_im
 
 # 載入自訂模組
-from mod_excel_access import clear_han_ji_kap_piau_im, reset_han_ji_cells
+from mod_excel_access import clear_han_ji_kap_piau_im, reset_han_ji_cells, strip_cell
 from mod_file_access import save_as_new_file
 
 # =========================================================================
@@ -88,48 +88,64 @@ def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
         # 設定起始及結束的【欄】位址（【D欄=4】到【R欄=18】）
         CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
         start_col = 4
-        end_col = start_col + CHARS_PER_ROW
+        end_col = start_col + CHARS_PER_ROW - 1
 
         index = 0  # 用來追蹤目前處理到的字元位置
         row = 5
 
         # 逐字處理字串
         while index < total_length:     # 使用 while 而非 for，確保處理完整個字串
+            if row >= end_row or index >= total_length: break
             # 設定當前作用儲存格，根據 `row` 和 `col` 動態選取
             sheet.range((row, 1)).select()
 
-            for col in range(start_col, end_col):  # 【D欄=4】到【R欄=18】
-                # 取得當前字元
-                char = v3_value[index]
-                # 換行：列數加一，並從下一列的第一個字元開始
-                char = '=CHAR(10)' if char == '\n' else char
-                # 將字元填入對應的儲存格
-                sheet.range((row, col)).value = char
-                # 顯示當前字元
-                col_name = xw.utils.col_name(col)
-                print(f"({row} 列, {col_name} 欄)：{char}")
+            # for col in range(start_col, end_col):  # 【D欄=4】到【R欄=18】
+            col = start_col
+            while col <= end_col:
+                # 若已處理完整個字串，則跳出迴圈
+                if index == total_length:  break
                 # 重置儲存格：文字顏色（黑色）及填滿色彩（無填滿）
                 sheet.range((row-2, col), (row+1, col)).color = None
                 sheet.range((row, col)).font.color = (0, 0, 0)
                 sheet.range((row-2, col)).font.color = (255, 0, 0)
                 sheet.range((row-1, col)).font.color = 0x3399FF # 藍色
                 sheet.range((row+1, col)).font.color = 0x009900 # 綠色
-                # 更新索引，處理下一個字元
-                index += 1
-                if index == total_length:  # 若已處理完整個字串，則跳出迴圈
-                    break
-                if char == '=CHAR(10)':  # 若為換行字元，則跳出迴圈
-                    break
 
-            # 每處理 15 個字元後，換到下一行
-            if col == end_col - 1: print("\n")
-            if row >= end_row or index >= total_length: break
-            row += 4
+                # 取得當前字元
+                cell_value = strip_cell(v3_value[index])
+
+                # 若為空白字元，則跳過
+                if cell_value == None:
+                    print(f"空白字元，跳過")
+                    index += 1
+                    continue
+                # 換行：列數加一，並從下一列的第一個字元開始
+                if cell_value == '\n':
+                    sheet.range((row, col)).value = '=CHAR(10)'
+                    print(f"({row} 列, {xw.utils.col_name(col)} 欄)：《換行》")
+                    index += 1
+                    row += ROWS_PER_LINE
+                    break
+                else:
+                    # 將字元填入對應的儲存格
+                    sheet.range((row, col)).value = cell_value
+                    # 顯示當前字元
+                    col_name = xw.utils.col_name(col)
+                    print(f"({row} 列, {col_name} 欄)：{cell_value}")
+
+                    # 更新索引，處理下一個字元
+                    index += 1
+                    # 若已處理完整列(如：15字)，則換到下一列
+                    col += 1
+                    if col > end_col:
+                        print("\n")
+                        col = start_col
+                        row += ROWS_PER_LINE
 
     # 保存 Excel 檔案
     # sheet.range((row, start_col)).value = "φ"
-    if col + 1  < end_col:
-        last_col = col + 1
+    if col <= end_col:
+        last_col = col
     else:
         last_col = start_col
     sheet.range((row, last_col)).value = "φ"

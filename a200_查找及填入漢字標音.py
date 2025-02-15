@@ -115,16 +115,22 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
 
     # 建置自動及人工漢字標音字庫工作表：（1）【標音字庫】；（2）【人工標音字】；（3）【缺字表】
     piau_im_sheet_name = '標音字庫'
-    delete_sheet_by_name(wb=wb, sheet_name=piau_im_sheet_name)
-    piau_im_ji_khoo = JiKhooDict()
+    # delete_sheet_by_name(wb=wb, sheet_name=piau_im_sheet_name)
+    piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+                            wb=wb,
+                            sheet_name=piau_im_sheet_name)
 
     jin_kang_piau_im_sheet_name='人工標音字庫'
-    delete_sheet_by_name(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
-    jin_kang_piau_im_ji_khoo = JiKhooDict()
+    # delete_sheet_by_name(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+                                    wb=wb,
+                                    sheet_name=jin_kang_piau_im_sheet_name)
 
     khuat_ji_piau_name = '缺字表'
-    delete_sheet_by_name(wb=wb, sheet_name=khuat_ji_piau_name)
-    khuat_ji_piau_ji_khoo = JiKhooDict()
+    # delete_sheet_by_name(wb=wb, sheet_name=khuat_ji_piau_name)
+    khuat_ji_piau_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+                                wb=wb,
+                                sheet_name=khuat_ji_piau_name)
 
     # 指定【漢字注音】工作表為【作用工作表】
     sheet = wb.sheets[sheet_name]
