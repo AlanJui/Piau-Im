@@ -542,7 +542,7 @@ def find_project_root():
     return None  # 未找到專案根目錄
 
 # 可以正確區分空白字符和換行符，從而避免將 \n 誤判為空白
-def s(x):
+def is_blank(x):
     """轉成字串並去除頭尾空白，若空則回傳 None，但保留換行符 \n"""
     if x is None:
         return None

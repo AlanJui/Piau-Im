@@ -11,6 +11,7 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 # 載入自訂模組
+from mod_excel_access import get_value_by_name
 from mod_file_access import save_as_new_file
 from mod_標音 import split_tai_gi_im_piau  # 分解台語音標
 from mod_標音 import PiauIm, is_punctuation
@@ -51,26 +52,22 @@ EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 # =========================================================================
 # 程式區域函式
 # =========================================================================
-def create_html_file(output_path, content, title='您的標題'):
-    template = f"""
-<!DOCTYPE html>
+def create_html_file(output_path, content, title='您的標題', head_extra=""):
+    template = f"""<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <title>{title}</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="assets/styles/styles.css">
+    {head_extra}
+    <link rel="stylesheet" href="assets/styles/styles2.css">
 </head>
 <body>
     {content}
 </body>
 </html>
     """
-
-    # Write to HTML file
     with open(output_path, 'w', encoding='utf-8') as file:
         file.write(template)
-
-    # 顯示輸出之網頁檔案及其存放目錄路徑
     print(f"\n輸出網頁檔案：{output_path}")
 
 
@@ -93,7 +90,7 @@ def put_picture(wb, source_sheet_name):
     )
     # 寫入文章附圖
     # html_str = f"《{title}》【{source_sheet_name}】\n"
-    html_str = f"{title}\n"
+    html_str = f"<p class='title'>{title}</p>\n"
     # html_str += div_tag % (title, image_url)
     html_str += (div_tag % (title, image_url) + "\n")
     return html_str
@@ -119,6 +116,7 @@ def tng_uann_piau_im(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
         return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
     elif zu_im_huat == "台語音標":
         siann = piau_im.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+        siann = siann if siann != "ø" else ""
         un = piau_im.Un_Bu_Dict[un_bu]["台語音標"]
         return f"{siann}{un}{tiau_ho}"
     return ""
@@ -269,8 +267,6 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
     # 輸出 <div> tag
     #--------------------------------------------------------------------------
     div_class = zu_im_huat_list[Web_Page_Style][0]
-    # html_str = f"<div class='{div_class}'><p>\n"
-    # write_buffer += html_str
     write_buffer += f"<div class='{div_class}'><p>\n"
 
     #--------------------------------------------------------------------------
@@ -288,8 +284,14 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
     start_col = 4
     end_col = start_col + CHARS_PER_ROW
 
+    # 取得【網頁每列字數】設定值：數值 0 表【預設】
+    total_chars_per_line = wb.names['網頁每列字數'].refers_to_range.value
+    if total_chars_per_line == 0:
+        total_chars_per_line = None
+
     # 逐列處理作業
     end_of_file = False
+    char_count = 0  # 用於計算每列的字數
     for row in range(start_row, end_row, ROWS_PER_LINE):
         Empty_Cells_Total = 0
         # 設定【作用儲存格】為列首
@@ -320,7 +322,6 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
             else:                       # 讀到：漢字或標點符號
                 # 當 han_ji 是標點符號時，不需要注音
                 if is_punctuation(cell_value):
-                    # ruby_tag = f"  {cell_value}\n"
                     ruby_tag = f"  <span>{cell_value}</span>\n"
                     msg = f"({row}, {xw.utils.col_name(col)}) = {cell_value}"
                 else:
@@ -338,6 +339,14 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
                     )
                     msg =f"({row}, {xw.utils.col_name(col)}) = {han_ji} [{tai_gi_im_piau}]"
 
+                # 檢查是否需要插入換行標籤
+                if total_chars_per_line and total_chars_per_line != "預設":
+                    char_count += 1
+                    if char_count >= total_chars_per_line:
+                        ruby_tag += "</br>\n"
+                        char_count = 0  # 重置字數計數器
+                        print('《--- 插入【人工斷行】--》')
+
             write_buffer += ruby_tag
             print(msg)
 
@@ -347,6 +356,10 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
         # 讀到【換行標示】，需要結束目前【段落】，並開始新的【段落】
         if cell_value == '\n':
             write_buffer += f"</p><p>\n"
+            # 檢查是否需要插入換行標籤
+            if total_chars_per_line and total_chars_per_line != "預設":
+                char_count = 0  # 重置字數計數器
+
 
         line += 1
         if end_of_file or line > TOTAL_LINES: break
@@ -354,7 +367,6 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
     # 返回網頁輸出暫存區
     write_buffer += "</p></div>"
     return write_buffer
-
 
 def tng_sing_bang_iah(wb, sheet_name='漢字注音', han_ji_source='V3', page_type='含頁頭'):
     global source_sheet  # 宣告 source_sheet 為全域變數
@@ -386,8 +398,22 @@ def tng_sing_bang_iah(wb, sheet_name='漢字注音', han_ji_source='V3', page_ty
     web_page_title = f"{title}"
 
     # 確保 output 子目錄存在
+    # output_file = f"{title}_{han_ji_piau_im_huat}.html"
+    hue_im = wb.names['語音類型'].refers_to_range.value
+    piau_im_huat = wb.names['標音方法'].refers_to_range.value
+    piau_im_format = wb.names['標音方式'].refers_to_range.value
+    if piau_im_format == "無預設":
+        im_piau = piau_im_huat
+    elif piau_im_format == "上":
+        im_piau = wb.names['上邊標音'].refers_to_range.value
+    elif piau_im_format == "右":
+        im_piau = wb.names['右邊標音'].refers_to_range.value
+    else:
+        im_piau = f"{wb.names['上邊標音'].refers_to_range.value}＋{wb.names['右邊標音'].refers_to_range.value}"
+    # 檢查檔案名稱是否已包含副檔名
+    output_file = f"《{title}》【{hue_im}】{im_piau}.html"
+
     output_dir = 'docs'
-    output_file = f"{title}_{han_ji_piau_im_huat}.html"
     output_path = os.path.join(output_dir, output_file)
 
     # 開啟文字檔，準備寫入網頁內容
@@ -413,8 +439,17 @@ def tng_sing_bang_iah(wb, sheet_name='漢字注音', han_ji_source='V3', page_ty
             piau_im= piau_im
         )
 
-        # 輸出到網頁檔案
-        create_html_file(output_path, html_content, web_page_title)
+        # 取得 env 工作表的設定值並組合 meta 標籤字串
+        env_keys = ["FILE_NAME", "TITLE", "IMAGE_URL", "OUTPUT_PATH", "章節序號",
+                    "顯示注音輸入", "每頁總列數", "每列總字數", "語音類型",
+                    "漢字庫", "標音方法", "網頁格式", "標音方式", "上邊標音", "右邊標音", "網頁每列字數"]
+        head_extra = ""
+        for key in env_keys:
+            value = get_value_by_name(wb, key)
+            head_extra += f'    <meta name="{key}" content="{value}" />\n'
+
+        # 輸出到網頁檔案：建立 HTML 檔案時傳入 head_extra
+        create_html_file(output_path, html_content, web_page_title, head_extra)
         print(f"【漢字注音】網頁製作完畢！")
 
     return 0
@@ -447,7 +482,6 @@ def process(wb):
     else:
         logging_process_step(f"儲存檔案至路徑：{file_path}")
         return EXIT_CODE_SUCCESS    # 作業正常結束
-
 
 # =============================================================================
 # 程式主流程
