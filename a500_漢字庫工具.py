@@ -157,7 +157,8 @@ def update_pronunciation_in_excel(wb):
     han_ji = active_cell.value
 
     # 計算人工標音儲存格位置
-    artificial_row = row - 2
+    # artificial_row = row - 2
+    artificial_row = row
     artificial_pronounce = wb.sheets[sheet_name].cells(artificial_row, col).value
 
     # 檢查標音字庫是否有此漢字，並更新校正音標
@@ -190,6 +191,9 @@ def update_database_from_excel(wb):
     """
     使用【標音字庫】工作表的資料更新 SQLite 資料庫（轉換台羅拼音 → 台語音標）。
 
+    - 如果資料庫中已存在相同的【漢字】和【台羅音標】，則更新【常用度】欄位。
+    - 如果資料庫中不存在相同的【漢字】和【台羅音標】，則新增一筆資料。
+
     :param wb: Excel 活頁簿物件
     :return: EXIT_CODE_SUCCESS or EXIT_CODE_FAILURE
     """
@@ -197,7 +201,7 @@ def update_database_from_excel(wb):
     sheet = wb.sheets[sheet_name]
     data = sheet.range("A2").expand("table").value
     hue_im = wb.names['語音類型'].refers_to_range.value
-    siong_iong_too = 0.8  if hue_im == "文讀音" else 0.6
+    siong_iong_too = 0.8 if hue_im == "文讀音" else 0.6  # 根據語音類型設定常用度
 
     if not isinstance(data[0], list):
         data = [data]
@@ -207,24 +211,38 @@ def update_database_from_excel(wb):
 
     try:
         for idx, row_data in enumerate(data, start=2):  # Excel A2 起始，Python Index 2
-            han_ji = row_data[0]  # A 欄
+            han_ji = row_data[0]  # A 欄 (漢字)
             tai_gi_im_piau = row_data[3]  # D 欄 (校正音標)
 
+            # 跳過無效資料
             if not han_ji or not tai_gi_im_piau or tai_gi_im_piau == "N/A":
-                continue  # 跳過無效資料
+                continue
 
             # 將 Excel 工作表存放的【台語音標（TLPA）】，改成資料庫保存的【台羅拼音（TL）】
             tai_lo_im_piau = convert_tlpa_to_tl(tai_gi_im_piau)
 
-            # **在 INSERT 之前，顯示 Console 訊息**
-            print(f"📌 寫入資料庫: 漢字='{han_ji}', 台語音標='{tai_gi_im_piau}', 轉換後 台羅拼音='{tai_lo_im_piau}', Excel 第 {idx} 列")
-
+            # 檢查資料庫中是否已存在相同的【漢字】和【台羅音標】
             cursor.execute("""
-                INSERT INTO 漢字庫 (漢字, 台羅音標, 常用度, 更新時間)
-                VALUES (?, ?, ?, CURRENT_TIMESTAMP)
-                ON CONFLICT(漢字, 台羅音標) DO UPDATE
-                SET 更新時間=CURRENT_TIMESTAMP;
-            """, (han_ji, tai_lo_im_piau, siong_iong_too))  # 常用度固定為 0.8
+                SELECT 1 FROM 漢字庫
+                WHERE 漢字 = ? AND 台羅音標 = ?
+            """, (han_ji, tai_lo_im_piau))
+            exists = cursor.fetchone()
+
+            if exists:
+                # 如果存在，更新【常用度】欄位
+                cursor.execute("""
+                    UPDATE 漢字庫
+                    SET 常用度 = ?, 更新時間 = CURRENT_TIMESTAMP
+                    WHERE 漢字 = ? AND 台羅音標 = ?
+                """, (siong_iong_too, han_ji, tai_lo_im_piau))
+                print(f"🔄 更新資料庫: 漢字='{han_ji}', 台羅音標='{tai_lo_im_piau}', 常用度={siong_iong_too}, Excel 第 {idx} 列")
+            else:
+                # 如果不存在，新增一筆資料
+                cursor.execute("""
+                    INSERT INTO 漢字庫 (漢字, 台羅音標, 常用度, 更新時間)
+                    VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+                """, (han_ji, tai_lo_im_piau, siong_iong_too))
+                print(f"📌 新增資料庫: 漢字='{han_ji}', 台羅音標='{tai_lo_im_piau}', 常用度={siong_iong_too}, Excel 第 {idx} 列")
 
         conn.commit()
         print("✅ 資料庫更新完成！")
@@ -236,6 +254,56 @@ def update_database_from_excel(wb):
 
     finally:
         conn.close()
+# def update_database_from_excel(wb):
+#     """
+#     使用【標音字庫】工作表的資料更新 SQLite 資料庫（轉換台羅拼音 → 台語音標）。
+
+#     :param wb: Excel 活頁簿物件
+#     :return: EXIT_CODE_SUCCESS or EXIT_CODE_FAILURE
+#     """
+#     sheet_name = "標音字庫"
+#     sheet = wb.sheets[sheet_name]
+#     data = sheet.range("A2").expand("table").value
+#     hue_im = wb.names['語音類型'].refers_to_range.value
+#     siong_iong_too = 0.8  if hue_im == "文讀音" else 0.6
+
+#     if not isinstance(data[0], list):
+#         data = [data]
+
+#     conn = sqlite3.connect(DB_HO_LOK_UE)
+#     cursor = conn.cursor()
+
+#     try:
+#         for idx, row_data in enumerate(data, start=2):  # Excel A2 起始，Python Index 2
+#             han_ji = row_data[0]  # A 欄
+#             tai_gi_im_piau = row_data[3]  # D 欄 (校正音標)
+
+#             if not han_ji or not tai_gi_im_piau or tai_gi_im_piau == "N/A":
+#                 continue  # 跳過無效資料
+
+#             # 將 Excel 工作表存放的【台語音標（TLPA）】，改成資料庫保存的【台羅拼音（TL）】
+#             tai_lo_im_piau = convert_tlpa_to_tl(tai_gi_im_piau)
+
+#             # **在 INSERT 之前，顯示 Console 訊息**
+#             print(f"📌 寫入資料庫: 漢字='{han_ji}', 常用度={siong_iong_too}, 台語音標='{tai_gi_im_piau}', 轉換後 台羅拼音='{tai_lo_im_piau}', Excel 第 {idx} 列")
+
+#             cursor.execute("""
+#                 INSERT INTO 漢字庫 (漢字, 台羅音標, 常用度, 更新時間)
+#                 VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+#                 ON CONFLICT(漢字, 台羅音標) DO UPDATE
+#                 SET 更新時間=CURRENT_TIMESTAMP;
+#             """, (han_ji, tai_lo_im_piau, siong_iong_too))  # 常用度固定為 0.8
+
+#         conn.commit()
+#         print("✅ 資料庫更新完成！")
+#         return EXIT_CODE_SUCCESS
+
+#     except Exception as e:
+#         print(f"❌ 資料庫更新失敗: {e}")
+#         return EXIT_CODE_FAILURE
+
+#     finally:
+#         conn.close()
 
 
 # =========================================================================

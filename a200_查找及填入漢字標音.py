@@ -246,7 +246,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                             )
                             han_ji_u_piau_im = True
 
-                        # 將人工輸入的【台語音標】置入【破音字庫】Dict
+                        # 將人工輸入的【台語音標】置入【人工標音字庫】Dict
                         jin_kang_piau_im_ji_khoo.add_or_update_entry(
                             han_ji=han_ji,
                             tai_gi_im_piau=tai_gi_im_piau,

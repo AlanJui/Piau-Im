@@ -1,5 +1,42 @@
+import logging
+import os
+import sys
+
+import xlwings as xw
+from dotenv import load_dotenv
+
 from mod_excel_access import ensure_sheet_exists, get_total_rows_in_sheet
 
+# =========================================================================
+# 載入環境變數
+# =========================================================================
+load_dotenv()
+
+DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
+DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
+
+# =========================================================================
+# 設定日誌
+# =========================================================================
+logging.basicConfig(
+    filename='process_log.txt',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
+def logging_process_step(msg):
+    print(msg)
+    logging.info(msg)
+
+# =========================================================================
+# 常數定義
+# =========================================================================
+EXIT_CODE_SUCCESS = 0  # 成功
+EXIT_CODE_FAILURE = 1
+EXIT_CODE_NO_FILE = 1  # 無法找到檔案
+EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
+EXIT_CODE_PROCESS_FAILURE = 3  # 過程失敗
+EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 
 class JiKhooDict:
     def __init__(self):
@@ -7,6 +44,21 @@ class JiKhooDict:
         初始化字典數據結構。
         """
         self.ji_khoo_dict = {}
+
+
+    def _is_han_ji_at_coordinates(self, han_ji: str, coordinates: tuple) -> bool:
+        """
+        檢查指定座標中是否確實存放了該漢字。
+
+        :param han_ji: 漢字。
+        :param coordinates: 座標 (row, col)。
+        :return: 如果座標中的漢字與輸入的漢字一致，回傳 True；否則回傳 False。
+        """
+        # 從字典中獲取該漢字的座標列表
+        if han_ji in self.ji_khoo_dict:
+            existing_coordinates = self.ji_khoo_dict[han_ji][3]  # 座標列表在字典中的索引為 3
+            return coordinates in existing_coordinates
+        return False
 
 
     def items(self):
@@ -34,36 +86,79 @@ class JiKhooDict:
             raise ValueError(f"漢字 '{han_ji}' 已存在，請使用 update_entry 方法來更新資料。")
 
 
-    def update_entry(self, han_ji: str, coordinates: tuple):
+    # def update_entry(self, han_ji: str, kenn_ziann_im_piau: str, coordinates: tuple):
+    #     """
+    #     使用【漢字】為【總數】欄加一，並新增一個座標。
+
+    #     :param han_ji: 漢字。
+    #     :param coordinates: 新的座標 (row, col)。
+    #     """
+    #     if han_ji in self.ji_khoo_dict:
+    #         # 增加總數
+    #         self.ji_khoo_dict[han_ji][0] += 1
+    #         # 更新校正音標
+    #         self.ji_khoo_dict[han_ji][2] = kenn_ziann_im_piau
+    #         # 增加新的座標
+    #         self.ji_khoo_dict[han_ji][3].append(coordinates)
+    #     else:
+    #         raise ValueError(f"漢字 '{han_ji}' 不存在，請先使用 add_entry 方法新增資料。")
+    def update_entry(self, han_ji: str, kenn_ziann_im_piau: str, coordinates: tuple):
         """
         使用【漢字】為【總數】欄加一，並新增一個座標。
 
         :param han_ji: 漢字。
+        :param kenn_ziann_im_piau: 校正音標。
         :param coordinates: 新的座標 (row, col)。
         """
         if han_ji in self.ji_khoo_dict:
             # 增加總數
             self.ji_khoo_dict[han_ji][0] += 1
+            # 更新校正音標（如果提供）
+            if kenn_ziann_im_piau:
+                self.ji_khoo_dict[han_ji][2] = kenn_ziann_im_piau
             # 增加新的座標
             self.ji_khoo_dict[han_ji][3].append(coordinates)
         else:
             raise ValueError(f"漢字 '{han_ji}' 不存在，請先使用 add_entry 方法新增資料。")
 
+    # def add_or_update_entry(self, han_ji: str, tai_gi_im_piau: str, kenn_ziann_im_piau: str, coordinates: tuple):
+    #     """
+    #     新增或更新一筆【漢字】的資料。
 
+    #     - 如果漢字已存在，將更新總數並新增座標。
+    #     - 如果漢字不存在，將新建一筆資料。
+
+    #     :param han_ji: 漢字。
+    #     :param tai_gi_im_piau: 台語音標。
+    #     :param coordinates: 漢字在【漢字注音】工作表中的座標 (row, col)。
+    #     """
+    #     if han_ji in self.ji_khoo_dict:
+    #         # 如果漢字已存在，使用 update_entry 更新
+    #         self.update_entry(han_ji, kenn_ziann_im_piau, coordinates)
+    #     else:
+    #         # 如果漢字不存在，使用 add_entry 新增
+    #         self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
     def add_or_update_entry(self, han_ji: str, tai_gi_im_piau: str, kenn_ziann_im_piau: str, coordinates: tuple):
         """
         新增或更新一筆【漢字】的資料。
 
-        - 如果漢字已存在，將更新總數並新增座標。
-        - 如果漢字不存在，將新建一筆資料。
+        - 如果漢字已存在，並且在指定的座標中確實存放了該漢字，則更新總數並新增座標。
+        - 如果漢字不存在，則新建一筆資料。
 
         :param han_ji: 漢字。
         :param tai_gi_im_piau: 台語音標。
+        :param kenn_ziann_im_piau: 校正音標。
         :param coordinates: 漢字在【漢字注音】工作表中的座標 (row, col)。
         """
+        # 檢查漢字是否已存在於字典中
         if han_ji in self.ji_khoo_dict:
-            # 如果漢字已存在，使用 update_entry 更新
-            self.update_entry(han_ji, coordinates)
+            # 檢查該漢字是否確實存在於指定的座標中
+            if self._is_han_ji_at_coordinates(han_ji, coordinates):
+                # 如果漢字已存在且座標正確，使用 update_entry 更新
+                self.update_entry(han_ji, kenn_ziann_im_piau, coordinates)
+            else:
+                # 如果漢字存在但座標不正確，視為新增一筆資料
+                self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
         else:
             # 如果漢字不存在，使用 add_entry 新增
             self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
@@ -151,7 +246,10 @@ class JiKhooDict:
         # 寫入字典內容
         data = []
         for han_ji, (total_count, tai_gi_im_piau, kenn_ziann_im_piau, coordinates) in self.ji_khoo_dict.items():
-            coords_str = "; ".join([f"({row}, {col})" for row, col in coordinates])
+            if total_count >= 2:
+                coords_str = "; ".join([f"({row}, {col})" for row, col in coordinates])
+            else:
+                coords_str = f"{coordinates[0]}"
             data.append([han_ji, total_count, tai_gi_im_piau, kenn_ziann_im_piau, coords_str])
 
         sheet.range("A2").value = data
@@ -223,20 +321,17 @@ class JiKhooDict:
 
 
     @classmethod
-    def create_ji_khoo_dict(cls, wb, sheet_name: str):
+    def create_ji_khoo_dict_from_sheet(cls, wb, sheet_name: str):
         """
-        自 Excel 工作表建立 JiKhooDict 字典。
+        根據輸入的【工作表名稱】，建立並回傳一個 JiKhooDict 物件。
 
         :param wb: Excel 活頁簿物件。
         :param sheet_name: 工作表名稱。
         :return: JiKhooDict 物件。
         """
+        # 確保工作表存在
         if not ensure_sheet_exists(wb, sheet_name):
             raise ValueError(f"無法找到工作表 '{sheet_name}'。")
-        # total_rows = get_total_rows_in_sheet(wb, sheet_name)
-        # if total_rows <= 1:
-        #     # raise ValueError(f"工作表 '{sheet_name}' 為空。")
-        #     return None
 
         try:
             sheet = wb.sheets[sheet_name]
@@ -502,12 +597,53 @@ def ut07():
     wb.save("漢字庫.xlsx")
     wb.close()
 
-# 單元測試
-if __name__ == "__main__":
+def ut08(wb):
+    # 從工作表建立 JiKhooDict
+    # ji_khoo = JiKhooDict.create_from_sheet(wb, sheet_name)
+    sheet_name = "人工標音字庫"
+    ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(wb, sheet_name)
+
+    try:
+        # 新增或更新資料
+        ji_khoo.add_or_update_entry("行", "kiann5", "N/A", (9, 7))  # 新增一筆資料
+        ji_khoo.add_or_update_entry("行", "kiann5", "N/A", (21, 18))  # 新增一筆資料
+
+        # 寫入 Excel 工作表
+        ji_khoo.write_to_excel_sheet(wb, sheet_name)
+    except ValueError as e:
+        print(f"❌ {e}")
+        return EXIT_CODE_FAILURE
+
+    return EXIT_CODE_SUCCESS
+
+def process(wb):
     # ut01()
     # ut02()
     # ut03()
     # ut04()
     # ut05()
     # ut06()
-    ut07()
+    # ut07()
+    return ut08(wb)
+
+
+# 單元測試
+def main():
+    try:
+        wb = xw.apps.active.books.active
+    except Exception as e:
+        print("找不到作用中的 Excel 工作簿！", e)
+        print("❌ 執行程式前請打開 Excel 檔案！")
+        return 1
+
+    return_code = process(wb)
+    if return_code == EXIT_CODE_SUCCESS:
+        print("✅ 通過單元測試！")
+        return EXIT_CODE_SUCCESS
+    else:
+        print("❌ 單元測試失敗！")
+        return EXIT_CODE_FAILURE
+
+if __name__ == "__main__":
+    exit_code = main()
+    sys.exit(exit_code)
