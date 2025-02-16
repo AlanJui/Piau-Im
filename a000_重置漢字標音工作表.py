@@ -11,7 +11,7 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 # 載入自訂模組
-from mod_excel_access import reset_han_ji_cells
+from mod_excel_access import reset_han_ji_cells, reset_han_ji_piau_im_sheet
 from mod_file_access import save_as_new_file
 
 # =========================================================================
@@ -72,13 +72,26 @@ def process(wb):
     #--------------------------------------------------------------------------
     # 將待注音的【漢字儲存格】，文字顏色重設為黑色（自動 RGB: 0, 0, 0）；填漢顏色重設為無填滿
     #--------------------------------------------------------------------------
-    logging_process_step(f"開始【漢字注音】工作表的清空、重置！")
-    if reset_han_ji_cells(wb) == EXIT_CODE_SUCCESS:
-        logging_process_step(f"完成【漢字注音】工作表的清空、重置！")
-        return EXIT_CODE_SUCCESS
-    else:
-        logging_process_step(f"【漢字注音】工作表的清空、重置失敗！")
-        return EXIT_CODE_PROCESS_FAILURE
+    reset_han_ji_piau_im_sheet(wb)
+
+    #--------------------------------------------------------------------------
+    # 儲存檔案
+    #--------------------------------------------------------------------------
+    try:
+        file_path = save_as_new_file(wb=wb, input_file_name='_working')
+    except Exception as e:
+        logging.error("儲存檔案失敗！")
+        return EXIT_CODE_PROCESS_FAILURE    # 作業異當終止：無法儲存檔案
+
+    #--------------------------------------------------------------------------
+    # 清空【env】工作表之設定
+    #--------------------------------------------------------------------------
+    sheet = wb.sheets['env']   # 選擇工作表
+    sheet.activate()               # 將「env」工作表設為作用中工作表
+    end_of_row = 20
+    sheet.range('C2:C{end_of_row}').clear_contents()     # 清除 C3:R{end_of_row} 範圍的內容
+
+    return EXIT_CODE_SUCCESS
 
 
 # =============================================================================
@@ -135,13 +148,7 @@ def main():
     # =========================================================================
     # 結束作業
     # =========================================================================
-    file_path = save_as_new_file(wb=wb, input_file_name='_working')
-    if not file_path:
-        logging.error("儲存檔案失敗！")
-        return EXIT_CODE_PROCESS_FAILURE    # 作業異當終止：無法儲存檔案
-    else:
-        logging_process_step(f"儲存檔案至路徑：{file_path}")
-        return EXIT_CODE_SUCCESS    # 作業正常結束
+    return EXIT_CODE_SUCCESS    # 作業正常結束
 
 
 if __name__ == "__main__":

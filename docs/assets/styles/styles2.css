@@ -12,11 +12,94 @@
 
 body {
     width: 90%;
+    max-width: 1080px;
+    /* 限制最大寬度 */
     margin: 0 auto;
+    padding: 0 20px;
+    /* 增加左右留白 */
     color: #333;
-    font-size: 300%;
-    line-height: 1.6;
+    font-size: 2.5em;
+    line-height: 1.8;
     font-family: 'Noto Sans TC', sans-serif !important;
+}
+
+div.Siang_Pai {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+    /* 增加左右留白 */
+}
+
+rt {
+    font-family: BopomofoRuby;
+    color: darkcyan;
+    font-size: 45%;
+    letter-spacing: 0;
+}
+
+rtc {
+    font-family: BopomofoRuby;
+    color: #B94B6A;
+    font-size: 30%;
+    line-height: normal;
+    ruby-merge: merge;
+
+    -webkit-ruby-position: inter-character;
+    ruby-position: inter-character;
+    text-orientation: upright;
+    letter-spacing: 3px;
+
+    -webkitg_writing-mode: vertical-lr;
+    writing-mode: vertical-lr;
+    vertical-align: middle;
+    display: inline;
+}
+
+/* rt {
+    font-family: BopomofoRuby;
+    color: darkcyan;
+    font-size: 45%;
+    letter-spacing: 0;
+}
+
+rtc {
+    font-family: BopomofoRuby;
+    color: #B94B6A;
+    font-size: 30%;
+    line-height: normal;
+    ruby-merge: merge;
+    -webkit-ruby-position: inter-character;
+    ruby-position: inter-character;
+    text-orientation: upright;
+    letter-spacing: 3px;
+    -webkit-writing-mode: vertical-lr;
+    writing-mode: vertical-lr;
+    vertical-align: middle;
+    display: inline;
+} */
+
+.title {
+    font-family: 'Noto Sans TC', serif;
+    color: #0066cc;
+    font-size: 1.2em;
+    letter-spacing: 2px;
+    text-align: center;
+    margin-bottom: 20px;
+    /* 增加標題與內容之間的間距 */
+}
+
+.author {
+    font-size: 0.7em;
+    letter-spacing: 2px;
+    text-align: right;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    /* 圖片居中顯示 */
 }
 
 main {
@@ -76,20 +159,6 @@ header h1 {
     font-weight: bold;
 }
 
-.title {
-    font-family: 'Noto Sans TC', serif;
-    color: #0066cc;
-    font-size: 1.0em;
-    letter-spacing: 2px;
-    text-align: center;
-}
-
-.author {
-    font-size: 0.7em;
-    letter-spacing: 2px;
-    text-align: right;
-}
-
 ul {
     display: none;
     list-style-type: none;
@@ -130,32 +199,6 @@ button {
 
 button:focus {
     outline: none;
-}
-
-rt {
-    /* font-family: Arial; */
-    font-family: BopomofoRuby;
-    color: darkcyan;
-    font-size: 45%;
-    letter-spacing: 0;
-}
-
-rtc {
-    font-family: BopomofoRuby;
-    color: #B94B6A;
-    font-size: 30%;
-    line-height: normal;
-    ruby-merge: merge;
-
-    -webkit-ruby-position: inter-character;
-    ruby-position: inter-character;
-    text-orientation: upright;
-    letter-spacing: 3px;
-
-    -webkitg_writing-mode: vertical-lr;
-    writing-mode: vertical-lr;
-    vertical-align: middle;
-    display: inline;
 }
 
 /* 方音符號 */

@@ -61,6 +61,161 @@ DEFAULT_SHEET_LIST = [
 # 程式用函式
 # =========================================================================
 
+def reset_han_ji_piau_im_sheet(wb, sheet_name="漢字注音"):
+    sheet = wb.sheets[sheet_name]  # 選擇【漢字注音】工作表
+    sheet = wb.sheets['漢字注音']  # 選擇【漢字注音】工作表
+
+    # 從 env 工作表中獲取每頁總列數和每列總字數
+    env_sheet = wb.sheets['env']
+    total_lines = int(env_sheet.range('每頁總列數').value)
+    chars_per_row = int(env_sheet.range('每列總字數').value)
+
+    # 設定起始及結束的【列】位址
+    ROWS_PER_LINE = 4
+    start_row = 5
+    end_row = start_row + (total_lines * ROWS_PER_LINE)
+
+    # 設定起始及結束的【欄】位址
+    start_col = 4  # D 欄
+    end_col = start_col + chars_per_row - 1  # 因為欄位是從 1 開始計數
+
+    # 定義儲存格格式
+    def set_range_format(range_obj, font_name, font_size, font_color, fill_color=None):
+        range_obj.api.Font.Name = font_name
+        range_obj.api.Font.Size = font_size
+        range_obj.api.Font.Color = font_color
+        if fill_color:
+            range_obj.api.Interior.Color = fill_color
+        else:
+            range_obj.api.Interior.Pattern = xw.constants.Pattern.xlPatternNone  # 無填滿
+
+    # 清除內容並設置格式
+    for row in range(start_row, end_row + 1, ROWS_PER_LINE):
+        line = ((row - start_row) // ROWS_PER_LINE) + 1
+        print(f'重置第 {line} 行，共 {ROWS_PER_LINE} 列之儲存格內容！')
+        # 人工標音
+        range_人工標音 = sheet.range((row - 2, start_col), (row - 2, end_col))
+        range_人工標音.value = None
+        set_range_format(range_人工標音, font_name='Arial', font_size=24, font_color=0xFF0000, fill_color=0xFFFFCC)  # 紅色
+
+        # 台語音標
+        range_台語音標 = sheet.range((row - 1, start_col), (row - 1, end_col))
+        range_台語音標.value = None
+        set_range_format(range_台語音標, font_name='Sitka Text Semibold', font_size=24, font_color=0xFF9933)  # 橙色
+
+        # 漢字
+        range_漢字 = sheet.range((row, start_col), (row, end_col))
+        range_漢字.value = None
+        set_range_format(range_漢字, font_name='吳守禮細明台語注音', font_size=48, font_color=0x000000)  # 黑色
+
+        # 漢字標音
+        range_漢字標音 = sheet.range((row + 1, start_col), (row + 1, end_col))
+        range_漢字標音.value = None
+        set_range_format(range_漢字標音, font_name='芫荽 0.94', font_size=26, font_color=0x009900)  # 綠色
+
+
+#--------------------------------------------------------------------------
+# 將待注音的【漢字儲存格】，文字顏色重設為黑色（自動 RGB: 0, 0, 0）；填漢顏色重設為無填滿
+#--------------------------------------------------------------------------
+# def reset_han_ji_cells(wb, sheet_name='漢字注音'):
+#     # 選擇指定的工作表
+#     sheet = wb.sheets[sheet_name]
+#     sheet.activate()  # 將「漢字注音」工作表設為作用中工作表
+#     sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
+
+#     # 每頁最多處理的列數
+#     TOTAL_ROWS = int(wb.names['每頁總列數'].refers_to_range.value)  # 從名稱【每頁總列數】取得值
+#     # 每列最多處理的字數
+#     CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)  # 從名稱【每列總字數】取得值
+
+#     # 設定起始及結束的欄位（【D欄=4】到【R欄=18】）
+#     start_col = 4
+#     end_col = start_col + CHARS_PER_ROW
+
+#     # 從第 5 列開始，每隔 4 列進行重置（5, 9, 13, ...）
+#     for row in range(5, 5 + 4 * TOTAL_ROWS, 4):
+#         for col in range(start_col, end_col):
+#             cell = sheet.range((row, col))
+#             # 將文字顏色設為【自動】（黑色）
+#             cell.font.color = (0, 0, 0)  # 設定為黑色
+#             # 將儲存格的填滿色彩設為【無填滿】
+#             cell.color = None
+
+#     print("漢字儲存格已成功重置，文字顏色設為自動，填滿色彩設為無填滿。")
+
+#     return 0
+
+
+# 重置【漢字注音】工作表
+def reset_han_ji_cells(wb, sheet_name="漢字注音"):
+    """
+    重置【漢字注音】工作表的儲存格內容
+    wb: Excel 活頁簿物件
+    sheet_name: 工作表名稱
+    """
+    # 選擇工作表
+    sheet = wb.sheets[sheet_name]
+    sheet.activate()  # 將工作表設為作用中工作表
+    sheet.range('A1').select()  # 將 A1 儲存格設為作用儲存格
+
+    # 從 env 工作表中獲取每頁總列數和每列總字數
+    env_sheet = wb.sheets['env']
+    total_lines = int(env_sheet.range('每頁總列數').value)
+    chars_per_row = int(env_sheet.range('每列總字數').value)
+
+    # 設定起始及結束的【列】位址
+    ROWS_PER_LINE = 4
+    start_row = 5
+    end_row = start_row + (total_lines * ROWS_PER_LINE)
+
+    # 設定起始及結束的【欄】位址
+    start_col = 4  # D 欄
+    end_col = start_col + chars_per_row - 1  # 因為欄位是從 1 開始計數
+
+    # 定義儲存格格式
+    def set_range_format(range_obj, font_name, font_size, font_color, fill_color=None):
+        range_obj.api.Font.Name = font_name
+        range_obj.api.Font.Size = font_size
+        range_obj.api.Font.Color = font_color
+        if fill_color:
+            range_obj.api.Interior.Color = fill_color
+        else:
+            range_obj.api.Interior.Pattern = xw.constants.Pattern.xlPatternNone  # 無填滿
+
+    # 清除內容並設置格式
+    for row in range(start_row, end_row + 1, ROWS_PER_LINE):
+        line = ((row - start_row) // ROWS_PER_LINE) + 1
+        print(f'重置第 {line} 行，共 {ROWS_PER_LINE} 列之儲存格內容！')
+
+# 依工作表名稱，刪除工作表
+def delete_sheet_by_name(wb, sheet_name: str, show_msg: bool=False):
+    """
+    刪除指定名稱的工作表
+    wb: Excel 活頁簿物件
+    sheet_name: 要刪除的工作表名稱
+    """
+    try:
+        # 檢查工作表是否存在
+        if sheet_name in [sheet.name for sheet in wb.sheets]:
+            sheet = wb.sheets[sheet_name]
+            sheet.delete()  # 刪除工作表
+            if show_msg: print(f"已成功刪除工作表：{sheet_name}")
+        else:
+            if show_msg: print(f"無法刪除，工作表 {sheet_name} 不存在")
+    except Exception as e:
+        if show_msg: print(f"刪除工作表時發生錯誤：{e}")
+
+
+# 使用 List 刪除工作表
+def delete_sheets_by_list(wb, sheet_list: list, show_msg: bool=False):
+    """
+    刪除指定名稱的工作表
+    wb: Excel 活頁簿物件
+    sheet_list: 要刪除的工作表名稱清單
+    """
+    for sheet_name in sheet_list:
+        delete_sheet_by_name(wb, sheet_name, show_msg)
+
 # 可以正確區分空白字符和換行符，從而避免將 \n 誤判為空白
 def strip_cell(x):
     """轉成字串並去除頭尾空白，若空則回傳 None，但保留換行符 \n"""
@@ -293,24 +448,6 @@ def ensure_sheet_exists(wb, sheet_name):
         print(f"⚠️ 無法確保工作表存在: {e}")
         return None  # 若發生錯誤，返回 None
 
-def delete_sheet_by_name(wb, sheet_name: str, show_msg: bool=False):
-    """
-    刪除指定名稱的工作表
-    wb: Excel 活頁簿物件
-    sheet_name: 要刪除的工作表名稱
-    """
-    try:
-        # 檢查工作表是否存在
-        if sheet_name in [sheet.name for sheet in wb.sheets]:
-            sheet = wb.sheets[sheet_name]
-            sheet.delete()  # 刪除工作表
-            if show_msg: print(f"已成功刪除工作表：{sheet_name}")
-        else:
-            if show_msg: print(f"無法刪除，工作表 {sheet_name} 不存在")
-    except Exception as e:
-        if show_msg: print(f"刪除工作表時發生錯誤：{e}")
-
-
 def get_value_by_name(wb, name):
     try:
         if name in wb.names:
@@ -508,38 +645,6 @@ def get_total_rows_in_sheet(wb, sheet_name):
         total_rows = 0
 
     return total_rows
-
-
-#--------------------------------------------------------------------------
-# 將待注音的【漢字儲存格】，文字顏色重設為黑色（自動 RGB: 0, 0, 0）；填漢顏色重設為無填滿
-#--------------------------------------------------------------------------
-def reset_han_ji_cells(wb, sheet_name='漢字注音'):
-    # 選擇指定的工作表
-    sheet = wb.sheets[sheet_name]
-    sheet.activate()  # 將「漢字注音」工作表設為作用中工作表
-    sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
-
-    # 每頁最多處理的列數
-    TOTAL_ROWS = int(wb.names['每頁總列數'].refers_to_range.value)  # 從名稱【每頁總列數】取得值
-    # 每列最多處理的字數
-    CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)  # 從名稱【每列總字數】取得值
-
-    # 設定起始及結束的欄位（【D欄=4】到【R欄=18】）
-    start_col = 4
-    end_col = start_col + CHARS_PER_ROW
-
-    # 從第 5 列開始，每隔 4 列進行重置（5, 9, 13, ...）
-    for row in range(5, 5 + 4 * TOTAL_ROWS, 4):
-        for col in range(start_col, end_col):
-            cell = sheet.range((row, col))
-            # 將文字顏色設為【自動】（黑色）
-            cell.font.color = (0, 0, 0)  # 設定為黑色
-            # 將儲存格的填滿色彩設為【無填滿】
-            cell.color = None
-
-    print("漢字儲存格已成功重置，文字顏色設為自動，填滿色彩設為無填滿。")
-
-    return 0
 
 
 #--------------------------------------------------------------------------

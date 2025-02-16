@@ -8468,3 +8468,295 @@ pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, Non
 2025-02-16 00:07:02,062 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
 2025-02-16 00:07:02,124 - INFO - 釋放 Excel 資源，處理完成。
 2025-02-16 00:07:02,124 - INFO - 作業成功完成！
+2025-02-16 10:43:11,301 - INFO - 作業開始
+2025-02-16 10:43:11,302 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 10:43:23,683 - INFO - 開始【漢字注音】工作表的清空、重置！
+2025-02-16 10:43:36,995 - INFO - 完成【漢字注音】工作表的清空、重置！
+2025-02-16 10:43:36,995 - INFO - a700_重罝漢字標音工作表.py 程式已執行完畢！
+2025-02-16 10:43:37,154 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】_working.xlsx
+2025-02-16 10:47:32,660 - INFO - 作業開始
+2025-02-16 10:47:32,661 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 10:47:32,695 - INFO - 【待注音漢字】總字數為: 111
+2025-02-16 10:47:32,829 - INFO - 儲存格內容清除完畢
+2025-02-16 10:47:46,956 - INFO - 儲存格格式重設完畢
+2025-02-16 10:47:55,719 - INFO - 待注音漢字已填入【漢字注音】工作表
+2025-02-16 10:47:55,763 - INFO - 開始【漢字標音作業】 - 河洛話: <class 'type'>
+2025-02-16 10:47:58,258 - ERROR - 作業過程發生未知的異常錯誤: ' sio'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a100_作業中活頁檔填入漢字.py", line 265, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a100_作業中活頁檔填入漢字.py", line 206, in process
+    ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3',
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      ue_im_lui_piat=ue_im_lui_piat,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      han_ji_khoo=han_ji_khoo, db_name=db_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      module_name=module_name,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+                      function_name='han_ji_ca_piau_im')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\a200_查找及填入漢字標音.py", line 203, in ca_han_ji_thak_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\a200_查找及填入漢字標音.py", line 91, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
+        piau_im,
+    ...<3 lines>...
+        tiau_ho
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 310, in siann_un_tiau_tng_piau_im
+    return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 781, in BP_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: ' sio'
+2025-02-16 10:47:58,271 - INFO - a701_作業中活頁簿填入漢字.py 程式已執行完畢！
+2025-02-16 10:49:16,744 - INFO - 作業開始
+2025-02-16 10:49:16,744 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 10:49:18,173 - ERROR - 作業過程發生未知的異常錯誤: ' sio'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a200_查找及填入漢字標音.py", line 354, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a200_查找及填入漢字標音.py", line 269, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name     # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\a200_查找及填入漢字標音.py", line 203, in ca_han_ji_thak_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\a200_查找及填入漢字標音.py", line 91, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(
+        piau_im,
+    ...<3 lines>...
+        tiau_ho
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 310, in siann_un_tiau_tng_piau_im
+    return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 781, in BP_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: ' sio'
+2025-02-16 10:49:18,175 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-02-16 10:50:00,008 - INFO - 作業開始
+2025-02-16 10:50:00,009 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 10:50:06,059 - INFO - 己存檔至路徑：{file_path}
+2025-02-16 10:50:06,060 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-02-16 10:50:06,060 - INFO - 作業完成！
+2025-02-16 11:12:32,470 - INFO - 作業開始
+2025-02-16 11:12:32,471 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 11:12:45,887 - INFO - 己存檔至路徑：{file_path}
+2025-02-16 11:12:45,887 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-02-16 11:12:45,887 - INFO - 作業完成！
+2025-02-16 11:15:48,841 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 11:16:10,595 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-16 11:16:10,665 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-16 11:16:10,665 - INFO - 作業成功完成！
+2025-02-16 11:21:16,875 - INFO - 作業開始
+2025-02-16 11:21:16,876 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 11:21:17,285 - ERROR - 無法找到作用中的 Excel 工作簿: No such file: 'example.xlsx'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a009_使用範本建新檔.py", line 114, in main
+    wb = xw.Book("example.xlsx")
+  File "C:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 933, in __init__
+    impl = app.books.open(
+           ~~~~~~~~~~~~~~^
+        fullname,
+        ^^^^^^^^^
+    ...<13 lines>...
+        corrupt_load,
+        ^^^^^^^^^^^^^
+    ).impl
+    ^
+  File "C:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 5157, in open
+    raise FileNotFoundError("No such file: '%s'" % fullname)
+FileNotFoundError: No such file: 'example.xlsx'
+2025-02-16 11:21:59,679 - INFO - 作業開始
+2025-02-16 11:21:59,679 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 11:21:59,957 - INFO - 開始【漢字注音】工作表的清空、重置！
+2025-02-16 11:22:13,204 - INFO - 完成【漢字注音】工作表的清空、重置！
+2025-02-16 11:22:13,205 - INFO - a700_重罝漢字標音工作表.py 程式已執行完畢！
+2025-02-16 11:22:13,390 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】_working.xlsx
+2025-02-16 11:25:28,001 - INFO - 作業開始
+2025-02-16 11:25:28,002 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 11:25:28,791 - INFO - 開始【漢字注音】工作表的清空、重置！
+2025-02-16 11:25:42,004 - INFO - 完成【漢字注音】工作表的清空、重置！
+2025-02-16 11:25:42,005 - INFO - a700_重罝漢字標音工作表.py 程式已執行完畢！
+2025-02-16 11:25:42,188 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】_working.xlsx
+2025-02-16 11:26:46,435 - INFO - 作業開始
+2025-02-16 11:26:46,435 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 11:26:56,226 - INFO - 己存檔至路徑：{file_path}
+2025-02-16 11:26:56,226 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-02-16 11:26:56,226 - INFO - 作業完成！
+2025-02-16 11:28:00,109 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 11:28:18,088 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-16 11:28:18,164 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-16 11:28:18,165 - INFO - 作業成功完成！
+2025-02-16 11:28:52,650 - INFO - 作業開始
+2025-02-16 11:28:52,651 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 11:29:04,516 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《望春風》.xlsx
+2025-02-16 11:29:04,517 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-16 11:29:04,517 - INFO - 作業完成！
+2025-02-16 11:37:26,655 - INFO - 作業開始
+2025-02-16 11:37:26,655 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 11:37:36,728 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《望春風》.xlsx
+2025-02-16 11:37:36,728 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-16 11:37:36,728 - INFO - 作業完成！
+2025-02-16 12:19:20,936 - INFO - 作業開始
+2025-02-16 12:19:20,936 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 12:20:27,002 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《寒窯賦》.xlsx
+2025-02-16 12:20:27,003 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-16 12:20:27,003 - INFO - 作業完成！
+2025-02-16 13:07:10,585 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 13:07:58,177 - ERROR - 執行過程中發生未知錯誤: 漢字 '骼' 已存在，請使用 update_entry 方法來更新資料。
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a300_手動更正漢字標音.py", line 589, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a300_手動更正漢字標音.py", line 527, in process
+    update_by_jin_kang_piau_im(wb=wb,
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+                               sheet_name='人工標音字庫',
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               piau_im=piau_im,
+                               ^^^^^^^^^^^^^^^^
+                               piau_im_huat=piau_im_huat)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\a300_手動更正漢字標音.py", line 391, in update_by_jin_kang_piau_im
+    piau_im_ji_khoo.update_kau_ziang_im_piau(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        coordinates=(row, col)
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_字庫.py", line 163, in update_kau_ziang_im_piau
+    self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_字庫.py", line 86, in add_entry
+    raise ValueError(f"漢字 '{han_ji}' 已存在，請使用 update_entry 方法來更新資料。")
+ValueError: 漢字 '骼' 已存在，請使用 update_entry 方法來更新資料。
+2025-02-16 13:07:58,282 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-16 13:10:23,943 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 13:13:31,591 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 13:23:56,493 - INFO - 作業開始
+2025-02-16 13:23:56,494 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 13:24:49,864 - ERROR - 作業過程發生未知的異常錯誤: name 'jin_kang_piau_im_ji_khoo' is not defined
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 354, in main
+    result_code = process(wb)
+  File "a200_查找及填入漢字標音.py", line 280, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name     # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a200_查找及填入漢字標音.py", line 235, in ca_han_ji_thak_im
+    jin_kang_piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'jin_kang_piau_im_ji_khoo' is not defined
+2025-02-16 13:24:49,871 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-02-16 13:26:01,916 - INFO - 作業開始
+2025-02-16 13:26:01,918 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 13:26:55,107 - INFO - 己存檔至路徑：{file_path}
+2025-02-16 13:26:55,107 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-02-16 13:26:55,107 - INFO - 作業完成！
+2025-02-16 13:40:12,060 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 13:43:13,181 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-16 13:43:13,233 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-16 13:43:13,233 - INFO - 作業成功完成！
+2025-02-16 13:47:01,731 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 13:48:25,155 - ERROR - 執行過程中發生未知錯誤: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 599, in main
+    result_code = process(wb)
+  File "a300_手動更正漢字標音.py", line 524, in process
+    update_by_khuat_ji_piau(wb=wb,
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+                            sheet_name=sheet_name,
+                            ^^^^^^^^^^^^^^^^^^^^^^
+                            piau_im=piau_im,
+                            ^^^^^^^^^^^^^^^^
+                            piau_im_huat=piau_im_huat)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a300_手動更正漢字標音.py", line 189, in update_by_khuat_ji_piau
+    han_ji_piau_im_sheet.range((row, col)).select()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2815, in select
+    self.impl.select()
+    ~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1500, in select
+    return self.xl.Select()
+           ~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject <unknown>>", line 2, in Select
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+2025-02-16 13:48:25,231 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-16 13:48:43,390 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 14:15:49,588 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-16 14:15:49,652 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-16 14:15:49,653 - INFO - 作業成功完成！
+2025-02-16 14:17:10,245 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 14:18:11,064 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 14:28:08,102 - INFO - 完成【作業程序】：更新漢字標音並同步【標音字庫】內容...
+2025-02-16 14:28:08,170 - INFO - 釋放 Excel 資源，處理完成。
+2025-02-16 14:28:08,171 - INFO - 作業成功完成！
+2025-02-16 15:34:46,949 - INFO - 作業開始
+2025-02-16 15:34:46,949 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 15:35:49,336 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《寒窯賦》.xlsx
+2025-02-16 15:35:49,336 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-16 15:35:49,336 - INFO - 作業完成！
+2025-02-16 17:17:48,004 - INFO - 作業開始
+2025-02-16 17:17:48,005 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 17:18:30,470 - ERROR - 作業過程發生未知的異常錯誤: unsupported operand type(s) for *: 'NoneType' and 'int'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a000_重置漢字標音工作表.py", line 132, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a000_重置漢字標音工作表.py", line 70, in process
+    end_of_rows = int((total_rows * cells_per_row ) + 2)
+                       ~~~~~~~~~~~^~~~~~~~~~~~~~~
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'
+2025-02-16 17:18:30,474 - INFO - a700_重罝漢字標音工作表.py 程式已執行完畢！
+2025-02-16 17:25:10,038 - INFO - 作業開始
+2025-02-16 17:25:10,040 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 17:25:27,102 - INFO - 開始【漢字注音】工作表的清空、重置！
+2025-02-16 17:25:46,277 - INFO - 完成【漢字注音】工作表的清空、重置！
+2025-02-16 17:25:51,903 - INFO - a700_重罝漢字標音工作表.py 程式已執行完畢！
+2025-02-16 17:33:11,384 - INFO - 作業開始
+2025-02-16 17:33:11,385 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 17:33:11,727 - INFO - 開始【漢字注音】工作表的清空、重置！
+2025-02-16 17:33:30,445 - INFO - 完成【漢字注音】工作表的清空、重置！
+2025-02-16 17:33:30,714 - INFO - 作業異常終止！
+2025-02-16 17:33:30,714 - INFO - a700_重罝漢字標音工作表.py 程式已執行完畢！
