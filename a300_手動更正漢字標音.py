@@ -163,13 +163,16 @@ def update_by_khuat_ji_piau(wb, sheet_name: str, piau_im: PiauIm, piau_im_huat: 
     """
     try:
         # 確保工作表存在
-        han_ji_piau_im_sheet_name = '漢字注音'
-        ensure_sheet_exists(wb, han_ji_piau_im_sheet_name)
-        han_ji_piau_im_sheet = wb.sheets[han_ji_piau_im_sheet_name]
+        piau_im_ji_khoo_sheet_name = '漢字注音'
+        ensure_sheet_exists(wb, piau_im_ji_khoo_sheet_name)
+        han_ji_piau_im_sheet = wb.sheets[piau_im_ji_khoo_sheet_name]
 
         # 依【工作表】內容建立【字庫字典】
         khuat_ji_piau_sheet_name = '缺字表'
         ji_khoo_dict = JiKhooDict.create_ji_khoo_dict_from_sheet(wb=wb, sheet_name=khuat_ji_piau_sheet_name)
+
+        piau_im_ji_khoo_sheet_name = '標音字庫'
+        piau_im_ji_khoo_dict = JiKhooDict.create_ji_khoo_dict_from_sheet(wb=wb, sheet_name=piau_im_ji_khoo_sheet_name)
     except Exception as e:
         raise ValueError(f"無法找到或建立工作表 '{sheet_name}'：{e}")
 
@@ -209,6 +212,13 @@ def update_by_khuat_ji_piau(wb, sheet_name: str, piau_im: PiauIm, piau_im_huat: 
                     piau_im_huat=piau_im_huat,
                     tai_gi_im_piau=original_tai_gi
                 )
+                # 將【缺字表】已填入【台語音標】之資料，回填【標音字庫】工作表，補登紀錄
+                piau_im_ji_khoo_dict.add_or_update_entry(
+                    han_ji=han_ji,
+                    tai_gi_im_piau=han_ji_piau_im_cell.value,
+                    kenn_ziann_im_piau='N/A',
+                    coordinates=(row, col)
+                )
                 # 減少剩餘更新次數，並同步回缺字表
                 total_count -= 1
                 # 每寫入一次，total_count 減 1
@@ -226,6 +236,7 @@ def update_by_khuat_ji_piau(wb, sheet_name: str, piau_im: PiauIm, piau_im_huat: 
     # 將【缺字表】字典保存之資料，回填【缺字表】工作表
     # write_ji_khoo_dict_to_sheet(wb=wb, sheet_name=sheet_name, ji_khoo_dict=ji_khoo_dict)
     ji_khoo_dict.write_to_excel_sheet(wb=wb, sheet_name=khuat_ji_piau_sheet_name)
+    piau_im_ji_khoo_dict.write_to_excel_sheet(wb=wb, sheet_name=piau_im_ji_khoo_sheet_name)
     # 顯示【漢字注音】工作表
     han_ji_piau_im_sheet.activate()
     han_ji_piau_im_sheet.range('A1').select()
