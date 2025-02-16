@@ -5,10 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: Python File",
+            "name": "Python 偵錯: 目前檔案",
             "type": "debugpy",
             "request": "launch",
-            "program": "${file}"
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python 偵錯: 帶引數的目前檔案",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": "${command:pickArgs}"
         },
         {
             "name": "Python Debugger: with Args",
@@ -23,27 +32,6 @@
                 // "output7/【河洛文讀注音-閩拼調號】《春曉》.txt"
                 // "output7/tmp.txt"
             ]
-        },
-        {
-            "name": "a000",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "mod_字庫.py",
-            "console": "integratedTerminal",
-        },
-        {
-            "name": "mod_excel",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "mod_excel_access.py",
-            "console": "integratedTerminal",
-        },
-        {
-            "name": "csv01_更新漢字表資料",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "csv01_更新【漢字表】資料.py",
-            "console": "integratedTerminal",
         },
         {
             "name": "a000_重置漢字標音工作表",
@@ -74,24 +62,10 @@
             "console": "integratedTerminal",
         },
         {
-            "name": "a310_人工標音更正漢字自動標音",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a310_人工標音更正漢字自動標音.py",
-            "console": "integratedTerminal",
-        },
-        {
             "name": "a400_製作標音網頁",
             "type": "debugpy",
             "request": "launch",
             "program": "a400_製作標音網頁.py",
-            "console": "integratedTerminal",
-        },
-        {
-            "name": "a401_人工斷行製作網頁",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a401_人工斷行製作網頁.py",
             "console": "integratedTerminal",
         },
         {
@@ -115,10 +89,48 @@
             ]
         },
         {
-            "name": "a501_缺字表回填字典資料庫",
+            "name": "a500-1_缺字表回填字典資料庫",
             "type": "debugpy",
             "request": "launch",
-            "program": "a501_缺字表回填字典資料庫.py",
+            "program": "a500_漢字庫工具.py",
+            "console": "integratedTerminal",
+            "args": [
+                "1"
+            ]
+        },
+        {
+            "name": "mod_字庫",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "mod_字庫.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "mod_excel",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "mod_excel_access.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "mod_台羅音標漢字庫",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "mod_台羅音標漢字庫.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "mod_雅俗通",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "mod_雅俗通.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "csv01_更新漢字表資料",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "csv01_更新【漢字表】資料.py",
             "console": "integratedTerminal",
         },
         {
@@ -192,76 +204,6 @@
             "console": "integratedTerminal",
         },
         {
-            "name": "p711_TL_Tng_Zu_Im",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "p711_TL_Tng_Zu_Im.py",
-            "console": "integratedTerminal",
-        },
-        {
-            "name": "mod_台羅音標漢字庫",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "mod_台羅音標漢字庫.py",
-            "console": "integratedTerminal",
-        },
-        {
-            "name": "mod_雅俗通",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "mod_雅俗通.py",
-            "console": "integratedTerminal",
-        },
-        {
-            "name": "a710_清理原填入漢字及注音",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a710_清理原填入漢字及注音.py",
-            "console": "integratedTerminal",
-        },
-        {
-            "name": "a720_待注音漢字填入標音用方格",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a720_待注音漢字填入標音用方格.py",
-            "console": "integratedTerminal",
-        },
-        {
-            "name": "a700_Iong_Excel_Piau_Zu_Im",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a700_Iong_Excel_Piau_Zu_Im.py",
-            "console": "integratedTerminal",
-        },
-        {
-            "name": "a730_將漢字注音填入",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a730_將漢字注音填入.py",
-            "console": "integratedTerminal",
-        },
-        {
-            "name": "a731_自動為漢字查注音",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a731_自動為漢字查注音.py",
-            "console": "integratedTerminal",
-        },
-        {
-            "name": "a740_漢字注音轉網頁",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a740_漢字注音轉網頁.py",
-            "console": "integratedTerminal",
-        },
-        {
-            "name": "a740_漢字注音轉網頁",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a740_漢字注音轉網頁.py",
-            "console": "integratedTerminal",
-        },
-        {
             "name": "a750_漢字注音存檔",
             "type": "debugpy",
             "request": "launch",
@@ -287,21 +229,6 @@
             "request": "launch",
             "name": "Launch Piau-Im App",
             "url": "http://localhost:8000/docs/index.html",
-        },
-        {
-            "name": "Python 偵錯: 目前檔案",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Python 偵錯: 帶引數的目前檔案",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal",
-            "args": "${command:pickArgs}"
         },
         {
             "name": "a900_Batch_Process",
@@ -364,27 +291,6 @@
             ]
         },
         {
-            "name": "a000_建立注音檔案",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a000_建立注音檔案.py",
-            "console": "integratedTerminal",
-        },
-        {
-            "name": "a100_予我漢字注音",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a100_予我漢字注音.py",
-            "console": "integratedTerminal",
-        },
-        {
-            "name": "a200_漢字補注音",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a200_漢字補注音.py",
-            "console": "integratedTerminal",
-        },
-        {
             "name": "a310_廣韻_漢字查標音",
             "type": "debugpy",
             "request": "launch",
@@ -433,52 +339,6 @@
             "args": [
                 "-i",
                 "【河洛話注音】周易．大過卦"
-                // "Piau-Tsu-Im.xlsx"
-            ]
-        },
-        // {
-        //     "name": "a500_予我廣韻標音 ouput2",
-        //     "type": "debugpy",
-        //     "request": "launch",
-        //     "program": "a500_予我廣韻標音.py",
-        //     "console": "integratedTerminal",
-        //     "args": [
-        //         "-d",
-        //         "output2",
-        //         "-i",
-        //         "【河洛話注音】上有力量的每日祈禱文"
-        //     ]
-        // },
-        {
-            "name": "a510_用廣韻為漢字標音",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a510_用廣韻為漢字標音.py",
-            "console": "integratedTerminal",
-            "args": [
-                "-i",
-                "【河洛話注音】丘陵歌．孔子.xlsx"
-                // "Piau-Tsu-Im.xlsx"
-                // "【河洛話注音】最有力量的每日祈禱文"
-            ]
-        },
-        {
-            "name": "a520_製作注音網頁",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a520_製作注音網頁.py",
-            "console": "integratedTerminal",
-            "args": "${command:pickArgs}"
-        },
-        {
-            "name": "a520_製作注音網頁 (自動提供輸入)",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a520_製作注音網頁.py",
-            "console": "integratedTerminal",
-            "args": [
-                // "-i",
-                // "【河洛話注音】京口北固亭懷古"
                 // "Piau-Tsu-Im.xlsx"
             ]
         },

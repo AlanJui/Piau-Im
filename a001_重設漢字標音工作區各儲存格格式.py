@@ -1,4 +1,3 @@
-
 # =========================================================================
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
@@ -12,12 +11,7 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 # 載入自訂模組
-from mod_file_access import (
-    copy_excel_sheet,
-    reset_han_ji_piau_im_cells,
-    save_as_new_file,
-)
-from p704_漢字以十五音標注音 import han_ji_piau_im
+from mod_excel_access import set_range_format
 
 # =========================================================================
 # 載入環境變數
@@ -55,47 +49,67 @@ EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 # 作業程序
 # =========================================================================
 def process(wb):
-    # (0) 取得專案根目錄。
-    # 使用已打開且處於作用中的 Excel 工作簿
-    try:
-        wb = xw.apps.active.books.active
-    except Exception as e:
-        print(f"發生錯誤: {e}")
-        print("無法找到作用中的 Excel 工作簿")
-        sys.exit(2)
+    sheet = wb.sheets['漢字注音']  # 選擇【漢字注音】工作表
 
-    # 獲取活頁簿的完整檔案路徑
-    file_path = wb.fullname
-    print(f"完整檔案路徑: {file_path}")
+    # 從 env 工作表中獲取每頁總列數和每列總字數
+    env_sheet = wb.sheets['env']
+    total_lines = int(env_sheet.range('每頁總列數').value)
+    chars_per_row = int(env_sheet.range('每列總字數').value)
 
-    # 獲取活頁簿的檔案名稱（不包括路徑）
-    file_name = wb.name
-    print(f"檔案名稱: {file_name}")
+    # 設定起始及結束的【列】位址
+    ROWS_PER_LINE = 4
+    start_row = 5
+    end_row = start_row + (total_lines * ROWS_PER_LINE)
 
-    # 顯示「已輸入之拼音字母及注音符號」
-    named_range = wb.names['顯示注音輸入']
-    named_range.refers_to_range.value = True
+    # 設定起始及結束的【欄】位址
+    start_col = 4  # D 欄
+    end_col = start_col + chars_per_row - 1  # 因為欄位是從 1 開始計數
 
-    # (1) A720: 將 V3 儲存格內的漢字，逐個填入標音用方格。
-    sheet = wb.sheets['漢字注音']
-    sheet.activate()
-    sheet.range('A1').select()
+    # for row in range(start_row, end_row + 1, ROWS_PER_LINE):
+    # 清除內容並設置格式
+    row = start_row
+    for line in range(1, total_lines + 1):
+        # 判斷是否已經超過結束列位址，若是則跳出迴圈
+        if row > end_row: break
+        # 顯示目前處理【狀態】
+        print(f'重置 {line} 行：【漢字】儲存格位於【 {row} 列 】。')
 
-    # (2) 複製【漢字注音】工作表，並將【漢字注音】工作表已有漢字標清除（不含上列之【台語音標】）
-    piau_im_huat = wb.names['標音方法'].refers_to_range.value
+        # 人工標音
+        range_人工標音 = sheet.range((row - 2, start_col), (row - 2, end_col))
+        range_人工標音.value = None
+        set_range_format(range_人工標音,
+                         font_name='Arial',
+                         font_size=24,
+                         font_color=0xFF0000,   # 紅色
+                         fill_color=0xFFFFCC)
 
-    copy_excel_sheet(wb, '漢字注音', piau_im_huat)
-    reset_han_ji_piau_im_cells(wb, piau_im_huat)
+        # 台語音標
+        range_台語音標 = sheet.range((row - 1, start_col), (row - 1, end_col))
+        range_台語音標.value = None
+        set_range_format(range_台語音標,
+                         font_name='Sitka Text Semibold',
+                         font_size=24,
+                         font_color=0xFF9933)  # 橙色
 
-    # 呼叫 han_ji_piau_im 函數，並傳入動態參數
-    han_ji_piau_im(wb, sheet_name=piau_im_huat, cell='V3')
+        # 漢字
+        range_漢字 = sheet.range((row, start_col), (row, end_col))
+        range_漢字.value = None
+        set_range_format(range_漢字,
+                         font_name='吳守禮細明台語注音',
+                         font_size=48,
+                         font_color=0x000000)  # 黑色
 
-    # (3) A740: 將【漢字注音】工作表的內容，轉成 HTML 網頁檔案。
-    # tng_sing_bang_iah(wb, '漢字注音', 'V3')
+        # 漢字標音
+        range_漢字標音 = sheet.range((row + 1, start_col), (row + 1, end_col))
+        range_漢字標音.value = None
+        set_range_format(range_漢字標音,
+                         font_name='芫荽 0.94',
+                         font_size=26,
+                         font_color=0x009900)  # 綠色
 
-    # (4) A750: 將 Tai_Gi_Zu_Im_Bun.xlsx 檔案，依 env 工作表的設定，另存新檔到指定目錄。
-    save_as_new_file(wb=wb)
-
+        # 準備處理下一【行】
+        row += ROWS_PER_LINE
+    # 返回【作業正常結束代碼】
     return EXIT_CODE_SUCCESS
 
 # =============================================================================
@@ -140,31 +154,17 @@ def main():
             return result_code
 
     except Exception as e:
-        print(f"作業過程發生未知的異常錯誤: {e}")
+        print(f"程式發生異常問題: {e}")
         logging.error(f"作業過程發生未知的異常錯誤: {e}", exc_info=True)
         return EXIT_CODE_UNKNOWN_ERROR
-
-    finally:
-        if wb:
-            # xw.apps.active.quit()  # 確保 Excel 被釋放資源，避免開啟殘留
-            logging.info("a704_製作其它漢字標音.py 程式已執行完畢！")
 
     # =========================================================================
     # 結束作業
     # =========================================================================
-    file_path = save_as_new_file(wb=wb, input_file_name='_working')
-    if not file_path:
-        logging.error("儲存檔案失敗！")
-        return EXIT_CODE_PROCESS_FAILURE    # 作業異當終止：無法儲存檔案
-    else:
-        logging_process_step(f"儲存檔案至路徑：{file_path}")
-        return EXIT_CODE_SUCCESS    # 作業正常結束
+    print("程式執行完畢！")
+    return EXIT_CODE_SUCCESS    # 作業正常結束
 
 
 if __name__ == "__main__":
     exit_code = main()
-    if exit_code == EXIT_CODE_SUCCESS:
-        print("程式正常完成！")
-    else:
-        print(f"程式異常終止，錯誤代碼為: {exit_code}")
     sys.exit(exit_code)

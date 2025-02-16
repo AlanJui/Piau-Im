@@ -61,6 +61,18 @@ DEFAULT_SHEET_LIST = [
 # 程式用函式
 # =========================================================================
 
+# 定義儲存格格式
+def set_range_format(range_obj, font_name, font_size, font_color, fill_color=None):
+    range_obj.api.Font.Name = font_name
+    range_obj.api.Font.Size = font_size
+    range_obj.api.Font.Color = font_color
+    if fill_color:
+        range_obj.api.Interior.Color = fill_color
+    else:
+        range_obj.api.Interior.Pattern = xw.constants.Pattern.xlPatternNone  # 無填滿
+
+
+# 重置【漢字注音】工作表
 def reset_han_ji_piau_im_sheet(wb, sheet_name="漢字注音"):
     sheet = wb.sheets[sheet_name]  # 選擇【漢字注音】工作表
     sheet = wb.sheets['漢字注音']  # 選擇【漢字注音】工作表
