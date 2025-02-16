@@ -73,12 +73,15 @@ def process(wb):
     # 將待注音的【漢字儲存格】，文字顏色重設為黑色（自動 RGB: 0, 0, 0）；填漢顏色重設為無填滿
     #--------------------------------------------------------------------------
     reset_han_ji_piau_im_sheet(wb)
+    print("【漢字注音】工作表重置完成！")
 
     #--------------------------------------------------------------------------
     # 儲存檔案
     #--------------------------------------------------------------------------
     try:
-        file_path = save_as_new_file(wb=wb, input_file_name='_working')
+        file_name = '_working'
+        file_path = save_as_new_file(wb=wb, input_file_name=file_name)
+        print(f"原檔案改以檔案名稱：【{file_name}.xlsx】儲存！")
     except Exception as e:
         logging.error("儲存檔案失敗！")
         return EXIT_CODE_PROCESS_FAILURE    # 作業異當終止：無法儲存檔案
@@ -89,7 +92,8 @@ def process(wb):
     sheet = wb.sheets['env']   # 選擇工作表
     sheet.activate()               # 將「env」工作表設為作用中工作表
     end_of_row = 20
-    sheet.range('C2:C{end_of_row}').clear_contents()     # 清除 C3:R{end_of_row} 範圍的內容
+    sheet.range(f'C2:C{end_of_row}').clear_contents()     # 清除 C3:R{end_of_row} 範圍的內容
+    print("【env】工作表之所有選項亦被清除！")
 
     return EXIT_CODE_SUCCESS
 

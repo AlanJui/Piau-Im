@@ -8760,3 +8760,25 @@ TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'
 2025-02-16 17:33:30,445 - INFO - 完成【漢字注音】工作表的清空、重置！
 2025-02-16 17:33:30,714 - INFO - 作業異常終止！
 2025-02-16 17:33:30,714 - INFO - a700_重罝漢字標音工作表.py 程式已執行完畢！
+2025-02-16 17:47:20,612 - INFO - 作業開始
+2025-02-16 17:47:20,614 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 17:47:40,702 - ERROR - 作業過程發生未知的異常錯誤: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a000_重置漢字標音工作表.py", line 133, in main
+    result_code = process(wb)
+  File "a000_重置漢字標音工作表.py", line 92, in process
+    sheet.range('C2:C{end_of_row}').clear_contents()     # 清除 C3:R{end_of_row} 範圍的內容
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 1460, in range
+    return Range(impl=self.impl.range(cell1, cell2))
+                      ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1025, in range
+    xl1 = self.xl.Range(arg1)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject <unknown>>", line 2, in Range
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-02-16 17:47:40,707 - INFO - a700_重罝漢字標音工作表.py 程式已執行完畢！
+2025-02-16 17:48:33,679 - INFO - 作業開始
+2025-02-16 17:48:33,680 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-16 17:51:06,619 - INFO - a700_重罝漢字標音工作表.py 程式已執行完畢！
