@@ -18,8 +18,12 @@ def logging_process_step(msg):
     logging.info(msg)
 
 def logging_exc_error(msg, error):
-    print(f'{msg}，發生未知錯誤: {error}')
-    logging.error(f"作業過程異常，發生未知錯誤: {error}", exc_info=True)
+    print(f'{msg}，錯誤訊息: {error}')
+    logging.error(f"{msg}，錯誤訊息: {error}", exc_info=True)
+
+def logging_exception(msg, error):
+    print(f'{msg}，錯誤訊息: {error}')
+    logging.exception(f"{msg}，錯誤訊息: {error}", exc_info=True)
 
 def logging_warning(msg):
     print(msg)
