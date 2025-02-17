@@ -1,7 +1,6 @@
 # =========================================================================
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
-import logging
 import os
 import sys
 from pathlib import Path
@@ -10,9 +9,21 @@ from pathlib import Path
 import xlwings as xw
 from dotenv import load_dotenv
 
+from mod_excel_access import reset_cells_format_in_sheet
+
 # 載入自訂模組
-from mod_excel_access import reset_han_ji_cells, reset_han_ji_piau_im_sheet
 from mod_file_access import save_as_new_file
+
+# =========================================================================
+# 常數定義
+# =========================================================================
+# 定義 Exit Code
+EXIT_CODE_SUCCESS = 0  # 成功
+EXIT_CODE_NO_FILE = 1  # 無法找到檔案
+EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
+EXIT_CODE_SAVE_FAILURE = 3  # 儲存失敗
+EXIT_CODE_PROCESS_FAILURE = 10  # 過程失敗
+EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 
 # =========================================================================
 # 載入環境變數
@@ -26,30 +37,9 @@ DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
 # =========================================================================
 # 設定日誌
 # =========================================================================
-logging.basicConfig(
-    filename='process_log.txt',
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
+from mod_logging import init_logging, logging_exc_error, logging_process_step
 
-def logging_process_step(msg):
-    print(msg)
-    logging.info(msg)
-
-def logging_exc_error(msg, error):
-    print(f'{msg}，發生未知錯誤: {error}')
-    logging.error(f"作業過程異常，發生未知錯誤: {error}", exc_info=True)
-
-# =========================================================================
-# 常數定義
-# =========================================================================
-# 定義 Exit Code
-EXIT_CODE_SUCCESS = 0  # 成功
-EXIT_CODE_NO_FILE = 1  # 無法找到檔案
-EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
-EXIT_CODE_SAVE_FAILURE = 3  # 儲存失敗
-EXIT_CODE_PROCESS_FAILURE = 10  # 過程失敗
-EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
+init_logging()
 
 # =========================================================================
 # 作業程序
@@ -78,7 +68,7 @@ def process(wb):
     #--------------------------------------------------------------------------
     # 將待注音的【漢字儲存格】，文字顏色重設為黑色（自動 RGB: 0, 0, 0）；填漢顏色重設為無填滿
     #--------------------------------------------------------------------------
-    reset_han_ji_piau_im_sheet(wb)
+    reset_cells_format_in_sheet(wb)
     logging_process_step("【漢字注音】工作表，完成重置作業！")
 
     #--------------------------------------------------------------------------
@@ -170,15 +160,14 @@ def main():
             wb.save(file_path)
             print(f"以檔案名稱：【{file_name}.xlsx】，儲存於目錄路徑：{output_dir_path}！")
         except Exception as e:
-            logging_process_step(f"程式異常終止：{program_name}")
-            logging.error("儲存檔案失敗！")
+            logging_exc_error(msg="儲存檔案失敗！", error=e)
             return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
 
         # if wb:
         #     xw.apps.active.quit()  # 確保 Excel 被釋放資源，避免開啟殘留
 
     # =========================================================================
-    # 結束作業
+    # 結束程式
     # =========================================================================
     logging_process_step(f"《========== 程式終止執行：{program_name} ==========》")
     return EXIT_CODE_SUCCESS    # 作業正常結束

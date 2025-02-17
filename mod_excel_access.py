@@ -19,28 +19,6 @@ from dotenv import load_dotenv
 from mod_file_access import save_as_new_file
 
 # =========================================================================
-# 載入環境變數
-# =========================================================================
-load_dotenv()
-
-# 預設檔案名稱從環境變數讀取
-DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
-DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
-
-# =========================================================================
-# 設定日誌
-# =========================================================================
-logging.basicConfig(
-    filename='process_log.txt',
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
-
-def logging_process_step(msg):
-    print(msg)
-    logging.info(msg)
-
-# =========================================================================
 # 常數定義
 # =========================================================================
 # 定義 Exit Code
@@ -58,6 +36,22 @@ DEFAULT_SHEET_LIST = [
 ]
 
 # =========================================================================
+# 設定日誌
+# =========================================================================
+from mod_logging import init_logging, logging_exc_error, logging_process_step
+
+init_logging()
+
+# =========================================================================
+# 載入環境變數
+# =========================================================================
+load_dotenv()
+
+# 預設檔案名稱從環境變數讀取
+DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
+DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
+
+# =========================================================================
 # 程式用函式
 # =========================================================================
 
@@ -73,131 +67,91 @@ def set_range_format(range_obj, font_name, font_size, font_color, fill_color=Non
 
 
 # 重置【漢字注音】工作表
-def reset_han_ji_piau_im_sheet(wb, sheet_name="漢字注音"):
-    sheet = wb.sheets[sheet_name]  # 選擇【漢字注音】工作表
-    sheet = wb.sheets['漢字注音']  # 選擇【漢字注音】工作表
+def reset_cells_format_in_sheet(wb, sheet_name="漢字注音"):
+    try:
+        sheet = wb.sheets[sheet_name]  # 選擇【漢字注音】工作表
 
-    # 從 env 工作表中獲取每頁總列數和每列總字數
-    env_sheet = wb.sheets['env']
-    total_lines = int(env_sheet.range('每頁總列數').value)
-    chars_per_row = int(env_sheet.range('每列總字數').value)
+        # 從 env 工作表中獲取每頁總列數和每列總字數
+        env_sheet = wb.sheets['env']
+        total_lines = int(env_sheet.range('每頁總列數').value)
+        chars_per_row = int(env_sheet.range('每列總字數').value)
 
-    # 設定起始及結束的【列】位址
-    ROWS_PER_LINE = 4
-    start_row = 5
-    end_row = start_row + (total_lines * ROWS_PER_LINE)
+        # 設定起始及結束的【列】位址
+        ROWS_PER_LINE = 4
+        start_row = 5
+        end_row = start_row + (total_lines * ROWS_PER_LINE)
 
-    # 設定起始及結束的【欄】位址
-    start_col = 4  # D 欄
-    end_col = start_col + chars_per_row - 1  # 因為欄位是從 1 開始計數
+        # 設定起始及結束的【欄】位址
+        start_col = 4  # D 欄
+        end_col = start_col + chars_per_row - 1  # 因為欄位是從 1 開始計數
 
-    # 定義儲存格格式
-    def set_range_format(range_obj, font_name, font_size, font_color, fill_color=None):
-        range_obj.api.Font.Name = font_name
-        range_obj.api.Font.Size = font_size
-        range_obj.api.Font.Color = font_color
-        if fill_color:
-            range_obj.api.Interior.Color = fill_color
-        else:
-            range_obj.api.Interior.Pattern = xw.constants.Pattern.xlPatternNone  # 無填滿
+        # 以【區塊】（range）方式設置儲存格格式
+        row = start_row
+        for line in range(1, total_lines + 1):
+            # 判斷是否已經超過結束列位址，若是則跳出迴圈
+            if row > end_row: break
+            # 顯示目前處理【狀態】
+            print(f'重置 {line} 行：【漢字】儲存格位於【 {row} 列 】。')
 
-    # 清除內容並設置格式
-    for row in range(start_row, end_row + 1, ROWS_PER_LINE):
-        line = ((row - start_row) // ROWS_PER_LINE) + 1
-        print(f'重置第 {line} 行，共 {ROWS_PER_LINE} 列之儲存格內容！')
-        # 人工標音
-        range_人工標音 = sheet.range((row - 2, start_col), (row - 2, end_col))
-        range_人工標音.value = None
-        set_range_format(range_人工標音, font_name='Arial', font_size=24, font_color=0xFF0000, fill_color=0xFFFFCC)  # 紅色
+            # 人工標音
+            range_人工標音 = sheet.range((row - 2, start_col), (row - 2, end_col))
+            range_人工標音.value = None
+            set_range_format(range_人工標音,
+                            font_name='Arial',
+                            font_size=24,
+                            font_color=0xFF0000,   # 紅色
+                            fill_color=0xFFFFCC)
 
-        # 台語音標
-        range_台語音標 = sheet.range((row - 1, start_col), (row - 1, end_col))
-        range_台語音標.value = None
-        set_range_format(range_台語音標, font_name='Sitka Text Semibold', font_size=24, font_color=0xFF9933)  # 橙色
+            # 台語音標
+            range_台語音標 = sheet.range((row - 1, start_col), (row - 1, end_col))
+            range_台語音標.value = None
+            set_range_format(range_台語音標,
+                            font_name='Sitka Text Semibold',
+                            font_size=24,
+                            font_color=0xFF9933)  # 橙色
 
-        # 漢字
-        range_漢字 = sheet.range((row, start_col), (row, end_col))
-        range_漢字.value = None
-        set_range_format(range_漢字, font_name='吳守禮細明台語注音', font_size=48, font_color=0x000000)  # 黑色
+            # 漢字
+            range_漢字 = sheet.range((row, start_col), (row, end_col))
+            range_漢字.value = None
+            set_range_format(range_漢字,
+                            font_name='吳守禮細明台語注音',
+                            font_size=48,
+                            font_color=0x000000)  # 黑色
 
-        # 漢字標音
-        range_漢字標音 = sheet.range((row + 1, start_col), (row + 1, end_col))
-        range_漢字標音.value = None
-        set_range_format(range_漢字標音, font_name='芫荽 0.94', font_size=26, font_color=0x009900)  # 綠色
+            # 漢字標音
+            range_漢字標音 = sheet.range((row + 1, start_col), (row + 1, end_col))
+            range_漢字標音.value = None
+            set_range_format(range_漢字標音,
+                            font_name='芫荽 0.94',
+                            font_size=26,
+                            font_color=0x009900)  # 綠色
+
+            # 準備處理下一【行】
+            row += ROWS_PER_LINE
+    except Exception as e:
+        logging_exc_error("重設【漢字注音】工作表儲存格格式時，發生錯誤：", e)
+        return EXIT_CODE_PROCESS_FAILURE
+
+    # 返回【作業正常結束代碼】
+    return EXIT_CODE_SUCCESS
 
 
 #--------------------------------------------------------------------------
-# 將待注音的【漢字儲存格】，文字顏色重設為黑色（自動 RGB: 0, 0, 0）；填漢顏色重設為無填滿
+# 清除儲存格內容
 #--------------------------------------------------------------------------
-# def reset_han_ji_cells(wb, sheet_name='漢字注音'):
-#     # 選擇指定的工作表
-#     sheet = wb.sheets[sheet_name]
-#     sheet.activate()  # 將「漢字注音」工作表設為作用中工作表
-#     sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
+def clear_han_ji_kap_piau_im(wb, sheet_name='漢字注音'):
+    sheet = wb.sheets[sheet_name]   # 選擇工作表
+    sheet.activate()               # 將「漢字注音」工作表設為作用中工作表
 
-#     # 每頁最多處理的列數
-#     TOTAL_ROWS = int(wb.names['每頁總列數'].refers_to_range.value)  # 從名稱【每頁總列數】取得值
-#     # 每列最多處理的字數
-#     CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)  # 從名稱【每列總字數】取得值
+    # 每頁最多處理的列數
+    TOTAL_ROWS = int(wb.names['每頁總列數'].refers_to_range.value)  # 從名稱【每頁總列數】取得值
 
-#     # 設定起始及結束的欄位（【D欄=4】到【R欄=18】）
-#     start_col = 4
-#     end_col = start_col + CHARS_PER_ROW
+    cells_per_row = 4
+    end_of_rows = int((TOTAL_ROWS * cells_per_row ) + 2)
+    cells_range = f'D3:R{end_of_rows}'
 
-#     # 從第 5 列開始，每隔 4 列進行重置（5, 9, 13, ...）
-#     for row in range(5, 5 + 4 * TOTAL_ROWS, 4):
-#         for col in range(start_col, end_col):
-#             cell = sheet.range((row, col))
-#             # 將文字顏色設為【自動】（黑色）
-#             cell.font.color = (0, 0, 0)  # 設定為黑色
-#             # 將儲存格的填滿色彩設為【無填滿】
-#             cell.color = None
+    sheet.range(cells_range).clear_contents()     # 清除 C3:R{end_of_row} 範圍的內容
 
-#     print("漢字儲存格已成功重置，文字顏色設為自動，填滿色彩設為無填滿。")
-
-#     return 0
-
-
-# 重置【漢字注音】工作表
-def reset_han_ji_cells(wb, sheet_name="漢字注音"):
-    """
-    重置【漢字注音】工作表的儲存格內容
-    wb: Excel 活頁簿物件
-    sheet_name: 工作表名稱
-    """
-    # 選擇工作表
-    sheet = wb.sheets[sheet_name]
-    sheet.activate()  # 將工作表設為作用中工作表
-    sheet.range('A1').select()  # 將 A1 儲存格設為作用儲存格
-
-    # 從 env 工作表中獲取每頁總列數和每列總字數
-    env_sheet = wb.sheets['env']
-    total_lines = int(env_sheet.range('每頁總列數').value)
-    chars_per_row = int(env_sheet.range('每列總字數').value)
-
-    # 設定起始及結束的【列】位址
-    ROWS_PER_LINE = 4
-    start_row = 5
-    end_row = start_row + (total_lines * ROWS_PER_LINE)
-
-    # 設定起始及結束的【欄】位址
-    start_col = 4  # D 欄
-    end_col = start_col + chars_per_row - 1  # 因為欄位是從 1 開始計數
-
-    # 定義儲存格格式
-    def set_range_format(range_obj, font_name, font_size, font_color, fill_color=None):
-        range_obj.api.Font.Name = font_name
-        range_obj.api.Font.Size = font_size
-        range_obj.api.Font.Color = font_color
-        if fill_color:
-            range_obj.api.Interior.Color = fill_color
-        else:
-            range_obj.api.Interior.Pattern = xw.constants.Pattern.xlPatternNone  # 無填滿
-
-    # 清除內容並設置格式
-    for row in range(start_row, end_row + 1, ROWS_PER_LINE):
-        line = ((row - start_row) // ROWS_PER_LINE) + 1
-        print(f'重置第 {line} 行，共 {ROWS_PER_LINE} 列之儲存格內容！')
 
 # 依工作表名稱，刪除工作表
 def delete_sheet_by_name(wb, sheet_name: str, show_msg: bool=False):
@@ -657,23 +611,6 @@ def get_total_rows_in_sheet(wb, sheet_name):
         total_rows = 0
 
     return total_rows
-
-
-#--------------------------------------------------------------------------
-# 清除儲存格內容
-#--------------------------------------------------------------------------
-def clear_han_ji_kap_piau_im(wb, sheet_name='漢字注音'):
-    sheet = wb.sheets[sheet_name]   # 選擇工作表
-    sheet.activate()               # 將「漢字注音」工作表設為作用中工作表
-
-    # 每頁最多處理的列數
-    TOTAL_ROWS = int(wb.names['每頁總列數'].refers_to_range.value)  # 從名稱【每頁總列數】取得值
-
-    cells_per_row = 4
-    end_of_rows = int((TOTAL_ROWS * cells_per_row ) + 2)
-    cells_range = f'D3:R{end_of_rows}'
-
-    sheet.range(cells_range).clear_contents()     # 清除 C3:R{end_of_row} 範圍的內容
 
 
 # =========================================================================

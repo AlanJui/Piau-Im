@@ -14,7 +14,11 @@ from dotenv import load_dotenv
 from a200_查找及填入漢字標音 import ca_han_ji_thak_im
 
 # 載入自訂模組
-from mod_excel_access import clear_han_ji_kap_piau_im, reset_han_ji_cells, strip_cell
+from mod_excel_access import (
+    clear_han_ji_kap_piau_im,
+    reset_cells_format_in_sheet,
+    strip_cell,
+)
 from mod_file_access import save_as_new_file
 
 # =========================================================================
@@ -184,7 +188,7 @@ def process(wb):
     logging.info("儲存格內容清除完畢")
 
     print("重設儲存格之格式...")
-    reset_han_ji_cells(wb)
+    reset_cells_format_in_sheet(wb)
     logging.info("儲存格格式重設完畢")
 
     print("待注音漢字填入【漢字注音】工作表...")
