@@ -82,7 +82,7 @@ rtc {
     font-family: 'Noto Sans TC', serif;
     color: #0066cc;
     font-size: 1.2em;
-    letter-spacing: 2px;
+    /* letter-spacing: 2px; */
     text-align: center;
     margin-bottom: 20px;
     /* 增加標題與內容之間的間距 */
