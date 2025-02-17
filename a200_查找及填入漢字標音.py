@@ -25,6 +25,17 @@ from mod_標音 import tai_gi_im_piau_tng_un_bu  # 台語音標轉韻部(方音�
 from mod_標音 import tlpa_tng_han_ji_piau_im  # 台語音標轉台語音標
 
 # =========================================================================
+# 常數定義
+# =========================================================================
+# 定義 Exit Code
+EXIT_CODE_SUCCESS = 0  # 成功
+EXIT_CODE_NO_FILE = 1  # 無法找到檔案
+EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
+EXIT_CODE_SAVE_FAILURE = 3  # 儲存失敗
+EXIT_CODE_PROCESS_FAILURE = 10  # 過程失敗
+EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
+
+# =========================================================================
 # 載入環境變數
 # =========================================================================
 load_dotenv()
@@ -36,25 +47,9 @@ DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
 # =========================================================================
 # 設定日誌
 # =========================================================================
-logging.basicConfig(
-    filename='process_log.txt',
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
+from mod_logging import init_logging, logging_exc_error, logging_process_step
 
-def logging_process_step(msg):
-    print(msg)
-    logging.info(msg)
-
-# =========================================================================
-# 常數定義
-# =========================================================================
-# 定義 Exit Code
-EXIT_CODE_SUCCESS = 0  # 成功
-EXIT_CODE_NO_FILE = 1  # 無法找到檔案
-EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
-EXIT_CODE_PROCESS_FAILURE = 3  # 過程失敗
-EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
+init_logging()
 
 # =========================================================================
 # 作業程序
@@ -100,149 +95,155 @@ def ca_ji_kiat_ko_tng_piau_im(result, han_ji_khoo: str, piau_im: PiauIm, piau_im
 
 def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im'):
     """查漢字讀音：依【漢字】查找【台語音標】，並依指定之【標音方法】輸出【漢字標音】"""
-    # 載入【漢字庫】查找函數
-    han_ji_ca_piau_im = load_module_function(module_name, function_name)
+    try:
+        # 載入【漢字庫】查找函數
+        han_ji_ca_piau_im = load_module_function(module_name, function_name)
 
-    # 連接指定資料庫
-    conn = sqlite3.connect(db_name)
-    cursor = conn.cursor()
+        # 連接指定資料庫
+        conn = sqlite3.connect(db_name)
+        cursor = conn.cursor()
 
-    # 建置 PiauIm 物件，供作漢字拼音轉換作業
-    han_ji_khoo_field = '漢字庫'
-    han_ji_khoo_name = get_value_by_name(wb=wb, name=han_ji_khoo_field)
-    piau_im = PiauIm(han_ji_khoo=han_ji_khoo_name)            # 指定漢字自動查找使用的【漢字庫】
-    piau_im_huat = get_value_by_name(wb=wb, name='標音方法')    # 指定【台語音標】轉換成【漢字標音】的方法
+        # 建置 PiauIm 物件，供作漢字拼音轉換作業
+        han_ji_khoo_field = '漢字庫'
+        han_ji_khoo_name = get_value_by_name(wb=wb, name=han_ji_khoo_field)
+        piau_im = PiauIm(han_ji_khoo=han_ji_khoo_name)            # 指定漢字自動查找使用的【漢字庫】
+        piau_im_huat = get_value_by_name(wb=wb, name='標音方法')    # 指定【台語音標】轉換成【漢字標音】的方法
 
-    # 建置自動及人工漢字標音字庫工作表：（1）【標音字庫】；（2）【人工標音字】；（3）【缺字表】
-    khuat_ji_piau_name = '缺字表'
-    # delete_sheet_by_name(wb=wb, sheet_name=khuat_ji_piau_name)
-    khuat_ji_piau_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        # 建置自動及人工漢字標音字庫工作表：（1）【標音字庫】；（2）【人工標音字】；（3）【缺字表】
+        khuat_ji_piau_name = '缺字表'
+        # delete_sheet_by_name(wb=wb, sheet_name=khuat_ji_piau_name)
+        khuat_ji_piau_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+                                    wb=wb,
+                                    sheet_name=khuat_ji_piau_name)
+
+        piau_im_sheet_name = '標音字庫'
+        # delete_sheet_by_name(wb=wb, sheet_name=piau_im_sheet_name)
+        piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
                                 wb=wb,
-                                sheet_name=khuat_ji_piau_name)
+                                sheet_name=piau_im_sheet_name)
 
-    piau_im_sheet_name = '標音字庫'
-    # delete_sheet_by_name(wb=wb, sheet_name=piau_im_sheet_name)
-    piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
-                            wb=wb,
-                            sheet_name=piau_im_sheet_name)
+        # jin_kang_piau_im_sheet_name='人工標音字庫'
+        # # delete_sheet_by_name(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
+        # jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        #                                 wb=wb,
+        #                                 sheet_name=jin_kang_piau_im_sheet_name)
 
-    # jin_kang_piau_im_sheet_name='人工標音字庫'
-    # # delete_sheet_by_name(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
-    # jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
-    #                                 wb=wb,
-    #                                 sheet_name=jin_kang_piau_im_sheet_name)
+        # 指定【漢字注音】工作表為【作用工作表】
+        sheet = wb.sheets[sheet_name]
+        sheet.activate()
 
-    # 指定【漢字注音】工作表為【作用工作表】
-    sheet = wb.sheets[sheet_name]
-    sheet.activate()
+        # 設定起始及結束的【列】位址（【第5列】、【第9列】、【第13列】等列）
+        TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
+        ROWS_PER_LINE = 4
+        start_row = 5
+        end_row = start_row + (TOTAL_LINES * ROWS_PER_LINE)
 
-    # 設定起始及結束的【列】位址（【第5列】、【第9列】、【第13列】等列）
-    TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
-    ROWS_PER_LINE = 4
-    start_row = 5
-    end_row = start_row + (TOTAL_LINES * ROWS_PER_LINE)
+        # 設定起始及結束的【欄】位址（【D欄=4】到【R欄=18】）
+        CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
+        start_col = 4
+        end_col = start_col + CHARS_PER_ROW
 
-    # 設定起始及結束的【欄】位址（【D欄=4】到【R欄=18】）
-    CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
-    start_col = 4
-    end_col = start_col + CHARS_PER_ROW
+        # 逐列處理作業
+        EOF = False
+        line = 1
+        for row in range(start_row, end_row, ROWS_PER_LINE):
+            # 設定【作用儲存格】為列首
+            Two_Empty_Cells = 0
+            sheet.range((row, 1)).select()
 
-    # 逐列處理作業
-    EOF = False
-    line = 1
-    for row in range(start_row, end_row, ROWS_PER_LINE):
-        # 設定【作用儲存格】為列首
-        Two_Empty_Cells = 0
-        sheet.range((row, 1)).select()
+            # 逐欄取出漢字處理
+            for col in range(start_col, end_col):
+                # 取得當前儲存格內含值
+                han_ji_u_piau_im = False
+                msg = ""
+                cell = sheet.range((row, col))
+                # 將文字顏色設為【自動】（黑色）
+                cell.font.color = (0, 0, 0)  # 設定為黑色
+                # 將儲存格的填滿色彩設為【無填滿】
+                cell.color = None
 
-        # 逐欄取出漢字處理
-        for col in range(start_col, end_col):
-            # 取得當前儲存格內含值
-            han_ji_u_piau_im = False
-            msg = ""
-            cell = sheet.range((row, col))
-            # 將文字顏色設為【自動】（黑色）
-            cell.font.color = (0, 0, 0)  # 設定為黑色
-            # 將儲存格的填滿色彩設為【無填滿】
-            cell.color = None
-
-            cell_value = cell.value
-            if cell_value == 'φ':
-                EOF = True
-                msg = "【文字終結】"
-            elif cell_value == '\n':
-                msg = "【換行】"
-            elif cell_value == None or cell_value.strip() == "":  # 若儲存格內無值
-                if Two_Empty_Cells == 0:
-                    Two_Empty_Cells += 1
-                elif Two_Empty_Cells == 1:
+                cell_value = cell.value
+                if cell_value == 'φ':
                     EOF = True
-                msg = "【空缺】"    # 表【儲存格】未填入任何字/符，不同於【空白】字元
-            else:
-                # 若不為【標點符號】，則以【漢字】處理
-                if is_punctuation(cell_value):
-                    msg = f"{cell_value}"
+                    msg = "【文字終結】"
+                elif cell_value == '\n':
+                    msg = "【換行】"
+                elif cell_value == None or cell_value.strip() == "":  # 若儲存格內無值
+                    if Two_Empty_Cells == 0:
+                        Two_Empty_Cells += 1
+                    elif Two_Empty_Cells == 1:
+                        EOF = True
+                    msg = "【空缺】"    # 表【儲存格】未填入任何字/符，不同於【空白】字元
                 else:
-                    # 查找漢字讀音
-                    han_ji = cell_value
-                    # 自【漢字庫】查找作業
-                    result = han_ji_ca_piau_im(cursor=cursor,
-                                                han_ji=han_ji,
-                                                ue_im_lui_piat=ue_im_lui_piat)
-                    # 若【漢字庫】查無此字，登錄至【缺字表】
-                    if not result:
-                        khuat_ji_piau_ji_khoo.add_or_update_entry(
-                            han_ji=han_ji,
-                            tai_gi_im_piau='',
-                            kenn_ziann_im_piau='N/A',
-                            coordinates=(row, col)
-                        )
-                        msg = f"【{han_ji}】查無此字！"
+                    # 若不為【標點符號】，則以【漢字】處理
+                    if is_punctuation(cell_value):
+                        msg = f"{cell_value}"
                     else:
-                        # 依【漢字庫】查找結果，輸出【台語音標】和【漢字標音】
-                        tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
-                            result=result,
-                            han_ji_khoo=han_ji_khoo,
-                            piau_im=piau_im,
-                            piau_im_huat=piau_im_huat
-                        )
-                        sheet.range((row - 1, col)).value = tai_gi_im_piau
-                        sheet.range((row + 1, col)).value = han_ji_piau_im
-                        msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
-                        # 【標音字庫】添加或更新【漢字】資料
-                        piau_im_ji_khoo.add_or_update_entry(
-                            han_ji=han_ji,
-                            tai_gi_im_piau=tai_gi_im_piau,
-                            kenn_ziann_im_piau='N/A',
-                            coordinates=(row, col)
-                        )
-            # 顯示處理進度
-            col_name = xw.utils.col_name(col)   # 取得欄位名稱
-            print(f"({row}, {col_name}) = {msg}")
+                        # 查找漢字讀音
+                        han_ji = cell_value
+                        # 自【漢字庫】查找作業
+                        result = han_ji_ca_piau_im(cursor=cursor,
+                                                    han_ji=han_ji,
+                                                    ue_im_lui_piat=ue_im_lui_piat)
+                        # 若【漢字庫】查無此字，登錄至【缺字表】
+                        if not result:
+                            khuat_ji_piau_ji_khoo.add_or_update_entry(
+                                han_ji=han_ji,
+                                tai_gi_im_piau='',
+                                kenn_ziann_im_piau='N/A',
+                                coordinates=(row, col)
+                            )
+                            msg = f"【{han_ji}】查無此字！"
+                        else:
+                            # 依【漢字庫】查找結果，輸出【台語音標】和【漢字標音】
+                            tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                result=result,
+                                han_ji_khoo=han_ji_khoo,
+                                piau_im=piau_im,
+                                piau_im_huat=piau_im_huat
+                            )
+                            sheet.range((row - 1, col)).value = tai_gi_im_piau
+                            sheet.range((row + 1, col)).value = han_ji_piau_im
+                            msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
+                            # 【標音字庫】添加或更新【漢字】資料
+                            piau_im_ji_khoo.add_or_update_entry(
+                                han_ji=han_ji,
+                                tai_gi_im_piau=tai_gi_im_piau,
+                                kenn_ziann_im_piau='N/A',
+                                coordinates=(row, col)
+                            )
+                # 顯示處理進度
+                col_name = xw.utils.col_name(col)   # 取得欄位名稱
+                print(f"({row}, {col_name}) = {msg}")
 
-            # 若讀到【換行】或【文字終結】，跳出逐欄取字迴圈
-            if msg == "【換行】" or EOF:
+                # 若讀到【換行】或【文字終結】，跳出逐欄取字迴圈
+                if msg == "【換行】" or EOF:
+                    break
+
+            # =================================================================
+            # 每當處理一行 15 個漢字後，亦換到下一行
+            if col == end_col - 1: print('\n')
+            line += 1
+            # 若已到【結尾】或【超過總行數】，則跳出迴圈
+            if EOF or line > TOTAL_LINES:
+                # 將【標音字庫】、【人工標音字庫】、【缺字表】三個字典，寫入 Excel 工作表
+                khuat_ji_piau_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=khuat_ji_piau_name)
+                piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=piau_im_sheet_name)
+                # jin_kang_piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
                 break
 
-        # =================================================================
-        # 每當處理一行 15 個漢字後，亦換到下一行
-        if col == end_col - 1: print('\n')
-        line += 1
-        # 若已到【結尾】或【超過總行數】，則跳出迴圈
-        if EOF or line > TOTAL_LINES:
-            # 將【標音字庫】、【人工標音字庫】、【缺字表】三個字典，寫入 Excel 工作表
-            khuat_ji_piau_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=khuat_ji_piau_name)
-            piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=piau_im_sheet_name)
-            # jin_kang_piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
-            break
-
-    #----------------------------------------------------------------------
-    # 作業結束前處理
-    #----------------------------------------------------------------------
-    # 關閉資料庫連線
-    conn.close()
-    print("已完成【台語音標】和【漢字標音】標注工作。")
-    return EXIT_CODE_SUCCESS
+        #----------------------------------------------------------------------
+        # 作業結束前處理
+        #----------------------------------------------------------------------
+        # 關閉資料庫連線
+        conn.close()
+        print("已完成【台語音標】和【漢字標音】標注工作。")
+        return EXIT_CODE_SUCCESS
+    except Exception as e:
+        # 你可以在這裡加上紀錄或處理，例如:
+        logging.exception("自動為【漢字】查找【台語音標】作業，發生例外！")
+        # 再次拋出異常，讓外層函式能捕捉
+        raise
 
 
 def process(wb):
@@ -320,15 +321,19 @@ def process(wb):
 # =============================================================================
 def main():
     # =========================================================================
-    # 開始作業
+    # (0) 程式初始化
     # =========================================================================
-    logging.info("作業開始")
-
-    # =========================================================================
-    # (1) 取得專案根目錄。
-    # =========================================================================
+    # 取得專案根目錄。
     current_file_path = Path(__file__).resolve()
     project_root = current_file_path.parent
+    # 取得程式名稱
+    # program_file_name = current_file_path.name
+    program_name = current_file_path.stem
+
+    # =========================================================================
+    # (1) 開始執行程式
+    # =========================================================================
+    logging_process_step(f"《========== 程式開始執行：{program_name} ==========》")
     logging_process_step(f"專案根目錄為: {project_root}")
 
     # =========================================================================
@@ -353,30 +358,43 @@ def main():
     try:
         result_code = process(wb)
         if result_code != EXIT_CODE_SUCCESS:
-            logging_process_step("作業異常終止！")
-            return result_code
+            msg = f"程式異常終止：{program_name}"
+            logging_exc_error(msg=msg, error=e)
+            return EXIT_CODE_PROCESS_FAILURE
 
     except Exception as e:
-        print(f"作業過程發生未知的異常錯誤: {e}")
-        logging.error(f"作業過程發生未知的異常錯誤: {e}", exc_info=True)
+        msg = f"程式異常終止：{program_name}"
+        logging_exc_error(msg=msg, error=e)
         return EXIT_CODE_UNKNOWN_ERROR
 
     finally:
-        if wb:
-            # xw.apps.active.quit()  # 確保 Excel 被釋放資源，避免開啟殘留
-            logging.info("a702_查找及填入漢字標音.py 程式已執行完畢！")
+        #--------------------------------------------------------------------------
+        # 儲存檔案
+        #--------------------------------------------------------------------------
+        try:
+            # 要求畫面回到【漢字注音】工作表
+            wb.sheets['漢字注音'].activate()
+            # 儲存檔案
+            file_path = save_as_new_file(wb=wb)
+            if not file_path:
+                logging_exc_error(msg="儲存檔案失敗！", error=e)
+                return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
+            else:
+                logging_process_step(f"儲存檔案至路徑：{file_path}")
+        except Exception as e:
+            logging_exc_error(msg="儲存檔案失敗！", error=e)
+            return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
+
+        # if wb:
+        #     xw.apps.active.quit()  # 確保 Excel 被釋放資源，避免開啟殘留
 
     # =========================================================================
-    # 結束作業
+    # 結束程式
     # =========================================================================
-    logging.info("作業完成！")
-    return EXIT_CODE_SUCCESS
+    logging_process_step(f"《========== 程式終止執行：{program_name} ==========》")
+    return EXIT_CODE_SUCCESS    # 作業正常結束
 
 
 if __name__ == "__main__":
     exit_code = main()
-    if exit_code == EXIT_CODE_SUCCESS:
-        print("程式正常完成！")
-    else:
-        print(f"程式異常終止，錯誤代碼為: {exit_code}")
     sys.exit(exit_code)

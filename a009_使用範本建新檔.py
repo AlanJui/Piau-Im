@@ -11,7 +11,7 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 # 載入自訂模組
-from mod_excel_access import reset_han_ji_cells
+from mod_excel_access import reset_cells_format_in_sheet
 from mod_file_access import save_as_new_file
 
 # =========================================================================
@@ -73,7 +73,7 @@ def process(wb):
     # 將待注音的【漢字儲存格】，文字顏色重設為黑色（自動 RGB: 0, 0, 0）；填漢顏色重設為無填滿
     #--------------------------------------------------------------------------
     logging_process_step(f"開始【漢字注音】工作表的清空、重置！")
-    if reset_han_ji_cells(wb) == EXIT_CODE_SUCCESS:
+    if reset_cells_format_in_sheet(wb) == EXIT_CODE_SUCCESS:
         logging_process_step(f"完成【漢字注音】工作表的清空、重置！")
         return EXIT_CODE_SUCCESS
     else:

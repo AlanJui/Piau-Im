@@ -44,9 +44,39 @@ init_logging()
 # 作業程序
 # =========================================================================
 def process(wb):
+    #----------------------------------------------------------------------
+    # 刪除漢字標音作業中使用之工作表
+    #----------------------------------------------------------------------
+    # 要刪除的工作表名稱
+    # sheets_to_delete = ["缺字表", "標音字庫", "人工標音字庫"]
+    sheets_to_delete = ["缺字表", "標音字庫"]
+
+    try:
+        for sheet_name in sheets_to_delete:
+            # 如果工作表確實存在才刪除
+            if sheet_name in [sh.name for sh in wb.sheets]:
+                wb.sheets[sheet_name].delete()
+    except Exception as e:
+        logging_exc_error(msg="刪除工作表失敗！", error=e)
+        return EXIT_CODE_PROCESS_FAILURE
+
+    msg = f'已刪除不必要的工作表：{sheets_to_delete}'
+    logging_process_step(msg)
+
+    #----------------------------------------------------------------------
     # 重置【漢字注音】工作表中的儲存格格式
-    result = reset_cells_format_in_sheet(wb=wb, sheet_name='漢字注音')
-    return result
+    #----------------------------------------------------------------------
+    status_code = reset_cells_format_in_sheet(wb=wb, sheet_name='漢字注音')
+    if status_code != EXIT_CODE_SUCCESS:
+        return status_code
+    else:
+        logging_process_step("已重置【漢字注音】工作表中的儲存格格式！")
+
+    #--------------------------------------------------------------------------
+    # 結束作業
+    #--------------------------------------------------------------------------
+    logging_process_step("<----------- 作業結束！---------->")
+    return EXIT_CODE_SUCCESS
 
 # =============================================================================
 # 程式主流程
