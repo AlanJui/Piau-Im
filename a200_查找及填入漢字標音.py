@@ -247,6 +247,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
 
 
 def process(wb):
+    logging_process_step("<----------- 作業開始！---------->")
     # ---------------------------------------------------------------------
     # 重設【漢字】儲存格文字及底色格式
     # ---------------------------------------------------------------------
@@ -266,55 +267,62 @@ def process(wb):
         module_name = 'mod_廣韻'
     function_name = 'han_ji_ca_piau_im'
 
-    if han_ji_khoo_name == "河洛話" and ue_im_lui_piat == "白話音":
-        ca_han_ji_thak_im(
-            wb=wb,
-            sheet_name="漢字注音",
-            cell="V3",
-            ue_im_lui_piat=ue_im_lui_piat,  # "白話音"
-            han_ji_khoo=han_ji_khoo_name,   # "河洛話",
-            db_name=db_name,                # "Ho_Lok_Ue.db",
-            module_name=module_name,        # "mod_河洛話",
-            function_name=function_name     # "han_ji_ca_piau_im",
-        )
-    elif han_ji_khoo_name == "河洛話" and ue_im_lui_piat == "文讀音":
-        ca_han_ji_thak_im(
-            wb=wb,
-            sheet_name="漢字注音",
-            cell="V3",
-            ue_im_lui_piat=ue_im_lui_piat,  # "文讀音"
-            han_ji_khoo=han_ji_khoo_name,   # "河洛話",
-            db_name=db_name,                # "Ho_Lok_Ue.db",
-            module_name=module_name,        # "mod_河洛話",
-            function_name=function_name     # "han_ji_ca_piau_im",
-        )
-    elif han_ji_khoo_name == "廣韻":
-        ca_han_ji_thak_im(
-            wb=wb,
-            sheet_name="漢字注音",
-            cell="V3",
-            ue_im_lui_piat="文讀音",
-            han_ji_khoo="廣韻",
-            db_name="Kong_Un.db",
-            module_name="mod_廣韻",
-            function_name="han_ji_ca_piau_im",
-        )
-    else:
-        msg = "無法執行漢字標音作業，請確認【env】工作表【語音類型】及【漢字庫】欄位的設定是否正確！"
-        print(msg)
-        logging.error(msg)
-        return EXIT_CODE_INVALID_INPUT
+    try:
+        if han_ji_khoo_name == "河洛話" and ue_im_lui_piat == "白話音":
+            ca_han_ji_thak_im(
+                wb=wb,
+                sheet_name="漢字注音",
+                cell="V3",
+                ue_im_lui_piat=ue_im_lui_piat,  # "白話音"
+                han_ji_khoo=han_ji_khoo_name,   # "河洛話",
+                db_name=db_name,                # "Ho_Lok_Ue.db",
+                module_name=module_name,        # "mod_河洛話",
+                function_name=function_name     # "han_ji_ca_piau_im",
+            )
+        elif han_ji_khoo_name == "河洛話" and ue_im_lui_piat == "文讀音":
+            ca_han_ji_thak_im(
+                wb=wb,
+                sheet_name="漢字注音",
+                cell="V3",
+                ue_im_lui_piat=ue_im_lui_piat,  # "文讀音"
+                han_ji_khoo=han_ji_khoo_name,   # "河洛話",
+                db_name=db_name,                # "Ho_Lok_Ue.db",
+                module_name=module_name,        # "mod_河洛話",
+                function_name=function_name     # "han_ji_ca_piau_im",
+            )
+        elif han_ji_khoo_name == "廣韻":
+            ca_han_ji_thak_im(
+                wb=wb,
+                sheet_name="漢字注音",
+                cell="V3",
+                ue_im_lui_piat="文讀音",
+                han_ji_khoo="廣韻",
+                db_name="Kong_Un.db",
+                module_name="mod_廣韻",
+                function_name="han_ji_ca_piau_im",
+            )
+        else:
+            msg = "無法執行漢字標音作業，請確認【env】工作表【語音類型】及【漢字庫】欄位的設定是否正確！"
+            logging_exc_error(msg=msg, error=None)
+            return EXIT_CODE_INVALID_INPUT
+    except Exception as e:
+        logging_exc_error(msg="在查找漢字標音時發生錯誤！", error=e)
+        return EXIT_CODE_PROCESS_FAILURE
+
+    print("------------------------------------------------------")
+    msg = f'自動為【漢字】查找【台語音標】作業己完成！'
+    logging_process_step(msg)
+    logging_process_step(f'【語音類型】：{ue_im_lui_piat}')
+    logging_process_step(f'【漢字庫】：{db_name}')
 
     #--------------------------------------------------------------------------
-    # 作業結尾處理
+    # 結束作業
     #--------------------------------------------------------------------------
     # 要求畫面回到【漢字注音】工作表
     wb.sheets['漢字注音'].activate()
-    # 儲存檔案
-    save_as_new_file(wb=wb)
-    logging.info("己存檔至路徑：{file_path}")
+    # 作業正常結束
+    logging_process_step("<----------- 作業結束！---------->")
     return EXIT_CODE_SUCCESS
-
 
 # =============================================================================
 # 程式主流程
