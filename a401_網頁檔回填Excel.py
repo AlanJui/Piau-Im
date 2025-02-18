@@ -1,10 +1,48 @@
-import json
+# =========================================================================
+# 載入程式所需套件/模組/函式庫
+# =========================================================================
+import logging
+import os
 import sys
+from pathlib import Path
 
 import xlwings as xw
 from bs4 import BeautifulSoup
+from dotenv import load_dotenv
+
+from mod_file_access import save_as_new_file
+
+# =========================================================================
+# 常數定義
+# =========================================================================
+# 定義 Exit Code
+EXIT_CODE_SUCCESS = 0  # 成功
+EXIT_CODE_NO_FILE = 1  # 無法找到檔案
+EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
+EXIT_CODE_SAVE_FAILURE = 3  # 儲存失敗
+EXIT_CODE_PROCESS_FAILURE = 10  # 過程失敗
+EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
+
+# =========================================================================
+# 載入環境變數
+# =========================================================================
+load_dotenv()
+
+# 預設檔案名稱從環境變數讀取
+DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
+DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
+
+# =========================================================================
+# 設定日誌
+# =========================================================================
+from mod_logging import init_logging, logging_exc_error, logging_process_step
+
+init_logging()
 
 
+# =========================================================================
+# 程式區域函式
+# =========================================================================
 def get_value_by_name(wb, name):
     """利用 Excel 名稱取得指定設定值（若有的話）"""
     try:
@@ -167,17 +205,140 @@ def import_html_to_excel(wb, html_file_path):
     print(f"({current_row}, {current_col})：填入【文章終結符號】（{EndOfText}）")
     print(f"回填 Excel 完成，共處理 {processed_count} 個填入動作！")
 
+
+def process(wb, html_file_path):
+    logging_process_step("<----------- 作業開始！---------->")
+    if html_file_path is None:
+        try:
+            title = wb.names['TITLE'].refers_to_range.value
+            hue_im = wb.names['語音類型'].refers_to_range.value
+            piau_im_huat = wb.names['標音方法'].refers_to_range.value
+            piau_im_format = wb.names['標音方式'].refers_to_range.value
+        except Exception as e:
+            logging_exc_error(msg="無法自【env】工作表，取得【名稱】之設定！", error=e)
+            return EXIT_CODE_INVALID_INPUT
+
+        # 檢查檔案名稱是否已包含副檔名
+        if piau_im_format == "無預設":
+            im_piau = piau_im_huat
+        elif piau_im_format == "上":
+            im_piau = wb.names['上邊標音'].refers_to_range.value
+        elif piau_im_format == "右":
+            im_piau = wb.names['右邊標音'].refers_to_range.value
+        else:
+            im_piau = f"{wb.names['上邊標音'].refers_to_range.value}＋{wb.names['右邊標音'].refers_to_range.value}"
+        # 檢查檔案名稱是否已包含副檔名
+        file_name = f"《{title}》【{hue_im}】{im_piau}.html"
+        file_dir_path = 'docs'
+        html_file_path = os.path.join(file_dir_path, file_name)
+
+    logging_process_step(f"開始讀取 HTML 檔案：{html_file_path}")
+    import_html_to_excel(wb, html_file_path)
+
+    # ---------------------------------------------------------------------
+    # 作業結尾處理
+    # ---------------------------------------------------------------------
+    # 要求畫面回到【漢字注音】工作表
+    wb.sheets['漢字注音'].activate()
+    # 作業正常結束
+    logging_process_step("<----------- 作業結束！---------->")
+    return EXIT_CODE_SUCCESS
+
+
+def main(html_file_path):
+    # =========================================================================
+    # (0) 程式初始化
+    # =========================================================================
+    # 取得專案根目錄。
+    current_file_path = Path(__file__).resolve()
+    project_root = current_file_path.parent
+    # 取得程式名稱
+    # program_file_name = current_file_path.name
+    program_name = current_file_path.stem
+
+    # =========================================================================
+    # (1) 開始執行程式
+    # =========================================================================
+    logging_process_step(f"《========== 程式開始執行：{program_name} ==========》")
+    logging_process_step(f"專案根目錄為: {project_root}")
+
+    # =========================================================================
+    # (2) 設定【作用中活頁簿】：偵測及獲取 Excel 已開啟之活頁簿檔案。
+    # =========================================================================
+    wb = None
+    # 取得【作用中活頁簿】
+    try:
+        wb = xw.apps.active.books.active    # 取得 Excel 作用中的活頁簿檔案
+        full_file_name = Path(wb.fullname).name
+        dir_path = Path(wb.fullname).parent
+        main_file_name = Path(full_file_name).stem
+        logging_process_step(f"作用中的 Excel 活頁簿：{full_file_name}，路徑：{dir_path}")
+    except Exception as e:
+        print(f"發生錯誤: {e}")
+        logging.error(f"無法找到作用中的 Excel 工作簿: {e}", exc_info=True)
+        return EXIT_CODE_NO_FILE
+
+    # 若無法取得【作用中活頁簿】，則因無法繼續作業，故返回【作業異常終止代碼】結束。
+    if not wb:
+        return EXIT_CODE_NO_FILE
+
+    # =========================================================================
+    # (3) 執行【處理作業】
+    # =========================================================================
+    try:
+        result_code = process(wb, html_file_path)
+        if result_code != EXIT_CODE_SUCCESS:
+            msg = f"程式異常終止：{program_name}"
+            logging_exc_error(msg=msg, error=e)
+            return EXIT_CODE_PROCESS_FAILURE
+
+    except Exception as e:
+        msg = f"程式異常終止：{program_name}"
+        logging_exc_error(msg=msg, error=e)
+        return EXIT_CODE_UNKNOWN_ERROR
+
+    finally:
+        #--------------------------------------------------------------------------
+        # 儲存檔案
+        #--------------------------------------------------------------------------
+        try:
+            # 要求畫面回到【漢字注音】工作表
+            wb.sheets['漢字注音'].activate()
+            # 儲存檔案
+            file_path = save_as_new_file(wb=wb)
+            if not file_path:
+                logging_exc_error(msg="儲存檔案失敗！", error=e)
+                return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
+            else:
+                logging_process_step(f"儲存檔案至路徑：{file_path}")
+        except Exception as e:
+            logging_exc_error(msg="儲存檔案失敗！", error=e)
+            return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
+
+        # if wb:
+        #     xw.apps.active.quit()  # 確保 Excel 被釋放資源，避免開啟殘留
+
+    # =========================================================================
+    # 結束程式
+    # =========================================================================
+    logging_process_step(f"《========== 程式終止執行：{program_name} ==========》")
+    return EXIT_CODE_SUCCESS    # 作業正常結束
+
+
 if __name__ == "__main__":
     # 利用 sys.argv 取得命令列參數，第一個參數應為 HTML 檔案路徑
+    # if len(sys.argv) < 2:
+    #     print("請在命令列提供 HTML 檔案路徑參數。")
+    #     sys.exit(1)
+    # if not os.path.exists(sys.argv[1]):
+
+    html_file_path = None
     if len(sys.argv) < 2:
-        print("請在命令列提供 HTML 檔案路徑參數。")
-        sys.exit(1)
-    html_file_path = sys.argv[1]
+        html_file_path = None
+        logging_process_step(f"未指定 HTML 檔案路徑！")
+    else:
+        html_file_path = sys.argv[1]
+        logging_process_step(f"已指定 HTML 檔案路徑：{sys.argv[1]}")
 
-    try:
-        wb = xw.apps.active.books.active
-    except Exception as e:
-        print("找不到作用中的 Excel 工作簿！", e)
-        sys.exit(1)
-
-    import_html_to_excel(wb, html_file_path)
+    exit_code = main(html_file_path)
+    sys.exit(exit_code)

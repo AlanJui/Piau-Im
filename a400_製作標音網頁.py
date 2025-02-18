@@ -13,8 +13,21 @@ from dotenv import load_dotenv
 # 載入自訂模組
 from mod_excel_access import get_value_by_name
 from mod_file_access import save_as_new_file
+
+# from mod_廣韻 import tng_uann_piau_im
 from mod_標音 import split_tai_gi_im_piau  # 分解台語音標
 from mod_標音 import PiauIm, is_punctuation
+
+# =========================================================================
+# 常數定義
+# =========================================================================
+# 定義 Exit Code
+EXIT_CODE_SUCCESS = 0  # 成功
+EXIT_CODE_NO_FILE = 1  # 無法找到檔案
+EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
+EXIT_CODE_SAVE_FAILURE = 3  # 儲存失敗
+EXIT_CODE_PROCESS_FAILURE = 10  # 過程失敗
+EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 
 # =========================================================================
 # 載入環境變數
@@ -28,26 +41,9 @@ DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
 # =========================================================================
 # 設定日誌
 # =========================================================================
-logging.basicConfig(
-    filename='process_log.txt',
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
+from mod_logging import init_logging, logging_exc_error, logging_process_step
 
-def logging_process_step(msg):
-    print(msg)
-    logging.info(msg)
-
-# =========================================================================
-# 常數定義
-# =========================================================================
-# 定義 Exit Code
-EXIT_CODE_SUCCESS = 0  # 成功
-EXIT_CODE_NO_FILE = 1  # 無法找到檔案
-EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
-EXIT_CODE_PROCESS_FAILURE = 3  # 過程失敗
-EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
-
+init_logging()
 
 # =========================================================================
 # 程式區域函式
@@ -96,32 +92,6 @@ def put_picture(wb, source_sheet_name):
     return html_str
 
 
-def tng_uann_piau_im(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
-    """根據指定的標音方法，轉換台語音標之羅馬拚音字母"""
-    if zu_im_huat == "十五音":
-        return piau_im.SNI_piau_im(siann_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "雅俗通":
-        return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "白話字":
-        return piau_im.POJ_piau_im(siann_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "台羅拼音":
-        return piau_im.TL_piau_im(siann_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "閩拼方案":
-        return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "閩拼調號":
-        return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "閩拼調符":
-        return piau_im.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "方音符號":
-        return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
-    elif zu_im_huat == "台語音標":
-        siann = piau_im.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
-        siann = siann if siann != "ø" else ""
-        un = piau_im.Un_Bu_Dict[un_bu]["台語音標"]
-        return f"{siann}{un}{tiau_ho}"
-    return ""
-
-
 def concat_ruby_tag(wb, piau_im, han_ji, tai_gi_im_piau):
     """將漢字、台語音標及台語注音符號，合併成一個 Ruby Tag"""
     zu_im_list = split_tai_gi_im_piau(tai_gi_im_piau)
@@ -144,32 +114,28 @@ def concat_ruby_tag(wb, piau_im, han_ji, tai_gi_im_piau):
         # 若【網頁格式】設定為【無預設】，則根據【標音方式】決定漢字之上方及右方，是否需要放置標音
         if piau_im_hong_sik == "上及右":
             # 漢字上方顯示【上邊標音】，下方顯示【下邊標音】
-            siong_piau_im = tng_uann_piau_im(
-                piau_im=piau_im,    # 注音法物件
-                zu_im_huat=siong_pinn_piau_im,
+            siong_piau_im = piau_im.han_ji_piau_im_tng_huan(
+                piau_im_huat=siong_pinn_piau_im,
                 siann_bu=siann_bu,
                 un_bu=zu_im_list[1],
                 tiau_ho=zu_im_list[2]
             )
-            zian_piau_im = tng_uann_piau_im(
-                piau_im=piau_im,    # 注音法物件
-                zu_im_huat=zian_pinn_piau_im,
+            zian_piau_im = piau_im.han_ji_piau_im_tng_huan(
+                piau_im_huat=zian_pinn_piau_im,
                 siann_bu=siann_bu,
                 un_bu=zu_im_list[1],
                 tiau_ho=zu_im_list[2]
             )
         elif piau_im_hong_sik == "上":
-            siong_piau_im = tng_uann_piau_im(
-                piau_im=piau_im,    # 注音法物件
-                zu_im_huat=siong_pinn_piau_im,
+            siong_piau_im = piau_im.han_ji_piau_im_tng_huan(
+                piau_im_huat=siong_pinn_piau_im,
                 siann_bu=siann_bu,
                 un_bu=zu_im_list[1],
                 tiau_ho=zu_im_list[2]
             )
         elif piau_im_hong_sik == "右":
-            zian_piau_im = tng_uann_piau_im(
-                piau_im=piau_im,    # 注音法物件
-                zu_im_huat=zian_pinn_piau_im,
+            zian_piau_im = piau_im.han_ji_piau_im_tng_huan(
+                piau_im_huat=zian_pinn_piau_im,
                 siann_bu=siann_bu,
                 un_bu=zu_im_list[1],
                 tiau_ho=zu_im_list[2]
@@ -177,43 +143,38 @@ def concat_ruby_tag(wb, piau_im, han_ji, tai_gi_im_piau):
     else:
         if style == "POJ" or style == "TL" or style == "BP" or style == "TLPA_Plus":
             # 羅馬拼音字母標音法，將標音置於漢字上方
-            siong_piau_im = tng_uann_piau_im(
-                piau_im=piau_im,    # 注音法物件
-                zu_im_huat=siong_pinn_piau_im,
+            siong_piau_im = piau_im.han_ji_piau_im_tng_huan(
+                piau_im_huat=siong_pinn_piau_im,
                 siann_bu=siann_bu,
                 un_bu=zu_im_list[1],
                 tiau_ho=zu_im_list[2]
             )
         elif style == "SNI":
             # 十五音反切法，將標音置於漢字上方
-            siong_piau_im = tng_uann_piau_im(
-                piau_im=piau_im,    # 注音法物件
-                zu_im_huat=siong_pinn_piau_im,
+            siong_piau_im = piau_im.han_ji_piau_im_tng_huan(
+                piau_im_huat=siong_pinn_piau_im,
                 siann_bu=siann_bu,
                 un_bu=zu_im_list[1],
                 tiau_ho=zu_im_list[2]
             )
         elif style == "TPS":
             # 注音符號標音法，將標音置於漢字右方
-            zian_piau_im = tng_uann_piau_im(
-                piau_im=piau_im,    # 注音法物件
-                zu_im_huat=zian_pinn_piau_im,
+            zian_piau_im = piau_im.han_ji_piau_im_tng_huan(
+                piau_im_huat=zian_pinn_piau_im,
                 siann_bu=siann_bu,
                 un_bu=zu_im_list[1],
                 tiau_ho=zu_im_list[2]
             )
         elif style == "DBL":
             # 漢字上方顯示台語音標，下方顯示台語注音符號
-            siong_piau_im = tng_uann_piau_im(
-                piau_im=piau_im,    # 注音法物件
-                zu_im_huat=siong_pinn_piau_im,
+            siong_piau_im = piau_im.han_ji_piau_im_tng_huan(
+                piau_im_huat=siong_pinn_piau_im,
                 siann_bu=siann_bu,
                 un_bu=zu_im_list[1],
                 tiau_ho=zu_im_list[2]
             )
-            zian_piau_im = tng_uann_piau_im(
-                piau_im=piau_im,    # 注音法物件
-                zu_im_huat=zian_pinn_piau_im,
+            zian_piau_im = piau_im.han_ji_piau_im_tng_huan(
+                piau_im_huat=zian_pinn_piau_im,
                 siann_bu=siann_bu,
                 un_bu=zu_im_list[1],
                 tiau_ho=zu_im_list[2]
@@ -450,101 +411,142 @@ def tng_sing_bang_iah(wb, sheet_name='漢字注音', han_ji_source='V3', page_ty
 
         # 輸出到網頁檔案：建立 HTML 檔案時傳入 head_extra
         create_html_file(output_path, html_content, web_page_title, head_extra)
-        print(f"【漢字注音】網頁製作完畢！")
+        logging_process_step(f"【漢字注音】工作表轉製網頁作業完畢！")
 
-    return 0
+    return EXIT_CODE_SUCCESS
 
 
 # =========================================================================
 # 作業程序
 # =========================================================================
 def process(wb):
+    logging_process_step("<----------- 作業開始！---------->")
     # ---------------------------------------------------------------------
     # 將【漢字注音】工作表中的標音漢字，轉成 HTML 網頁檔案。
     # ---------------------------------------------------------------------
-    result_code = tng_sing_bang_iah(
+    status_code = tng_sing_bang_iah(
         wb=wb,
         sheet_name='漢字注音',
         han_ji_source='V3',
         page_type='含頁頭'
     )
-    if result_code != EXIT_CODE_SUCCESS:
+    if status_code != EXIT_CODE_SUCCESS:
         logging.error("標音漢字轉換為 HTML 網頁檔案失敗！")
-        return result_code
+        return status_code
 
     # ---------------------------------------------------------------------
     # 作業結尾處理
     # ---------------------------------------------------------------------
-    file_path = save_as_new_file(wb=wb)
-    if not file_path:
-        logging.error("儲存檔案失敗！")
-        return EXIT_CODE_PROCESS_FAILURE    # 作業異當終止：無法儲存檔案
-    else:
-        logging_process_step(f"儲存檔案至路徑：{file_path}")
-        return EXIT_CODE_SUCCESS    # 作業正常結束
+    # 要求畫面回到【漢字注音】工作表
+    wb.sheets['漢字注音'].activate()
+    # 作業正常結束
+    logging_process_step("<----------- 作業結束！---------->")
+    return EXIT_CODE_SUCCESS
 
 # =============================================================================
 # 程式主流程
 # =============================================================================
 def main():
     # =========================================================================
-    # 開始作業
+    # (0) 程式初始化
     # =========================================================================
-    logging.info("作業開始")
-
-    # =========================================================================
-    # (1) 取得專案根目錄
-    # =========================================================================
+    # 取得專案根目錄。
     current_file_path = Path(__file__).resolve()
     project_root = current_file_path.parent
-    print(f"專案根目錄為: {project_root}")
-    logging.info(f"專案根目錄為: {project_root}")
+    # 取得程式名稱
+    # program_file_name = current_file_path.name
+    program_name = current_file_path.stem
 
     # =========================================================================
-    # (2) 嘗試獲取當前作用中的 Excel 工作簿
+    # (1) 開始執行程式
+    # =========================================================================
+    logging_process_step(f"《========== 程式開始執行：{program_name} ==========》")
+    logging_process_step(f"專案根目錄為: {project_root}")
+
+    # =========================================================================
+    # (2) 設定【作用中活頁簿】：偵測及獲取 Excel 已開啟之活頁簿檔案。
     # =========================================================================
     wb = None
+    # 取得【作用中活頁簿】
     try:
-        wb = xw.apps.active.books.active
+        wb = xw.apps.active.books.active    # 取得 Excel 作用中的活頁簿檔案
     except Exception as e:
+        print(f"發生錯誤: {e}")
         logging.error(f"無法找到作用中的 Excel 工作簿: {e}", exc_info=True)
-        print("無法找到作用中的 Excel 工作簿")
         return EXIT_CODE_NO_FILE
 
+    # 若無法取得【作用中活頁簿】，則因無法繼續作業，故返回【作業異常終止代碼】結束。
     if not wb:
-        print("無法作業，原因可能為：(1) 未指定輸入檔案；(2) 未找到作用中的 Excel 工作簿！")
-        logging.error("無法作業，未指定輸入檔案或 Excel 無效。")
         return EXIT_CODE_NO_FILE
 
     # =========================================================================
-    # (3) 處理作業
+    # (3) 執行【處理作業】
     # =========================================================================
     try:
         result_code = process(wb)
         if result_code != EXIT_CODE_SUCCESS:
-            logging.error("處理作業失敗，過程中出錯！")
-            return result_code
+            msg = f"程式異常終止：{program_name}"
+            logging_exc_error(msg=msg, error=e)
+            return EXIT_CODE_PROCESS_FAILURE
 
     except Exception as e:
-        print(f"執行過程中發生未知錯誤: {e}")
-        logging.error(f"執行過程中發生未知錯誤: {e}", exc_info=True)
+        msg = f"程式異常終止：{program_name}"
+        logging_exc_error(msg=msg, error=e)
         return EXIT_CODE_UNKNOWN_ERROR
 
     finally:
-        if wb:
-            logging_process_step(f"製作【漢字標音】網頁己完成！")
+        #--------------------------------------------------------------------------
+        # 儲存檔案
+        #--------------------------------------------------------------------------
+        try:
+            # 要求畫面回到【漢字注音】工作表
+            wb.sheets['漢字注音'].activate()
+            # 儲存檔案
+            file_path = save_as_new_file(wb=wb)
+            if not file_path:
+                logging_exc_error(msg="儲存檔案失敗！", error=e)
+                return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
+            else:
+                logging_process_step(f"儲存檔案至路徑：{file_path}")
+        except Exception as e:
+            logging_exc_error(msg="儲存檔案失敗！", error=e)
+            return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
+
+        # if wb:
+        #     xw.apps.active.quit()  # 確保 Excel 被釋放資源，避免開啟殘留
 
     # =========================================================================
-    # 結束作業
+    # 結束程式
     # =========================================================================
-    logging.info("作業完成！")
-    return EXIT_CODE_SUCCESS
+    logging_process_step(f"《========== 程式終止執行：{program_name} ==========》")
+    return EXIT_CODE_SUCCESS    # 作業正常結束
 
 
 if __name__ == "__main__":
     exit_code = main()
-    if exit_code == EXIT_CODE_SUCCESS:
-        print("程式正常完成！")
-    else:
-        print(f"程式異常終止，錯誤代碼為: {exit_code}")
     sys.exit(exit_code)
+# def tng_uann_piau_im(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
+#     """根據指定的標音方法，轉換台語音標之羅馬拚音字母"""
+#     if zu_im_huat == "十五音":
+#         return piau_im.SNI_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif zu_im_huat == "雅俗通":
+#         return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif zu_im_huat == "白話字":
+#         return piau_im.POJ_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif zu_im_huat == "台羅拼音":
+#         return piau_im.TL_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif zu_im_huat == "閩拼方案":
+#         return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif zu_im_huat == "閩拼調號":
+#         return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif zu_im_huat == "閩拼調符":
+#         return piau_im.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+#     elif zu_im_huat == "方音符號":
+#         return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif zu_im_huat == "台語音標":
+#         siann = piau_im.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+#         siann = siann if siann != "ø" else ""
+#         un = piau_im.Un_Bu_Dict[un_bu]["台語音標"]
+#         return f"{siann}{un}{tiau_ho}"
+#     return ""
+

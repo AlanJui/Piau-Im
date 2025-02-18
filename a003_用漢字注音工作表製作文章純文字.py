@@ -1,7 +1,6 @@
 # =========================================================================
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
-import logging
 import os
 import sys
 from pathlib import Path
@@ -10,9 +9,21 @@ from pathlib import Path
 import xlwings as xw
 from dotenv import load_dotenv
 
+from mod_excel_access import reset_cells_format_in_sheet
+
 # 載入自訂模組
-from mod_file_access import save_as_new_file
-from p709_reset_han_ji_cells import reset_han_ji_cells
+from mod_file_access import dump_txt_file
+
+# =========================================================================
+# 常數定義
+# =========================================================================
+# 定義 Exit Code
+EXIT_CODE_SUCCESS = 0  # 成功
+EXIT_CODE_NO_FILE = 1  # 無法找到檔案
+EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
+EXIT_CODE_SAVE_FAILURE = 3  # 儲存失敗
+EXIT_CODE_PROCESS_FAILURE = 10  # 過程失敗
+EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 
 # =========================================================================
 # 載入環境變數
@@ -26,45 +37,12 @@ DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
 # =========================================================================
 # 設定日誌
 # =========================================================================
-logging.basicConfig(
-    filename='process_log.txt',
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
+from mod_logging import init_logging, logging_exc_error, logging_process_step
 
-def logging_process_step(msg):
-    print(msg)
-    logging.info(msg)
+init_logging()
 
 # =========================================================================
-# 常數定義
-# =========================================================================
-# 定義 Exit Code
-EXIT_CODE_SUCCESS = 0  # 成功
-EXIT_CODE_NO_FILE = 1  # 無法找到檔案
-EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
-EXIT_CODE_PROCESS_FAILURE = 3  # 過程失敗
-EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
-
-
-# =========================================================================
-# Local Function
-# =========================================================================
-def dump_txt_file(file_path):
-    """
-    在螢幕 Dump 純文字檔內容。
-    """
-    print("\n【文字檔內容】：")
-    print("========================================\n")
-    try:
-        with open(file_path, 'r', encoding='utf-8') as f:
-            content = f.read()
-            print(content)
-    except FileNotFoundError:
-        print(f"無法找到檔案：{file_path}")
-
-# =========================================================================
-# 本程式主要處理作業程序
+# 作業程序
 # =========================================================================
 def process(wb):
     """
@@ -75,34 +53,6 @@ def process(wb):
     #--------------------------------------------------------------------------
     logging_process_step("<----------- 作業開始！---------->")
 
-    # 選擇工作表
-    sheet = wb.sheets['漢字注音']
-    sheet.activate()
-    #--------------------------------------------------------------------------
-    # 自【env】設定工作表，取得處理作業所需參數
-    #--------------------------------------------------------------------------
-
-    # 設定起始及結束的【列】位址（【第5列】、【第9列】、【第13列】等列）
-    TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
-    ROWS_PER_LINE = 4
-    start_row = 5
-    end_row = start_row + (TOTAL_LINES * ROWS_PER_LINE)
-    line = 1
-
-    # 設定起始及結束的【欄】位址（【D欄=4】到【R欄=18】）
-    CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
-    start_col = 4
-    end_col = start_col + CHARS_PER_ROW
-
-    #--------------------------------------------------------------------------
-    # 作業處理：逐列取出漢字，組合成純文字檔
-    #--------------------------------------------------------------------------
-    logging_process_step(f"開始【處理作業】...")
-    han_ji_text = ""
-    EOF = False
-
-    # 逐列處理作業
-    for row in range(start_row, end_row, ROWS_PER_LINE):
     # 選擇工作表
     sheet = wb.sheets['漢字注音']
     sheet.activate()
@@ -183,69 +133,103 @@ def process(wb):
     # 螢幕 Dump 檔案內容
     dump_txt_file(output_file)
 
-    # 作業結束前處理
-    logging_process_step(f"完成【處理作業】...")
+    # 回填【漢字注音】工作表之 V3 儲存格
+    wb.sheets['漢字注音'].range('V3').value = han_ji_text
+    logging_process_step("已將【漢字注音】工作表之內容，匯整成整篇【文章】之純文字，並回存 V3 儲存格！")
+
+    #--------------------------------------------------------------------------
+    # 結束作業
+    #--------------------------------------------------------------------------
+    logging_process_step("<----------- 作業結束！---------->")
     return EXIT_CODE_SUCCESS
 
 
-# =========================================================================
-# 程式主要作業流程
-# =========================================================================
+# =============================================================================
+# 程式主流程
+# =============================================================================
 def main():
     # =========================================================================
-    # (1) 取得專案根目錄。
+    # (0) 程式初始化
     # =========================================================================
+    # 取得專案根目錄。
     current_file_path = Path(__file__).resolve()
     project_root = current_file_path.parent
+    # 取得程式名稱
+    # program_file_name = current_file_path.name
+    program_name = current_file_path.stem
+
+    # =========================================================================
+    # (1) 開始執行程式
+    # =========================================================================
+    logging_process_step(f"《========== 程式開始執行：{program_name} ==========》")
     logging_process_step(f"專案根目錄為: {project_root}")
 
     # =========================================================================
-    # (2) 若無指定輸入檔案，則獲取當前作用中的 Excel 檔案並另存新檔。
+    # (2) 設定【作用中活頁簿】：偵測及獲取 Excel 已開啟之活頁簿檔案。
     # =========================================================================
+    # 確認 Excel 應用程式是否已啟動
+    if xw.apps.count == 0:
+        logging_process_step("程式異常終止：未檢測到 Excel 應用程式！")
+        return EXIT_CODE_INVALID_INPUT
+    # 確認是否有 Excel 活頁簿檔案已開啟
+    if xw.apps.active.books.count == 0:
+        logging_process_step("程式異常終止：未檢測到 Excel 活頁簿！")
+        return EXIT_CODE_INVALID_INPUT
+
     wb = None
-    # 使用已打開且處於作用中的 Excel 工作簿
+    # 取得【作用中活頁簿】
     try:
-        # 嘗試獲取當前作用中的 Excel 工作簿
-        wb = xw.apps.active.books.active
+        wb = xw.apps.active.books.active    # 取得 Excel 作用中的活頁簿檔案
+        directory = Path(wb.fullname).parent
+        logging_process_step(f"作用中活頁簿：{wb.name}")
+        logging_process_step(f"目錄路徑：{directory}")
     except Exception as e:
-        logging_process_step(f"發生錯誤: {e}")
-        logging.error(f"無法找到作用中的 Excel 工作簿: {e}", exc_info=True)
-        return EXIT_CODE_NO_FILE
+        logging_exc_error(msg=f"程式異常終止：{program_name}", error=e)
+        return EXIT_CODE_INVALID_INPUT
 
+    # 若無法取得【作用中活頁簿】，則因無法繼續作業，故返回【作業異常終止代碼】結束。
     if not wb:
-        logging_process_step("無法作業，因未無任何 Excel 檔案己開啟。")
-        return EXIT_CODE_NO_FILE
+        return EXIT_CODE_INVALID_INPUT
 
+    # =========================================================================
+    # (3) 執行【處理作業】
+    # =========================================================================
     try:
-        # =========================================================================
-        # (3) 執行【處理作業】
-        # =========================================================================
         result_code = process(wb)
         if result_code != EXIT_CODE_SUCCESS:
-            logging_process_step("處理作業失敗，過程中出錯！")
-            return result_code
+            msg = f"程式異常終止：{program_name}"
+            logging_exc_error(msg=msg, error=e)
+            return EXIT_CODE_PROCESS_FAILURE
 
     except Exception as e:
-        print(f"執行過程中發生未知錯誤: {e}")
-        logging.error(f"執行過程中發生未知錯誤: {e}", exc_info=True)
+        msg = f"程式異常終止：{program_name}"
+        logging_exc_error(msg=msg, error=e)
         return EXIT_CODE_UNKNOWN_ERROR
 
     finally:
-        if wb:
-            wb.save()
-            # 是否關閉 Excel 視窗可根據需求決定
-            # xw.apps.active.quit()  # 確保 Excel 被釋放資源，避免開啟殘留
-            logging.info("釋放 Excel 資源，處理完成。")
+        #--------------------------------------------------------------------------
+        # 儲存檔案
+        #--------------------------------------------------------------------------
+        try:
+            file_name = '_working'
+            output_dir_path = Path(wb.fullname).parent
+            file_path = os.path.join(output_dir_path, f"{file_name}.xlsx")
+            wb.save(file_path)
+            print(f"以檔案名稱：【{file_name}.xlsx】，儲存於目錄路徑：{output_dir_path}！")
+        except Exception as e:
+            logging_exc_error(msg="儲存檔案失敗！", error=e)
+            return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
 
-    # 結束作業
-    logging.info("作業成功完成！")
-    return EXIT_CODE_SUCCESS
+        # if wb:
+        #     xw.apps.active.quit()  # 確保 Excel 被釋放資源，避免開啟殘留
+
+    # =========================================================================
+    # 結束程式
+    # =========================================================================
+    logging_process_step(f"《========== 程式終止執行：{program_name} ==========》")
+    return EXIT_CODE_SUCCESS    # 作業正常結束
 
 
 if __name__ == "__main__":
     exit_code = main()
-    if exit_code == EXIT_CODE_SUCCESS:
-        print("作業正常結束！")
-    else:
-        print(f"作業異常終止，錯誤代碼為: {exit_code}")
     sys.exit(exit_code)

@@ -116,3 +116,202 @@ TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'
 2025-02-17 21:13:39,299 - INFO - <----------- 作業結束！---------->
 2025-02-17 21:13:40,552 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《蘭亭集序》.xlsx
 2025-02-17 21:13:40,552 - INFO - 《========== 程式終止執行：a300_手動更正漢字標音 ==========》
+2025-02-17 21:15:48,687 - INFO - 作業開始
+2025-02-17 21:15:48,687 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-17 21:15:48,688 - ERROR - 無法找到作用中的 Excel 工作簿: 'NoneType' object has no attribute 'books'
+Traceback (most recent call last):
+  File "c:\work\Piau-Im\a400_製作標音網頁.py", line 508, in main
+    wb = xw.apps.active.books.active
+         ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'books'
+2025-02-17 21:16:48,635 - INFO - 作業開始
+2025-02-17 21:16:48,635 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-17 21:17:21,035 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《蘭亭集序》.xlsx
+2025-02-17 21:17:21,035 - INFO - 製作【漢字標音】網頁己完成！
+2025-02-17 21:17:21,036 - INFO - 作業完成！
+2025-02-18 11:53:44,873 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-02-18 11:53:44,874 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-18 11:53:44,893 - INFO - <----------- 作業開始！---------->
+2025-02-18 11:54:13,167 - INFO - 自動為【漢字】查找【台語音標】作業己完成！
+2025-02-18 11:54:13,167 - INFO - 【語音類型】：文讀音
+2025-02-18 11:54:13,167 - INFO - 【漢字庫】：Ho_Lok_Ue.db
+2025-02-18 11:54:13,176 - INFO - <----------- 作業結束！---------->
+2025-02-18 11:54:13,364 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《蘭亭集序》.xlsx
+2025-02-18 11:54:13,364 - INFO - 《========== 程式終止執行：a200_查找及填入漢字標音 ==========》
+2025-02-18 11:54:28,562 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-02-18 11:54:28,563 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-18 11:54:28,579 - INFO - <----------- 作業開始！---------->
+2025-02-18 11:55:16,325 - INFO - <----------- 作業結束！---------->
+2025-02-18 11:55:16,522 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《蘭亭集序》.xlsx
+2025-02-18 11:55:16,522 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-02-18 11:58:46,681 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-02-18 11:58:46,682 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-18 11:58:46,698 - INFO - <----------- 作業開始！---------->
+2025-02-18 11:59:18,745 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-02-18 11:59:18,758 - INFO - <----------- 作業結束！---------->
+2025-02-18 11:59:18,921 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《蘭亭集序》.xlsx
+2025-02-18 11:59:18,922 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-02-18 12:16:13,884 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-02-18 12:16:13,885 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-18 12:16:13,901 - INFO - <----------- 作業開始！---------->
+2025-02-18 12:20:02,218 - INFO - 《========== 程式開始執行：a401_網頁檔回填Excel ==========》
+2025-02-18 12:20:02,219 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-18 12:25:25,503 - INFO - 《========== 程式開始執行：a401_網頁檔回填Excel ==========》
+2025-02-18 12:25:25,504 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-18 12:58:52,947 - INFO - 未指定 HTML 檔案路徑！
+2025-02-18 12:59:16,837 - INFO - 《========== 程式開始執行：a401_網頁檔回填Excel ==========》
+2025-02-18 12:59:16,838 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-18 12:59:16,850 - ERROR - 無法找到作用中的 Excel 工作簿: name 'full_file_name' is not defined
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a401_網頁檔回填Excel.py", line 252, in main
+    logging_process_step(f"作用中的 Excel 活頁簿：{full_file_name}")
+                                                   ^^^^^^^^^^^^^^
+NameError: name 'full_file_name' is not defined
+2025-02-18 13:01:05,848 - INFO - 未指定 HTML 檔案路徑！
+2025-02-18 13:01:05,850 - INFO - 《========== 程式開始執行：a401_網頁檔回填Excel ==========》
+2025-02-18 13:01:05,850 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-18 13:01:05,864 - ERROR - 無法找到作用中的 Excel 工作簿: name 'full_file_name' is not defined
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a401_網頁檔回填Excel.py", line 263, in main
+    logging_process_step(f"作用中的 Excel 活頁簿：{full_file_name}")
+                                                   ^^^^^^^^^^^^^^
+NameError: name 'full_file_name' is not defined
+2025-02-18 13:01:24,856 - INFO - 未指定 HTML 檔案路徑！
+2025-02-18 13:01:24,857 - INFO - 《========== 程式開始執行：a401_網頁檔回填Excel ==========》
+2025-02-18 13:01:24,858 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-18 13:01:24,872 - ERROR - 無法找到作用中的 Excel 工作簿: name 'full_file_name' is not defined
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a401_網頁檔回填Excel.py", line 263, in main
+    logging_process_step(f"作用中的 Excel 活頁簿：{full_file_name}")
+                                                   ^^^^^^^^^^^^^^
+NameError: name 'full_file_name' is not defined
+2025-02-18 13:02:02,208 - INFO - 未指定 HTML 檔案路徑！
+2025-02-18 13:02:29,636 - INFO - 《========== 程式開始執行：a401_網頁檔回填Excel ==========》
+2025-02-18 13:02:29,637 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-18 13:02:29,646 - ERROR - 無法找到作用中的 Excel 工作簿: name 'full_file_name' is not defined
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a401_網頁檔回填Excel.py", line 263, in main
+    logging_process_step(f"作用中的 Excel 活頁簿：{full_file_name}")
+                                                   ^^^^^^^^^^^^^^
+NameError: name 'full_file_name' is not defined
+2025-02-18 13:03:03,504 - INFO - 未指定 HTML 檔案路徑！
+2025-02-18 13:03:14,500 - INFO - 《========== 程式開始執行：a401_網頁檔回填Excel ==========》
+2025-02-18 13:03:15,676 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-18 13:07:50,712 - INFO - 未指定 HTML 檔案路徑！
+2025-02-18 13:08:02,196 - INFO - 《========== 程式開始執行：a401_網頁檔回填Excel ==========》
+2025-02-18 13:08:02,197 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-18 13:08:02,207 - ERROR - 無法找到作用中的 Excel 工作簿: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'NoneType'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a401_網頁檔回填Excel.py", line 263, in main
+    main_file_name = Path(html_file_path).stem
+                     ~~~~^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\pathlib\_local.py", line 503, in __init__
+    super().__init__(*args)
+    ~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Program Files\Python313\Lib\pathlib\_local.py", line 132, in __init__
+    raise TypeError(
+    ...<2 lines>...
+        f"not {type(path).__name__!r}")
+TypeError: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'NoneType'
+2025-02-18 13:08:57,900 - INFO - 未指定 HTML 檔案路徑！
+2025-02-18 13:08:57,902 - INFO - 《========== 程式開始執行：a401_網頁檔回填Excel ==========》
+2025-02-18 13:08:57,902 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-18 13:10:51,485 - INFO - 未指定 HTML 檔案路徑！
+2025-02-18 13:10:51,486 - INFO - 《========== 程式開始執行：a401_網頁檔回填Excel ==========》
+2025-02-18 13:10:51,486 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-18 13:10:51,503 - INFO - 作用中的 Excel 活頁簿：【河洛文讀注音-閩拼調號】《蘭亭集序》.xlsx，路徑：C:\work\Piau-Im\output7
+2025-02-18 13:10:59,115 - INFO - <----------- 作業開始！---------->
+2025-02-18 13:13:58,403 - INFO - 未指定 HTML 檔案路徑！
+2025-02-18 13:13:58,404 - INFO - 《========== 程式開始執行：a401_網頁檔回填Excel ==========》
+2025-02-18 13:13:58,405 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-18 13:13:58,425 - INFO - 作用中的 Excel 活頁簿：【河洛文讀注音-閩拼調號】《蘭亭集序》.xlsx，路徑：C:\work\Piau-Im\output7
+2025-02-18 13:14:02,940 - INFO - <----------- 作業開始！---------->
+2025-02-18 13:14:41,388 - ERROR - 程式異常終止：a401_網頁檔回填Excel，錯誤訊息: [Errno 2] No such file or directory: 'docs\\《蘭亭集序》【文讀音】閩拼調號.html'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a401_網頁檔回填Excel.py", line 278, in main
+    result_code = process(wb, html_file_path)
+  File "C:\work\Piau-Im\a401_網頁檔回填Excel.py", line 225, in process
+    import_html_to_excel(wb, html_file_path)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\a401_網頁檔回填Excel.py", line 69, in import_html_to_excel
+    with open(html_file_path, 'r', encoding='utf-8') as f:
+         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'docs\\《蘭亭集序》【文讀音】閩拼調號.html'
+2025-02-18 13:14:41,612 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《蘭亭集序》.xlsx
+2025-02-18 13:16:02,928 - INFO - 未指定 HTML 檔案路徑！
+2025-02-18 13:16:02,930 - INFO - 《========== 程式開始執行：a401_網頁檔回填Excel ==========》
+2025-02-18 13:16:02,930 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-18 13:16:02,945 - INFO - 作用中的 Excel 活頁簿：【河洛文讀注音-閩拼調號】《蘭亭集序》.xlsx，路徑：C:\work\Piau-Im\output7
+2025-02-18 13:16:02,946 - INFO - <----------- 作業開始！---------->
+2025-02-18 13:16:42,032 - INFO - 開始讀取 HTML 檔案：docs\《蘭亭集序》【文讀音】閩拼調號.html
+2025-02-18 14:01:20,946 - INFO - 未指定 HTML 檔案路徑！
+2025-02-18 14:01:20,947 - INFO - 《========== 程式開始執行：a401_網頁檔回填Excel ==========》
+2025-02-18 14:01:20,947 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-18 14:01:20,965 - INFO - 作用中的 Excel 活頁簿：【河洛文讀注音-閩拼調號】《蘭亭集序》.xlsx，路徑：C:\work\Piau-Im\output7
+2025-02-18 14:01:20,966 - INFO - <----------- 作業開始！---------->
+2025-02-18 14:01:21,063 - INFO - 開始讀取 HTML 檔案：docs\《蘭亭集序》【文讀音】雅俗通＋方音符號.html
+2025-02-18 14:02:45,100 - INFO - <----------- 作業結束！---------->
+2025-02-18 14:02:45,265 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《蘭亭集序》.xlsx
+2025-02-18 14:02:45,265 - INFO - 《========== 程式終止執行：a401_網頁檔回填Excel ==========》
+2025-02-18 14:03:29,132 - INFO - 《========== 程式開始執行：a001_重設漢字標音工作區各儲存格格式 ==========》
+2025-02-18 14:03:29,132 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-18 14:03:29,237 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫']
+2025-02-18 14:03:46,052 - INFO - 已重置【漢字注音】工作表中的儲存格格式！
+2025-02-18 14:03:46,052 - INFO - <----------- 作業結束！---------->
+2025-02-18 14:03:46,185 - INFO - 《========== 程式終止執行：a001_重設漢字標音工作區各儲存格格式 ==========》
+2025-02-18 14:05:29,446 - INFO - 未指定 HTML 檔案路徑！
+2025-02-18 14:05:29,448 - INFO - 《========== 程式開始執行：a401_網頁檔回填Excel ==========》
+2025-02-18 14:05:29,448 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-18 14:05:29,463 - INFO - 作用中的 Excel 活頁簿：_working.xlsx，路徑：C:\work\Piau-Im\output7
+2025-02-18 14:05:29,464 - INFO - <----------- 作業開始！---------->
+2025-02-18 14:05:29,560 - INFO - 開始讀取 HTML 檔案：docs\《蘭亭集序》【文讀音】雅俗通＋方音符號.html
+2025-02-18 14:05:34,038 - INFO - <----------- 作業結束！---------->
+2025-02-18 14:05:34,237 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《蘭亭集序》.xlsx
+2025-02-18 14:05:34,237 - INFO - 《========== 程式終止執行：a401_網頁檔回填Excel ==========》
+2025-02-18 14:06:43,949 - INFO - 未指定 HTML 檔案路徑！
+2025-02-18 14:06:43,950 - INFO - 《========== 程式開始執行：a401_網頁檔回填Excel ==========》
+2025-02-18 14:06:43,950 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-18 14:06:43,968 - INFO - 作用中的 Excel 活頁簿：【河洛文讀注音-閩拼調號】《蘭亭集序》.xlsx，路徑：C:\work\Piau-Im\output7
+2025-02-18 14:06:43,968 - INFO - <----------- 作業開始！---------->
+2025-02-18 14:06:44,067 - INFO - 開始讀取 HTML 檔案：docs\《蘭亭集序》【白話音】雅俗通＋方音符號.html
+2025-02-18 14:07:20,005 - INFO - <----------- 作業結束！---------->
+2025-02-18 14:07:20,744 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《蘭亭集序》.xlsx
+2025-02-18 14:07:20,744 - INFO - 《========== 程式終止執行：a401_網頁檔回填Excel ==========》
+2025-02-18 14:25:48,577 - INFO - 《========== 程式開始執行：a003_用漢字注音工作表製作文章純文字 ==========》
+2025-02-18 14:25:48,578 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-18 14:25:48,601 - INFO - 作用中活頁簿：【河洛白話注音-閩拼調號】《蘭亭集序》.xlsx
+2025-02-18 14:25:48,601 - INFO - 目錄路徑：C:\work\Piau-Im\output7
+2025-02-18 14:25:48,602 - INFO - <----------- 作業開始！---------->
+2025-02-18 14:25:48,665 - INFO - 開始【處理作業】...
+2025-02-18 14:25:55,038 - INFO - 已成功將漢字輸出至檔案：tmp.txt
+2025-02-18 14:25:55,048 - ERROR - 程式異常終止：a003_用漢字注音工作表製作文章純文字，錯誤訊息: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a003_用漢字注音工作表製作文章純文字.py", line 199, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a003_用漢字注音工作表製作文章純文字.py", line 137, in process
+    wb.names['漢字注音'].range('V3').refers_to_range.value = han_ji_text
+    ~~~~~~~~^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4622, in __getitem__
+    return self(item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4581, in __call__
+    return Name(impl=self.impl(name_or_index))
+                     ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2286, in __call__
+    return Name(xl=self.xl(name_or_index))
+                   ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-02-18 14:29:02,427 - INFO - 《========== 程式開始執行：a003_用漢字注音工作表製作文章純文字 ==========》
+2025-02-18 14:29:02,427 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-18 14:29:02,449 - INFO - 作用中活頁簿：_working.xlsx
+2025-02-18 14:29:02,449 - INFO - 目錄路徑：C:\work\Piau-Im\output7
+2025-02-18 14:29:02,450 - INFO - <----------- 作業開始！---------->
+2025-02-18 14:29:02,501 - INFO - 開始【處理作業】...
+2025-02-18 14:29:08,951 - INFO - 已成功將漢字輸出至檔案：tmp.txt
+2025-02-18 14:29:39,146 - INFO - 已將【漢字注音】工作表之內容，匯整成整篇【文章】之純文字，並回存 V3 儲存格！
+2025-02-18 14:29:39,146 - INFO - <----------- 作業結束！---------->
+2025-02-18 14:29:39,254 - INFO - 《========== 程式終止執行：a003_用漢字注音工作表製作文章純文字 ==========》

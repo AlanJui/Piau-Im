@@ -51,8 +51,9 @@ from mod_logging import init_logging, logging_exc_error, logging_process_step
 
 init_logging()
 
+
 # =========================================================================
-# 作業程序
+# 程式區域函式
 # =========================================================================
 def ca_ji_kiat_ko_tng_piau_im(result, han_ji_khoo: str, piau_im: PiauIm, piau_im_huat: str):
     """查字結果出標音：查詢【漢字庫】取得之【查找結果】，將之切分：聲、韻、調"""
@@ -364,8 +365,8 @@ def main():
     # (3) 執行【處理作業】
     # =========================================================================
     try:
-        result_code = process(wb)
-        if result_code != EXIT_CODE_SUCCESS:
+        status_code = process(wb)
+        if status_code != EXIT_CODE_SUCCESS:
             msg = f"程式異常終止：{program_name}"
             logging_exc_error(msg=msg, error=e)
             return EXIT_CODE_PROCESS_FAILURE

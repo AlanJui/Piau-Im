@@ -999,7 +999,8 @@ class PiauIm:
     #================================================================
     # 轉換【漢字標音】
     #================================================================
-    def han_ji_piau_im_tng_huan(self, piau_im, piau_im_huat, siann_bu, un_bu, tiau_ho):
+    # def han_ji_piau_im_tng_huan(self, piau_im, piau_im_huat, siann_bu, un_bu, tiau_ho):
+    def han_ji_piau_im_tng_huan(self, piau_im_huat, siann_bu, un_bu, tiau_ho):
         """選擇並執行對應的注音方法"""
         if piau_im_huat == "十五音":
             return self.SNI_piau_im(siann_bu, un_bu, tiau_ho)

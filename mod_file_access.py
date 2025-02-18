@@ -75,6 +75,49 @@ def save_as_new_file(wb, input_file_name=None):
     wb.save(new_file_path)
     return f"{new_file_path}"
 
+def save_as_new_excel_file(wb, input_file_name=None):
+    # 取得檔案名稱
+    if input_file_name == '_working':
+        file_name = input_file_name
+    else:
+        # 自 env 工作表取得檔案名稱
+        try:
+            title = str(wb.names['TITLE'].refers_to_range.value).strip()
+            file_name = f"《{title}》"
+        except KeyError:
+            setting_sheet = wb.sheets["env"]
+            file_name = str(setting_sheet.range("C4").value).strip()
+
+    # 設定檔案輸出路徑，存於專案根目錄下的 output2 資料夾
+    output_path = wb.names['OUTPUT_PATH'].refers_to_range.value
+    hue_im = wb.names['語音類型'].refers_to_range.value
+    piau_im_huat = wb.names['標音方法'].refers_to_range.value
+    im_piat = hue_im[:2]  # 取 hue_im 前兩個字元
+    # 檢查檔案名稱是否已包含副檔名
+    new_file_name = ensure_xlsx_extension(file_name)
+    new_file_path = os.path.join(
+        ".\\{0}".format(output_path),
+        f"【河洛{im_piat}注音-{piau_im_huat}】{new_file_name}")
+
+    # 儲存新建立的工作簿
+    wb.save(new_file_path)
+    return f"{new_file_path}"
+
+
+def dump_txt_file(file_path):
+    """
+    在螢幕 Dump 純文字檔內容。
+    """
+    print("\n【文字檔內容】：")
+    print("========================================\n")
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+            print(content)
+    except FileNotFoundError:
+        print(f"無法找到檔案：{file_path}")
+
+
 #----------------------------------------------------------------
 # 依 env 工作表的設定，將【漢字注音】輸出成網頁檔案。
 #----------------------------------------------------------------
