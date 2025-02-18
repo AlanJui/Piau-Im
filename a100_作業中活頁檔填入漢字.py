@@ -146,14 +146,14 @@ def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
         last_col = col
     else:
         last_col = start_col
-    sheet.range((row, last_col)).value = "φ"
+    sheet.range((row - ROWS_PER_LINE, last_col)).value = "φ"
     wb.save()
 
     # 選擇名為 "顯示注音輸入" 的命名範圍
     named_range = wb.names['顯示注音輸入']
     named_range.refers_to_range.value = True
 
-    logging.info(f"已成功更新，漢字已填入對應儲存格，上下方儲存格已清空。")
+    logging.info(f"已將《文章》之漢字，填入【漢字注音】工作表之【漢字標音】工作區！")
     return EXIT_CODE_SUCCESS
 
 

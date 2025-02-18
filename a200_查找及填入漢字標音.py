@@ -221,10 +221,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                 if msg == "【換行】" or EOF:
                     break
 
-            # =================================================================
-            # 每當處理一行 15 個漢字後，亦換到下一行
-            if col == end_col - 1: print('\n')
-            line += 1
+            # -----------------------------------------------------------------
             # 若已到【結尾】或【超過總行數】，則跳出迴圈
             if EOF or line > TOTAL_LINES:
                 # 將【標音字庫】、【人工標音字庫】、【缺字表】三個字典，寫入 Excel 工作表
@@ -232,13 +229,16 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                 piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=piau_im_sheet_name)
                 # jin_kang_piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
                 break
+            # 每當處理一行 15 個漢字後，亦換到下一行
+            if col == end_col - 1: print('\n')
+            line += 1
 
         #----------------------------------------------------------------------
         # 作業結束前處理
         #----------------------------------------------------------------------
         # 關閉資料庫連線
         conn.close()
-        print("已完成【台語音標】和【漢字標音】標注工作。")
+        logging_process_step("已完成【台語音標】和【漢字標音】標注工作。")
         return EXIT_CODE_SUCCESS
     except Exception as e:
         # 你可以在這裡加上紀錄或處理，例如:
