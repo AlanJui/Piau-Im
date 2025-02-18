@@ -1004,6 +1004,8 @@ class PiauIm:
         """選擇並執行對應的注音方法"""
         if piau_im_huat == "十五音":
             return self.SNI_piau_im(siann_bu, un_bu, tiau_ho)
+        elif piau_im_huat == "雅俗通":
+            return self.NST_piau_im(siann_bu, un_bu, tiau_ho)
         elif piau_im_huat == "白話字":
             return self.POJ_piau_im(siann_bu, un_bu, tiau_ho)
         elif piau_im_huat == "台羅拼音":
