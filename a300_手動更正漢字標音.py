@@ -554,7 +554,6 @@ def process(wb):
                                 sheet_name=sheet_name,
                                 piau_im=piau_im,
                                 piau_im_huat=piau_im_huat)
-        print("\n使用【缺字表】之【台語音標】更新【台語音標】作業已完成！")
     except Exception as e:
         logging_exc_error(msg=f"處理【缺字表】作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE

@@ -146,7 +146,8 @@ def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
         last_col = col
     else:
         last_col = start_col
-    sheet.range((row - ROWS_PER_LINE, last_col)).value = "φ"
+    # sheet.range((row - ROWS_PER_LINE, last_col)).value = "φ"
+    sheet.range((row, last_col)).value = "φ"
     wb.save()
 
     # 選擇名為 "顯示注音輸入" 的命名範圍
@@ -254,7 +255,7 @@ def main():
         wb = xw.apps.active.books.active    # 取得 Excel 作用中的活頁簿檔案
     except Exception as e:
         print(f"發生錯誤: {e}")
-        logging.error(f"無法找到作用中的 Excel 工作簿: {e}", exc_info=True)
+        logging_exc_error(f"無法找到作用中的 Excel 活頁簿！", error=e)
         return EXIT_CODE_NO_FILE
 
     # 若無法取得【作用中活頁簿】，則因無法繼續作業，故返回【作業異常終止代碼】結束。

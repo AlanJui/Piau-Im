@@ -206,6 +206,8 @@ def khuat_ji_piau_poo_im_piau(wb):
     piau_im_huat = get_value_by_name(wb=wb, name="語音類型")
     db_path = "Ho_Lok_Ue.db"  # 替換為你的資料庫檔案路徑
     table_name = "漢字庫"         # 替換為你的資料表名稱
+    hue_im = wb.names['語音類型'].refers_to_range.value
+    siong_iong_too = 0.8 if hue_im == "文讀音" else 0.6  # 根據語音類型設定常用度
 
     # 讀取資料表範圍
     data = sheet.range("A2").expand("table").value
