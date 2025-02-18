@@ -407,3 +407,212 @@ pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, Non
 2025-02-18 15:42:04,524 - INFO - <----------- 作業結束！---------->
 2025-02-18 15:42:04,685 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《蘭亭集序》.xlsx
 2025-02-18 15:42:04,685 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-02-18 16:46:55,621 - INFO - <----------- 作業開始！---------->
+2025-02-18 16:47:18,665 - ERROR - 程式異常終止：a501_缺字表回填字典資料庫，錯誤訊息: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 183, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 137, in process
+    process_excel_to_db(wb, sheet_name, db_path, table_name)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 113, in process_excel_to_db
+    if not isinstance(data[0], list):
+                      ~~~~^^^
+TypeError: 'NoneType' object is not subscriptable
+2025-02-18 16:47:18,699 - ERROR - 儲存檔案失敗！，錯誤訊息: name 'save_as_new_file' is not defined
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 202, in main
+    file_path = save_as_new_file(wb=wb)
+                ^^^^^^^^^^^^^^^^
+NameError: name 'save_as_new_file' is not defined
+2025-02-18 16:50:40,803 - INFO - <----------- 作業開始！---------->
+2025-02-18 16:50:50,160 - ERROR - 【缺字表】中無任何資料！，錯誤訊息: None
+NoneType: None
+2025-02-18 16:50:52,473 - ERROR - 無法將【缺字表】資料回填至資料庫！，錯誤訊息: 【缺字表】中無任何資料！
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 142, in process
+    process_excel_to_db(wb, sheet_name, db_path, table_name)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 114, in process_excel_to_db
+    raise ValueError("【缺字表】中無任何資料！")
+ValueError: 【缺字表】中無任何資料！
+2025-02-18 16:50:52,476 - ERROR - 程式異常終止：a501_缺字表回填字典資料庫，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 194, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-02-18 16:50:52,505 - ERROR - 儲存檔案失敗！，錯誤訊息: name 'save_as_new_file' is not defined
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 210, in main
+    file_path = save_as_new_file(wb=wb)
+                ^^^^^^^^^^^^^^^^
+NameError: name 'save_as_new_file' is not defined
+2025-02-18 16:52:28,019 - INFO - <----------- 作業開始！---------->
+2025-02-18 16:52:35,368 - ERROR - 【缺字表】中無任何資料！，錯誤訊息: None
+NoneType: None
+2025-02-18 16:52:36,921 - ERROR - 無法將【缺字表】資料回填至資料庫！，錯誤訊息: 【缺字表】中無任何資料！
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 147, in process
+    process_excel_to_db(wb, sheet_name, db_path, table_name)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 119, in process_excel_to_db
+    raise ValueError("【缺字表】中無任何資料！")
+ValueError: 【缺字表】中無任何資料！
+2025-02-18 16:52:36,924 - ERROR - 程式異常終止：a501_缺字表回填字典資料庫，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 199, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-02-18 16:52:36,940 - ERROR - 儲存檔案失敗！，錯誤訊息: name 'save_as_new_file' is not defined
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 215, in main
+    file_path = save_as_new_file(wb=wb)
+                ^^^^^^^^^^^^^^^^
+NameError: name 'save_as_new_file' is not defined
+2025-02-18 16:55:16,070 - INFO - <----------- 作業開始！---------->
+2025-02-18 16:55:26,016 - ERROR - 【缺字表】中無任何資料！，錯誤訊息: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 119, in process_excel_to_db
+    if not isinstance(data[0], list):
+                      ~~~~^^^
+TypeError: 'NoneType' object is not subscriptable
+2025-02-18 16:55:27,376 - ERROR - 無法將【缺字表】資料回填至資料庫！，錯誤訊息: 【缺字表】中無任何資料！
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 119, in process_excel_to_db
+    if not isinstance(data[0], list):
+                      ~~~~^^^
+TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 149, in process
+    process_excel_to_db(wb, sheet_name, db_path, table_name)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 131, in process_excel_to_db
+    raise ValueError("【缺字表】中無任何資料！")
+ValueError: 【缺字表】中無任何資料！
+2025-02-18 16:55:27,377 - ERROR - 程式異常終止：a501_缺字表回填字典資料庫，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 201, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-02-18 16:55:27,405 - ERROR - 儲存檔案失敗！，錯誤訊息: name 'save_as_new_file' is not defined
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 217, in main
+    file_path = save_as_new_file(wb=wb)
+                ^^^^^^^^^^^^^^^^
+NameError: name 'save_as_new_file' is not defined
+2025-02-18 16:56:13,903 - INFO - <----------- 作業開始！---------->
+2025-02-18 16:56:21,216 - ERROR - 【缺字表】中無任何資料！，錯誤訊息: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 119, in process_excel_to_db
+    if not isinstance(data[0], list):
+                      ~~~~^^^
+TypeError: 'NoneType' object is not subscriptable
+2025-02-18 16:56:22,080 - ERROR - 無法將【缺字表】資料回填至資料庫！，錯誤訊息: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 150, in process
+    process_excel_to_db(wb, sheet_name, db_path, table_name)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 119, in process_excel_to_db
+    if not isinstance(data[0], list):
+                      ~~~~^^^
+TypeError: 'NoneType' object is not subscriptable
+2025-02-18 16:56:22,081 - ERROR - 程式異常終止：a501_缺字表回填字典資料庫，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 202, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-02-18 16:56:22,095 - ERROR - 儲存檔案失敗！，錯誤訊息: name 'save_as_new_file' is not defined
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 218, in main
+    file_path = save_as_new_file(wb=wb)
+                ^^^^^^^^^^^^^^^^
+NameError: name 'save_as_new_file' is not defined
+2025-02-18 16:57:17,572 - INFO - <----------- 作業開始！---------->
+2025-02-18 16:57:48,472 - ERROR - 【缺字表】中無任何資料！，錯誤訊息: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 119, in process_excel_to_db
+    if not isinstance(data[0], list):
+                      ~~~~^^^
+TypeError: 'NoneType' object is not subscriptable
+2025-02-18 16:58:16,016 - ERROR - 無法將【缺字表】資料回填至資料庫！，錯誤訊息: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 150, in process
+    process_excel_to_db(wb, sheet_name, db_path, table_name)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 119, in process_excel_to_db
+    if not isinstance(data[0], list):
+                      ~~~~^^^
+TypeError: 'NoneType' object is not subscriptable
+2025-02-18 16:58:16,017 - ERROR - 程式異常終止：a501_缺字表回填字典資料庫，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 202, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-02-18 16:58:16,031 - ERROR - 儲存檔案失敗！，錯誤訊息: name 'save_as_new_file' is not defined
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 218, in main
+    file_path = save_as_new_file(wb=wb)
+                ^^^^^^^^^^^^^^^^
+NameError: name 'save_as_new_file' is not defined
+2025-02-18 16:59:07,465 - INFO - <----------- 作業開始！---------->
+2025-02-18 16:59:19,414 - ERROR - 【缺字表】中無任何資料！，錯誤訊息: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 119, in process_excel_to_db
+    if not isinstance(data[0], list):
+                      ~~~~^^^
+TypeError: 'NoneType' object is not subscriptable
+2025-02-18 17:00:33,469 - INFO - <----------- 作業開始！---------->
+2025-02-18 17:00:39,415 - ERROR - 【缺字表】中無任何資料！，錯誤訊息: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 119, in process_excel_to_db
+    if not isinstance(data[0], list):
+                      ~~~~^^^
+TypeError: 'NoneType' object is not subscriptable
+2025-02-18 17:00:43,935 - ERROR - 無法將【缺字表】資料回填至資料庫！，錯誤訊息: None
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 150, in process
+    process_excel_to_db(wb, sheet_name, db_path, table_name)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 119, in process_excel_to_db
+    if not isinstance(data[0], list):
+                      ~~~~^^^
+TypeError: 'NoneType' object is not subscriptable
+2025-02-18 17:01:33,944 - ERROR - 程式異常終止：a501_缺字表回填字典資料庫，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 202, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-02-18 17:01:33,977 - ERROR - 儲存檔案失敗！，錯誤訊息: name 'save_as_new_file' is not defined
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 218, in main
+    file_path = save_as_new_file(wb=wb)
+                ^^^^^^^^^^^^^^^^
+NameError: name 'save_as_new_file' is not defined
+2025-02-18 17:05:45,447 - INFO - <----------- 作業開始！---------->
+2025-02-18 17:05:53,175 - ERROR - 【缺字表】中無任何資料！，錯誤訊息: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 119, in process_excel_to_db
+    if not isinstance(data[0], list):
+                      ~~~~^^^
+TypeError: 'NoneType' object is not subscriptable
+2025-02-18 17:06:05,526 - ERROR - 無法將【缺字表】資料回填至資料庫！，錯誤訊息: None
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 150, in process
+    process_excel_to_db(wb, sheet_name, db_path, table_name)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\a501_缺字表回填字典資料庫.py", line 119, in process_excel_to_db
+    if not isinstance(data[0], list):
+                      ~~~~^^^
+TypeError: 'NoneType' object is not subscriptable
+2025-02-18 17:06:11,070 - ERROR - 程式異常終止：a501_缺字表回填字典資料庫，錯誤訊息: None
+NoneType: None
+2025-02-18 17:06:39,463 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《蘭亭集序》.xlsx

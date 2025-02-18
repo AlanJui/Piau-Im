@@ -13,13 +13,18 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 # 載入自訂模組/函式
-from mod_excel_access import (
-    create_dict_by_sheet,
-    ensure_sheet_exists,
-    get_ji_khoo,
-    get_value_by_name,
-    maintain_ji_khoo,
-)
+from mod_excel_access import get_value_by_name, save_as_new_file
+
+# =========================================================================
+# 常數定義
+# =========================================================================
+# 定義 Exit Code
+EXIT_CODE_SUCCESS = 0  # 成功
+EXIT_CODE_NO_FILE = 1  # 無法找到檔案
+EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
+EXIT_CODE_SAVE_FAILURE = 3  # 儲存失敗
+EXIT_CODE_PROCESS_FAILURE = 10  # 過程失敗
+EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 
 # =========================================================================
 # 載入環境變數
@@ -33,28 +38,17 @@ DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
 # =========================================================================
 # 設定日誌
 # =========================================================================
-logging.basicConfig(
-    filename='process_log.txt',
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+from mod_logging import (
+    init_logging,
+    logging_exc_error,
+    logging_exception,
+    logging_process_step,
 )
 
-def logging_process_step(msg):
-    print(msg)
-    logging.info(msg)
+init_logging()
 
 # =========================================================================
-# 常數定義
-# =========================================================================
-# 定義 Exit Code
-EXIT_CODE_SUCCESS = 0  # 成功
-EXIT_CODE_NO_FILE = 1  # 無法找到檔案
-EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
-EXIT_CODE_PROCESS_FAILURE = 3  # 過程失敗
-EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
-
-# =========================================================================
-# 作業程序
+# 程式區域函式
 # =========================================================================
 def insert_or_update_to_db(db_path, table_name: str, han_ji: str, tai_gi_im_piau: str, piau_im_huat: str):
     """
@@ -117,34 +111,54 @@ def process_excel_to_db(wb, sheet_name, db_path, table_name):
     sheet = wb.sheets[sheet_name]
     piau_im_huat = get_value_by_name(wb=wb, name="語音類型")
 
-    # 讀取資料表範圍
-    data = sheet.range("A2").expand("table").value
+    try:
+        # 讀取資料表範圍
+        data = sheet.range("A2").expand("table").value
 
-    # 確保資料為 2D 列表
-    if not isinstance(data[0], list):
-        data = [data]
+        # 確保資料為 2D 列表
+        if not isinstance(data[0], list):
+            data = [data]
 
-    for row in data:
-        han_ji = row[0]
-        tai_gi_im_piau = row[2]
+        for row in data:
+            han_ji = row[0]
+            tai_gi_im_piau = row[2]
 
-        if han_ji and tai_gi_im_piau:
-            insert_or_update_to_db(db_path, table_name, han_ji, tai_gi_im_piau, piau_im_huat)
+            if han_ji and tai_gi_im_piau:
+                insert_or_update_to_db(db_path, table_name, han_ji, tai_gi_im_piau, piau_im_huat)
 
-    print(f"【缺字表】中的資料已成功回填至資料庫： {db_path} 的【{table_name}】資料表中。")
+    except Exception as e:
+        logging_exception(msg=f"【缺字表】中無任何資料！", error=e)
+        # raise ValueError("【缺字表】中無任何資料！")
+        raise
+
+    logging_process_step(f"【缺字表】中的資料已成功回填至資料庫： {db_path} 的【{table_name}】資料表中。")
+    return EXIT_CODE_SUCCESS
 
 
 # =============================================================================
 # 作業主流程
 # =============================================================================
 def process(wb):
+    logging_process_step("<----------- 作業開始！---------->")
     # excel_path = "缺字表.xlsx"  # 替換為你的 Excel 檔案路徑
     sheet_name = "缺字表"      # 替換為你的工作表名稱
     db_path = "Ho_Lok_Ue.db"  # 替換為你的資料庫檔案路徑
     # db_path = "QA.sqlite"  # 替換為你的資料庫檔案路徑
     table_name = "漢字庫"         # 替換為你的資料表名稱
 
-    process_excel_to_db(wb, sheet_name, db_path, table_name)
+    try:
+        process_excel_to_db(wb, sheet_name, db_path, table_name)
+    except Exception as e:
+        logging_exc_error(msg="無法將【缺字表】資料回填至資料庫！", error=None)
+        return EXIT_CODE_PROCESS_FAILURE
+
+    # ---------------------------------------------------------------------
+    # 作業結尾處理
+    # ---------------------------------------------------------------------
+    # 要求畫面回到【缺字表】工作表
+    wb.sheets['缺字表'].activate()
+    # 作業正常結束
+    logging_process_step("<----------- 作業結束！---------->")
     return EXIT_CODE_SUCCESS
 
 
@@ -153,17 +167,14 @@ def process(wb):
 # =============================================================================
 def main():
     # =========================================================================
-    # 開始作業
+    # (0) 程式初始化
     # =========================================================================
-    logging.info("作業開始")
-    print(f"🔍 執行程式前，務必確認【缺字表】工作表中之【台語昔標】已填入！！")
-
-    # =========================================================================
-    # (1) 取得專案根目錄。
-    # =========================================================================
+    # 取得專案根目錄。
     current_file_path = Path(__file__).resolve()
     project_root = current_file_path.parent
-    logging_process_step(f"專案根目錄為: {project_root}")
+    # 取得程式名稱
+    # program_file_name = current_file_path.name
+    program_name = current_file_path.stem
 
     # =========================================================================
     # (2) 設定【作用中活頁簿】：偵測及獲取 Excel 已開啟之活頁簿檔案。
@@ -185,32 +196,44 @@ def main():
     # (3) 執行【處理作業】
     # =========================================================================
     try:
-        result_code = process(wb)
-        if result_code != EXIT_CODE_SUCCESS:
-            logging_process_step("作業異常終止！")
-            return result_code
+        status_code = process(wb)
+        if status_code != EXIT_CODE_SUCCESS:
+            msg = f"程式異常終止：{program_name}"
+            logging_exc_error(msg=msg, error=None)
+            return EXIT_CODE_PROCESS_FAILURE
 
     except Exception as e:
-        print(f"作業過程發生未知的異常錯誤: {e}")
-        logging.error(f"作業過程發生未知的異常錯誤: {e}", exc_info=True)
+        msg = f"程式異常終止：{program_name}"
+        logging_exc_error(msg=msg, error=e)
         return EXIT_CODE_UNKNOWN_ERROR
 
     finally:
-        if wb:
-            # xw.apps.active.quit()  # 確保 Excel 被釋放資源，避免開啟殘留
-            logging.info("a702_查找及填入漢字標音.py 程式已執行完畢！")
+        #--------------------------------------------------------------------------
+        # 儲存檔案
+        #--------------------------------------------------------------------------
+        try:
+            # 要求畫面回到【漢字注音】工作表
+            wb.sheets['漢字注音'].activate()
+            # 儲存檔案
+            file_path = save_as_new_file(wb=wb)
+            if not file_path:
+                logging_exc_error(msg="儲存檔案失敗！", error=e)
+                return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
+            else:
+                logging_process_step(f"儲存檔案至路徑：{file_path}")
+        except Exception as e:
+            logging_exc_error(msg="儲存檔案失敗！", error=e)
+            return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
+
+        # if wb:
+        #     xw.apps.active.quit()  # 確保 Excel 被釋放資源，避免開啟殘留
 
     # =========================================================================
-    # 結束作業
+    # 結束程式
     # =========================================================================
-    logging.info("作業完成！")
-    return EXIT_CODE_SUCCESS
+    logging_process_step(f"《========== 程式終止執行：{program_name} ==========》")
+    return EXIT_CODE_SUCCESS    # 作業正常結束
 
 
 if __name__ == "__main__":
     exit_code = main()
-    if exit_code == EXIT_CODE_SUCCESS:
-        print("程式正常完成！")
-    else:
-        print(f"程式異常終止，錯誤代碼為: {exit_code}")
-    sys.exit(exit_code)
