@@ -7,6 +7,7 @@ import re
 import sqlite3
 import sys
 from datetime import datetime
+from pathlib import Path
 
 import xlwings as xw
 from dotenv import load_dotenv
@@ -16,37 +17,39 @@ from mod_excel_access import (
     convert_to_excel_address,
     ensure_sheet_exists,
     excel_address_to_row_col,
+    get_value_by_name,
 )
 from mod_標音 import convert_tlpa_to_tl
+
+# =========================================================================
+# 常數定義
+# =========================================================================
+# 定義 Exit Code
+EXIT_CODE_SUCCESS = 0  # 成功
+EXIT_CODE_NO_FILE = 1  # 無法找到檔案
+EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
+EXIT_CODE_SAVE_FAILURE = 3  # 儲存失敗
+EXIT_CODE_PROCESS_FAILURE = 10  # 過程失敗
+EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 
 # =========================================================================
 # 載入環境變數
 # =========================================================================
 load_dotenv()
 
+# 預設檔案名稱從環境變數讀取
 DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
+DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
 
 # =========================================================================
 # 設定日誌
 # =========================================================================
-logging.basicConfig(
-    filename='process_log.txt',
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
+from mod_logging import init_logging, logging_exc_error, logging_process_step
+
+init_logging()
 
 # =========================================================================
-# 常數定義
-# =========================================================================
-EXIT_CODE_SUCCESS = 0
-EXIT_CODE_FAILURE = 1
-EXIT_CODE_INVALID_INPUT = 2
-EXIT_CODE_PROCESS_FAILURE = 3
-EXIT_CODE_UNKNOWN_ERROR = 99
-
-
-# =========================================================================
-# 作業程序
+# 程式區域函式
 # =========================================================================
 def get_active_cell_info(wb):
     """
@@ -138,51 +141,88 @@ def convert_tl_to_tlpa(im_piau):
     return im_piau
 
 
+def insert_or_update_to_db(db_path, table_name: str, han_ji: str, tai_gi_im_piau: str, piau_im_huat: str):
+    """
+    將【漢字】與【台語音標】插入或更新至資料庫。
+
+    :param db_path: 資料庫檔案路徑。
+    :param table_name: 資料表名稱。
+    :param han_ji: 漢字。
+    :param tai_gi_im_piau: 台語音標。
+    """
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    # 確保資料表存在
+    cursor.execute(f"""
+    CREATE TABLE IF NOT EXISTS {table_name} (
+        識別號 INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT,
+        漢字 TEXT,
+        台羅音標 TEXT,
+        常用度 REAL,
+        摘要說明 TEXT,
+        建立時間 TEXT NOT NULL DEFAULT (DATETIME('now', 'localtime')),
+        更新時間 TEXT NOT NULL DEFAULT (DATETIME('now', 'localtime'))
+    );
+    """)
+
+    # 檢查是否已存在該漢字
+    cursor.execute(f"SELECT 識別號 FROM {table_name} WHERE 漢字 = ?", (han_ji,))
+    row = cursor.fetchone()
+
+    siong_iong_too = 0.8 if piau_im_huat == "文讀音" else 0.6
+    if row:
+        # 更新資料
+        cursor.execute(f"""
+        UPDATE {table_name}
+        SET 台羅音標 = ?, 更新時間 = ?
+        WHERE 識別號 = ?;
+        """, (tai_gi_im_piau, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), row[0]))
+    else:
+        # 若語音類型為：【文讀音】，設定【常用度】欄位值為 0.8
+        cursor.execute(f"""
+        INSERT INTO {table_name} (漢字, 台羅音標, 常用度, 摘要說明)
+        VALUES (?, ?, ?, NULL);
+        """, (han_ji, tai_gi_im_piau, siong_iong_too))
+
+    conn.commit()
+    conn.close()
+
+
 # =========================================================================
 # 功能 1：使用【人工標音】更新【標音字庫】的校正音標
 # =========================================================================
-def update_pronunciation_in_excel(wb):
+def khuat_ji_piau_poo_im_piau(wb):
     """
-    更新【標音字庫】工作表中的【校正音標】（D 欄）
-    - 依據 【人工標音】(row-2, col) 更新 (row, col) 的【校正音標】
+    讀取 Excel 的【缺字表】工作表，並將資料回填至 SQLite 資料庫。
 
-    :param wb: Excel 活頁簿物件
-    :return: EXIT_CODE_SUCCESS or EXIT_CODE_FAILURE
+    :param excel_path: Excel 檔案路徑。
+    :param sheet_name: Excel 工作表名稱。
+    :param db_path: 資料庫檔案路徑。
+    :param table_name: 資料表名稱。
     """
-    sheet_name = "標音字庫"
-    active_cell = wb.app.selection  # 取得目前作用儲存格
-    cell_address = active_cell.address.replace("$", "")
-
-    row, col = excel_address_to_row_col(cell_address)
-    han_ji = active_cell.value
-
-    # 計算人工標音儲存格位置
-    # artificial_row = row - 2
-    artificial_row = row
-    artificial_pronounce = wb.sheets[sheet_name].cells(artificial_row, col).value
-
-    # 檢查標音字庫是否有此漢字，並更新校正音標
+    sheet_name = "缺字表"
     sheet = wb.sheets[sheet_name]
+    piau_im_huat = get_value_by_name(wb=wb, name="語音類型")
+    db_path = "Ho_Lok_Ue.db"  # 替換為你的資料庫檔案路徑
+    table_name = "漢字庫"         # 替換為你的資料表名稱
+
+    # 讀取資料表範圍
     data = sheet.range("A2").expand("table").value
 
+    # 確保資料為 2D 列表
     if not isinstance(data[0], list):
         data = [data]
 
-    for idx, row_data in enumerate(data):
-        row_han_ji = row_data[0]
-        correction_pronounce_cell = sheet.range(f"D{idx+2}")
-        coordinates = row_data[4]
+    for row in data:
+        han_ji = row[0]
+        tai_gi_im_piau = row[2]
 
-        if row_han_ji == han_ji and coordinates:
-            if convert_to_excel_address(str((row, col))) in coordinates:
-                if correction_pronounce_cell.value == "N/A":
-                    correction_pronounce_cell.value = artificial_pronounce
-                    print(f"✅ 更新成功: {han_ji} ({row}, {col}) -> {artificial_pronounce}")
-                    return EXIT_CODE_SUCCESS
+        if han_ji and tai_gi_im_piau:
+            insert_or_update_to_db(db_path, table_name, han_ji, tai_gi_im_piau, piau_im_huat)
 
-    print(f"❌ 未找到匹配的資料或不符合更新條件: {han_ji} ({row}, {col})")
-    return EXIT_CODE_FAILURE
-
+    logging_process_step(f"【缺字表】中的資料已成功回填至資料庫： {db_path} 的【{table_name}】資料表中。")
+    return EXIT_CODE_SUCCESS
 
 # =========================================================================
 # 功能 2：使用【標音字庫】更新【Ho_Lok_Ue.db】資料庫（含拼音轉換）
@@ -246,65 +286,16 @@ def update_database_from_excel(wb):
 
         conn.commit()
         print("✅ 資料庫更新完成！")
-        return EXIT_CODE_SUCCESS
 
     except Exception as e:
         print(f"❌ 資料庫更新失敗: {e}")
-        return EXIT_CODE_FAILURE
+        return EXIT_CODE_PROCESS_FAILURE
 
     finally:
         conn.close()
-# def update_database_from_excel(wb):
-#     """
-#     使用【標音字庫】工作表的資料更新 SQLite 資料庫（轉換台羅拼音 → 台語音標）。
 
-#     :param wb: Excel 活頁簿物件
-#     :return: EXIT_CODE_SUCCESS or EXIT_CODE_FAILURE
-#     """
-#     sheet_name = "標音字庫"
-#     sheet = wb.sheets[sheet_name]
-#     data = sheet.range("A2").expand("table").value
-#     hue_im = wb.names['語音類型'].refers_to_range.value
-#     siong_iong_too = 0.8  if hue_im == "文讀音" else 0.6
-
-#     if not isinstance(data[0], list):
-#         data = [data]
-
-#     conn = sqlite3.connect(DB_HO_LOK_UE)
-#     cursor = conn.cursor()
-
-#     try:
-#         for idx, row_data in enumerate(data, start=2):  # Excel A2 起始，Python Index 2
-#             han_ji = row_data[0]  # A 欄
-#             tai_gi_im_piau = row_data[3]  # D 欄 (校正音標)
-
-#             if not han_ji or not tai_gi_im_piau or tai_gi_im_piau == "N/A":
-#                 continue  # 跳過無效資料
-
-#             # 將 Excel 工作表存放的【台語音標（TLPA）】，改成資料庫保存的【台羅拼音（TL）】
-#             tai_lo_im_piau = convert_tlpa_to_tl(tai_gi_im_piau)
-
-#             # **在 INSERT 之前，顯示 Console 訊息**
-#             print(f"📌 寫入資料庫: 漢字='{han_ji}', 常用度={siong_iong_too}, 台語音標='{tai_gi_im_piau}', 轉換後 台羅拼音='{tai_lo_im_piau}', Excel 第 {idx} 列")
-
-#             cursor.execute("""
-#                 INSERT INTO 漢字庫 (漢字, 台羅音標, 常用度, 更新時間)
-#                 VALUES (?, ?, ?, CURRENT_TIMESTAMP)
-#                 ON CONFLICT(漢字, 台羅音標) DO UPDATE
-#                 SET 更新時間=CURRENT_TIMESTAMP;
-#             """, (han_ji, tai_lo_im_piau, siong_iong_too))  # 常用度固定為 0.8
-
-#         conn.commit()
-#         print("✅ 資料庫更新完成！")
-#         return EXIT_CODE_SUCCESS
-
-#     except Exception as e:
-#         print(f"❌ 資料庫更新失敗: {e}")
-#         return EXIT_CODE_FAILURE
-
-#     finally:
-#         conn.close()
-
+    logging_process_step(f"【標音字庫】中的【漢字】與【台語音標】已成功回填資料庫！")
+    return EXIT_CODE_SUCCESS
 
 # =========================================================================
 # 功能 3：將【漢字庫】資料表匯出到 Excel 的【漢字庫】工作表
@@ -339,15 +330,16 @@ def export_database_to_excel(wb):
         sheet.range("A2").value = rows
 
         print("✅ 資料成功匯出至 Excel！")
-        return EXIT_CODE_SUCCESS
 
     except Exception as e:
         print(f"❌ 匯出資料失敗: {e}")
-        return EXIT_CODE_FAILURE
+        return EXIT_CODE_PROCESS_FAILURE
 
     finally:
         conn.close()
 
+    logging_process_step(f"已將資料庫之【漢字庫】資料表，匯出至 Excel 作用中活頁簿檔的【漢字庫】工作表！")
+    return EXIT_CODE_SUCCESS
 
 # =========================================================================
 # 功能 4：重建 `漢字庫` 資料表（補上 `摘要說明` 欄位）
@@ -427,15 +419,16 @@ def rebuild_database_from_excel(wb):
 
         conn.commit()
         print("✅ `漢字庫` 資料表已成功重建！")
-        return EXIT_CODE_SUCCESS
 
     except Exception as e:
         print(f"❌ 重建 `漢字庫` 失敗: {e}")
-        return EXIT_CODE_FAILURE
+        return EXIT_CODE_PROCESS_FAILURE
 
     finally:
         conn.close()
 
+    logging_process_step(f"自【作用中活頁簿】檔之【漢字庫】工作表，匯入資料進資料庫之【漢字庫】資料表！")
+    return EXIT_CODE_SUCCESS
 
 # =========================================================================
 # 功能 5：匯出成 RIME 輸入法字典
@@ -477,18 +470,39 @@ def export_to_rime_dict():
                 file.write(f"{han_ji}\t{tai_lo_pinyin}\t{weight}\t{summary}\t{create_time}\n")
 
         print(f"✅ RIME 字典 `{dict_filename}` 匯出完成！")
-        return EXIT_CODE_SUCCESS
     except Exception as e:
         print(f"❌ 匯出 RIME 字典失敗: {e}")
-        return EXIT_CODE_FAILURE
+        return EXIT_CODE_PROCESS_FAILURE
     finally:
         conn.close()
+
+    logging_process_step(f"已將資料庫之【漢字庫】資料表，匯出並製成【中州韻字典檔】！")
+    return EXIT_CODE_SUCCESS
 
 
 # =========================================================================
 # 主程式執行
 # =========================================================================
 def main():
+    # =========================================================================
+    # (0) 程式初始化
+    # =========================================================================
+    # 取得專案根目錄。
+    current_file_path = Path(__file__).resolve()
+    project_root = current_file_path.parent
+    # 取得程式名稱
+    # program_file_name = current_file_path.name
+    program_name = current_file_path.stem
+
+    # =========================================================================
+    # 程式初始化
+    # =========================================================================
+    logging_process_step(f"《========== 程式開始執行：{program_name} ==========》")
+    logging_process_step(f"專案根目錄為: {project_root}")
+
+    # =========================================================================
+    # 開始執行程式
+    # =========================================================================
     if len(sys.argv) > 1:
         mode = sys.argv[1]
     else:
@@ -500,7 +514,7 @@ def main():
     wb = xw.apps.active.books.active
 
     if mode == "1":
-        return update_pronunciation_in_excel(wb)
+        return khuat_ji_piau_poo_im_piau(wb)
     elif mode == "2":
         return update_database_from_excel(wb)
     elif mode == "3":
