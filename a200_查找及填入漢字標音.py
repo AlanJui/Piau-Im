@@ -18,7 +18,6 @@ from mod_字庫 import JiKhooDict  # 漢字字庫物件
 from mod_標音 import PiauIm  # 漢字標音物件
 from mod_標音 import hong_im_tng_tai_gi_im_piau  # 方音符號轉台語音標
 from mod_標音 import is_punctuation  # 是否為標點符號
-from mod_標音 import siann_un_tiau_tng_piau_im  # 声、韻、調轉台語音標
 from mod_標音 import split_hong_im_hu_ho  # 分解漢字標音
 from mod_標音 import split_tai_gi_im_piau  # 分解台語音標
 from mod_標音 import tai_gi_im_piau_tng_un_bu  # 台語音標轉韻部(方音轉強勢音)
@@ -84,12 +83,11 @@ def ca_ji_kiat_ko_tng_piau_im(result, han_ji_khoo: str, piau_im: PiauIm, piau_im
     # 標音法為：【十五音】或【雅俗通】，且【聲母】為空值，則將【聲母】設為【ø】
     if (piau_im_huat == "十五音" or piau_im_huat == "雅俗通") and (siann_bu == "" or siann_bu == None):
         siann_bu = "ø"
-    han_ji_piau_im = siann_un_tiau_tng_piau_im(
-        piau_im,
-        piau_im_huat,
-        siann_bu,
-        un_bu,
-        tiau_ho
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+        siann_bu=siann_bu,
+        un_bu=un_bu,
+        tiau_ho=tiau_ho,
     )
     return tai_gi_im_piau, han_ji_piau_im
 
@@ -112,13 +110,13 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
 
         # 建置自動及人工漢字標音字庫工作表：（1）【標音字庫】；（2）【人工標音字】；（3）【缺字表】
         khuat_ji_piau_name = '缺字表'
-        # delete_sheet_by_name(wb=wb, sheet_name=khuat_ji_piau_name)
+        delete_sheet_by_name(wb=wb, sheet_name=khuat_ji_piau_name)
         khuat_ji_piau_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
                                     wb=wb,
                                     sheet_name=khuat_ji_piau_name)
 
         piau_im_sheet_name = '標音字庫'
-        # delete_sheet_by_name(wb=wb, sheet_name=piau_im_sheet_name)
+        delete_sheet_by_name(wb=wb, sheet_name=piau_im_sheet_name)
         piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
                                 wb=wb,
                                 sheet_name=piau_im_sheet_name)

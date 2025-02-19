@@ -191,6 +191,23 @@ def split_tai_lo(input_str):
 # }
 # ==========================================================
 def split_tai_gi_im_piau(im_piau: str):
+    # 查檢【台語音標】是否符合【標準】=【聲母】+【韻母】+【調號】；若是將：【陰平】、【陰入】調，
+    # 略去【調號】數值：1、4，則進行矯正
+    # 先將傳入之【台語音標】的最後一個字元視作【調號】取出
+    tiau = im_piau[-1]
+    # 若【調號】數值，使用上標數值格式，則替換為 ASCII 數字
+    tiau = replace_superscript_digits(str(tiau))
+
+    # 若輸入之【台語音標】未循【標準】，對【陰平】、【陰入】聲調，省略【調號】值：【1】/【4】
+    # 則依此規則進行矯正：若【調號】（即：拼音最後一個字母）為 [ptkh]，則更正調號值為 4；
+    # 則【調號】填入【韻母】之拼音字元，則將【調號】則更正為 1
+    if tiau in ['p', 't', 'k', 'h']:
+        tiau = '4'  # 聲調值為 4（陰入聲）
+        im_piau += tiau  # 為輸入之簡寫【台語音標】，添加【調號】
+    elif tiau in ['a', 'e', 'i', 'o', 'u', 'm', 'n', 'g']:  # 如果最後一個字母是英文字母
+        tiau = '1'  # 聲調值為 1（陰平聲）
+        im_piau += tiau  # 為輸入之簡寫【台語音標】，添加【調號】
+
     # 聲母相容性轉換處理（將 tsh 轉換為 c；將 ts 轉換為 z）
     # zu_im = zu_im.replace("tsh", "c")   # 將 tsh 轉換為 c
     # zu_im = zu_im.replace("ts", "z")    # 將 ts  轉換為 z
@@ -222,23 +239,8 @@ def split_tai_gi_im_piau(im_piau: str):
             siann_bu = ""  # 沒有匹配到聲母，聲母為空字串
             un_bu = im_piau[:-1]  # 韻母是剩下的部分，去掉最後的聲調
 
-        tiau = im_piau[-1]  # 最後一個字符是聲調
-
     # 轉換韻母
     un_bu = un_bu_tng_huan(un_bu)
-
-    # 將上標數字替換為普通數字
-    tiau = replace_superscript_digits(str(tiau))
-
-    # 若輸入之【台語音標】未循【標準】，對【陰平】、【陰入】聲調，省略【調號】值：【1】/【4】
-    # 則依此規則進行矯正：若【調號】（即：拼音最後一個字母）為 [ptkh]，則更正調號值為 4；
-    # 則【調號】填入【韻母】之拼音字元，則將【調號】則更正為 1
-    if tiau in ['p', 't', 'k', 'h']:
-        un_bu += tiau  # 將最後一個字母加入韻母
-        tiau = '4'  # 聲調值為 4（陰入聲）
-    elif tiau in ['a', 'e', 'i', 'o', 'u', 'oo']:  # 如果最後一個字母是英文字母
-        un_bu += tiau  # 將最後一個字母加入韻母
-        tiau = '1'  # 聲調值為 1（陰平聲）
 
     result += [siann_bu]
     result += [un_bu]
@@ -303,32 +305,32 @@ def split_hong_im_hu_ho(hong_im_piau_im):
     return [siann_mu, un_mu, str(tiau_ho)]
 
 
-def siann_un_tiau_tng_piau_im(piau_im, piau_im_huat, siann_bu, un_bu, tiau_ho):
-    """選擇並執行對應的注音方法"""
-    if piau_im_huat == "雅俗通":
-        return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
-    elif piau_im_huat == "十五音":
-        return piau_im.SNI_piau_im(siann_bu, un_bu, tiau_ho)
-    elif piau_im_huat == "白話字":
-        return piau_im.POJ_piau_im(siann_bu, un_bu, tiau_ho)
-    elif piau_im_huat == "台羅拼音":
-        return piau_im.TL_piau_im(siann_bu, un_bu, tiau_ho)
-    elif piau_im_huat == "閩拼方案":
-        return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
-    elif piau_im_huat == "閩拼調號":
-        return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
-    elif piau_im_huat == "閩拼調符":
-        return piau_im.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
-    elif piau_im_huat == "方音符號":
-        return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
-    elif piau_im_huat == "台語音標":
-        if siann_bu == "" or siann_bu == "Ø":
-            siann = ''
-        else:
-            siann = piau_im.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
-        un = piau_im.Un_Bu_Dict[un_bu]["台語音標"]
-        return f"{siann}{un}{tiau_ho}"
-    return ""
+# def siann_un_tiau_tng_piau_im(piau_im, piau_im_huat, siann_bu, un_bu, tiau_ho):
+#     """選擇並執行對應的注音方法"""
+#     if piau_im_huat == "雅俗通":
+#         return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif piau_im_huat == "十五音":
+#         return piau_im.SNI_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif piau_im_huat == "白話字":
+#         return piau_im.POJ_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif piau_im_huat == "台羅拼音":
+#         return piau_im.TL_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif piau_im_huat == "閩拼方案":
+#         return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif piau_im_huat == "閩拼調號":
+#         return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif piau_im_huat == "閩拼調符":
+#         return piau_im.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+#     elif piau_im_huat == "方音符號":
+#         return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif piau_im_huat == "台語音標":
+#         if siann_bu == "" or siann_bu == "Ø":
+#             siann = ''
+#         else:
+#             siann = piau_im.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+#         un = piau_im.Un_Bu_Dict[un_bu]["台語音標"]
+#         return f"{siann}{un}{tiau_ho}"
+#     return ""
 
 
 # ==========================================================
@@ -341,11 +343,10 @@ def tlpa_tng_han_ji_piau_im(piau_im, piau_im_huat, tai_gi_im_piau):
         # siann_bu = "Ø"
         siann_bu = 'ø'
 
-    han_ji_piau_im = siann_un_tiau_tng_piau_im(piau_im,
-                                               piau_im_huat,
-                                               siann_bu,
-                                               un_bu,
-                                               tiau_ho)
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(piau_im_huat=piau_im_huat,
+                                                     siann_bu=siann_bu,
+                                                     un_bu=un_bu,
+                                                     tiau_ho=tiau_ho)
     return han_ji_piau_im
 
 
