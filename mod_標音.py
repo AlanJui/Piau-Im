@@ -341,13 +341,11 @@ def tlpa_tng_han_ji_piau_im(piau_im, piau_im_huat, tai_gi_im_piau):
         # siann_bu = "Ø"
         siann_bu = 'ø'
 
-    han_ji_piau_im = siann_un_tng_piau_im(
-        piau_im,
-        piau_im_huat,
-        siann_bu,
-        un_bu,
-        tiau_ho
-    )
+    han_ji_piau_im = siann_un_tiau_tng_piau_im(piau_im,
+                                               piau_im_huat,
+                                               siann_bu,
+                                               un_bu,
+                                               tiau_ho)
     return han_ji_piau_im
 
 
