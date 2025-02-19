@@ -230,13 +230,15 @@ def split_tai_gi_im_piau(im_piau: str):
     # 將上標數字替換為普通數字
     tiau = replace_superscript_digits(str(tiau))
 
-    # 新增邏輯：若拼音最後一個字母為 [ptkh]，則更正調號值為 4；其它字母則更正為 1
+    # 若輸入之【台語音標】未循【標準】，對【陰平】、【陰入】聲調，省略【調號】值：【1】/【4】
+    # 則依此規則進行矯正：若【調號】（即：拼音最後一個字母）為 [ptkh]，則更正調號值為 4；
+    # 則【調號】填入【韻母】之拼音字元，則將【調號】則更正為 1
     if tiau in ['p', 't', 'k', 'h']:
-        un_bu = un_bu + tiau
-        tiau = '4'
-    else:
-        un_bu = un_bu + tiau
-        tiau = '1'
+        un_bu += tiau  # 將最後一個字母加入韻母
+        tiau = '4'  # 聲調值為 4（陰入聲）
+    elif tiau in ['a', 'e', 'i', 'o', 'u', 'oo']:  # 如果最後一個字母是英文字母
+        un_bu += tiau  # 將最後一個字母加入韻母
+        tiau = '1'  # 聲調值為 1（陰平聲）
 
     result += [siann_bu]
     result += [un_bu]
