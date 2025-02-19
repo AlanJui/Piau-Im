@@ -229,7 +229,14 @@ def split_tai_gi_im_piau(im_piau: str):
 
     # 將上標數字替換為普通數字
     tiau = replace_superscript_digits(str(tiau))
-    # tiau = 7 if int(tiau_ho) == 6 else int(tiau)
+
+    # 新增邏輯：若拼音最後一個字母為 [ptkh]，則更正調號值為 4；其它字母則更正為 1
+    if tiau in ['p', 't', 'k', 'h']:
+        un_bu = un_bu + tiau
+        tiau = '4'
+    else:
+        un_bu = un_bu + tiau
+        tiau = '1'
 
     result += [siann_bu]
     result += [un_bu]
@@ -332,7 +339,7 @@ def tlpa_tng_han_ji_piau_im(piau_im, piau_im_huat, tai_gi_im_piau):
         # siann_bu = "Ø"
         siann_bu = 'ø'
 
-    han_ji_piau_im = siann_un_tiau_tng_piau_im(
+    han_ji_piau_im = siann_un_tng_piau_im(
         piau_im,
         piau_im_huat,
         siann_bu,
@@ -816,6 +823,7 @@ class PiauIm:
             3: 5,  # 陰去：21
             4: 7,  # 上聲：53
             5: 2,  # 陽平：24
+            6: 5,  # 陽去：21
             7: 6,  # 陰入：3?
             8: 8,  # 陽入：4?
         }
