@@ -304,7 +304,7 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
                 if total_chars_per_line and total_chars_per_line != "預設":
                     char_count += 1
                     if char_count >= total_chars_per_line:
-                        ruby_tag += "</br>\n"
+                        ruby_tag += "<br/>\n"
                         char_count = 0  # 重置字數計數器
                         print('《--- 插入【人工斷行】--》')
 
