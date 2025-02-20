@@ -46,6 +46,23 @@ init_logging()
 # =========================================================================
 def process(wb):
     logging_process_step("<----------- 作業開始！---------->")
+    #--------------------------------------------------------------------------
+    # 清空【env】工作表之設定： 根據 name_list 清除對應名稱所在儲存格的內容
+    #----------------------------------------------------------------------
+    sheet = wb.sheets['env']   # 選擇工作表
+    sheet.activate()               # 將「env」工作表設為作用中工作表
+    name_list = ['INPUT_FILE_PATH', 'FILE_NAME', 'TITLE', 'IMAGE_URL', '章節序號']
+    for name in name_list:
+        if name in [n.name for n in wb.names]:
+            wb.names[name].refers_to_range.clear_contents()
+    # 預設值
+    wb.names['OUTPUT_PATH'].refers_to_range.value = 'output7'
+    wb.names['每頁總列數'].refers_to_range.value = 120
+    wb.names['每列總字數'].refers_to_range.value = 15
+    wb.names['網頁每列字數'].refers_to_range.value = 7
+    logging_process_step("【env】工作表之【選項設定】已重置！")
+
+
     #----------------------------------------------------------------------
     # 刪除漢字標音作業中使用之工作表
     #----------------------------------------------------------------------
@@ -92,18 +109,6 @@ def process(wb):
     #--------------------------------------------------------------------------
     reset_cells_format_in_sheet(wb)
     logging_process_step("【漢字注音】工作表，完成重置作業！")
-
-    #--------------------------------------------------------------------------
-    # 清空【env】工作表之設定： 根據 name_list 清除對應名稱所在儲存格的內容
-    #----------------------------------------------------------------------
-    sheet = wb.sheets['env']   # 選擇工作表
-    sheet.activate()               # 將「env」工作表設為作用中工作表
-    name_list = ['INPUT_FILE_PATH', 'FILE_NAME', 'TITLE', 'IMAGE_URL', '章節序號']
-    for name in name_list:
-        if name in [n.name for n in wb.names]:
-            wb.names[name].refers_to_range.clear_contents()
-    logging_process_step("【env】工作表之所有選項亦被清除！")
-
 
     #--------------------------------------------------------------------------
     # 結束作業
@@ -195,8 +200,11 @@ def main(mode: str = "1"):
         #--------------------------------------------------------------------------
         try:
             file_name = '_working'
-            output_dir_path = str(Path(wb.fullname).parent)
-            output_dir_path = "output7" if mode == "1" else output_dir_path
+            output_dir_path = wb.names['OUTPUT_PATH'].refers_to_range.value
+            if mode == "1" and output_dir_path == "":
+                output_dir_path = "output7"
+            else:
+                output_dir_path = str(Path(wb.fullname).parent)
             file_path = os.path.join(project_root, output_dir_path, f"{file_name}.xlsx")
             wb.save(file_path)
             logging_process_step(f"以檔案名稱：【{file_name}.xlsx】，儲存於目錄路徑：{output_dir_path}！")

@@ -2,6 +2,7 @@
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
 import logging
+import math
 import os
 import sys
 from pathlib import Path
@@ -77,16 +78,16 @@ def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
         total_length = len(v3_value)
         print(f" {total_length} 個字元")
 
-        # 設定起始及結束的【列】位址（【第5列】、【第9列】、【第13列】等列）
-        TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
-        ROWS_PER_LINE = 4
-        start_row = 5
-        end_row = start_row + (TOTAL_LINES * ROWS_PER_LINE)
-
         # 設定起始及結束的【欄】位址（【D欄=4】到【R欄=18】）
         CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
         start_col = 4
         end_col = start_col + CHARS_PER_ROW - 1
+
+        # 設定起始及結束的【列】位址（【第5列】、【第9列】、【第13列】等列）
+        TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value) if '每頁總列數' in [name.name for name in wb.names] else 120
+        ROWS_PER_LINE = 4
+        start_row = 5
+        end_row = start_row + (TOTAL_LINES * ROWS_PER_LINE)
 
         index = 0  # 用來追蹤目前處理到的字元位置
         row = 5
