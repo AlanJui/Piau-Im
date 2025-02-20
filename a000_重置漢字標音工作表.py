@@ -56,12 +56,16 @@ def process(wb):
         for sheet_name in sheets_to_delete:
             # 如果工作表確實存在才刪除
             if sheet_name in [sh.name for sh in wb.sheets]:
-                wb.sheets[sheet_name].delete()
+                try:
+                    wb.sheets[sheet_name].delete()
+                except Exception as e:
+                    logging_exc_error(msg=f"刪除工作表 {sheet_name} 失敗！", error=e)
+                    continue  # 繼續刪除其他工作表
     except Exception as e:
         logging_exc_error(msg="刪除工作表失敗！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
 
-    msg = f'已刪除不必要的工作表：{sheets_to_delete}'
+    msg = f'確認過不應存在要的工作表，的確沒有或已經刪除：{sheets_to_delete}'
     logging_process_step(msg)
 
     #----------------------------------------------------------------------
@@ -71,7 +75,7 @@ def process(wb):
     sheet.activate()               # 將「漢字注音」工作表設為作用中工作表
     sheet.range('A1').select()     # 將 A1 儲存格設為作用儲存格
 
-    total_rows = wb.names['每頁總列數'].refers_to_range.value
+    total_rows = wb.names['每頁總列數'].refers_to_range.value if '每頁總列數' in [name.name for name in wb.names] else 120
     cells_per_row = 4
     end_of_rows = int((total_rows * cells_per_row ) + 2)
     cells_range = f'D3:R{end_of_rows}'
@@ -90,13 +94,16 @@ def process(wb):
     logging_process_step("【漢字注音】工作表，完成重置作業！")
 
     #--------------------------------------------------------------------------
-    # 清空【env】工作表之設定
-    #--------------------------------------------------------------------------
+    # 清空【env】工作表之設定： 根據 name_list 清除對應名稱所在儲存格的內容
+    #----------------------------------------------------------------------
     sheet = wb.sheets['env']   # 選擇工作表
     sheet.activate()               # 將「env」工作表設為作用中工作表
-    end_of_row = 20
-    sheet.range(f'C2:C{end_of_row}').clear_contents()     # 清除 C3:R{end_of_row} 範圍的內容
+    name_list = ['INPUT_FILE_PATH', 'FILE_NAME', 'TITLE', 'IMAGE_URL', '章節序號']
+    for name in name_list:
+        if name in [n.name for n in wb.names]:
+            wb.names[name].refers_to_range.clear_contents()
     logging_process_step("【env】工作表之所有選項亦被清除！")
+
 
     #--------------------------------------------------------------------------
     # 結束作業
@@ -108,7 +115,7 @@ def process(wb):
 # =============================================================================
 # 程式主流程
 # =============================================================================
-def main():
+def main(mode: str = "1"):
     # =========================================================================
     # (0) 程式初始化
     # =========================================================================
@@ -128,25 +135,40 @@ def main():
     # =========================================================================
     # (2) 設定【作用中活頁簿】：偵測及獲取 Excel 已開啟之活頁簿檔案。
     # =========================================================================
-    # 確認 Excel 應用程式是否已啟動
-    if xw.apps.count == 0:
-        logging_process_step("程式異常終止：未檢測到 Excel 應用程式！")
-        return EXIT_CODE_INVALID_INPUT
-    # 確認是否有 Excel 活頁簿檔案已開啟
-    if xw.apps.active.books.count == 0:
-        logging_process_step("程式異常終止：未檢測到 Excel 活頁簿！")
-        return EXIT_CODE_INVALID_INPUT
-
     wb = None
-    # 取得【作用中活頁簿】
-    try:
-        wb = xw.apps.active.books.active    # 取得 Excel 作用中的活頁簿檔案
-        directory = Path(wb.fullname).parent
-        logging_process_step(f"作用中活頁簿：{wb.name}")
-        logging_process_step(f"目錄路徑：{directory}")
-    except Exception as e:
-        logging_exc_error(msg=f"程式異常終止：{program_name}", error=e)
-        return EXIT_CODE_INVALID_INPUT
+    if mode == "1":
+        # 設定活頁簿檔案路徑
+        file_path = os.path.join(project_root, "Template.xlsx")
+        # 確認檔案是否存在
+        if not os.path.exists(file_path):
+            logging_process_step("程式異常終止：找不到檔案！")
+            return EXIT_CODE_NO_FILE
+        # 開啟活頁簿檔案
+        try:
+            wb = xw.Book(file_path)
+            logging_process_step(f"已開啟活頁簿：{file_path}")
+        except Exception as e:
+            logging_exc_error(msg="程式異常終止：無法開啟活頁簿！", error=e)
+            return EXIT_CODE_NO_FILE
+    else:
+        # 確認 Excel 應用程式是否已啟動
+        if xw.apps.count == 0:
+            logging_process_step("程式異常終止：未檢測到 Excel 應用程式！")
+            return EXIT_CODE_INVALID_INPUT
+        # 確認是否有 Excel 活頁簿檔案已開啟
+        if xw.apps.active.books.count == 0:
+            logging_process_step("程式異常終止：未檢測到 Excel 活頁簿！")
+            return EXIT_CODE_INVALID_INPUT
+
+        # 取得【作用中活頁簿】
+        try:
+            wb = xw.apps.active.books.active    # 取得 Excel 作用中的活頁簿檔案
+            directory = Path(wb.fullname).parent
+            logging_process_step(f"作用中活頁簿：{wb.name}")
+            logging_process_step(f"目錄路徑：{directory}")
+        except Exception as e:
+            logging_exc_error(msg=f"程式異常終止：{program_name}", error=e)
+            return EXIT_CODE_INVALID_INPUT
 
     # 若無法取得【作用中活頁簿】，則因無法繼續作業，故返回【作業異常終止代碼】結束。
     if not wb:
@@ -173,10 +195,11 @@ def main():
         #--------------------------------------------------------------------------
         try:
             file_name = '_working'
-            output_dir_path = Path(wb.fullname).parent
-            file_path = os.path.join(output_dir_path, f"{file_name}.xlsx")
+            output_dir_path = str(Path(wb.fullname).parent)
+            output_dir_path = "output7" if mode == "1" else output_dir_path
+            file_path = os.path.join(project_root, output_dir_path, f"{file_name}.xlsx")
             wb.save(file_path)
-            print(f"以檔案名稱：【{file_name}.xlsx】，儲存於目錄路徑：{output_dir_path}！")
+            logging_process_step(f"以檔案名稱：【{file_name}.xlsx】，儲存於目錄路徑：{output_dir_path}！")
         except Exception as e:
             logging_exc_error(msg="儲存檔案失敗！", error=e)
             return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
@@ -192,5 +215,10 @@ def main():
 
 
 if __name__ == "__main__":
-    exit_code = main()
+    if len(sys.argv) > 1:
+        mode = sys.argv[1]
+    else:
+        mode = "1"
+
+    exit_code = main(mode)
     sys.exit(exit_code)

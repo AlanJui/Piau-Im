@@ -61,9 +61,12 @@ def set_range_format(range_obj, font_name, font_size, font_color, fill_color=Non
     range_obj.api.Font.Size = font_size
     range_obj.api.Font.Color = font_color
     if fill_color:
-        range_obj.api.Interior.Color = fill_color
+        # range_obj.api.Interior.Color = fill_color
+        # range_obj.color = (255, 255, 204)  # 淡黃色
+        range_obj.color = fill_color
     else:
-        range_obj.api.Interior.Pattern = xw.constants.Pattern.xlPatternNone  # 無填滿
+        # range_obj.api.Interior.Pattern = xw.constants.Pattern.xlPatternNone  # 無填滿
+        range_obj.color = None
 
 
 # 重置【漢字注音】工作表
@@ -73,8 +76,8 @@ def reset_cells_format_in_sheet(wb, sheet_name="漢字注音"):
 
         # 從 env 工作表中獲取每頁總列數和每列總字數
         env_sheet = wb.sheets['env']
-        total_lines = int(env_sheet.range('每頁總列數').value)
-        chars_per_row = int(env_sheet.range('每列總字數').value)
+        total_lines = int(env_sheet.range('每頁總列數').value) if env_sheet.range('每頁總列數').value else 120
+        chars_per_row = int(env_sheet.range('每列總字數').value) if env_sheet.range('每列總字數').value else 15
 
         # 設定起始及結束的【列】位址
         ROWS_PER_LINE = 4
@@ -100,7 +103,7 @@ def reset_cells_format_in_sheet(wb, sheet_name="漢字注音"):
                             font_name='Arial',
                             font_size=24,
                             font_color=0xFF0000,   # 紅色
-                            fill_color=0xFFFFCC)
+                            fill_color=(255, 255, 204))  # 淡黃色
 
             # 台語音標
             range_台語音標 = sheet.range((row - 1, start_col), (row - 1, end_col))

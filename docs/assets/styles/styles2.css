@@ -278,13 +278,14 @@ button:focus {
 /* 雙排注音符號 */
 .Siang_Pai {
     font-family: "Noto Serif TC";
+    /* font-size: 2.5em; */
+    margin-left: 30px;
 }
 
 .Siang_Pai ruby {
     ruby-merge: separate;
     ruby-position: over;
-    /* margin-left: 0em; */
-    margin-right: 0.3em;
+    margin-right: 0.2em;
 }
 
 .Siang_Pai rt {

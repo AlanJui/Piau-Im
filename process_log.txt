@@ -2109,3 +2109,458 @@ UnboundLocalError: cannot access local variable 'e' where it is not associated w
 2025-02-20 00:21:13,003 - INFO - <----------- 作業結束！---------->
 2025-02-20 00:21:13,219 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《赤壁賦》.xlsx
 2025-02-20 00:21:13,219 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-02-20 11:08:29,957 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-02-20 11:08:29,957 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 11:08:29,980 - INFO - <----------- 作業開始！---------->
+2025-02-20 11:09:31,312 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-02-20 11:09:31,313 - INFO - 自動為【漢字】查找【台語音標】作業己完成！
+2025-02-20 11:09:31,314 - INFO - 【語音類型】：文讀音
+2025-02-20 11:09:31,314 - INFO - 【漢字庫】：Ho_Lok_Ue.db
+2025-02-20 11:09:31,323 - INFO - <----------- 作業結束！---------->
+2025-02-20 11:09:31,551 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《赤壁賦》.xlsx
+2025-02-20 11:09:31,552 - INFO - 《========== 程式終止執行：a200_查找及填入漢字標音 ==========》
+2025-02-20 11:09:38,370 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-02-20 11:09:38,371 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 11:09:38,386 - INFO - <----------- 作業開始！---------->
+2025-02-20 11:09:38,437 - INFO - 已完成作業所需之初始化設定！
+2025-02-20 11:09:39,071 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-02-20 11:10:54,576 - INFO - 以【人工標音】更正之【台語音標】，已填入【標音字庫】之【校正音標】！
+2025-02-20 11:11:05,488 - INFO - 以【標音字庫】之【校正音標】，更新【漢字注音】工作表之【台語音標】！
+2025-02-20 11:11:05,496 - INFO - <----------- 作業結束！---------->
+2025-02-20 11:11:05,739 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《赤壁賦》.xlsx
+2025-02-20 11:11:05,740 - INFO - 《========== 程式終止執行：a300_手動更正漢字標音 ==========》
+2025-02-20 11:11:17,445 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-02-20 11:11:17,445 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 11:11:17,459 - INFO - <----------- 作業開始！---------->
+2025-02-20 11:12:14,255 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-02-20 11:12:14,269 - INFO - <----------- 作業結束！---------->
+2025-02-20 11:12:14,469 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《赤壁賦》.xlsx
+2025-02-20 11:12:14,469 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-02-20 18:18:19,667 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-02-20 18:18:19,668 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 18:18:19,690 - INFO - <----------- 作業開始！---------->
+2025-02-20 18:18:19,780 - INFO - 已完成作業所需之初始化設定！
+2025-02-20 18:18:20,808 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-02-20 19:27:59,152 - INFO - 《========== 程式開始執行：a000_重置漢字標音工作表 ==========》
+2025-02-20 19:27:59,152 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 19:27:59,185 - INFO - 作用中活頁簿：【河洛文讀注音-閩拼調號】《赤壁賦》.xlsx
+2025-02-20 19:27:59,186 - INFO - 目錄路徑：C:\work\Piau-Im\output7
+2025-02-20 19:27:59,186 - INFO - <----------- 作業開始！---------->
+2025-02-20 19:27:59,393 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫', '人工標音字庫']
+2025-02-20 19:28:14,261 - INFO - 【漢字注音】工作表，完成重置作業！
+2025-02-20 19:28:14,707 - INFO - 【env】工作表之所有選項亦被清除！
+2025-02-20 19:28:14,707 - INFO - <----------- 作業結束！---------->
+2025-02-20 19:28:14,915 - INFO - 《========== 程式終止執行：a000_重置漢字標音工作表 ==========》
+2025-02-20 19:40:57,819 - INFO - 《========== 程式開始執行：a001_重設漢字標音工作區各儲存格格式 ==========》
+2025-02-20 19:40:57,820 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 19:40:57,870 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫']
+2025-02-20 19:40:57,890 - ERROR - 重設【漢字注音】工作表儲存格格式時，發生錯誤：，錯誤訊息: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_excel_access.py", line 76, in reset_cells_format_in_sheet
+    total_lines = int(env_sheet.range('每頁總列數').value)
+                  ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+2025-02-20 19:40:57,891 - ERROR - 程式異常終止：a001_重設漢字標音工作區各儲存格格式，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a001_重設漢字標音工作區各儲存格格式.py", line 133, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-02-20 19:43:38,926 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-02-20 19:43:38,927 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 19:43:38,942 - INFO - <----------- 作業開始！---------->
+2025-02-20 19:43:39,003 - INFO - 已完成作業所需之初始化設定！
+2025-02-20 19:43:39,634 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-02-20 19:43:39,931 - ERROR - 處理【人工標音】作業異常！，錯誤訊息: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 280, in update_by_jin_kang_piau_im
+    TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
+                  ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+2025-02-20 19:43:39,935 - ERROR - 處理【漢字】之【人工標音】作業異常！，錯誤訊息: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 570, in process
+    update_by_jin_kang_piau_im(wb=wb,
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+                            sheet_name='人工標音字庫',
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+                            piau_im=piau_im,
+                            ^^^^^^^^^^^^^^^^
+                            piau_im_huat=piau_im_huat)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a300_手動更正漢字標音.py", line 280, in update_by_jin_kang_piau_im
+    TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
+                  ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+2025-02-20 19:43:39,936 - ERROR - 程式異常終止：a300_手動更正漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 646, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-02-20 19:43:40,083 - ERROR - 儲存檔案失敗！，錯誤訊息: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 662, in main
+    file_path = save_as_new_file(wb=wb)
+  File "c:\work\Piau-Im\mod_file_access.py", line 67, in save_as_new_file
+    im_piat = hue_im[:2]  # 取 hue_im 前兩個字元
+              ~~~~~~^^^^
+TypeError: 'NoneType' object is not subscriptable
+2025-02-20 19:44:27,417 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-02-20 19:44:27,418 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 19:45:17,616 - INFO - <----------- 作業開始！---------->
+2025-02-20 19:45:17,685 - INFO - 已完成作業所需之初始化設定！
+2025-02-20 19:45:18,209 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-02-20 19:45:18,437 - ERROR - 處理【人工標音】作業異常！，錯誤訊息: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 280, in update_by_jin_kang_piau_im
+    TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
+                  ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+2025-02-20 19:45:18,441 - ERROR - 處理【漢字】之【人工標音】作業異常！，錯誤訊息: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 570, in process
+    update_by_jin_kang_piau_im(wb=wb,
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+                            sheet_name='人工標音字庫',
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+                            piau_im=piau_im,
+                            ^^^^^^^^^^^^^^^^
+                            piau_im_huat=piau_im_huat)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a300_手動更正漢字標音.py", line 280, in update_by_jin_kang_piau_im
+    TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
+                  ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+2025-02-20 19:45:18,441 - ERROR - 程式異常終止：a300_手動更正漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 646, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-02-20 19:45:18,526 - ERROR - 儲存檔案失敗！，錯誤訊息: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 662, in main
+    file_path = save_as_new_file(wb=wb)
+  File "c:\work\Piau-Im\mod_file_access.py", line 67, in save_as_new_file
+    im_piat = hue_im[:2]  # 取 hue_im 前兩個字元
+              ~~~~~~^^^^
+TypeError: 'NoneType' object is not subscriptable
+2025-02-20 19:45:25,678 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-02-20 19:45:25,679 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 19:45:52,433 - INFO - <----------- 作業開始！---------->
+2025-02-20 19:45:52,505 - INFO - 已完成作業所需之初始化設定！
+2025-02-20 19:46:26,973 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-02-20 19:46:27,205 - ERROR - 處理【人工標音】作業異常！，錯誤訊息: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 280, in update_by_jin_kang_piau_im
+    TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
+                  ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+2025-02-20 19:46:27,210 - ERROR - 處理【漢字】之【人工標音】作業異常！，錯誤訊息: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 570, in process
+    update_by_jin_kang_piau_im(wb=wb,
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+                            sheet_name='人工標音字庫',
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+                            piau_im=piau_im,
+                            ^^^^^^^^^^^^^^^^
+                            piau_im_huat=piau_im_huat)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a300_手動更正漢字標音.py", line 280, in update_by_jin_kang_piau_im
+    TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
+                  ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+2025-02-20 19:46:27,210 - ERROR - 程式異常終止：a300_手動更正漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 646, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-02-20 19:46:27,289 - ERROR - 儲存檔案失敗！，錯誤訊息: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 662, in main
+    file_path = save_as_new_file(wb=wb)
+  File "c:\work\Piau-Im\mod_file_access.py", line 67, in save_as_new_file
+    im_piat = hue_im[:2]  # 取 hue_im 前兩個字元
+              ~~~~~~^^^^
+TypeError: 'NoneType' object is not subscriptable
+2025-02-20 19:46:36,240 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-02-20 19:46:36,241 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 19:46:43,273 - INFO - <----------- 作業開始！---------->
+2025-02-20 19:46:43,345 - INFO - 已完成作業所需之初始化設定！
+2025-02-20 19:47:51,083 - INFO - 《========== 程式開始執行：a001_重設漢字標音工作區各儲存格格式 ==========》
+2025-02-20 19:47:51,084 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 19:48:12,729 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫']
+2025-02-20 19:48:27,890 - ERROR - 重設【漢字注音】工作表儲存格格式時，發生錯誤：，錯誤訊息: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_excel_access.py", line 76, in reset_cells_format_in_sheet
+    total_lines = int(env_sheet.range('每頁總列數').value)
+                  ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+2025-02-20 19:48:31,209 - ERROR - 程式異常終止：a001_重設漢字標音工作區各儲存格格式，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a001_重設漢字標音工作區各儲存格格式.py", line 133, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-02-20 19:48:49,926 - INFO - 《========== 程式開始執行：a001_重設漢字標音工作區各儲存格格式 ==========》
+2025-02-20 19:48:49,927 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 19:48:49,991 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫']
+2025-02-20 19:49:10,833 - ERROR - 重設【漢字注音】工作表儲存格格式時，發生錯誤：，錯誤訊息: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_excel_access.py", line 76, in reset_cells_format_in_sheet
+    total_lines = int(env_sheet.range('每頁總列數').value)
+                  ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+2025-02-20 19:50:18,727 - INFO - 《========== 程式開始執行：a001_重設漢字標音工作區各儲存格格式 ==========》
+2025-02-20 19:50:18,728 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 19:50:18,780 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫']
+2025-02-20 19:51:26,929 - INFO - 《========== 程式開始執行：a001_重設漢字標音工作區各儲存格格式 ==========》
+2025-02-20 19:51:26,929 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 19:51:26,981 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫']
+2025-02-20 19:52:06,135 - INFO - 《========== 程式開始執行：a001_重設漢字標音工作區各儲存格格式 ==========》
+2025-02-20 19:52:06,137 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 19:52:06,188 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫']
+2025-02-20 19:53:53,729 - INFO - 《========== 程式開始執行：a001_重設漢字標音工作區各儲存格格式 ==========》
+2025-02-20 19:53:53,729 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 19:53:53,781 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫']
+2025-02-20 19:54:32,180 - INFO - 《========== 程式開始執行：a001_重設漢字標音工作區各儲存格格式 ==========》
+2025-02-20 19:54:32,181 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 19:54:32,233 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫']
+2025-02-20 19:56:12,910 - INFO - 已重置【漢字注音】工作表中的儲存格格式！
+2025-02-20 19:56:12,911 - INFO - <----------- 作業結束！---------->
+2025-02-20 19:56:13,014 - INFO - 《========== 程式終止執行：a001_重設漢字標音工作區各儲存格格式 ==========》
+2025-02-20 19:57:14,294 - INFO - 《========== 程式開始執行：a002_清除漢字注音工作表欲標音之漢字 ==========》
+2025-02-20 19:57:14,294 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 19:57:14,317 - INFO - 作用中活頁簿：_working.xlsx
+2025-02-20 19:57:14,317 - INFO - 目錄路徑：C:\work\Piau-Im\output7
+2025-02-20 19:57:14,317 - INFO - <----------- 作業開始！---------->
+2025-02-20 19:57:14,403 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫', '人工標音字庫']
+2025-02-20 19:57:14,458 - ERROR - 程式異常終止：a002_清除漢字注音工作表欲標音之漢字，錯誤訊息: unsupported operand type(s) for *: 'NoneType' and 'int'
+Traceback (most recent call last):
+  File "c:\work\Piau-Im\a002_清除漢字注音工作表欲標音之漢字.py", line 158, in main
+    result_code = process(wb)
+  File "c:\work\Piau-Im\a002_清除漢字注音工作表欲標音之漢字.py", line 87, in process
+    end_of_rows = int((total_rows * cells_per_row ) + 2)
+                       ~~~~~~~~~~~^~~~~~~~~~~~~~~
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'
+2025-02-20 19:57:26,256 - INFO - 《========== 程式開始執行：a001_重設漢字標音工作區各儲存格格式 ==========》
+2025-02-20 19:57:26,256 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 19:57:26,307 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫']
+2025-02-20 19:57:45,919 - INFO - 已重置【漢字注音】工作表中的儲存格格式！
+2025-02-20 19:57:45,919 - INFO - <----------- 作業結束！---------->
+2025-02-20 19:57:46,004 - INFO - 《========== 程式終止執行：a001_重設漢字標音工作區各儲存格格式 ==========》
+2025-02-20 20:17:07,082 - INFO - 《========== 程式開始執行：a001_重設漢字標音工作區各儲存格格式 ==========》
+2025-02-20 20:17:07,082 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 20:17:07,131 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫']
+2025-02-20 20:17:26,850 - INFO - 已重置【漢字注音】工作表中的儲存格格式！
+2025-02-20 20:17:26,850 - INFO - <----------- 作業結束！---------->
+2025-02-20 20:17:26,937 - INFO - 《========== 程式終止執行：a001_重設漢字標音工作區各儲存格格式 ==========》
+2025-02-20 20:21:11,769 - INFO - 《========== 程式開始執行：a001_重設漢字標音工作區各儲存格格式 ==========》
+2025-02-20 20:21:11,769 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 20:21:11,816 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫']
+2025-02-20 20:21:31,290 - INFO - 已重置【漢字注音】工作表中的儲存格格式！
+2025-02-20 20:21:31,290 - INFO - <----------- 作業結束！---------->
+2025-02-20 20:21:31,378 - INFO - 《========== 程式終止執行：a001_重設漢字標音工作區各儲存格格式 ==========》
+2025-02-20 20:21:44,835 - INFO - 《========== 程式開始執行：a001_重設漢字標音工作區各儲存格格式 ==========》
+2025-02-20 20:21:44,835 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 20:21:44,886 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫']
+2025-02-20 20:22:04,933 - INFO - 已重置【漢字注音】工作表中的儲存格格式！
+2025-02-20 20:22:04,934 - INFO - <----------- 作業結束！---------->
+2025-02-20 20:22:05,013 - INFO - 《========== 程式終止執行：a001_重設漢字標音工作區各儲存格格式 ==========》
+2025-02-20 20:22:27,510 - INFO - 作業開始
+2025-02-20 20:22:27,511 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 20:22:27,531 - ERROR - 作業過程發生未知的異常錯誤: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147352565), None)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_excel_access.py", line 894, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\mod_excel_access.py", line 816, in process
+    return_code = ut02_利用列欄座標值定位漢字注音儲存格(wb=wb)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\work\Piau-Im\mod_excel_access.py", line 795, in ut02_利用列欄座標值定位漢字注音儲存格
+    active_cell = wb.sheets[sheet_name].range(cell_address)
+                  ~~~~~~~~~^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 89, in __getitem__
+    return self(key)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 5218, in __call__
+    return Sheet(impl=self.impl(name_or_index))
+                      ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 943, in __call__
+    return Sheet(xl=self.xl(name_or_index))
+                    ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147352565), None)
+2025-02-20 20:23:00,593 - INFO - 《========== 程式開始執行：a001_重設漢字標音工作區各儲存格格式 ==========》
+2025-02-20 20:23:00,594 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 20:23:00,668 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫']
+2025-02-20 20:23:25,525 - INFO - 已重置【漢字注音】工作表中的儲存格格式！
+2025-02-20 20:23:25,525 - INFO - <----------- 作業結束！---------->
+2025-02-20 20:23:25,616 - INFO - 《========== 程式終止執行：a001_重設漢字標音工作區各儲存格格式 ==========》
+2025-02-20 20:32:48,462 - INFO - 《========== 程式開始執行：a000_重置漢字標音工作表 ==========》
+2025-02-20 20:32:48,462 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 20:32:48,464 - INFO - 程式異常終止：未檢測到 Excel 應用程式！
+2025-02-20 20:33:30,159 - INFO - 《========== 程式開始執行：a000_重置漢字標音工作表 ==========》
+2025-02-20 20:33:30,160 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 20:33:33,144 - INFO - 已開啟活頁簿：C:\work\Piau-Im\Template.xlsx
+2025-02-20 20:33:33,145 - INFO - <----------- 作業開始！---------->
+2025-02-20 20:33:33,389 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫', '人工標音字庫']
+2025-02-20 20:33:33,519 - ERROR - 程式異常終止：a000_重置漢字標音工作表，錯誤訊息: unsupported operand type(s) for *: 'NoneType' and 'int'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a000_重置漢字標音工作表.py", line 174, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a000_重置漢字標音工作表.py", line 76, in process
+    end_of_rows = int((total_rows * cells_per_row ) + 2)
+                       ~~~~~~~~~~~^~~~~~~~~~~~~~~
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'
+2025-02-20 20:41:08,806 - INFO - 《========== 程式開始執行：a000_重置漢字標音工作表 ==========》
+2025-02-20 20:41:08,807 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 20:41:09,205 - INFO - 已開啟活頁簿：C:\work\Piau-Im\Template.xlsx
+2025-02-20 20:41:09,206 - INFO - <----------- 作業開始！---------->
+2025-02-20 20:41:09,403 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫', '人工標音字庫']
+2025-02-20 20:41:09,520 - ERROR - 程式異常終止：a000_重置漢字標音工作表，錯誤訊息: unsupported operand type(s) for *: 'NoneType' and 'int'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a000_重置漢字標音工作表.py", line 178, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a000_重置漢字標音工作表.py", line 80, in process
+    end_of_rows = int((total_rows * cells_per_row ) + 2)
+                       ~~~~~~~~~~~^~~~~~~~~~~~~~~
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'
+2025-02-20 20:41:09,577 - ERROR - 儲存檔案失敗！，錯誤訊息: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', '您不能使用這個檔名存檔，因為已經有同樣檔名的檔案或增益集被開啟了。請選用其他的檔名，或將那個同名的檔案或增益集關閉。', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a000_重置漢字標音工作表.py", line 197, in main
+    wb.save(file_path)
+    ~~~~~~~^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 1169, in save
+    self.impl.save(path, password=password)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 894, in save
+    self.xl.SaveAs(
+    ~~~~~~~~~~~~~~^
+        os.path.realpath(path), FileFormat=file_format, Password=password
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject Open>", line 4, in SaveAs
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', '您不能使用這個檔名存檔，因為已經有同樣檔名的檔案或增益集被開啟了。請選用其他的檔名，或將那個同名的檔案或增益集關閉。', 'xlmain11.chm', 0, -2146827284), None)
+2025-02-20 20:41:36,938 - INFO - 《========== 程式開始執行：a000_重置漢字標音工作表 ==========》
+2025-02-20 20:41:36,939 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 20:41:39,227 - INFO - 已開啟活頁簿：C:\work\Piau-Im\Template.xlsx
+2025-02-20 20:41:39,227 - INFO - <----------- 作業開始！---------->
+2025-02-20 20:41:39,465 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫', '人工標音字庫']
+2025-02-20 20:41:39,609 - ERROR - 程式異常終止：a000_重置漢字標音工作表，錯誤訊息: unsupported operand type(s) for *: 'NoneType' and 'int'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a000_重置漢字標音工作表.py", line 178, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a000_重置漢字標音工作表.py", line 80, in process
+    end_of_rows = int((total_rows * cells_per_row ) + 2)
+                       ~~~~~~~~~~~^~~~~~~~~~~~~~~
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'
+2025-02-20 20:43:40,475 - INFO - 《========== 程式開始執行：a000_重置漢字標音工作表 ==========》
+2025-02-20 20:43:40,475 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 20:48:29,521 - INFO - 《========== 程式開始執行：a000_重置漢字標音工作表 ==========》
+2025-02-20 20:48:29,522 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 20:48:58,459 - INFO - 《========== 程式開始執行：a000_重置漢字標音工作表 ==========》
+2025-02-20 20:48:58,460 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 20:49:12,407 - INFO - 《========== 程式開始執行：a000_重置漢字標音工作表 ==========》
+2025-02-20 20:49:12,408 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 20:49:47,754 - INFO - 已開啟活頁簿：C:\work\Piau-Im\Template.xlsx
+2025-02-20 20:49:58,995 - INFO - <----------- 作業開始！---------->
+2025-02-20 20:49:59,036 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫', '人工標音字庫']
+2025-02-20 20:51:19,123 - INFO - 《========== 程式開始執行：a000_重置漢字標音工作表 ==========》
+2025-02-20 20:51:19,124 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 20:51:35,541 - INFO - 已開啟活頁簿：C:\work\Piau-Im\Template.xlsx
+2025-02-20 20:51:48,229 - INFO - <----------- 作業開始！---------->
+2025-02-20 20:52:29,392 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫', '人工標音字庫']
+2025-02-20 20:56:23,104 - INFO - 《========== 程式開始執行：a000_重置漢字標音工作表 ==========》
+2025-02-20 20:56:23,105 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 20:56:23,123 - INFO - 已開啟活頁簿：C:\work\Piau-Im\Template.xlsx
+2025-02-20 20:56:30,364 - INFO - <----------- 作業開始！---------->
+2025-02-20 20:56:30,399 - INFO - 確認過不應存在要的工作表，的確沒有或已經刪除：['缺字表', '標音字庫', '人工標音字庫']
+2025-02-20 20:56:30,478 - ERROR - 程式異常終止：a000_重置漢字標音工作表，錯誤訊息: unsupported operand type(s) for *: 'NoneType' and 'int'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a000_重置漢字標音工作表.py", line 178, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a000_重置漢字標音工作表.py", line 80, in process
+    end_of_rows = int((total_rows * cells_per_row ) + 2)
+                       ~~~~~~~~~~~^~~~~~~~~~~~~~~
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'
+2025-02-20 20:57:48,429 - INFO - 《========== 程式開始執行：a000_重置漢字標音工作表 ==========》
+2025-02-20 20:57:48,430 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 20:57:48,883 - INFO - 已開啟活頁簿：C:\work\Piau-Im\Template.xlsx
+2025-02-20 20:57:48,884 - INFO - <----------- 作業開始！---------->
+2025-02-20 20:57:49,114 - INFO - 確認過不應存在要的工作表，的確沒有或已經刪除：['缺字表', '標音字庫', '人工標音字庫']
+2025-02-20 20:57:49,355 - ERROR - 程式異常終止：a000_重置漢字標音工作表，錯誤訊息: unsupported operand type(s) for *: 'NoneType' and 'int'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a000_重置漢字標音工作表.py", line 178, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a000_重置漢字標音工作表.py", line 80, in process
+    end_of_rows = int((total_rows * cells_per_row ) + 2)
+                       ~~~~~~~~~~~^~~~~~~~~~~~~~~
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'
+2025-02-20 20:58:00,360 - INFO - 《========== 程式開始執行：a000_重置漢字標音工作表 ==========》
+2025-02-20 20:58:00,361 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 20:58:02,937 - INFO - 已開啟活頁簿：C:\work\Piau-Im\Template.xlsx
+2025-02-20 20:58:02,938 - INFO - <----------- 作業開始！---------->
+2025-02-20 20:58:03,191 - INFO - 確認過不應存在要的工作表，的確沒有或已經刪除：['缺字表', '標音字庫', '人工標音字庫']
+2025-02-20 20:58:03,402 - ERROR - 程式異常終止：a000_重置漢字標音工作表，錯誤訊息: unsupported operand type(s) for *: 'NoneType' and 'int'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a000_重置漢字標音工作表.py", line 178, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a000_重置漢字標音工作表.py", line 80, in process
+    end_of_rows = int((total_rows * cells_per_row ) + 2)
+                       ~~~~~~~~~~~^~~~~~~~~~~~~~~
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'
+2025-02-20 21:00:23,809 - INFO - 《========== 程式開始執行：a000_重置漢字標音工作表 ==========》
+2025-02-20 21:00:23,810 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 21:00:24,223 - INFO - 已開啟活頁簿：C:\work\Piau-Im\Template.xlsx
+2025-02-20 21:00:24,224 - INFO - <----------- 作業開始！---------->
+2025-02-20 21:00:24,420 - INFO - 確認過不應存在要的工作表，的確沒有或已經刪除：['缺字表', '標音字庫', '人工標音字庫']
+2025-02-20 21:00:37,270 - ERROR - 程式異常終止：a000_重置漢字標音工作表，錯誤訊息: unsupported operand type(s) for *: 'NoneType' and 'int'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a000_重置漢字標音工作表.py", line 178, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a000_重置漢字標音工作表.py", line 80, in process
+    end_of_rows = int((total_rows * cells_per_row ) + 2)
+                       ~~~~~~~~~~~^~~~~~~~~~~~~~~
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'
+2025-02-20 21:00:58,893 - INFO - 《========== 程式開始執行：a000_重置漢字標音工作表 ==========》
+2025-02-20 21:00:58,894 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 21:00:58,914 - INFO - 已開啟活頁簿：C:\work\Piau-Im\Template.xlsx
+2025-02-20 21:00:58,915 - INFO - <----------- 作業開始！---------->
+2025-02-20 21:00:58,946 - INFO - 確認過不應存在要的工作表，的確沒有或已經刪除：['缺字表', '標音字庫', '人工標音字庫']
+2025-02-20 21:01:02,731 - ERROR - 程式異常終止：a000_重置漢字標音工作表，錯誤訊息: unsupported operand type(s) for *: 'NoneType' and 'int'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a000_重置漢字標音工作表.py", line 178, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a000_重置漢字標音工作表.py", line 80, in process
+    end_of_rows = int((total_rows * cells_per_row ) + 2)
+                       ~~~~~~~~~~~^~~~~~~~~~~~~~~
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'
+2025-02-20 21:16:14,597 - INFO - 《========== 程式開始執行：a000_重置漢字標音工作表 ==========》
+2025-02-20 21:16:14,597 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 21:16:16,604 - INFO - 已開啟活頁簿：C:\work\Piau-Im\Template.xlsx
+2025-02-20 21:16:16,604 - INFO - <----------- 作業開始！---------->
+2025-02-20 21:16:16,879 - INFO - 確認過不應存在要的工作表，的確沒有或已經刪除：['缺字表', '標音字庫', '人工標音字庫']
+2025-02-20 21:17:12,314 - INFO - 《========== 程式開始執行：a000_重置漢字標音工作表 ==========》
+2025-02-20 21:17:12,315 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 21:17:12,333 - INFO - 已開啟活頁簿：C:\work\Piau-Im\Template.xlsx
+2025-02-20 21:17:12,333 - INFO - <----------- 作業開始！---------->
+2025-02-20 21:17:12,363 - INFO - 確認過不應存在要的工作表，的確沒有或已經刪除：['缺字表', '標音字庫', '人工標音字庫']
+2025-02-20 21:19:39,803 - INFO - 《========== 程式開始執行：a000_重置漢字標音工作表 ==========》
+2025-02-20 21:19:39,804 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-02-20 21:19:41,807 - INFO - 已開啟活頁簿：C:\work\Piau-Im\Template.xlsx
+2025-02-20 21:19:41,807 - INFO - <----------- 作業開始！---------->
+2025-02-20 21:19:42,078 - INFO - 確認過不應存在要的工作表，的確沒有或已經刪除：['缺字表', '標音字庫', '人工標音字庫']
+2025-02-20 21:20:07,364 - INFO - 【漢字注音】工作表，完成重置作業！
+2025-02-20 21:20:07,643 - INFO - 【env】工作表之所有選項亦被清除！
+2025-02-20 21:20:07,643 - INFO - <----------- 作業結束！---------->
+2025-02-20 21:20:18,308 - INFO - 以檔案名稱：【_working.xlsx】，儲存於目錄路徑：output7！
+2025-02-20 21:20:24,963 - INFO - 《========== 程式終止執行：a000_重置漢字標音工作表 ==========》

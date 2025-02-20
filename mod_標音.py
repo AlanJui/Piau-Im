@@ -209,12 +209,12 @@ def split_tai_gi_im_piau(im_piau: str):
         im_piau += tiau  # 為輸入之簡寫【台語音標】，添加【調號】
 
     # 聲母相容性轉換處理（將 tsh 轉換為 c；將 ts 轉換為 z）
-    # zu_im = zu_im.replace("tsh", "c")   # 將 tsh 轉換為 c
-    # zu_im = zu_im.replace("ts", "z")    # 將 ts  轉換為 z
     if im_piau.startswith("tsh"):
-        im_piau = im_piau.replace("tsh", "c", 1).replace("ch", "c", 1)  # 將 tsh, ch 轉換為 c
+        # im_piau = im_piau.replace("tsh", "c", 1).replace("ch", "c", 1)  # 將 tsh, ch 轉換為 c
+        im_piau = im_piau.replace("tsh", "c", 1)    # 將 tsh 轉換為 c
     elif im_piau.startswith("ts"):
-        im_piau = im_piau.replace("ts", "z", 1).replace("c", "z", 1)  # 將 ts, c 轉換為 z
+        # im_piau = im_piau.replace("ts", "z", 1).replace("c", "z", 1)      # 將 ts, c 轉換為 z
+        im_piau = im_piau.replace("ts", "z", 1)     # 將 ts 轉換為 z
 
     # 定義聲母的正規表示式，包括常見的聲母，但不包括 m 和 ng
     siann_bu_pattern = re.compile(r"(b|c|z|g|h|j|kh|k|l|m(?!\d)|ng(?!\d)|n|ph|p|s|th|t|Ø)")
