@@ -484,7 +484,9 @@ def split_hong_im_hu_ho(hong_im_piau_im):
 # 台語音標轉換為【漢字標音】之注音符號或羅馬字音標
 # ==========================================================
 def tlpa_tng_han_ji_piau_im(piau_im, piau_im_huat, tai_gi_im_piau):
-    siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(tai_gi_im_piau)
+    siann, un, tiau = convert_tl_with_tiau_hu_to_tlpa(tai_gi_im_piau)
+    tai_gi_im_piau_iong_tiau_ho = f"{siann}{un}{tiau}"
+    siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(tai_gi_im_piau_iong_tiau_ho)
 
     if siann_bu == "" or siann_bu == None:
         # siann_bu = "Ø"
@@ -503,47 +505,47 @@ def tlpa_tng_han_ji_piau_im(piau_im, piau_im_huat, tai_gi_im_piau):
 # def is_valid_han_ji(char):
 #     return is_punctuation(char) or is_chinese_char(char)
 
-# 方音符號轉換為【台語音標】
-def hong_im_tng_tai_gi_im_piau(siann, un, tiau, cursor):
-    """
-    根據傳入的方音符號聲母、韻母、聲調，轉換成對應的台語音標
-    :param siann: 聲母 (方音符號)
-    :param un: 韻母 (方音符號)
-    :param tiau: 聲調 (方音符號)
-    :param cursor: 數據庫游標
-    :return: 包含台語音標的字典
-    """
-    # 查詢聲母表，將方音符號的聲母轉換成台語音標
-    cursor.execute("SELECT 台語音標 FROM 聲母對照表 WHERE 方音符號 = ?", (siann,))
-    siann_result = cursor.fetchone()
-    if siann_result:
-        tai_gi_siann = siann_result[0]  # 取得台語音標
-    else:
-        tai_gi_siann = ''  # 無聲母的情況
+# # 方音符號轉換為【台語音標】
+# def hong_im_tng_tai_gi_im_piau(siann, un, tiau, cursor):
+#     """
+#     根據傳入的方音符號聲母、韻母、聲調，轉換成對應的台語音標
+#     :param siann: 聲母 (方音符號)
+#     :param un: 韻母 (方音符號)
+#     :param tiau: 聲調 (方音符號)
+#     :param cursor: 數據庫游標
+#     :return: 包含台語音標的字典
+#     """
+#     # 查詢聲母表，將方音符號的聲母轉換成台語音標
+#     cursor.execute("SELECT 台語音標 FROM 聲母對照表 WHERE 方音符號 = ?", (siann,))
+#     siann_result = cursor.fetchone()
+#     if siann_result:
+#         tai_gi_siann = siann_result[0]  # 取得台語音標
+#     else:
+#         tai_gi_siann = ''  # 無聲母的情況
 
-    # 查詢韻母表，將方音符號的韻母轉換成台語音標
-    cursor.execute("SELECT 台語音標 FROM 韻母對照表 WHERE 方音符號 = ?", (un,))
-    un_result = cursor.fetchone()
-    if un_result:
-        tai_gi_un = un_result[0]  # 取得台語音標
-    else:
-        tai_gi_un = ''
+#     # 查詢韻母表，將方音符號的韻母轉換成台語音標
+#     cursor.execute("SELECT 台語音標 FROM 韻母對照表 WHERE 方音符號 = ?", (un,))
+#     un_result = cursor.fetchone()
+#     if un_result:
+#         tai_gi_un = un_result[0]  # 取得台語音標
+#     else:
+#         tai_gi_un = ''
 
-    # 查詢聲調表，將方音符號的聲調轉換成台語音標
-    # cursor.execute("SELECT 方音符號調符 FROM 聲調對照表 WHERE 台羅調號 = ?", (tiau,))
-    # tiau_result = cursor.fetchone()
-    # if tiau_result:
-    #     tai_gi_tiau = tiau_result[0]  # 取得台語音標
-    # else:
-    #     tai_gi_tiau = ''
-    tai_gi_tiau = tiau
+#     # 查詢聲調表，將方音符號的聲調轉換成台語音標
+#     # cursor.execute("SELECT 方音符號調符 FROM 聲調對照表 WHERE 台羅調號 = ?", (tiau,))
+#     # tiau_result = cursor.fetchone()
+#     # if tiau_result:
+#     #     tai_gi_tiau = tiau_result[0]  # 取得台語音標
+#     # else:
+#     #     tai_gi_tiau = ''
+#     tai_gi_tiau = tiau
 
-    return {
-        '台語音標': f"{tai_gi_siann}{tai_gi_un}{tai_gi_tiau}",
-        '聲母': tai_gi_siann,
-        '韻母': tai_gi_un,
-        '聲調': tai_gi_tiau,
-    }
+#     return {
+#         '台語音標': f"{tai_gi_siann}{tai_gi_un}{tai_gi_tiau}",
+#         '聲母': tai_gi_siann,
+#         '韻母': tai_gi_un,
+#         '聲調': tai_gi_tiau,
+#     }
 
 
 # 台語音標轉換為方音符號
@@ -696,28 +698,28 @@ class PiauIm:
         """
         return self.cursor
 
-    def _init_siann_bu_dict(self, cursor):
-        # 執行 SQL 查詢
-        cursor.execute("SELECT * FROM 聲母對照表")
+    # def _init_siann_bu_dict(self, cursor):
+    #     # 執行 SQL 查詢
+    #     cursor.execute("SELECT * FROM 聲母對照表")
 
-        # 獲取所有資料
-        rows = cursor.fetchall()
+    #     # 獲取所有資料
+    #     rows = cursor.fetchall()
 
-        # 初始化字典
-        siann_bu_dict = {}
+    #     # 初始化字典
+    #     siann_bu_dict = {}
 
-        # 從查詢結果中提取資料並將其整理成一個字典
-        for row in rows:
-            siann_bu_dict[row[1]] = {
-                '台語音標': row[1],
-                '國際音標': row[2],
-                '台羅拼音': row[3],
-                '白話字':   row[4],
-                '閩拼方案': row[5],
-                '方音符號': row[6],
-                '十五音':   row[7],
-            }
-        return siann_bu_dict
+    #     # 從查詢結果中提取資料並將其整理成一個字典
+    #     for row in rows:
+    #         siann_bu_dict[row[1]] = {
+    #             '台語音標': row[1],
+    #             '國際音標': row[2],
+    #             '台羅拼音': row[3],
+    #             '白話字':   row[4],
+    #             '閩拼方案': row[5],
+    #             '方音符號': row[6],
+    #             '十五音':   row[7],
+    #         }
+    #     return siann_bu_dict
 
     def _init_siann_bu_dict(self):
         """
@@ -1177,6 +1179,40 @@ class PiauIm:
             un = self.Un_Bu_Dict[un_bu]["台語音標"]
             return f"{siann}{un}{tiau_ho}"
         return ""
+
+
+    def hong_im_tng_tai_gi_im_piau(self, siann, un, tiau):
+        """
+        將【方音符號】轉換為【台語音標】
+        :param siann: 聲母 (方音符號)
+        :param un: 韻母 (方音符號)
+        :param tiau: 聲調 (方音符號)
+        :return: (聲母, 韻母, 聲調) 的 tuple
+        """
+        if not self.cursor:
+            raise ValueError("資料庫 cursor 未設定，無法執行查詢")
+
+        # 查詢【聲母對照表】轉換【聲母】
+        self.cursor.execute("SELECT 台語音標 FROM 聲母對照表 WHERE 方音符號 = ?", (siann,))
+        siann_result = self.cursor.fetchone()
+        tai_gi_siann = siann_result[0] if siann_result else ""
+
+        # 查詢【韻母對照表】轉換【韻母】
+        self.cursor.execute("SELECT 台語音標 FROM 韻母對照表 WHERE 方音符號 = ?", (un,))
+        un_result = self.cursor.fetchone()
+        tai_gi_un = un_result[0] if un_result else ""
+
+        # 聲調不變，直接回傳
+        tai_gi_tiau = tiau
+
+        # return tai_gi_siann, tai_gi_un, tai_gi_tiau
+        return {
+            '台語音標': f"{tai_gi_siann}{tai_gi_un}{tai_gi_tiau}",
+            '聲母': tai_gi_siann,
+            '韻母': tai_gi_un,
+            '聲調': tai_gi_tiau,
+        }
+
 
 
 def ut001():

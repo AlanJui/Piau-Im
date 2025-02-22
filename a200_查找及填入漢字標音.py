@@ -15,14 +15,16 @@ from dotenv import load_dotenv
 from mod_excel_access import delete_sheet_by_name, get_value_by_name
 from mod_file_access import load_module_function, save_as_new_file
 from mod_字庫 import JiKhooDict  # 漢字字庫物件
+
+# from mod_標音 import hong_im_tng_tai_gi_im_piau  # 方音符號轉台語音標
 from mod_標音 import PiauIm  # 漢字標音物件
 from mod_標音 import ca_ji_kiat_ko_tng_piau_im  # 查字典得台語音標及漢字標音
-from mod_標音 import hong_im_tng_tai_gi_im_piau  # 方音符號轉台語音標
 from mod_標音 import is_punctuation  # 是否為標點符號
-from mod_標音 import split_hong_im_hu_ho  # 分解漢字標音
-from mod_標音 import split_tai_gi_im_piau  # 分解台語音標
-from mod_標音 import tai_gi_im_piau_tng_un_bu  # 台語音標轉韻部(方音轉強勢音)
-from mod_標音 import tlpa_tng_han_ji_piau_im  # 台語音標轉台語音標
+
+# from mod_標音 import split_hong_im_hu_ho  # 分解漢字標音
+# from mod_標音 import split_tai_gi_im_piau  # 分解台語音標
+# from mod_標音 import tai_gi_im_piau_tng_un_bu  # 台語音標轉韻部(方音轉強勢音)
+# from mod_標音 import tlpa_tng_han_ji_piau_im  # 台語音標轉台語音標
 
 # =========================================================================
 # 常數定義
