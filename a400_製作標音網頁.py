@@ -3,6 +3,7 @@
 # =========================================================================
 import logging
 import os
+import sqlite3
 import sys
 from pathlib import Path
 
@@ -12,11 +13,11 @@ from dotenv import load_dotenv
 
 # 載入自訂模組
 from mod_excel_access import get_value_by_name
-from mod_file_access import save_as_new_file
+from mod_file_access import load_module_function, save_as_new_file
 
 # from mod_廣韻 import tng_uann_piau_im
 from mod_標音 import split_tai_gi_im_piau  # 分解台語音標
-from mod_標音 import PiauIm, is_punctuation
+from mod_標音 import PiauIm, ca_ji_kiat_ko_tng_piau_im, is_punctuation
 
 # =========================================================================
 # 常數定義
@@ -67,6 +68,82 @@ def create_html_file(output_path, content, title='您的標題', head_extra=""):
     print(f"\n輸出網頁檔案：{output_path}")
 
 
+def title_piau_im(wb, title: str) -> str:
+    # ------------------------------------------------------------------------------
+    # 為漢字查找讀音，漢字上方填：【台語音標】；漢字下方填使用者指定之【漢字標音】
+    # ------------------------------------------------------------------------------
+    # 取得【漢字庫】之資料庫查詢所需環境參數
+    try:
+        han_ji_khoo_name = wb.names['漢字庫'].refers_to_range.value
+        ue_im_lui_piat = wb.names['語音類型'].refers_to_range.value  # 取得【語音類型】，判別使用【白話音】或【文讀音】何者。
+        db_name = 'Ho_Lok_Ue.db' if han_ji_khoo_name == '河洛話' else 'Kong_Un.db'
+        piau_im_huat = wb.names['標音方法'].refers_to_range.value
+    except Exception as e:
+        logging_exc_error(f"【env】工作表找不到選項之設定值", e)
+        raise
+
+    # 決定使用的模組名稱
+    if han_ji_khoo_name == '河洛話':
+        module_name = 'mod_河洛話'
+    else:
+        module_name = 'mod_廣韻'
+    # 決定使用的函數名稱
+    function_name = 'han_ji_ca_piau_im'
+
+    # 載入【漢字庫】查找函數
+    if han_ji_khoo_name == "河洛話":
+        han_ji_ca_piau_im = load_module_function(module_name, function_name)
+    elif han_ji_khoo_name == "廣韻":
+        han_ji_ca_piau_im = load_module_function(module_name, function_name)
+    else:
+        msg = "無法執行漢字標音作業，請確認【env】工作表【語音類型】及【漢字庫】欄位的設定是否正確！"
+        logging_exc_error(msg=msg, error=None)
+        raise ValueError(msg)
+
+    # 連接指定資料庫
+    conn = sqlite3.connect(db_name)
+    cursor = conn.cursor()
+
+    # 産生標音物件
+    piau_im = PiauIm(han_ji_khoo_name)
+
+    """將標題的文字加注【台語音標】"""
+    u_piau_im_title = ""
+    for han_ji in title:
+        if han_ji.strip() == "":
+            continue
+        elif is_punctuation(han_ji):
+            tag = f"<span>{han_ji}</span>"
+            u_piau_im_title += tag
+        else:
+            # 自【漢字庫】查找作業
+            result = han_ji_ca_piau_im(cursor=cursor,
+                                        han_ji=han_ji,
+                                        ue_im_lui_piat=ue_im_lui_piat)
+            # 若【漢字庫】查無此字，登錄至【缺字表】
+            if not result:
+                msg = f"【{han_ji}】查無此字！"
+                logging_exc_error(msg=msg, error=None)
+            else:
+                # 依【漢字庫】查找結果，輸出【台語音標】和【漢字標音】
+                tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                    result=result,
+                    han_ji_khoo=han_ji_khoo_name,
+                    piau_im=piau_im,
+                    piau_im_huat=piau_im_huat
+                )
+                # 將【漢字】及【上方】/【右方】標音合併成一個 Ruby Tag
+                ruby_tag = concat_ruby_tag(
+                    wb=wb,
+                    piau_im=piau_im,    # 注音法物件
+                    han_ji=han_ji,
+                    tai_gi_im_piau=tai_gi_im_piau
+                )
+                u_piau_im_title += ruby_tag
+
+    return u_piau_im_title
+
+
 def put_picture(wb, source_sheet_name):
     html_str = ""
 
@@ -79,15 +156,12 @@ def put_picture(wb, source_sheet_name):
     div_tag = (
         "<div class='separator' style='clear: both'>\n"
         "  <a href='圖片' style='display: block; padding: 1em 0; text-align: center'>\n"
-        "    <img alt='%s' border='0' width='400' data-original-height='630' data-original-width='1200'\n"
+        "    <img alt='%s' border='0' width='800' \n"
         "      src='%s' />\n"
         "  </a>\n"
         "</div>\n"
     )
     # 寫入文章附圖
-    # html_str = f"《{title}》【{source_sheet_name}】\n"
-    html_str = f"<p class='title'>{title}</p>\n"
-    # html_str += div_tag % (title, image_url)
     html_str += (div_tag % (title, image_url) + "\n")
     return html_str
 
@@ -183,13 +257,43 @@ def concat_ruby_tag(wb, piau_im, han_ji, tai_gi_im_piau):
     # 根據標音方式，設定 Ruby Tag
     if siong_piau_im != "" and zian_piau_im == "":
         # 將標音置於漢字上方
-        ruby_tag = f"  <ruby><rb>{han_ji}</rb><rp>(</rp><rt>{siong_piau_im}</rt><rp>)</rp></ruby>\n"
+        # ruby_tag = f"  <ruby><rb>{han_ji}</rb><rp>(</rp><rt>{siong_piau_im}</rt><rp>)</rp></ruby>\n"
+        html_str = (
+            "<ruby>\n"
+            "  <rb>%s</rb>\n"   # 漢字
+            "  <rp>(</rp>\n"    # 括號左
+            "  <rt>%s</rt>\n"   # 上方標音
+            "  <rp>)</rp>\n"    # 括號右
+            "</ruby>\n"
+        )
+        ruby_tag = html_str % (han_ji, siong_piau_im)
     elif siong_piau_im == "" and zian_piau_im != "":
         # 將標音置於漢字右方
-        ruby_tag = f"  <ruby><rb>{han_ji}</rb><rp>(</rp><rtc>{zian_piau_im}</rtc><rp>)</rp></ruby>\n"
+        # ruby_tag = f"  <ruby><rb>{han_ji}</rb><rp>(</rp><rtc>{zian_piau_im}</rtc><rp>)</rp></ruby>\n"
+        html_str = (
+            "<ruby>\n"
+            "  <rb>%s</rb>\n"   # 漢字
+            "  <rp>(</rp>\n"    # 括號左
+            "  <rtc>%s</rtc>\n" # 右方標音
+            "  <rp>)</rp>\n"    # 括號右
+            "</ruby>\n"
+        )
+        ruby_tag = html_str % (han_ji, zian_piau_im)
     elif siong_piau_im != "" and zian_piau_im != "":
         # 將標音置於漢字上方及右方
-        ruby_tag = f"  <ruby><rb>{han_ji}</rb><rt>{siong_piau_im}</rt><rp>(</rp><rtc>{zian_piau_im}</rtc><rp>)</rp></ruby>\n"
+        # ruby_tag = f"  <ruby><rb>{han_ji}</rb><rt>{siong_piau_im}</rt><rp>(</rp><rtc>{zian_piau_im}</rtc><rp>)</rp></ruby>\n"
+        html_str = (
+            "<ruby>\n"
+            "  <rb>%s</rb>\n"   # 漢字
+            "  <rp>(</rp>\n"    # 括號左
+            "  <rt>%s</rt>\n"   # 上方標音
+            "  <rp>)</rp>\n"    # 括號右
+            "  <rp>(</rp>\n"    # 括號左
+            "  <rtc>%s</rtc>\n" # 右方標音
+            "  <rp>)</rp>\n"    # 括號右
+            "</ruby>\n"
+        )
+        ruby_tag = html_str % (han_ji, siong_piau_im, zian_piau_im)
 
     return ruby_tag
 
@@ -222,13 +326,30 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
     #--------------------------------------------------------------------------
     # 寫入文章附圖
     if page_type == '含頁頭':
-        write_buffer += put_picture(wb, sheet.name)
+        html_str = put_picture(wb, sheet.name)
+        write_buffer += html_str
 
     #--------------------------------------------------------------------------
-    # 輸出 <div> tag
+    # 輸出【文章】Div tag 及【文章標題】Ruby Tag
     #--------------------------------------------------------------------------
-    div_class = zu_im_huat_list[Web_Page_Style][0]
-    write_buffer += f"<div class='{div_class}'><p>\n"
+    # 取得文章標題並加注【台語音標】
+    title = wb.names['TITLE'].refers_to_range.value
+    title_with_ruby = title_piau_im(wb, title)
+
+    # 設定文章內容使用之 div tag 及標題 Ruby Tag
+    piau_im_format = wb.names['網頁格式'].refers_to_range.value
+    pai_ban_iong_huat = zu_im_huat_list[piau_im_format][0]
+    # CSS 排版用法（CSS class 名稱）
+    div_tag = (
+        "<div class='%s'>\n"
+        "  <p class='title'>\n"
+        "    <span>《</span>\n"
+        "    %s\n"
+        "    <span>》</span>\n"
+        "  </p>\n"
+    )
+    html_str = div_tag % (pai_ban_iong_huat, title_with_ruby)
+    write_buffer += html_str
 
     #--------------------------------------------------------------------------
     # 作業處理：逐列取出漢字，組合成純文字檔
@@ -525,28 +646,3 @@ def main():
 if __name__ == "__main__":
     exit_code = main()
     sys.exit(exit_code)
-# def tng_uann_piau_im(piau_im, zu_im_huat, siann_bu, un_bu, tiau_ho):
-#     """根據指定的標音方法，轉換台語音標之羅馬拚音字母"""
-#     if zu_im_huat == "十五音":
-#         return piau_im.SNI_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif zu_im_huat == "雅俗通":
-#         return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif zu_im_huat == "白話字":
-#         return piau_im.POJ_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif zu_im_huat == "台羅拼音":
-#         return piau_im.TL_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif zu_im_huat == "閩拼方案":
-#         return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif zu_im_huat == "閩拼調號":
-#         return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif zu_im_huat == "閩拼調符":
-#         return piau_im.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
-#     elif zu_im_huat == "方音符號":
-#         return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif zu_im_huat == "台語音標":
-#         siann = piau_im.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
-#         siann = siann if siann != "ø" else ""
-#         un = piau_im.Un_Bu_Dict[un_bu]["台語音標"]
-#         return f"{siann}{un}{tiau_ho}"
-#     return ""
-

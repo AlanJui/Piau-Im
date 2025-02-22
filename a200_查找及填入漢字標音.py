@@ -16,6 +16,7 @@ from mod_excel_access import delete_sheet_by_name, get_value_by_name
 from mod_file_access import load_module_function, save_as_new_file
 from mod_字庫 import JiKhooDict  # 漢字字庫物件
 from mod_標音 import PiauIm  # 漢字標音物件
+from mod_標音 import ca_ji_kiat_ko_tng_piau_im  # 查字典得台語音標及漢字標音
 from mod_標音 import hong_im_tng_tai_gi_im_piau  # 方音符號轉台語音標
 from mod_標音 import is_punctuation  # 是否為標點符號
 from mod_標音 import split_hong_im_hu_ho  # 分解漢字標音
@@ -54,44 +55,6 @@ init_logging()
 # =========================================================================
 # 程式區域函式
 # =========================================================================
-def ca_ji_kiat_ko_tng_piau_im(result, han_ji_khoo: str, piau_im: PiauIm, piau_im_huat: str):
-    """查字結果出標音：查詢【漢字庫】取得之【查找結果】，將之切分：聲、韻、調"""
-    if han_ji_khoo == "河洛話":
-        #-----------------------------------------------------------------
-        # 【白話音】：依《河洛話漢字庫》標注【台語音標】和【方音符號】
-        #-----------------------------------------------------------------
-        # 將【台語音標】分解為【聲母】、【韻母】、【聲調】
-        siann_bu = result[0]['聲母']
-        un_bu = result[0]['韻母']
-        un_bu = tai_gi_im_piau_tng_un_bu(un_bu)
-        tiau_ho = result[0]['聲調']
-        if tiau_ho == "6":
-            # 若【聲調】為【6】，則將【聲調】改為【7】
-            tiau_ho = "7"
-    else:
-        #-----------------------------------------------：------------------
-        # 【文讀音】：依《廣韻字庫》標注【台語音標】和【方音符號】
-        #-----------------------------------------------------------------
-        siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(result[0]['標音'])
-        if siann_bu == "" or siann_bu == None:
-            siann_bu = "ø"
-
-    # 將【聲母】、【韻母】、【聲調】，合併成【台語音標】
-    # tai_gi_im_piau = siann_bu + un_bu + tiau_ho
-    tai_gi_im_piau = ''.join([siann_bu, un_bu, tiau_ho])
-
-    # 標音法為：【十五音】或【雅俗通】，且【聲母】為空值，則將【聲母】設為【ø】
-    if (piau_im_huat == "十五音" or piau_im_huat == "雅俗通") and (siann_bu == "" or siann_bu == None):
-        siann_bu = "ø"
-    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
-        piau_im_huat=piau_im_huat,
-        siann_bu=siann_bu,
-        un_bu=un_bu,
-        tiau_ho=tiau_ho,
-    )
-    return tai_gi_im_piau, han_ji_piau_im
-
-
 def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im'):
     """查漢字讀音：依【漢字】查找【台語音標】，並依指定之【標音方法】輸出【漢字標音】"""
     try:

@@ -38,6 +38,55 @@ un_bu_tng_huan_map_dict = {
 
 
 # =========================================================================
+# 將【漢字庫】查詢所得結果，解析出【台語音標】，並依據使用者設定輸出【漢字標音】
+# =========================================================================
+def ca_ji_kiat_ko_tng_piau_im(result, han_ji_khoo: str, piau_im, piau_im_huat: str):
+    """查字結果出標音：查詢【漢字庫】取得之【查找結果】，將之切分：聲、韻、調"""
+    if han_ji_khoo == "河洛話":
+        #-----------------------------------------------------------------
+        # 【白話音】：依《河洛話漢字庫》標注【台語音標】和【方音符號】
+        #-----------------------------------------------------------------
+        # 將【台語音標】分解為【聲母】、【韻母】、【聲調】
+        siann_bu = result[0]['聲母']
+        un_bu = result[0]['韻母']
+        un_bu = tai_gi_im_piau_tng_un_bu(un_bu)
+        tiau_ho = result[0]['聲調']
+        if tiau_ho == "6":
+            # 若【聲調】為【6】，則將【聲調】改為【7】
+            tiau_ho = "7"
+    else:
+        #-----------------------------------------------：------------------
+        # 【文讀音】：依《廣韻字庫》標注【台語音標】和【方音符號】
+        #-----------------------------------------------------------------
+        siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(result[0]['標音'])
+        if siann_bu == "" or siann_bu == None:
+            siann_bu = "ø"
+
+    # 將【聲母】、【韻母】、【聲調】，合併成【台語音標】
+    # tai_gi_im_piau = siann_bu + un_bu + tiau_ho
+    tai_gi_im_piau = ''.join([siann_bu, un_bu, tiau_ho])
+
+    # 標音法為：【十五音】或【雅俗通】，且【聲母】為空值，則將【聲母】設為【ø】
+    if (piau_im_huat == "十五音" or piau_im_huat == "雅俗通") and (siann_bu == "" or siann_bu == None):
+        siann_bu = "ø"
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+        siann_bu=siann_bu,
+        un_bu=un_bu,
+        tiau_ho=tiau_ho,
+    )
+    return tai_gi_im_piau, han_ji_piau_im
+
+
+# =========================================================================
+# 將首字母為大寫之羅馬拼音字母轉換為小寫（只處理第一個字母）
+# =========================================================================
+def normalize_im_piau_case(im_piau: str) -> str:
+    im_piau = unicodedata.normalize("NFC", im_piau)  # 先標準化 Unicode
+    return im_piau[0].lower() + im_piau[1:] if im_piau else im_piau
+
+
+# =========================================================================
 # 台語音標 → 台羅拼音（TLPA → TL）轉換函數
 # =========================================================================
 # def convert_tlpa_to_tl(tai_gi_im_piau):
@@ -66,29 +115,127 @@ def convert_tlpa_to_tl(tai_gi_im_piau: str) -> str:
 # =========================================================================
 # 台羅拼音 → 台語音標（TL → TLPA）轉換函數
 # =========================================================================
-# def convert_tl_to_tlpa(im_piau):
-#     """
-#     轉換台羅拼音（TL）為台語音標（TLPA）。
-#     """
-#     if not im_piau:
-#         return ""
-#     im_piau = re.sub(r'\btsh', 'c', im_piau)  # tsh → c
-#     im_piau = re.sub(r'\bts', 'z', im_piau)   # ts → z
-#     return im_piau
-def convert_tl_to_tlpa(tai_lo_im_piau: str) -> str:
+import unicodedata
+
+# 聲調符號對應表（帶調號母音 → 對應數字）
+tone_mapping = {
+    "a̍": ("a", "8"), "á": ("a", "2"), "ǎ": ("a", "6"), "â": ("a", "5"), "ā": ("a", "7"), "à": ("a", "3"),
+    "e̍": ("e", "8"), "é": ("e", "2"), "ě": ("e", "6"), "ê": ("e", "5"), "ē": ("e", "7"), "è": ("e", "3"),
+    "i̍": ("i", "8"), "í": ("i", "2"), "ǐ": ("i", "6"), "î": ("i", "5"), "ī": ("i", "7"), "ì": ("i", "3"),
+    "o̍": ("o", "8"), "ó": ("o", "2"), "ǒ": ("o", "6"), "ô": ("o", "5"), "ō": ("o", "7"), "ò": ("o", "3"),
+    "u̍": ("u", "8"), "ú": ("u", "2"), "ǔ": ("u", "6"), "û": ("u", "5"), "ū": ("u", "7"), "ù": ("u", "3"),
+    "m̍": ("m", "8"), "ḿ": ("m", "2"), "m̀": ("m", "3"), "m̂": ("m", "5"), "m̄": ("m", "7"),
+    "n̍": ("n", "8"), "ń": ("n", "2"), "ň": ("n", "6"), "n̂": ("n", "5"), "n̄": ("n", "7")
+}
+
+# 聲母轉換規則（台羅拼音 → 台語音標+）
+initials_mapping = {
+    "tsh": "c",
+    "ts": "z"
+}
+
+
+def convert_tl_without_tiau_hu(tai_lo: str) -> str:
+    """
+    將帶有聲調符號的台羅拼音轉換為改良式【台語音標】（TLPA+）。
+    """
+    # **重要**：先將字串標準化為 NFC 格式，統一處理 Unicode 差異
+    tai_lo = unicodedata.normalize("NFC", tai_lo)
+
+    tone_number = ""
+
+    # 1. 先處理聲調轉換
+    for tone_mark, (base_char, number) in tone_mapping.items():
+        if tone_mark in tai_lo:
+            tai_lo = tai_lo.replace(tone_mark, base_char)  # 移除調號，還原原始母音
+            tone_number = number  # 記錄對應的聲調數字
+            break  # 只會有一個聲調符號，找到就停止
+
+    # 2. 若有聲調數字，則加到末尾
+    if tone_number:
+        return tai_lo + tone_number
+
+    return tai_lo  # 若無聲調符號則不變更
+
+
+def convert_tl_with_tiau_hu_to_tlpa(im_piau: str) -> list:
+    """
+    將帶有聲調符號的台羅拼音轉換為改良式【台語音標】（TLPA+）。
+    """
+    # 1. 將首字母為大寫之羅馬拼音字母轉換為小寫（只處理第一個字母）
+    im_piau = normalize_im_piau_case(im_piau)
+
+    # 2. 先處理聲調轉換
+    tai_lo_bo_taiu_hu = convert_tl_without_tiau_hu(im_piau)
+
+    # 3. 將聲母轉換為 TLPA+
+    tai_gi_im_piau = []
+    tai_gi_im_piau = convert_tl_to_tlpa(tai_lo_bo_taiu_hu)
+
+    return tai_gi_im_piau  # 若無聲調符號則不變更
+
+
+def convert_tl_to_tlpa(tai_lo: str) -> list:
     """
     轉換台羅（TL）為台語音標（TLPA），只在單字邊界進行替換。
     """
-    if not tai_lo_im_piau:
+    if not tai_lo:
         return ""
 
-    # 第一次替換：tsh → c
-    tai_gi_im_piau = re.sub(r'\btsh\b', 'c', tai_lo_im_piau)
+    # 查檢【台語音標】是否符合【標準】=【聲母】+【韻母】+【調號】；若是將：【陰平】、【陰入】調，
+    # 略去【調號】數值：1、4，則進行矯正
+    # 先將傳入之【台語音標】的最後一個字元視作【調號】取出
+    tiau = tai_lo[-1]
+    # 若【調號】數值，使用上標數值格式，則替換為 ASCII 數字
+    tiau = replace_superscript_digits(str(tiau))
 
-    # 第二次替換：ts → z
-    tai_gi_im_piau = re.sub(r'\bts\b', 'z', tai_gi_im_piau)
+    # 若輸入之【台語音標】未循【標準】，對【陰平】、【陰入】聲調，省略【調號】值：【1】/【4】
+    # 則依此規則進行矯正：若【調號】（即：拼音最後一個字母）為 [ptkh]，則更正調號值為 4；
+    # 則【調號】填入【韻母】之拼音字元，則將【調號】則更正為 1
+    if tiau in ['p', 't', 'k', 'h']:
+        tiau = '4'  # 聲調值為 4（陰入聲）
+        tai_lo += tiau  # 為輸入之簡寫【台語音標】，添加【調號】
+    elif tiau in ['a', 'e', 'i', 'o', 'u', 'm', 'n', 'g']:  # 如果最後一個字母是英文字母
+        tiau = '1'  # 聲調值為 1（陰平聲）
+        tai_lo += tiau  # 為輸入之簡寫【台語音標】，添加【調號】
 
-    return tai_gi_im_piau
+    # 將【台羅音標】聲母轉換成【台語音標】（將 tsh 轉換為 c；將 ts 轉換為 z）
+    if tai_lo.startswith("tsh"):
+        tai_lo = re.sub(r'\btsh\b', 'c', tai_lo)
+    elif tai_lo.startswith("ts"):
+        tai_lo = re.sub(r'\bts\b', 'z', tai_lo)
+
+    # 定義聲母的正規表示式，包括常見的聲母，但不包括 m 和 ng
+    siann_bu_pattern = re.compile(r"(b|c|z|g|h|j|kh|k|l|m(?!\d)|ng(?!\d)|n|ph|p|s|th|t|Ø)")
+
+    # 韻母為 m 或 ng 這種情況的正規表示式 (m\d 或 ng\d)
+    un_bu_as_m_or_ng_pattern = re.compile(r"(m|ng)\d")
+
+    tai_gi = []
+
+    # 首先檢查是否是 m 或 ng 當作韻母的特殊情況
+    if un_bu_as_m_or_ng_pattern.match(tai_lo):
+        siann_bu = ""  # 沒有聲母
+        un_bu = tai_lo[:-1]  # 韻母是 m 或 ng
+        tiau = tai_lo[-1]  # 聲調是最後一個字符
+    else:
+        # 使用正規表示式來匹配聲母
+        siann_bu_match = siann_bu_pattern.match(tai_lo)
+        if siann_bu_match:
+            siann_bu = siann_bu_match.group()  # 找到聲母
+            un_bu = tai_lo[len(siann_bu):-1]  # 韻母部分
+        else:
+            siann_bu = ""  # 沒有匹配到聲母，聲母為空字串
+            un_bu = tai_lo[:-1]  # 韻母是剩下的部分，去掉最後的聲調
+
+    # 轉換韻母
+    un_bu = un_bu_tng_huan(un_bu)
+
+    tai_gi += [siann_bu]
+    tai_gi += [un_bu]
+    tai_gi += [tiau]
+
+    return tai_gi
 
 
 # =========================================================
@@ -1060,10 +1207,51 @@ def ut002():
         print('測試失敗')
 
 
+def ut003():
+    """測試：帶聲調符號之台羅拼音轉換成聲調以數字表示之台羅拼音"""
+    # 測試
+    test_cases = ["lio̍k", "tāi", "bô", "siâu", "lâi", "pò", "tshi̍t", "tsuan", "giâm", "ló"]
+    converted = [convert_tl_with_tiau_hu_to_tlpa(word) for word in test_cases]
+
+    # 顯示轉換結果
+    for original, converted_word in zip(test_cases, converted):
+        print(f"{original} → {converted_word}")
+
+
+def ut004():
+    """測試：帶聲調符號之台羅拼音轉換成【台語音標】"""
+    # 測試
+    test_cases = ["lio̍k", "tāi", "bô", "siâu", "lâi", "pò", "tshi̍t", "tsuan", "giâm", "ló"]
+    tai_lo_im_piau = [convert_tl_with_tiau_hu_to_tlpa(word) for word in test_cases]
+    converted = [convert_tl_to_tlpa(word) for word in tai_lo_im_piau]
+
+    # 顯示轉換結果
+    for original, converted_word in zip(test_cases, converted):
+        tai_gi_im_piau = "".join(converted_word)
+        print(f"{original} → {tai_gi_im_piau}: {converted_word}")
+
+
+def ut005():
+    test_cases = ["Lio̍k", "Tshiâu", "Gua̍n", "Tsian"]
+    converted = [normalize_im_piau_case(word) for word in test_cases]
+
+    for original, converted_word in zip(test_cases, converted):
+        print(f"{original} → {converted_word}")
+
+
 if __name__ == "__main__":
+    # # 測試：將【雞】kere1 轉換為【kue1】
+    # print('==================================================================')
+    # ut001()
+    # # 測試：將【ir】轉換為【kue1】
+    # print('==================================================================')
+    # ut002()
+    # # 測試：帶聲調符號之台羅拼音轉換成聲調以數字表示之台羅拼音
+    # print('==================================================================')
+    # ut003()
+    # # 測試：帶聲調符號之台羅拼音轉換成【台語音標】
+    # print('==================================================================')
+    # ut004()
+    # 測試：將首字母大寫的音標轉換成小寫
     print('==================================================================')
-    # 測試：將【雞】kere1 轉換為【kue1】
-    ut001()
-    print('==================================================================')
-    # 測試：將【ir】轉換為【kue1】
-    ut002()
+    ut005()

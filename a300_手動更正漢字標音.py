@@ -25,6 +25,8 @@ from mod_excel_access import (
 )
 from mod_字庫 import JiKhooDict  # 漢字字庫物件
 from mod_標音 import PiauIm  # 漢字標音物件
+from mod_標音 import convert_tl_to_tlpa  # 台羅拼音轉台語音標
+from mod_標音 import convert_tl_with_tiau_hu_to_tlpa  # 去除台語音標的聲調符號
 from mod_標音 import hong_im_tng_tai_gi_im_piau  # 方音符號轉台語音標
 from mod_標音 import is_punctuation  # 是否為標點符號
 from mod_標音 import split_hong_im_hu_ho  # 分解漢字標音
@@ -194,6 +196,8 @@ def update_by_khuat_ji_piau(wb, sheet_name: str, piau_im: PiauIm, piau_im_huat: 
                 # 取得【漢字注音】表中的【台語音標】儲存格內容
                 tai_gi_cell = han_ji_piau_im_sheet.range((row - 1, col))
                 # tai_gi_im_piau = tai_gi_cell.value or ""
+                tai_lo_bo_tiau_hu = convert_tl_with_tiau_hu_to_tlpa(tai_gi_im_piau)
+                tai_gi_im_piau = "".join(tai_lo_bo_tiau_hu)
                 original_tai_gi = tai_gi_im_piau
                 # 取得【漢字注音】表中的【人工標音】儲存格內容
                 jin_kang_piau_im_cell = han_ji_piau_im_sheet.range((row - 2, col))
