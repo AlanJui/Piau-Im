@@ -1,5 +1,7 @@
 import re
 import sqlite3
+import unicodedata
+from typing import Optional
 
 # 上標數字與普通數字的映射字典
 superscript_digit_mapping = {
@@ -89,15 +91,6 @@ def normalize_im_piau_case(im_piau: str) -> str:
 # =========================================================================
 # 台語音標 → 台羅拼音（TLPA → TL）轉換函數
 # =========================================================================
-# def convert_tlpa_to_tl(tai_gi_im_piau):
-#     """
-#     轉換台語音標（TLPA）為台羅拼音（TL）。
-#     """
-#     if not tai_gi_im_piau:
-#         return ""
-#     tai_lo_im_piau = re.sub(r'\bc', 'tsh', tai_gi_im_piau)  # c → tsh
-#     tai_lo_im_piau = re.sub(r'\bz', 'ts', tai_gi_im_piau)   # z → ts
-#     return tai_lo_im_piau
 def convert_tlpa_to_tl(tai_gi_im_piau: str) -> str:
     """
     轉換台語音標（TLPA）為台羅拼音（TL）。
@@ -112,10 +105,68 @@ def convert_tlpa_to_tl(tai_gi_im_piau: str) -> str:
 
     return tai_lo_im_piau
 
+
+def convert_tl_to_tlpa(tai_lo: str) -> Optional[str]:
+    """
+    轉換台羅（TL）為台語音標（TLPA），只在單字邊界進行替換。
+    """
+    if not tai_lo:
+        return None
+
+    # 查檢【台語音標】是否符合【標準】=【聲母】+【韻母】+【調號】；若是將：【陰平】、【陰入】調，
+    # 略去【調號】數值：1、4，則進行矯正
+    # 先將傳入之【台語音標】的最後一個字元視作【調號】取出
+    tiau = tai_lo[-1]
+    # 若【調號】數值，使用上標數值格式，則替換為 ASCII 數字
+    tiau = replace_superscript_digits(str(tiau))
+
+    # 若輸入之【台語音標】未循【標準】，對【陰平】、【陰入】聲調，省略【調號】值：【1】/【4】
+    # 則依此規則進行矯正：若【調號】（即：拼音最後一個字母）為 [ptkh]，則更正調號值為 4；
+    # 則【調號】填入【韻母】之拼音字元，則將【調號】則更正為 1
+    if tiau in ['p', 't', 'k', 'h']:
+        tiau = '4'  # 聲調值為 4（陰入聲）
+        tai_lo += tiau  # 為輸入之簡寫【台語音標】，添加【調號】
+    elif tiau in ['a', 'e', 'i', 'o', 'u', 'm', 'n', 'g']:  # 如果最後一個字母是英文字母
+        tiau = '1'  # 聲調值為 1（陰平聲）
+        tai_lo += tiau  # 為輸入之簡寫【台語音標】，添加【調號】
+
+    # 將【台羅音標】聲母轉換成【台語音標】（將 tsh 轉換為 c；將 ts 轉換為 z）
+    if tai_lo.startswith("tsh"):
+        tai_lo = re.sub(r'\btsh\b', 'c', tai_lo)
+    elif tai_lo.startswith("ts"):
+        tai_lo = re.sub(r'\bts\b', 'z', tai_lo)
+
+    # 定義聲母的正規表示式，包括常見的聲母，但不包括 m 和 ng
+    siann_bu_pattern = re.compile(r"(b|c|z|g|h|j|kh|k|l|m(?!\d)|ng(?!\d)|n|ph|p|s|th|t|Ø)")
+
+    # 韻母為 m 或 ng 這種情況的正規表示式 (m\d 或 ng\d)
+    un_bu_as_m_or_ng_pattern = re.compile(r"(m|ng)\d")
+
+    # 首先檢查是否是 m 或 ng 當作韻母的特殊情況
+    if un_bu_as_m_or_ng_pattern.match(tai_lo):
+        siann_bu = ""  # 沒有聲母
+        un_bu = tai_lo[:-1]  # 韻母是 m 或 ng
+        tiau = tai_lo[-1]  # 聲調是最後一個字符
+    else:
+        # 使用正規表示式來匹配聲母
+        siann_bu_match = siann_bu_pattern.match(tai_lo)
+        if siann_bu_match:
+            siann_bu = siann_bu_match.group()  # 找到聲母
+            un_bu = tai_lo[len(siann_bu):-1]  # 韻母部分
+        else:
+            siann_bu = ""  # 沒有匹配到聲母，聲母為空字串
+            un_bu = tai_lo[:-1]  # 韻母是剩下的部分，去掉最後的聲調
+
+    # 轉換韻母
+    un_bu = un_bu_tng_huan(un_bu)
+
+    tai_gi = ''.join([siann_bu, un_bu, tiau])
+    return tai_gi
+
+
 # =========================================================================
 # 台羅拼音 → 台語音標（TL → TLPA）轉換函數
 # =========================================================================
-import unicodedata
 
 # 聲調符號對應表（帶調號母音 → 對應數字）
 tone_mapping = {
@@ -158,7 +209,7 @@ def convert_tl_without_tiau_hu(tai_lo: str) -> str:
     return tai_lo  # 若無聲調符號則不變更
 
 
-def convert_tl_with_tiau_hu_to_tlpa(im_piau: str) -> list:
+def convert_tl_with_tiau_hu_to_tlpa(im_piau: str) -> Optional[str]:
     """
     將帶有聲調符號的台羅拼音轉換為改良式【台語音標】（TLPA+）。
     """
@@ -169,73 +220,9 @@ def convert_tl_with_tiau_hu_to_tlpa(im_piau: str) -> list:
     tai_lo_bo_taiu_hu = convert_tl_without_tiau_hu(im_piau)
 
     # 3. 將聲母轉換為 TLPA+
-    tai_gi_im_piau = []
     tai_gi_im_piau = convert_tl_to_tlpa(tai_lo_bo_taiu_hu)
 
-    return tai_gi_im_piau  # 若無聲調符號則不變更
-
-
-def convert_tl_to_tlpa(tai_lo: str) -> list:
-    """
-    轉換台羅（TL）為台語音標（TLPA），只在單字邊界進行替換。
-    """
-    if not tai_lo:
-        return ""
-
-    # 查檢【台語音標】是否符合【標準】=【聲母】+【韻母】+【調號】；若是將：【陰平】、【陰入】調，
-    # 略去【調號】數值：1、4，則進行矯正
-    # 先將傳入之【台語音標】的最後一個字元視作【調號】取出
-    tiau = tai_lo[-1]
-    # 若【調號】數值，使用上標數值格式，則替換為 ASCII 數字
-    tiau = replace_superscript_digits(str(tiau))
-
-    # 若輸入之【台語音標】未循【標準】，對【陰平】、【陰入】聲調，省略【調號】值：【1】/【4】
-    # 則依此規則進行矯正：若【調號】（即：拼音最後一個字母）為 [ptkh]，則更正調號值為 4；
-    # 則【調號】填入【韻母】之拼音字元，則將【調號】則更正為 1
-    if tiau in ['p', 't', 'k', 'h']:
-        tiau = '4'  # 聲調值為 4（陰入聲）
-        tai_lo += tiau  # 為輸入之簡寫【台語音標】，添加【調號】
-    elif tiau in ['a', 'e', 'i', 'o', 'u', 'm', 'n', 'g']:  # 如果最後一個字母是英文字母
-        tiau = '1'  # 聲調值為 1（陰平聲）
-        tai_lo += tiau  # 為輸入之簡寫【台語音標】，添加【調號】
-
-    # 將【台羅音標】聲母轉換成【台語音標】（將 tsh 轉換為 c；將 ts 轉換為 z）
-    if tai_lo.startswith("tsh"):
-        tai_lo = re.sub(r'\btsh\b', 'c', tai_lo)
-    elif tai_lo.startswith("ts"):
-        tai_lo = re.sub(r'\bts\b', 'z', tai_lo)
-
-    # 定義聲母的正規表示式，包括常見的聲母，但不包括 m 和 ng
-    siann_bu_pattern = re.compile(r"(b|c|z|g|h|j|kh|k|l|m(?!\d)|ng(?!\d)|n|ph|p|s|th|t|Ø)")
-
-    # 韻母為 m 或 ng 這種情況的正規表示式 (m\d 或 ng\d)
-    un_bu_as_m_or_ng_pattern = re.compile(r"(m|ng)\d")
-
-    tai_gi = []
-
-    # 首先檢查是否是 m 或 ng 當作韻母的特殊情況
-    if un_bu_as_m_or_ng_pattern.match(tai_lo):
-        siann_bu = ""  # 沒有聲母
-        un_bu = tai_lo[:-1]  # 韻母是 m 或 ng
-        tiau = tai_lo[-1]  # 聲調是最後一個字符
-    else:
-        # 使用正規表示式來匹配聲母
-        siann_bu_match = siann_bu_pattern.match(tai_lo)
-        if siann_bu_match:
-            siann_bu = siann_bu_match.group()  # 找到聲母
-            un_bu = tai_lo[len(siann_bu):-1]  # 韻母部分
-        else:
-            siann_bu = ""  # 沒有匹配到聲母，聲母為空字串
-            un_bu = tai_lo[:-1]  # 韻母是剩下的部分，去掉最後的聲調
-
-    # 轉換韻母
-    un_bu = un_bu_tng_huan(un_bu)
-
-    tai_gi += [siann_bu]
-    tai_gi += [un_bu]
-    tai_gi += [tiau]
-
-    return tai_gi
+    return tai_gi_im_piau
 
 
 # =========================================================
@@ -452,40 +439,11 @@ def split_hong_im_hu_ho(hong_im_piau_im):
     return [siann_mu, un_mu, str(tiau_ho)]
 
 
-# def siann_un_tiau_tng_piau_im(piau_im, piau_im_huat, siann_bu, un_bu, tiau_ho):
-#     """選擇並執行對應的注音方法"""
-#     if piau_im_huat == "雅俗通":
-#         return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif piau_im_huat == "十五音":
-#         return piau_im.SNI_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif piau_im_huat == "白話字":
-#         return piau_im.POJ_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif piau_im_huat == "台羅拼音":
-#         return piau_im.TL_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif piau_im_huat == "閩拼方案":
-#         return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif piau_im_huat == "閩拼調號":
-#         return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif piau_im_huat == "閩拼調符":
-#         return piau_im.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
-#     elif piau_im_huat == "方音符號":
-#         return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif piau_im_huat == "台語音標":
-#         if siann_bu == "" or siann_bu == "Ø":
-#             siann = ''
-#         else:
-#             siann = piau_im.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
-#         un = piau_im.Un_Bu_Dict[un_bu]["台語音標"]
-#         return f"{siann}{un}{tiau_ho}"
-#     return ""
-
-
 # ==========================================================
 # 台語音標轉換為【漢字標音】之注音符號或羅馬字音標
 # ==========================================================
 def tlpa_tng_han_ji_piau_im(piau_im, piau_im_huat, tai_gi_im_piau):
-    siann, un, tiau = convert_tl_with_tiau_hu_to_tlpa(tai_gi_im_piau)
-    tai_gi_im_piau_iong_tiau_ho = f"{siann}{un}{tiau}"
+    tai_gi_im_piau_iong_tiau_ho = convert_tl_with_tiau_hu_to_tlpa(tai_gi_im_piau)
     siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(tai_gi_im_piau_iong_tiau_ho)
 
     if siann_bu == "" or siann_bu == None:
@@ -1291,3 +1249,44 @@ if __name__ == "__main__":
     # 測試：將首字母大寫的音標轉換成小寫
     print('==================================================================')
     ut005()
+
+# def siann_un_tiau_tng_piau_im(piau_im, piau_im_huat, siann_bu, un_bu, tiau_ho):
+#     """選擇並執行對應的注音方法"""
+#     if piau_im_huat == "雅俗通":
+#         return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif piau_im_huat == "十五音":
+#         return piau_im.SNI_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif piau_im_huat == "白話字":
+#         return piau_im.POJ_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif piau_im_huat == "台羅拼音":
+#         return piau_im.TL_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif piau_im_huat == "閩拼方案":
+#         return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif piau_im_huat == "閩拼調號":
+#         return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif piau_im_huat == "閩拼調符":
+#         return piau_im.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+#     elif piau_im_huat == "方音符號":
+#         return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+#     elif piau_im_huat == "台語音標":
+#         if siann_bu == "" or siann_bu == "Ø":
+#             siann = ''
+#         else:
+#             siann = piau_im.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+#         un = piau_im.Un_Bu_Dict[un_bu]["台語音標"]
+#         return f"{siann}{un}{tiau_ho}"
+#     return ""
+
+
+# =========================================================================
+# 台語音標 → 台羅拼音（TLPA → TL）轉換函數
+# =========================================================================
+# def convert_tlpa_to_tl(tai_gi_im_piau):
+#     """
+#     轉換台語音標（TLPA）為台羅拼音（TL）。
+#     """
+#     if not tai_gi_im_piau:
+#         return ""
+#     tai_lo_im_piau = re.sub(r'\bc', 'tsh', tai_gi_im_piau)  # c → tsh
+#     tai_lo_im_piau = re.sub(r'\bz', 'ts', tai_gi_im_piau)   # z → ts
+#     return tai_lo_im_piau

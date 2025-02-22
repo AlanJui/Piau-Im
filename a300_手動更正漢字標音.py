@@ -24,10 +24,10 @@ from mod_excel_access import (
     strip_cell,
 )
 from mod_字庫 import JiKhooDict  # 漢字字庫物件
+
+# from mod_標音 import hong_im_tng_tai_gi_im_piau  # 方音符號轉台語音標
 from mod_標音 import PiauIm  # 漢字標音物件
-from mod_標音 import convert_tl_to_tlpa  # 台羅拼音轉台語音標
 from mod_標音 import convert_tl_with_tiau_hu_to_tlpa  # 去除台語音標的聲調符號
-from mod_標音 import hong_im_tng_tai_gi_im_piau  # 方音符號轉台語音標
 from mod_標音 import is_punctuation  # 是否為標點符號
 from mod_標音 import split_hong_im_hu_ho  # 分解漢字標音
 from mod_標音 import tlpa_tng_han_ji_piau_im  # 台語音標轉台語音標
@@ -85,15 +85,14 @@ def han_ji_ti_piau_im_ji_khoo(wb, position, han_ji: str, jin_kang_piau_im: str) 
     return check_and_update_pronunciation(wb, han_ji, position, jin_kang_piau_im)
 
 
-def jin_kang_piau_im_cu_han_ji_piau_im(wb, han_ji: str, jin_kang_piau_im: str, piau_im: PiauIm, piau_im_huat: str) -> str:
+# def jin_kang_piau_im_cu_han_ji_piau_im(wb, han_ji: str, jin_kang_piau_im: str, piau_im: PiauIm, piau_im_huat: str):
+def jin_kang_piau_im_cu_han_ji_piau_im(wb, jin_kang_piau_im: str, piau_im: PiauIm, piau_im_huat: str):
     """人工標音取【台語音標】"""
-    cursor = piau_im.get_cursor()   # 取得【資料庫】系統之 cursor 物件
-    jin_kang_piau_im_sheet = wb.sheets['人工標音字庫']  # 取得【人工標音字庫】工作表
 
     if '〔' in jin_kang_piau_im and '〕' in jin_kang_piau_im:
         # 將人工輸入的〔台語音標〕轉換成【方音符號】
         im_piau = jin_kang_piau_im.split('〔')[1].split('〕')[0]
-        tai_gi_im_piau = im_piau
+        tai_gi_im_piau = convert_tl_with_tiau_hu_to_tlpa(im_piau)
         # 依使用者指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
         han_ji_piau_im = tlpa_tng_han_ji_piau_im(
             piau_im=piau_im,
@@ -105,15 +104,19 @@ def jin_kang_piau_im_cu_han_ji_piau_im(wb, han_ji: str, jin_kang_piau_im: str, p
         han_ji_piau_im = jin_kang_piau_im.split('【')[1].split('】')[0]
         siann, un, tiau = split_hong_im_hu_ho(han_ji_piau_im)
         # 依使用者指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
-        tai_gi_im_piau = hong_im_tng_tai_gi_im_piau(
+        tai_gi_im_piau = piau_im.hong_im_tng_tai_gi_im_piau(
             siann=siann,
             un=un,
-            tiau=tiau,
-            cursor=cursor,
-        )['台語音標']
+            tiau=tiau)['台語音標']
+        # tai_gi_im_piau = hong_im_tng_tai_gi_im_piau(
+        #     siann=siann,
+        #     un=un,
+        #     tiau=tiau,
+        #     cursor=cursor,
+        # )['台語音標']
     else:
         # 將人工輸入的【台語音標】，解構為【聲母】、【韻母】、【聲調】
-        tai_gi_im_piau = jin_kang_piau_im
+        tai_gi_im_piau = convert_tl_with_tiau_hu_to_tlpa(jin_kang_piau_im)
         # 依指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
         han_ji_piau_im = tlpa_tng_han_ji_piau_im(
             piau_im=piau_im,
@@ -121,7 +124,7 @@ def jin_kang_piau_im_cu_han_ji_piau_im(wb, han_ji: str, jin_kang_piau_im: str, p
             tai_gi_im_piau=tai_gi_im_piau
         )
 
-    return han_ji_piau_im
+    return tai_gi_im_piau, han_ji_piau_im
 
 
 def write_ji_khoo_dict_to_sheet(wb, sheet_name: str, ji_khoo_dict: JiKhooDict):
@@ -363,47 +366,22 @@ def update_by_jin_kang_piau_im(wb, sheet_name: str, piau_im: PiauIm, piau_im_hua
                                 han_ji_cell.font.color = (0, 0, 0)    # 將文字顏色設為【黑色】
                         else:                               # 【漢字】以【人工標音】更正【程式自動標音】
                             # 在【漢字注音】工作表，為有【人工標音】之【漢字】儲存格做醒目標記
-                            # jin_kang_piau_im_cell.value = ''
                             han_ji_cell.color = (255, 255, 0)       # 將底色設為【黄色】
                             han_ji_cell.font.color = (255, 0, 0)    # 將文字顏色設為【紅色】
 
-                            if '〔' in jin_kang_piau_im and '〕' in jin_kang_piau_im:
-                                # 將人工輸入的〔台語音標〕轉換成【方音符號】
-                                im_piau = jin_kang_piau_im.split('〔')[1].split('〕')[0]
-                                tai_gi_im_piau = im_piau
-                                # 依使用者指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
-                                han_ji_piau_im = tlpa_tng_han_ji_piau_im(
-                                    piau_im=piau_im,
-                                    piau_im_huat=piau_im_huat,
-                                    tai_gi_im_piau=tai_gi_im_piau
-                                )
-                            elif '【' in jin_kang_piau_im and '】' in jin_kang_piau_im:
-                                # 將人工輸入的【方音符號】轉換成【台語音標】
-                                han_ji_piau_im = jin_kang_piau_im.split('【')[1].split('】')[0]
-                                siann, un, tiau = split_hong_im_hu_ho(han_ji_piau_im)
-                                # 依使用者指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
-                                han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
-                                    piau_im=piau_im,    # 注音法物件
-                                    piau_im_huat=han_ji_piau_im_huat,
-                                    siann_bu=siann,
-                                    un_bu=un,
-                                    tiau_ho=tiau
-                                )
-                            else:
-                                # 將人工輸入的【台語音標】，解構為【聲母】、【韻母】、【聲調】
-                                tai_gi_im_piau = jin_kang_piau_im
-                                # 依指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
-                                han_ji_piau_im = tlpa_tng_han_ji_piau_im(
-                                    piau_im=piau_im,
-                                    piau_im_huat=piau_im_huat,
-                                    tai_gi_im_piau=tai_gi_im_piau
-                                )
+                            # 依據【人工標音】取【台語音標】及【漢字標音】
+                            kenn_ziann_im_piau, han_ji_piau_im = jin_kang_piau_im_cu_han_ji_piau_im(
+                                wb=wb,
+                                jin_kang_piau_im=jin_kang_piau_im,
+                                piau_im=piau_im,
+                                piau_im_huat=piau_im_huat
+                            )
 
                             # 遇【漢字】具【人工標音】，於【人工標音字庫】工作表登錄一筆紀錄
                             jin_kang_piau_im_ji_khoo.add_or_update_entry(
                                 han_ji=han_ji,
                                 tai_gi_im_piau=tai_gi_im_piau,
-                                kenn_ziann_im_piau='N/A',
+                                kenn_ziann_im_piau=kenn_ziann_im_piau,
                                 coordinates=(row, col)
                             )
                             print(f"({row}, {xw.utils.col_name(col)}) = {han_ji_cell.value}：將【人工標音】{jin_kang_piau_im} 登錄至【人工標音字庫】工作表")
@@ -415,7 +393,7 @@ def update_by_jin_kang_piau_im(wb, sheet_name: str, piau_im: PiauIm, piau_im_hua
                                 piau_im_ji_khoo.update_kau_ziang_im_piau(
                                     han_ji=han_ji,
                                     tai_gi_im_piau=tai_gi_im_piau,
-                                    kenn_ziann_im_piau=jin_kang_piau_im,
+                                    kenn_ziann_im_piau=kenn_ziann_im_piau,
                                     coordinates=(row, col)
                                 )
                                 print(f"({row}, {xw.utils.col_name(col)}) = {han_ji_cell.value}：將【人工標音】{jin_kang_piau_im} 填入【標音字庫】工作表之【校正音標】")
