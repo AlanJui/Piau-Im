@@ -377,6 +377,10 @@ def update_by_jin_kang_piau_im(wb, sheet_name: str, piau_im: PiauIm, piau_im_hua
                                 piau_im_huat=piau_im_huat
                             )
 
+                            # 依據【漢字】的【人工標音】，更新【漢字注音】工作表之【台語音標】及轉換取而得之【漢字標音】
+                            tai_gi_cell.value = kenn_ziann_im_piau
+                            han_ji_piau_im_cell.value = han_ji_piau_im
+
                             # 遇【漢字】具【人工標音】，於【人工標音字庫】工作表登錄一筆紀錄
                             jin_kang_piau_im_ji_khoo.add_or_update_entry(
                                 han_ji=han_ji,

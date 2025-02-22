@@ -131,10 +131,12 @@ def convert_tl_to_tlpa(tai_lo: str) -> Optional[str]:
         tai_lo += tiau  # 為輸入之簡寫【台語音標】，添加【調號】
 
     # 將【台羅音標】聲母轉換成【台語音標】（將 tsh 轉換為 c；將 ts 轉換為 z）
-    if tai_lo.startswith("tsh"):
-        tai_lo = re.sub(r'\btsh\b', 'c', tai_lo)
-    elif tai_lo.startswith("ts"):
-        tai_lo = re.sub(r'\bts\b', 'z', tai_lo)
+    # if tai_lo.startswith("tsh"):
+    #     tai_lo = tai_lo.replace("tsh", "c", 1)  # 只替換前面出現的 "tsh"
+    # elif tai_lo.startswith("ts"):
+    #     tai_lo = tai_lo.replace("ts", "z", 1)  # 只替換前面出現的 "ts"
+    tai_lo = re.sub(r'^tsh', 'c', tai_lo)  # `^` 表示「字串開頭」
+    tai_lo = re.sub(r'^ts', 'z', tai_lo)  # `^` 表示「字串開頭」
 
     # 定義聲母的正規表示式，包括常見的聲母，但不包括 m 和 ng
     siann_bu_pattern = re.compile(r"(b|c|z|g|h|j|kh|k|l|m(?!\d)|ng(?!\d)|n|ph|p|s|th|t|Ø)")
