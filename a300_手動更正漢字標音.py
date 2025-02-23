@@ -200,7 +200,8 @@ def update_by_khuat_ji_piau(wb, sheet_name: str, piau_im: PiauIm, piau_im_huat: 
                 tai_gi_cell = han_ji_piau_im_sheet.range((row - 1, col))
                 # tai_gi_im_piau = tai_gi_cell.value or ""
                 tai_lo_bo_tiau_hu = convert_tl_with_tiau_hu_to_tlpa(tai_gi_im_piau)
-                tai_gi_im_piau = "".join(tai_lo_bo_tiau_hu)
+                # tai_gi_im_piau = "".join(tai_lo_bo_tiau_hu)
+                tai_gi_im_piau = tai_lo_bo_tiau_hu
                 original_tai_gi = tai_gi_im_piau
                 # 取得【漢字注音】表中的【人工標音】儲存格內容
                 jin_kang_piau_im_cell = han_ji_piau_im_sheet.range((row - 2, col))

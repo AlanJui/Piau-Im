@@ -20,7 +20,7 @@ from mod_excel_access import (
     excel_address_to_row_col,
     get_value_by_name,
 )
-from mod_標音 import convert_tl_to_tlpa, convert_tl_with_tiau_hu_to_tlpa
+from mod_標音 import PiauIm, convert_tl_with_tiau_hu_to_tlpa, tlpa_tng_han_ji_piau_im
 
 # =========================================================================
 # 常數定義
@@ -54,33 +54,94 @@ init_logging()
 # =========================================================================
 def update_excel_with_tai_gi(wb):
     """
-    讀取 Excel 檔案，為 A 欄的每個漢字查詢台語音標與字義，並填入 C 欄（台語音標）與 F 欄（字義）。
-
-    參數：
-        file_path (str): Excel 檔案的路徑
+    讀取 Excel 檔案，依據【缺字表】工作表中的資料執行下列作業：
+      1. 由 A 欄讀取漢字，從 C 欄取得原始【台語音標】，並轉換為 TLPA+ 格式後更新 D 欄（校正音標）。
+      2. 從 E 欄讀取座標字串（可能含有多組座標），每組座標指向【漢字注音】工作表中該漢字儲存格，
+         而【台語音標】應填入位於該漢字儲存格上方一列（row - 1）的相同欄位。
+         若該儲存格尚無值，則填入校正音標。
     """
+    # 取得本函式所需之【選項】參數
     try:
-        sheet = wb.sheets["缺字表"]  # 選擇工作表
+        han_ji_khoo = wb.names["漢字庫"].refers_to_range.value
+        piau_im_huat = wb.names["標音方法"].refers_to_range.value
     except Exception as e:
-        logging_exc_error(f"找不到名為「缺字表」的工作表", e)
+        logging_exc_error("找不到作業所需之選項設定", e)
+        return EXIT_CODE_INVALID_INPUT
+
+    piau_im = PiauIm(han_ji_khoo=han_ji_khoo)
+
+    # 取得【缺字表】工作表
+    try:
+        sheet = wb.sheets["缺字表"]
+    except Exception as e:
+        logging_exc_error("找不到名為『缺字表』的工作表", e)
+        return EXIT_CODE_INVALID_INPUT
+
+    # 取得【漢字注音】工作表
+    try:
+        han_ji_piau_im_sheet = wb.sheets["漢字注音"]
+    except Exception as e:
+        logging_exc_error("找不到名為『漢字注音』的工作表", e)
         return EXIT_CODE_INVALID_INPUT
 
     row = 2  # 從第 2 列開始（跳過標題列）
     while True:
         han_ji = sheet.range(f"A{row}").value  # 讀取 A 欄（漢字）
-        if not han_ji:  # 若 A 欄為空，則結束
+        if not han_ji:  # 若 A 欄為空，則結束迴圈
             break
 
-        # 取得【缺字表】中的【台語音標】（極有可能是【台羅拼音】且帶有調符與使用簡寫）與字義
+        # 取得原始【台語音標】並轉換為 TLPA+ 格式
         im_piau = sheet.range(f"C{row}").value
-        tai_gi_im_piau = convert_tl_with_tiau_hu_to_tlpa(im_piau)  # 將台語音標轉換為 TLPA+
+        tai_gi_im_piau = convert_tl_with_tiau_hu_to_tlpa(im_piau)
 
-        # 以經過轉換的【台語音標】更新【缺字表】的【校正音標】欄
+        # 更新【缺字表】中【校正音標】欄（D 欄）
         sheet.range(f"D{row}").value = tai_gi_im_piau
 
-        print(f"{row-1}. (A{row}) 【{han_ji}】： 台語音標：{im_piau}, 校正音標：{tai_gi_im_piau}")
+        print(f"{row-1}. (A{row}) 【{han_ji}】： 原音標：{im_piau}, 校正音標：{tai_gi_im_piau}")
 
-        row += 1  # 讀取下一行
+        # 讀取【缺字表】中【座標】欄（E 欄）的內容，該內容可能含有多組座標，如 "(5, 17); (33, 8); (77, 5)"
+        coordinates_str = sheet.range(f"E{row}").value
+        if coordinates_str:
+            # 利用正規表達式解析所有形如 (row, col) 的座標
+            coordinate_tuples = re.findall(r"\((\d+)\s*,\s*(\d+)\)", coordinates_str)
+            for tup in coordinate_tuples:
+                try:
+                    r_coord = int(tup[0])
+                    c_coord = int(tup[1])
+                except ValueError:
+                    continue  # 若轉換失敗，跳過該組座標
+
+                # 根據說明，【台語音標】應填入漢字儲存格上方一列 (row - 1)，相同欄位
+                target_row = r_coord - 1
+                tai_gi_im_piau_cell = (target_row, c_coord)
+
+                # 將【校正音標】填入【漢字注音】工作表漢字之【台語音標】儲存格
+                han_ji_piau_im_sheet.range(tai_gi_im_piau_cell).value = tai_gi_im_piau
+                print(f"更新『台語音標』：座標 {tai_gi_im_piau_cell} 填入音標：{tai_gi_im_piau}")
+                # # 若目標儲存格尚無資料，則填入校正音標
+                # existing_value = han_ji_piau_im_sheet.range(target_cell).value
+                # if not existing_value:
+                #     han_ji_piau_im_sheet.range(target_cell).value = tai_gi_im_piau
+                #     print(f"更新『漢字注音』：座標 {target_cell} 填入音標：{tai_gi_im_piau}")
+                # else:
+                #     print(f"跳過『漢字注音』：座標 {target_cell} 已有音標：{existing_value}")
+
+                #--------------------------------------------------------------------------
+                # 【漢字標音】
+                #--------------------------------------------------------------------------
+                # 使用【台語音標】轉換，取得【漢字標音】
+                han_ji_im_piau = tlpa_tng_han_ji_piau_im(
+                    piau_im=piau_im, piau_im_huat=piau_im_huat, tai_gi_im_piau=tai_gi_im_piau
+                )
+                # 根據說明，【漢字標音】應填入漢字儲存格下方一列 (row + 1)，相同欄位
+                target_row = r_coord + 1
+                han_ji_piau_im_cell = (target_row, c_coord)
+
+                # 將【校正音標】填入【漢字注音】工作表漢字之【台語音標】儲存格
+                han_ji_piau_im_sheet.range(han_ji_piau_im_cell).value = han_ji_im_piau
+                print(f"更新『漢字注音』：座標 {han_ji_piau_im_cell} 填入音標：{han_ji_im_piau}")
+
+        row += 1  # 讀取下一列
 
     return EXIT_CODE_SUCCESS
 

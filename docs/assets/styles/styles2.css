@@ -79,8 +79,8 @@ rtc {
 } */
 
 .title {
-    font-family: 'Noto Sans TC', serif;
-    color: #0066cc;
+    /* font-family: 'Noto Sans TC', serif; */
+    color: #01172e;
     font-size: 1.2em;
     /* letter-spacing: 2px; */
     text-align: center;
