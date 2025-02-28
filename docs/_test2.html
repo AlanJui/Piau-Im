@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <style>
+        .Siang_Pai rt {
+            font-family: Arial, BopomofoRuby;
+            color: #00C4AB;
+            font-size: 40%;
+        }
+
+        .Siang_Pai rt::after {
+            content: attr(data-bopomofo);
+            /* 自訂屬性儲存注音 */
+            color: #B94B6A;
+            font-size: 30%;
+            display: block;
+        }
+    </style>
+    <div class='Siang_Pai'>
+        <p>
+            <span>《</span>
+            <ruby>
+                <rb>春</rb>
+                <rt data-bopomofo="ㄘㄨㄣ">cun1</rt>
+            </ruby>
+            <ruby>
+                <rb>曉</rb>
+                <rt data-bopomofo="ㄏㄧㄠˋ">hiao3</rt>
+            </ruby>
+            <span>》</span>
+        </p>
+        <p>
+        </p>
+        <p>
+            <ruby>
+                <rb>春</rb>
+                <rt data-bopomofo="ㄘㄨㄣ">cun1</rt>
+            </ruby>
+            <ruby>
+                <rb>眠</rb>
+                <rt data-bopomofo="ㆠㄧㄢˊ">bbian2</rt>
+            </ruby>
+            <ruby>
+                <rb>不</rb>
+                <rt data-bopomofo="ㄅㄨㆵ">but7</rt>
+            </ruby>
+            <ruby>
+                <rb>覺</rb>
+                <rt data-bopomofo="ㄍㄚㆻ">gak7</rt>
+            </ruby>
+            <ruby>
+                <rb>曉</rb>
+                <rt data-bopomofo="ㄏㄧㄠˋ">hiao3</rt>
+            </ruby>
+            <span>，</span>
+            <br>
+            <ruby>
+                <rb>處</rb>
+                <rt data-bopomofo="ㄘㄨˋ">cu3</rt>
+            </ruby>
+            <ruby>
+                <rb>處</rb>
+                <rt data-bopomofo="ㄘㄨˋ">cu3</rt>
+            </ruby>
+            <ruby>
+                <rb>聞</rb>
+                <rt data-bopomofo="ㆠㄨㄣˊ">bbun2</rt>
+            </ruby>
+            <ruby>
+                <rb>啼</rb>
+                <rt data-bopomofo="ㄊㆤˊ">te2</rt>
+            </ruby>
+            <ruby>
+                <rb>鳥</rb>
+                <rt data-bopomofo="ㄐㄧㄠˋ">ziao3</rt>
+            </ruby>
+            <span>。</span>
+
+        </p>
+    </div>
+</body>
+
+</html>

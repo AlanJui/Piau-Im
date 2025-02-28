@@ -340,12 +340,18 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
     piau_im_format = wb.names['網頁格式'].refers_to_range.value
     pai_ban_iong_huat = zu_im_huat_list[piau_im_format][0]
     # CSS 排版用法（CSS class 名稱）
+    # div_tag = (
+    #     "<div class='%s'>\n"
+    #     "  <p class='title'>\n"
+    #     "    <span>《</span>\n"
+    #     "    %s\n"
+    #     "    <span>》</span>\n"
+    #     "  </p>\n"
+    # )
     div_tag = (
         "<div class='%s'>\n"
         "  <p class='title'>\n"
-        "    <span>《</span>\n"
         "    %s\n"
-        "    <span>》</span>\n"
         "  </p>\n"
     )
     html_str = div_tag % (pai_ban_iong_huat, title_with_ruby)

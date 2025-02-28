@@ -10,88 +10,32 @@
         url('../fonts/BopomofoRuby1909-v1-Regular.ttf');
 }
 
+html {
+    font-size: 16px;
+}
+
+/*
+.body {
+    max-width: 100rem;
+    width: 90%;
+    margin: 0 auto;
+    max-width: 1080px;
+    margin-left: auto;
+    margin-right: auto;
+    }
+    */
+
 body {
     width: 90%;
     max-width: 1080px;
-    /* 限制最大寬度 */
-    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
     padding: 0 20px;
-    /* 增加左右留白 */
+
     color: #333;
-    font-size: 2.5em;
+    font-size: 1rem;
     line-height: 1.8;
-    font-family: 'Noto Sans TC', sans-serif !important;
-}
-
-div.Siang_Pai {
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 20px;
-    /* 增加左右留白 */
-}
-
-rt {
-    font-family: BopomofoRuby;
-    color: darkcyan;
-    font-size: 45%;
-    letter-spacing: 0;
-}
-
-rtc {
-    font-family: BopomofoRuby;
-    color: #B94B6A;
-    font-size: 30%;
-    line-height: normal;
-    ruby-merge: merge;
-
-    -webkit-ruby-position: inter-character;
-    ruby-position: inter-character;
-    text-orientation: upright;
-    letter-spacing: 3px;
-
-    -webkitg_writing-mode: vertical-lr;
-    writing-mode: vertical-lr;
-    vertical-align: middle;
-    display: inline;
-}
-
-/* rt {
-    font-family: BopomofoRuby;
-    color: darkcyan;
-    font-size: 45%;
-    letter-spacing: 0;
-}
-
-rtc {
-    font-family: BopomofoRuby;
-    color: #B94B6A;
-    font-size: 30%;
-    line-height: normal;
-    ruby-merge: merge;
-    -webkit-ruby-position: inter-character;
-    ruby-position: inter-character;
-    text-orientation: upright;
-    letter-spacing: 3px;
-    -webkit-writing-mode: vertical-lr;
-    writing-mode: vertical-lr;
-    vertical-align: middle;
-    display: inline;
-} */
-
-.title {
-    /* font-family: 'Noto Sans TC', serif; */
-    color: #01172e;
-    font-size: 1.2em;
-    /* letter-spacing: 2px; */
-    text-align: center;
-    margin-bottom: 20px;
-    /* 增加標題與內容之間的間距 */
-}
-
-.author {
-    font-size: 0.7em;
-    letter-spacing: 2px;
-    text-align: right;
+    font-family: 'Noto Serif TC', sans-serif !important;
 }
 
 img {
@@ -102,61 +46,14 @@ img {
     /* 圖片居中顯示 */
 }
 
-main {
-    display: block;
-    padding: 40px 20px 20px;
-    color: #333;
-    line-height: 1.8;
-    width: 95%;
-    margin: 0 auto;
-}
-
 p {
-    margin-bottom: 50px;
-    line-height: 2em;
-}
-
-header {
-    /* display: block; */
-    border-top: #00c4ab 5px solid;
-    text-align: center;
-    background: url(../picts/bg_header.png) #e6e6e6;
-}
-
-header h1 {
-    padding: 0 10px 25px;
-    font-family: 'Noto Serif TC', serif;
-    font-size: 32pt;
-    font-weight: bold;
+    margin: 0;
+    text-align: justify;
+    /* text-indent: 2.4em; */
 }
 
 h1 {
     color: #333;
-}
-
-#articles {
-    font-weight: bold;
-    width: 95%;
-    margin: 0 auto;
-}
-
-p {
-    margin-bottom: 50px;
-    line-height: 2em;
-}
-
-header {
-    /* display: block; */
-    border-top: #00c4ab 5px solid;
-    text-align: center;
-    background: url(../picts/bg_header.png) #e6e6e6;
-}
-
-header h1 {
-    padding: 0 10px 25px;
-    font-family: 'Noto Serif TC', serif;
-    font-size: 32pt;
-    font-weight: bold;
 }
 
 ul {
@@ -200,6 +97,53 @@ button {
 button:focus {
     outline: none;
 }
+
+.title {
+    /* font-family: 'Noto Sans TC', serif; */
+    color: #01172e;
+    font-size: 1.2em;
+    /* letter-spacing: 2px; */
+    text-align: center;
+    margin-bottom: 20px;
+    /* 增加標題與內容之間的間距 */
+}
+
+.author {
+    font-size: 0.7em;
+    letter-spacing: 2px;
+    text-align: right;
+}
+
+main {
+    display: block;
+    padding: 40px 20px 20px;
+    color: #333;
+    line-height: 1.8;
+    width: 95%;
+    margin: 0 auto;
+}
+
+header {
+    /* display: block; */
+    border-top: #00c4ab 5px solid;
+    text-align: center;
+    background: url(../picts/bg_header.png) #e6e6e6;
+}
+
+header h1 {
+    padding: 0 10px 25px;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 32pt;
+    font-weight: bold;
+}
+
+#articles {
+    font-weight: bold;
+    /* width: 95%; */
+    /* margin: 0 auto; */
+}
+
+/******************************************************/
 
 /* 方音符號 */
 .zhu_yin {
@@ -258,6 +202,8 @@ button:focus {
 /* 標音 */
 .Piau_Im {
     font-family: "Noto Serif TC";
+    font-size: 2.0rem;
+    letter-spacing: 0.2rem;
 }
 
 .Piau_Im rt {
@@ -271,42 +217,6 @@ button:focus {
 
     -webkit-writing-mode: vertical-rl;
     writing-mode: vertical-rl;
-    vertical-align: middle;
-    display: inline;
-}
-
-/* 雙排注音符號 */
-.Siang_Pai {
-    font-family: "Noto Serif TC";
-    /* font-size: 2.5em; */
-    margin-left: 30px;
-}
-
-.Siang_Pai ruby {
-    ruby-merge: separate;
-    ruby-position: over;
-    margin-right: 0.2em;
-}
-
-.Siang_Pai rt {
-    font-family: Arial;
-    color: #00c4ab;
-    font-size: 40%;
-}
-
-.Siang_Pai rtc {
-    margin-left: -0.2em;
-    /* 根据需要调整数值 */
-    font-family: BopomofoRuby;
-    color: #B94B6A;
-    font-size: 30%;
-
-    -webkit-ruby-position: inter-character;
-    ruby-position: inter-character;
-    text-orientation: upright;
-
-    -webkit-writing-mode: vertical-lr;
-    writing-mode: vertical-lr;
     vertical-align: middle;
     display: inline;
 }
@@ -340,4 +250,225 @@ button:focus {
 .fifteen_yin rt {
     letter-spacing: 0;
     font-size: 40%;
+}
+
+/******************************************************/
+
+.Siang_Pai rt::after {
+    content: attr(data-fangyin);
+    /* 使用 data-fangyin 屬性的值作為內容 */
+    display: block;
+    writing-mode: vertical-rl;
+    /* 直排顯示 */
+    text-align: left;
+    font-family: BopomofoRuby;
+    color: #B94B6A;
+    font-size: 40%;
+    line-height: 2.0;
+    /* 調整行高，讓方音符號與漢字底部對齊 */
+    -webkit-ruby-position: inter-character;
+    ruby-position: inter-character;
+    text-orientation: upright;
+    letter-spacing: 0px;
+    -webkit-writing-mode: vertical-lr;
+    writing-mode: vertical-lr;
+    vertical-align: bottom;
+    /* 讓方音符號與漢字底部對齊 */
+    margin-top: 0.1em;
+    /* 微調方音符號的垂直位置 */
+}
+
+/* 雙排注音符號 */
+.Siang_Pai {
+    font-family: "Noto Serif TC";
+    font-size: 2.9rem;
+    line-height: 2.4;
+    text-align: justify;
+}
+
+.Siang_Pai ruby {
+    /* ruby-position: over; */
+    margin-right: 0.2rem;
+}
+
+.Siang_Pai rt {
+    margin-left: -0.6em;
+    font-family: Arial;
+    color: #00c4ab;
+    font-size: 40%;
+    font-variant-east-asian: salt;
+    -moz-font-feature-settings: "salt";
+    -webkit-font-feature-settings: "salt";
+    font-feature-settings: "salt";
+    text-orientation: upright;
+}
+
+.Siang_Pai rtc {
+    /* 根据需要调整数值 */
+    font-family: BopomofoRuby;
+    color: #B94B6A;
+    font-size: 30%;
+
+    -webkit-ruby-position: inter-character;
+    ruby-position: inter-character;
+    text-orientation: upright;
+
+    -moz-writing-mode: vertical-rl;
+    -webkit-writing-mode: vertical-lr;
+    writing-mode: vertical-lr;
+    vertical-align: middle;
+
+    display: inline;
+    text-orientation: upright;
+}
+
+ruby {
+    padding-right: 0px;
+    /* display: inline-block; */
+}
+
+.h rt,
+.v rt {
+    font-family: BopomofoRuby;
+}
+
+/* 橫書 */
+.h {
+    font-variant-east-asian: salt;
+    -moz-font-feature-settings: "salt";
+    -webkit-font-feature-settings: "salt";
+    font-feature-settings: "salt";
+}
+
+/* 直書 */
+.v {
+    -moz-writing-mode: vertical-rl;
+    -webkit-writing-mode: vertical-rl;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+}
+
+rt {
+    font-family: BopomofoRuby;
+    color: #008b8b;
+    font-size: 26%;
+    letter-spacing: 0;
+    font-variant-east-asian: salt;
+    -moz-font-feature-settings: "salt";
+    -webkit-font-feature-settings: "salt";
+    font-feature-settings: "salt";
+    text-orientation: upright;
+    ruby-align: center;
+    text-align: center;
+    /* chrome */
+    /* -webkit-ruby-position: inter-character; */
+}
+
+rtc {
+    font-family: BopomofoRuby;
+    color: #B94B6A;
+    font-size: 30%;
+    line-height: normal;
+    ruby-merge: merge;
+
+    -webkit-ruby-position: inter-character;
+    ruby-position: inter-character;
+    text-orientation: upright;
+    letter-spacing: 3px;
+
+    -webkitg_writing-mode: vertical-lr;
+    writing-mode: vertical-lr;
+    vertical-align: middle;
+    /* display: inline; */
+}
+
+/* 添加媒體查詢 */
+
+/* PC 版 */
+@media screen and (min-width: 769px) {
+    .main-inner .columns {
+        padding-right: 360px;
+    }
+
+    .main-inner .column-right-outer {
+        width: 360px;
+    }
+}
+
+/* 移動端調整 */
+@media screen and (max-width: 768px) {
+    body {
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+    .article_content {
+        font-size: 20px;
+        /* 文章內容稍小 */
+    }
+
+    h3.post-title {
+        font-size: 16px;
+        /* 文章標題適配 */
+    }
+
+    .image-caption {
+        font-size: 0.9em;
+        /* 移動端縮減 */
+    }
+
+    .main-inner .columns {
+        padding-left: 0;
+        padding-right: 0;
+        /* 移除側邊欄空間 */
+    }
+
+    .main-inner .column-right-outer,
+    .main-inner .column-left-outer {
+        /* width: 100%; */
+        /* 側邊欄變全寬 */
+        /* margin: 0; */
+        display: none;
+    }
+
+    .post-outer {
+        margin: 0 10px 20px;
+        /* 調整文章外距 */
+        padding: 10px;
+        /* 縮減內距 */
+    }
+
+    .Siang_Pai {
+        font-size: 1.8em;
+        /* 縮減移動端字體 */
+        line-height: 1.8;
+    }
+
+    .Piau_Im {
+        font-size: 1.5em;
+        letter-spacing: 0.1em;
+    }
+
+    rt,
+    rtc {
+        font-size: 35%;
+        /* 調整注音符號大小 */
+    }
+
+    .content-outer,
+    .main-outer,
+    .post-outer {
+        background: inherit;
+        border: none;
+        border-radius: 0;
+    }
+
+    .column-right-outer {
+        display: none !important;
+    }
+
+    /* 只要 Blogger 偵測 mobile 就隱藏右欄 */
+    .mobile .body-fauxcolumn-outer {
+        display: none !important;
+    }
 }

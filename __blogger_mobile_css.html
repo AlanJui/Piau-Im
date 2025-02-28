@@ -1,0 +1,146 @@
+/* Content
+----------------------------------------------- */
+body {
+font: $(body.font);
+color: $(body.text.color);
+background: $(body.background);
+}
+
+html body .region-inner {
+min-width: 0;
+max-width: 100%;
+width: auto;
+}
+
+.content-outer {
+font-size: 90%;
+}
+
+a:link {
+text-decoration:none;
+color: $(link.color);
+}
+
+a:visited {
+text-decoration:none;
+color: $(link.visited.color);
+}
+
+a:hover {
+text-decoration:underline;
+color: $(link.hover.color);
+}
+
+.content-outer {
+background: $(content.background);
+
+-moz-border-radius: $(content.border.radius);
+-webkit-border-radius: $(content.border.radius);
+-goog-ms-border-radius: $(content.border.radius);
+border-radius: $(content.border.radius);
+
+-moz-box-shadow: 0 0 $(content.shadow.spread) rgba(0, 0, 0, .15);
+-webkit-box-shadow: 0 0 $(content.shadow.spread) rgba(0, 0, 0, .15);
+-goog-ms-box-shadow: 0 0 $(content.shadow.spread) rgba(0, 0, 0, .15);
+box-shadow: 0 0 $(content.shadow.spread) rgba(0, 0, 0, .15);
+
+margin: $(content.margin) auto;
+}
+
+.content-inner {
+padding: $(content.padding);
+}
+
+
+
+.footer-outer .widget h2 {
+color: $(footer.widget.title.text.color);
+}
+
+/* Mobile
+----------------------------------------------- */
+html body.mobile {
+height: auto;
+}
+
+html body.mobile {
+min-height: 480px;
+background-size: 100% auto;
+}
+
+.mobile .body-fauxcolumn-outer {
+background: $(mobile.background.overlay);
+}
+
+html .mobile .mobile-date-outer, html .mobile .blog-pager {
+border-bottom: none;
+background: $(main.background);
+margin-bottom: 10px;
+}
+
+.mobile .date-outer {
+background: $(main.background);
+}
+
+.mobile .header-outer, .mobile .main-outer,
+.mobile .post-outer, .mobile .footer-outer {
+-moz-border-radius: 0;
+-webkit-border-radius: 0;
+-goog-ms-border-radius: 0;
+border-radius: 0;
+}
+
+.mobile .content-outer,
+.mobile .main-outer,
+.mobile .post-outer {
+background: inherit;
+border: none;
+}
+
+.mobile .content-outer {
+font-size: 100%;
+}
+
+.mobile-link-button {
+background-color: $(link.color);
+}
+
+.mobile-link-button a:link, .mobile-link-button a:visited {
+color: $(post.background.color);
+}
+
+.mobile-index-contents {
+color: $(body.text.color);
+}
+
+.mobile .tabs-inner .PageList .widget-content {
+background: $(tabs.selected.background.color) $(tab.selected.background.gradient) repeat scroll bottom;
+color: $(tabs.selected.text.color);
+}
+
+.mobile .tabs-inner .PageList .widget-content .pagelist-arrow {
+border-$startSide: 1px solid $(tabs.separator.color);
+}
+
+.resvideo {
+position: relative;
+padding-bottom: 56.25%;
+max-width: 100%;
+margin: 20px auto;
+padding-top: 30px;
+overflow: hidden;
+height: auto;
+text-align: center;
+clear: both;
+}
+
+.resvideo iframe,
+.videoresp object,
+.videoresp embed {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+text-align: center;
+}
