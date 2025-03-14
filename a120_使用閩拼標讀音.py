@@ -15,7 +15,9 @@ PUNCTUATIONS = (",", ".", "?", "!")
 
 # TLPA → BP 拼音轉換對應表
 TLPA_TO_BP = {
+    "eng": "ing",  # 例: teng → ting
     "oa": "ua",  # 例: loan → luan
+    "oe": "ue",  # 例: koe → kue
     "chh": "c",  # 例: chhia → cia
     "ch": "z",  # 例: chai → zai
     "oo": "oo",  # BP 保持不變
@@ -23,15 +25,36 @@ TLPA_TO_BP = {
 
 # TLPA → BP 聲調轉換
 TLPA_TONE_TO_BP_TONE = {
-    "7": "6",
-    "2": "3",
-    "3": "5",
+    "2": "5",
+    "3": "3",
     "5": "2",
-    "6": "4",
-    "4": "7",
-    "8": "8"
+    "6": "6",
+    "7": "7",
+    "8": "8",
 }
 
+# TLPA 聲調符號 → BP 聲調符號
+TLPA_TONE_SYMBOL_TO_BP = {
+    # i 部分
+    "i": "ī",  # TLPA 陰平 (1) → 閩拼 陰平 (1)
+    "í": "ǐ",  # TLPA 陰上 (2) → 閩拼 上聲 (3)
+    "ì": "ì",  # TLPA 陰去 (3) → 閩拼 陰去 (5)
+    "i": "ī",  # TLPA 陰入 (4) → 閩拼 陰入 (7)
+    "î": "í",  # TLPA 陽平 (5) → 閩拼 陽平 (2)
+    "ǐ": "ǐ",  # TLPA 陽上 (6) → 閩拼 上聲 (4)
+    "ī": "î",  # TLPA 陽去 (7) → 閩拼 陽去 (6)
+    "i̍": "í",  # TLPA 陽入 (8) → 閩拼 陽入 (8)
+
+    # u 部分
+    "u": "ū",  # TLPA 陰平 (1) → 閩拼 陰平 (1)
+    "ú": "ǔ",  # TLPA 陰上 (2) → 閩拼 上聲 (3)
+    "ù": "ù",  # TLPA 陰去 (3) → 閩拼 陰去 (5)
+    "u": "ū",  # TLPA 陰入 (4) → 閩拼 陰入 (7)
+    "û": "ú",  # TLPA 陽平 (5) → 閩拼 陽平 (2)
+    "ǔ": "ǔ",  # TLPA 陽上 (6) → 閩拼 上聲 (4)
+    "ū": "û",  # TLPA 陽去 (7) → 閩拼 陽去 (6)
+    "u̍": "ú",  # TLPA 陽入 (8) → 閩拼 陽入 (8)
+}
 # =========================================================================
 # 程式區域函式
 # =========================================================================
@@ -62,15 +85,13 @@ def clean_pinyin(word, use_bp=False):
         # 處理鼻化音標記（TLPA: ann → BP: nna, oann → BP: nuan）
         word = re.sub(r'([iu]?(ai|au|[iuaoe]))nn$', r'n\1', word)
         # 處理以母音開頭但帶有聲調的拼音（í → yí, ú → wú）
-        if re.match(r'^[íìîïi]', word, re.IGNORECASE):
-            word = 'y' + word
-        elif re.match(r'^[úùûüu]', word, re.IGNORECASE):
-            word = 'w' + word
-        # 轉換 TLPA 聲調至 BP
+        word = ''.join(TLPA_TONE_SYMBOL_TO_BP.get(ch, ch) for ch in word)  # 轉換 TLPA 聲調符號至 BP
+        if re.match(r'^[aeiou]', word):
+            word = ('y' if word.startswith('i') else 'w') + word
+        # 轉換 TLPA 數字聲調至 BP
         word = re.sub(r'(\d)$', lambda m: TLPA_TONE_TO_BP_TONE.get(m.group(1), m.group(1)), word)
     return word
-    íìîǐīi̍ # 2：陰上、3：陰去、5：陽平、6：陽上、7：陽去、8：陽入
-    ǎāàāáâá
+
 # =========================================================================
 # 用途：將漢字及拼音填入Excel指定工作表
 # =========================================================================
@@ -101,7 +122,7 @@ def fill_hanzi_and_pinyin(wb, filename, use_bp=False, sheet_name='漢字注音',
             if cell_char and is_hanzi(cell_char):
                 sheet.cells(row_pinyin, col).value = pinyin_words[word_idx]
                 word_idx += 1
-                logging.info(f"已完成填入: {cell_char} - {pinyin_words[word_idx-1]}")
+                print(f"({row_hanzi}, {col}) 已填入: {cell_char} - {pinyin_words[word_idx-1]}")
             col += 1
 
     logging.info(f"已將漢字及拼音填入【{sheet_name}】工作表！")
