@@ -21,6 +21,17 @@ TLPA_TO_BP = {
     "oo": "oo",  # BP 保持不變
 }
 
+# TLPA → BP 聲調轉換
+TLPA_TONE_TO_BP_TONE = {
+    "7": "6",
+    "2": "3",
+    "3": "5",
+    "5": "2",
+    "6": "4",
+    "4": "7",
+    "8": "8"
+}
+
 # =========================================================================
 # 程式區域函式
 # =========================================================================
@@ -48,13 +59,18 @@ def clean_pinyin(word, use_bp=False):
     if use_bp:
         for tlpa, bp in TLPA_TO_BP.items():
             word = word.replace(tlpa, bp)  # 轉換為 BP
-        # 處理鼻化音標記（TLPA: aⁿ → BP: na, oaⁿ → nua）
-        word = re.sub(r'([aeiou])ⁿ', r'n\1', word)  # 例: aⁿ → na, oaⁿ → nua
-        # 處理以母音開頭的音標（i → yi, u → wu）
-        if re.match(r'^[aeiou]', word):
-            word = ('y' if word.startswith('i') else 'w') + word
+        # 處理鼻化音標記（TLPA: ann → BP: nna, oann → BP: nuan）
+        word = re.sub(r'([iu]?(ai|au|[iuaoe]))nn$', r'n\1', word)
+        # 處理以母音開頭但帶有聲調的拼音（í → yí, ú → wú）
+        if re.match(r'^[íìîïi]', word, re.IGNORECASE):
+            word = 'y' + word
+        elif re.match(r'^[úùûüu]', word, re.IGNORECASE):
+            word = 'w' + word
+        # 轉換 TLPA 聲調至 BP
+        word = re.sub(r'(\d)$', lambda m: TLPA_TONE_TO_BP_TONE.get(m.group(1), m.group(1)), word)
     return word
-
+    íìîǐīi̍ # 2：陰上、3：陰去、5：陽平、6：陽上、7：陽去、8：陽入
+    ǎāàāáâá
 # =========================================================================
 # 用途：將漢字及拼音填入Excel指定工作表
 # =========================================================================

@@ -658,29 +658,6 @@ class PiauIm:
         """
         return self.cursor
 
-    # def _init_siann_bu_dict(self, cursor):
-    #     # 執行 SQL 查詢
-    #     cursor.execute("SELECT * FROM 聲母對照表")
-
-    #     # 獲取所有資料
-    #     rows = cursor.fetchall()
-
-    #     # 初始化字典
-    #     siann_bu_dict = {}
-
-    #     # 從查詢結果中提取資料並將其整理成一個字典
-    #     for row in rows:
-    #         siann_bu_dict[row[1]] = {
-    #             '台語音標': row[1],
-    #             '國際音標': row[2],
-    #             '台羅拼音': row[3],
-    #             '白話字':   row[4],
-    #             '閩拼方案': row[5],
-    #             '方音符號': row[6],
-    #             '十五音':   row[7],
-    #         }
-    #     return siann_bu_dict
-
     def _init_siann_bu_dict(self):
         """
         初始化聲母對照表，使用 cursor 進行 SQL 查詢
@@ -1251,44 +1228,3 @@ if __name__ == "__main__":
     # 測試：將首字母大寫的音標轉換成小寫
     print('==================================================================')
     ut005()
-
-# def siann_un_tiau_tng_piau_im(piau_im, piau_im_huat, siann_bu, un_bu, tiau_ho):
-#     """選擇並執行對應的注音方法"""
-#     if piau_im_huat == "雅俗通":
-#         return piau_im.NST_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif piau_im_huat == "十五音":
-#         return piau_im.SNI_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif piau_im_huat == "白話字":
-#         return piau_im.POJ_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif piau_im_huat == "台羅拼音":
-#         return piau_im.TL_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif piau_im_huat == "閩拼方案":
-#         return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif piau_im_huat == "閩拼調號":
-#         return piau_im.BP_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif piau_im_huat == "閩拼調符":
-#         return piau_im.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
-#     elif piau_im_huat == "方音符號":
-#         return piau_im.TPS_piau_im(siann_bu, un_bu, tiau_ho)
-#     elif piau_im_huat == "台語音標":
-#         if siann_bu == "" or siann_bu == "Ø":
-#             siann = ''
-#         else:
-#             siann = piau_im.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
-#         un = piau_im.Un_Bu_Dict[un_bu]["台語音標"]
-#         return f"{siann}{un}{tiau_ho}"
-#     return ""
-
-
-# =========================================================================
-# 台語音標 → 台羅拼音（TLPA → TL）轉換函數
-# =========================================================================
-# def convert_tlpa_to_tl(tai_gi_im_piau):
-#     """
-#     轉換台語音標（TLPA）為台羅拼音（TL）。
-#     """
-#     if not tai_gi_im_piau:
-#         return ""
-#     tai_lo_im_piau = re.sub(r'\bc', 'tsh', tai_gi_im_piau)  # c → tsh
-#     tai_lo_im_piau = re.sub(r'\bz', 'ts', tai_gi_im_piau)   # z → ts
-#     return tai_lo_im_piau
