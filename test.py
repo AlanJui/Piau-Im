@@ -21,7 +21,9 @@ def read_text_with_tlpa(filename):
     with open(filename, 'r', encoding='utf-8') as f:
         lines = [line.strip() for line in f if line.strip() and not line.startswith('zh.wikipedia.org')]
     for i in range(0, len(lines), 2):
-        text_with_tlpa.append((lines[i], lines[i + 1]))
+        hanzi = lines[i]
+        tlpa = lines[i + 1].replace("-", " ")  # 替換 "-" 為空白字元
+        text_with_tlpa.append((hanzi, tlpa))
     return text_with_tlpa
 
 # 用途：檢查是否為漢字
