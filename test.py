@@ -2,10 +2,14 @@
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
 import logging
-import re
 import unicodedata
 
 import xlwings as xw
+
+# =========================================================================
+# 設定標點符號過濾
+# =========================================================================
+PUNCTUATIONS = (",", ".", "?", "!")
 
 # =========================================================================
 # 程式區域函式
@@ -20,17 +24,15 @@ def read_text_with_tlpa(filename):
         text_with_tlpa.append((lines[i], lines[i + 1]))
     return text_with_tlpa
 
-# =========================================================================
 # 用途：檢查是否為漢字
-# =========================================================================
 def is_hanzi(char):
     return 'CJK UNIFIED IDEOGRAPH' in unicodedata.name(char, '')
 
 # =========================================================================
-# 用途：清理TLPA標音，去除標點符號但保留數字聲調
+# 用途：移除標點符號
 # =========================================================================
 def clean_tlpa(word):
-    return re.sub(r'[^a-zA-Z0-9̀-ͯ]', '', word)  # 允許數字和聲調符號
+    return ''.join(ch for ch in word if ch not in PUNCTUATIONS)
 
 # =========================================================================
 # 用途：將漢字及TLPA標音填入Excel指定工作表
@@ -53,14 +55,7 @@ def fill_hanzi_and_tlpa(wb, filename='tmp.txt', sheet_name='漢字注音', start
             sheet.cells(row_hanzi, col).select()  # 每字填入後選取以便畫面滾動
 
         # TLPA逐詞填入（從D欄開始），檢查下方儲存格是否為漢字
-        tlpa_words = []
-        for word in tlpa.split():
-            cleaned_word = clean_tlpa(word)  # 去除標點符號但保留聲調數字
-            if '-' in cleaned_word:
-                tlpa_words.extend(cleaned_word.split('-'))
-            else:
-                tlpa_words.append(cleaned_word)
-
+        tlpa_words = [clean_tlpa(word) for word in tlpa.split()]
         col = 4
         word_idx = 0
 
