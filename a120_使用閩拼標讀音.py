@@ -2,6 +2,7 @@
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
 import logging
+import re
 import sys
 import unicodedata
 
@@ -47,6 +48,11 @@ def clean_pinyin(word, use_bp=False):
     if use_bp:
         for tlpa, bp in TLPA_TO_BP.items():
             word = word.replace(tlpa, bp)  # 轉換為 BP
+        # 處理鼻化音標記（TLPA: aⁿ → BP: na, oaⁿ → nua）
+        word = re.sub(r'([aeiou])ⁿ', r'n\1', word)  # 例: aⁿ → na, oaⁿ → nua
+        # 處理以母音開頭的音標（i → yi, u → wu）
+        if re.match(r'^[aeiou]', word):
+            word = ('y' if word.startswith('i') else 'w') + word
     return word
 
 # =========================================================================
@@ -79,8 +85,7 @@ def fill_hanzi_and_pinyin(wb, filename, use_bp=False, sheet_name='漢字注音',
             if cell_char and is_hanzi(cell_char):
                 sheet.cells(row_pinyin, col).value = pinyin_words[word_idx]
                 word_idx += 1
-                # logging.info(f"已完成填入: {cell_char} - {pinyin_words[word_idx-1]}")
-                print(f"（{row_pinyin}, {col}）已填入: {cell_char} - {pinyin_words[word_idx-1]}")
+                logging.info(f"已完成填入: {cell_char} - {pinyin_words[word_idx-1]}")
             col += 1
 
     logging.info(f"已將漢字及拼音填入【{sheet_name}】工作表！")
