@@ -1,0 +1,17 @@
+[tool.djlint]
+ignore = ["H014"]
+
+[tool.ruff]
+; ignore = E W  # 忽略所有 `pycodestyle` (E, W) 規則
+ignore = E501  # 忽略行長度限制
+
+[tool.pycodestyle]
+count = false
+ignore = ["E226", "E302", "E71"]
+max-line-length = 160
+statistics = true
+
+[tool.pydocstyle]
+inherit = false
+ignore = ["D100", "D103", "D203", "D405", "E501"]
+match = "*.py"
