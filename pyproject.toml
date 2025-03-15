@@ -1,5 +1,6 @@
 [tool.djlint]
-ignore = ["H014"]
+ignore = "H014,H015"
+exclude=".venv,venv,.tox,.eggs,..."  # 忽略檢查的目錄
 
 [tool.ruff]
 ; ignore = E W  # 忽略所有 `pycodestyle` (E, W) 規則
