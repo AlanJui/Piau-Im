@@ -60,17 +60,30 @@ def convert_tlpa_tone(tlpa_word):
 # =========================================================================
 # 程式區域函式
 # =========================================================================
-# 用途：從純文字檔案讀取資料並回傳 [(漢字, TLPA), ...] 之格式
 
+# 用途：從純文字檔案讀取資料並回傳 [(漢字, TLPA), ...] 之格式
+# def read_text_with_tlpa(filename):
+#     text_with_tlpa = []
+#     with open(filename, 'r', encoding='utf-8') as f:
+#         lines = [line.strip() for line in f if line.strip() and not line.startswith('zh.wikipedia.org')]
+#     for i in range(0, len(lines), 2):
+#         hanzi = lines[i]
+#         tlpa = lines[i + 1].replace("-", " ")  # 替換 "-" 為空白字元
+#         text_with_tlpa.append((hanzi, tlpa))
+#     return text_with_tlpa
 def read_text_with_tlpa(filename):
     text_with_tlpa = []
-    with open(filename, 'r', encoding='utf-8') as f:
-        lines = [line.strip() for line in f if line.strip() and not line.startswith('zh.wikipedia.org')]
+    with open(filename, "r", encoding="utf-8") as f:
+        # 先移除 `\u200b`，確保不會影響 TLPA 拼音對應
+        lines = [re.sub(r"[\u200b]", "", line.strip()) for line in f if line.strip() and not line.startswith("zh.wikipedia.org")]
+
     for i in range(0, len(lines), 2):
         hanzi = lines[i]
         tlpa = lines[i + 1].replace("-", " ")  # 替換 "-" 為空白字元
         text_with_tlpa.append((hanzi, tlpa))
+
     return text_with_tlpa
+
 
 # 用途：檢查是否為漢字
 def is_hanzi(char):
@@ -91,8 +104,9 @@ def is_hanzi(char):
 def clean_tlpa(word):
     word = ''.join(ch for ch in word if ch not in PUNCTUATIONS)  # 移除標點符號
     word = unicodedata.normalize("NFD", word)  # 先正規化，拆解聲調符號
+    # word = word.replace("oa", "ua")  # TLPA+ 調整，將 "oa" 變為 "ua"
+    word = re.sub(r"o[\u0300\u0301\u0302\u0304\u030D]?a", "ua", word)  # 替換 "oe" 為 "ue"
     word = re.sub(r"o[\u0300\u0301\u0302\u0304\u030D]?e", "ue", word)  # 替換 "oe" 為 "ue"
-    word = word.replace("oa", "ua")  # TLPA+ 調整，將 "oa" 變為 "ua"
 
     if word.startswith("chh"):
         word = "c" + word[3:]
@@ -104,7 +118,7 @@ def clean_tlpa(word):
 # =========================================================================
 # 用途：將漢字及TLPA標音填入Excel指定工作表
 # =========================================================================
-def fill_hanzi_and_tlpa(wb, use_tiau_ho=False, filename='tmp.txt', sheet_name='漢字注音', start_row=5):
+def fill_hanzi_and_tlpa(wb, use_tiau_ho=False, filename='tmp.txt', sheet_name='漢字注音', start_row=5, piau_im_row=-2):
     sheet = wb.sheets[sheet_name]
     sheet.activate()
     sheet.range('A1').select()
@@ -113,7 +127,7 @@ def fill_hanzi_and_tlpa(wb, use_tiau_ho=False, filename='tmp.txt', sheet_name='�
 
     for idx, (hanzi, tlpa) in enumerate(text_with_tlpa):
         row_hanzi = start_row + idx * 4      # 漢字位置
-        row_tlpa = row_hanzi - 1             # TLPA位置
+        row_tlpa = row_hanzi + piau_im_row   # TLPA位置: -1 ==> 自動標音； -2 ==> 人工標音
 
         # 漢字逐字填入（從D欄開始）
         for col_idx, char in enumerate(hanzi):
@@ -141,6 +155,15 @@ def fill_hanzi_and_tlpa(wb, use_tiau_ho=False, filename='tmp.txt', sheet_name='�
                 print(f"（{row_tlpa}, {col}）已填入: {cell_char} - {tlpa_words[word_idx-1]}")
             col += 1
 
+        # 完成一組漢字及TLPA標音後，需在儲存格存入換行符號
+        if word_idx == len(tlpa_words):
+            if col >= 18:   # 若已填滿一行（col = 19），則需換行
+                col = 4
+                row_hanzi += 4
+
+            # 以下程式碼有假設：每組漢字之結尾，必有標點符號
+            sheet.cells(row_hanzi, col+1).value = "=CHAR(10)"
+
     logging.info(f"已將漢字及TLPA注音填入【{sheet_name}】工作表！")
 
 # =========================================================================
@@ -157,7 +180,11 @@ def main():
         logging.error("無法找到作用中的Excel活頁簿。")
         return
 
-    fill_hanzi_and_tlpa(wb, use_tiau_ho)
+    fill_hanzi_and_tlpa(wb,
+                        filename=filename,
+                        use_tiau_ho=use_tiau_ho,
+                        start_row=5,
+                        piau_im_row=-2) # -1: 自動標音；-2: 人工標音
 
 if __name__ == "__main__":
     main()
