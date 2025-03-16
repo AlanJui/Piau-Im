@@ -107,7 +107,7 @@ def clean_tlpa(word):
 # =========================================================================
 # 用途：將漢字及TLPA標音填入Excel指定工作表
 # =========================================================================
-def fill_hanzi_and_tlpa(wb, use_tiau_ho=False, filename='tmp.txt', sheet_name='漢字注音', start_row=5, piau_im_row=-2):
+def fill_hanzi_and_tlpa(wb, use_tiau_ho=True, filename='tmp.txt', sheet_name='漢字注音', start_row=5, piau_im_row=-2):
     sheet = wb.sheets[sheet_name]
     sheet.activate()
     sheet.range('A1').select()
@@ -165,10 +165,10 @@ def main():
     # 檢查是否有指定檔案名稱，若無則使用預設檔名
     filename = sys.argv[1] if len(sys.argv) > 1 else "tmp.txt"
     # 檢查是否有 'ho' 參數，若有則使用標音格式二：【聲母】+【韻母】+【調號】
-    if "ho" in sys.argv:  # 若命令行參數包含 'bp'，則使用 BP
-        use_tiau_ho = True
-    else:
+    if "hu" in sys.argv:  # 若命令行參數包含 'bp'，則使用 BP
         use_tiau_ho = False
+    else:
+        use_tiau_ho = True
     # 以作用中的Excel活頁簿為作業標的
     wb = xw.apps.active.books.active
     if wb is None:
