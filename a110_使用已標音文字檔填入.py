@@ -82,6 +82,10 @@ def is_hanzi(char):
 def clean_tlpa(word):
     word = ''.join(ch for ch in word if ch not in PUNCTUATIONS)  # 移除標點符號
     word = unicodedata.normalize("NFD", word)  # 先正規化，拆解聲調符號
+
+     # **新增鼻音處理：將 `ⁿ`（U+207F）轉換為 `nn`**
+    word = word.replace("ⁿ", "nn")
+
     # word = word.replace("oa", "ua")  # TLPA+ 調整，將 "oa" 變為 "ua"
     word = re.sub(r"o[\u0300\u0301\u0302\u0304\u030D]?a", "ua", word)  # 替換 "oe" 為 "ue"
     word = re.sub(r"o[\u0300\u0301\u0302\u0304\u030D]?e", "ue", word)  # 替換 "oe" 為 "ue"
