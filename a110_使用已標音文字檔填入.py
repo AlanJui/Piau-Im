@@ -9,68 +9,55 @@ import unicodedata
 import xlwings as xw
 
 # =========================================================================
-# 設定標點符號過濾
-# =========================================================================
-PUNCTUATIONS = (",", ".", "?", "!", ":", ";")
-
-# =========================================================================
 # 將使用聲調符號的 TLPA 拼音轉為改用調號數值的 TLPA 拼音
 # =========================================================================
-# TLPA 聲調符號對應數值
+
+# 聲調符號對應表（帶調號母音 → 對應數字）
 # fmt: off
-TONE_MAP = {
-    "á": "2", "à": "3", "a̍": "8", "â": "5", "ǎ": "6", "ā": "7",  # a
-    "é": "2", "è": "3", "e̍": "8", "ê": "5", "ě": "6", "ē": "7",  # e
-    "í": "2", "ì": "3", "i̍": "8", "î": "5", "ǐ": "6", "ī": "7",  # i
-    "ó": "2", "ò": "3", "o̍": "8", "ô": "5", "ǒ": "6", "ō": "7",  # o
-    "ú": "2", "ù": "3", "u̍": "8", "û": "5", "ǔ": "6", "ū": "7",  # u
-    "ń": "2", "ň": "6", "ñ": "5"  # 特殊鼻音
+tiau_hu_mapping = {
+    "a̍": ("a", "8"), "á": ("a", "2"), "ǎ": ("a", "6"), "â": ("a", "5"), "ā": ("a", "7"), "à": ("a", "3"),
+    "e̍": ("e", "8"), "é": ("e", "2"), "ě": ("e", "6"), "ê": ("e", "5"), "ē": ("e", "7"), "è": ("e", "3"),
+    "i̍": ("i", "8"), "í": ("i", "2"), "ǐ": ("i", "6"), "î": ("i", "5"), "ī": ("i", "7"), "ì": ("i", "3"),
+    "o̍": ("o", "8"), "ó": ("o", "2"), "ǒ": ("o", "6"), "ô": ("o", "5"), "ō": ("o", "7"), "ò": ("o", "3"),
+    "u̍": ("u", "8"), "ú": ("u", "2"), "ǔ": ("u", "6"), "û": ("u", "5"), "ū": ("u", "7"), "ù": ("u", "3"),
+    "m̍": ("m", "8"), "ḿ": ("m", "2"), "m̀": ("m", "3"), "m̂": ("m", "5"), "m̄": ("m", "7"),
+    "n̍": ("n", "8"), "ń": ("n", "2"), "ň": ("n", "6"), "n̂": ("n", "5"), "n̄": ("n", "7")
 }
 # fmt: on
 
-# 用途：將 TLPA 拼音中的聲調符號轉換為數字
-def convert_tlpa_tone(tlpa_word):
-    tone = "1"  # 預設為陰平調
-    decomposed = unicodedata.normalize("NFD", tlpa_word)  # 拆解組合字元，確保聲調分離
-    base_chars = []  # 存儲純字母
-    last_tone = None  # 存儲最後一個聲調符號
-    has_tone_8 = False  # 用來判斷是否有聲調 8（U+030D）
+def tiau_hu_tng_tiau_ho(im_piau: str) -> str:
+    """
+    將帶有聲調符號的台羅拼音轉換為改良式【台語音標】（TLPA+）。
+    """
+    # **重要**：先將字串標準化為 NFC 格式，統一處理 Unicode 差異
+    im_piau = unicodedata.normalize("NFC", im_piau)
 
-    for char in decomposed:
-        if char in TONE_MAP:
-            last_tone = TONE_MAP[char]  # 記錄最後找到的聲調
-        elif char == "\u030D":  # 檢查是否為「聲調 8」（U+030D）
-            has_tone_8 = True
-        elif unicodedata.category(char) != "Mn":  # 不是變音符號才存入
-            base_chars.append(char)
+    tone_number = "1"
 
-    # 如果包含聲調 8，則強制調值為 8
-    if has_tone_8:
-        tone = "8"
-    elif last_tone:
-        tone = last_tone  # 使用最後找到的聲調
+    # 1. 先處理聲調轉換
+    for tone_mark, (base_char, number) in tiau_hu_mapping.items():
+        if tone_mark in im_piau:
+            im_piau = im_piau.replace(tone_mark, base_char)  # 移除調號，還原原始母音
+            tone_number = number  # 記錄對應的聲調數字
+            break  # 只會有一個聲調符號，找到就停止
 
-    # 若尾碼為 h/p/t/k，則屬於陰入調（4調），但 **若已確定為 8，則不改變**
-    if not has_tone_8 and base_chars and base_chars[-1] in "hptk":
-        tone = "4"
+    # 2. 若有聲調數字，則加到末尾
+    if tone_number:
+        return im_piau + tone_number
 
-    return "".join(base_chars) + tone
+    return im_piau  # 若無聲調符號則不變更
 
 
 # =========================================================================
 # 程式區域函式
 # =========================================================================
 
+# =========================================================================
+# 設定標點符號過濾
+# =========================================================================
+PUNCTUATIONS = (",", ".", "?", "!", ":", ";")
+
 # 用途：從純文字檔案讀取資料並回傳 [(漢字, TLPA), ...] 之格式
-# def read_text_with_tlpa(filename):
-#     text_with_tlpa = []
-#     with open(filename, 'r', encoding='utf-8') as f:
-#         lines = [line.strip() for line in f if line.strip() and not line.startswith('zh.wikipedia.org')]
-#     for i in range(0, len(lines), 2):
-#         hanzi = lines[i]
-#         tlpa = lines[i + 1].replace("-", " ")  # 替換 "-" 為空白字元
-#         text_with_tlpa.append((hanzi, tlpa))
-#     return text_with_tlpa
 def read_text_with_tlpa(filename):
     text_with_tlpa = []
     with open(filename, "r", encoding="utf-8") as f:
@@ -107,6 +94,8 @@ def clean_tlpa(word):
     # word = word.replace("oa", "ua")  # TLPA+ 調整，將 "oa" 變為 "ua"
     word = re.sub(r"o[\u0300\u0301\u0302\u0304\u030D]?a", "ua", word)  # 替換 "oe" 為 "ue"
     word = re.sub(r"o[\u0300\u0301\u0302\u0304\u030D]?e", "ue", word)  # 替換 "oe" 為 "ue"
+    word = re.sub(r"e[\u0300\u0301\u0302\u0304\u030D]?ng", "ing", word)  # 替換 "eng" 為 "ing"
+    word = re.sub(r"e[\u0300\u0301\u0302\u0304\u030D]?k", "ik", word)  # 替換 "ek" 為 "ik"
 
     if word.startswith("chh"):
         word = "c" + word[3:]
@@ -125,10 +114,9 @@ def fill_hanzi_and_tlpa(wb, use_tiau_ho=False, filename='tmp.txt', sheet_name='�
 
     text_with_tlpa = read_text_with_tlpa(filename)
 
+    row_hanzi = start_row      # 漢字位置
+    row_tlpa = row_hanzi + piau_im_row   # TLPA位置: -1 ==> 自動標音； -2 ==> 人工標音
     for idx, (hanzi, tlpa) in enumerate(text_with_tlpa):
-        row_hanzi = start_row + idx * 4      # 漢字位置
-        row_tlpa = row_hanzi + piau_im_row   # TLPA位置: -1 ==> 自動標音； -2 ==> 人工標音
-
         # 漢字逐字填入（從D欄開始）
         for col_idx, char in enumerate(hanzi):
             col = 4 + col_idx  # D欄是第4欄
@@ -149,7 +137,7 @@ def fill_hanzi_and_tlpa(wb, use_tiau_ho=False, filename='tmp.txt', sheet_name='�
                     tlpa_word = ""
                 else:
                     # 若讀入之TLPA音標非標點符號，且使用標音格式二，則轉換為【聲母】+【韻母】+【調號】
-                    if use_tiau_ho: tlpa_word = convert_tlpa_tone(tlpa_word)
+                    if use_tiau_ho: tlpa_word = tiau_hu_tng_tiau_ho(tlpa_word)
                 sheet.cells(row_tlpa, col).value = tlpa_word
                 word_idx += 1
                 print(f"（{row_tlpa}, {col}）已填入: {cell_char} - {tlpa_words[word_idx-1]}")
@@ -164,6 +152,10 @@ def fill_hanzi_and_tlpa(wb, use_tiau_ho=False, filename='tmp.txt', sheet_name='�
             # 以下程式碼有假設：每組漢字之結尾，必有標點符號
             sheet.cells(row_hanzi, col+1).value = "=CHAR(10)"
 
+            # 更新下一組漢字及TLPA標音之位置
+            row_hanzi += 4      # 漢字位置
+            row_tlpa = row_hanzi + piau_im_row   # TLPA位置: -1 ==> 自動標音； -2 ==> 人工標音
+
     logging.info(f"已將漢字及TLPA注音填入【{sheet_name}】工作表！")
 
 # =========================================================================
@@ -173,7 +165,10 @@ def main():
     # 檢查是否有指定檔案名稱，若無則使用預設檔名
     filename = sys.argv[1] if len(sys.argv) > 1 else "tmp.txt"
     # 檢查是否有 'ho' 參數，若有則使用標音格式二：【聲母】+【韻母】+【調號】
-    use_tiau_ho = "ho" in sys.argv  # 若命令行參數包含 'bp'，則使用 BP
+    if "ho" in sys.argv:  # 若命令行參數包含 'bp'，則使用 BP
+        use_tiau_ho = True
+    else:
+        use_tiau_ho = False
     # 以作用中的Excel活頁簿為作業標的
     wb = xw.apps.active.books.active
     if wb is None:
