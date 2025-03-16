@@ -2,6 +2,7 @@
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
 import logging
+import re
 import sys
 import unicodedata
 
@@ -30,20 +31,30 @@ TONE_MAP = {
 # 用途：將 TLPA 拼音中的聲調符號轉換為數字
 def convert_tlpa_tone(tlpa_word):
     tone = "1"  # 預設為陰平調
-    plain_word = ""
+    decomposed = unicodedata.normalize("NFD", tlpa_word)  # 拆解組合字元，確保聲調分離
+    base_chars = []  # 存儲純字母
+    last_tone = None  # 存儲最後一個聲調符號
+    has_tone_8 = False  # 用來判斷是否有聲調 8（U+030D）
 
-    for char in tlpa_word:
+    for char in decomposed:
         if char in TONE_MAP:
-            tone = TONE_MAP[char]  # 取得對應的聲調數值
-            plain_word += unicodedata.normalize("NFD", char)[0]  # 去掉聲調符號
-        else:
-            plain_word += char
+            last_tone = TONE_MAP[char]  # 記錄最後找到的聲調
+        elif char == "\u030D":  # 檢查是否為「聲調 8」（U+030D）
+            has_tone_8 = True
+        elif unicodedata.category(char) != "Mn":  # 不是變音符號才存入
+            base_chars.append(char)
 
-    # 若尾碼為 h/p/t/k，則屬於陰入調（4調）
-    if plain_word[-1] in "hptk":
+    # 如果包含聲調 8，則強制調值為 8
+    if has_tone_8:
+        tone = "8"
+    elif last_tone:
+        tone = last_tone  # 使用最後找到的聲調
+
+    # 若尾碼為 h/p/t/k，則屬於陰入調（4調），但 **若已確定為 8，則不改變**
+    if not has_tone_8 and base_chars and base_chars[-1] in "hptk":
         tone = "4"
 
-    return plain_word + tone
+    return "".join(base_chars) + tone
 
 
 # =========================================================================
@@ -68,15 +79,27 @@ def is_hanzi(char):
 # =========================================================================
 # 用途：移除標點符號並轉換TLPA+拼音格式
 # =========================================================================
+# def clean_tlpa(word):
+#     word = ''.join(ch for ch in word if ch not in PUNCTUATIONS)  # 移除標點符號
+#     word = word.replace("oa", "ua")  # TLPA+ 調整，將 "oa" 變為 "ua"
+#     word = word.replace("oe", "ue")  # TLPA+ 調整，將 "oe" 變為 "ue"
+#     if word.startswith("chh"):
+#         word = "c" + word[3:]
+#     elif word.startswith("ch"):
+#         word = "z" + word[2:]
+#     return word
 def clean_tlpa(word):
     word = ''.join(ch for ch in word if ch not in PUNCTUATIONS)  # 移除標點符號
+    word = unicodedata.normalize("NFD", word)  # 先正規化，拆解聲調符號
+    word = re.sub(r"o[\u0300\u0301\u0302\u0304\u030D]?e", "ue", word)  # 替換 "oe" 為 "ue"
     word = word.replace("oa", "ua")  # TLPA+ 調整，將 "oa" 變為 "ua"
-    word = word.replace("oe", "ue")  # TLPA+ 調整，將 "oe" 變為 "ue"
+
     if word.startswith("chh"):
         word = "c" + word[3:]
     elif word.startswith("ch"):
         word = "z" + word[2:]
-    return word
+
+    return unicodedata.normalize("NFC", word)  # 重新組合聲調符號
 
 # =========================================================================
 # 用途：將漢字及TLPA標音填入Excel指定工作表
