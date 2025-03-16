@@ -79,15 +79,6 @@ def is_hanzi(char):
 # =========================================================================
 # 用途：移除標點符號並轉換TLPA+拼音格式
 # =========================================================================
-# def clean_tlpa(word):
-#     word = ''.join(ch for ch in word if ch not in PUNCTUATIONS)  # 移除標點符號
-#     word = word.replace("oa", "ua")  # TLPA+ 調整，將 "oa" 變為 "ua"
-#     word = word.replace("oe", "ue")  # TLPA+ 調整，將 "oe" 變為 "ue"
-#     if word.startswith("chh"):
-#         word = "c" + word[3:]
-#     elif word.startswith("ch"):
-#         word = "z" + word[2:]
-#     return word
 def clean_tlpa(word):
     word = ''.join(ch for ch in word if ch not in PUNCTUATIONS)  # 移除標點符號
     word = unicodedata.normalize("NFD", word)  # 先正規化，拆解聲調符號
@@ -96,6 +87,8 @@ def clean_tlpa(word):
     word = re.sub(r"o[\u0300\u0301\u0302\u0304\u030D]?e", "ue", word)  # 替換 "oe" 為 "ue"
     word = re.sub(r"e[\u0300\u0301\u0302\u0304\u030D]?ng", "ing", word)  # 替換 "eng" 為 "ing"
     word = re.sub(r"e[\u0300\u0301\u0302\u0304\u030D]?k", "ik", word)  # 替換 "ek" 為 "ik"
+    # word = re.sub(r"ô͘", "ôo", word)  # 替換所有 `ô͘`，將 POJ `ô͘` 轉換為 TLPA `ôo`
+    word = re.sub(r"o\u0302\u0358", "ôo", word)  # 替換分解後的 ô͘ (o + ̂ + 鼻音符號)
 
     if word.startswith("chh"):
         word = "c" + word[3:]
