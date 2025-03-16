@@ -153,6 +153,8 @@ def fill_hanzi_and_tlpa(wb, use_tiau_ho=True, filename='tmp.txt', sheet_name='�
             row_hanzi += 4      # 漢字位置
             row_tlpa = row_hanzi + piau_im_row   # TLPA位置: -1 ==> 自動標音； -2 ==> 人工標音
 
+    # 填入文章終止符號：φ
+    sheet.cells(row_hanzi-4, 4).value = "φ"
     logging.info(f"已將漢字及TLPA注音填入【{sheet_name}】工作表！")
 
 # =========================================================================
