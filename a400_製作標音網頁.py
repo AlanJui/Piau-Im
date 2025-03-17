@@ -22,6 +22,7 @@ from mod_標音 import PiauIm, ca_ji_kiat_ko_tng_piau_im, is_punctuation
 # =========================================================================
 # 常數定義
 # =========================================================================
+Piau_Im_Row = -1  # 標音位置：-1 ==> 自動標音；-2 ==> 人工標音
 # 定義 Exit Code
 EXIT_CODE_SUCCESS = 0  # 成功
 EXIT_CODE_NO_FILE = 1  # 無法找到檔案
@@ -415,7 +416,8 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
                 else:
                     han_ji = cell_value.strip()  # 取得漢字
                     # 取得漢字的【台語音標】
-                    tai_gi_im_piau = sheet.range((row - 1, col)).value  # 取得漢字的台語音標
+                    # tai_gi_im_piau = sheet.range((row - 1, col)).value  # 取得漢字的台語音標
+                    tai_gi_im_piau = sheet.range((row + Piau_Im_Row, col)).value  # 取得漢字的台語音標
                     # 當儲存格寫入之資料為 None 情況時之處理作法：給予空字串
                     tai_gi_im_piau = tai_gi_im_piau if tai_gi_im_piau is not None else ""
                     # 將已注音之漢字加入【漢字注音表】
@@ -650,5 +652,8 @@ def main():
 
 
 if __name__ == "__main__":
+    # 檢查是否有 '-2' 人工標音參數
+    if "-2" in sys.argv:
+        Piau_Im_Row = -2
     exit_code = main()
     sys.exit(exit_code)

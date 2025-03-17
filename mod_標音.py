@@ -326,63 +326,59 @@ def split_tai_lo(input_str):
 #     'ts': 'z'
 # }
 # ==========================================================
-def split_tai_gi_im_piau(im_piau: str):
-    # 查檢【台語音標】是否符合【標準】=【聲母】+【韻母】+【調號】；若是將：【陰平】、【陰入】調，
-    # 略去【調號】數值：1、4，則進行矯正
-    # 先將傳入之【台語音標】的最後一個字元視作【調號】取出
+
+def split_tai_gi_im_piau(im_piau: str, po_ci: bool = False):
+    # 將輸入的台語音標轉換為小寫
+    im_piau = im_piau.lower()
+    # 查檢【台語音標】是否符合【標準】=【聲母】+【韻母】+【調號】
     tiau = im_piau[-1]
-    # 若【調號】數值，使用上標數值格式，則替換為 ASCII 數字
     tiau = replace_superscript_digits(str(tiau))
 
-    # 若輸入之【台語音標】未循【標準】，對【陰平】、【陰入】聲調，省略【調號】值：【1】/【4】
-    # 則依此規則進行矯正：若【調號】（即：拼音最後一個字母）為 [ptkh]，則更正調號值為 4；
-    # 則【調號】填入【韻母】之拼音字元，則將【調號】則更正為 1
+    # 矯正未標明陰平/陰入調號的情況
     if tiau in ['p', 't', 'k', 'h']:
-        tiau = '4'  # 聲調值為 4（陰入聲）
-        im_piau += tiau  # 為輸入之簡寫【台語音標】，添加【調號】
-    elif tiau in ['a', 'e', 'i', 'o', 'u', 'm', 'n', 'g']:  # 如果最後一個字母是英文字母
-        tiau = '1'  # 聲調值為 1（陰平聲）
-        im_piau += tiau  # 為輸入之簡寫【台語音標】，添加【調號】
+        tiau = '4'
+        im_piau += tiau
+    elif tiau in ['a', 'e', 'i', 'o', 'u', 'm', 'n', 'g']:
+        tiau = '1'
+        im_piau += tiau
 
-    # 聲母相容性轉換處理（將 tsh 轉換為 c；將 ts 轉換為 z）
+    # 聲母相容性轉換
     if im_piau.startswith("tsh"):
-        # im_piau = im_piau.replace("tsh", "c", 1).replace("ch", "c", 1)  # 將 tsh, ch 轉換為 c
-        im_piau = im_piau.replace("tsh", "c", 1)    # 將 tsh 轉換為 c
+        im_piau = im_piau.replace("tsh", "c", 1)
     elif im_piau.startswith("ts"):
-        # im_piau = im_piau.replace("ts", "z", 1).replace("c", "z", 1)      # 將 ts, c 轉換為 z
-        im_piau = im_piau.replace("ts", "z", 1)     # 將 ts 轉換為 z
+        im_piau = im_piau.replace("ts", "z", 1)
 
     # 定義聲母的正規表示式，包括常見的聲母，但不包括 m 和 ng
     siann_bu_pattern = re.compile(r"(b|c|z|g|h|j|kh|k|l|m(?!\d)|ng(?!\d)|n|ph|p|s|th|t|Ø)")
-
-    # 韻母為 m 或 ng 這種情況的正規表示式 (m\d 或 ng\d)
     un_bu_as_m_or_ng_pattern = re.compile(r"(m|ng)\d")
 
     result = []
 
     # 首先檢查是否是 m 或 ng 當作韻母的特殊情況
     if un_bu_as_m_or_ng_pattern.match(im_piau):
-        siann_bu = ""  # 沒有聲母
-        un_bu = im_piau[:-1]  # 韻母是 m 或 ng
-        tiau = im_piau[-1]  # 聲調是最後一個字符
+        siann_bu = ""
+        un_bu = im_piau[:-1]
+        tiau = im_piau[-1]
     else:
-        # 使用正規表示式來匹配聲母
         siann_bu_match = siann_bu_pattern.match(im_piau)
         if siann_bu_match:
-            siann_bu = siann_bu_match.group()  # 找到聲母
-            un_bu = im_piau[len(siann_bu):-1]  # 韻母部分
+            siann_bu = siann_bu_match.group()
+            un_bu = im_piau[len(siann_bu):-1]
         else:
-            siann_bu = ""  # 沒有匹配到聲母，聲母為空字串
-            un_bu = im_piau[:-1]  # 韻母是剩下的部分，去掉最後的聲調
+            siann_bu = ""
+            un_bu = im_piau[:-1]
 
     # 轉換韻母
     un_bu = un_bu_tng_huan(un_bu)
+
+    # 調整聲母大小寫
+    if po_ci:
+        siann_bu = siann_bu[0].upper() + siann_bu[1:] if siann_bu else ""
 
     result += [siann_bu]
     result += [un_bu]
     result += [tiau]
     return result
-
 
 def split_hong_im_hu_ho(hong_im_piau_im):
     # 定義調符對應的字典

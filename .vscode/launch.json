@@ -59,6 +59,17 @@
             "console": "integratedTerminal",
         },
         {
+            "name": "a110_使用已標音文字檔填入: 帶引數",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a110_使用已標音文字檔填入.py",
+            "console": "integratedTerminal",
+            "args": [
+                "tmp.txt",
+                "ho"
+            ]
+        },
+        {
             "name": "a200_查找及填入漢字標音",
             "type": "debugpy",
             "request": "launch",
@@ -78,6 +89,9 @@
             "request": "launch",
             "program": "a400_製作標音網頁.py",
             "console": "integratedTerminal",
+            "args": [
+                "-2"
+            ]
         },
         {
             "name": "a500_漢字庫工具",
