@@ -65,8 +65,8 @@
             "program": "a110_使用已標音文字檔填入.py",
             "console": "integratedTerminal",
             "args": [
-                "tmp.txt",
-                "ho"
+                // "tmp.txt",
+                // "ho"
             ]
         },
         {

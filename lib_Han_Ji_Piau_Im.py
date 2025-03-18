@@ -53,123 +53,77 @@ PUNCTUATIONS = (",", ".", "?", "!", ":", ";")
 
 # 聲調符號對應表（帶調號母音 → 對應數字）
 tiau_hu_mapping = {
-    # a
-    "á": ("a", "2"), "à": ("a", "3"), "â": ("a", "5"), "ǎ": ("a", "6"), "ā": ("a", "7"), "ā": ("a", "8"), "a̋": ("a", "9"),
-    # A
-    "Á": ("A", "2"), "À": ("A", "3"), "Â": ("A", "5"), "Ǎ": ("A", "6"), "Ā": ("A", "7"), "Ā": ("A", "8"), "A̋": ("A", "9"),
-    # e
-    "é": ("e", "2"), "è": ("e", "3"), "ê": ("e", "5"), "ě": ("e", "6"), "ē": ("e", "7"), "ē": ("e", "8"), "e̋": ("e", "9"),
-    # E
-    "É": ("E", "2"), "È": ("E", "3"), "Ê": ("E", "5"), "Ě": ("E", "6"), "Ē": ("E", "7"), "Ē": ("E", "8"), "E̋": ("E", "9"),
-    # i
-    "í": ("i", "2"), "ì": ("i", "3"), "î": ("i", "5"), "ǐ": ("i", "6"), "ī": ("i", "7"), "ī": ("i", "8"), "i̋": ("i", "9"),
-    # I
-    "Í": ("I", "2"), "Ì": ("I", "3"), "Î": ("I", "5"), "Ǐ": ("I", "6"), "Ī": ("I", "7"), "Ī": ("I", "8"), "I̋": ("I", "9"),
-    # o
-    "ó": ("o", "2"), "ò": ("o", "3"), "ô": ("o", "5"), "ǒ": ("o", "6"), "ō": ("o", "7"), "ō": ("o", "8"), "ő": ("o", "9"),
-    # O
-    "Ó": ("O", "2"), "Ò": ("O", "3"), "Ô": ("O", "5"), "Ǒ": ("O", "6"), "Ō": ("O", "7"), "Ō": ("O", "8"), "Ő": ("O", "9"),
-    # u
-    "ú": ("u", "2"), "ù": ("u", "3"), "û": ("u", "5"), "ǔ": ("u", "6"), "ū": ("u", "7"), "ū": ("u", "8"), "ű": ("u", "9"),
-    # U
-    "Ú": ("U", "2"), "Ù": ("U", "3"), "Û": ("U", "5"), "Ǔ": ("U", "6"), "Ū": ("U", "7"), "Ū": ("U", "8"), "Ű": ("U", "9"),
-    # m
-    "ḿ": ("m", "2"), "m̀": ("m", "3"), "m̂": ("m", "5"), "m̌": ("m", "6"), "m̄": ("m", "7"), "m̄": ("m", "8"), "m̋": ("m", "9"),
-    # M
-    "Ḿ": ("M", "2"), "M̀": ("M", "3"), "M̂": ("M", "5"), "M̌": ("M", "6"), "M̄": ("M", "7"), "M̄": ("M", "8"), "M̋": ("M", "9"),
-    # n
-    "ń": ("n", "2"), "ǹ": ("n", "3"), "n̂": ("n", "5"), "ň": ("n", "6"), "n̄": ("n", "7"), "n̄": ("n", "8"), "n̋": ("n", "9"),
-    # N
-    "Ń": ("N", "2"), "Ǹ": ("N", "3"), "N̂": ("N", "5"), "Ň": ("N", "6"), "N̄": ("N", "7"), "N̄": ("N", "8"), "N̋": ("N", "9"),
+    "a": ("a", "1"), "á": ("a", "2"), "à": ("a", "3"), "â": ("a", "5"), "ǎ": ("a", "6"), "ā": ("a", "7"), "a̍": ("a", "8"), "a̋": ("a", "9"),
+    "A": ("A", "1"), "Á": ("A", "2"), "À": ("A", "3"), "Â": ("A", "5"), "Ǎ": ("A", "6"), "Ā": ("A", "7"), "A̍": ("A", "8"), "A̋": ("A", "9"),
+    "e": ("e", "1"), "é": ("e", "2"), "è": ("e", "3"), "ê": ("e", "5"), "ě": ("e", "6"), "ē": ("e", "7"), "e̍": ("e", "8"), "e̋": ("e", "9"),
+    "E": ("E", "1"), "É": ("E", "2"), "È": ("E", "3"), "Ê": ("E", "5"), "Ě": ("E", "6"), "Ē": ("E", "7"), "E̍": ("E", "8"), "E̋": ("E", "9"),
+    "i": ("i", "1"), "í": ("i", "2"), "ì": ("i", "3"), "î": ("i", "5"), "ǐ": ("i", "6"), "ī": ("i", "7"), "i̍": ("i", "8"), "i̋": ("i", "9"),
+    "I": ("I", "1"), "Í": ("I", "2"), "Ì": ("I", "3"), "Î": ("I", "5"), "Ǐ": ("I", "6"), "Ī": ("I", "7"), "I̍": ("I", "8"), "I̋": ("I", "9"),
+    "o": ("o", "1"), "ó": ("o", "2"), "ò": ("o", "3"), "ô": ("o", "5"), "ǒ": ("o", "6"), "ō": ("o", "7"), "o̍": ("o", "8"), "ő": ("o", "9"),
+    "O": ("O", "1"), "Ó": ("O", "2"), "Ò": ("O", "3"), "Ô": ("O", "5"), "Ǒ": ("O", "6"), "Ō": ("O", "7"), "O̍": ("O", "8"), "Ő": ("O", "9"),
+    "u": ("u", "1"), "ú": ("u", "2"), "ù": ("u", "3"), "û": ("u", "5"), "ǔ": ("u", "6"), "ū": ("u", "7"), "u̍": ("u", "8"), "ű": ("u", "9"),
+    "U": ("U", "1"), "Ú": ("U", "2"), "Ù": ("U", "3"), "Û": ("U", "5"), "Ǔ": ("U", "6"), "Ū": ("U", "7"), "U̍": ("U", "8"), "Ű": ("U", "9"),
+    "m": ("m", "1"), "ḿ": ("m", "2"), "m̀": ("m", "3"), "m̂": ("m", "5"), "m̌": ("m", "6"), "m̄": ("m", "7"), "m̍": ("m", "8"), "m̋": ("m", "9"),
+    "M": ("M", "1"), "Ḿ": ("M", "2"), "M̀": ("M", "3"), "M̂": ("M", "5"), "M̌": ("M", "6"), "M̄": ("M", "7"), "M̍": ("M", "8"), "M̋": ("M", "9"),
+    "n": ("n", "1"), "ń": ("n", "2"), "ǹ": ("n", "3"), "n̂": ("n", "5"), "ň": ("n", "6"), "n̄": ("n", "7"), "n̍": ("n", "8"), "n̋": ("n", "9"),
+    "N": ("N", "1"), "Ń": ("N", "2"), "Ǹ": ("N", "3"), "N̂": ("N", "5"), "Ň": ("N", "6"), "N̄": ("N", "7"), "N̍": ("N", "8"), "N̋": ("N", "9"),
 }
-def create_tiau_hu_mapping_horizontal():
-    uan_im_ji_bu = ("a", "A", "e", "E", "i", "I", "o", "O", "u", "U", "m", "M", "n", "N")
 
-    tiau_fu_tng_tiau_ho_mapping_dict = {
-        "\u0301": "2",  # ˊ
-        "\u0300": "3",  # ˋ
-        "\u0302": "5",  # ˆ
-        "\u030C": "6",  # ˇ
-        "\u0304": "7",  # ˉ
-        "\u0304 ": "8", # 陽入特殊
-        "\u030B": "9",  # 雙上標
-    }
-
-    print("tiau_hu_mapping = {")
-
-    for uan_im in uan_im_ji_bu:
-        print(f"    # {uan_im}")
-        row_items = []
-        for tiau_fu, tiau_ho in tiau_fu_tng_tiau_ho_mapping_dict.items():
-            uan_im_tiau = unicodedata.normalize("NFC", f"{uan_im}{tiau_fu}")
-            uan_im_tiau = uan_im_tiau.replace(' ', '')
-            row_items.append(f'"{uan_im_tiau}": ("{uan_im}", "{tiau_ho}")')
-        print("    " + ", ".join(row_items) + ",")
-
-    print("}")
-
-
-def create_tiau_hu_mapping_vertical():
-    # 基本元音與韻化輔音
-    uan_im_ji_bu = ("a", "A", "e", "E", "i", "I", "o", "O", "u", "U", "m", "M", "n", "N")
-
-    # 聲調符號與數字的對應表
-    tiau_fu_tng_tiau_ho_mapping_dict = {
-        "\u0301": "2",  # ˊ
-        "\u0300": "3",  # ˋ
-        "\u0302": "5",  # ˆ
-        "\u030C": "6",  # ˇ
-        "\u0304": "7",  # ˉ
-        "\u0304 ": "8", # 特殊陽入調
-        "\u030B": "9",  # 雙上標聲調
-    }
-
-    # 開始建立 dict
-    print("tiau_hu_mapping = {")
-
-    for uan_im in uan_im_ji_bu:
-        for tiau_fu, tiau_ho in tiau_fu_tng_tiau_ho_mapping_dict.items():
-            # 組合並轉換為單一字元（NFC）
-            uan_im_tiau = unicodedata.normalize("NFC", f"{uan_im}{tiau_fu}")
-            # 調整沒有成功組合的特殊情況（如陽入符號後面多空白的處理）
-            uan_im_tiau = uan_im_tiau.replace(' ', '')
-            # 輸出字典項
-            print(f'    "{uan_im_tiau}": ("{uan_im}", "{tiau_ho}"),')
-
-    print("}")
 # =========================================================
 # 韻母轉換
 # =========================================================
 # 韻母轉換字典
 un_bu_tng_huan_map_dict = {
-    'ee': 'e',          # ee（ㄝ）= [ɛ]
-    'er': 'e',          # er（ㄜ）= [ə]
-    'erh': 'eh',        # er（ㄜ）= [ə]
-    'or': 'o',          # or（ㄜ）= [ə]
-    'ere': 'ue',        # ere = [əe]
-    'ereh': 'ueh',      # ereh = [əeh]
-    'ir': 'i',          # ir（ㆨ）= [ɯ] / [ɨ]
-    'eng': 'ing',       # 白話字：eng ==> 閩南語：ing
-    'oa': 'ua',         # 白話字：oa ==> 閩南語：ua
-    'oe': 'ue',         # 白話字：oe ==> 閩南語：ue
-    'oai': 'uai',       # 白話字：oai ==> 閩南語：uai
-    'ei': 'e',          # 雅俗通十五音：稽
-    'ou': 'oo',         # 雅俗通十五音：沽
-    'onn': 'oonn',      # 雅俗通十五音：扛
-    'uei': 'ue',        # 雅俗通十五音：檜
-    'ueinn': 'uenn',    # 雅俗通十五音：檜
-    'ur': 'u',          # 雅俗通十五音：艍
+    'ee': 'e', 'er': 'e', 'erh': 'eh', 'or': 'o', 'ere': 'ue', 'ereh': 'ueh',
+    'ir': 'i', 'eng': 'ing', 'oa': 'ua', 'oe': 'ue', 'oai': 'uai', 'ei': 'e',
+    'ou': 'oo', 'onn': 'oonn', 'uei': 'ue', 'ueinn': 'uenn', 'ur': 'u',
 }
 
-def un_bu_tng_huan(un_bu: str) -> str:
-    """
-    將輸入的韻母依照轉換字典進行轉換
-    :param un_bu: str - 韻母輸入
-    :return: str - 轉換後的韻母結果
-    """
+# 處理 o͘ 韻母特殊情況的函數
+def handle_o_dot(im_piau):
+    decomposed = unicodedata.normalize('NFD', im_piau)
+    # 找出 o + 聲調 + 鼻化符號的特殊組合
+    match = re.search(r'(o)([\u0300\u0301\u0302\u0304\u0306\u030B\u030C\u030D]?)(\u0358)', decomposed, re.I)
+    if match:
+        letter, tone, nasal = match.groups()
+        # 轉為 oo，再附回聲調
+        replaced = f"{letter}{letter}{tone}"
+        # 重組字串
+        decomposed = decomposed.replace(match.group(), replaced)
+    return unicodedata.normalize('NFC', decomposed)
 
-    # 韻母轉換，若不存在於字典中則返回原始韻母
-    return un_bu_tng_huan_map_dict.get(un_bu, un_bu)
+def separate_tone(s):
+    """拆解帶調字母為無調字母與調號"""
+    decomposed = unicodedata.normalize('NFD', s)
+    letters = ''.join(c for c in decomposed if unicodedata.category(c) != 'Mn')
+    tones = ''.join(c for c in decomposed if unicodedata.category(c) == 'Mn' and c != '\u0358')
+    return letters, tones
+
+def apply_tone(s, tone):
+    """聲調符號重新加回第一個母音字母上"""
+    vowels = 'aeiouAEIOU'
+    for i, c in enumerate(s):
+        if c in vowels:
+            return unicodedata.normalize('NFC', s[:i+1] + tone + s[i+1:])
+    return unicodedata.normalize('NFC', s[0] + tone + s[1:])
+
+def un_bu_tng_huan(im_piau: str) -> str:
+    # 處理特殊鼻化韻母 o͘
+    im_piau = handle_o_dot(im_piau)
+
+    letters, tone = separate_tone(im_piau)
+    sorted_keys = sorted(un_bu_tng_huan_map_dict, key=len, reverse=True)
+
+    for key in sorted_keys:
+        if key in letters:
+            letters = letters.replace(key, un_bu_tng_huan_map_dict[key])
+            break
+
+    if tone:
+        letters = apply_tone(letters, tone)
+
+    return letters
+
 
 # =========================================================
 # 解構音標 = 聲母 + 韻母 + 調號
@@ -249,22 +203,38 @@ def clean_im_piau(im_piau: str) -> str:
     im_piau = ''.join(ji_bu for ji_bu in im_piau if ji_bu not in PUNCTUATIONS)  # 移除標點符號
     return im_piau
 
-def tng_tiau_ho(im_piau: str) -> str:
+def tng_tiau_ho(im_piau: str, kan_hua: bool = False) -> str:
     """
     將帶聲調符號的台語音標轉換為不帶聲調符號的台語音標（音標 + 調號）
     :param im_piau: str - 台語音標輸入
+    :param kan_hua: bool - 簡化：若是【簡化】，聲調值為 1 或 4 ，去除調號值
     :return: str - 轉換後的台語音標
     """
-    # **遍歷所有可能的聲調符號**
-    tone_number = "0"
+    # 遇標點符號，不做轉換處理，直接回傳
+    if im_piau[-1] in PUNCTUATIONS:
+        return im_piau
+
+    # 將傳入【音標】字串，以標準化之 NFC 組合格式，調整【帶調符拼音字母】；
+    # 令以下之處理作業，不會發生【看似相同】的【帶調符拼音字母】，其實使用
+    # 不同之 Unicode 編碼
+    im_piau = unicodedata.normalize("NFC", im_piau)
+
+    # 以【元音及韻化輔音清單】，比對傳入之【音標】，找出對應之【基本拼音字母】與【調號】
+    tone_number = ""
     for tone_mark, (base_char, number) in tiau_hu_mapping.items():
         if tone_mark in im_piau:
             im_piau = im_piau.replace(tone_mark, base_char)  # 移除聲調符號，保留基本母音
-            tone_number = number
             break
 
-    # print(f"im_piau + tone_number = {im_piau + tone_number}")
+    # 依是否要【簡化】之設定，處理【調號】1 或 4 是否要略去
+    if kan_hua and number in ["1", "4"]:
+        # 若是【簡化】，且聲調值為 1 或 4 ，去除調號值
+        tone_number = ""
+    else:
+        # 若未要求【簡化】，聲調值置於【音標】末端
+        tone_number = number
     return im_piau + tone_number
+
 
 def clean_tlpa(im_piau: str) -> str:
     # su_ji = im_piau[0]
@@ -321,6 +291,69 @@ def tng_poj_oo_iong_tiau_fu(im_piau: str) -> str:
     im_piau = unicodedata.normalize("NFC", im_piau)
     return im_piau
 
+def tu_bo_iong_ji_bu(ku: str) -> str:
+    """
+    清無用字母：清除控制字元
+    :param ku: str - 句子輸入
+    :return: str - 句子輸出
+    """
+    ku_clean = re.sub(r'[\u200b-\u200f\u202a-\u202e\u2060-\u206f]', '', ku)
+    return ku_clean
+
+def cing_bo_iong_ji_bu(text: str) -> str:
+    """_summary_
+    清無用字母：清除控制字元
+    Args:
+        text (str): _description_
+
+    Returns:
+        str: _description_
+    """
+    return ''.join(
+        ch for ch in text
+        if unicodedata.category(ch)[0] != 'C'  # 排除所有類別為 Control (C) 的字元
+    )
+
+def zuan_ku_zing_li(ku: str) -> str:
+    """
+    全句整理：移除多餘的控制字元、將 "-" 轉換成空白、將標點符號前後加上空白、移除多餘空白
+    :param ku: str - 句子輸入
+    :return: list - 斷詞結果
+    """
+    # 移除多餘的控制字元
+    ku = cing_bo_iong_ji_bu(ku)
+    # 將 "-" 轉換成空白
+    ku = ku.replace("-", " ")
+
+    # 將標點符號前後加上空白
+    ku = re.sub(f"([{''.join(re.escape(p) for p in PUNCTUATIONS)}])", r" \1 ", ku)
+
+    # 移除多餘空白
+    ku = re.sub(r"\s+", " ", ku).strip()
+
+    return ku
+
+def normalize_sentence(im_piau_list):
+    sentence = ''
+    punctuations = {'.', ',', '!', '?', ':', ';'}
+
+    for idx, item in enumerate(im_piau_list):
+        if item in punctuations:
+            sentence = sentence.rstrip() + item + ' '
+        else:
+            sentence += item + ' '
+
+    sentence = sentence.strip()
+    sentence = re.sub(r'\s+([.,!?;:])', r'\1', sentence)
+
+    return sentence
+
+
+
+#=========================================================================
+# 測試程式
+#=========================================================================
+
 def ut01():
     im_piau = "Ín"
     print(f"im_piau = {im_piau}")
@@ -359,10 +392,61 @@ def ut06():
         im_piau = tng_poj_oo_iong_tiau_fu(im_piau)
         print(im_piau)
 
+def ut07():
+    ku_cleaned = 'Kue kì lâi ê ! Tiân ôan chiong û hô put kue ?'
+    # 解構【音標】組成之【句子】，變成單一【帶調符音標】清單
+    im_piau_list = ku_cleaned.split()
+
+    # 轉換成【帶調號拼音】
+    converted_list = []
+    for im_piau in im_piau_list:
+        # 排除標點符號不進行韻母轉換
+        if re.match(r'[a-zA-Zâîûêôáéíóúàèìòùāēīōūǎěǐǒǔ]+$', im_piau, re.I):
+            converted_im_piau = un_bu_tng_huan(im_piau)
+        else:
+            converted_im_piau = im_piau
+
+        converted_list.append(converted_im_piau)
+
+    print(converted_list)
+
 # =========================================================
 # 主程式
 # =========================================================
 if __name__ == "__main__":
+    # 歸去來兮！田園將蕪胡不歸？​
+    ku = "Kue kì lâi ê! Tiân-ôan chiong û hô put kue?​"
+    # 去除多餘的控制字元、將 "-" 轉換成空白、將標點符號前後加上空白、移除多餘空白
+    ku_cleaned = zuan_ku_zing_li(ku)
+    # 將整段句子，解構成單一【音標】清單
+    im_piau_list = [im_piau for im_piau in ku_cleaned.split()]
+    # 顯示解構後的音標清單
+    for im_piau in im_piau_list:
+        print(im_piau, end=" ")
+    print("\n---------------------------------------------------")
+
+    # 存放轉換後的音標清單
+    tng_uann_kiat_ko = []
+    for im_piau in im_piau_list:
+        if re.match(r'[a-zA-Zâîûêôáéíóúàèìòùāēīōūǎěǐǒǔ]+$', im_piau, re.I):
+            # 將帶調的音標轉換為使用調值的音標
+            im_piau_tua_tiau_ho = un_bu_tng_huan(im_piau)
+            # 去除聲調符號，轉成數值調號
+            tng_uann_hau = tng_tiau_ho(im_piau_tua_tiau_ho)
+        else:
+            tng_uann_hau = im_piau
+
+        tng_uann_kiat_ko.append(tng_uann_hau)
+
+    for im_piau in tng_uann_kiat_ko:
+        print(im_piau, end=" ")
+
+    print("\n---------------------------------------------------")
+
+    # 將音標清單轉換為句子
+    sentence = normalize_sentence(tng_uann_kiat_ko)
+    print(f"sentence = {sentence}")
+
     # # 測試 split_tai_gi_im_piau 函式
     # im_piau = "Tsit8"
     # tng_uan_hau = split_tai_gi_im_piau(im_piau, po_ci=True)
@@ -394,52 +478,3 @@ if __name__ == "__main__":
     # ut05()
     # ut06()
     # create_tiau_hu_mapping_horizontal()
-
-    def tu_bo_iong_ji_bu(ku: str) -> str:
-        """
-        清無用字母：清除控制字元
-        :param ku: str - 句子輸入
-        :return: str - 句子輸出
-        """
-        ku_clean = re.sub(r'[\u200b-\u200f\u202a-\u202e\u2060-\u206f]', '', ku)
-        return ku_clean
-
-    def cing_bo_iong_ji_bu(text: str) -> str:
-        """_summary_
-        清無用字母：清除控制字元
-        Args:
-            text (str): _description_
-
-        Returns:
-            str: _description_
-        """
-        return ''.join(
-            ch for ch in text
-            if unicodedata.category(ch)[0] != 'C'  # 排除所有類別為 Control (C) 的字元
-        )
-
-    def zuan_ku_zing_li(ku: str) -> list:
-        """
-        全句整理：移除多餘的控制字元、將 "-" 轉換成空白、將標點符號前後加上空白、移除多餘空白
-        :param ku: str - 句子輸入
-        :return: list - 斷詞結果
-        """
-        # 移除多餘的控制字元
-        ku = re.sub(r"\s+", "\u200b", ku).strip()
-        # 將 "-" 轉換成空白
-        ku = ku.replace("-", " ")
-
-        # 將標點符號前後加上空白
-        ku = re.sub(f"([{''.join(re.escape(p) for p in PUNCTUATIONS)}])", r" \1 ", ku)
-
-        # 移除多餘空白
-        ku = re.sub(r"\s+", " ", ku).strip()
-
-        return ku
-
-    # 歸去來兮！田園將蕪胡不歸？​
-    ku = "Kue kì lâi ê! Tiân-ôan chiong û hô put kue?​"
-    ku_cleaned = zuan_ku_zing_li(ku)
-    # im_piau_list = [clean_im_piau(im_piau) for im_piau in ku.split()]
-    for im_piau in im_piau_list:
-        print(im_piau, end=" ")

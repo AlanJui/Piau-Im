@@ -40,9 +40,57 @@ PUNCTUATIONS = (",", ".", "?", "!", ":", ";", "\u200B")
 def clean_im_piau(im_piau: str) -> str:
     # 移除標點符號
     im_piau = ''.join(ji_bu for ji_bu in im_piau if ji_bu not in PUNCTUATIONS)
-    # 重新組合聲調符號（標準組合 NFC）
-    im_piau = unicodedata.normalize("NFC", im_piau)
+    # 透過正規化的 Unicode 標準分解 NFD，拆解聲調符號
+    im_piau = unicodedata.normalize("NFD", im_piau)
+
+    su_ji = im_piau[0]  # 保存第一個字母
+    im_piau = im_piau.lower()  # 轉為小寫
+
+    # **新增鼻音處理：將 ⁿ（U+207F）轉換為 nn**
+    im_piau = im_piau.replace("ⁿ", "nn")
+    im_piau = im_piau.replace("hⁿ", "nnh")
+    # im_piau = im_piau.replace("o͘", "oo")  # 替換 o͘ (o + 鼻音符號)
+
+    # 替換音標變化
+    # im_piau = re.sub(r"u[\u0300\u0301\u0302\u0304\u030D]?e", "ui", im_piau)
+    im_piau = re.sub(r"o[\u0300\u0301\u0302\u0304\u030D]?a", "ua", im_piau)
+    im_piau = re.sub(r"o[\u0300\u0301\u0302\u0304\u030D]?e", "ue", im_piau)
+    im_piau = re.sub(r"e[\u0300\u0301\u0302\u0304\u030D]?ng", "ing", im_piau)
+    im_piau = re.sub(r"e[\u0300\u0301\u0302\u0304\u030D]?k", "ik", im_piau)
+
+    #-------------------------------------------------------------------------
+    #
+    #-------------------------------------------------------------------------
+    # 聲調符號對應調值的映射
+    tone_mapping = {
+        "\u0300": "3",  # 陰去 ò
+        "\u0301": "2",  # 陰上 ó
+        "\u0302": "5",  # 陽平 ô
+        "\u0304": "7",  # 陽去 ō
+        "\u0306": "9",  # 輕声 ŏ
+        "\u030C": "6",  # 陽上 ǒ
+        "\u030D": "8",  # 陽入 o̍h
+    }
+
+    # 替換白話字母為oo，並附加聲調號
+    # 找到帶鼻化符號(͘)的 o 或 ô，將其轉成對應的帶調符號 + o
+    im_piau = re.sub(
+        r"([aeiou])([\u0300\u0301\u0302\u0304\u030D])?\u0358",
+        lambda m: f"{m.group(1)}{m.group(2) if m.group(2) else ''}o",
+        im_piau
+    )
+
+    if im_piau.startswith("chh"):
+        im_piau = "c" + im_piau[3:]
+    elif im_piau.startswith("ch"):
+        im_piau = "z" + im_piau[2:]
+
+    if su_ji.isupper():
+        im_piau = im_piau.capitalize()
+
+    im_piau = unicodedata.normalize("NFC", im_piau)  # 重新組合聲調符號（標準組合 NFC）
     return im_piau
+
 
 # =========================================================================
 # 將使用聲調符號的 TLPA 拼音轉為改用調號數值的 TLPA 拼音
@@ -182,31 +230,26 @@ tone_mapping = {
 
 # 韻母轉換字典
 un_bu_tng_huan_map_dict = {
-    'ee': 'e', 'er': 'e', 'erh': 'eh', 'or': 'o', 'ere': 'ue', 'ereh': 'ueh',
-    'ir': 'i', 'eng': 'ing', 'oa': 'ua', 'oe': 'ue', 'oai': 'uai', 'ei': 'e',
-    'ou': 'oo', 'onn': 'oonn', 'uei': 'ue', 'ueinn': 'uenn', 'ur': 'u',
+    # 'onn': 'oonn',      # 雅俗通十五音：扛
+    'ueinn': 'uenn',    # 雅俗通十五音：檜
+    'uei': 'ue',        # 雅俗通十五音：檜
+    'ue': 'ui',
+    'ereh': 'ueh',      # ereh = [əeh]
+    'erh': 'eh',        # er（ㄜ）= [ə]
+    'ere': 'ue',        # ere = [əe]
+    'er': 'e',          # er（ㄜ）= [ə]
+    'ee': 'e',          # ee（ㄝ）= [ɛ]
+    'or': 'o',          # or（ㄜ）= [ə]
+    'ir': 'i',          # ir（ㆨ）= [ɯ] / [ɨ]
+    'eng': 'ing',       # 白話字：eng ==> 閩南語：ing
+    'oa': 'ua',         # 白話字：oa ==> 閩南語：ua
+    'oe': 'ue',         # 白話字：oe ==> 閩南語：ue
+    'ei': 'e',          # 雅俗通十五音：稽
+    'ou': 'oo',         # 雅俗通十五音：沽
+    'ur': 'u',          # 雅俗通十五音：艍
+    'ek': 'ik',
+    'ⁿ' : 'nn',
 }
-# un_bu_tng_huan_map_dict = {
-#     # 'onn': 'oonn',      # 雅俗通十五音：扛
-#     'ueinn': 'uenn',    # 雅俗通十五音：檜
-#     'uei': 'ue',        # 雅俗通十五音：檜
-#     'ue': 'ui',
-#     'ereh': 'ueh',      # ereh = [əeh]
-#     'erh': 'eh',        # er（ㄜ）= [ə]
-#     'ere': 'ue',        # ere = [əe]
-#     'er': 'e',          # er（ㄜ）= [ə]
-#     'ee': 'e',          # ee（ㄝ）= [ɛ]
-#     'or': 'o',          # or（ㄜ）= [ə]
-#     'ir': 'i',          # ir（ㆨ）= [ɯ] / [ɨ]
-#     'eng': 'ing',       # 白話字：eng ==> 閩南語：ing
-#     'oa': 'ua',         # 白話字：oa ==> 閩南語：ua
-#     'oe': 'ue',         # 白話字：oe ==> 閩南語：ue
-#     'ei': 'e',          # 雅俗通十五音：稽
-#     'ou': 'oo',         # 雅俗通十五音：沽
-#     'ur': 'u',          # 雅俗通十五音：艍
-#     'ek': 'ik',
-#     'ⁿ' : 'nn',
-# }
 
 
 # =========================================================================
@@ -253,90 +296,45 @@ def tng_tiau_ho(im_piau: str, kan_hua: bool = False) -> str:
 
     return im_piau + tone_number
 
-# def tiau_hu_tng_tiau_ho(im_piau: str) -> str:
-#     """
-#     將帶聲調符號的台語音標轉換為不帶聲調符號的台語音標（音標 + 調號）
-#     :param im_piau: str - 台語音標輸入
-#     :return: str - 轉換後的台語音標
-#     """
-#     # **重要**：先將字串標準化為 NFC 格式，統一處理 Unicode 差異
-#     im_piau = unicodedata.normalize("NFC", im_piau)
+def tiau_hu_tng_tiau_ho(im_piau: str) -> str:
+    """
+    將帶聲調符號的台語音標轉換為不帶聲調符號的台語音標（音標 + 調號）
+    :param im_piau: str - 台語音標輸入
+    :return: str - 轉換後的台語音標
+    """
+    # **重要**：先將字串標準化為 NFC 格式，統一處理 Unicode 差異
+    im_piau = unicodedata.normalize("NFC", im_piau)
 
-#     # 1. 先處理聲調轉換
-#     tone_number = ""
-#     for tone_mark, (base_char, number) in tone_mapping.items():
-#         if tone_mark in im_piau:
-#             im_piau = im_piau.replace(tone_mark, base_char)  # 移除調號，還原原始母音
-#             tone_number = number  # 記錄對應的聲調數字
-#             break  # 只會有一個聲調符號，找到就停止
+    # 1. 先處理聲調轉換
+    tone_number = ""
+    for tone_mark, (base_char, number) in tone_mapping.items():
+        if tone_mark in im_piau:
+            im_piau = im_piau.replace(tone_mark, base_char)  # 移除調號，還原原始母音
+            tone_number = number  # 記錄對應的聲調數字
+            break  # 只會有一個聲調符號，找到就停止
 
-#     # 2. 若有聲調數字，則加到末尾
-#     if tone_number:
-#         return im_piau + tone_number
+    # 2. 若有聲調數字，則加到末尾
+    if tone_number:
+        return im_piau + tone_number
 
-#     return im_piau  # 若無聲調符號則不變更
+    return im_piau  # 若無聲調符號則不變更
 
 
 # =========================================================
 # 韻母轉換
 # =========================================================
+def un_bu_tng_huan(un_bu: str) -> str:
+    """
+    將輸入的韻母依照轉換字典進行轉換
+    :param un_bu: str - 韻母輸入
+    :return: str - 轉換後的韻母結果
+    """
+    # **新增鼻音處理：將 ⁿ（U+207F）轉換為 nn**
+    un_bu = un_bu.replace("ⁿ", "nn")
 
-# 韻母轉換字典
-un_bu_tng_huan_map_dict = {
-    'ee': 'e', 'er': 'e', 'erh': 'eh', 'or': 'o', 'ere': 'ue', 'ereh': 'ueh',
-    'ir': 'i', 'eng': 'ing', 'oa': 'ua', 'oe': 'ue', 'oai': 'uai', 'ei': 'e',
-    'ou': 'oo', 'onn': 'oonn', 'uei': 'ue', 'ueinn': 'uenn', 'ur': 'u',
-}
+    # 韻母轉換，若不存在於字典中則返回原始韻母
+    return un_bu_tng_huan_map_dict.get(un_bu, un_bu)
 
-# 處理 o͘ 韻母特殊情況的函數
-def handle_o_dot(im_piau):
-    decomposed = unicodedata.normalize('NFD', im_piau)
-    # 找出 o + 聲調 + 鼻化符號的特殊組合
-    match = re.search(r'(o)([\u0300\u0301\u0302\u0304\u0306\u030B\u030C\u030D]?)(\u0358)', decomposed, re.I)
-    if match:
-        letter, tone, nasal = match.groups()
-        # 轉為 oo，再附回聲調
-        replaced = f"{letter}{letter}{tone}"
-        # 重組字串
-        decomposed = decomposed.replace(match.group(), replaced)
-    return unicodedata.normalize('NFC', decomposed)
-
-def separate_tone(s):
-    """拆解帶調字母為無調字母與調號"""
-    decomposed = unicodedata.normalize('NFD', s)
-    letters = ''.join(c for c in decomposed if unicodedata.category(c) != 'Mn')
-    tones = ''.join(c for c in decomposed if unicodedata.category(c) == 'Mn' and c != '\u0358')
-    return letters, tones
-
-def apply_tone(s, tone):
-    """聲調符號重新加回第一個母音字母上"""
-    vowels = 'aeiouAEIOU'
-    for i, c in enumerate(s):
-        if c in vowels:
-            return unicodedata.normalize('NFC', s[:i+1] + tone + s[i+1:])
-    return unicodedata.normalize('NFC', s[0] + tone + s[1:])
-
-def un_bu_tng_huan(im_piau: str) -> str:
-    # 處理特殊鼻化韻母 o͘
-    im_piau = handle_o_dot(im_piau)
-
-    letters, tone = separate_tone(im_piau)
-    sorted_keys = sorted(un_bu_tng_huan_map_dict, key=len, reverse=True)
-
-    for key in sorted_keys:
-        if key in letters:
-            letters = letters.replace(key, un_bu_tng_huan_map_dict[key])
-            break
-
-    if tone:
-        letters = apply_tone(letters, tone)
-
-    return letters
-
-
-# =========================================================
-# 解構音標 = 聲母 + 韻母 + 調號
-# =========================================================
 def split_tai_gi_im_piau(im_piau: str) -> list:
     # 將輸入的台語音標轉換為小寫
     im_piau = im_piau.lower()
@@ -390,17 +388,17 @@ def split_tai_gi_im_piau(im_piau: str) -> list:
     result += [tiau]
     return result
 
-# def clean_tlpa(im_piau: str) -> str:
-#     org_im_piau = im_piau
-#     # su_ji = im_piau[0]
-#     # 去除標點符號、控制字元
-#     im_piau = clean_im_piau(im_piau)
-#     # 轉換帶聲調符號的 TLPA 拼音為數值表示的 TLPA 拼音
-#     # im_piau = tng_tiau_ho(im_piau)
-#     im_piau = tiau_hu_tng_tiau_ho(im_piau)
-#     # 轉換 TLPA 音標使用之【聲母】及【韻母】, po_ci: bool = False
-#     siann_bu, un_bu, tiau = split_tai_gi_im_piau(im_piau=im_piau)
-#     return f"{siann_bu}{un_bu}{tiau}"
+def clean_tlpa(im_piau: str) -> str:
+    org_im_piau = im_piau
+    # su_ji = im_piau[0]
+    # 去除標點符號、控制字元
+    im_piau = clean_im_piau(im_piau)
+    # 轉換帶聲調符號的 TLPA 拼音為數值表示的 TLPA 拼音
+    # im_piau = tng_tiau_ho(im_piau)
+    im_piau = tiau_hu_tng_tiau_ho(im_piau)
+    # 轉換 TLPA 音標使用之【聲母】及【韻母】, po_ci: bool = False
+    siann_bu, un_bu, tiau = split_tai_gi_im_piau(im_piau=im_piau)
+    return f"{siann_bu}{un_bu}{tiau}"
 
 
 # =========================================================================
@@ -425,39 +423,6 @@ def read_text_with_tlpa(filename):
 def is_hanzi(char):
     return 'CJK UNIFIED IDEOGRAPH' in unicodedata.name(char, '')
 
-def cing_bo_iong_ji_bu(text: str) -> str:
-    """_summary_
-    清無用字母：清除控制字元
-    Args:
-        text (str): _description_
-
-    Returns:
-        str: _description_
-    """
-    return ''.join(
-        ch for ch in text
-        if unicodedata.category(ch)[0] != 'C'  # 排除所有類別為 Control (C) 的字元
-    )
-
-def zuan_ku_zing_li(ku: str) -> str:
-    """
-    全句整理：移除多餘的控制字元、將 "-" 轉換成空白、將標點符號前後加上空白、移除多餘空白
-    :param ku: str - 句子輸入
-    :return: list - 斷詞結果
-    """
-    # 移除多餘的控制字元
-    ku = cing_bo_iong_ji_bu(ku)
-    # 將 "-" 轉換成空白
-    ku = ku.replace("-", " ")
-
-    # 將標點符號前後加上空白
-    ku = re.sub(f"([{''.join(re.escape(p) for p in PUNCTUATIONS)}])", r" \1 ", ku)
-
-    # 移除多餘空白
-    ku = re.sub(r"\s+", " ", ku).strip()
-
-    return ku
-
 # =========================================================================
 # 用途：將漢字及TLPA標音填入Excel指定工作表
 # =========================================================================
@@ -477,40 +442,22 @@ def fill_hanzi_and_tlpa(wb, use_tiau_ho=True, filename='tmp.txt', sheet_name='�
             sheet.cells(row_hanzi, col).value = char
             sheet.cells(row_hanzi, col).select()  # 每字填入後選取以便畫面滾動
 
-        # 整理整個句子，移除多餘的控制字元、將 "-" 轉換成空白、將標點符號前後加上空白、移除多餘空白
-        tlpa_cleaned = zuan_ku_zing_li(tlpa)
-
-        # 解構【音標】組成之【句子】，變成單一【帶調符音標】清單
-        im_piau_list = [im_piau for im_piau in tlpa_cleaned.split() if im_piau]
-
-        # 轉換成【帶調號拼音】
-        converted_list = []
-        for im_piau in im_piau_list:
-            # 排除標點符號不進行韻母轉換
-            if re.match(r'[a-zA-Zâîûêôáéíóúàèìòùāēīōūǎěǐǒǔ]+$', im_piau, re.I):
-                converted_im_piau = un_bu_tng_huan(im_piau)
-            else:
-                converted_im_piau = im_piau
-
-            converted_list.append(converted_im_piau)
         # TLPA逐詞填入（從D欄開始），檢查下方儲存格是否為漢字
-        # tlpa_words = [clean_tlpa(word) for word in tlpa.split()]
-        tlpa_words = converted_list
+        tlpa_words = [clean_tlpa(word) for word in tlpa.split()]
         col = 4
         word_idx = 0
 
         while word_idx < len(tlpa_words):
             cell_char = sheet.cells(row_hanzi, col).value
-            # if cell_char and is_hanzi(cell_char):
-            if cell_char:
+            if cell_char and is_hanzi(cell_char):
                 tlpa_word = tlpa_words[word_idx]
                 if tlpa_word in PUNCTUATIONS:
                     # 若讀入之TLPA音標為標點符號，則音標儲存入空字串
                     tlpa_word = ""
-                else:
-                    # 若讀入之TLPA音標非標點符號，且使用標音格式二，則轉換為【聲母】+【韻母】+【調號】
-                    if use_tiau_ho:
-                        tlpa_word = tng_tiau_ho(tlpa_word)
+                # else:
+                #     # 若讀入之TLPA音標非標點符號，且使用標音格式二，則轉換為【聲母】+【韻母】+【調號】
+                #     if use_tiau_ho:
+                #         tlpa_word = tiau_hu_tng_tiau_ho(tlpa_word)
                 sheet.cells(row_tlpa, col).value = tlpa_word
                 word_idx += 1
                 print(f"（{row_tlpa}, {col}）已填入: {cell_char} - {tlpa_words[word_idx-1]}")
