@@ -56,6 +56,35 @@ def process():
     print("--------------------------------------------------------------------")
 
 if __name__ == "__main__":
-    process()
-    print("--------------------------------------------------------------------")
-    print("Done.")
+    # process()
+    # print("--------------------------------------------------------------------")
+    # print("Done.")
+    print(f"o\u0300")   # 3 陰去: ò
+    print(f"o\u0301")   # 2 陰上: ó
+    print(f"o\u0302")   # 5 陽平: ô
+    print(f"o\u0304")   # 7 陽去: ō
+    print(f"o\u030B")   # 9 輕声: ő
+    print(f"o\u030C")   # 6 陽上: ǒ
+    print(f"o\u030D")   # 8 陽入: o̍
+
+    tiau_hu_list = (
+        "\u0300",   # 3 陰去: ò
+        "\u0301",   # 2 陰上: ó
+        "\u0302",   # 5 陽平: ô
+        "\u0304",   # 7 陽去: ō
+        "\u030B",   # 9 輕声: ő
+        "\u030C",   # 6 陽上: ǒ
+        "\u030D",   # 8 陽入: o̍
+    )
+
+    a_list = []
+
+    for tiau_hu in tiau_hu_list:
+        a_list.append(f"o{tiau_hu}")
+
+    decomposed = unicodedata.normalize("NFD", "o\u030B")
+    # decomposed = unicodedata.normalize("NFD", a_list[4])
+    print(f"decomposed: {decomposed}")
+
+
+

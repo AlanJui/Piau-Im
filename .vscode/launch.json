@@ -5,17 +5,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python 偵錯: 帶引數",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal",
-            "args": [
-                "tmp.txt",
-                "ho"
-            ]
-        },
-        {
             "name": "Python 偵錯: 目前檔案",
             "type": "debugpy",
             "request": "launch",
@@ -57,6 +46,17 @@
             "request": "launch",
             "program": "a100_作業中活頁檔填入漢字.py",
             "console": "integratedTerminal",
+        },
+        {
+            "name": "Python 偵錯: a110",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                // "tmp.txt",
+                // "ho"
+            ]
         },
         {
             "name": "a110_使用已標音文字檔填入: 帶引數",
