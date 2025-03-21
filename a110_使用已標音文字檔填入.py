@@ -272,14 +272,28 @@ def tng_im_piau(bo_tiau_hu_im_piau: str, po_ci: bool = True) -> str:
     return bo_tiau_hu_im_piau
 
 def tng_tiau_ho(im_piau: str, kan_hua: bool = False) -> str:
-    #--------------------------------------------------------------------------------
-    # 以【元音及韻化輔音清單】，比對傳入之【音標】，找出對應之【基本拼音字母】與【調號】
-    #--------------------------------------------------------------------------------
+    """
+    將【帶調符音標】轉換為【帶調號音標】
+    :param im_piau: str - 帶調符音標
+    :param kan_hua: bool - 簡化：若是【簡化】，聲調值為 1 或 4 ，去除調號值
+    :return: str - 帶調號音標
+    """
+    # 遇標點符號，不做轉換處理，直接回傳
     if im_piau[-1] in PUNCTUATIONS:
         return im_piau
 
+    # 若【音標】末端為數值，表音標已是【帶調號拼音】，直接回傳
+    u_tiau_ho = True if im_piau[-1] in "123456789" else False
+    if u_tiau_ho: return im_piau
+
+    # 將傳入【音標】字串，以標準化之 NFC 組合格式，調整【帶調符拼音字母】；
+    # 令以下之處理作業，不會發生【看似相同】的【帶調符拼音字母】，其實使用
+    # 不同之 Unicode 編碼
     im_piau = unicodedata.normalize("NFC", im_piau)
 
+    #--------------------------------------------------------------------------------
+    # 以【元音及韻化輔音清單】，比對傳入之【音標】，找出對應之【基本拼音字母】與【調號】
+    #--------------------------------------------------------------------------------
     tone_number = "1"  # 初始化調號為 1
     number = "1"  # 明確初始化 number 變數，以免未設定而發生錯誤
     for tone_mark, (base_char, number) in tiau_hu_mapping.items():

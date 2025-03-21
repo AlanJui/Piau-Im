@@ -48,6 +48,10 @@ def tng_tiau_ho(im_piau: str, kan_hua: bool = False) -> str:
     if im_piau[-1] in PUNCTUATIONS:
         return im_piau
 
+    # 若【音標】末端為數值，表音標已是【帶調號拼音】，直接回傳
+    u_tiau_ho = True if im_piau[-1] in "123456789" else False
+    if u_tiau_ho: return im_piau
+
     # 將傳入【音標】字串，以標準化之 NFC 組合格式，調整【帶調符拼音字母】；
     # 令以下之處理作業，不會發生【看似相同】的【帶調符拼音字母】，其實使用
     # 不同之 Unicode 編碼
@@ -131,12 +135,28 @@ if __name__ == "__main__":
     # }
     # ut01(test_cases)
 
+    # test_cases = {
+    #     "東": 'tong',
+    # }
+    # for key, im_piau in test_cases.items():
+    #     # print(f"漢字: {key}, 白話音標: {value}")
+    #     print(f"{key} [ {im_piau} ]")
+    #     # 轉換【帶調符拼音】為【帶調號拼音】
+    #     im_piau_tiau_ho = tng_tiau_ho(im_piau, kan_hua=False)
+    #     print(f"im_piau_tiau_ho = {im_piau_tiau_ho}")
+
     test_cases = {
-        "東": 'tong',
+        "泉": 'tsuann5',
+        "涓": 'kuan1',
+        "而": 'ji5',
+        "始": 'si2',
+        "流": 'lau5',
     }
+
     for key, im_piau in test_cases.items():
-        # print(f"漢字: {key}, 白話音標: {value}")
         print(f"{key} [ {im_piau} ]")
         # 轉換【帶調符拼音】為【帶調號拼音】
+        # u_tiau_ho = True if im_piau[-1] in "123456789" else False
+        # print(f"u_tiau_ho = {u_tiau_ho}")
         im_piau_tiau_ho = tng_tiau_ho(im_piau, kan_hua=False)
         print(f"im_piau_tiau_ho = {im_piau_tiau_ho}")
