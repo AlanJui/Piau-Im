@@ -6,6 +6,7 @@ un_bu_mapping = {
     'ee': 'e', 'er': 'e', 'erh': 'eh', 'or': 'o', 'ere': 'ue', 'ereh': 'ueh',
     'ir': 'i', 'eng': 'ing', 'oa': 'ua', 'oe': 'ue', 'oai': 'uai', 'ei': 'e',
     'ou': 'oo', 'onn': 'oonn', 'uei': 'ue', 'ueinn': 'uenn', 'ur': 'u',
+    'ⁿ': 'nn',
 }
 
 def tones_to_hex(tones):
@@ -91,7 +92,8 @@ def tng_un_bu(im_piau: str) -> str:
 #     print(f"Input: {test}, Letters: {letters}, Tones: {tones}, Unicode: {unicode_tones}")
 
 # test_cases = ["ngô͘", "pô", ]
-test_cases = ['Kue', 'kì', 'lâi', 'ê', '!', 'Tiân', 'ôan', 'chiong', 'û', 'hô', 'put', 'kue', '?']
+# test_cases = ['Kue', 'kì', 'lâi', 'ê', '!', 'Tiân', 'ôan', 'chiong', 'û', 'hô', 'put', 'kue', '?']
+test_cases = ['ziaⁿ5']
 for test in test_cases:
     print(tng_un_bu(test), end= " ")  # ngoo
 print()
