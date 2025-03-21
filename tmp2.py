@@ -111,9 +111,9 @@ def clean_tlpa(word):
 # =========================================================================
 
 
-too5 = "tô͘"
-too5 = clean_tlpa(too5)
-print(f"too5: {too5}")
+# too5 = "tô͘"
+# too5 = clean_tlpa(too5)
+# print(f"too5: {too5}")
 
 # tlpa_word = "tsháu"
 # tlpa_bo_tiau_hu = tiau_hu_tng_tiau_ho(tlpa_word)

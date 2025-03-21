@@ -433,14 +433,14 @@ def fill_hanzi_and_tlpa(wb, use_tiau_ho=True, filename='tmp.txt', sheet_name='�
 
     text_with_tlpa = read_text_with_tlpa(filename)
 
-    row_hanzi = start_row      # 漢字位置
-    row_tlpa = row_hanzi + piau_im_row   # TLPA位置: -1 ==> 自動標音； -2 ==> 人工標音
+    row_han_ji = start_row      # 漢字位置
+    row_tlpa = row_han_ji + piau_im_row   # TLPA位置: -1 ==> 自動標音； -2 ==> 人工標音
     for idx, (hanzi, tlpa) in enumerate(text_with_tlpa):
         # 漢字逐字填入（從D欄開始）
         for col_idx, char in enumerate(hanzi):
             col = 4 + col_idx  # D欄是第4欄
-            sheet.cells(row_hanzi, col).value = char
-            sheet.cells(row_hanzi, col).select()  # 每字填入後選取以便畫面滾動
+            sheet.cells(row_han_ji, col).value = char
+            sheet.cells(row_han_ji, col).select()  # 每字填入後選取以便畫面滾動
 
         # TLPA逐詞填入（從D欄開始），檢查下方儲存格是否為漢字
         tlpa_words = [clean_tlpa(word) for word in tlpa.split()]
@@ -448,7 +448,7 @@ def fill_hanzi_and_tlpa(wb, use_tiau_ho=True, filename='tmp.txt', sheet_name='�
         word_idx = 0
 
         while word_idx < len(tlpa_words):
-            cell_char = sheet.cells(row_hanzi, col).value
+            cell_char = sheet.cells(row_han_ji, col).value
             if cell_char and is_hanzi(cell_char):
                 tlpa_word = tlpa_words[word_idx]
                 if tlpa_word in PUNCTUATIONS:
@@ -467,17 +467,17 @@ def fill_hanzi_and_tlpa(wb, use_tiau_ho=True, filename='tmp.txt', sheet_name='�
         if word_idx == len(tlpa_words):
             if col >= 18:   # 若已填滿一行（col = 19），則需換行
                 col = 4
-                row_hanzi += 4
+                row_han_ji += 4
 
             # 以下程式碼有假設：每組漢字之結尾，必有標點符號
-            sheet.cells(row_hanzi, col+1).value = "=CHAR(10)"
+            sheet.cells(row_han_ji, col+1).value = "=CHAR(10)"
 
             # 更新下一組漢字及TLPA標音之位置
-            row_hanzi += 4      # 漢字位置
-            row_tlpa = row_hanzi + piau_im_row   # TLPA位置: -1 ==> 自動標音； -2 ==> 人工標音
+            row_han_ji += 4      # 漢字位置
+            row_tlpa = row_han_ji + piau_im_row   # TLPA位置: -1 ==> 自動標音； -2 ==> 人工標音
 
     # 填入文章終止符號：φ
-    sheet.cells(row_hanzi-4, 4).value = "φ"
+    sheet.cells(row_han_ji-4, 4).value = "φ"
     logging.info(f"已將漢字及TLPA注音填入【{sheet_name}】工作表！")
 
 # =========================================================================

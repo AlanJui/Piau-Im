@@ -262,8 +262,6 @@ def tng_im_piau(bo_tiau_hu_im_piau: str, po_ci: bool = True) -> str:
             bo_tiau_hu_im_piau = "I" + bo_tiau_hu_im_piau[1:]
         else:
             bo_tiau_hu_im_piau = su_ji + bo_tiau_hu_im_piau[1:]
-    # else:
-    #     bo_tiau_hu_im_piau = su_ji + bo_tiau_hu_im_piau[1:]
     # 調符
     # if tone: print(f"調符：{hex(ord(tone))}")
     if tone:
@@ -351,12 +349,22 @@ def fill_hanzi_and_tlpa(wb, use_tiau_ho=True, filename='tmp.txt', sheet_name='�
 
     row_han_ji = start_row      # 漢字位置
     row_im_piau = row_han_ji + piau_im_soo_zai   # 標音所在: -1 ==> 自動標音； -2 ==> 人工標音
-    for idx, (han_ji_ku, im_piau_ku) in enumerate(text_with_tlpa):
-        # 漢字逐字填入（從D欄開始）
-        for col_idx, han_ji in enumerate(han_ji_ku):
-            col = 4 + col_idx  # D欄是第4欄
+    start_col = 4   # 從D欄開始
+    max_col = 18    # 最大可填入的欄位（R欄）
+
+    col = start_col
+
+    for han_ji_ku, im_piau_ku in text_with_tlpa:
+        for han_ji in han_ji_ku:
+            if col > max_col:
+                # 超過欄位，換到下一組行
+                row_han_ji += 4
+                row_im_piau += 4
+                col = start_col
+
             sheet.cells(row_han_ji, col).value = han_ji
-            sheet.cells(row_han_ji, col).select()  # 每字填入後選取以便畫面滾動
+            sheet.cells(row_han_ji, col).select()  # 選取，畫面滾動
+            col += 1  # 填入後右移一欄
 
         # 整理整個句子，移除多餘的控制字元、將 "-" 轉換成空白、將標點符號前後加上空白、移除多餘空白
         im_piau_ku_cleaned = zing_li_zuan_ku(im_piau_ku)
@@ -385,33 +393,36 @@ def fill_hanzi_and_tlpa(wb, use_tiau_ho=True, filename='tmp.txt', sheet_name='�
             han_ji = sheet.cells(row_han_ji, col).value
             tlpa_im_piau = im_piau_zoo[im_piau_idx]
             im_piau = ""
-            if han_ji_ku and is_han_ji(han_ji):
+            if han_ji and is_han_ji(han_ji):
                 # 若 cell_char 為漢字，
                 if use_tiau_ho:
                     # 若設定【音標帶調號】，將 tlpa_word（音標），轉換音標格式為：【聲母】+【韻母】+【調號】
                     im_piau = tng_tiau_ho(tlpa_im_piau)
                 else:
                     im_piau = tlpa_im_piau
-            elif im_piau in PUNCTUATIONS:
+            # elif tlpa_im_piau in PUNCTUATIONS:
+            else:
+                # 因為【漢字】與【音標】應呈現一對一之對映關係，故 han_ji 變數不為漢字時，必為全形標點符號
                 # 若讀入之TLPA音標為標點符號，則音標儲存入空字串
                 im_piau = ""
             sheet.cells(row_im_piau, col).value = im_piau
+            print(f"（{row_im_piau}, {col}）已填入: {han_ji} [ {im_piau} ] <-- {im_piau_zoo[im_piau_idx]}")
             im_piau_idx += 1
-            print(f"（{row_im_piau}, {col}）已填入: {han_ji} [ {im_piau} ] <-- {im_piau_zoo[im_piau_idx-1]}")
             col += 1
+            if col > max_col:   # 若已填滿一行（col = 19），則需換行
+                row_han_ji += 4
+                row_im_piau += 4
+                col = start_col
 
         # 完成一組漢字及TLPA標音後，需在儲存格存入換行符號
         if im_piau_idx == len(im_piau_zoo):
-            if col >= 18:   # 若已填滿一行（col = 19），則需換行
-                col = 4
-                row_han_ji += 4
-
             # 以下程式碼有假設：每組漢字之結尾，必有標點符號
-            sheet.cells(row_han_ji, col+1).value = "=CHAR(10)"
+            sheet.cells(row_han_ji, col).value = "=CHAR(10)"
 
             # 更新下一組漢字及TLPA標音之位置
-            row_han_ji += 4      # 漢字位置
-            row_im_piau = row_han_ji + piau_im_soo_zai   # TLPA位置: -1 ==> 自動標音； -2 ==> 人工標音
+            row_han_ji += 4     # 漢字位置
+            row_im_piau += 4    # 音標位置
+            col = start_col     # 每句開始的欄位
 
     # 填入文章終止符號：φ
     sheet.cells(row_han_ji-4, 4).value = "φ"
