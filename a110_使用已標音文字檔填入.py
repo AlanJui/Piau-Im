@@ -355,6 +355,12 @@ def fill_hanzi_and_tlpa(wb, use_tiau_ho=True, filename='tmp.txt', sheet_name='�
     col = start_col
 
     for han_ji_ku, im_piau_ku in text_with_tlpa:
+        #------------------------------------------------------------------------------
+        # 填入【漢字】
+        #------------------------------------------------------------------------------
+        # 由於每組漢字句子，其字數可能超過15個，以致換行，故需記錄原始位置
+        org_row_han_ji = row_han_ji
+        org_row_im_piau = row_im_piau
         for han_ji in han_ji_ku:
             if col > max_col:
                 # 超過欄位，換到下一組行
@@ -365,7 +371,15 @@ def fill_hanzi_and_tlpa(wb, use_tiau_ho=True, filename='tmp.txt', sheet_name='�
             sheet.cells(row_han_ji, col).value = han_ji
             sheet.cells(row_han_ji, col).select()  # 選取，畫面滾動
             col += 1  # 填入後右移一欄
+            # 以下程式碼有假設：每組漢字之結尾，必有標點符號
+            sheet.cells(row_han_ji, col).value = "=CHAR(10)"
+        # 防漢字句子總字數有超過15個之可能，故需於此回復原始之 row_han_ji 及 row_im_piau 之 row no
+        row_han_ji = org_row_han_ji
+        row_im_piau = org_row_im_piau
 
+        #------------------------------------------------------------------------------
+        # 處理【音標】句子，將【字串】(String)資料轉換成【清單】(List)，使之與【漢字】一一對映
+        #------------------------------------------------------------------------------
         # 整理整個句子，移除多餘的控制字元、將 "-" 轉換成空白、將標點符號前後加上空白、移除多餘空白
         im_piau_ku_cleaned = zing_li_zuan_ku(im_piau_ku)
 
@@ -385,11 +399,17 @@ def fill_hanzi_and_tlpa(wb, use_tiau_ho=True, filename='tmp.txt', sheet_name='�
 
             im_piau_zoo.append(tlpa_im_piau)
 
-        col = 4
+        #------------------------------------------------------------------------------
+        # 填入【音標】
+        #------------------------------------------------------------------------------
+        col = start_col     # 重設【欄數】為： 4（D欄）
         im_piau_idx = 0
-
         # 執行到此，【音標】應已轉換為【帶調號之TLPA音標】
         while im_piau_idx < len(im_piau_zoo):
+            if col > max_col:   # 若已填滿一行（col = 19），則需換行
+                row_han_ji += 4
+                row_im_piau += 4
+                col = start_col
             han_ji = sheet.cells(row_han_ji, col).value
             tlpa_im_piau = im_piau_zoo[im_piau_idx]
             im_piau = ""
@@ -400,32 +420,19 @@ def fill_hanzi_and_tlpa(wb, use_tiau_ho=True, filename='tmp.txt', sheet_name='�
                     im_piau = tng_tiau_ho(tlpa_im_piau)
                 else:
                     im_piau = tlpa_im_piau
-            # elif tlpa_im_piau in PUNCTUATIONS:
-            else:
-                # 因為【漢字】與【音標】應呈現一對一之對映關係，故 han_ji 變數不為漢字時，必為全形標點符號
-                # 若讀入之TLPA音標為標點符號，則音標儲存入空字串
-                im_piau = ""
+            # 填入【音標】
             sheet.cells(row_im_piau, col).value = im_piau
             print(f"（{row_im_piau}, {col}）已填入: {han_ji} [ {im_piau} ] <-- {im_piau_zoo[im_piau_idx]}")
             im_piau_idx += 1
             col += 1
-            if col > max_col:   # 若已填滿一行（col = 19），則需換行
-                row_han_ji += 4
-                row_im_piau += 4
-                col = start_col
 
-        # 完成一組漢字及TLPA標音後，需在儲存格存入換行符號
-        if im_piau_idx == len(im_piau_zoo):
-            # 以下程式碼有假設：每組漢字之結尾，必有標點符號
-            sheet.cells(row_han_ji, col).value = "=CHAR(10)"
-
-            # 更新下一組漢字及TLPA標音之位置
-            row_han_ji += 4     # 漢字位置
-            row_im_piau += 4    # 音標位置
-            col = start_col     # 每句開始的欄位
+        # 更新下一組漢字及TLPA標音之位置
+        row_han_ji += 4     # 漢字位置
+        row_im_piau += 4    # 音標位置
+        col = start_col     # 每句開始的欄位
 
     # 填入文章終止符號：φ
-    sheet.cells(row_han_ji-4, 4).value = "φ"
+    sheet.cells(row_han_ji, start_col).value = "φ"
     logging.info(f"已將漢字及TLPA注音填入【{sheet_name}】工作表！")
 
 # =========================================================================
