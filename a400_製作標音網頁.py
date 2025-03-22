@@ -14,6 +14,7 @@ from dotenv import load_dotenv
 # 載入自訂模組
 from mod_excel_access import get_value_by_name
 from mod_file_access import load_module_function, save_as_new_file
+from mod_帶調符音標 import kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
 
 # from mod_廣韻 import tng_uann_piau_im
 from mod_標音 import split_tai_gi_im_piau  # 分解台語音標
@@ -415,19 +416,28 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
                     msg = f"({row}, {xw.utils.col_name(col)}) = {cell_value}"
                 else:
                     han_ji = cell_value.strip()  # 取得漢字
+
                     # 取得漢字的【台語音標】
                     # tai_gi_im_piau = sheet.range((row - 1, col)).value  # 取得漢字的台語音標
                     tai_gi_im_piau = sheet.range((row + Piau_Im_Row, col)).value  # 取得漢字的台語音標
                     # 當儲存格寫入之資料為 None 情況時之處理作法：給予空字串
                     tai_gi_im_piau = tai_gi_im_piau if tai_gi_im_piau is not None else ""
+
+                    # 如果輸入之【音標】為【帶調符音標】，則需確保轉換為【帶調號TLPA音標】
+                    if kam_si_u_tiau_hu(tai_gi_im_piau):
+                        tai_gi_im_piau = tng_im_piau(tai_gi_im_piau)
+                        tlpa_im_piau = tng_tiau_ho(tai_gi_im_piau)
+                    else:
+                        tlpa_im_piau = tai_gi_im_piau
+
                     # 將已注音之漢字加入【漢字注音表】
                     ruby_tag = concat_ruby_tag(
                         wb=wb,
                         piau_im=piau_im,    # 注音法物件
                         han_ji=han_ji,
-                        tai_gi_im_piau=tai_gi_im_piau
+                        tai_gi_im_piau=tlpa_im_piau
                     )
-                    msg =f"({row}, {xw.utils.col_name(col)}) = {han_ji} [{tai_gi_im_piau}]"
+                    msg =f"({row}, {xw.utils.col_name(col)}) = {han_ji} [{tlpa_im_piau}] <-- {tai_gi_im_piau}"
 
                 # 檢查是否需要插入換行標籤
                 if total_chars_per_line and total_chars_per_line != "預設":

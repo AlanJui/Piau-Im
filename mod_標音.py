@@ -3,6 +3,8 @@ import sqlite3
 import unicodedata
 from typing import Optional
 
+from mod_帶調符音標 import kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
+
 # 上標數字與普通數字的映射字典
 superscript_digit_mapping = {
     '⁰': '0',
@@ -328,6 +330,10 @@ def split_tai_lo(input_str):
 # ==========================================================
 
 def split_tai_gi_im_piau(im_piau: str, po_ci: bool = False):
+    # 如果輸入之【音標】為【帶調符音標】，則需確保轉換為【帶調號TLPA音標】
+    if kam_si_u_tiau_hu(im_piau):
+        im_piau = tng_im_piau(im_piau)
+        im_piau = tng_tiau_ho(im_piau)
     # 將輸入的台語音標轉換為小寫
     im_piau = im_piau.lower()
     # 查檢【台語音標】是否符合【標準】=【聲母】+【韻母】+【調號】

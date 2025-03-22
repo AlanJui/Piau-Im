@@ -6855,3 +6855,224 @@ KeyError: 'hiang'
 2025-03-22 13:04:40,378 - INFO - <----------- 作業結束！---------->
 2025-03-22 13:04:40,482 - INFO - 《========== 程式終止執行：a003_使用漢字注音工作表製作文章純文字 ==========》
 2025-03-22 13:04:50,600 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《歸去來辭》.xlsx
+2025-03-22 13:06:04,100 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-22 13:06:04,101 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-22 13:06:04,117 - INFO - <----------- 作業開始！---------->
+2025-03-22 13:06:38,803 - ERROR - 程式異常終止：a400_製作標音網頁，錯誤訊息: 'hiang'
+Traceback (most recent call last):
+  File "a400_製作標音網頁.py", line 615, in main
+    result_code = process(wb)
+  File "a400_製作標音網頁.py", line 556, in process
+    status_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a400_製作標音網頁.py", line 522, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a400_製作標音網頁.py", line 424, in build_web_page
+    ruby_tag = concat_ruby_tag(
+        wb=wb,
+    ...<2 lines>...
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "a400_製作標音網頁.py", line 192, in concat_ruby_tag
+    siong_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2]
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1099, in han_ji_piau_im_tng_huan
+    return self.NST_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1055, in NST_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'hiang'
+2025-03-22 13:06:38,959 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《歸去來辭》.xlsx
+2025-03-22 13:08:48,747 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-22 13:08:48,748 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-22 13:08:48,762 - INFO - <----------- 作業開始！---------->
+2025-03-22 13:10:16,164 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-03-22 13:10:16,179 - INFO - <----------- 作業結束！---------->
+2025-03-22 13:10:16,331 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《歸去來辭》.xlsx
+2025-03-22 13:10:16,331 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-03-22 13:23:10,742 - INFO - 已將漢字及TLPA注音填入【漢字注音】工作表！
+2025-03-22 13:23:10,744 - INFO - 《========== 程式開始執行：a003_使用漢字注音工作表製作文章純文字 ==========》
+2025-03-22 13:23:10,744 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-22 13:23:10,763 - INFO - 作用中活頁簿：【河洛文讀注音-閩拼調號】《歸去來辭》.xlsx
+2025-03-22 13:23:10,763 - INFO - 目錄路徑：C:\work\Piau-Im\output7
+2025-03-22 13:23:10,763 - INFO - <----------- 作業開始！---------->
+2025-03-22 13:23:10,814 - INFO - 開始【處理作業】...
+2025-03-22 13:23:17,541 - INFO - 已成功將漢字輸出至檔案：tmp.txt
+2025-03-22 13:23:17,576 - INFO - 已將【漢字注音】工作表之內容，匯整成整篇【文章】之純文字，並回存 V3 儲存格！
+2025-03-22 13:23:17,577 - INFO - <----------- 作業結束！---------->
+2025-03-22 13:23:17,685 - INFO - 《========== 程式終止執行：a003_使用漢字注音工作表製作文章純文字 ==========》
+2025-03-22 13:23:17,942 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《歸去來辭》.xlsx
+2025-03-22 13:24:02,307 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-22 13:24:02,308 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-22 13:24:02,323 - INFO - <----------- 作業開始！---------->
+2025-03-22 13:24:08,482 - ERROR - 程式異常終止：a400_製作標音網頁，錯誤訊息: invalid literal for int() with base 10: 'ì'
+Traceback (most recent call last):
+  File "a400_製作標音網頁.py", line 615, in main
+    result_code = process(wb)
+  File "a400_製作標音網頁.py", line 556, in process
+    status_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a400_製作標音網頁.py", line 522, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a400_製作標音網頁.py", line 424, in build_web_page
+    ruby_tag = concat_ruby_tag(
+        wb=wb,
+    ...<2 lines>...
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "a400_製作標音網頁.py", line 192, in concat_ruby_tag
+    siong_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2]
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1099, in han_ji_piau_im_tng_huan
+    return self.NST_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1049, in NST_piau_im
+    tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
+                   ~~~^^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'ì'
+2025-03-22 13:24:08,694 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《歸去來辭》.xlsx
+2025-03-22 16:13:24,323 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-22 16:13:24,324 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-22 16:13:24,341 - INFO - <----------- 作業開始！---------->
+2025-03-22 16:59:39,621 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-22 16:59:39,622 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-22 16:59:39,635 - INFO - <----------- 作業開始！---------->
+2025-03-22 20:14:04,658 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-22 20:14:04,658 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-22 20:14:04,675 - INFO - <----------- 作業開始！---------->
+2025-03-22 20:14:23,457 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-22 20:14:23,458 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-22 20:14:23,478 - INFO - <----------- 作業開始！---------->
+2025-03-22 20:19:44,935 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-22 20:19:44,936 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-22 20:19:44,951 - INFO - <----------- 作業開始！---------->
+2025-03-22 20:22:13,622 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-22 20:22:13,623 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-22 20:22:13,637 - INFO - <----------- 作業開始！---------->
+2025-03-22 20:23:23,730 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-22 20:23:23,731 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-22 20:23:23,746 - INFO - <----------- 作業開始！---------->
+2025-03-22 20:23:36,620 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-22 20:23:36,621 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-22 20:23:36,635 - INFO - <----------- 作業開始！---------->
+2025-03-22 20:37:14,640 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-22 20:37:14,641 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-22 20:37:14,657 - INFO - <----------- 作業開始！---------->
+2025-03-22 20:44:13,933 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-22 20:44:13,934 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-22 20:44:13,952 - INFO - <----------- 作業開始！---------->
+2025-03-22 20:45:02,747 - ERROR - 程式異常終止：a400_製作標音網頁，錯誤訊息: 'ńai'
+Traceback (most recent call last):
+  File "a400_製作標音網頁.py", line 625, in main
+    result_code = process(wb)
+  File "a400_製作標音網頁.py", line 566, in process
+    status_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a400_製作標音網頁.py", line 532, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a400_製作標音網頁.py", line 434, in build_web_page
+    ruby_tag = concat_ruby_tag(
+        wb=wb,
+    ...<2 lines>...
+        tai_gi_im_piau=tlpa_im_piau
+    )
+  File "a400_製作標音網頁.py", line 193, in concat_ruby_tag
+    siong_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2]
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1105, in han_ji_piau_im_tng_huan
+    return self.NST_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1061, in NST_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'ńai'
+2025-03-22 20:45:02,912 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《歸去來辭》.xlsx
+2025-03-22 20:48:12,395 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-22 20:48:12,396 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-22 20:48:12,411 - INFO - <----------- 作業開始！---------->
+2025-03-22 20:48:20,447 - ERROR - 程式異常終止：a400_製作標音網頁，錯誤訊息: 'ńai'
+Traceback (most recent call last):
+  File "a400_製作標音網頁.py", line 625, in main
+    result_code = process(wb)
+  File "a400_製作標音網頁.py", line 566, in process
+    status_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a400_製作標音網頁.py", line 532, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a400_製作標音網頁.py", line 434, in build_web_page
+    ruby_tag = concat_ruby_tag(
+        wb=wb,
+    ...<2 lines>...
+        tai_gi_im_piau=tlpa_im_piau
+    )
+  File "a400_製作標音網頁.py", line 193, in concat_ruby_tag
+    siong_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2]
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1105, in han_ji_piau_im_tng_huan
+    return self.NST_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1061, in NST_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'ńai'
+2025-03-22 20:48:20,616 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《歸去來辭》.xlsx
+2025-03-22 20:49:54,290 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-22 20:49:54,291 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-22 20:49:54,308 - INFO - <----------- 作業開始！---------->
+2025-03-22 20:52:46,647 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-22 20:52:46,648 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-22 20:52:46,664 - INFO - <----------- 作業開始！---------->
+2025-03-22 23:37:22,171 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-22 23:37:22,172 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-22 23:37:22,191 - INFO - <----------- 作業開始！---------->
+2025-03-22 23:39:23,978 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-22 23:39:23,979 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-22 23:39:23,996 - INFO - <----------- 作業開始！---------->
+2025-03-22 23:40:19,191 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-22 23:40:19,191 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-22 23:40:19,206 - INFO - <----------- 作業開始！---------->
+2025-03-22 23:41:28,539 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-03-22 23:41:28,548 - INFO - <----------- 作業結束！---------->
+2025-03-22 23:41:28,783 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《歸去來辭》.xlsx
+2025-03-22 23:41:28,784 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》

@@ -208,10 +208,6 @@ def ut08():
     print(f"轉成標準句子：{sentence}")
 
 if __name__ == '__main__':
-    # ut01()
     #===========================================================================
-    ut08()
-
-    # converted_list = ['Kue', 'ki3', 'lai5', 'e5', '!', 'Tian5', 'uan5', 'chiong', 'u5', 'ho5', 'put', 'kue', '?']
-    # sentence = normalize_sentence(converted_list)
-    # print(sentence)
+    # ut08()
+    ut01()
