@@ -2,11 +2,45 @@
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
 import logging
+import os
 import re
 import sys
 import unicodedata
+from pathlib import Path
 
 import xlwings as xw
+from dotenv import load_dotenv
+
+from a003_使用漢字注音工作表製作文章純文字 import main as a003_main
+from mod_file_access import save_as_new_file
+
+# =========================================================================
+# 常數定義
+# =========================================================================
+# 定義 Exit Code
+EXIT_CODE_SUCCESS = 0  # 成功
+EXIT_CODE_FAILURE = 1  # 失敗
+EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
+EXIT_CODE_SAVE_FAILURE = 3  # 儲存失敗
+EXIT_CODE_PROCESS_FAILURE = 10  # 過程失敗
+EXIT_CODE_NO_FILE = 90 # 無法找到檔案
+EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
+
+# =========================================================================
+# 載入環境變數
+# =========================================================================
+load_dotenv()
+
+# 預設檔案名稱從環境變數讀取
+DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
+DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
+
+# =========================================================================
+# 設定日誌
+# =========================================================================
+from mod_logging import init_logging, logging_exc_error, logging_process_step
+
+init_logging()
 
 
 # =========================================================
@@ -458,5 +492,26 @@ def main():
                         start_row=5,
                         piau_im_soo_zai=-2) # -1: 自動標音；-2: 人工標音
 
+    if a003_main() != EXIT_CODE_SUCCESS:
+        return EXIT_CODE_FAILURE
+
+    #--------------------------------------------------------------------------
+    # 儲存檔案
+    #--------------------------------------------------------------------------
+    try:
+        # 要求畫面回到【漢字注音】工作表
+        wb.sheets['漢字注音'].activate()
+        # 儲存檔案
+        file_path = save_as_new_file(wb=wb)
+        if not file_path:
+            logging_exc_error(msg="儲存檔案失敗！", error=e)
+            return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
+        else:
+            logging_process_step(f"儲存檔案至路徑：{file_path}")
+    except Exception as e:
+        logging_exc_error(msg="儲存檔案失敗！", error=e)
+        return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
+
 if __name__ == "__main__":
-    main()
+    exit_code = main()
+    sys.exit(exit_code)
