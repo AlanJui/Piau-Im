@@ -59,7 +59,8 @@ def process(wb):
     wb.names['OUTPUT_PATH'].refers_to_range.value = 'output7'
     wb.names['每頁總列數'].refers_to_range.value = 120
     wb.names['每列總字數'].refers_to_range.value = 15
-    wb.names['網頁每列字數'].refers_to_range.value = 7
+    # wb.names['網頁每列字數'].refers_to_range.value = 7
+    wb.names['網頁每列字數'].refers_to_range.value = 0
     logging_process_step("【env】工作表之【選項設定】已重置！")
 
 

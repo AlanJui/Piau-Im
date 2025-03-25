@@ -83,6 +83,9 @@ def read_text_with_tlpa(filename):
 # =========================================================
 # 音標整埋工具庫
 # =========================================================
+def is_im_piau(im_piau: str) -> bool:
+    return im_piau in PUNCTUATIONS
+
 # 用途：檢查是否為漢字
 def is_han_ji(char):
     return 'CJK UNIFIED IDEOGRAPH' in unicodedata.name(char, '')
@@ -358,6 +361,7 @@ def tng_tiau_ho(im_piau: str, kan_hua: bool = False) -> str:
     :param kan_hua: bool - 簡化：若是【簡化】，聲調值為 1 或 4 ，去除調號值
     :return: str - 帶調號音標
     """
+    if im_piau == '': return ''
     # 遇標點符號，不做轉換處理，直接回傳
     if im_piau[-1] in PUNCTUATIONS:
         return im_piau
