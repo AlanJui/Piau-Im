@@ -11,7 +11,6 @@ from pathlib import Path
 import xlwings as xw
 from dotenv import load_dotenv
 
-from a003_使用漢字注音工作表製作文章純文字 import main as a003_main
 from mod_file_access import save_as_new_file
 from mod_帶調符音標 import (
     apply_tone,
@@ -115,6 +114,7 @@ def fill_han_ji_and_ping_im(wb, han_ji_filename:str, ping_im_filename:str, use_t
 
     col = start_col
 
+    text = ""
     for han_ji_ku in text_with_han_ji:
         for han_ji in han_ji_ku:
             if col > max_col:
@@ -122,6 +122,7 @@ def fill_han_ji_and_ping_im(wb, han_ji_filename:str, ping_im_filename:str, use_t
                 row_han_ji += 4
                 col = start_col
 
+            text += han_ji
             sheet.cells(row_han_ji, col).value = han_ji
             sheet.cells(row_han_ji, col).select()  # 選取，畫面滾動
             col += 1  # 填入後右移一欄
@@ -129,10 +130,12 @@ def fill_han_ji_and_ping_im(wb, han_ji_filename:str, ping_im_filename:str, use_t
 
         # 段落終結處：換下一段落
         sheet.cells(row_han_ji, col).value = "=CHAR(10)"
+        text += "\n"
         row_han_ji += 4
         col = start_col
 
     # 填入文章終止符號：φ
+    sheet["V3"].value = text
     sheet.cells(row_han_ji, col).value = "φ"
 
 
@@ -213,7 +216,7 @@ def fill_han_ji_and_ping_im(wb, han_ji_filename:str, ping_im_filename:str, use_t
         im_piau = ""
         if tlpa_im_piau == "":
             # 若音標為空白，表示遇有漢字未查找到音標
-            im_piau = "【沒有音標】"
+            im_piau = ""    # 標示為：【沒有音標】
         elif han_ji and is_han_ji(han_ji):
             # 若 cell_char 為漢字，
             if use_tiau_ho:
@@ -265,9 +268,6 @@ def main():
         use_tiau_ho=use_tiau_ho,
         start_row=5,
         piau_im_soo_zai=-2) # -1: 自動標音；-2: 人工標音
-
-    if a003_main() != EXIT_CODE_SUCCESS:
-        return EXIT_CODE_FAILURE
 
     #--------------------------------------------------------------------------
     # 儲存檔案
