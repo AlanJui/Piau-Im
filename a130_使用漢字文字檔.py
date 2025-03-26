@@ -98,6 +98,10 @@ def read_han_ji_from_text_file(wb, filename:str, sheet_name:str='漢字注音', 
             # 以下程式碼有假設：每組漢字之結尾，必有標點符號
 
         # 段落終結處：換下一段落
+        if col > max_col:
+            # 超過欄位，換到下一組行
+            row_han_ji += 4
+            col = start_col
         sheet.cells(row_han_ji, col).value = "=CHAR(10)"
         text += "\n"
         row_han_ji += 4
@@ -211,42 +215,35 @@ def fill_in_ping_im(wb, han_ji_list:list, im_piau_list:list, use_tiau_ho:bool=Tr
     col = start_col
     idx = 0
     # 執行到此，【音標】應已轉換為【帶調號之TLPA音標】
-    # while idx < len(im_piau_list):
     for idx, han_ji in enumerate(han_ji_list):
         if col > max_col:   # 若已填滿一行（col = 19），則需換行
             row_han_ji += 4
             row_im_piau += 4
             col = start_col
 
-        han_ji = han_ji_list[idx]
-        tlpa_im_piau = im_piau_list[idx]
         im_piau = ""
         msg = ""
-        if tlpa_im_piau == "":
-            # 若音標為空白，表示遇有漢字未查找到音標
-            msg = "《空白字元》"    # 標示為：【沒有音標】
-        elif tlpa_im_piau == "\n":
+        if han_ji == "\n":
             msg = "《換行》"
-        elif han_ji and is_han_ji(han_ji):
-            # 若 cell_char 為漢字，
-            im_piau = tlpa_im_piau
-            msg = f"{han_ji} [ {im_piau} ] <-- {im_piau_list[idx]}"
-            # if use_tiau_ho:
-            #     # 若設定【音標帶調號】，將 tlpa_word（音標），轉換音標格式為：【聲母】+【韻母】+【調號】
-            #     im_piau = tng_tiau_ho(tlpa_im_piau)
-            #     msg =f"（{row_im_piau}, {col}）已填入: {han_ji} [ {im_piau} ] <-- {im_piau_list[idx]}"
-            # else:
-            #     im_piau = tlpa_im_piau
         else:
-            msg = f"{han_ji}《標點符號》"
+            tlpa_im_piau = im_piau_list[idx]
+            if tlpa_im_piau == "":
+                # 若音標為空白，表示遇有漢字未查找到音標
+                msg = "《空白字元》"    # 標示為：【沒有音標】
+            elif han_ji and is_han_ji(han_ji):
+                # 若 cell_char 為漢字，
+                im_piau = tlpa_im_piau
+                msg = f"{han_ji} [ {im_piau} ] <-- {im_piau_list[idx]}"
+            else:
+                msg = f"{han_ji}《標點符號》"
 
         # 填入【音標】
         sheet.cells(row_im_piau, col).select()
         sheet.cells(row_im_piau, col).value = im_piau
-        print(f"({row_im_piau}, {col})：{msg}")
+        print(f"{idx}. ({row_im_piau}, {col})：{msg}")
         idx += 1
         col += 1
-        if tlpa_im_piau == "\n":
+        if han_ji == "\n":
             # 若遇到換行符號，表示段落結束，換到下一段落
             row_han_ji += 4     # 漢字位置
             row_im_piau += 4    # 音標位置
