@@ -259,6 +259,111 @@ def fill_in_ping_im(wb, han_ji_list:list, im_piau_list:list, use_tiau_ho:bool=Tr
 
     print(f"已將【漢字】及【漢字標音】填入【{sheet_name}】工作表！")
 
+def fill_in_jin_kang_ping_im(wb, han_ji_list:list, ping_im_file:str, use_tiau_ho:bool=True, sheet_name:str='漢字注音', start_row:int=5, piau_im_soo_zai:int=-2):
+    # 讀取整篇文章之【標音文檔】
+    text_with_im_piau = read_text_with_im_piau(filename=ping_im_file)
+
+    #------------------------------------------------------------------------------
+    # 填入【音標】
+    #------------------------------------------------------------------------------
+    fixed_im_piau_ku = []
+    for im_piau_ku in text_with_im_piau:
+        #------------------------------------------------------------------------------
+        # 處理【音標】句子，將【字串】(String)資料轉換成【清單】(List)，使之與【漢字】一一對映
+        #------------------------------------------------------------------------------
+        # 整理整個句子，移除多餘的控制字元、將 "-" 轉換成空白、將標點符號前後加上空白、移除多餘空白
+        im_piau_ku_cleaned = zing_li_zuan_ku(im_piau_ku)
+
+        # 解構【音標】組成之【句子】，變成單一【帶調符音標】清單
+        raw_im_piau_list = im_piau_ku_cleaned.split()
+
+        # 查檢【音標】是否有【漢字+音標】之異常組合，若有則進行處理
+        fixed_im_piau_list = []
+        for i, raw_im_piau in enumerate(raw_im_piau_list):
+            fixed_im_piau = fix_im_piau_spacing(raw_im_piau)
+            # 可能因【校正音標】産生兩個音標，需分開處理
+            fixed_im_piau_list.extend(fixed_im_piau.split())
+            # print(f"已整理音標：{i}. {raw_im_piau} --> {fixed_im_piau}")
+
+        # 轉換成【帶調號拼音】
+        im_piau_list = []
+        for i, im_piau in enumerate(fixed_im_piau_list):
+            # 排除標點符號不進行韻母轉換
+            if is_im_piau(im_piau):
+                # 若為標點符號，無需轉換
+                tlpa_im_piau = im_piau
+            elif im_piau and is_han_ji(im_piau[0]):
+                # 若為漢字，表示遇有漢字未查找到音標
+                tlpa_im_piau = ""
+            else:
+                # 符合【帶調符音標】格式者，則進行【帶調號音標】轉換
+                if im_piau == "":
+                    tlpa_im_piau = ""
+                else:
+                    tlpa_im_piau = tng_im_piau(im_piau)    # 完成轉換之音標 = 音標帶調號
+            im_piau_list.append(tlpa_im_piau)
+            # print(f"已轉換音標：{i}. {im_piau} --> {tlpa_im_piau}")
+
+        fixed_im_piau_ku.extend(im_piau_list)
+
+    #------------------------------------------------------------------------------
+    # 填入【音標】
+    #------------------------------------------------------------------------------
+    sheet = wb.sheets[sheet_name]
+    sheet.activate()
+    sheet.range('A1').select()
+
+    row_han_ji = start_row      # 漢字位置
+    start_col = 4   # 從D欄開始
+    max_col = 18    # 最大可填入的欄位（R欄）
+
+    col = start_col
+
+    row_han_ji = start_row  # 重設【行數】為： 5（第5行）
+    row_im_piau = row_han_ji + piau_im_soo_zai   # 標音所在: -1 ==> 自動標音； -2 ==> 人工標音
+    im_piau_list = fixed_im_piau_ku
+    col = start_col     # 重設【欄數】為： 4（D欄）
+    im_piau_idx = 0
+    # 執行到此，【音標】應已轉換為【帶調號之TLPA音標】
+    while im_piau_idx < len(im_piau_list):
+        if col > max_col:   # 若已填滿一行（col = 19），則需換行
+            row_han_ji += 4
+            row_im_piau += 4
+            col = start_col
+        han_ji = sheet.cells(row_han_ji, col).value
+        if han_ji == "\n":
+            # 若遇到換行符號，表示段落結束，換到下一段落
+            row_han_ji += 4     # 漢字位置
+            row_im_piau += 4    # 音標位置
+            col = start_col     # 每句開始的欄位
+            continue
+
+        tlpa_im_piau = im_piau_list[im_piau_idx]
+        im_piau = ""
+        if tlpa_im_piau == "":
+            # 若音標為空白，表示遇有漢字未查找到音標
+            im_piau = ""    # 標示為：【沒有音標】
+        elif han_ji and is_han_ji(han_ji):
+            # 若 cell_char 為漢字，
+            if use_tiau_ho:
+                # 若設定【音標帶調號】，將 tlpa_word（音標），轉換音標格式為：【聲母】+【韻母】+【調號】
+                im_piau = tng_tiau_ho(tlpa_im_piau)
+            else:
+                im_piau = tlpa_im_piau
+        # 填入【音標】
+        sheet.cells(row_im_piau, col).select()
+        sheet.cells(row_im_piau, col).value = im_piau
+        print(f"（{row_im_piau}, {col}）已填入: {han_ji} [ {im_piau} ] <-- {im_piau_list[im_piau_idx]}")
+        im_piau_idx += 1
+        col += 1
+
+    # 更新下一組漢字及TLPA標音之位置
+    row_han_ji += 4     # 漢字位置
+    row_im_piau += 4    # 音標位置
+    col = start_col     # 每句開始的欄位
+
+    print(f"已將漢字及TLPA注音填入【{sheet_name}】工作表！")
+
 # =========================================================================
 # 主作業程序
 # =========================================================================
@@ -300,12 +405,21 @@ def main():
     # 查找【漢字】之【音標】
     im_piau_list = cue_han_ji_piau_im(wb, text_with_han_ji)
 
+    # 將【漢字】及【漢字標音】填入【漢字注音】工作表
     fill_in_ping_im(wb,
         han_ji_list=han_ji_list,
         im_piau_list=im_piau_list,
         use_tiau_ho=use_tiau_ho,
         start_row=5,
         piau_im_soo_zai=-1) # -1: 自動標音；-2: 人工標音
+
+    # 將【漢字】及【標音文檔】填入【漢字注音】工作表
+    fill_in_jin_kang_ping_im(wb,
+        han_ji_list=han_ji_list,
+        ping_im_file=default_ping_im_file,
+        use_tiau_ho=use_tiau_ho,
+        start_row=5,
+        piau_im_soo_zai=-2) # -1: 自動標音；-2: 人工標音
 
     #--------------------------------------------------------------------------
     # 儲存檔案
