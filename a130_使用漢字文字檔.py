@@ -390,7 +390,7 @@ def main():
         return
 
     # 備妥工作檔
-    # a000_main(wb)
+    a000_main(wb)
 
     # 讀取整篇文章之【漢字】純文字檔案。
     text_with_han_ji = read_han_ji_from_text_file(wb, filename=han_ji_file)
