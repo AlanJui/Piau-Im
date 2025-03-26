@@ -24,6 +24,43 @@ EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 # 程式區域函式
 # =========================================================================
 
+# 用途：從純文字檔案讀取資料並回傳 [漢字, ...] 之格式
+def read_text_with_han_ji(filename: str = "p2_han_ji.txt") -> list:
+    text_with_han_ji = []
+    with open(filename, "r", encoding="utf-8") as f:
+        # 先移除 `\u200b`，確保不會影響 TLPA 拼音對應
+        lines = [re.sub(r"[\u200b]", "", line.strip()) for line in f if line.strip()]
+
+    for i in range(0, len(lines), 1):
+        han_ji = lines[i]
+        text_with_han_ji.append(han_ji)
+
+    return text_with_han_ji
+
+
+# 用途：從純文字檔案讀取資料並回傳 [Im-Piau, ...] 之格式
+def read_text_with_im_piau(filename: str = "ping_im.txt") -> list:
+    text_with_tlpa = []
+    with open(filename, "r", encoding="utf-8") as f:
+        # 先移除 `\u200b`，確保不會影響 TLPA 拼音對應
+        lines = [re.sub(r"[\u200b]", "", line.strip()) for line in f if line.strip()]
+
+    # for i in range(0, len(lines), 2):
+    for i in range(0, len(lines), 1):
+        im_piau = lines[i].replace("-", " ")  # 替換 "-" 為空白字元
+        text_with_tlpa.append((im_piau))
+
+    return text_with_tlpa
+
+def fix_im_piau_spacing(im_piau: str) -> str:
+    """
+    若音標的首字為漢字，則在首個漢字之後插入空白字元。
+    如：「僇lâng」→「僇 lâng」
+    """
+    if im_piau and is_han_ji(im_piau[0]):
+        return im_piau[0] + ' ' + im_piau[1:]
+    return im_piau
+
 def tu_bo_iong_ji_bu(ku: str) -> str:
     """
     清無用字母：清除控制字元
