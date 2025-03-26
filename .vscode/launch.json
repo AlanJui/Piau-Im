@@ -70,6 +70,17 @@
             ]
         },
         {
+            "name": "a130_使用漢字文檔與標音文檔",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a130_使用漢字文字檔.py",
+            "console": "integratedTerminal",
+            "args": [
+                "tmp_p1_han_ji.txt",
+                "tmp_p2_ping_im.txt",
+            ]
+        },
+        {
             "name": "a200_查找及填入漢字標音",
             "type": "debugpy",
             "request": "launch",

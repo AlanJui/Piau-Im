@@ -370,7 +370,8 @@ def fill_in_jin_kang_ping_im(wb, han_ji_list:list, ping_im_file:str, use_tiau_ho
 def main():
     # 預設檔案名稱
     default_han_ji_file = "tmp_p1_han_ji.txt"
-    default_ping_im_file = "tmp_p2_ping_im.txt"
+    # default_ping_im_file = "tmp_p2_ping_im.txt"
+    default_ping_im_file = ""
 
     # 檢查是否有指定檔案名稱，若無則使用預設檔名
     # 命令列參數處理：sys.argv[1] = 漢字檔案, sys.argv[2] = 拼音檔案
@@ -414,12 +415,13 @@ def main():
         piau_im_soo_zai=-1) # -1: 自動標音；-2: 人工標音
 
     # 將【漢字】及【標音文檔】填入【漢字注音】工作表
-    fill_in_jin_kang_ping_im(wb,
-        han_ji_list=han_ji_list,
-        ping_im_file=default_ping_im_file,
-        use_tiau_ho=use_tiau_ho,
-        start_row=5,
-        piau_im_soo_zai=-2) # -1: 自動標音；-2: 人工標音
+    if ping_im_file:
+        fill_in_jin_kang_ping_im(wb,
+            han_ji_list=han_ji_list,
+            ping_im_file=ping_im_file,
+            use_tiau_ho=use_tiau_ho,
+            start_row=5,
+            piau_im_soo_zai=-2) # -1: 自動標音；-2: 人工標音
 
     #--------------------------------------------------------------------------
     # 儲存檔案

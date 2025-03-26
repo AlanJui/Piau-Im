@@ -7577,3 +7577,46 @@ IndexError: string index out of range
 2025-03-26 12:25:57,630 - INFO - 已完成【漢字】查找標音作業。
 2025-03-26 12:28:41,375 - INFO - 已完成【漢字】查找標音作業。
 2025-03-26 12:30:26,428 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《None》.xlsx
+2025-03-26 12:36:44,978 - INFO - 《========== 程式開始執行：a002_清除漢字注音工作表欲標音之漢字 ==========》
+2025-03-26 12:36:44,979 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-26 12:36:45,010 - INFO - 作用中活頁簿：【河洛白話注音-閩拼調號】《None》.xlsx
+2025-03-26 12:36:45,010 - INFO - 目錄路徑：C:\work\Piau-Im\output7
+2025-03-26 12:36:45,010 - INFO - <----------- 作業開始！---------->
+2025-03-26 12:36:45,077 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫', '人工標音字庫']
+2025-03-26 12:36:45,116 - ERROR - 程式異常終止：a002_清除漢字注音工作表欲標音之漢字，錯誤訊息: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a002_清除漢字注音工作表欲標音之漢字.py", line 158, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a002_清除漢字注音工作表欲標音之漢字.py", line 90, in process
+    sheet.range(cells_range).clear_contents()     # 清除 C3:R{end_of_row} 範圍的內容
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2048, in clear_contents
+    return self.impl.clear_contents()
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1213, in clear_contents
+    self.xl.ClearContents()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject Range>", line 2, in ClearContents
+  File "C:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-03-26 12:37:17,269 - INFO - 《========== 程式開始執行：a002_清除漢字注音工作表欲標音之漢字 ==========》
+2025-03-26 12:37:17,269 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-26 12:37:17,296 - INFO - 作用中活頁簿：_working.xlsx
+2025-03-26 12:37:17,296 - INFO - 目錄路徑：C:\work\Piau-Im\output7
+2025-03-26 12:37:17,296 - INFO - <----------- 作業開始！---------->
+2025-03-26 12:37:17,349 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫', '人工標音字庫']
+2025-03-26 12:37:17,432 - INFO - 【漢字注音】工作表【漢字標音】工作區，及【原始文章】（V3儲存格），原始舊資料已清除！
+2025-03-26 12:37:17,432 - INFO - <----------- 作業結束！---------->
+2025-03-26 12:37:17,517 - INFO - 《========== 程式終止執行：a002_清除漢字注音工作表欲標音之漢字 ==========》
+2025-03-26 12:37:51,134 - INFO - 已完成【漢字】查找標音作業。
+2025-03-26 12:38:22,621 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《None》.xlsx
+2025-03-26 12:42:10,710 - INFO - 已完成【漢字】查找標音作業。
+2025-03-26 12:45:02,138 - INFO - 已完成【漢字】查找標音作業。
+2025-03-26 12:49:58,273 - INFO - 已完成【漢字】查找標音作業。
+2025-03-26 12:50:57,551 - INFO - 已完成【漢字】查找標音作業。
+2025-03-26 12:52:19,884 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《None》.xlsx
