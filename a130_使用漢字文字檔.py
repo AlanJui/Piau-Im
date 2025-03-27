@@ -13,7 +13,7 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 from a000_重置漢字標音工作表 import main as a000_main
-from mod_excel_access import delete_sheet_by_name, get_value_by_name
+from mod_excel_access import delete_sheet_by_name, ensure_sheet_exists
 from mod_file_access import save_as_new_file
 from mod_字庫 import JiKhooDict  # 漢字字庫物件
 from mod_帶調符音標 import (
@@ -33,6 +33,7 @@ from mod_帶調符音標 import (
     zing_li_zuan_ku,
 )
 from mod_標音 import PiauIm  # 漢字標音物件
+from mod_標音 import split_tai_gi_im_piau  # 分解台語音標
 from mod_河洛話 import han_ji_ca_piau_im
 
 # =========================================================================
@@ -59,7 +60,12 @@ DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
 # =========================================================================
 # 設定日誌
 # =========================================================================
-from mod_logging import init_logging, logging_exc_error, logging_process_step
+from mod_logging import (
+    init_logging,
+    logging_exc_error,
+    logging_exception,
+    logging_process_step,
+)
 
 init_logging()
 
@@ -113,6 +119,7 @@ def read_han_ji_from_text_file(wb, filename:str, sheet_name:str='漢字注音', 
     print(f"已將文章之漢字純文字檔讀入，並填進【{sheet_name}】工作表！")
 
     return text_with_han_ji
+
 
 def cue_han_ji_piau_im(wb, text_with_han_ji:list) -> list:
     """查漢字讀音：依【漢字】查找【台語音標】，並依指定之【標音方法】輸出【漢字標音】"""
@@ -315,6 +322,7 @@ def fill_in_ping_im(wb, han_ji_list:list, im_piau_list:list, use_tiau_ho:bool=Tr
 
     print(f"已將【漢字】及【漢字標音】填入【{sheet_name}】工作表！")
 
+
 def fill_in_jin_kang_ping_im(wb, han_ji_list:list, ping_im_file:str, use_tiau_ho:bool=True, sheet_name:str='漢字注音', start_row:int=5, piau_im_soo_zai:int=-2):
     # 讀取整篇文章之【標音文檔】
     text_with_im_piau = read_text_with_im_piau(filename=ping_im_file)
@@ -420,6 +428,7 @@ def fill_in_jin_kang_ping_im(wb, han_ji_list:list, ping_im_file:str, use_tiau_ho
 
     print(f"已將漢字及TLPA注音填入【{sheet_name}】工作表！")
 
+
 # =========================================================================
 # 主作業程序
 # =========================================================================
@@ -478,6 +487,9 @@ def main():
             use_tiau_ho=use_tiau_ho,
             start_row=5,
             piau_im_soo_zai=-2) # -1: 自動標音；-2: 人工標音
+
+    # 依【漢字】之【台語音標】，轉換成【漢字標音】
+    han_ji_piau_im(wb)
 
     #--------------------------------------------------------------------------
     # 儲存檔案

@@ -1,9 +1,47 @@
+import os
 import re
 import sqlite3
 import unicodedata
 from typing import Optional
 
+from dotenv import load_dotenv
+
+from mod_excel_access import ensure_sheet_exists
 from mod_帶調符音標 import kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
+
+# =========================================================================
+# 常數定義
+# =========================================================================
+# 定義 Exit Code
+EXIT_CODE_SUCCESS = 0  # 成功
+EXIT_CODE_FAILURE = 1  # 失敗
+EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
+EXIT_CODE_SAVE_FAILURE = 3  # 儲存失敗
+EXIT_CODE_PROCESS_FAILURE = 10  # 過程失敗
+EXIT_CODE_NO_FILE = 90 # 無法找到檔案
+EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
+
+# =========================================================================
+# 載入環境變數
+# =========================================================================
+load_dotenv()
+
+# 預設檔案名稱從環境變數讀取
+DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
+DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
+
+# =========================================================================
+# 設定日誌
+# =========================================================================
+from mod_logging import (
+    init_logging,
+    logging_exc_error,
+    logging_exception,
+    logging_process_step,
+)
+
+init_logging()
+
 
 # 上標數字與普通數字的映射字典
 superscript_digit_mapping = {
@@ -80,6 +118,105 @@ def ca_ji_kiat_ko_tng_piau_im(result, han_ji_khoo: str, piau_im, piau_im_huat: s
         tiau_ho=tiau_ho,
     )
     return tai_gi_im_piau, han_ji_piau_im
+
+
+# =========================================================================
+# 將【漢字注音】表中的【漢字】，依【台語音標】轉換成【漢字標音】
+# =========================================================================
+def han_ji_piau_im(wb, sheet_name: str = '漢字注音'):
+    """
+    更新【漢字注音】表中【台語音標】儲存格的內容，依據【標音字庫】中的【校正音標】欄位進行更新，並將【校正音標】覆蓋至原【台語音標】。
+    """
+    try:
+        # 確保工作表存在
+        ensure_sheet_exists(wb, sheet_name)
+        han_ji_piau_im_sheet = wb.sheets[sheet_name]
+
+        han_ji_khoo = wb.names['漢字庫'].refers_to_range.value
+        han_ji_piau_im_huat = wb.names['標音方法'].refers_to_range.value
+        piau_im = PiauIm(han_ji_khoo)
+
+    except Exception as e:
+        raise ValueError(f"無法找到或建立工作表 '{sheet_name}'：{e}")
+
+    try:
+        # 逐列處理【漢字注音】表
+        TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
+        CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
+        ROWS_PER_LINE = 4
+
+        start_row = 5
+        end_row = start_row + (TOTAL_LINES * ROWS_PER_LINE)
+        start_col = 4
+        end_col = start_col + CHARS_PER_ROW
+
+        # 選擇工作表
+        EOF = False # 是否已到達【漢字注音】表的結尾
+        line = 1
+        for row in range(start_row, end_row, ROWS_PER_LINE):
+            # 設定【作用儲存格】為列首
+            Empty_Cells_Total = 0
+            han_ji_piau_im_sheet.activate()
+            han_ji_piau_im_sheet.range((row, 1)).select()
+
+            # 逐欄取出漢字處理
+            for col in range(start_col, end_col):
+                status = ""
+                # 取得【漢字注音】表中的【漢字】儲存格內容
+                jin_kang_piau_im_cell = han_ji_piau_im_sheet.range((row - 2, col))
+                tai_gi_cell = han_ji_piau_im_sheet.range((row - 1, col))
+                han_ji_cell = han_ji_piau_im_sheet.range((row, col))
+                han_ji_piau_im_cell = han_ji_piau_im_sheet.range((row + 1, col))
+
+                # 依據【漢字】儲存格讀取之資料，進行處理作業
+                if han_ji_cell.value == 'φ':
+                    EOF = True
+                    msg = f"《文章終止》"
+                    break
+                elif han_ji_cell.value == '\n':
+                    msg = f"《換行》"
+                    break
+                elif han_ji_cell.value == None or han_ji_cell.value == "":
+                    msg = f"《空格》"
+                else:
+                    # 若不為【標點符號】，則以【漢字】處理
+                    if not is_han_ji(han_ji_cell.value):
+                        msg = f"{han_ji_cell.value}：標點符號不處理"
+                    else:
+                        # ---------------------------------------------------------
+                        # 確認【漢字】有【台語標音】時之處理作業
+                        # ---------------------------------------------------------
+                        if tai_gi_cell.value:        # 【漢字】沒用【人工標音】
+                            siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(tai_gi_cell.value)
+                            han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+                                piau_im_huat=han_ji_piau_im_huat,
+                                siann_bu=siann_bu,
+                                un_bu=un_bu,
+                                tiau_ho=tiau_ho,
+                            )
+                            tlpa_im_piau = f"{siann_bu}{un_bu}{tiau_ho}"
+                            han_ji_piau_im_cell.value = han_ji_piau_im
+
+                            msg = f"{han_ji_cell.value}：[{tlpa_im_piau}] / [{han_ji_piau_im}]"
+
+                # 每欄結束前處理作業
+                print(f"({row}, {col}) = {msg}")
+
+            # 每列結束前處理作業
+            print('\n')
+            line += 1
+            if EOF or line > TOTAL_LINES: break
+    except Exception as e:
+        logging_exception(msg=f"處理【人工標音】作業異常！", error=e)
+        raise
+
+    #-------------------------------------------------------------------------------------
+    # 作業結束前處理
+    #-------------------------------------------------------------------------------------
+    han_ji_piau_im_sheet.activate()
+    han_ji_piau_im_sheet.range('A1').select()
+
+    return EXIT_CODE_SUCCESS
 
 
 # =========================================================================
