@@ -73,82 +73,79 @@ def fill_hanji_in_cells(wb, sheet_name='漢字注音', cell='V3'):
     v3_value = sheet.range(cell).value
 
     # 確認 V3 不為空
-    if v3_value:
-        # 計算字串的總長度
-        total_length = len(v3_value)
-        print(f" {total_length} 個字元")
+    if v3_value is None:
+        logging_exc_error(msg="【待注音漢字】儲存格為空！", error=None)
+        return EXIT_CODE_INVALID_INPUT
 
-        # 設定起始及結束的【欄】位址（【D欄=4】到【R欄=18】）
-        CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
-        start_col = 4
-        end_col = start_col + CHARS_PER_ROW - 1
+    # 設定起始及結束的【欄】位址（【D欄=4】到【R欄=18】）
+    CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
+    start_col = 4
+    # end_col = start_col + CHARS_PER_ROW - 1
+    end_col = start_col + CHARS_PER_ROW
 
-        # 設定起始及結束的【列】位址（【第5列】、【第9列】、【第13列】等列）
-        TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value) if '每頁總列數' in [name.name for name in wb.names] else 120
-        ROWS_PER_LINE = 4
-        start_row = 5
-        end_row = start_row + (TOTAL_LINES * ROWS_PER_LINE)
+    # 設定起始及結束的【列】位址（【第5列】、【第9列】、【第13列】等列）
+    TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value) if '每頁總列數' in [name.name for name in wb.names] else 120
+    ROWS_PER_LINE = 4
+    start_row = 5
+    end_row = start_row + (TOTAL_LINES * ROWS_PER_LINE)
 
-        index = 0  # 用來追蹤目前處理到的字元位置
-        row = 5
+    # 逐字處理字串
+    row = start_row
+    col = start_col
+    index = 0  # 用來追蹤目前處理到的字元位置
+    total_length = len(v3_value)    # 計算字串的總長度
 
-        # 逐字處理字串
-        while index < total_length:     # 使用 while 而非 for，確保處理完整個字串
-            if row >= end_row or index >= total_length: break
-            # 設定當前作用儲存格，根據 `row` 和 `col` 動態選取
-            sheet.range((row, 1)).select()
+    while index < total_length:     # 使用 while 而非 for，確保處理完整個字串
+        if row >= end_row: break
+        # 設定當前作用儲存格，根據 `row` 和 `col` 動態選取
+        sheet.range((row, 1)).select()
 
-            # for col in range(start_col, end_col):  # 【D欄=4】到【R欄=18】
-            col = start_col
-            while col <= end_col:
-                # 若已處理完整個字串，則跳出迴圈
-                if index == total_length:  break
-                # 重置儲存格：文字顏色（黑色）及填滿色彩（無填滿）
-                sheet.range((row-2, col), (row+1, col)).color = None
-                sheet.range((row, col)).font.color = (0, 0, 0)
-                sheet.range((row-2, col)).font.color = (255, 0, 0)
-                sheet.range((row-1, col)).font.color = 0x3399FF # 藍色
-                sheet.range((row+1, col)).font.color = 0x009900 # 綠色
+        # for col in range(start_col, end_col):  # 【D欄=4】到【R欄=18】
+        while col < end_col:
+            # 重置儲存格：文字顏色（黑色）及填滿色彩（無填滿）
+            sheet.range((row-2, col), (row+1, col)).color = None
+            sheet.range((row, col)).font.color = (0, 0, 0)
+            sheet.range((row-2, col)).font.color = (255, 0, 0)
+            sheet.range((row-1, col)).font.color = 0x3399FF # 藍色
+            sheet.range((row+1, col)).font.color = 0x009900 # 綠色
 
-                # 取得當前字元
-                cell_value = strip_cell(v3_value[index])
+            # 取得當前字元
+            cell_value = strip_cell(v3_value[index])
 
-                # 若為空白字元，則跳過
-                if cell_value == None:
-                    print(f"空白字元，跳過")
-                    index += 1
-                    continue
+            # 若為空白字元，則跳過
+            if cell_value == None:
+                index += 1
+                msg = f"《空白字元》，跳過"
+            elif cell_value == '\n':
                 # 換行：列數加一，並從下一列的第一個字元開始
-                if cell_value == '\n':
-                    sheet.range((row, col)).value = '=CHAR(10)'
-                    print(f"({row} 列, {xw.utils.col_name(col)} 欄)：《換行》")
-                    index += 1
-                    row += ROWS_PER_LINE
-                    break
-                else:
-                    # 將字元填入對應的儲存格
-                    sheet.range((row, col)).value = cell_value
-                    # 顯示當前字元
-                    col_name = xw.utils.col_name(col)
-                    print(f"({row} 列, {col_name} 欄)：{cell_value}")
+                sheet.range((row, col)).value = '=CHAR(10)'
+                index += 1
+                msg = f"《換行》"
+            else:
+                # 將【漢字】填入儲存格
+                sheet.range((row, col)).value = cell_value
+                index += 1
+                msg = f"{cell_value}"
 
-                    # 更新索引，處理下一個字元
-                    index += 1
-                    # 若已處理完整列(如：15字)，則換到下一列
-                    col += 1
-                    if col > end_col:
-                        print("\n")
-                        col = start_col
-                        row += ROWS_PER_LINE
+            print(f"{index}. ({row}, {col}) = {msg}")
+            col += 1
+
+            if cell_value == '\n':
+                row += ROWS_PER_LINE
+                col = start_col
+            # 若已處理完整列(如：15字)，則換到下一列
+            if col > end_col:
+                col = start_col
+                row += ROWS_PER_LINE
+            # 若已處理完整個字串，則跳出迴圈
+            if index == total_length:  break
+
+        # 處理完一列後，換到下一列
+        row += ROWS_PER_LINE
+        col = start_col
 
     # 保存 Excel 檔案
-    # sheet.range((row, start_col)).value = "φ"
-    if col <= end_col:
-        last_col = col
-    else:
-        last_col = start_col
-    # sheet.range((row - ROWS_PER_LINE, last_col)).value = "φ"
-    sheet.range((row, last_col)).value = "φ"
+    sheet.range((row, col)).value = "φ"
     wb.save()
 
     # 選擇名為 "顯示注音輸入" 的命名範圍

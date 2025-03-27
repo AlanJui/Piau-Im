@@ -197,7 +197,7 @@ def han_ji_piau_im(wb, sheet_name: str = '漢字注音'):
                             tlpa_im_piau = f"{siann_bu}{un_bu}{tiau_ho}"
                             han_ji_piau_im_cell.value = han_ji_piau_im
 
-                            msg = f"{han_ji_cell.value}：[{tlpa_im_piau}] / [{han_ji_piau_im}]"
+                            msg = f"{han_ji_cell.value} [{tlpa_im_piau}] / [{han_ji_piau_im}]"
 
                 # 每欄結束前處理作業
                 print(f"({row}, {col}) = {msg}")
