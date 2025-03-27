@@ -181,7 +181,7 @@ def han_ji_piau_im(wb, sheet_name: str = '漢字注音'):
                 else:
                     # 若不為【標點符號】，則以【漢字】處理
                     if not is_han_ji(han_ji_cell.value):
-                        msg = f"{han_ji_cell.value}：標點符號不處理"
+                        msg = f"{han_ji_cell.value}"
                     else:
                         # ---------------------------------------------------------
                         # 確認【漢字】有【台語標音】時之處理作業
