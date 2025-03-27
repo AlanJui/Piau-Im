@@ -86,7 +86,6 @@ def han_ji_ti_piau_im_ji_khoo(wb, position, han_ji: str, jin_kang_piau_im: str) 
     return check_and_update_pronunciation(wb, han_ji, position, jin_kang_piau_im)
 
 
-# def jin_kang_piau_im_cu_han_ji_piau_im(wb, han_ji: str, jin_kang_piau_im: str, piau_im: PiauIm, piau_im_huat: str):
 def jin_kang_piau_im_cu_han_ji_piau_im(wb, jin_kang_piau_im: str, piau_im: PiauIm, piau_im_huat: str):
     """人工標音取【台語音標】"""
 
@@ -195,6 +194,10 @@ def update_by_khuat_ji_piau(wb, sheet_name: str, piau_im: PiauIm, piau_im_huat: 
                 original_total_count = total_count
                 # 取得【漢字注音】表中的【漢字】儲存格物件
                 han_ji_cell = han_ji_piau_im_sheet.range((row, col))
+                # 重置【漢字】儲存格的底色和文字顏色
+                han_ji_cell.color = (255, 255, 0)       # 將底色設為【黄色】
+                han_ji_cell.font.color = (255, 0, 0)    # 將文字顏色設為【紅色】
+
                 # 取得【漢字注音】表中的【人工標音】儲存格內容
                 jin_kang_piau_im_cell = han_ji_piau_im_sheet.range((row - 2, col))
                 # 取得【漢字注音】表中的【台語音標】儲存格內容
@@ -251,14 +254,11 @@ def update_by_khuat_ji_piau(wb, sheet_name: str, piau_im: PiauIm, piau_im_huat: 
                     total_count -= 1
                     # 每寫入一次，total_count 減 1
                     ji_khoo_dict[han_ji][0] = total_count
-                    # 重置【漢字】儲存格的底色和文字顏色
-                    han_ji_cell.color = (255, 255, 0)       # 將底色設為【黄色】
-                    han_ji_cell.font.color = (255, 0, 0)    # 將文字顏色設為【紅色】
                 # 顯示更新訊息
                 # print(f"({row}, {xw.utils.col_name(col)}) = {han_ji}：【{tai_gi_im_piau}】/【{kenn_ziann_im_piau}】"
                 #     f"（原有：{original_total_count} 字；尚有 {total_count} 字待補上）")
-                print(f"({row}, {xw.utils.col_name(col)}) = {han_ji}：【{tai_gi_im_piau}】/【{kenn_ziann_im_piau}】<-- 【{jin_kang_im_piau}】"
-                    f"（原有：{original_total_count} 字；尚有 {total_count} 字待補上）")
+                msg = f"{han_ji}：【{tai_gi_im_piau}】/【{kenn_ziann_im_piau}】<-- 【{jin_kang_im_piau}】（原有 {original_total_count} 字；尚有 {total_count} 字待補上）"
+                print(f"({row}, {col}) = msg")
     except Exception as e:
         logging_exception(msg=f"處理【漢字】補【台語音標】作業異常！", error=e)
         raise
@@ -279,6 +279,7 @@ def update_by_khuat_ji_piau(wb, sheet_name: str, piau_im: PiauIm, piau_im_huat: 
     han_ji_piau_im_sheet.range('A1').select()
 
     return EXIT_CODE_SUCCESS
+
 
 def update_by_jin_kang_piau_im(wb, sheet_name: str, piau_im: PiauIm, piau_im_huat: str):
     """

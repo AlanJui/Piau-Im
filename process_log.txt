@@ -7735,3 +7735,199 @@ pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, Non
 2025-03-26 14:44:06,673 - INFO - 《========== 程式終止執行：a000_重置漢字標音工作表 ==========》
 2025-03-26 14:44:23,671 - INFO - 已完成【漢字】查找標音作業。
 2025-03-26 14:45:31,278 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《None》.xlsx
+2025-03-26 14:58:51,072 - INFO - 《========== 程式開始執行：a000_重置漢字標音工作表 ==========》
+2025-03-26 14:58:51,073 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-26 14:58:51,092 - INFO - 作用中活頁簿：【河洛白話注音-閩拼調號】《None》.xlsx
+2025-03-26 14:58:51,092 - INFO - 目錄路徑：C:\work\Piau-Im\output7
+2025-03-26 14:58:51,092 - INFO - <----------- 作業開始！---------->
+2025-03-26 14:58:51,492 - INFO - 【env】工作表之【選項設定】已重置！
+2025-03-26 14:58:51,522 - INFO - 確認過不應存在要的工作表，的確沒有或已經刪除：['缺字表', '標音字庫', '人工標音字庫']
+2025-03-26 14:59:56,473 - INFO - 【漢字注音】工作表，完成重置作業！
+2025-03-26 14:59:56,474 - INFO - <----------- 作業結束！---------->
+2025-03-26 14:59:56,612 - INFO - 以檔案名稱：【_working.xlsx】，儲存於目錄路徑：C:\work\Piau-Im\output7！
+2025-03-26 14:59:56,612 - INFO - 《========== 程式終止執行：a000_重置漢字標音工作表 ==========》
+2025-03-26 15:00:13,690 - INFO - 已完成【漢字】查找標音作業。
+2025-03-26 15:01:19,174 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《None》.xlsx
+2025-03-26 22:46:24,489 - INFO - 《========== 程式開始執行：a000_重置漢字標音工作表 ==========》
+2025-03-26 22:46:24,490 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-26 22:46:24,509 - INFO - 作用中活頁簿：【河洛白話注音-閩拼調號】《None》.xlsx
+2025-03-26 22:46:24,509 - INFO - 目錄路徑：C:\work\Piau-Im\output7
+2025-03-26 22:46:24,509 - INFO - <----------- 作業開始！---------->
+2025-03-26 22:46:24,632 - ERROR - 程式異常終止：a000_重置漢字標音工作表，錯誤訊息: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a000_重置漢字標音工作表.py", line 187, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a000_重置漢字標音工作表.py", line 57, in process
+    wb.names[name].refers_to_range.clear_contents()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2048, in clear_contents
+    return self.impl.clear_contents()
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1213, in clear_contents
+    self.xl.ClearContents()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject <unknown>>", line 2, in ClearContents
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-03-26 22:46:24,834 - INFO - 以檔案名稱：【_working.xlsx】，儲存於目錄路徑：C:\work\Piau-Im\output7！
+2025-03-26 22:46:30,295 - INFO - 已完成【漢字】查找標音作業。
+2025-03-26 22:46:35,030 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《None》.xlsx
+2025-03-26 22:47:34,802 - INFO - 《========== 程式開始執行：a000_重置漢字標音工作表 ==========》
+2025-03-26 22:47:34,803 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-26 22:47:34,819 - INFO - 作用中活頁簿：【河洛白話注音-閩拼調號】《None》.xlsx
+2025-03-26 22:47:34,819 - INFO - 目錄路徑：C:\work\Piau-Im\output7
+2025-03-26 22:47:34,819 - INFO - <----------- 作業開始！---------->
+2025-03-26 22:47:35,166 - INFO - 【env】工作表之【選項設定】已重置！
+2025-03-26 22:47:35,195 - INFO - 確認過不應存在要的工作表，的確沒有或已經刪除：['缺字表', '標音字庫', '人工標音字庫']
+2025-03-26 22:48:20,754 - INFO - 【漢字注音】工作表，完成重置作業！
+2025-03-26 22:48:20,754 - INFO - <----------- 作業結束！---------->
+2025-03-26 22:48:20,863 - INFO - 以檔案名稱：【_working.xlsx】，儲存於目錄路徑：C:\work\Piau-Im\output7！
+2025-03-26 22:48:20,863 - INFO - 《========== 程式終止執行：a000_重置漢字標音工作表 ==========》
+2025-03-26 22:48:34,623 - INFO - 已完成【漢字】查找標音作業。
+2025-03-26 22:48:58,023 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《None》.xlsx
+2025-03-27 10:06:41,409 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-03-27 10:06:41,410 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-27 10:06:41,427 - INFO - <----------- 作業開始！---------->
+2025-03-27 10:06:41,489 - INFO - 已完成作業所需之初始化設定！
+2025-03-27 10:06:42,141 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-03-27 10:06:57,502 - ERROR - 處理【人工標音】作業異常！，錯誤訊息: 漢字 '不' 已存在，請使用 update_entry 方法來更新資料。
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 419, in update_by_jin_kang_piau_im
+    piau_im_ji_khoo.update_kau_ziang_im_piau(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        coordinates=(row, col)
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_字庫.py", line 163, in update_kau_ziang_im_piau
+    self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_字庫.py", line 86, in add_entry
+    raise ValueError(f"漢字 '{han_ji}' 已存在，請使用 update_entry 方法來更新資料。")
+ValueError: 漢字 '不' 已存在，請使用 update_entry 方法來更新資料。
+2025-03-27 10:06:57,506 - ERROR - 處理【漢字】之【人工標音】作業異常！，錯誤訊息: 漢字 '不' 已存在，請使用 update_entry 方法來更新資料。
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 578, in process
+    update_by_jin_kang_piau_im(wb=wb,
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+                            sheet_name='人工標音字庫',
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+                            piau_im=piau_im,
+                            ^^^^^^^^^^^^^^^^
+                            piau_im_huat=piau_im_huat)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a300_手動更正漢字標音.py", line 419, in update_by_jin_kang_piau_im
+    piau_im_ji_khoo.update_kau_ziang_im_piau(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        coordinates=(row, col)
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_字庫.py", line 163, in update_kau_ziang_im_piau
+    self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_字庫.py", line 86, in add_entry
+    raise ValueError(f"漢字 '{han_ji}' 已存在，請使用 update_entry 方法來更新資料。")
+ValueError: 漢字 '不' 已存在，請使用 update_entry 方法來更新資料。
+2025-03-27 10:06:57,507 - ERROR - 程式異常終止：a300_手動更正漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 654, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-03-27 10:06:57,683 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《五柳先生傳》.xlsx
+2025-03-27 11:27:44,781 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-03-27 11:27:44,782 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-27 11:27:44,801 - INFO - <----------- 作業開始！---------->
+2025-03-27 11:27:44,880 - INFO - 已完成作業所需之初始化設定！
+2025-03-27 11:27:45,413 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-03-27 11:28:01,008 - ERROR - 處理【人工標音】作業異常！，錯誤訊息: 漢字 '不' 已存在，請使用 update_entry 方法來更新資料。
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 420, in update_by_jin_kang_piau_im
+    piau_im_ji_khoo.update_kau_ziang_im_piau(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        coordinates=(row, col)
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_字庫.py", line 163, in update_kau_ziang_im_piau
+    self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_字庫.py", line 86, in add_entry
+    raise ValueError(f"漢字 '{han_ji}' 已存在，請使用 update_entry 方法來更新資料。")
+ValueError: 漢字 '不' 已存在，請使用 update_entry 方法來更新資料。
+2025-03-27 11:28:01,013 - ERROR - 處理【漢字】之【人工標音】作業異常！，錯誤訊息: 漢字 '不' 已存在，請使用 update_entry 方法來更新資料。
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 579, in process
+    update_by_jin_kang_piau_im(wb=wb,
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+                            sheet_name='人工標音字庫',
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+                            piau_im=piau_im,
+                            ^^^^^^^^^^^^^^^^
+                            piau_im_huat=piau_im_huat)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a300_手動更正漢字標音.py", line 420, in update_by_jin_kang_piau_im
+    piau_im_ji_khoo.update_kau_ziang_im_piau(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        coordinates=(row, col)
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_字庫.py", line 163, in update_kau_ziang_im_piau
+    self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_字庫.py", line 86, in add_entry
+    raise ValueError(f"漢字 '{han_ji}' 已存在，請使用 update_entry 方法來更新資料。")
+ValueError: 漢字 '不' 已存在，請使用 update_entry 方法來更新資料。
+2025-03-27 11:28:01,014 - ERROR - 程式異常終止：a300_手動更正漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 655, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-03-27 11:28:01,193 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《五柳先生傳》.xlsx
+2025-03-27 11:31:59,727 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-03-27 11:31:59,728 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-27 11:31:59,744 - INFO - <----------- 作業開始！---------->
+2025-03-27 11:31:59,804 - INFO - 已完成作業所需之初始化設定！
+2025-03-27 12:41:21,012 - INFO - 《========== 程式開始執行：a000_重置漢字標音工作表 ==========》
+2025-03-27 12:41:21,013 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-27 12:41:21,030 - INFO - 作用中活頁簿：【河洛白話注音-閩拼調號】《五柳先生傳》.xlsx
+2025-03-27 12:41:21,031 - INFO - 目錄路徑：C:\work\Piau-Im\output7
+2025-03-27 12:41:21,031 - INFO - <----------- 作業開始！---------->
+2025-03-27 12:41:21,469 - INFO - 【env】工作表之【選項設定】已重置！
+2025-03-27 12:41:21,560 - INFO - 確認過不應存在要的工作表，的確沒有或已經刪除：['缺字表', '標音字庫', '人工標音字庫']
+2025-03-27 12:42:23,084 - INFO - 【漢字注音】工作表，完成重置作業！
+2025-03-27 12:42:23,084 - INFO - <----------- 作業結束！---------->
+2025-03-27 12:42:23,231 - INFO - 以檔案名稱：【_working.xlsx】，儲存於目錄路徑：C:\work\Piau-Im\output7！
+2025-03-27 12:42:23,231 - INFO - 《========== 程式終止執行：a000_重置漢字標音工作表 ==========》
+2025-03-27 12:42:39,610 - INFO - 已完成【漢字】查找標音作業。
+2025-03-27 12:43:06,190 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《None》.xlsx
+2025-03-27 12:44:37,040 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-03-27 12:44:37,041 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-27 12:44:37,056 - INFO - <----------- 作業開始！---------->
+2025-03-27 12:44:37,138 - INFO - 已完成作業所需之初始化設定！
+2025-03-27 12:45:11,479 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-03-27 12:45:59,225 - INFO - 以【人工標音】更正之【台語音標】，已填入【標音字庫】之【校正音標】！
+2025-03-27 12:45:59,649 - INFO - 以【標音字庫】之【校正音標】，更新【漢字注音】工作表之【台語音標】！
+2025-03-27 12:45:59,655 - INFO - <----------- 作業結束！---------->
+2025-03-27 12:45:59,833 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《None》.xlsx
+2025-03-27 12:45:59,834 - INFO - 《========== 程式終止執行：a300_手動更正漢字標音 ==========》

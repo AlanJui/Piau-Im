@@ -116,24 +116,53 @@ def read_han_ji_from_text_file(wb, filename:str, sheet_name:str='漢字注音', 
 
 def cue_han_ji_piau_im(wb, text_with_han_ji:list) -> list:
     """查漢字讀音：依【漢字】查找【台語音標】，並依指定之【標音方法】輸出【漢字標音】"""
+    #------------------------------------------------------------------------------
+    # 籌備作業
+    #------------------------------------------------------------------------------
+
+    # 建置 PiauIm 物件，供作漢字拼音轉換作業
+    han_ji_khoo_name = wb.names['漢字庫'].refers_to_range.value
+    ue_im_lui_piat = wb.names['語音類型'].refers_to_range.value    # 指定【台語音標】轉換成【漢字標音】的方法
+    piau_im_huat = wb.names['標音方法'].refers_to_range.value    # 指定【台語音標】轉換成【漢字標音】的方法
+    piau_im = PiauIm(han_ji_khoo=han_ji_khoo_name)            # 指定漢字自動查找使用的【漢字庫】
+
+    # 建置自動及人工漢字標音字庫工作表：（1）【標音字庫】；（2）【人工標音字】；（3）【缺字表】
+    khuat_ji_piau_name = '缺字表'
+    delete_sheet_by_name(wb=wb, sheet_name=khuat_ji_piau_name)
+    khuat_ji_piau_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=khuat_ji_piau_name)
+
+    piau_im_sheet_name = '標音字庫'
+    delete_sheet_by_name(wb=wb, sheet_name=piau_im_sheet_name)
+    piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=piau_im_sheet_name)
+
     try:
         # 連接指定資料庫
         conn = sqlite3.connect(DB_HO_LOK_UE)
         cursor = conn.cursor()
 
-        # 建置 PiauIm 物件，供作漢字拼音轉換作業
-        han_ji_khoo_field = '漢字庫'
-        han_ji_khoo_name = wb.names[han_ji_khoo_field].refers_to_range.value
-        ue_im_lui_piat = wb.names['語音類型'].refers_to_range.value    # 指定【台語音標】轉換成【漢字標音】的方法
-        piau_im_huat = wb.names['標音方法'].refers_to_range.value    # 指定【台語音標】轉換成【漢字標音】的方法
-        piau_im = PiauIm(han_ji_khoo=han_ji_khoo_name)            # 指定漢字自動查找使用的【漢字庫】
-
         # 指定【漢字注音】工作表為【作用工作表】
         sheet = wb.sheets['漢字注音']
         sheet.activate()
 
+        # 設定起始及結束的【列】位址（【第5列】、【第9列】、【第13列】等列）
+        TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
+        ROWS_PER_LINE = 4
+        start_row = 5
+        end_row = start_row + (TOTAL_LINES * ROWS_PER_LINE)
+
+        # 設定起始及結束的【欄】位址（【D欄=4】到【R欄=18】）
+        CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
+        start_col = 4
+        end_col = start_col + CHARS_PER_ROW
+
         im_piau_list = []
         idx = 0
+        row = start_row
+        col = start_col
         for han_ji_ku in text_with_han_ji:
             for han_ji in han_ji_ku:
                 im_piau = ""
@@ -158,6 +187,12 @@ def cue_han_ji_piau_im(wb, text_with_han_ji:list) -> list:
 
                         # 若【漢字庫】查無此字，登錄至【缺字表】
                         if not result:
+                            khuat_ji_piau_ji_khoo.add_or_update_entry(
+                                han_ji=han_ji,
+                                tai_gi_im_piau='N/A',
+                                kenn_ziann_im_piau='N/A',
+                                coordinates=(row, col)
+                            )
                             msg = f"{han_ji}：查無此字！"
                         else:
                             # 依【漢字庫】查找結果，輸出【台語音標】和【漢字標音】
@@ -170,16 +205,34 @@ def cue_han_ji_piau_im(wb, text_with_han_ji:list) -> list:
                                 tiau_ho = "7"
                             # 將【聲母】、【韻母】、【聲調】，合併成【台語音標】
                             im_piau = ''.join([siann_bu, un_bu, tiau_ho])
+
+                            # 【標音字庫】添加或更新【漢字】資料
+                            piau_im_ji_khoo.add_or_update_entry(
+                                han_ji=han_ji,
+                                tai_gi_im_piau=im_piau,
+                                kenn_ziann_im_piau='N/A',
+                                coordinates=(row, col)
+                            )
                             msg = f"{han_ji}： [{im_piau}]"
 
                     # 顯示處理進度
                     im_piau_list.append(im_piau)
-                    print(f"[{idx}] = {msg}")
-                    idx += 1
+                    print(f"{idx}. ({row}, {col}) = {msg}")
+
+                # 每處理一個字，右移一格
+                idx += 1
+                col += 1
+                if col == end_col:
+                    # 若已處理完一行，則換行
+                    row += 4
+                    col = start_col
 
             # 讀完一個段落
             im_piau_list.append("\n")
-            print(f"({idx}. 【段落終結】")
+            print(f"({idx}. ({row}, {col}) = 【段落終結】")
+            # 若已處理完一段落，則換行
+            row += 4
+            col = start_col
             idx += 1
 
         #----------------------------------------------------------------------
@@ -194,6 +247,12 @@ def cue_han_ji_piau_im(wb, text_with_han_ji:list) -> list:
         logging.exception("為【漢字】查找標音作業，發生異常狀況！")
         # 再次拋出異常，讓外層函式能捕捉
         raise
+    finally:
+        # 將【標音字庫】、【缺字表】字典，寫入 Excel 工作表
+        khuat_ji_piau_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=khuat_ji_piau_name)
+        piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=piau_im_sheet_name)
+        # 關閉資料庫連線
+        conn.close()
 
 
 def fill_in_ping_im(wb, han_ji_list:list, im_piau_list:list, use_tiau_ho:bool=True, sheet_name:str='漢字注音', start_row:int=5, piau_im_soo_zai:int=-2):
