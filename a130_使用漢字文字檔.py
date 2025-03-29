@@ -33,6 +33,7 @@ from mod_帶調符音標 import (
     zing_li_zuan_ku,
 )
 from mod_標音 import PiauIm  # 漢字標音物件
+from mod_標音 import han_ji_piau_im  # 依據【台語音標】查找【漢字標音】
 from mod_標音 import split_tai_gi_im_piau  # 分解台語音標
 from mod_河洛話 import han_ji_ca_piau_im
 

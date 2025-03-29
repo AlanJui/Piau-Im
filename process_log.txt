@@ -8276,3 +8276,348 @@ UnboundLocalError: cannot access local variable 'e' where it is not associated w
 2025-03-29 10:41:23,437 - INFO - 《========== 程式開始執行：a500_漢字庫工具 ==========》
 2025-03-29 10:41:23,438 - INFO - 專案根目錄為: C:\work\Piau-Im
 2025-03-29 10:41:23,453 - INFO - 已將資料庫之【漢字庫】資料表，匯出並製成【中州韻字典檔】！
+2025-03-29 12:50:36,574 - INFO - 《========== 程式開始執行：a000_重置漢字標音工作表 ==========》
+2025-03-29 12:50:36,575 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 12:50:36,592 - INFO - 作用中活頁簿：【河洛文讀注音-閩拼調號】《滕王閣序》.xlsx
+2025-03-29 12:50:36,593 - INFO - 目錄路徑：C:\work\Piau-Im\output7
+2025-03-29 12:50:36,593 - INFO - <----------- 作業開始！---------->
+2025-03-29 12:50:36,695 - ERROR - 程式異常終止：a000_重置漢字標音工作表，錯誤訊息: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a000_重置漢字標音工作表.py", line 187, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a000_重置漢字標音工作表.py", line 57, in process
+    wb.names[name].refers_to_range.clear_contents()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2048, in clear_contents
+    return self.impl.clear_contents()
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1213, in clear_contents
+    self.xl.ClearContents()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject <unknown>>", line 2, in ClearContents
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-03-29 12:50:36,921 - INFO - 以檔案名稱：【_working.xlsx】，儲存於目錄路徑：C:\work\Piau-Im\output7！
+2025-03-29 12:53:01,759 - INFO - 已完成【漢字】查找標音作業。
+2025-03-29 13:03:28,891 - INFO - 《========== 程式開始執行：a001_重設漢字標音工作區各儲存格格式 ==========》
+2025-03-29 13:03:28,891 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 13:03:29,002 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫']
+2025-03-29 13:07:34,328 - INFO - 已重置【漢字注音】工作表中的儲存格格式！
+2025-03-29 13:07:34,329 - INFO - <----------- 作業結束！---------->
+2025-03-29 13:07:34,460 - INFO - 《========== 程式終止執行：a001_重設漢字標音工作區各儲存格格式 ==========》
+2025-03-29 13:08:51,952 - INFO - 《========== 程式開始執行：a000_重置漢字標音工作表 ==========》
+2025-03-29 13:08:51,953 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 13:08:51,969 - INFO - 作用中活頁簿：_working.xlsx
+2025-03-29 13:08:51,969 - INFO - 目錄路徑：C:\work\Piau-Im\output7
+2025-03-29 13:08:51,969 - INFO - <----------- 作業開始！---------->
+2025-03-29 13:08:52,278 - INFO - 【env】工作表之【選項設定】已重置！
+2025-03-29 13:08:52,335 - INFO - 確認過不應存在要的工作表，的確沒有或已經刪除：['缺字表', '標音字庫', '人工標音字庫']
+2025-03-29 13:09:35,724 - INFO - 【漢字注音】工作表，完成重置作業！
+2025-03-29 13:09:35,724 - INFO - <----------- 作業結束！---------->
+2025-03-29 13:09:35,929 - INFO - 以檔案名稱：【_working.xlsx】，儲存於目錄路徑：C:\work\Piau-Im\output7！
+2025-03-29 13:09:35,929 - INFO - 《========== 程式終止執行：a000_重置漢字標音工作表 ==========》
+2025-03-29 13:12:54,630 - INFO - 已完成【漢字】查找標音作業。
+2025-03-29 13:53:57,426 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 13:53:57,427 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 13:53:57,446 - INFO - <----------- 作業開始！---------->
+2025-03-29 13:53:57,705 - ERROR - 處理【人工標音】作業異常！，錯誤訊息: name() argument 1 must be a unicode character, not float
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 121, in han_ji_piau_im
+    if not is_han_ji(han_ji_cell.value):
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 128, in is_han_ji
+    return 'CJK UNIFIED IDEOGRAPH' in unicodedata.name(char, '')
+                                      ~~~~~~~~~~~~~~~~^^^^^^^^^^
+TypeError: name() argument 1 must be a unicode character, not float
+2025-03-29 13:53:57,709 - ERROR - 轉換成【漢字標音】時發生錯誤！，錯誤訊息: name() argument 1 must be a unicode character, not float
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 174, in process
+    han_ji_piau_im(wb=wb, sheet_name='漢字注音')
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a240_為漢字標注漢字標音.py", line 121, in han_ji_piau_im
+    if not is_han_ji(han_ji_cell.value):
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 128, in is_han_ji
+    return 'CJK UNIFIED IDEOGRAPH' in unicodedata.name(char, '')
+                                      ~~~~~~~~~~~~~~~~^^^^^^^^^^
+TypeError: name() argument 1 must be a unicode character, not float
+2025-03-29 13:53:57,710 - ERROR - 程式異常終止：a240_為漢字標注漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 231, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-03-29 13:53:57,941 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《None》.xlsx
+2025-03-29 13:55:11,089 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 13:55:11,089 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 13:55:11,105 - INFO - <----------- 作業開始！---------->
+2025-03-29 13:56:39,660 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 13:56:39,662 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 13:56:39,678 - INFO - <----------- 作業開始！---------->
+2025-03-29 13:57:47,843 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 13:57:47,844 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 13:57:47,860 - INFO - <----------- 作業開始！---------->
+2025-03-29 14:00:49,571 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 14:00:49,572 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 14:00:49,589 - INFO - <----------- 作業開始！---------->
+2025-03-29 14:06:30,986 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 14:06:30,987 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 14:06:31,002 - INFO - <----------- 作業開始！---------->
+2025-03-29 14:07:08,106 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 14:07:08,107 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 14:07:08,123 - INFO - <----------- 作業開始！---------->
+2025-03-29 14:07:42,123 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 14:07:42,124 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 14:07:42,139 - INFO - <----------- 作業開始！---------->
+2025-03-29 14:09:23,922 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 14:09:23,923 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 14:09:23,941 - INFO - <----------- 作業開始！---------->
+2025-03-29 14:11:16,879 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 14:11:16,880 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 14:11:16,896 - INFO - <----------- 作業開始！---------->
+2025-03-29 14:12:28,248 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 14:12:28,249 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 14:12:28,264 - INFO - <----------- 作業開始！---------->
+2025-03-29 14:13:02,366 - ERROR - 處理【人工標音】作業異常！，錯誤訊息: invalid literal for int() with base 10: '.'
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 120, in han_ji_piau_im
+    value = str(int(han_ji_cell.value) or "")
+                ~~~^^^^^^^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '.'
+2025-03-29 14:16:41,508 - ERROR - 轉換成【漢字標音】時發生錯誤！，錯誤訊息: invalid literal for int() with base 10: '.'
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 174, in process
+    han_ji_piau_im(wb=wb, sheet_name='漢字注音')
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a240_為漢字標注漢字標音.py", line 120, in han_ji_piau_im
+    value = str(int(han_ji_cell.value) or "")
+                ~~~^^^^^^^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '.'
+2025-03-29 14:16:41,509 - ERROR - 程式異常終止：a240_為漢字標注漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 231, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-03-29 14:16:41,734 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《None》.xlsx
+2025-03-29 14:16:50,315 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 14:16:50,316 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 14:16:50,332 - INFO - <----------- 作業開始！---------->
+2025-03-29 14:17:00,260 - ERROR - 處理【人工標音】作業異常！，錯誤訊息: invalid literal for int() with base 10: '.'
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 120, in han_ji_piau_im
+    value = str(int(han_ji_cell.value) or "")
+                ~~~^^^^^^^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '.'
+2025-03-29 14:17:00,265 - ERROR - 轉換成【漢字標音】時發生錯誤！，錯誤訊息: invalid literal for int() with base 10: '.'
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 174, in process
+    han_ji_piau_im(wb=wb, sheet_name='漢字注音')
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a240_為漢字標注漢字標音.py", line 120, in han_ji_piau_im
+    value = str(int(han_ji_cell.value) or "")
+                ~~~^^^^^^^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '.'
+2025-03-29 14:17:00,265 - ERROR - 程式異常終止：a240_為漢字標注漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 231, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-03-29 14:17:00,500 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《None》.xlsx
+2025-03-29 14:21:35,440 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 14:21:35,441 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 14:21:35,458 - INFO - <----------- 作業開始！---------->
+2025-03-29 14:22:30,919 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 14:22:30,920 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 14:22:30,937 - INFO - <----------- 作業開始！---------->
+2025-03-29 14:31:36,131 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 14:31:36,132 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 14:31:36,147 - INFO - <----------- 作業開始！---------->
+2025-03-29 14:33:29,442 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 14:33:29,443 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 14:33:29,461 - INFO - <----------- 作業開始！---------->
+2025-03-29 14:34:25,694 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 14:34:25,694 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 14:34:25,710 - INFO - <----------- 作業開始！---------->
+2025-03-29 14:40:34,982 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 14:40:34,983 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 14:40:34,999 - INFO - <----------- 作業開始！---------->
+2025-03-29 14:40:46,055 - ERROR - 處理【人工標音】作業異常！，錯誤訊息: invalid literal for int() with base 10: '.'
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 120, in han_ji_piau_im
+    value = str(int(han_ji_cell.value) or "")
+                ~~~^^^^^^^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '.'
+2025-03-29 14:40:46,060 - ERROR - 轉換成【漢字標音】時發生錯誤！，錯誤訊息: invalid literal for int() with base 10: '.'
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 180, in process
+    han_ji_piau_im(wb=wb, sheet_name='漢字注音')
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a240_為漢字標注漢字標音.py", line 120, in han_ji_piau_im
+    value = str(int(han_ji_cell.value) or "")
+                ~~~^^^^^^^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '.'
+2025-03-29 14:40:46,061 - ERROR - 程式異常終止：a240_為漢字標注漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 237, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-03-29 14:40:46,259 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《None》.xlsx
+2025-03-29 14:41:26,320 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 14:41:26,321 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 14:41:26,336 - INFO - <----------- 作業開始！---------->
+2025-03-29 14:47:38,063 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 14:47:38,064 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 14:47:38,079 - INFO - <----------- 作業開始！---------->
+2025-03-29 14:48:00,627 - ERROR - 處理【人工標音】作業異常！，錯誤訊息: invalid literal for int() with base 10: '.'
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 119, in han_ji_piau_im
+    value = str(int(han_ji_cell.value) or "")
+                ~~~^^^^^^^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '.'
+2025-03-29 14:48:00,634 - ERROR - 轉換成【漢字標音】時發生錯誤！，錯誤訊息: invalid literal for int() with base 10: '.'
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 181, in process
+    han_ji_piau_im(wb=wb, sheet_name='漢字注音')
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a240_為漢字標注漢字標音.py", line 119, in han_ji_piau_im
+    value = str(int(han_ji_cell.value) or "")
+                ~~~^^^^^^^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '.'
+2025-03-29 14:48:00,635 - ERROR - 程式異常終止：a240_為漢字標注漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 238, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-03-29 14:48:00,855 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《None》.xlsx
+2025-03-29 14:48:08,238 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 14:48:08,239 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 14:48:08,256 - INFO - <----------- 作業開始！---------->
+2025-03-29 14:49:36,910 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 14:49:36,911 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 14:49:36,926 - INFO - <----------- 作業開始！---------->
+2025-03-29 14:50:03,479 - ERROR - 處理【人工標音】作業異常！，錯誤訊息: invalid literal for int() with base 10: '天'
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 122, in han_ji_piau_im
+    elif str(int(han_ji_cell.value)).isdigit():
+             ~~~^^^^^^^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '天'
+2025-03-29 14:50:03,484 - ERROR - 轉換成【漢字標音】時發生錯誤！，錯誤訊息: invalid literal for int() with base 10: '天'
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 179, in process
+    han_ji_piau_im(wb=wb, sheet_name='漢字注音')
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a240_為漢字標注漢字標音.py", line 122, in han_ji_piau_im
+    elif str(int(han_ji_cell.value)).isdigit():
+             ~~~^^^^^^^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '天'
+2025-03-29 14:50:03,485 - ERROR - 程式異常終止：a240_為漢字標注漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 236, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-03-29 14:50:03,703 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《None》.xlsx
+2025-03-29 14:50:25,404 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 14:50:25,405 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 14:50:25,420 - INFO - <----------- 作業開始！---------->
+2025-03-29 14:52:22,796 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 14:52:22,797 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 14:52:22,812 - INFO - <----------- 作業開始！---------->
+2025-03-29 14:55:00,279 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 14:55:00,280 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 14:55:00,298 - INFO - <----------- 作業開始！---------->
+2025-03-29 14:55:37,011 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 14:55:37,012 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 14:55:37,028 - INFO - <----------- 作業開始！---------->
+2025-03-29 14:57:10,776 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 14:57:10,777 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 14:57:10,793 - INFO - <----------- 作業開始！---------->
+2025-03-29 15:02:43,376 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 15:02:43,377 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 15:02:43,392 - INFO - <----------- 作業開始！---------->
+2025-03-29 15:02:51,065 - ERROR - 處理【人工標音】作業異常！，錯誤訊息: 'float' object has no attribute 'isdigit'
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 122, in han_ji_piau_im
+    elif han_ji_cell.value.isdigit():
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'float' object has no attribute 'isdigit'
+2025-03-29 15:02:51,070 - ERROR - 轉換成【漢字標音】時發生錯誤！，錯誤訊息: 'float' object has no attribute 'isdigit'
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 181, in process
+    han_ji_piau_im(wb=wb, sheet_name='漢字注音')
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a240_為漢字標注漢字標音.py", line 122, in han_ji_piau_im
+    elif han_ji_cell.value.isdigit():
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'float' object has no attribute 'isdigit'
+2025-03-29 15:02:51,071 - ERROR - 程式異常終止：a240_為漢字標注漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 238, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-03-29 15:02:51,264 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《None》.xlsx
+2025-03-29 15:03:52,419 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 15:03:52,420 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 15:03:52,436 - INFO - <----------- 作業開始！---------->
+2025-03-29 15:04:21,550 - ERROR - 處理【人工標音】作業異常！，錯誤訊息: 'float' object has no attribute 'isnumeric'
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 123, in han_ji_piau_im
+    elif han_ji_cell.value.isnumeric():
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'float' object has no attribute 'isnumeric'
+2025-03-29 15:06:26,011 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 15:06:26,012 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 15:06:26,027 - INFO - <----------- 作業開始！---------->
+2025-03-29 15:06:47,847 - ERROR - 處理【人工標音】作業異常！，錯誤訊息: name() argument 1 must be a unicode character, not float
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 126, in han_ji_piau_im
+    elif not is_han_ji(han_ji_cell.value):
+             ~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 128, in is_han_ji
+    return 'CJK UNIFIED IDEOGRAPH' in unicodedata.name(char, '')
+                                      ~~~~~~~~~~~~~~~~^^^^^^^^^^
+TypeError: name() argument 1 must be a unicode character, not float
+2025-03-29 15:06:47,852 - ERROR - 轉換成【漢字標音】時發生錯誤！，錯誤訊息: name() argument 1 must be a unicode character, not float
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 182, in process
+    han_ji_piau_im(wb=wb, sheet_name='漢字注音')
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a240_為漢字標注漢字標音.py", line 126, in han_ji_piau_im
+    elif not is_han_ji(han_ji_cell.value):
+             ~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 128, in is_han_ji
+    return 'CJK UNIFIED IDEOGRAPH' in unicodedata.name(char, '')
+                                      ~~~~~~~~~~~~~~~~^^^^^^^^^^
+TypeError: name() argument 1 must be a unicode character, not float
+2025-03-29 15:06:47,853 - ERROR - 程式異常終止：a240_為漢字標注漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 239, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-03-29 15:06:48,052 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《None》.xlsx
+2025-03-29 15:06:54,984 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 15:06:54,985 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 15:06:54,999 - INFO - <----------- 作業開始！---------->
+2025-03-29 15:11:11,937 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 15:11:11,937 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 15:11:11,951 - INFO - <----------- 作業開始！---------->
+2025-03-29 15:11:46,417 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 15:11:46,418 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 15:11:46,433 - INFO - <----------- 作業開始！---------->
+2025-03-29 15:15:08,261 - INFO - 依【漢字】之【台語音標】轉換【漢字音標音】作業己完成！
+2025-03-29 15:15:08,261 - INFO - 【語音類型】：文讀音
+2025-03-29 15:15:08,261 - INFO - 【漢字庫】：Ho_Lok_Ue.db
+2025-03-29 15:15:08,308 - INFO - <----------- 作業結束！---------->
+2025-03-29 15:15:08,502 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《None》.xlsx
+2025-03-29 15:15:08,502 - INFO - 《========== 程式終止執行：a240_為漢字標注漢字標音 ==========》

@@ -125,6 +125,8 @@ def is_im_piau(im_piau: str) -> bool:
 
 # 用途：檢查是否為漢字
 def is_han_ji(char):
+    if not isinstance(char, str) or len(char) != 1:
+        return False
     return 'CJK UNIFIED IDEOGRAPH' in unicodedata.name(char, '')
 
 # 清除控制字元：將 Unicode 中所有類別為 Control (C) 的字元移除
