@@ -216,12 +216,20 @@ def khuat_ji_piau_poo_im_piau(wb):
     if not isinstance(data[0], list):
         data = [data]
 
+    idx = 0
     for row in data:
-        han_ji = row[0]
-        tai_gi_im_piau = row[2]
+        han_ji = row[0] # 漢字
+        zong_siau = row[1] # 總數
+        tai_gi_im_piau = row[2] # 台語音標
+        hau_ziann_im_piau = row[3] # 台語音標
+        zo_piau = row[4] # (儲存格位置)座標
 
-        if han_ji and tai_gi_im_piau:
-            insert_or_update_to_db(db_path, table_name, han_ji, tai_gi_im_piau, piau_im_huat)
+        # if han_ji and tai_gi_im_piau:
+            # insert_or_update_to_db(db_path, table_name, han_ji, tai_gi_im_piau, piau_im_huat)
+        if han_ji and hau_ziann_im_piau:
+            insert_or_update_to_db(db_path, table_name, han_ji, hau_ziann_im_piau, piau_im_huat)
+            print(f"📌 {idx+1}. 【{han_ji}】：校正音標：【{hau_ziann_im_piau}】、台語音標=【{tai_gi_im_piau}】、座標：{zo_piau}")
+            idx += 1
 
     logging_process_step(f"【缺字表】中的資料已成功回填至資料庫： {db_path} 的【{table_name}】資料表中。")
     return EXIT_CODE_SUCCESS
@@ -254,14 +262,16 @@ def update_database_from_excel(wb):
     try:
         for idx, row_data in enumerate(data, start=2):  # Excel A2 起始，Python Index 2
             han_ji = row_data[0]  # A 欄 (漢字)
-            tai_gi_im_piau = row_data[3]  # D 欄 (校正音標)
+            hau_ziann_im_piau = row_data[3]  # D 欄 (校正音標)
 
             # 跳過無效資料
-            if not han_ji or not tai_gi_im_piau or tai_gi_im_piau == "N/A":
+            if not han_ji or not hau_ziann_im_piau or hau_ziann_im_piau == "N/A":
                 continue
 
             # 將 Excel 工作表存放的【台語音標（TLPA）】，改成資料庫保存的【台羅拼音（TL）】
-            tai_lo_im_piau = convert_tlpa_to_tl(tai_gi_im_piau)
+            tai_lo_im_piau = convert_tlpa_to_tl(hau_ziann_im_piau)
+
+            # 檢查【台語音標】與【校正音標】兩欄位，若【校正音標】非空白，則以此欄位之【音標】輸入資料庫
 
             # 檢查資料庫中是否已存在相同的【漢字】和【台羅音標】
             cursor.execute("""
