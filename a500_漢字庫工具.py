@@ -171,13 +171,14 @@ def insert_or_update_to_db(db_path, table_name: str, han_ji: str, tai_gi_im_piau
     row = cursor.fetchone()
 
     siong_iong_too = 0.8 if piau_im_huat == "文讀音" else 0.6
+    tai_lo_im_piau = convert_tlpa_to_tl(tai_gi_im_piau)
     if row:
         # 更新資料
         cursor.execute(f"""
         UPDATE {table_name}
         SET 台羅音標 = ?, 更新時間 = ?
         WHERE 識別號 = ?;
-        """, (tai_gi_im_piau, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), row[0]))
+        """, (tai_lo_im_piau, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), row[0]))
     else:
         # 若語音類型為：【文讀音】，設定【常用度】欄位值為 0.8
         cursor.execute(f"""

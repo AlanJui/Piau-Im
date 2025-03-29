@@ -264,12 +264,66 @@ def separate_tone(im_piau):
     return letters, tones
 
 def apply_tone(im_piau, tone):
-    """聲調符號重新加回第一個母音字母上"""
-    vowels = 'aeioumnAEIOUMN'
-    for i, c in enumerate(im_piau):
-        if c in vowels:
-            return unicodedata.normalize('NFC', im_piau[:i+1] + tone + im_piau[i+1:])
+    """
+    根據 TLPA 響度優先規則，將聲調符號 tone 正確標示在母音上。
+    """
+    tone_priority = ['a', 'oo', 'e', 'o', 'i', 'u', 'm']
+    lower = im_piau.lower()
+
+    # 特例：ere → 最後 e
+    if 'ere' in lower:
+        idx = lower.rindex('e')
+        return unicodedata.normalize('NFC', im_piau[:idx+1] + tone + im_piau[idx+1:])
+
+    # ✅ 特例：iu / ui 雙母音（不限定結尾）
+    for i in range(len(lower) - 1):
+        if lower[i] == 'i' and lower[i+1] == 'u':
+            return unicodedata.normalize('NFC', im_piau[:i+2] + tone + im_piau[i+2:])
+        if lower[i] == 'u' and lower[i+1] == 'i':
+            return unicodedata.normalize('NFC', im_piau[:i+2] + tone + im_piau[i+2:])
+
+    # 特例：oo → 第一個 o
+    if 'oo' in lower:
+        idx = lower.index('oo')
+        return unicodedata.normalize('NFC', im_piau[:idx+1] + tone + im_piau[idx+1:])
+
+    # 響度優先分析
+    best_idx = -1
+    best_priority = len(tone_priority) + 1
+
+    i = 0
+    while i < len(lower):
+        if lower[i] == 'o' and i+1 < len(lower) and lower[i+1] == 'o':
+            current = 'oo'
+            idx = i
+            i += 1
+        else:
+            current = lower[i]
+            idx = i
+
+        if current in tone_priority:
+            pri = tone_priority.index(current)
+            if pri < best_priority:
+                best_idx = idx
+                best_priority = pri
+            elif pri == best_priority and current in ['i', 'u']:
+                best_idx = idx
+        i += 1
+
+    if best_idx != -1:
+        return unicodedata.normalize('NFC', im_piau[:best_idx+1] + tone + im_piau[best_idx+1:])
+
+    # fallback
     return unicodedata.normalize('NFC', im_piau[0] + tone + im_piau[1:])
+
+
+# def apply_tone(im_piau, tone):
+#     """聲調符號重新加回第一個母音字母上"""
+#     vowels = 'aeioumnAEIOUMN'
+#     for i, c in enumerate(im_piau):
+#         if c in vowels:
+#             return unicodedata.normalize('NFC', im_piau[:i+1] + tone + im_piau[i+1:])
+#     return unicodedata.normalize('NFC', im_piau[0] + tone + im_piau[1:])
 
 # 處理 o͘ 韻母特殊情況的函數
 def handle_o_dot(im_piau):
@@ -362,12 +416,23 @@ def tng_im_piau(im_piau: str, po_ci: bool = True) -> str:
 
     # 轉換音標中【韻母】為【o͘】（oo長音）的特殊處理
     im_piau = handle_o_dot(im_piau)
+
+    # # 聲調符號對映調號數值的轉換字典
+    # tiau_fu_mapping = {
+    #     "\u0300": "3",   # 3 陰去: ò
+    #     "\u0301": "2",   # 2 陰上: ó
+    #     "\u0302": "5",   # 5 陽平: ô
+    #     "\u0304": "7",   # 7 陽去: ō
+    #     "\u0306": "9",   # 9 輕声: ő
+    #     "\u030C": "6",   # 6 陽上: ǒ
+    #     "\u030D": "8",   # 8 陽入: o̍
+    # }
     # 轉換音標中【韻母】部份，不含【o͘】（oo長音）的特殊處理
     letters, tone = separate_tone(im_piau)   # 無調符音標：im_piau
     if tone:
-        tiau_fu = f"{hex(ord(tone))}"
+        tiau_ho = tiau_fu_mapping[tone]
     else:
-        tiau_fu = ""
+        tiau_ho = ""
 
     # 以【無調符音標】，轉換【韻母】
     sorted_keys = sorted(un_bu_mapping, key=len, reverse=True)
@@ -375,11 +440,6 @@ def tng_im_piau(im_piau: str, po_ci: bool = True) -> str:
         if key in letters:
             letters = letters.replace(key, un_bu_mapping[key])
             break
-
-    # 調符
-    # if tone: print(f"調符：{hex(ord(tone))}")
-    if tone:
-        letters = apply_tone(letters, tone)
 
     # 如若傳入之【音標】首字母為大寫，則將已轉成 "z" 或 "c" 之拼音字母改為大寫
     if su_ji.isupper():
@@ -389,8 +449,11 @@ def tng_im_piau(im_piau: str, po_ci: bool = True) -> str:
             letters = "I" + letters[1:]
         else:
             letters = su_ji + letters[1:]
+
     # 調符
-    # if tone: print(f"調符：{hex(ord(tone))}")
+    if tone:
+        letters = apply_tone(letters, tone)
+
     return letters
 
 def tng_tiau_ho(im_piau: str, kan_hua: bool = False) -> str:
@@ -671,29 +734,35 @@ def ut09():
         print("")
     print("\n-----------------------------------------------------------")
 
-# =========================================================
-# 主程式
-# =========================================================
-if __name__ == "__main__":
-    # ut08()
-    # ut09()
-    print("\n-----------------------------------------------------------")
-    # 歸去來兮！田園將蕪胡不歸？​
-    # ku = "Kue kì lâi ê! Tiân-ôan chiong û hô put kue?​"
-    # ku = "Kue1 ki3 lai5 e5! Tian5 uan5 ziong1 u5 ho5 put4 kue1?"
-    # ku = "Kue chhiong Chhiong chiong Chiong tshiong Tshiong tsiong Tsiong ńai ôan chiong hô​"
-    ku = "ńai Ńai"
-    # 去除多餘的控制字元、將 "-" 轉換成空白、將標點符號前後加上空白、移除多餘空白
-    ku_cleaned = zing_li_zuan_ku(ku)
-    # 將整段句子，解構成單一【音標】清單
-    im_piau_list = [im_piau for im_piau in ku_cleaned.split()]
+def ut10():
+    # 轉換音標中【韻母】部份，不含【o͘】（oo長音）的特殊處理
+    letters, tone = separate_tone('Ióng')   # 無調符音標：im_piau
+    if tone:
+        tiau_ho = tiau_fu_mapping[tone]
+        unicode_code = f"U+{ord(tone):04X}"  # 例如 tone = '́' → 'U+0301'
+        print(f"{unicode_code} ==> 調號： {tiau_ho}")
+        print("-----------------------------------------------------------")
+
+def ut11():
+    # 測試 apply_tone 函數
+    print(apply_tone("Iong", "\u0301"))  # 勇 → Ióng ✅
+    print(apply_tone("noo", "\u0301"))   # 老 → nóo
+    print(apply_tone("ngoo", "\u0302"))  # 吾 → ngôo
+    print(apply_tone("tong", "\u0304"))  # 同 → tōng
+    print(apply_tone("Phuan", "\u0302")) # 盤 → Puân
+    print(apply_tone("liu", "\u0302"))   # 劉 → liû
+    print(apply_tone("lau", "\u0302"))   # 流 → lâu
+
+def ut12():
+    #=================================================================
+    # 存放轉換後的音標清單
+    # tlpa_im_piau_list = []
+    han_ji_list = ['罟', '勇', '輶']
+    im_piau_list = ['ko͘', 'Ióng', 'Iû']
     # 顯示解構後的音標清單
     for im_piau in im_piau_list:
         print(im_piau, end=" ")
     print("\n-----------------------------------------------------------")
-
-    # 存放轉換後的音標清單
-    # tlpa_im_piau_list = []
     for im_piau in im_piau_list:
         tng_uann_hau = ""
         # 排除標點符號不進行韻母轉換
@@ -701,11 +770,40 @@ if __name__ == "__main__":
             # 非【音標】，視同【標點符號】，直接存入
             tng_uann_hau = im_piau
         else:
-            if kam_si_u_tiau_hu(im_piau):
-                # 將【音標】轉換為【TLPA音標】
-                tlpa_im_piau_tua_tiau_hu = tng_im_piau(im_piau)
-                # 將【帶調符音標】轉換為【帶調號音標】
-                tng_uann_hau = tng_tiau_ho(tlpa_im_piau_tua_tiau_hu)
+            # if kam_si_u_tiau_hu(im_piau):
+            #     # 將【音標】轉換為【TLPA音標】
+            #     tlpa_im_piau_tua_tiau_hu = tng_im_piau(im_piau)
+            #     # 將【帶調符音標】轉換為【帶調號音標】
+            #     tng_uann_hau = tng_tiau_ho(tlpa_im_piau_tua_tiau_hu)
+            # else:
+            #     tng_uann_hau = tng_tiau_ho(tlpa_im_piau_tua_tiau_hu)
+
+            # 將【音標】轉換為【TLPA音標】
+            tlpa_im_piau_tua_tiau_hu = tng_im_piau(im_piau)
+            # 將【帶調符音標】轉換為【帶調號音標】
+            tng_uann_hau = tng_tiau_ho(tlpa_im_piau_tua_tiau_hu)
             # tng_uann_hau_im_piau = split_tai_gi_im_piau(tng_uann_hau)
             # print(split_tlpa_im_piau(tng_uann_hau))
             print(f"im_piau = {tng_uann_hau} <-- {im_piau}")
+
+# =========================================================
+# 主程式
+# =========================================================
+if __name__ == "__main__":
+    # 歸去來兮！田園將蕪胡不歸？​
+    # ku = "Kue kì lâi ê! Tiân-ôan chiong û hô put kue?​"
+    # ku = "Kue1 ki3 lai5 e5! Tian5 uan5 ziong1 u5 ho5 put4 kue1?"
+    # ku = "Kue chhiong Chhiong chiong Chiong tshiong Tshiong tsiong Tsiong ńai ôan chiong hô​"
+    # ku = "ńai Ńai"
+    # # 去除多餘的控制字元、將 "-" 轉換成空白、將標點符號前後加上空白、移除多餘空白
+    # ku_cleaned = zing_li_zuan_ku(ku)
+    # # 將整段句子，解構成單一【音標】清單
+    # im_piau_list = [im_piau for im_piau in ku_cleaned.split()]
+    # # 顯示解構後的音標清單
+    # for im_piau in im_piau_list:
+    #     print(im_piau, end=" ")
+    # print("\n-----------------------------------------------------------")
+    print("-----------------------------------------------------------")
+    # ut08()
+    # ut09()
+    ut12()

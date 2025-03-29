@@ -20,7 +20,8 @@ from mod_excel_access import (
     excel_address_to_row_col,
     get_value_by_name,
 )
-from mod_標音 import PiauIm, convert_tl_with_tiau_hu_to_tlpa, tlpa_tng_han_ji_piau_im
+from mod_帶調符音標 import is_han_ji, is_im_piau, kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
+from mod_標音 import PiauIm, tlpa_tng_han_ji_piau_im
 
 # =========================================================================
 # 常數定義
@@ -92,7 +93,10 @@ def update_excel_with_tai_gi(wb):
 
         # 取得原始【台語音標】並轉換為 TLPA+ 格式
         im_piau = sheet.range(f"C{row}").value
-        tai_gi_im_piau = convert_tl_with_tiau_hu_to_tlpa(im_piau)
+
+        tlpa_im_piau = tng_im_piau(im_piau)   # 將【音標】使用之【拼音字母】轉換成【TLPA拼音字母】；【音標調符】仍保持
+        tai_gi_im_piau = tng_tiau_ho(tlpa_im_piau).lower()  # 將【音標調符】轉換成【數值調號】
+        # tai_lo_im_piau = convert_tl_with_tiau_hu_to_tlpa(im_piau)
 
         # 更新【缺字表】中【校正音標】欄（D 欄）
         sheet.range(f"D{row}").value = tai_gi_im_piau

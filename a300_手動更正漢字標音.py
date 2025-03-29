@@ -14,6 +14,7 @@ from dotenv import load_dotenv
 
 # 載入自訂模組/函式
 from a100_作業中活頁檔填入漢字 import process as fill_hanji_in_cells
+from a240_為漢字標注漢字標音 import han_ji_piau_im  # 取得漢字標音
 
 # 載入自訂模組/函式
 from mod_excel_access import (
@@ -29,7 +30,6 @@ from mod_帶調符音標 import cing_bo_iong_ji_bu, kam_si_u_tiau_hu, tng_im_pia
 # from mod_標音 import hong_im_tng_tai_gi_im_piau  # 方音符號轉台語音標
 from mod_標音 import PiauIm  # 漢字標音物件
 from mod_標音 import convert_tl_with_tiau_hu_to_tlpa  # 去除台語音標的聲調符號
-from mod_標音 import han_ji_piau_im  # 取得漢字標音
 from mod_標音 import is_punctuation  # 是否為標點符號
 from mod_標音 import split_hong_im_hu_ho  # 分解漢字標音
 from mod_標音 import tlpa_tng_han_ji_piau_im  # 台語音標轉台語音標
