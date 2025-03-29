@@ -8624,3 +8624,98 @@ UnboundLocalError: cannot access local variable 'e' where it is not associated w
 2025-03-29 15:18:49,208 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
 2025-03-29 15:18:49,209 - INFO - 專案根目錄為: C:\work\Piau-Im
 2025-03-29 15:18:49,225 - INFO - <----------- 作業開始！---------->
+2025-03-29 15:29:27,838 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 15:29:27,839 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 15:29:27,854 - INFO - <----------- 作業開始！---------->
+2025-03-29 15:33:08,079 - ERROR - 處理【人工標音】作業異常！，錯誤訊息: 'ooonn'
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 131, in han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=han_ji_piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1149, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 915, in BP_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'ooonn'
+2025-03-29 15:33:08,084 - ERROR - 轉換成【漢字標音】時發生錯誤！，錯誤訊息: 'ooonn'
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 178, in process
+    han_ji_piau_im(wb=wb, sheet_name='漢字注音')
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a240_為漢字標注漢字標音.py", line 131, in han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=han_ji_piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1149, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 915, in BP_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'ooonn'
+2025-03-29 15:33:08,085 - ERROR - 程式異常終止：a240_為漢字標注漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 235, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-03-29 15:33:08,307 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《None》.xlsx
+2025-03-29 15:37:51,317 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 15:37:51,318 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 15:37:51,335 - INFO - <----------- 作業開始！---------->
+2025-03-29 15:44:24,067 - ERROR - 處理【人工標音】作業異常！，錯誤訊息: 'ooonn'
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 131, in han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=han_ji_piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1159, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 925, in BP_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'ooonn'
+2025-03-29 15:44:24,071 - ERROR - 轉換成【漢字標音】時發生錯誤！，錯誤訊息: 'ooonn'
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 178, in process
+    han_ji_piau_im(wb=wb, sheet_name='漢字注音')
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a240_為漢字標注漢字標音.py", line 131, in han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=han_ji_piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1159, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 925, in BP_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'ooonn'
+2025-03-29 15:44:24,072 - ERROR - 程式異常終止：a240_為漢字標注漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a240_為漢字標注漢字標音.py", line 235, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-03-29 15:44:24,280 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《None》.xlsx
+2025-03-29 15:50:02,646 - INFO - 《========== 程式開始執行：a240_為漢字標注漢字標音 ==========》
+2025-03-29 15:50:02,647 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-29 15:50:02,663 - INFO - <----------- 作業開始！---------->
+2025-03-29 15:58:59,790 - INFO - 依【漢字】之【台語音標】轉換【漢字音標音】作業己完成！
+2025-03-29 15:58:59,791 - INFO - 【語音類型】：文讀音
+2025-03-29 15:58:59,791 - INFO - 【漢字庫】：Ho_Lok_Ue.db
+2025-03-29 15:58:59,809 - INFO - <----------- 作業結束！---------->
+2025-03-29 15:59:00,057 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《None》.xlsx
+2025-03-29 15:59:00,057 - INFO - 《========== 程式終止執行：a240_為漢字標注漢字標音 ==========》

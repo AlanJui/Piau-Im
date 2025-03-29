@@ -72,7 +72,7 @@ un_bu_tng_huan_map_dict = {
     'oai': 'uai',       # 白話字：oai ==> 閩南語：uai
     'ei': 'e',          # 雅俗通十五音：稽
     'ou': 'oo',         # 雅俗通十五音：沽
-    'onn': 'oonn',      # 雅俗通十五音：扛
+    # 'onn': 'oonn',      # 雅俗通十五音：扛
     'uei': 'ue',        # 雅俗通十五音：檜
     'ueinn': 'uenn',    # 雅俗通十五音：檜
     'ur': 'u',          # 雅俗通十五音：艍
@@ -296,9 +296,19 @@ def is_valid_han_ji(char):
 # 想要僅針對漢字進行檢查，而不包括其他語言的字母，可用 Unicode 範圍來判斷。
 # 漢字的 Unicode 範圍： [\u4e00-\u9fff] (包括中日韓越所有漢字)
 # =========================================================
-def is_han_ji(char):
+def char_is_han_ji(char):
     return '\u4e00' <= char <= '\u9fff'
 
+# 用途：檢查是否為漢字
+def is_han_ji(char):
+    if not isinstance(char, str) or len(char) != 1:
+        return False
+    return 'CJK UNIFIED IDEOGRAPH' in unicodedata.name(char, '')
+
+def extract_han_ji(text):
+    if not isinstance(text, str):
+        text = str(text or "")
+    return ''.join([c for c in text if is_han_ji(c)])
 
 def un_bu_tng_huan(un_bu: str) -> str:
     """
