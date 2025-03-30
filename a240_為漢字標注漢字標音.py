@@ -116,11 +116,8 @@ def han_ji_piau_im(wb, sheet_name: str = '漢字注音'):
                 elif han_ji_cell.value == None or han_ji_cell.value == "":
                     msg = f"《空格》"
                 else:
-                    if han_ji_cell.value in [',', '.', '"', "'", '(', ')', '!', '?', ':', ';', ]:
-                        # 若為【半形】之【標點符號】則以【標點符號】處理
-                        msg = f"{han_ji_cell.value}"
-                    elif not is_han_ji(han_ji_cell.value):
-                        # 若為非【漢字】，則以【標點符號】處理
+                    if not is_han_ji(han_ji_cell.value):
+                        # 若儲存格為：非【漢字】，有可能為：全形/半形【標點符號】，或半形字元
                         msg = f"{han_ji_cell.value}"
                     else:
                         # ---------------------------------------------------------

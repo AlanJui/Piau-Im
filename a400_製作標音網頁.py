@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 # 載入自訂模組
 from mod_excel_access import get_value_by_name
 from mod_file_access import load_module_function, save_as_new_file
-from mod_帶調符音標 import kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
+from mod_帶調符音標 import is_han_ji, kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
 
 # from mod_廣韻 import tng_uann_piau_im
 from mod_標音 import split_tai_gi_im_piau  # 分解台語音標
@@ -392,6 +392,9 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
             ruby_tag = ""
 
             cell_value = sheet.range((row, col)).value
+            # 若【儲存格】內存放【整數值】，則轉為【字串】
+            if isinstance(cell_value, float) and cell_value.is_integer():
+                cell_value = str(int(cell_value))
             if cell_value == 'φ':       # 讀到【結尾標示】
                 end_of_file = True
                 print(f"({row}, {xw.utils.col_name(col)}) = 《文章終止》")
@@ -410,12 +413,13 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
                 else:
                     continue
             else:                       # 讀到：漢字或標點符號
-                # 當 han_ji 是標點符號時，不需要注音
-                if is_punctuation(cell_value):
+                # 當【儲存格】存放的是【標點符號】時，不需要注音
+                if not is_han_ji(cell_value):
                     ruby_tag = f"  <span>{cell_value}</span>\n"
                     msg = f"({row}, {xw.utils.col_name(col)}) = {cell_value}"
                 else:
-                    han_ji = cell_value.strip()  # 取得漢字
+                    # 當【儲存格】存放的是【漢字】時，則需標注漢字標音
+                    han_ji = cell_value.strip()  # 消去空白字元
 
                     # 取得漢字的【台語音標】
                     # tai_gi_im_piau = sheet.range((row - 1, col)).value  # 取得漢字的台語音標

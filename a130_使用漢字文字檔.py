@@ -13,6 +13,8 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 from a000_重置漢字標音工作表 import main as a000_main
+from a002_清除漢字注音工作表欲標音之漢字 import main as a002_main
+from a240_為漢字標注漢字標音 import han_ji_piau_im  # 依據【台語音標】查找【漢字標音】
 from mod_excel_access import delete_sheet_by_name, ensure_sheet_exists
 from mod_file_access import save_as_new_file
 from mod_字庫 import JiKhooDict  # 漢字字庫物件
@@ -33,7 +35,6 @@ from mod_帶調符音標 import (
     zing_li_zuan_ku,
 )
 from mod_標音 import PiauIm  # 漢字標音物件
-from mod_標音 import han_ji_piau_im  # 依據【台語音標】查找【漢字標音】
 from mod_標音 import split_tai_gi_im_piau  # 分解台語音標
 from mod_河洛話 import han_ji_ca_piau_im
 
@@ -122,7 +123,7 @@ def read_han_ji_from_text_file(wb, filename:str, sheet_name:str='漢字注音', 
     return text_with_han_ji
 
 
-def cue_han_ji_piau_im(wb, text_with_han_ji:list) -> list:
+def cue_han_ji_piau_im(wb, han_ji_list:list) -> list:
     """查漢字讀音：依【漢字】查找【台語音標】，並依指定之【標音方法】輸出【漢字標音】"""
     #------------------------------------------------------------------------------
     # 籌備作業
@@ -171,76 +172,77 @@ def cue_han_ji_piau_im(wb, text_with_han_ji:list) -> list:
         idx = 0
         row = start_row
         col = start_col
-        for han_ji_ku in text_with_han_ji:
-            for han_ji in han_ji_ku:
-                im_piau = ""
-                if han_ji == 'φ':
-                    EOF = True
-                    msg = "【文字終結】"
-                elif han_ji == '\n':
-                    msg = "【換行】"
-                elif han_ji == None or han_ji.strip() == "":  # 若儲存格內無值
-                    msg = "【空缺】"    # 表【儲存格】未填入任何字/符，不同於【空白】字元
+
+        EOF = False
+        for han_ji in han_ji_list:
+            sheet.cells(row, col).select()  # 選取，畫面滾動
+            if han_ji == 'φ':
+                EOF = True
+                im_piau_list.append(han_ji)
+                msg = "【文字終結】"
+            elif han_ji == '\n':
+                im_piau_list.append('\n')
+                msg = "【換行】"
+            else:
+                # 若不為【漢字】，則以【標點符號】、【空白】或【半形字元】處置
+                if not is_han_ji(han_ji):
+                    im_piau_list.append(han_ji)
+                    msg = f"{han_ji}：略過！"
                 else:
-                    # 若不為【標點符號】，則以【漢字】處理
-                    if not is_han_ji(han_ji):
-                        im_piau = han_ji
-                        msg = f"{han_ji}：略過不轉換！"
-                    else:
-                        # 自【漢字庫】查找作業
-                        result = han_ji_ca_piau_im(
-                            cursor=cursor,
+                    im_piau = ""
+                    # 自【漢字庫】查找作業
+                    result = han_ji_ca_piau_im(
+                        cursor=cursor,
+                        han_ji=han_ji,
+                        ue_im_lui_piat=ue_im_lui_piat)
+
+                    # 若【漢字庫】查無此字，登錄至【缺字表】
+                    if not result:
+                        khuat_ji_piau_ji_khoo.add_or_update_entry(
                             han_ji=han_ji,
-                            ue_im_lui_piat=ue_im_lui_piat)
+                            tai_gi_im_piau='N/A',
+                            kenn_ziann_im_piau='N/A',
+                            coordinates=(row, col)
+                        )
+                        im_piau_list.append(im_piau)
+                        msg = f"{han_ji}：查無此字！"
+                    else:
+                        # 依【漢字庫】查找結果，輸出【台語音標】和【漢字標音】
+                        siann_bu = result[0]['聲母']
+                        un_bu = result[0]['韻母']
+                        un_bu = tng_un_bu(un_bu)
+                        tiau_ho = result[0]['聲調']
+                        if tiau_ho == "6":
+                            # 若【聲調】為【6】，則將【聲調】改為【7】
+                            tiau_ho = "7"
+                        # 將【聲母】、【韻母】、【聲調】，合併成【台語音標】
+                        im_piau = ''.join([siann_bu, un_bu, tiau_ho])
 
-                        # 若【漢字庫】查無此字，登錄至【缺字表】
-                        if not result:
-                            khuat_ji_piau_ji_khoo.add_or_update_entry(
-                                han_ji=han_ji,
-                                tai_gi_im_piau='N/A',
-                                kenn_ziann_im_piau='N/A',
-                                coordinates=(row, col)
-                            )
-                            msg = f"{han_ji}：查無此字！"
-                        else:
-                            # 依【漢字庫】查找結果，輸出【台語音標】和【漢字標音】
-                            siann_bu = result[0]['聲母']
-                            un_bu = result[0]['韻母']
-                            un_bu = tng_un_bu(un_bu)
-                            tiau_ho = result[0]['聲調']
-                            if tiau_ho == "6":
-                                # 若【聲調】為【6】，則將【聲調】改為【7】
-                                tiau_ho = "7"
-                            # 將【聲母】、【韻母】、【聲調】，合併成【台語音標】
-                            im_piau = ''.join([siann_bu, un_bu, tiau_ho])
+                        # 【標音字庫】添加或更新【漢字】資料
+                        piau_im_ji_khoo.add_or_update_entry(
+                            han_ji=han_ji,
+                            tai_gi_im_piau=im_piau,
+                            kenn_ziann_im_piau='N/A',
+                            coordinates=(row, col)
+                        )
+                        im_piau_list.append(im_piau)
+                        msg = f"{han_ji}： [{im_piau}]"
+            # 顯示處理進度
+            print(f"{idx}. ({row}, {col}) = {msg}")
 
-                            # 【標音字庫】添加或更新【漢字】資料
-                            piau_im_ji_khoo.add_or_update_entry(
-                                han_ji=han_ji,
-                                tai_gi_im_piau=im_piau,
-                                kenn_ziann_im_piau='N/A',
-                                coordinates=(row, col)
-                            )
-                            msg = f"{han_ji}： [{im_piau}]"
-
-                    # 顯示處理進度
-                    im_piau_list.append(im_piau)
-                    print(f"{idx}. ({row}, {col}) = {msg}")
-
+            if EOF:
+                break
+            elif han_ji == '\n':
+                # 若已處理完一段落，則換行
+                row += ROWS_PER_LINE
+                col = start_col
+            else:
                 # 每處理一個字，右移一格
-                idx += 1
                 col += 1
                 if col == end_col:
                     # 若已處理完一行，則換行
-                    row += 4
+                    row += ROWS_PER_LINE
                     col = start_col
-
-            # 讀完一個段落
-            im_piau_list.append("\n")
-            print(f"({idx}. ({row}, {col}) = 【段落終結】")
-            # 若已處理完一段落，則換行
-            row += 4
-            col = start_col
             idx += 1
 
         #----------------------------------------------------------------------
@@ -456,12 +458,13 @@ def main():
         return
 
     # 備妥工作檔
-    a000_main(wb)
+    a002_main()   # 清除【漢字注音】工作表欲標音之漢字
+    a000_main(wb)   # 重置【漢字標音】工作表【儲存格】
 
-    # 讀取整篇文章之【漢字】純文字檔案。
+    # 讀取整篇文章之【漢字】純文字檔案；並填入【漢字注音】工作表。
     text_with_han_ji = read_han_ji_from_text_file(wb, filename=han_ji_file)
 
-    # 將 text_with_han_ji 整編為【漢字】列表
+    # 將 text_with_han_ji 整編為【漢字清單】
     han_ji_list = []
     for han_ji_ku in text_with_han_ji:
         for han_ji in han_ji_ku:
@@ -469,8 +472,8 @@ def main():
         # 段落終結處：換下一段落
         han_ji_list.append("\n")
 
-    # 查找【漢字】之【音標】
-    im_piau_list = cue_han_ji_piau_im(wb, text_with_han_ji)
+    # 依據【漢字清單】，查找【漢字】之【台語音標】，並製成與之成一一對映之【音標清單】
+    im_piau_list = cue_han_ji_piau_im(wb, han_ji_list)
 
     # 將【漢字】及【漢字標音】填入【漢字注音】工作表
     fill_in_ping_im(wb,
