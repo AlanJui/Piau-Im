@@ -25,7 +25,7 @@ EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 # =========================================================================
 
 # 用途：從純文字檔案讀取資料並回傳 [漢字, ...] 之格式
-def read_text_with_han_ji(filename: str = "p2_han_ji.txt") -> list:
+def read_text_with_han_ji(filename: str = "tmp_p1_han_ji.txt") -> list:
     text_with_han_ji = []
     with open(filename, "r", encoding="utf-8") as f:
         # 先移除 `\u200b`，確保不會影響 TLPA 拼音對應

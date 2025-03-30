@@ -122,13 +122,6 @@ def update_excel_with_tai_gi(wb):
                 # 將【校正音標】填入【漢字注音】工作表漢字之【台語音標】儲存格
                 han_ji_piau_im_sheet.range(tai_gi_im_piau_cell).value = tai_gi_im_piau
                 print(f"更新『台語音標』：座標 {tai_gi_im_piau_cell} 填入音標：{tai_gi_im_piau}")
-                # # 若目標儲存格尚無資料，則填入校正音標
-                # existing_value = han_ji_piau_im_sheet.range(target_cell).value
-                # if not existing_value:
-                #     han_ji_piau_im_sheet.range(target_cell).value = tai_gi_im_piau
-                #     print(f"更新『漢字注音』：座標 {target_cell} 填入音標：{tai_gi_im_piau}")
-                # else:
-                #     print(f"跳過『漢字注音』：座標 {target_cell} 已有音標：{existing_value}")
 
                 #--------------------------------------------------------------------------
                 # 【漢字標音】

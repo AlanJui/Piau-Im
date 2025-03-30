@@ -113,28 +113,25 @@ def han_ji_piau_im(wb, sheet_name: str = '漢字注音'):
                 elif han_ji_cell.value == '\n':
                     msg = f"《換行》"
                     break
-                elif han_ji_cell.value == None or han_ji_cell.value == "":
-                    msg = f"《空格》"
+                elif not is_han_ji(han_ji_cell.value):
+                    # 若儲存格為：非【漢字】，有可能為：全形/半形【標點符號】，或半形字元
+                    msg = f"{han_ji_cell.value}"
                 else:
-                    if not is_han_ji(han_ji_cell.value):
-                        # 若儲存格為：非【漢字】，有可能為：全形/半形【標點符號】，或半形字元
-                        msg = f"{han_ji_cell.value}"
-                    else:
-                        # ---------------------------------------------------------
-                        # 確認【漢字】有【台語標音】時之處理作業
-                        # ---------------------------------------------------------
-                        if tai_gi_cell.value:        # 【漢字】沒用【人工標音】
-                            siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(tai_gi_cell.value)
-                            han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
-                                piau_im_huat=han_ji_piau_im_huat,
-                                siann_bu=siann_bu,
-                                un_bu=un_bu,
-                                tiau_ho=tiau_ho,
-                            )
-                            tlpa_im_piau = f"{siann_bu}{un_bu}{tiau_ho}"
-                            han_ji_piau_im_cell.value = han_ji_piau_im
+                    # ---------------------------------------------------------
+                    # 確認【漢字】有【台語標音】時之處理作業
+                    # ---------------------------------------------------------
+                    if tai_gi_cell.value:        # 【漢字】沒用【人工標音】
+                        siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(tai_gi_cell.value)
+                        han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+                            piau_im_huat=han_ji_piau_im_huat,
+                            siann_bu=siann_bu,
+                            un_bu=un_bu,
+                            tiau_ho=tiau_ho,
+                        )
+                        tlpa_im_piau = f"{siann_bu}{un_bu}{tiau_ho}"
+                        han_ji_piau_im_cell.value = han_ji_piau_im
 
-                            msg = f"{han_ji_cell.value} [{tlpa_im_piau}] / [{han_ji_piau_im}]"
+                        msg = f"{han_ji_cell.value} [{tlpa_im_piau}] / [{han_ji_piau_im}]"
 
                 # 每欄結束前處理作業
                 print(f"({row}, {col}) = {msg}")

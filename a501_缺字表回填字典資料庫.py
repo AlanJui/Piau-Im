@@ -14,6 +14,8 @@ from dotenv import load_dotenv
 
 # 載入自訂模組/函式
 from mod_excel_access import get_value_by_name, save_as_new_file
+from mod_帶調符音標 import tng_im_piau, tng_tiau_ho
+from mod_標音 import convert_tlpa_to_tl
 
 # =========================================================================
 # 常數定義
@@ -98,7 +100,10 @@ def insert_or_update_to_db(db_path, table_name: str, han_ji: str, tai_gi_im_piau
     conn.close()
 
 
-def process_excel_to_db(wb, sheet_name, db_path, table_name):
+# =========================================================================
+# 使用【人工標音】更新【標音字庫】的校正音標
+# =========================================================================
+def khuat_ji_piau_poo_im_piau(wb):
     """
     讀取 Excel 的【缺字表】工作表，並將資料回填至 SQLite 資料庫。
 
@@ -107,29 +112,38 @@ def process_excel_to_db(wb, sheet_name, db_path, table_name):
     :param db_path: 資料庫檔案路徑。
     :param table_name: 資料表名稱。
     """
-    # wb = xw.Book(excel_path)
+    sheet_name = "缺字表"
     sheet = wb.sheets[sheet_name]
     piau_im_huat = get_value_by_name(wb=wb, name="語音類型")
+    db_path = "Ho_Lok_Ue.db"  # 替換為你的資料庫檔案路徑
+    table_name = "漢字庫"         # 替換為你的資料表名稱
+    hue_im = wb.names['語音類型'].refers_to_range.value
+    siong_iong_too = 0.8 if hue_im == "文讀音" else 0.6  # 根據語音類型設定常用度
 
-    try:
-        # 讀取資料表範圍
-        data = sheet.range("A2").expand("table").value
+    # 讀取資料表範圍
+    data = sheet.range("A2").expand("table").value
 
-        # 確保資料為 2D 列表
-        if not isinstance(data[0], list):
-            data = [data]
+    # 確保資料為 2D 列表
+    if not isinstance(data[0], list):
+        data = [data]
 
-        for row in data:
-            han_ji = row[0]
-            tai_gi_im_piau = row[2]
+    idx = 0
+    for row in data:
+        han_ji = row[0] # 漢字
+        zong_siau = row[1] # 總數
+        tai_gi_im_piau = row[2] # 台語音標
+        hau_ziann_im_piau = row[3] # 台語音標
+        zo_piau = row[4] # (儲存格位置)座標
 
-            if han_ji and tai_gi_im_piau:
-                insert_or_update_to_db(db_path, table_name, han_ji, tai_gi_im_piau, piau_im_huat)
+        if han_ji and (tai_gi_im_piau != 'N/A' or hau_ziann_im_piau != 'N/A'):
+            # 將 Excel 工作表存放的【台語音標（TLPA）】，改成資料庫保存的【台羅拼音（TL）】
+            tlpa_im_piau = tng_im_piau(tai_gi_im_piau)   # 將【音標】使用之【拼音字母】轉換成【TLPA拼音字母】；【音標調符】仍保持
+            tlpa_im_piau_cleanned = tng_tiau_ho(tlpa_im_piau).lower()  # 將【音標調符】轉換成【數值調號】
+            tl_im_piau = convert_tlpa_to_tl(tlpa_im_piau_cleanned)
 
-    except Exception as e:
-        logging_exception(msg=f"【缺字表】中無任何資料！", error=e)
-        # raise ValueError("【缺字表】中無任何資料！")
-        raise
+            insert_or_update_to_db(db_path, table_name, han_ji, tl_im_piau, piau_im_huat)
+            print(f"📌 {idx+1}. 【{han_ji}】：台羅音標：【{tl_im_piau}】、校正音標：【{hau_ziann_im_piau}】、台語音標=【{tai_gi_im_piau}】、座標：{zo_piau}")
+            idx += 1
 
     logging_process_step(f"【缺字表】中的資料已成功回填至資料庫： {db_path} 的【{table_name}】資料表中。")
     return EXIT_CODE_SUCCESS
@@ -140,14 +154,9 @@ def process_excel_to_db(wb, sheet_name, db_path, table_name):
 # =============================================================================
 def process(wb):
     logging_process_step("<----------- 作業開始！---------->")
-    # excel_path = "缺字表.xlsx"  # 替換為你的 Excel 檔案路徑
-    sheet_name = "缺字表"      # 替換為你的工作表名稱
-    db_path = "Ho_Lok_Ue.db"  # 替換為你的資料庫檔案路徑
-    # db_path = "QA.sqlite"  # 替換為你的資料庫檔案路徑
-    table_name = "漢字庫"         # 替換為你的資料表名稱
 
     try:
-        process_excel_to_db(wb, sheet_name, db_path, table_name)
+        khuat_ji_piau_poo_im_piau(wb)
     except Exception as e:
         logging_exc_error(msg="無法將【缺字表】資料回填至資料庫！", error=None)
         return EXIT_CODE_PROCESS_FAILURE

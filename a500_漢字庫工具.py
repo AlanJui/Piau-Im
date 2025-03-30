@@ -19,6 +19,7 @@ from mod_excel_access import (
     excel_address_to_row_col,
     get_value_by_name,
 )
+from mod_帶調符音標 import tng_im_piau, tng_tiau_ho
 from mod_標音 import convert_tlpa_to_tl
 
 # =========================================================================
@@ -225,11 +226,14 @@ def khuat_ji_piau_poo_im_piau(wb):
         hau_ziann_im_piau = row[3] # 台語音標
         zo_piau = row[4] # (儲存格位置)座標
 
-        # if han_ji and tai_gi_im_piau:
-            # insert_or_update_to_db(db_path, table_name, han_ji, tai_gi_im_piau, piau_im_huat)
-        if han_ji and hau_ziann_im_piau:
-            insert_or_update_to_db(db_path, table_name, han_ji, hau_ziann_im_piau, piau_im_huat)
-            print(f"📌 {idx+1}. 【{han_ji}】：校正音標：【{hau_ziann_im_piau}】、台語音標=【{tai_gi_im_piau}】、座標：{zo_piau}")
+        if han_ji and (tai_gi_im_piau != 'N/A' or hau_ziann_im_piau != 'N/A'):
+            # 將 Excel 工作表存放的【台語音標（TLPA）】，改成資料庫保存的【台羅拼音（TL）】
+            tlpa_im_piau = tng_im_piau(tai_gi_im_piau)   # 將【音標】使用之【拼音字母】轉換成【TLPA拼音字母】；【音標調符】仍保持
+            tlpa_im_piau_cleanned = tng_tiau_ho(tlpa_im_piau).lower()  # 將【音標調符】轉換成【數值調號】
+            tl_im_piau = convert_tlpa_to_tl(tlpa_im_piau_cleanned)
+
+            insert_or_update_to_db(db_path, table_name, han_ji, tl_im_piau, piau_im_huat)
+            print(f"📌 {idx+1}. 【{han_ji}】：台羅音標：【{tl_im_piau}】、校正音標：【{hau_ziann_im_piau}】、台語音標=【{tai_gi_im_piau}】、座標：{zo_piau}")
             idx += 1
 
     logging_process_step(f"【缺字表】中的資料已成功回填至資料庫： {db_path} 的【{table_name}】資料表中。")
