@@ -53,7 +53,7 @@ init_logging()
 # =========================================================================
 # 程式區域函式
 # =========================================================================
-def update_excel_with_tai_gi(wb):
+def update_khuat_ji_piau(wb):
     """
     讀取 Excel 檔案，依據【缺字表】工作表中的資料執行下列作業：
       1. 由 A 欄讀取漢字，從 C 欄取得原始【台語音標】，並轉換為 TLPA+ 格式後更新 D 欄（校正音標）。
@@ -172,7 +172,7 @@ def main():
         logging_exc_error(f"找不到作用中活頁簿檔", e)
         return EXIT_CODE_INVALID_INPUT
 
-    status_code = update_excel_with_tai_gi(wb)
+    status_code = update_khuat_ji_piau(wb)
     if status_code != EXIT_CODE_SUCCESS:
         logging_process_step(f"程式執行失敗，錯誤代碼：{status_code}")
         return status_code

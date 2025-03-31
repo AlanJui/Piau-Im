@@ -9097,3 +9097,205 @@ NoneType: None
 2025-03-30 21:29:12,111 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
 2025-03-30 21:36:01,251 - INFO - 《========== 程式開始執行：a230_缺字表補標音 ==========》
 2025-03-30 21:36:01,253 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 10:12:11,501 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-03-31 10:12:11,502 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 10:12:11,520 - INFO - <----------- 作業開始！---------->
+2025-03-31 10:12:11,640 - INFO - 已完成作業所需之初始化設定！
+2025-03-31 10:24:11,884 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-03-31 10:24:11,885 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 10:24:11,903 - INFO - <----------- 作業開始！---------->
+2025-03-31 10:24:12,002 - INFO - 已完成作業所需之初始化設定！
+2025-03-31 10:25:17,111 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-03-31 10:25:17,112 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 10:25:17,129 - INFO - <----------- 作業開始！---------->
+2025-03-31 10:25:17,213 - INFO - 已完成作業所需之初始化設定！
+2025-03-31 10:33:29,063 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-03-31 10:33:29,064 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 10:33:29,078 - INFO - <----------- 作業開始！---------->
+2025-03-31 10:33:29,162 - INFO - 已完成作業所需之初始化設定！
+2025-03-31 10:54:56,139 - ERROR - 處理以【標音字庫】更新【漢字注音】工作表之作業，發生執行異常！，錯誤訊息: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a310_缺字表修正後續作業.py", line 280, in process
+    # 根據【標音字庫】工作表，更新【漢字注音】工作表中的【台語音標】
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        wb.sheets['缺字表'].activate()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\a310_缺字表修正後續作業.py", line 238, in update_by_piau_im_ji_khoo
+    han_ji_piau_im_sheet.range(han_ji_piau_im_cell).value = han_ji_im_piau
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2815, in select
+    self.impl.select()
+    ~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1500, in select
+    return self.xl.Select()
+           ~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject Range>", line 2, in Select
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+2025-03-31 10:54:56,174 - ERROR - 程式異常終止：a310_缺字表修正後續作業，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a310_缺字表修正後續作業.py", line 344, in main
+    except Exception as e:
+    
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-03-31 10:54:56,553 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《了凡四訓【第一篇、立命之學】》.xlsx
+2025-03-31 10:55:36,067 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-03-31 10:55:37,155 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 10:56:00,261 - INFO - <----------- 作業開始！---------->
+2025-03-31 10:56:10,923 - INFO - 已完成作業所需之初始化設定！
+2025-03-31 10:56:39,151 - ERROR - 處理【缺字表】作業異常！，錯誤訊息: name 're' is not defined
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a310_缺字表修正後續作業.py", line 273, in process
+    update_khuat_ji_piau(wb)
+    ~~~~~~~~~~~~~~~~~~~~^^^^
+  File "C:\work\Piau-Im\a310_缺字表修正後續作業.py", line 210, in update_khuat_ji_piau
+    coordinate_tuples = re.findall(r"\((\d+)\s*,\s*(\d+)\)", coordinates_str)
+                        ^^
+NameError: name 're' is not defined. Did you forget to import 're'?
+2025-03-31 10:56:39,155 - ERROR - 程式異常終止：a310_缺字表修正後續作業，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a310_缺字表修正後續作業.py", line 341, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-03-31 10:56:39,522 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《了凡四訓【第一篇、立命之學】》.xlsx
+2025-03-31 10:56:49,270 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-03-31 10:56:49,271 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 10:56:49,285 - INFO - <----------- 作業開始！---------->
+2025-03-31 10:56:49,347 - INFO - 已完成作業所需之初始化設定！
+2025-03-31 10:58:04,636 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-03-31 10:58:04,637 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 10:58:04,651 - INFO - <----------- 作業開始！---------->
+2025-03-31 10:58:04,744 - INFO - 已完成作業所需之初始化設定！
+2025-03-31 10:58:29,458 - INFO - 完成：處理【缺字表】作業
+2025-03-31 10:58:29,577 - ERROR - 將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業，發生執行異常！，錯誤訊息: name 'convert_tlpa_to_tl' is not defined
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a310_缺字表修正後續作業.py", line 284, in process
+    khuat_ji_piau_poo_im_piau(wb)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "C:\work\Piau-Im\a310_缺字表修正後續作業.py", line 146, in khuat_ji_piau_poo_im_piau
+    tl_im_piau = convert_tlpa_to_tl(tlpa_im_piau_cleanned)
+                 ^^^^^^^^^^^^^^^^^^
+NameError: name 'convert_tlpa_to_tl' is not defined
+2025-03-31 10:58:29,583 - ERROR - 程式異常終止：a310_缺字表修正後續作業，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a310_缺字表修正後續作業.py", line 341, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-03-31 10:58:29,900 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《了凡四訓【第一篇、立命之學】》.xlsx
+2025-03-31 10:59:50,357 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-03-31 10:59:50,358 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 10:59:50,375 - INFO - <----------- 作業開始！---------->
+2025-03-31 10:59:50,435 - INFO - 已完成作業所需之初始化設定！
+2025-03-31 10:59:58,320 - INFO - 完成：處理【缺字表】作業
+2025-03-31 10:59:58,436 - ERROR - 將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業，發生執行異常！，錯誤訊息: name 'datetime' is not defined
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a310_缺字表修正後續作業.py", line 281, in process
+    khuat_ji_piau_poo_im_piau(wb)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "C:\work\Piau-Im\a310_缺字表修正後續作業.py", line 145, in khuat_ji_piau_poo_im_piau
+    insert_or_update_to_db(db_path, table_name, han_ji, tl_im_piau, piau_im_huat)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\a310_缺字表修正後續作業.py", line 95, in insert_or_update_to_db
+    """, (tai_gi_im_piau, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), row[0]))
+                          ^^^^^^^^
+NameError: name 'datetime' is not defined. Did you forget to import 'datetime'?
+2025-03-31 10:59:58,441 - ERROR - 程式異常終止：a310_缺字表修正後續作業，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a310_缺字表修正後續作業.py", line 338, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-03-31 10:59:58,754 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《了凡四訓【第一篇、立命之學】》.xlsx
+2025-03-31 11:00:40,428 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-03-31 11:00:40,428 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 11:00:40,443 - INFO - <----------- 作業開始！---------->
+2025-03-31 11:00:40,505 - INFO - 已完成作業所需之初始化設定！
+2025-03-31 11:00:41,954 - INFO - 完成：處理【缺字表】作業
+2025-03-31 11:00:42,269 - INFO - 【缺字表】中的資料已成功回填至資料庫： Ho_Lok_Ue.db 的【漢字庫】資料表中。
+2025-03-31 11:00:42,270 - INFO - 完成：將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業
+2025-03-31 11:00:42,273 - ERROR - 程式異常終止：a310_缺字表修正後續作業，錯誤訊息: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a310_缺字表修正後續作業.py", line 335, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a310_缺字表修正後續作業.py", line 290, in process
+    han_ji_piau_im_sheet.range('A1').select()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2815, in select
+    self.impl.select()
+    ~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1500, in select
+    return self.xl.Select()
+           ~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject Range>", line 2, in Select
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+2025-03-31 11:00:42,589 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《了凡四訓【第一篇、立命之學】》.xlsx
+2025-03-31 11:01:24,144 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-03-31 11:01:24,145 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 11:01:24,159 - INFO - <----------- 作業開始！---------->
+2025-03-31 11:01:24,221 - INFO - 已完成作業所需之初始化設定！
+2025-03-31 11:01:25,638 - INFO - 完成：處理【缺字表】作業
+2025-03-31 11:01:31,511 - INFO - 【缺字表】中的資料已成功回填至資料庫： Ho_Lok_Ue.db 的【漢字庫】資料表中。
+2025-03-31 11:01:37,079 - INFO - 完成：將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業
+2025-03-31 11:01:41,038 - ERROR - 程式異常終止：a310_缺字表修正後續作業，錯誤訊息: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a310_缺字表修正後續作業.py", line 335, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a310_缺字表修正後續作業.py", line 290, in process
+    han_ji_piau_im_sheet.range('A1').select()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2815, in select
+    self.impl.select()
+    ~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1500, in select
+    return self.xl.Select()
+           ~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject Range>", line 2, in Select
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+2025-03-31 11:01:41,403 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《了凡四訓【第一篇、立命之學】》.xlsx
+2025-03-31 11:02:26,294 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-03-31 11:02:26,295 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 11:02:26,311 - INFO - <----------- 作業開始！---------->
+2025-03-31 11:02:26,387 - INFO - 已完成作業所需之初始化設定！
+2025-03-31 11:02:27,714 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-03-31 11:02:27,715 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 11:02:27,733 - INFO - <----------- 作業開始！---------->
+2025-03-31 11:02:27,823 - INFO - 已完成作業所需之初始化設定！
+2025-03-31 11:02:28,095 - INFO - 完成：處理【缺字表】作業
+2025-03-31 11:02:28,321 - INFO - 【缺字表】中的資料已成功回填至資料庫： Ho_Lok_Ue.db 的【漢字庫】資料表中。
+2025-03-31 11:02:28,321 - INFO - 完成：將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業
+2025-03-31 11:02:29,412 - INFO - 完成：處理【缺字表】作業
+2025-03-31 11:02:29,599 - INFO - 【缺字表】中的資料已成功回填至資料庫： Ho_Lok_Ue.db 的【漢字庫】資料表中。
+2025-03-31 11:02:29,599 - INFO - 完成：將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業
+2025-03-31 11:02:35,321 - INFO - <----------- 作業結束！---------->
+2025-03-31 11:02:55,021 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《了凡四訓【第一篇、立命之學】》.xlsx
+2025-03-31 11:02:56,137 - INFO - 《========== 程式終止執行：a310_缺字表修正後續作業 ==========》
+2025-03-31 11:10:41,796 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-03-31 11:10:41,797 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 11:10:41,813 - INFO - <----------- 作業開始！---------->
+2025-03-31 11:10:41,853 - INFO - 已完成作業所需之初始化設定！
+2025-03-31 11:10:43,492 - INFO - 完成：處理【缺字表】作業
+2025-03-31 11:10:43,694 - INFO - 【缺字表】中的資料已成功回填至資料庫： Ho_Lok_Ue.db 的【漢字庫】資料表中。
+2025-03-31 11:10:43,694 - INFO - 完成：將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業
+2025-03-31 11:10:43,695 - INFO - <----------- 作業結束！---------->
+2025-03-31 11:10:44,039 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《了凡四訓【第一篇、立命之學】》.xlsx
+2025-03-31 11:10:44,039 - INFO - 《========== 程式終止執行：a310_缺字表修正後續作業 ==========》
