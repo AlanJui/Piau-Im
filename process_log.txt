@@ -9539,3 +9539,290 @@ pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Exce
 2025-03-31 14:19:42,423 - INFO - <----------- 作業結束！---------->
 2025-03-31 14:19:42,704 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《了凡四訓【第一篇、立命之學】》.xlsx
 2025-03-31 14:19:42,704 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-03-31 21:02:49,281 - INFO - 《========== 程式開始執行：a001_清除漢字注音工作表欲標音之漢字 ==========》
+2025-03-31 21:02:49,282 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 21:02:49,310 - INFO - 作用中活頁簿：_working.xlsx
+2025-03-31 21:02:49,310 - INFO - 目錄路徑：C:\work\Piau-Im\output7
+2025-03-31 21:02:49,310 - INFO - <----------- 作業開始！---------->
+2025-03-31 21:02:49,556 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫', '人工標音字庫']
+2025-03-31 21:02:49,726 - INFO - 【漢字注音】工作表【漢字標音】工作區，及【原始文章】（V3儲存格），原始舊資料已清除！
+2025-03-31 21:02:49,727 - INFO - <----------- 作業結束！---------->
+2025-03-31 21:02:49,864 - INFO - 《========== 程式終止執行：a001_清除漢字注音工作表欲標音之漢字 ==========》
+2025-03-31 21:03:16,120 - INFO - 《========== 程式開始執行：a002_重設漢字標音工作區各儲存格格式 ==========》
+2025-03-31 21:03:16,121 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 21:03:16,168 - INFO - 已刪除不必要的工作表：['缺字表', '標音字庫']
+2025-03-31 21:06:28,243 - INFO - 已重置【漢字注音】工作表中的儲存格格式！
+2025-03-31 21:06:28,243 - INFO - <----------- 作業結束！---------->
+2025-03-31 21:06:28,347 - INFO - 《========== 程式終止執行：a002_重設漢字標音工作區各儲存格格式 ==========》
+2025-03-31 21:23:28,256 - INFO - 已完成【漢字】查找標音作業。
+2025-03-31 21:30:47,669 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《中庸》.xlsx
+2025-03-31 21:34:53,213 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-03-31 21:34:53,214 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 21:34:53,231 - INFO - <----------- 作業開始！---------->
+2025-03-31 21:34:53,267 - INFO - 已完成作業所需之初始化設定！
+2025-03-31 21:34:54,306 - INFO - 完成：處理【缺字表】作業
+2025-03-31 21:34:54,479 - INFO - 【缺字表】中的資料已成功回填至資料庫： Ho_Lok_Ue.db 的【漢字庫】資料表中。
+2025-03-31 21:34:54,479 - INFO - 完成：將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業
+2025-03-31 21:34:54,479 - INFO - <----------- 作業結束！---------->
+2025-03-31 21:34:54,762 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《中庸》.xlsx
+2025-03-31 21:34:54,762 - INFO - 《========== 程式終止執行：a310_缺字表修正後續作業 ==========》
+2025-03-31 21:46:43,085 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-03-31 21:46:43,086 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 21:46:43,105 - INFO - <----------- 作業開始！---------->
+2025-03-31 21:46:43,134 - INFO - 已完成作業所需之初始化設定！
+2025-03-31 21:46:43,333 - ERROR - 處理【缺字表】作業異常！，錯誤訊息: cannot access local variable 'han_ji_piau_im_cell' where it is not associated with a value
+Traceback (most recent call last):
+  File "a310_缺字表修正後續作業.py", line 265, in process
+    update_khuat_ji_piau(wb)
+    ~~~~~~~~~~~~~~~~~~~~^^^^
+  File "a310_缺字表修正後續作業.py", line 221, in update_khuat_ji_piau
+    print(f"台語音標：【{tai_gi_im_piau}】，填入座標：{xw.utils.col_name(c_coord)}{target_row} = {han_ji_piau_im_cell}")
+                                                                                                  ^^^^^^^^^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'han_ji_piau_im_cell' where it is not associated with a value
+2025-03-31 21:46:43,337 - ERROR - 程式異常終止：a310_缺字表修正後續作業，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a310_缺字表修正後續作業.py", line 332, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-03-31 21:46:43,648 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《中庸》.xlsx
+2025-03-31 21:49:35,394 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-03-31 21:49:35,396 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 21:49:35,411 - INFO - <----------- 作業開始！---------->
+2025-03-31 21:49:35,434 - INFO - 已完成作業所需之初始化設定！
+2025-03-31 21:49:38,963 - ERROR - 處理【缺字表】作業異常！，錯誤訊息: cannot access local variable 'han_ji_piau_im_cell' where it is not associated with a value
+Traceback (most recent call last):
+  File "a310_缺字表修正後續作業.py", line 265, in process
+    update_khuat_ji_piau(wb)
+    ~~~~~~~~~~~~~~~~~~~~^^^^
+  File "a310_缺字表修正後續作業.py", line 221, in update_khuat_ji_piau
+    print(f"台語音標：【{tai_gi_im_piau}】，填入座標：{xw.utils.col_name(c_coord)}{target_row} = {han_ji_piau_im_cell}")
+                                                                                                  ^^^^^^^^^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'han_ji_piau_im_cell' where it is not associated with a value
+2025-03-31 21:49:38,966 - ERROR - 程式異常終止：a310_缺字表修正後續作業，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a310_缺字表修正後續作業.py", line 332, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-03-31 21:49:39,317 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《中庸》.xlsx
+2025-03-31 21:51:20,756 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-03-31 21:51:20,757 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 21:51:20,772 - INFO - <----------- 作業開始！---------->
+2025-03-31 21:51:20,806 - INFO - 已完成作業所需之初始化設定！
+2025-03-31 21:52:41,739 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-03-31 21:52:41,740 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 21:52:41,756 - INFO - <----------- 作業開始！---------->
+2025-03-31 21:52:41,808 - INFO - 已完成作業所需之初始化設定！
+2025-03-31 21:54:36,108 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-03-31 21:54:36,108 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 21:54:36,123 - INFO - <----------- 作業開始！---------->
+2025-03-31 21:54:36,167 - INFO - 已完成作業所需之初始化設定！
+2025-03-31 21:54:46,101 - ERROR - 處理【缺字表】作業異常！，錯誤訊息: cannot access local variable 'han_ji_piau_im_cell' where it is not associated with a value
+Traceback (most recent call last):
+  File "a310_缺字表修正後續作業.py", line 269, in process
+    update_khuat_ji_piau(wb)
+    ~~~~~~~~~~~~~~~~~~~~^^^^
+  File "a310_缺字表修正後續作業.py", line 223, in update_khuat_ji_piau
+    print(f"台語音標：【{tai_gi_im_piau}】，填入座標：{excel_address} = {han_ji_piau_im_cell}")
+                                                                         ^^^^^^^^^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'han_ji_piau_im_cell' where it is not associated with a value
+2025-03-31 21:54:46,105 - ERROR - 程式異常終止：a310_缺字表修正後續作業，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a310_缺字表修正後續作業.py", line 336, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-03-31 21:54:46,489 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《中庸》.xlsx
+2025-03-31 21:56:11,010 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-03-31 21:56:11,011 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 21:56:11,027 - INFO - <----------- 作業開始！---------->
+2025-03-31 21:56:11,060 - INFO - 已完成作業所需之初始化設定！
+2025-03-31 21:57:07,539 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-03-31 21:57:07,540 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 21:57:07,555 - INFO - <----------- 作業開始！---------->
+2025-03-31 21:57:07,599 - INFO - 已完成作業所需之初始化設定！
+2025-03-31 21:57:51,142 - INFO - 完成：處理【缺字表】作業
+2025-03-31 21:57:51,491 - INFO - 【缺字表】中的資料已成功回填至資料庫： Ho_Lok_Ue.db 的【漢字庫】資料表中。
+2025-03-31 21:57:51,491 - INFO - 完成：將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業
+2025-03-31 21:57:51,491 - INFO - <----------- 作業結束！---------->
+2025-03-31 21:57:51,833 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《中庸》.xlsx
+2025-03-31 21:57:51,833 - INFO - 《========== 程式終止執行：a310_缺字表修正後續作業 ==========》
+2025-03-31 21:58:18,095 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-31 21:58:18,096 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 21:58:18,112 - INFO - <----------- 作業開始！---------->
+2025-03-31 21:58:18,710 - ERROR - 程式異常終止：a400_製作標音網頁，錯誤訊息: string index out of range
+Traceback (most recent call last):
+  File "a400_製作標音網頁.py", line 628, in main
+    result_code = process(wb)
+  File "a400_製作標音網頁.py", line 569, in process
+    status_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a400_製作標音網頁.py", line 535, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a400_製作標音網頁.py", line 429, in build_web_page
+    if kam_si_u_tiau_hu(tai_gi_im_piau):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+IndexError: string index out of range
+2025-03-31 21:58:18,905 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《中庸》.xlsx
+2025-03-31 21:58:56,930 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-31 21:58:56,931 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 21:58:56,946 - INFO - <----------- 作業開始！---------->
+2025-03-31 21:58:57,526 - ERROR - 程式異常終止：a400_製作標音網頁，錯誤訊息: string index out of range
+Traceback (most recent call last):
+  File "a400_製作標音網頁.py", line 628, in main
+    result_code = process(wb)
+  File "a400_製作標音網頁.py", line 569, in process
+    status_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a400_製作標音網頁.py", line 535, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a400_製作標音網頁.py", line 429, in build_web_page
+    if kam_si_u_tiau_hu(tai_gi_im_piau):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+IndexError: string index out of range
+2025-03-31 21:58:57,719 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《中庸》.xlsx
+2025-03-31 22:01:16,324 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-31 22:01:16,324 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 22:01:16,342 - INFO - <----------- 作業開始！---------->
+2025-03-31 22:01:17,669 - ERROR - 程式異常終止：a400_製作標音網頁，錯誤訊息: string index out of range
+Traceback (most recent call last):
+  File "a400_製作標音網頁.py", line 628, in main
+    result_code = process(wb)
+  File "a400_製作標音網頁.py", line 569, in process
+    status_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a400_製作標音網頁.py", line 535, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a400_製作標音網頁.py", line 429, in build_web_page
+    if kam_si_u_tiau_hu(tai_gi_im_piau):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+IndexError: string index out of range
+2025-03-31 22:01:17,994 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《了凡四訓【第二篇、改過之法】》.xlsx
+2025-03-31 22:03:30,530 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-31 22:03:30,531 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 22:03:30,549 - INFO - <----------- 作業開始！---------->
+2025-03-31 22:05:59,142 - ERROR - 程式異常終止：a400_製作標音網頁，錯誤訊息: string index out of range
+Traceback (most recent call last):
+  File "a400_製作標音網頁.py", line 628, in main
+    result_code = process(wb)
+  File "a400_製作標音網頁.py", line 569, in process
+    status_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a400_製作標音網頁.py", line 535, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a400_製作標音網頁.py", line 429, in build_web_page
+    if kam_si_u_tiau_hu(tai_gi_im_piau):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+IndexError: string index out of range
+2025-03-31 22:05:59,381 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《了凡四訓【第二篇、改過之法】》.xlsx
+2025-03-31 22:06:35,200 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-31 22:06:35,200 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 22:06:35,216 - INFO - <----------- 作業開始！---------->
+2025-03-31 22:06:43,502 - ERROR - 程式異常終止：a400_製作標音網頁，錯誤訊息: string index out of range
+Traceback (most recent call last):
+  File "a400_製作標音網頁.py", line 628, in main
+    result_code = process(wb)
+  File "a400_製作標音網頁.py", line 569, in process
+    status_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a400_製作標音網頁.py", line 535, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a400_製作標音網頁.py", line 429, in build_web_page
+    if kam_si_u_tiau_hu(tai_gi_im_piau):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+IndexError: string index out of range
+2025-03-31 22:06:43,706 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《了凡四訓【第二篇、改過之法】》.xlsx
+2025-03-31 22:08:49,578 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-31 22:08:49,579 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 22:08:49,595 - INFO - <----------- 作業開始！---------->
+2025-03-31 22:09:06,431 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-31 22:09:06,432 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 22:09:06,447 - INFO - <----------- 作業開始！---------->
+2025-03-31 22:10:52,987 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-31 22:10:52,988 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 22:10:53,005 - INFO - <----------- 作業開始！---------->
+2025-03-31 22:12:01,558 - ERROR - 程式異常終止：a400_製作標音網頁，錯誤訊息: string index out of range
+Traceback (most recent call last):
+  File "a400_製作標音網頁.py", line 628, in main
+    result_code = process(wb)
+  File "a400_製作標音網頁.py", line 569, in process
+    status_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a400_製作標音網頁.py", line 535, in tng_sing_bang_iah
+    html_content = build_web_page(
+        wb=wb,
+    ...<5 lines>...
+        piau_im= piau_im
+    )
+  File "a400_製作標音網頁.py", line 429, in build_web_page
+    if kam_si_u_tiau_hu(tai_gi_im_piau):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+IndexError: string index out of range
+2025-03-31 22:12:01,762 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《了凡四訓【第二篇、改過之法】》.xlsx
+2025-03-31 22:12:34,657 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-31 22:12:34,658 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 22:12:34,674 - INFO - <----------- 作業開始！---------->
+2025-03-31 22:13:22,643 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-03-31 22:13:22,644 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-03-31 22:13:22,660 - INFO - <----------- 作業開始！---------->
+2025-03-31 22:17:05,869 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-03-31 22:17:05,882 - INFO - <----------- 作業結束！---------->
+2025-03-31 22:17:06,101 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《了凡四訓【第二篇、改過之法】》.xlsx
+2025-03-31 22:17:06,102 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》

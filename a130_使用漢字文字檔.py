@@ -13,7 +13,7 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 from a000_重置漢字標音工作表 import main as a000_main
-from a002_清除漢字注音工作表欲標音之漢字 import main as a002_main
+from a001_清除漢字注音工作表欲標音之漢字 import main as a002_main
 from a240_為漢字標注漢字標音 import han_ji_piau_im  # 依據【台語音標】查找【漢字標音】
 from mod_excel_access import delete_sheet_by_name, ensure_sheet_exists
 from mod_file_access import save_as_new_file
@@ -479,7 +479,8 @@ def main():
     else:
         use_tiau_ho = True
     # 以作用中的Excel活頁簿為作業標的
-    wb = xw.apps.active.books.active
+    # wb = xw.apps.active.books.active
+    wb = xw.Book('_working.xlsx')  # 直接指定活頁簿名稱
     if wb is None:
         logging.error("無法找到作用中的Excel活頁簿。")
         return

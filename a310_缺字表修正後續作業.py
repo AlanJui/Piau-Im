@@ -218,13 +218,15 @@ def update_khuat_ji_piau(wb):
 
                 # 將【校正音標】填入【漢字注音】工作表漢字之【台語音標】儲存格
                 han_ji_piau_im_sheet.range(tai_gi_im_piau_cell).value = tai_gi_im_piau
-                print(f"更新『台語音標』：座標 {tai_gi_im_piau_cell} 填入音標：{tai_gi_im_piau}")
+                excel_address = han_ji_piau_im_sheet.range(tai_gi_im_piau_cell).address
+                excel_address = excel_address.replace("$", "")  # 去除 "$" 符號
+                print(f"   台語音標：【{tai_gi_im_piau}】，填入座標：{excel_address} = {tai_gi_im_piau_cell}")
 
                 #--------------------------------------------------------------------------
                 # 【漢字標音】
                 #--------------------------------------------------------------------------
                 # 使用【台語音標】轉換，取得【漢字標音】
-                han_ji_im_piau = tlpa_tng_han_ji_piau_im(
+                han_ji_piau_im = tlpa_tng_han_ji_piau_im(
                     piau_im=piau_im, piau_im_huat=piau_im_huat, tai_gi_im_piau=tai_gi_im_piau
                 )
                 # 根據說明，【漢字標音】應填入漢字儲存格下方一列 (row + 1)，相同欄位
@@ -232,8 +234,10 @@ def update_khuat_ji_piau(wb):
                 han_ji_piau_im_cell = (target_row, c_coord)
 
                 # 將【校正音標】填入【漢字注音】工作表漢字之【台語音標】儲存格
-                han_ji_piau_im_sheet.range(han_ji_piau_im_cell).value = han_ji_im_piau
-                print(f"更新『漢字注音』：座標 {han_ji_piau_im_cell} 填入音標：{han_ji_im_piau}")
+                han_ji_piau_im_sheet.range(han_ji_piau_im_cell).value = han_ji_piau_im
+                excel_address = han_ji_piau_im_sheet.range(tai_gi_im_piau_cell).address
+                excel_address = excel_address.replace("$", "")  # 去除 "$" 符號
+                print(f"   漢字標音：【{han_ji_piau_im}】，填入座標：{excel_address} = {han_ji_piau_im_cell}")
 
         row += 1  # 讀取下一列
 
