@@ -20,6 +20,17 @@
             "args": "${command:pickArgs}"
         },
         {
+            "name": "Python 偵錯: 帶參數",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                // "tmp.txt",
+                // "ho"
+            ]
+        },
+        {
             "name": "Python Debugger: with Args",
             "type": "debugpy",
             "request": "launch",
@@ -48,14 +59,24 @@
             "console": "integratedTerminal",
         },
         {
-            "name": "Python 偵錯: a110",
+            "name": "a110_使用漢字文檔",
             "type": "debugpy",
             "request": "launch",
-            "program": "${file}",
+            "program": "a110_使用漢字文字檔.py",
             "console": "integratedTerminal",
             "args": [
-                // "tmp.txt",
-                // "ho"
+                "tmp_p1_han_ji.txt",
+            ]
+        },
+        {
+            "name": "a110_使用漢字文檔與標音文檔",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a110_使用漢字文字檔.py",
+            "console": "integratedTerminal",
+            "args": [
+                "tmp_p1_han_ji.txt",
+                "tmp_p2_ping_im.txt",
             ]
         },
         {
@@ -67,27 +88,6 @@
             "args": [
                 "tmp.txt",
                 "hu"
-            ]
-        },
-        {
-            "name": "a130_使用漢字文檔",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a130_使用漢字文字檔.py",
-            "console": "integratedTerminal",
-            "args": [
-                "tmp_p1_han_ji.txt",
-            ]
-        },
-        {
-            "name": "a130_使用漢字文檔與標音文檔",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a130_使用漢字文字檔.py",
-            "console": "integratedTerminal",
-            "args": [
-                "tmp_p1_han_ji.txt",
-                "tmp_p2_ping_im.txt",
             ]
         },
         {
