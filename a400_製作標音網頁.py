@@ -383,7 +383,7 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
     end_col = start_col + CHARS_PER_ROW
 
     # 取得【網頁每列字數】設定值：數值 0 表【預設】
-    total_chars_per_line = wb.names['網頁每列字數'].refers_to_range.value
+    total_chars_per_line = int(wb.names['網頁每列字數'].refers_to_range.value)
     if total_chars_per_line == 0:
         total_chars_per_line = None
 
@@ -402,19 +402,23 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
             # 若【儲存格】內存放【整數值】，則轉為【字串】
             if cell_value == 'φ':       # 讀到【結尾標示】
                 End_Of_File = True
-                print(f"({row}, {xw.utils.col_name(col)}) = 《文章終止》")
+                msg = f"《文章終止》"
+                print(f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}")
                 break
             elif cell_value == '\n':    # 讀到【換行標示】
-                ruby_tag = f"</p><p>\n"
-                print(f"({row}, {xw.utils.col_name(col)}) = 《換行》")
                 # 若遇到換行字元，退出迴圈
+                ruby_tag = f"</p><p>\n"
+                msg = f"《換行》"
+                char_count += 1
+                print(f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}")
+                char_count = 0  # 重置字數計數器
                 break
             elif not is_han_ji(cell_value):
                 # 若【儲存格】存放非漢字，則為：【標點符號】、【空白】或【數值】等
                 if isinstance(cell_value, float) and cell_value.is_integer():
                     cell_value = str(int(cell_value))
                 ruby_tag = f"  <span>{cell_value}</span>\n"
-                msg = f"({row}, {xw.utils.col_name(col)}) = {cell_value}"
+                msg = f"{cell_value}"
             else:
                 # 當【儲存格】存放的是【漢字】時，則需標注漢字標音
                 han_ji = cell_value.strip()  # 消去空白字元
@@ -440,18 +444,19 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
                     tai_gi_im_piau=tlpa_im_piau
                 )
                 # msg =f"({row}, {xw.utils.col_name(col)}) = {han_ji} [{tlpa_im_piau}] <-- {tai_gi_im_piau}"
-                msg =f"({row}, {col}) = {han_ji} [{tlpa_im_piau}] <-- {tai_gi_im_piau}"
-
-                # 檢查是否需要插入換行標籤
-                if total_chars_per_line and total_chars_per_line != "預設":
-                    char_count += 1
-                    if char_count >= total_chars_per_line:
-                        ruby_tag += "<br/>\n"
-                        char_count = 0  # 重置字數計數器
-                        print('《--- 插入【人工斷行】--》')
+                msg =f"{han_ji} [{tlpa_im_piau}] /【{tai_gi_im_piau}】"
 
             write_buffer += ruby_tag
-            print(msg)
+            char_count += 1
+            print(f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}")
+
+            # 檢查是否需要插入換行標籤
+            # if total_chars_per_line and total_chars_per_line != "預設":
+            if total_chars_per_line and total_chars_per_line != "0":
+                if char_count == total_chars_per_line:
+                    ruby_tag += "<br/>\n"
+                    char_count = 0  # 重置字數計數器
+                    print('《人工斷行》')
 
         # =========================================================
         # 換行處理：(1)每處理完 15 字後，換下一行 ；(2) 讀到【換行標示】
