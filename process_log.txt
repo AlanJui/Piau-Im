@@ -9969,3 +9969,349 @@ IndexError: string index out of range
 2025-04-19 20:44:38,004 - INFO - <----------- 作業結束！---------->
 2025-04-19 20:44:38,197 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《登金陵鳳凰台》.xlsx
 2025-04-19 20:44:38,197 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-04-22 13:02:36,530 - INFO - 已完成【漢字】查找標音作業。
+2025-04-22 13:03:25,759 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《_working》.xlsx
+2025-04-22 13:09:55,831 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-04-22 13:09:55,832 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-22 13:09:55,848 - INFO - <----------- 作業開始！---------->
+2025-04-22 13:09:55,896 - INFO - 已完成作業所需之初始化設定！
+2025-04-22 13:09:57,367 - INFO - 完成：處理【缺字表】作業
+2025-04-22 13:09:57,510 - INFO - 【缺字表】中的資料已成功回填至資料庫： Ho_Lok_Ue.db 的【漢字庫】資料表中。
+2025-04-22 13:09:57,511 - INFO - 完成：將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業
+2025-04-22 13:09:57,511 - INFO - <----------- 作業結束！---------->
+2025-04-22 13:09:57,849 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《_working》.xlsx
+2025-04-22 13:09:57,849 - INFO - 《========== 程式終止執行：a310_缺字表修正後續作業 ==========》
+2025-04-22 13:15:54,886 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-04-22 13:15:54,887 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-22 13:15:54,906 - INFO - <----------- 作業開始！---------->
+2025-04-22 13:16:08,343 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-04-22 13:16:08,354 - INFO - <----------- 作業結束！---------->
+2025-04-22 13:16:08,596 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《_working》.xlsx
+2025-04-22 13:16:08,596 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-04-22 13:19:58,279 - INFO - 《========== 程式開始執行：a500_漢字庫工具 ==========》
+2025-04-22 13:19:58,279 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-22 13:19:58,433 - INFO - 【缺字表】中的資料已成功回填至資料庫： Ho_Lok_Ue.db 的【漢字庫】資料表中。
+2025-04-22 13:23:22,981 - INFO - 已完成【漢字】查找標音作業。
+2025-04-22 13:24:01,313 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《_working》.xlsx
+2025-04-22 13:25:39,517 - INFO - 已完成【漢字】查找標音作業。
+2025-04-22 13:26:44,523 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《_working》.xlsx
+2025-04-22 13:29:04,163 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-04-22 13:29:04,164 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-22 13:29:04,179 - INFO - <----------- 作業開始！---------->
+2025-04-22 13:29:17,578 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-04-22 13:29:17,591 - INFO - <----------- 作業結束！---------->
+2025-04-22 13:29:17,886 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《_working》.xlsx
+2025-04-22 13:29:17,886 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-04-22 13:34:44,246 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-04-22 13:34:44,246 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-22 13:34:44,262 - INFO - <----------- 作業開始！---------->
+2025-04-22 13:34:56,762 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-04-22 13:34:56,770 - INFO - <----------- 作業結束！---------->
+2025-04-22 13:34:57,106 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《_working》.xlsx
+2025-04-22 13:34:57,106 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-04-22 13:36:48,130 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-04-22 13:36:48,132 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-22 13:36:48,152 - INFO - <----------- 作業開始！---------->
+2025-04-22 13:36:48,364 - ERROR - 程式異常終止：a400_製作標音網頁，錯誤訊息: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a400_製作標音網頁.py", line 633, in main
+    result_code = process(wb)
+  File "a400_製作標音網頁.py", line 574, in process
+    status_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a400_製作標音網頁.py", line 505, in tng_sing_bang_iah
+    title = wb.names['TITLE'].refers_to_range.value
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4726, in refers_to_range
+    return Range(impl=self.impl.refers_to_range)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2334, in refers_to_range
+    return Range(xl=self.xl.RefersToRange)
+                    ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 199, in __getattr__
+    v = getattr(self._inner, item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 618, in __getattr__
+    ret = self._oleobj_.Invoke(retEntry.dispid, 0, invoke_type, 1)
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-04-22 13:36:48,436 - ERROR - 儲存檔案失敗！，錯誤訊息: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a400_製作標音網頁.py", line 652, in main
+    file_path = save_as_new_file(wb=wb)
+  File "C:\work\Piau-Im\mod_file_access.py", line 57, in save_as_new_file
+    title = str(wb.names['TITLE'].refers_to_range.value).strip()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4726, in refers_to_range
+    return Range(impl=self.impl.refers_to_range)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2334, in refers_to_range
+    return Range(xl=self.xl.RefersToRange)
+                    ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 199, in __getattr__
+    v = getattr(self._inner, item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 618, in __getattr__
+    ret = self._oleobj_.Invoke(retEntry.dispid, 0, invoke_type, 1)
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-04-22 13:38:10,521 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-04-22 13:38:10,522 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-22 13:38:10,539 - INFO - <----------- 作業開始！---------->
+2025-04-22 13:38:10,758 - ERROR - 程式異常終止：a400_製作標音網頁，錯誤訊息: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a400_製作標音網頁.py", line 633, in main
+    result_code = process(wb)
+  File "a400_製作標音網頁.py", line 574, in process
+    status_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a400_製作標音網頁.py", line 505, in tng_sing_bang_iah
+    title = wb.names['TITLE'].refers_to_range.value
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4726, in refers_to_range
+    return Range(impl=self.impl.refers_to_range)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2334, in refers_to_range
+    return Range(xl=self.xl.RefersToRange)
+                    ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 199, in __getattr__
+    v = getattr(self._inner, item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 618, in __getattr__
+    ret = self._oleobj_.Invoke(retEntry.dispid, 0, invoke_type, 1)
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-04-22 13:38:10,781 - ERROR - 儲存檔案失敗！，錯誤訊息: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a400_製作標音網頁.py", line 652, in main
+    file_path = save_as_new_file(wb=wb)
+  File "C:\work\Piau-Im\mod_file_access.py", line 57, in save_as_new_file
+    title = str(wb.names['TITLE'].refers_to_range.value).strip()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4726, in refers_to_range
+    return Range(impl=self.impl.refers_to_range)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2334, in refers_to_range
+    return Range(xl=self.xl.RefersToRange)
+                    ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 199, in __getattr__
+    v = getattr(self._inner, item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 618, in __getattr__
+    ret = self._oleobj_.Invoke(retEntry.dispid, 0, invoke_type, 1)
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-04-22 13:39:13,329 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-04-22 13:39:13,330 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-22 13:39:13,346 - INFO - <----------- 作業開始！---------->
+2025-04-22 13:39:13,606 - ERROR - 程式異常終止：a400_製作標音網頁，錯誤訊息: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a400_製作標音網頁.py", line 633, in main
+    result_code = process(wb)
+  File "a400_製作標音網頁.py", line 574, in process
+    status_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a400_製作標音網頁.py", line 505, in tng_sing_bang_iah
+    title = wb.names['TITLE'].refers_to_range.value
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4726, in refers_to_range
+    return Range(impl=self.impl.refers_to_range)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2334, in refers_to_range
+    return Range(xl=self.xl.RefersToRange)
+                    ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 199, in __getattr__
+    v = getattr(self._inner, item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 618, in __getattr__
+    ret = self._oleobj_.Invoke(retEntry.dispid, 0, invoke_type, 1)
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-04-22 13:39:13,632 - ERROR - 儲存檔案失敗！，錯誤訊息: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a400_製作標音網頁.py", line 652, in main
+    file_path = save_as_new_file(wb=wb)
+  File "C:\work\Piau-Im\mod_file_access.py", line 57, in save_as_new_file
+    title = str(wb.names['TITLE'].refers_to_range.value).strip()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4726, in refers_to_range
+    return Range(impl=self.impl.refers_to_range)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2334, in refers_to_range
+    return Range(xl=self.xl.RefersToRange)
+                    ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 199, in __getattr__
+    v = getattr(self._inner, item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 618, in __getattr__
+    ret = self._oleobj_.Invoke(retEntry.dispid, 0, invoke_type, 1)
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-04-22 13:40:23,284 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-04-22 13:40:24,831 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-22 13:41:13,465 - INFO - <----------- 作業開始！---------->
+2025-04-22 13:41:31,640 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-04-22 13:41:31,641 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-22 13:41:42,163 - INFO - <----------- 作業開始！---------->
+2025-04-22 13:41:55,333 - ERROR - 程式異常終止：a400_製作標音網頁，錯誤訊息: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a400_製作標音網頁.py", line 633, in main
+    result_code = process(wb)
+  File "a400_製作標音網頁.py", line 574, in process
+    status_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a400_製作標音網頁.py", line 505, in tng_sing_bang_iah
+    title = wb.names['TITLE'].refers_to_range.value
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4726, in refers_to_range
+    return Range(impl=self.impl.refers_to_range)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2334, in refers_to_range
+    return Range(xl=self.xl.RefersToRange)
+                    ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 199, in __getattr__
+    v = getattr(self._inner, item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 618, in __getattr__
+    ret = self._oleobj_.Invoke(retEntry.dispid, 0, invoke_type, 1)
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-04-22 13:41:55,353 - ERROR - 儲存檔案失敗！，錯誤訊息: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a400_製作標音網頁.py", line 652, in main
+    file_path = save_as_new_file(wb=wb)
+  File "C:\work\Piau-Im\mod_file_access.py", line 57, in save_as_new_file
+    title = str(wb.names['TITLE'].refers_to_range.value).strip()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4726, in refers_to_range
+    return Range(impl=self.impl.refers_to_range)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2334, in refers_to_range
+    return Range(xl=self.xl.RefersToRange)
+                    ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 199, in __getattr__
+    v = getattr(self._inner, item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 618, in __getattr__
+    ret = self._oleobj_.Invoke(retEntry.dispid, 0, invoke_type, 1)
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-04-22 13:42:05,331 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-04-22 13:42:05,332 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-22 13:42:12,359 - INFO - <----------- 作業開始！---------->
+2025-04-22 13:42:12,444 - ERROR - 程式異常終止：a400_製作標音網頁，錯誤訊息: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a400_製作標音網頁.py", line 633, in main
+    result_code = process(wb)
+  File "a400_製作標音網頁.py", line 574, in process
+    status_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a400_製作標音網頁.py", line 505, in tng_sing_bang_iah
+    title = wb.names['TITLE'].refers_to_range.value
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4726, in refers_to_range
+    return Range(impl=self.impl.refers_to_range)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2334, in refers_to_range
+    return Range(xl=self.xl.RefersToRange)
+                    ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 199, in __getattr__
+    v = getattr(self._inner, item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 618, in __getattr__
+    ret = self._oleobj_.Invoke(retEntry.dispid, 0, invoke_type, 1)
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-04-22 13:42:12,462 - ERROR - 儲存檔案失敗！，錯誤訊息: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a400_製作標音網頁.py", line 652, in main
+    file_path = save_as_new_file(wb=wb)
+  File "C:\work\Piau-Im\mod_file_access.py", line 57, in save_as_new_file
+    title = str(wb.names['TITLE'].refers_to_range.value).strip()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4726, in refers_to_range
+    return Range(impl=self.impl.refers_to_range)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2334, in refers_to_range
+    return Range(xl=self.xl.RefersToRange)
+                    ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 199, in __getattr__
+    v = getattr(self._inner, item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 618, in __getattr__
+    ret = self._oleobj_.Invoke(retEntry.dispid, 0, invoke_type, 1)
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-04-22 13:42:59,976 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-04-22 13:42:59,977 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-22 13:42:59,991 - INFO - <----------- 作業開始！---------->
+2025-04-22 13:43:30,791 - ERROR - 程式異常終止：a400_製作標音網頁，錯誤訊息: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a400_製作標音網頁.py", line 633, in main
+    result_code = process(wb)
+  File "a400_製作標音網頁.py", line 574, in process
+    status_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a400_製作標音網頁.py", line 505, in tng_sing_bang_iah
+    title = wb.names['TITLE'].refers_to_range.value
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4726, in refers_to_range
+    return Range(impl=self.impl.refers_to_range)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2334, in refers_to_range
+    return Range(xl=self.xl.RefersToRange)
+                    ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 199, in __getattr__
+    v = getattr(self._inner, item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 618, in __getattr__
+    ret = self._oleobj_.Invoke(retEntry.dispid, 0, invoke_type, 1)
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-04-22 13:43:30,818 - ERROR - 儲存檔案失敗！，錯誤訊息: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a400_製作標音網頁.py", line 652, in main
+    file_path = save_as_new_file(wb=wb)
+  File "C:\work\Piau-Im\mod_file_access.py", line 57, in save_as_new_file
+    title = str(wb.names['TITLE'].refers_to_range.value).strip()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4726, in refers_to_range
+    return Range(impl=self.impl.refers_to_range)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2334, in refers_to_range
+    return Range(xl=self.xl.RefersToRange)
+                    ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 199, in __getattr__
+    v = getattr(self._inner, item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 618, in __getattr__
+    ret = self._oleobj_.Invoke(retEntry.dispid, 0, invoke_type, 1)
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-04-22 13:44:14,054 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-04-22 13:44:14,055 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-22 13:44:14,070 - INFO - <----------- 作業開始！---------->
+2025-04-22 13:44:32,265 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-04-22 13:44:32,276 - INFO - <----------- 作業結束！---------->
+2025-04-22 13:44:32,487 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《蘇武牧羊》.xlsx
+2025-04-22 13:44:32,487 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-04-23 12:59:30,596 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-04-23 12:59:30,597 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-23 12:59:30,615 - INFO - <----------- 作業開始！---------->
+2025-04-23 12:59:30,636 - INFO - 已完成作業所需之初始化設定！
+2025-04-23 12:59:31,177 - INFO - 完成：處理【缺字表】作業
+2025-04-23 12:59:31,308 - INFO - 【缺字表】中的資料已成功回填至資料庫： Ho_Lok_Ue.db 的【漢字庫】資料表中。
+2025-04-23 12:59:31,308 - INFO - 完成：將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業
+2025-04-23 12:59:31,309 - INFO - <----------- 作業結束！---------->
+2025-04-23 12:59:31,539 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《寒窯賦》.xlsx
+2025-04-23 12:59:31,540 - INFO - 《========== 程式終止執行：a310_缺字表修正後續作業 ==========》
+2025-04-23 13:01:02,148 - INFO - 已完成【漢字】查找標音作業。
+2025-04-23 13:03:37,901 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《_working》.xlsx
+2025-04-23 13:11:32,458 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-04-23 13:11:32,459 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-23 13:11:32,475 - INFO - <----------- 作業開始！---------->
+2025-04-23 13:12:37,283 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-04-23 13:12:37,299 - INFO - <----------- 作業結束！---------->
+2025-04-23 13:12:37,550 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《寒窯賦》.xlsx
+2025-04-23 13:12:37,551 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-04-23 13:26:53,083 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-04-23 13:26:53,084 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-23 13:26:53,100 - INFO - <----------- 作業開始！---------->
+2025-04-23 13:27:46,475 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-04-23 13:27:46,488 - INFO - <----------- 作業結束！---------->
+2025-04-23 13:27:46,640 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《寒窯賦》.xlsx
+2025-04-23 13:27:46,640 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
