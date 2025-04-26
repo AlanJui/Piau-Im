@@ -76,6 +76,12 @@ un_bu_tng_huan_map_dict = {
     'uei': 'ue',        # 雅俗通十五音：檜
     'ueinn': 'uenn',    # 雅俗通十五音：檜
     'ur': 'u',          # 雅俗通十五音：艍
+    'oa': 'ua',         # 白話字：oa ==> 台語音標：ua
+    'oe': 'ue',         # 白話字：oe ==> 台語音標：ue
+    'eng': 'ing',       # 白話字：eng ==> 台語音標：ing
+    'ek': 'ik',         # 白話字：ek ==> 台語音標：ik
+    'o͘': 'oo',          # 白話字：o͘ (o + U+0358) ==> 台語音標：oo
+    'ⁿ': 'nn',          # 白話字：ⁿ ==> 台語音標：nn
 }
 
 
@@ -170,11 +176,11 @@ def convert_tl_to_tlpa(tai_lo: str) -> Optional[str]:
         tiau = '1'  # 聲調值為 1（陰平聲）
         tai_lo += tiau  # 為輸入之簡寫【台語音標】，添加【調號】
 
+    # 將【白話字】聲母轉換成【台語音標】（將 chh 轉換為 c；將 ch 轉換為 z）
+    tai_lo = re.sub(r'^chh', 'c', tai_lo)  # `^` 表示「字串開頭」
+    tai_lo = re.sub(r'^ch', 'z', tai_lo)  # `^` 表示「字串開頭」
+
     # 將【台羅音標】聲母轉換成【台語音標】（將 tsh 轉換為 c；將 ts 轉換為 z）
-    # if tai_lo.startswith("tsh"):
-    #     tai_lo = tai_lo.replace("tsh", "c", 1)  # 只替換前面出現的 "tsh"
-    # elif tai_lo.startswith("ts"):
-    #     tai_lo = tai_lo.replace("ts", "z", 1)  # 只替換前面出現的 "ts"
     tai_lo = re.sub(r'^tsh', 'c', tai_lo)  # `^` 表示「字串開頭」
     tai_lo = re.sub(r'^ts', 'z', tai_lo)  # `^` 表示「字串開頭」
 
@@ -316,6 +322,37 @@ def un_bu_tng_huan(un_bu: str) -> str:
     :param un_bu: str - 韻母輸入
     :return: str - 轉換後的韻母結果
     """
+
+    # 韻母起頭替換規則（優先進行）
+    if un_bu.startswith("oa"):
+        # 白話字：oa ==> 閩南語：ua
+        un_bu = "u" + un_bu[1:]  # oan → uan, oann → uann
+    elif un_bu.startswith("oe"):
+        # 白話字：oe ==> 閩南語：ue
+        un_bu = "u" + un_bu[1:]  # oe → ue, oeh → ueh
+
+    # 韻母轉換字典
+    un_bu_tng_huan_map_dict = {
+        'ee': 'e',          # ee（ㄝ）= [ɛ]
+        'er': 'e',          # er（ㄜ）= [ə]
+        'erh': 'eh',        # er（ㄜ）= [ə]
+        'or': 'o',          # or（ㄜ）= [ə]
+        'ere': 'ue',        # ere = [əe]
+        'ereh': 'ueh',      # ereh = [əeh]
+        'ir': 'i',          # ir（ㆨ）= [ɯ] / [ɨ]
+        'eng': 'ing',       # 白話字：eng ==> 閩南語：ing
+        'oai': 'uai',       # 白話字：oai ==> 閩南語：uai
+        'ei': 'e',          # 雅俗通十五音：稽
+        'ou': 'oo',         # 雅俗通十五音：沽
+        # 'onn': 'oonn',      # 雅俗通十五音：扛
+        'uei': 'ue',        # 雅俗通十五音：檜
+        'ueinn': 'uenn',    # 雅俗通十五音：檜
+        'ur': 'u',          # 雅俗通十五音：艍
+        'eng': 'ing',       # 白話字：eng ==> 台語音標：ing
+        'ek': 'ik',         # 白話字：ek ==> 台語音標：ik
+        'o͘': 'oo',          # 白話字：o͘ (o + U+0358) ==> 台語音標：oo
+        'ⁿ': 'nn',          # 白話字：ⁿ ==> 台語音標：nn
+    }
 
     # 韻母轉換，若不存在於字典中則返回原始韻母
     return un_bu_tng_huan_map_dict.get(un_bu, un_bu)

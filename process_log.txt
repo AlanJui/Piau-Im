@@ -10315,3 +10315,506 @@ pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, Non
 2025-04-23 13:27:46,488 - INFO - <----------- 作業結束！---------->
 2025-04-23 13:27:46,640 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《寒窯賦》.xlsx
 2025-04-23 13:27:46,640 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-04-26 11:44:38,672 - INFO - 已完成【漢字】查找標音作業。
+2025-04-26 11:45:37,491 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《_working》.xlsx
+2025-04-26 11:48:30,593 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-04-26 11:48:30,593 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-26 11:48:30,612 - INFO - <----------- 作業開始！---------->
+2025-04-26 11:48:30,652 - INFO - 已完成作業所需之初始化設定！
+2025-04-26 11:48:31,390 - ERROR - 處理【缺字表】作業異常！，錯誤訊息: 'e3'
+Traceback (most recent call last):
+  File "a310_缺字表修正後續作業.py", line 269, in process
+    update_khuat_ji_piau(wb)
+    ~~~~~~~~~~~~~~~~~~~~^^^^
+  File "a310_缺字表修正後續作業.py", line 229, in update_khuat_ji_piau
+    han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+        piau_im=piau_im, piau_im_huat=piau_im_huat, tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 505, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(piau_im_huat=piau_im_huat,
+                                                     siann_bu=siann_bu,
+                                                     un_bu=un_bu,
+                                                     tiau_ho=tiau_ho)
+  File "C:\work\Piau-Im\mod_標音.py", line 1159, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 925, in BP_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'e3'
+2025-04-26 11:48:31,413 - ERROR - 程式異常終止：a310_缺字表修正後續作業，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a310_缺字表修正後續作業.py", line 336, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-04-26 11:48:31,721 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《_working》.xlsx
+2025-04-26 12:06:24,705 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-04-26 12:06:24,706 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-26 12:06:24,723 - INFO - <----------- 作業開始！---------->
+2025-04-26 12:06:24,785 - INFO - 已完成作業所需之初始化設定！
+2025-04-26 12:06:25,015 - ERROR - 處理【漢字】補【台語音標】作業異常！，錯誤訊息: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 212, in update_by_khuat_ji_piau
+    if kam_si_u_tiau_hu(jin_kang_piau_im_cell.value):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+TypeError: 'NoneType' object is not subscriptable
+2025-04-26 12:06:25,019 - ERROR - 處理【缺字表】作業異常！，錯誤訊息: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 569, in process
+    update_by_khuat_ji_piau(wb=wb,
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+                            sheet_name=sheet_name,
+                            ^^^^^^^^^^^^^^^^^^^^^^
+                            piau_im=piau_im,
+                            ^^^^^^^^^^^^^^^^
+                            piau_im_huat=piau_im_huat)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a300_手動更正漢字標音.py", line 212, in update_by_khuat_ji_piau
+    if kam_si_u_tiau_hu(jin_kang_piau_im_cell.value):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+TypeError: 'NoneType' object is not subscriptable
+2025-04-26 12:06:25,020 - ERROR - 程式異常終止：a300_手動更正漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 667, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-04-26 12:06:25,242 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《漁父》.xlsx
+2025-04-26 12:08:41,129 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-04-26 12:08:41,130 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-26 12:08:41,148 - INFO - <----------- 作業開始！---------->
+2025-04-26 12:09:19,690 - INFO - 已完成作業所需之初始化設定！
+2025-04-26 12:11:41,293 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-04-26 12:11:41,294 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-26 12:11:41,310 - INFO - <----------- 作業開始！---------->
+2025-04-26 12:11:47,036 - INFO - 已完成作業所需之初始化設定！
+2025-04-26 12:16:25,689 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-04-26 12:16:25,691 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-26 12:16:25,706 - INFO - <----------- 作業開始！---------->
+2025-04-26 12:16:25,768 - INFO - 已完成作業所需之初始化設定！
+2025-04-26 12:19:44,246 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-04-26 12:19:44,247 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-26 12:19:44,263 - INFO - <----------- 作業開始！---------->
+2025-04-26 12:19:44,337 - INFO - 已完成作業所需之初始化設定！
+2025-04-26 12:35:16,482 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-04-26 12:35:16,483 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-26 12:35:16,500 - INFO - <----------- 作業開始！---------->
+2025-04-26 12:35:16,598 - INFO - 已完成作業所需之初始化設定！
+2025-04-26 12:36:27,507 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-04-26 12:36:27,508 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-26 12:36:27,524 - INFO - <----------- 作業開始！---------->
+2025-04-26 12:36:27,588 - INFO - 已完成作業所需之初始化設定！
+2025-04-26 12:37:05,527 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-04-26 12:37:46,091 - ERROR - 處理【人工標音】作業異常！，錯誤訊息: 'ho'
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 409, in update_by_jin_kang_piau_im
+    kenn_ziann_im_piau, han_ji_piau_im = jin_kang_piau_im_cu_han_ji_piau_im(
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a300_手動更正漢字標音.py", line 122, in jin_kang_piau_im_cu_han_ji_piau_im
+    han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+        piau_im=piau_im,
+        piau_im_huat=piau_im_huat,
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 505, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(piau_im_huat=piau_im_huat,
+                                                     siann_bu=siann_bu,
+                                                     un_bu=un_bu,
+                                                     tiau_ho=tiau_ho)
+  File "C:\work\Piau-Im\mod_標音.py", line 1159, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 925, in BP_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'ho'
+2025-04-26 12:37:46,097 - ERROR - 處理【漢字】之【人工標音】作業異常！，錯誤訊息: 'ho'
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 591, in process
+    update_by_jin_kang_piau_im(wb=wb,
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+                            sheet_name='人工標音字庫',
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+                            piau_im=piau_im,
+                            ^^^^^^^^^^^^^^^^
+                            piau_im_huat=piau_im_huat)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a300_手動更正漢字標音.py", line 409, in update_by_jin_kang_piau_im
+    kenn_ziann_im_piau, han_ji_piau_im = jin_kang_piau_im_cu_han_ji_piau_im(
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a300_手動更正漢字標音.py", line 122, in jin_kang_piau_im_cu_han_ji_piau_im
+    han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+        piau_im=piau_im,
+        piau_im_huat=piau_im_huat,
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 505, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(piau_im_huat=piau_im_huat,
+                                                     siann_bu=siann_bu,
+                                                     un_bu=un_bu,
+                                                     tiau_ho=tiau_ho)
+  File "C:\work\Piau-Im\mod_標音.py", line 1159, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 925, in BP_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'ho'
+2025-04-26 12:37:46,098 - ERROR - 程式異常終止：a300_手動更正漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 672, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-04-26 12:37:46,304 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《漁父》.xlsx
+2025-04-26 12:41:15,292 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-04-26 12:41:15,294 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-26 12:41:15,310 - INFO - <----------- 作業開始！---------->
+2025-04-26 12:41:15,373 - INFO - 已完成作業所需之初始化設定！
+2025-04-26 12:41:16,341 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-04-26 12:55:01,765 - ERROR - 處理【人工標音】作業異常！，錯誤訊息: 'ho'
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 409, in update_by_jin_kang_piau_im
+    kenn_ziann_im_piau, han_ji_piau_im = jin_kang_piau_im_cu_han_ji_piau_im(
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a300_手動更正漢字標音.py", line 122, in jin_kang_piau_im_cu_han_ji_piau_im
+    han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+        piau_im=piau_im,
+        piau_im_huat=piau_im_huat,
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 505, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(piau_im_huat=piau_im_huat,
+                                                     siann_bu=siann_bu,
+                                                     un_bu=un_bu,
+                                                     tiau_ho=tiau_ho)
+  File "C:\work\Piau-Im\mod_標音.py", line 1159, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 925, in BP_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'ho'
+2025-04-26 12:55:01,770 - ERROR - 處理【漢字】之【人工標音】作業異常！，錯誤訊息: 'ho'
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 591, in process
+    update_by_jin_kang_piau_im(wb=wb,
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+                            sheet_name='人工標音字庫',
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+                            piau_im=piau_im,
+                            ^^^^^^^^^^^^^^^^
+                            piau_im_huat=piau_im_huat)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a300_手動更正漢字標音.py", line 409, in update_by_jin_kang_piau_im
+    kenn_ziann_im_piau, han_ji_piau_im = jin_kang_piau_im_cu_han_ji_piau_im(
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a300_手動更正漢字標音.py", line 122, in jin_kang_piau_im_cu_han_ji_piau_im
+    han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+        piau_im=piau_im,
+        piau_im_huat=piau_im_huat,
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 505, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(piau_im_huat=piau_im_huat,
+                                                     siann_bu=siann_bu,
+                                                     un_bu=un_bu,
+                                                     tiau_ho=tiau_ho)
+  File "C:\work\Piau-Im\mod_標音.py", line 1159, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 925, in BP_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'ho'
+2025-04-26 12:55:01,772 - ERROR - 程式異常終止：a300_手動更正漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 672, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-04-26 12:55:01,968 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《漁父》.xlsx
+2025-04-26 12:55:39,125 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-04-26 12:55:39,126 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-26 12:55:39,141 - INFO - <----------- 作業開始！---------->
+2025-04-26 12:55:39,207 - INFO - 已完成作業所需之初始化設定！
+2025-04-26 12:55:40,181 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-04-26 13:01:46,061 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-04-26 13:01:46,062 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-26 13:01:46,078 - INFO - <----------- 作業開始！---------->
+2025-04-26 13:01:46,161 - INFO - 已完成作業所需之初始化設定！
+2025-04-26 13:01:47,135 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-04-26 13:03:59,161 - ERROR - 處理【人工標音】作業異常！，錯誤訊息: 'oan'
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 409, in update_by_jin_kang_piau_im
+    kenn_ziann_im_piau, han_ji_piau_im = jin_kang_piau_im_cu_han_ji_piau_im(
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a300_手動更正漢字標音.py", line 122, in jin_kang_piau_im_cu_han_ji_piau_im
+    han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+        piau_im=piau_im,
+        piau_im_huat=piau_im_huat,
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 505, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(piau_im_huat=piau_im_huat,
+                                                     siann_bu=siann_bu,
+                                                     un_bu=un_bu,
+                                                     tiau_ho=tiau_ho)
+  File "C:\work\Piau-Im\mod_標音.py", line 1159, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 925, in BP_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'oan'
+2025-04-26 13:03:59,166 - ERROR - 處理【漢字】之【人工標音】作業異常！，錯誤訊息: 'oan'
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 591, in process
+    update_by_jin_kang_piau_im(wb=wb,
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+                            sheet_name='人工標音字庫',
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+                            piau_im=piau_im,
+                            ^^^^^^^^^^^^^^^^
+                            piau_im_huat=piau_im_huat)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a300_手動更正漢字標音.py", line 409, in update_by_jin_kang_piau_im
+    kenn_ziann_im_piau, han_ji_piau_im = jin_kang_piau_im_cu_han_ji_piau_im(
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a300_手動更正漢字標音.py", line 122, in jin_kang_piau_im_cu_han_ji_piau_im
+    han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+        piau_im=piau_im,
+        piau_im_huat=piau_im_huat,
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 505, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(piau_im_huat=piau_im_huat,
+                                                     siann_bu=siann_bu,
+                                                     un_bu=un_bu,
+                                                     tiau_ho=tiau_ho)
+  File "C:\work\Piau-Im\mod_標音.py", line 1159, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 925, in BP_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'oan'
+2025-04-26 13:03:59,167 - ERROR - 程式異常終止：a300_手動更正漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 672, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-04-26 13:03:59,376 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《漁父》.xlsx
+2025-04-26 13:06:23,889 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-04-26 13:06:23,890 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-26 13:06:23,906 - INFO - <----------- 作業開始！---------->
+2025-04-26 13:06:23,988 - INFO - 已完成作業所需之初始化設定！
+2025-04-26 13:06:24,992 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-04-26 13:08:06,053 - ERROR - 處理【人工標音】作業異常！，錯誤訊息: 'oan'
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 409, in update_by_jin_kang_piau_im
+    kenn_ziann_im_piau, han_ji_piau_im = jin_kang_piau_im_cu_han_ji_piau_im(
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a300_手動更正漢字標音.py", line 122, in jin_kang_piau_im_cu_han_ji_piau_im
+    han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+        piau_im=piau_im,
+        piau_im_huat=piau_im_huat,
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 505, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(piau_im_huat=piau_im_huat,
+                                                     siann_bu=siann_bu,
+                                                     un_bu=un_bu,
+                                                     tiau_ho=tiau_ho)
+  File "C:\work\Piau-Im\mod_標音.py", line 1159, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 925, in BP_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'oan'
+2025-04-26 13:08:06,058 - ERROR - 處理【漢字】之【人工標音】作業異常！，錯誤訊息: 'oan'
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 591, in process
+    update_by_jin_kang_piau_im(wb=wb,
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+                            sheet_name='人工標音字庫',
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+                            piau_im=piau_im,
+                            ^^^^^^^^^^^^^^^^
+                            piau_im_huat=piau_im_huat)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a300_手動更正漢字標音.py", line 409, in update_by_jin_kang_piau_im
+    kenn_ziann_im_piau, han_ji_piau_im = jin_kang_piau_im_cu_han_ji_piau_im(
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a300_手動更正漢字標音.py", line 122, in jin_kang_piau_im_cu_han_ji_piau_im
+    han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+        piau_im=piau_im,
+        piau_im_huat=piau_im_huat,
+        tai_gi_im_piau=tai_gi_im_piau
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 505, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(piau_im_huat=piau_im_huat,
+                                                     siann_bu=siann_bu,
+                                                     un_bu=un_bu,
+                                                     tiau_ho=tiau_ho)
+  File "C:\work\Piau-Im\mod_標音.py", line 1159, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 925, in BP_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'oan'
+2025-04-26 13:08:06,059 - ERROR - 程式異常終止：a300_手動更正漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 672, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-04-26 13:08:06,255 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《漁父》.xlsx
+2025-04-26 13:08:35,692 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-04-26 13:08:35,694 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-26 13:08:35,709 - INFO - <----------- 作業開始！---------->
+2025-04-26 13:08:35,775 - INFO - 已完成作業所需之初始化設定！
+2025-04-26 13:08:36,781 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-04-26 13:15:58,683 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-04-26 13:15:58,684 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-26 13:15:58,700 - INFO - <----------- 作業開始！---------->
+2025-04-26 13:15:58,779 - INFO - 已完成作業所需之初始化設定！
+2025-04-26 13:15:59,774 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-04-26 13:26:28,469 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-04-26 13:26:28,470 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-26 13:26:28,488 - INFO - <----------- 作業開始！---------->
+2025-04-26 13:26:28,562 - INFO - 已完成作業所需之初始化設定！
+2025-04-26 13:26:29,282 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-04-26 13:29:02,581 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-04-26 13:29:02,583 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-26 13:29:02,618 - INFO - <----------- 作業開始！---------->
+2025-04-26 13:29:02,694 - INFO - 已完成作業所需之初始化設定！
+2025-04-26 13:29:03,578 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-04-26 13:33:44,583 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-04-26 13:33:44,584 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-26 13:33:44,600 - INFO - <----------- 作業開始！---------->
+2025-04-26 13:33:44,669 - INFO - 已完成作業所需之初始化設定！
+2025-04-26 13:33:45,630 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-04-26 14:17:31,039 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-04-26 14:17:31,040 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-26 14:17:31,056 - INFO - <----------- 作業開始！---------->
+2025-04-26 14:17:31,145 - INFO - 已完成作業所需之初始化設定！
+2025-04-26 14:17:32,132 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-04-26 14:19:50,036 - INFO - 以【人工標音】更正之【台語音標】，已填入【標音字庫】之【校正音標】！
+2025-04-26 14:20:01,851 - INFO - 以【標音字庫】之【校正音標】，更新【漢字注音】工作表之【台語音標】！
+2025-04-26 14:20:11,794 - INFO - <----------- 作業結束！---------->
+2025-04-26 14:20:37,989 - ERROR - 處理【人工標音】作業異常！，錯誤訊息: 'è'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a240_為漢字標注漢字標音.py", line 125, in han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=han_ji_piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1196, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 962, in BP_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'è'
+2025-04-26 14:20:37,996 - ERROR - 程式異常終止：a300_手動更正漢字標音，錯誤訊息: 'è'
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 669, in main
+    result_code = process(wb)
+  File "a300_手動更正漢字標音.py", line 625, in process
+    han_ji_piau_im(wb)
+    ~~~~~~~~~~~~~~^^^^
+  File "C:\work\Piau-Im\a240_為漢字標注漢字標音.py", line 125, in han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=han_ji_piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1196, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 962, in BP_piau_im
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'è'
+2025-04-26 14:20:38,199 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《漁父》.xlsx
+2025-04-26 14:23:49,807 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-04-26 14:23:49,809 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-04-26 14:23:49,824 - INFO - <----------- 作業開始！---------->
+2025-04-26 14:23:49,884 - INFO - 已完成作業所需之初始化設定！
+2025-04-26 14:23:50,845 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-04-26 14:25:26,922 - INFO - 以【人工標音】更正之【台語音標】，已填入【標音字庫】之【校正音標】！
+2025-04-26 14:25:45,472 - INFO - 以【標音字庫】之【校正音標】，更新【漢字注音】工作表之【台語音標】！
+2025-04-26 14:25:45,491 - INFO - <----------- 作業結束！---------->
+2025-04-26 14:26:36,155 - INFO - 依【漢字】之【台語音標】轉換【漢字音標音】作業己完成！
+2025-04-26 14:26:36,156 - INFO - 【語音類型】：文讀音
+2025-04-26 14:26:36,156 - INFO - 【漢字庫】：Ho_Lok_Ue.db
+2025-04-26 14:26:48,486 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《漁父》.xlsx
+2025-04-26 14:26:48,486 - INFO - 《========== 程式終止執行：a300_手動更正漢字標音 ==========》

@@ -206,10 +206,14 @@ def update_by_khuat_ji_piau(wb, sheet_name: str, piau_im: PiauIm, piau_im_huat: 
                 han_ji_piau_im_cell = han_ji_piau_im_sheet.range((row + 1, col))
 
                 # 如果【人工標音】為【帶調符音標】，則需確保轉換為【帶調號TLPA音標】
-                if jin_kang_piau_im_cell.value == None and kenn_ziann_im_piau == 'N/A':
+                jin_kang_piau_im = strip_cell(jin_kang_piau_im_cell.value)
+                # if jin_kang_piau_im == None:
+                if not jin_kang_piau_im:
+                    continue
+                if tai_gi_im_piau == 'N/A' and kenn_ziann_im_piau == 'N/A':
                     # 若【缺字表】表格中【校正音標】欄位值為空，則略過
                     continue
-                if kam_si_u_tiau_hu(jin_kang_piau_im_cell.value):
+                if kam_si_u_tiau_hu(jin_kang_piau_im):
                     jin_kang_im_piau = cing_bo_iong_ji_bu(jin_kang_piau_im_cell.value)
                     # 轉換成【帶調符TLPA音標】
                     tlpa_im_piau_u_tiau_hu = tng_im_piau(jin_kang_im_piau)
@@ -226,6 +230,7 @@ def update_by_khuat_ji_piau(wb, sheet_name: str, piau_im: PiauIm, piau_im_huat: 
                 )
 
                 # 回填【缺字表】表格【校正音標】欄位
+                tai_gi_im_piau = jin_kang_piau_im
                 kenn_ziann_im_piau = tlpa_im_piau
 
                 # 更新【漢字注音】工作表中【台語音標】、【漢字標音】儲存格內容
