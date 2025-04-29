@@ -400,6 +400,7 @@ def update_by_jin_kang_piau_im(wb, sheet_name: str, piau_im: PiauIm, piau_im_hua
                                 jin_kang_piau_im_cell.value = ""
                                 han_ji_cell.color = (255, 255, 255)       # 將底色設為【白色】
                                 han_ji_cell.font.color = (0, 0, 0)    # 將文字顏色設為【黑色】
+                                msg += f"無【人工標音】"
                         else:                               # 【漢字】以【人工標音】更正【程式自動標音】
                             # 在【漢字注音】工作表，為有【人工標音】之【漢字】儲存格做醒目標記
                             han_ji_cell.color = (255, 255, 0)       # 將底色設為【黄色】
@@ -438,7 +439,7 @@ def update_by_jin_kang_piau_im(wb, sheet_name: str, piau_im: PiauIm, piau_im_hua
 
                                 # 每欄結束前處理作業
                                 msg += f"：[{tai_gi_im_piau}]/[{han_ji_piau_im}]"
-                print(f"({row}, {col}) = {msg}")
+                print(f"【{xw.utils.col_name(col)}{row}】({row}, {col}) = {msg}")
 
             # 每列結束前處理作業
             print('\n')

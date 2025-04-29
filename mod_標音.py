@@ -960,7 +960,7 @@ class PiauIm:
             siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
 
         un = self.Un_Bu_Dict[un_bu][piau_im_huat]
-        piau_im = f"{siann}{un}"
+        # piau_im = f"{siann}{un}"
 
         # 當聲母為「空白」，韻母為：i 或 u 時，調整聲母
         un_chars = list(un)
@@ -972,8 +972,9 @@ class PiauIm:
 
         # 直接將調號附加到音標的末尾
         tiau = Tiau_Ho_Remap[tiau_ho]  # 將「傳統八聲調」轉換成閩拼使用的調號
-        piau_im = f"{piau_im}{tiau}"
+        # piau_im = f"{piau_im}{tiau}"
 
+        piau_im = f"{siann}{un}{tiau}"
         return piau_im
 
     #================================================================

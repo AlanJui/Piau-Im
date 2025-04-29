@@ -15,16 +15,12 @@ from dotenv import load_dotenv
 from mod_excel_access import delete_sheet_by_name, get_value_by_name
 from mod_file_access import load_module_function, save_as_new_file
 from mod_字庫 import JiKhooDict  # 漢字字庫物件
-
-# from mod_標音 import hong_im_tng_tai_gi_im_piau  # 方音符號轉台語音標
-from mod_標音 import PiauIm  # 漢字標音物件
 from mod_標音 import ca_ji_kiat_ko_tng_piau_im  # 查字典得台語音標及漢字標音
+from mod_標音 import convert_tl_with_tiau_hu_to_tlpa  # 去除台語音標的聲調符號
 from mod_標音 import is_punctuation  # 是否為標點符號
-
-# from mod_標音 import split_hong_im_hu_ho  # 分解漢字標音
-# from mod_標音 import split_tai_gi_im_piau  # 分解台語音標
-# from mod_標音 import tai_gi_im_piau_tng_un_bu  # 台語音標轉韻部(方音轉強勢音)
-# from mod_標音 import tlpa_tng_han_ji_piau_im  # 台語音標轉台語音標
+from mod_標音 import split_hong_im_hu_ho  # 分解漢字標音
+from mod_標音 import tlpa_tng_han_ji_piau_im  # 漢字標音物件
+from mod_標音 import PiauIm
 
 # =========================================================================
 # 常數定義
@@ -57,6 +53,41 @@ init_logging()
 # =========================================================================
 # 程式區域函式
 # =========================================================================
+def jin_kang_piau_im_cu_han_ji_piau_im(wb, jin_kang_piau_im: str, piau_im: PiauIm, piau_im_huat: str):
+    """人工標音取【台語音標】"""
+
+    if '〔' in jin_kang_piau_im and '〕' in jin_kang_piau_im:
+        # 將人工輸入的〔台語音標〕轉換成【方音符號】
+        im_piau = jin_kang_piau_im.split('〔')[1].split('〕')[0]
+        tai_gi_im_piau = convert_tl_with_tiau_hu_to_tlpa(im_piau)
+        # 依使用者指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
+        han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+            piau_im=piau_im,
+            piau_im_huat=piau_im_huat,
+            tai_gi_im_piau=tai_gi_im_piau
+        )
+    elif '【' in jin_kang_piau_im and '】' in jin_kang_piau_im:
+        # 將人工輸入的【方音符號】轉換成【台語音標】
+        han_ji_piau_im = jin_kang_piau_im.split('【')[1].split('】')[0]
+        siann, un, tiau = split_hong_im_hu_ho(han_ji_piau_im)
+        # 依使用者指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
+        tai_gi_im_piau = piau_im.hong_im_tng_tai_gi_im_piau(
+            siann=siann,
+            un=un,
+            tiau=tiau)['台語音標']
+    else:
+        # 將人工輸入的【台語音標】，解構為【聲母】、【韻母】、【聲調】
+        tai_gi_im_piau = convert_tl_with_tiau_hu_to_tlpa(jin_kang_piau_im)
+        # 依指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
+        han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+            piau_im=piau_im,
+            piau_im_huat=piau_im_huat,
+            tai_gi_im_piau=tai_gi_im_piau
+        )
+
+    return tai_gi_im_piau, han_ji_piau_im
+
+
 def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im'):
     """查漢字讀音：依【漢字】查找【台語音標】，並依指定之【標音方法】輸出【漢字標音】"""
     try:
@@ -117,6 +148,10 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
 
             # 逐欄取出漢字處理
             for col in range(start_col, end_col):
+                # Initialize variables to avoid using them before assignment
+                tai_gi_im_piau = ""
+                han_ji_piau_im = ""
+
                 # 取得當前儲存格內含值
                 han_ji_u_piau_im = False
                 msg = ""
@@ -127,6 +162,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                 cell.color = None
 
                 cell_value = cell.value
+                jin_kang_piau_im = cell.offset(-2, 0).value  # 人工標音
                 if cell_value == 'φ':
                     EOF = True
                     msg = "【文字終結】"
@@ -138,13 +174,19 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                     elif Two_Empty_Cells == 1:
                         EOF = True
                     msg = "【空缺】"    # 表【儲存格】未填入任何字/符，不同於【空白】字元
+                # 若不為【標點符號】，則以【漢字】處理
+                elif is_punctuation(cell_value):
+                    msg = f"{cell_value}【標點符號】"
                 else:
-                    # 若不為【標點符號】，則以【漢字】處理
-                    if is_punctuation(cell_value):
-                        msg = f"{cell_value}"
+                    # 查找漢字讀音
+                    han_ji = cell_value
+                    if jin_kang_piau_im and han_ji != '':
+                        tai_gi_im_piau, han_ji_piau_im = jin_kang_piau_im_cu_han_ji_piau_im(
+                            wb=wb,
+                            jin_kang_piau_im=jin_kang_piau_im,
+                            piau_im=piau_im,
+                            piau_im_huat=piau_im_huat)
                     else:
-                        # 查找漢字讀音
-                        han_ji = cell_value
                         # 自【漢字庫】查找作業
                         result = han_ji_ca_piau_im(cursor=cursor,
                                                     han_ji=han_ji,
@@ -166,19 +208,20 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                                 piau_im=piau_im,
                                 piau_im_huat=piau_im_huat
                             )
-                            sheet.range((row - 1, col)).value = tai_gi_im_piau
-                            sheet.range((row + 1, col)).value = han_ji_piau_im
-                            msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
-                            # 【標音字庫】添加或更新【漢字】資料
-                            piau_im_ji_khoo.add_or_update_entry(
-                                han_ji=han_ji,
-                                tai_gi_im_piau=tai_gi_im_piau,
-                                kenn_ziann_im_piau='N/A',
-                                coordinates=(row, col)
-                            )
+                    # 將【台語音標】和【漢字標音】寫入儲存格
+                    sheet.range((row - 1, col)).value = tai_gi_im_piau
+                    sheet.range((row + 1, col)).value = han_ji_piau_im
+                    msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
+                    # 【標音字庫】添加或更新【漢字】資料
+                    piau_im_ji_khoo.add_or_update_entry(
+                        han_ji=han_ji,
+                        tai_gi_im_piau=tai_gi_im_piau,
+                        kenn_ziann_im_piau='N/A',
+                        coordinates=(row, col)
+                    )
                 # 顯示處理進度
                 col_name = xw.utils.col_name(col)   # 取得欄位名稱
-                print(f"({row}, {col_name}) = {msg}")
+                print(f"【{xw.utils.col_name(col)}{row}】({row}, {col_name}) = {msg}")
 
                 # 若讀到【換行】或【文字終結】，跳出逐欄取字迴圈
                 if msg == "【換行】" or EOF:
