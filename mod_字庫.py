@@ -6,6 +6,8 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 from mod_excel_access import ensure_sheet_exists, get_total_rows_in_sheet
+from mod_logging import logging_exception
+from mod_標音 import tlpa_tng_han_ji_piau_im
 
 # =========================================================================
 # 載入環境變數
@@ -101,6 +103,7 @@ class JiKhooDict:
         else:
             raise ValueError(f"漢字 '{han_ji}' 不存在於字典中。")
 
+
     def update_value_by_key(self, han_ji: str, tai_gi_im_piau: str, key: str, value):
         if han_ji in self.ji_khoo_dict:
             for entry in self.ji_khoo_dict[han_ji]:
@@ -114,24 +117,87 @@ class JiKhooDict:
         else:
             raise ValueError(f"漢字 '{han_ji}' 不存在於字典中。")
 
-    # def write_to_excel_sheet(self, wb, sheet_name: str) -> int:
-    #     try:
-    #         sheet = wb.sheets[sheet_name]
-    #     except Exception:
-    #         sheet = wb.sheets.add(sheet_name)
+    def update_kau_ziang_im_piau(self, han_ji: str, tai_gi_im_piau: str, kenn_ziann_im_piau: str, coordinates: tuple):
+        """
+        將人工標音或校正音標更新至字典。
+        如果該漢字、音標已存在則更新校正音標與座標。
+        若尚未記錄該音標，則新增一筆。
+        """
+        if han_ji in self.ji_khoo_dict:
+            for entry in self.ji_khoo_dict[han_ji]:
+                if entry["tai_gi_im_piau"] == tai_gi_im_piau:
+                    entry["kenn_ziann_im_piau"] = kenn_ziann_im_piau
+                    if coordinates not in entry["coordinates"]:
+                        entry["coordinates"].append(coordinates)
+                    return
+        # 若找不到，則新增新項目
+        self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
 
-    #     sheet.clear()
-    #     headers = ["漢字", "台語音標", "校正音標", "座標"]
-    #     sheet.range("A1").value = headers
+    def update_by_piau_im_ji_khoo(self, wb, sheet_name: str, piau_im, piau_im_huat: str):
+        """
+        依【標音字庫】中的【校正音標】欄位進行更新，並將【校正音標】覆蓋至原【台語音標】。
+        """
+        try:
+            han_ji_piau_im_sheet_name = '漢字注音'
+            ensure_sheet_exists(wb, han_ji_piau_im_sheet_name)
+            han_ji_piau_im_sheet = wb.sheets[han_ji_piau_im_sheet_name]
 
-    #     data = []
-    #     for han_ji, entry in self.items():
-    #         for coord in entry["coordinates"]:
-    #             coord_str = f"({coord[0]}, {coord[1]})"
-    #             data.append([han_ji, entry["tai_gi_im_piau"], entry["kenn_ziann_im_piau"], coord_str])
+            piau_im_sheet_name = '標音字庫'
+            piau_im_ji_khoo_dict = self.create_ji_khoo_dict_from_sheet(wb, piau_im_sheet_name)
+        except Exception as e:
+            raise ValueError(f"無法找到或建立工作表 '{sheet_name}'：{e}")
 
-    #     sheet.range("A2").value = data
-    #     return 0
+        try:
+            for han_ji, entries in piau_im_ji_khoo_dict.ji_khoo_dict.items():
+                if not isinstance(entries, list):
+                    continue
+                for entry in entries:
+                    if not isinstance(entry, dict):
+                        continue
+                    tai_gi_im_piau = entry.get("tai_gi_im_piau", "")
+                    kau_ziann_im_piau = entry.get("kenn_ziann_im_piau", "")
+                    coordinates = entry.get("coordinates", [])
+
+                    if not kau_ziann_im_piau or kau_ziann_im_piau == 'N/A':
+                        if coordinates:
+                            row_no, col_no = coordinates[0]
+                            msg = f"{han_ji} [{tai_gi_im_piau}] / [{kau_ziann_im_piau}]"
+                            print(f"({row_no}, {col_no}) = {msg}")
+                        continue
+
+                    for row, col in coordinates:
+                        han_ji_piau_im_sheet.activate()
+                        han_ji_piau_im_sheet.range((row, col)).select()
+                        han_ji_cell = han_ji_piau_im_sheet.range((row, col))
+                        tai_gi_im_piau_cell = han_ji_piau_im_sheet.range((row - 1, col))
+                        han_ji_piau_im_cell = han_ji_piau_im_sheet.range((row + 1, col))
+
+                        tai_gi_im_piau_cell.value = kau_ziann_im_piau
+                        han_ji_piau_im_cell.value = tlpa_tng_han_ji_piau_im(
+                            piau_im=piau_im,
+                            piau_im_huat=piau_im_huat,
+                            tai_gi_im_piau=kau_ziann_im_piau
+                        )
+                        han_ji_cell.color = (0, 255, 255)
+                        han_ji_cell.font.color = (255, 0, 0)
+
+                        msg = f"{han_ji} [{tai_gi_im_piau}] / [{kau_ziann_im_piau}]"
+                        print(f"({row}, {col}) = {msg}")
+
+        except Exception as e:
+            logging_exception(msg=f"使用【標音字庫】之【校正音標】，改正【漢字注音】之【台語音標】作業異常！", error=e)
+            raise
+
+        try:
+            piau_im_ji_khoo_dict.write_to_excel_sheet(wb=wb, sheet_name=piau_im_sheet_name)
+        except Exception as e:
+            logging_exception(msg=f"將【字典】存放之資料，更新工作表作業異常！", error=e)
+            raise
+
+        han_ji_piau_im_sheet.range('A1').select()
+        return EXIT_CODE_SUCCESS
+
+
     def write_to_excel_sheet(self, wb, sheet_name: str) -> int:
         try:
             sheet = wb.sheets[sheet_name]
@@ -170,43 +236,6 @@ class JiKhooDict:
         print(f"已成功將字典資料寫入工作表 '{sheet_name}'。")
 
     @classmethod
-    # def create_ji_khoo_dict_from_sheet(cls, wb, sheet_name: str):
-    #     from mod_excel_access import ensure_sheet_exists
-
-    #     if not ensure_sheet_exists(wb, sheet_name):
-    #         raise ValueError(f"無法找到工作表 '{sheet_name}'。")
-
-    #     try:
-    #         sheet = wb.sheets[sheet_name]
-    #     except Exception as e:
-    #         raise ValueError(f"無法找到工作表 '{sheet_name}'：{e}")
-
-    #     data = sheet.range("A2").expand("table").value
-    #     ji_khoo = cls()
-
-    #     if data is None:
-    #         return ji_khoo
-    #     if not isinstance(data[0], list):
-    #         data = [data]
-
-    #     for row in data:
-    #         han_ji = row[0] or ""
-    #         tai_gi_im_piau = row[1] or "N/A"
-    #         kenn_ziann_im_piau = row[2] or "N/A"
-    #         coords_str = row[3] or ""
-
-    #         coordinates = []
-    #         if coords_str:
-    #             coords_list = coords_str.split("; ")
-    #             for coord in coords_list:
-    #                 coord = coord.strip("()")
-    #                 row_col = tuple(map(int, coord.split(", ")))
-    #                 coordinates.append(row_col)
-
-    #         for coord in coordinates:
-    #             ji_khoo.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coord)
-
-    #     return ji_khoo
     def create_ji_khoo_dict_from_sheet(cls, wb, sheet_name: str):
         from mod_excel_access import ensure_sheet_exists
 

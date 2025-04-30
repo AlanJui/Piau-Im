@@ -90,7 +90,7 @@ def jin_kang_piau_im_cu_han_ji_piau_im(wb, jin_kang_piau_im: str, piau_im: PiauI
     return tai_gi_im_piau, han_ji_piau_im
 
 
-def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im'):
+def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im', new_jin_kang_piau_im__piau:bool=False):
     """查漢字讀音：依【漢字】查找【台語音標】，並依指定之【標音方法】輸出【漢字標音】"""
     try:
         # 載入【漢字庫】查找函數
@@ -120,7 +120,8 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                                 sheet_name=piau_im_sheet_name)
 
         jin_kang_piau_im_sheet_name='人工標音字庫'
-        delete_sheet_by_name(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
+        if new_jin_kang_piau_im__piau:
+            delete_sheet_by_name(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
         jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
             wb=wb,
             sheet_name=jin_kang_piau_im_sheet_name)
@@ -300,7 +301,8 @@ def process(wb):
                 han_ji_khoo=han_ji_khoo_name,   # "河洛話",
                 db_name=db_name,                # "Ho_Lok_Ue.db",
                 module_name=module_name,        # "mod_河洛話",
-                function_name=function_name     # "han_ji_ca_piau_im",
+                function_name=function_name,    # "han_ji_ca_piau_im",
+                new_jin_kang_piau_im__piau=True # 新建人工標音字庫工作表
             )
         elif han_ji_khoo_name == "河洛話" and ue_im_lui_piat == "文讀音":
             ca_han_ji_thak_im(
@@ -311,7 +313,8 @@ def process(wb):
                 han_ji_khoo=han_ji_khoo_name,   # "河洛話",
                 db_name=db_name,                # "Ho_Lok_Ue.db",
                 module_name=module_name,        # "mod_河洛話",
-                function_name=function_name     # "han_ji_ca_piau_im",
+                function_name=function_name,    # "han_ji_ca_piau_im",
+                new_jin_kang_piau_im__piau=True # 新建人工標音字庫工作表
             )
         elif han_ji_khoo_name == "廣韻":
             ca_han_ji_thak_im(
