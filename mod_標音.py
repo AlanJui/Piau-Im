@@ -937,48 +937,28 @@ class PiauIm:
         return piau_im
 
 
-    def BP_piau_im(self, siann_bu, un_bu, tiau_ho):
-        piau_im_huat = "閩拼方案"
-        # 將「台羅八聲調」轉換成閩拼使用的調號
-        Tiau_Ho_Remap = {
-            1: 1,  # 陰平: 44
-            2: 3,  # 上聲：53
-            3: 5,  # 陰去：21
-            4: 7,  # 上聲：53
-            5: 2,  # 陽平：24
-            7: 6,  # 陰入：3?
-            8: 8,  # 陽入：4?
-        }
-
-        # 將上標數字替換為普通數字
-        tiau_ho = replace_superscript_digits(str(tiau_ho))
-        tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
-
-        if siann_bu == "" or siann_bu is None or siann_bu == "Ø" or siann_bu == "ø":
-            siann = ""
-        else:
-            siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
-
-        un = self.Un_Bu_Dict[un_bu][piau_im_huat]
-        # piau_im = f"{siann}{un}"
-
-        # 當聲母為「空白」，韻母為：i 或 u 時，調整聲母
-        un_chars = list(un)
-        if siann == "":
-            if un_chars[0] == "i":
-                siann = "y"
-            elif un_chars[0] == "u":
-                siann = "w"
-
-        # 直接將調號附加到音標的末尾
-        tiau = Tiau_Ho_Remap[tiau_ho]  # 將「傳統八聲調」轉換成閩拼使用的調號
-        # piau_im = f"{piau_im}{tiau}"
-
-        piau_im = f"{siann}{un}{tiau}"
-        return piau_im
-
     #================================================================
     # 閩拼（BP）
+    #================================================================
+    #
+    # 《閩拼方案規範》
+    #
+    # 【零聲母，音節開頭為母音 'i' 或 'u' 之轉換規則】
+    # 音節為母音[i]或[u]開頭時(零聲母)，會視情況將其母音改寫或增加一個y或w字首，此規則與漢語拼音方案相同。
+    #   （1）傳入之 siann_bu 為："Ø"/""/None ；且 un_bu 的第一個羅馬拼音字母為「i」時：
+    #       (a) i 後無其它【韻母】，則在 "i" 之前，增添「y」。
+    #           【例】： 【依】= "" + "i" + "1" → un_bu = "yi"。
+    #                   【因】= "" + "in" + "1" →  un_bu = "yin"。
+    #       (b) i 後有其它羅馬字母，則將 "i" 改為「y」。
+    #           【例】：【鴉】= "" + "ia" + "1" → un_bu = "ya"。
+    #                   【煙】 = "" + "ian" + "1" → un_bu = "yan"。
+    #   （2）傳入之 siann_bu 為："Ø"/""/None ；且 un_bu 的第一個羅馬拼音字母為「u」時：
+    #       (a) u 後無其它【韻母】，則在 "u" 之前，增添「w」。
+    #           【例】： 【烏】= "" + "u" + "1" → un_bu = "wu"。
+    #                   【溫】= "" + "un" + "1" →  un_bu = "wun"。
+    #       (b) u 後有其它羅馬字母，則將 "u" 改為「w」。
+    #           【例】：【蛙】= "" + "ua" + "1" → un_bu = "wa"。
+    #                   【彎】 = "" + "uan" + "1" → un_bu = "wan"。
     #
     # 【調號標示規則】
     # 當一個音節有多個字母時，調號得標示在響度最大的字母上面（通常在韻腹）。由規則可以判定確切的字母：
@@ -989,7 +969,10 @@ class PiauIm:
     #  - 二合字母 oo 及 ng，標於前一個字母上；比如 ng 標示在字母 n 上。
     #  - 三合字母 ere，標於最後的字母 e 上。
     #================================================================
-    def BP_piau_im_with_tiau_hu(self, siann_bu, un_bu, tiau_ho):
+    def _get_BP_syllable(self, siann_bu, un_bu, tiau_ho, with_tone_number=True):
+        """
+        產生未附聲調符號的【閩拼音節】，可選擇附數字調號或不附（方便後續加符號）
+        """
         piau_im_huat = "閩拼方案"
         # 將「台羅八聲調」轉換成閩拼使用的調號
         Tiau_Ho_Remap = {
@@ -998,53 +981,180 @@ class PiauIm:
             3: 5,  # 陰去：21
             4: 7,  # 上聲：53
             5: 2,  # 陽平：24
-            6: 5,  # 陽去：21
             7: 6,  # 陰入：3?
             8: 8,  # 陽入：4?
         }
 
-        # 將上標數字替換為普通數字
+        # 將表【調號】之【上標數值】字母轉換為標準字母
+        # 【調號】值為 6 時，轉換成：7
         tiau_ho = replace_superscript_digits(str(tiau_ho))
         tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
+        tiau = Tiau_Ho_Remap[int(tiau_ho)]
 
-        if siann_bu == "" or siann_bu == None or siann_bu == "Ø" or siann_bu == "ø":
+        # 聲母與韻母轉換
+        # siann = "" if siann_bu in ("", None, "Ø", "ø") else self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+        if siann_bu in ("", None, "Ø", "ø"):
             siann = ""
         else:
             siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
-
         un = self.Un_Bu_Dict[un_bu][piau_im_huat]
-        piau_im = f"{siann}{un}"
 
-        # 當聲母為「空白」，韻母為：i 或 u 時，調整聲母
-        un_chars = list(un)
+        # 閩拼特例：零聲母 + i/u 開頭的韻母
+        # 當聲母為「空白」，韻母為首之【羅馬拼音字母】為：i 或 u 時之調整作業
         if siann == "":
-            if un_chars[0] == "i":
-                siann = "y"
-            elif un_chars[0] == "u":
-                siann = "w"
+            if un.startswith("i"):
+                # un = "y" + un[1:] if len(un) > 1 else "y" + un
+                if len(un) == 1:
+                    un = "y" + un  # i 後無其它韻母字母，增添 y
+                else:
+                    un = "y" + un[1:]  # i 後有其它韻母字母，將 i 改為 y
+            elif un.startswith("u"):
+                # un = "w" + un[1:] if len(un) > 1 else "w" + un
+                if len(un) == 1:
+                    un = "w" + un  # u 後無其它韻母字母，增添 w
+                else:
+                    un = "w" + un[1:]  # u 後有其它韻母字母，將 u 改為 w
 
+        if with_tone_number:
+            return f"{siann}{un}{tiau}"
+        else:
+            return siann, un, tiau
+
+
+    def BP_piau_im(self, siann_bu, un_bu, tiau_ho):
+        """將傳入的「TLPA+音標」之【聲母】、【韻母】、【調號】轉換為【閩拼方案】的音標
+
+        Args:
+            siann_bu (str): TLPA+音標的聲母
+            un_bu (str): TLPA+音標的韻母
+            tiau_ho (str): TLPA+音標的調號
+
+        Returns:
+            str: 閩拼方案的音標
+        """
+        return self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=True)
+
+    def BP_piau_im_with_tiau_hu(self, siann_bu, un_bu, tiau_ho):
+        #----------------------------------------
+        # 取得【閩拼方案】之【聲母】、【韻母】、【調號】
+        #----------------------------------------
+        siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+
+        #----------------------------------------
+        # 在【韻母】之【羅馬拼音字母】之上標示【聲調】符號
+        #----------------------------------------
+
+        # 韻腹標調位置規則
         pattern = r"(a|oo|ere|iu|ui|ng|e|o|i|u|m)"
-        searchObj = re.search(pattern, piau_im, re.M | re.I)
+        match = re.search(pattern, un, re.I)
+        if match:
+            found = match.group(1)
+            idx = {"iu": 1, "ui": 1, "oo": 0, "ng": 0, "ere": 2}.get(found, 0)
+            target = list(found)
+            target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+            un = un.replace(found, ''.join(target))
 
-        if searchObj:
-            found = searchObj.group(1)
-            un_chars = list(found)
-            idx = 0
-            if found == "iu" or found == "ui":
-                idx = 1
-            elif found == "oo" or found == "ng":
-                idx = 0
-            elif found == "ere":
-                idx = 2
+        return f"{siann}{un}"
 
-            # 處理韻母加聲調符號
-            guan_im = un_chars[idx]
-            tiau = Tiau_Ho_Remap[tiau_ho]  # 將「傳統八聲調」轉換成閩拼使用的調號
-            un_chars[idx] = self.bp_un_bu_ga_tiau_ho(guan_im, tiau)
-            un_str = "".join(un_chars)
-            piau_im = piau_im.replace(found, un_str)
+    # def BP_piau_im2(self, siann_bu, un_bu, tiau_ho):
+    #     piau_im_huat = "閩拼方案"
+    #     # 將「台羅八聲調」轉換成閩拼使用的調號
+    #     Tiau_Ho_Remap = {
+    #         1: 1,  # 陰平: 44
+    #         2: 3,  # 上聲：53
+    #         3: 5,  # 陰去：21
+    #         4: 7,  # 上聲：53
+    #         5: 2,  # 陽平：24
+    #         7: 6,  # 陰入：3?
+    #         8: 8,  # 陽入：4?
+    #     }
 
-        return piau_im
+    #     # 將上標數字替換為普通數字
+    #     tiau_ho = replace_superscript_digits(str(tiau_ho))
+    #     tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
+
+    #     if siann_bu == "" or siann_bu is None or siann_bu == "Ø" or siann_bu == "ø":
+    #         siann = ""
+    #     else:
+    #         siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+
+    #     un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+
+    #     # 當聲母為「空白」，韻母為：i 或 u 時，調整韻母（閩拼方案規範）
+    #     if siann == "":
+    #         if un.startswith("i"):
+    #             if len(un) == 1:
+    #                 un = "y" + un  # i 後無其它韻母字母，增添 y
+    #             else:
+    #                 un = "y" + un[1:]  # i 後有其它韻母字母，將 i 改為 y
+    #         elif un.startswith("u"):
+    #             if len(un) == 1:
+    #                 un = "w" + un  # u 後無其它韻母字母，增添 w
+    #             else:
+    #                 un = "w" + un[1:]  # u 後有其它韻母字母，將 u 改為 w
+
+    #     # 直接將調號附加到音標的末尾
+    #     tiau = Tiau_Ho_Remap[tiau_ho]  # 將「傳統八聲調」轉換成閩拼使用的調號
+
+    #     piau_im = f"{siann}{un}{tiau}"
+    #     return piau_im
+
+    # def BP_piau_im_with_tiau_hu(self, siann_bu, un_bu, tiau_ho):
+    #     piau_im_huat = "閩拼方案"
+    #     # 將「台羅八聲調」轉換成閩拼使用的調號
+    #     Tiau_Ho_Remap = {
+    #         1: 1,  # 陰平: 44
+    #         2: 3,  # 上聲：53
+    #         3: 5,  # 陰去：21
+    #         4: 7,  # 上聲：53
+    #         5: 2,  # 陽平：24
+    #         6: 5,  # 陽去：21
+    #         7: 6,  # 陰入：3?
+    #         8: 8,  # 陽入：4?
+    #     }
+
+    #     # 將上標數字替換為普通數字
+    #     tiau_ho = replace_superscript_digits(str(tiau_ho))
+    #     tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
+
+    #     if siann_bu == "" or siann_bu == None or siann_bu == "Ø" or siann_bu == "ø":
+    #         siann = ""
+    #     else:
+    #         siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+
+    #     un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+    #     piau_im = f"{siann}{un}"
+
+    #     # 當聲母為「空白」，韻母為：i 或 u 時，調整聲母
+    #     un_chars = list(un)
+    #     if siann == "":
+    #         if un_chars[0] == "i":
+    #             siann = "y"
+    #         elif un_chars[0] == "u":
+    #             siann = "w"
+
+    #     pattern = r"(a|oo|ere|iu|ui|ng|e|o|i|u|m)"
+    #     searchObj = re.search(pattern, piau_im, re.M | re.I)
+
+    #     if searchObj:
+    #         found = searchObj.group(1)
+    #         un_chars = list(found)
+    #         idx = 0
+    #         if found == "iu" or found == "ui":
+    #             idx = 1
+    #         elif found == "oo" or found == "ng":
+    #             idx = 0
+    #         elif found == "ere":
+    #             idx = 2
+
+    #         # 處理韻母加聲調符號
+    #         guan_im = un_chars[idx]
+    #         tiau = Tiau_Ho_Remap[tiau_ho]  # 將「傳統八聲調」轉換成閩拼使用的調號
+    #         un_chars[idx] = self.bp_un_bu_ga_tiau_ho(guan_im, tiau)
+    #         un_str = "".join(un_chars)
+    #         piau_im = piau_im.replace(found, un_str)
+
+    #     return piau_im
 
     #================================================================
     # 方音符號注音（TPS）
