@@ -54,7 +54,9 @@ init_logging()
 # 程式區域函式
 # =========================================================================
 def jin_kang_piau_im_cu_han_ji_piau_im(wb, jin_kang_piau_im: str, piau_im: PiauIm, piau_im_huat: str):
-    """人工標音取【台語音標】"""
+    """
+    人工標音取【台語音標】
+    """
 
     if '〔' in jin_kang_piau_im and '〕' in jin_kang_piau_im:
         # 將人工輸入的〔台語音標〕轉換成【方音符號】
@@ -117,11 +119,11 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                                 wb=wb,
                                 sheet_name=piau_im_sheet_name)
 
-        # jin_kang_piau_im_sheet_name='人工標音字庫'
-        # # delete_sheet_by_name(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
-        # jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
-        #                                 wb=wb,
-        #                                 sheet_name=jin_kang_piau_im_sheet_name)
+        jin_kang_piau_im_sheet_name='人工標音字庫'
+        delete_sheet_by_name(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
+        jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+            wb=wb,
+            sheet_name=jin_kang_piau_im_sheet_name)
 
         # 指定【漢字注音】工作表為【作用工作表】
         sheet = wb.sheets[sheet_name]
@@ -153,7 +155,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                 han_ji_piau_im = ""
 
                 # 取得當前儲存格內含值
-                han_ji_u_piau_im = False
+                # han_ji_u_piau_im = False
                 msg = ""
                 cell = sheet.range((row, col))
                 # 將文字顏色設為【自動】（黑色）
@@ -186,6 +188,18 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                             jin_kang_piau_im=jin_kang_piau_im,
                             piau_im=piau_im,
                             piau_im_huat=piau_im_huat)
+                        # 將【台語音標】和【漢字標音】寫入儲存格
+                        sheet.range((row - 1, col)).value = tai_gi_im_piau
+                        sheet.range((row + 1, col)).value = han_ji_piau_im
+                        msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】《人工標音》]"
+                        # 【標音字庫】添加或更新【漢字】資料
+                        # jin_kang_piau_im_ji_khoo.add_or_update_entry(
+                        jin_kang_piau_im_ji_khoo.add_entry(
+                            han_ji=han_ji,
+                            tai_gi_im_piau=tai_gi_im_piau,
+                            kenn_ziann_im_piau=jin_kang_piau_im,
+                            coordinates=(row, col)
+                        )
                     else:
                         # 自【漢字庫】查找作業
                         result = han_ji_ca_piau_im(cursor=cursor,
@@ -193,7 +207,8 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                                                     ue_im_lui_piat=ue_im_lui_piat)
                         # 若【漢字庫】查無此字，登錄至【缺字表】
                         if not result:
-                            khuat_ji_piau_ji_khoo.add_or_update_entry(
+                            # khuat_ji_piau_ji_khoo.add_or_update_entry(
+                            khuat_ji_piau_ji_khoo.add_entry(
                                 han_ji=han_ji,
                                 tai_gi_im_piau='',
                                 kenn_ziann_im_piau='N/A',
@@ -208,17 +223,18 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                                 piau_im=piau_im,
                                 piau_im_huat=piau_im_huat
                             )
-                    # 將【台語音標】和【漢字標音】寫入儲存格
-                    sheet.range((row - 1, col)).value = tai_gi_im_piau
-                    sheet.range((row + 1, col)).value = han_ji_piau_im
-                    msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
-                    # 【標音字庫】添加或更新【漢字】資料
-                    piau_im_ji_khoo.add_or_update_entry(
-                        han_ji=han_ji,
-                        tai_gi_im_piau=tai_gi_im_piau,
-                        kenn_ziann_im_piau='N/A',
-                        coordinates=(row, col)
-                    )
+                            # 將【台語音標】和【漢字標音】寫入儲存格
+                            sheet.range((row - 1, col)).value = tai_gi_im_piau
+                            sheet.range((row + 1, col)).value = han_ji_piau_im
+                            msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
+                            # 【標音字庫】添加或更新【漢字】資料
+                            # piau_im_ji_khoo.add_or_update_entry(
+                            piau_im_ji_khoo.add_entry(
+                                han_ji=han_ji,
+                                tai_gi_im_piau=tai_gi_im_piau,
+                                kenn_ziann_im_piau='N/A',
+                                coordinates=(row, col)
+                            )
                 # 顯示處理進度
                 col_name = xw.utils.col_name(col)   # 取得欄位名稱
                 print(f"【{xw.utils.col_name(col)}{row}】({row}, {col_name}) = {msg}")
@@ -233,7 +249,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                 # 將【標音字庫】、【人工標音字庫】、【缺字表】三個字典，寫入 Excel 工作表
                 khuat_ji_piau_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=khuat_ji_piau_name)
                 piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=piau_im_sheet_name)
-                # jin_kang_piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
+                jin_kang_piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
                 break
             # 每當處理一行 15 個漢字後，亦換到下一行
             if col == end_col - 1: print('\n')

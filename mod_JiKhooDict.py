@@ -1,43 +1,3 @@
-import logging
-import os
-import sys
-
-import xlwings as xw
-from dotenv import load_dotenv
-
-from mod_excel_access import ensure_sheet_exists, get_total_rows_in_sheet
-
-# =========================================================================
-# 載入環境變數
-# =========================================================================
-load_dotenv()
-
-DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
-DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
-
-# =========================================================================
-# 設定日誌
-# =========================================================================
-logging.basicConfig(
-    filename='process_log.txt',
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
-
-def logging_process_step(msg):
-    print(msg)
-    logging.info(msg)
-
-# =========================================================================
-# 常數定義
-# =========================================================================
-EXIT_CODE_SUCCESS = 0  # 成功
-EXIT_CODE_FAILURE = 1
-EXIT_CODE_NO_FILE = 1  # 無法找到檔案
-EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
-EXIT_CODE_PROCESS_FAILURE = 3  # 過程失敗
-EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
-
 class JiKhooDict:
     def __init__(self):
         self.ji_khoo_dict = {}
@@ -114,24 +74,6 @@ class JiKhooDict:
         else:
             raise ValueError(f"漢字 '{han_ji}' 不存在於字典中。")
 
-    # def write_to_excel_sheet(self, wb, sheet_name: str) -> int:
-    #     try:
-    #         sheet = wb.sheets[sheet_name]
-    #     except Exception:
-    #         sheet = wb.sheets.add(sheet_name)
-
-    #     sheet.clear()
-    #     headers = ["漢字", "台語音標", "校正音標", "座標"]
-    #     sheet.range("A1").value = headers
-
-    #     data = []
-    #     for han_ji, entry in self.items():
-    #         for coord in entry["coordinates"]:
-    #             coord_str = f"({coord[0]}, {coord[1]})"
-    #             data.append([han_ji, entry["tai_gi_im_piau"], entry["kenn_ziann_im_piau"], coord_str])
-
-    #     sheet.range("A2").value = data
-    #     return 0
     def write_to_excel_sheet(self, wb, sheet_name: str) -> int:
         try:
             sheet = wb.sheets[sheet_name]
@@ -143,14 +85,13 @@ class JiKhooDict:
         sheet.range("A1").value = headers
 
         data = []
-        for han_ji, entries in self.ji_khoo_dict.items():
-            for entry in entries:
-                coord_str = "; ".join(f"({r}, {c})" for r, c in entry["coordinates"])
+        for han_ji, entry in self.items():
+            for coord in entry["coordinates"]:
+                coord_str = f"({coord[0]}, {coord[1]})"
                 data.append([han_ji, entry["tai_gi_im_piau"], entry["kenn_ziann_im_piau"], coord_str])
 
         sheet.range("A2").value = data
         return 0
-
 
     def write_to_han_ji_zu_im_sheet(self, wb, sheet_name: str):
         from mod_excel_access import ensure_sheet_exists
@@ -170,43 +111,6 @@ class JiKhooDict:
         print(f"已成功將字典資料寫入工作表 '{sheet_name}'。")
 
     @classmethod
-    # def create_ji_khoo_dict_from_sheet(cls, wb, sheet_name: str):
-    #     from mod_excel_access import ensure_sheet_exists
-
-    #     if not ensure_sheet_exists(wb, sheet_name):
-    #         raise ValueError(f"無法找到工作表 '{sheet_name}'。")
-
-    #     try:
-    #         sheet = wb.sheets[sheet_name]
-    #     except Exception as e:
-    #         raise ValueError(f"無法找到工作表 '{sheet_name}'：{e}")
-
-    #     data = sheet.range("A2").expand("table").value
-    #     ji_khoo = cls()
-
-    #     if data is None:
-    #         return ji_khoo
-    #     if not isinstance(data[0], list):
-    #         data = [data]
-
-    #     for row in data:
-    #         han_ji = row[0] or ""
-    #         tai_gi_im_piau = row[1] or "N/A"
-    #         kenn_ziann_im_piau = row[2] or "N/A"
-    #         coords_str = row[3] or ""
-
-    #         coordinates = []
-    #         if coords_str:
-    #             coords_list = coords_str.split("; ")
-    #             for coord in coords_list:
-    #                 coord = coord.strip("()")
-    #                 row_col = tuple(map(int, coord.split(", ")))
-    #                 coordinates.append(row_col)
-
-    #         for coord in coordinates:
-    #             ji_khoo.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coord)
-
-    #     return ji_khoo
     def create_ji_khoo_dict_from_sheet(cls, wb, sheet_name: str):
         from mod_excel_access import ensure_sheet_exists
 
@@ -244,4 +148,3 @@ class JiKhooDict:
                 ji_khoo.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coord)
 
         return ji_khoo
-
