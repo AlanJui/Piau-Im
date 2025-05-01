@@ -101,7 +101,7 @@ def jin_kang_piau_imm(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
 
         # 建置自動及人工漢字標音字庫工作表：（1）【標音字庫】（2）【人工標音字】
         piau_im_sheet_name = '標音字庫'
-        delete_sheet_by_name(wb=wb, sheet_name=piau_im_sheet_name)
+        # delete_sheet_by_name(wb=wb, sheet_name=piau_im_sheet_name)
         piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
             wb=wb,
             sheet_name=piau_im_sheet_name)
@@ -186,6 +186,38 @@ def jin_kang_piau_imm(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                             kenn_ziann_im_piau=jin_kang_piau_im,
                             coordinates=(row, col)
                         )
+                        # ----- 新增程式邏輯：更新【標音字庫】 -----
+                        # Step 1: 在【標音字庫】搜尋該筆【漢字】+【台語音標】
+                        existing_entries = piau_im_ji_khoo.ji_khoo_dict.get(han_ji, [])
+
+                        # 標記是否找到
+                        entry_found = False
+
+                        for existing_entry in existing_entries:
+                            # Step 2: 若找到，移除該筆資料內的座標
+                            if (row, col) in existing_entry["coordinates"]:
+                                existing_entry["coordinates"].remove((row, col))
+                            entry_found = True
+                            break  # 找到即可離開迴圈
+                            # if existing_entry["tai_gi_im_piau"] == tai_gi_im_piau:
+                            #     # Step 2: 若找到，移除該筆資料內的座標
+                            #     if (row, col) in existing_entry["coordinates"]:
+                            #         existing_entry["coordinates"].remove((row, col))
+                            #     entry_found = True
+                            #     break  # 找到即可離開迴圈
+
+                        # Step 3: 將此筆資料（校正音標為 'N/A'）於【標音字庫】底端新增
+                        piau_im_ji_khoo.add_entry(
+                            han_ji=han_ji,
+                            tai_gi_im_piau=tai_gi_im_piau,
+                            kenn_ziann_im_piau="N/A",  # 預設值
+                            coordinates=(row, col)
+                        )
+
+                        # 將文字顏色設為【紅色】
+                        cell.font.color = (255, 0, 0)
+                        # 將儲存格的填滿色彩設為【黄色】
+                        cell.color = (255, 255, 0)
                 # 顯示處理進度
                 col_name = xw.utils.col_name(col)   # 取得欄位名稱
                 print(f"【{xw.utils.col_name(col)}{row}】({row}, {col_name}) = {msg}")
@@ -239,7 +271,7 @@ def process(wb):
             cell="V3",
             ue_im_lui_piat=ue_im_lui_piat,  # "白話音"
             han_ji_khoo=han_ji_khoo_name,   # "河洛話",
-            new_jin_kang_piau_im__piau=True # 新建人工標音字庫工作表
+            # new_jin_kang_piau_im__piau=True # 新建人工標音字庫工作表
         )
     except Exception as e:
         logging_exc_error(msg="在查找漢字標音時發生錯誤！", error=e)

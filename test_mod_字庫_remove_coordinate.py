@@ -8,7 +8,12 @@ from mod_字庫 import JiKhooDict
 
 
 class TestJiKhooDict(unittest.TestCase):
-
+# | 測試名稱 | 測試作用 |
+# |----------|-------------|
+# | `test_remove_single_coordinate()` | ✔ 測試移除其中一個座標，另一個仍在 |
+# | `test_remove_all_coordinates_should_delete_entry()` | ✔ 測試移除全部座標後整筆移除 |
+# | `test_remove_nonexistent_coordinate()` | ✔ 測試不存在的座標不影響現有資料 |
+# | `test_remove_with_nonexistent_han_ji()` | ✔ 測試無效漢字不產生例外 |
     def setUp(self):
         self.dict_obj = JiKhooDict()
         self.han_ji = "行"
