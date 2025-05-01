@@ -90,8 +90,7 @@ def jin_kang_piau_im_cu_han_ji_piau_im(wb, jin_kang_piau_im: str, piau_im: PiauI
     return tai_gi_im_piau, han_ji_piau_im
 
 
-# def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im', new_jin_kang_piau_im__piau:bool=False):
-def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im'):
+def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im', new_jin_kang_piau_im__piau:bool=False):
     """查漢字讀音：依【漢字】查找【台語音標】，並依指定之【標音方法】輸出【漢字標音】"""
     try:
         # 載入【漢字庫】查找函數
@@ -111,21 +110,21 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
         khuat_ji_piau_name = '缺字表'
         delete_sheet_by_name(wb=wb, sheet_name=khuat_ji_piau_name)
         khuat_ji_piau_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
-            wb=wb,
-            sheet_name=khuat_ji_piau_name)
+                                    wb=wb,
+                                    sheet_name=khuat_ji_piau_name)
 
         piau_im_sheet_name = '標音字庫'
         delete_sheet_by_name(wb=wb, sheet_name=piau_im_sheet_name)
         piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
-            wb=wb,
-            sheet_name=piau_im_sheet_name)
+                                wb=wb,
+                                sheet_name=piau_im_sheet_name)
 
-        # jin_kang_piau_im_sheet_name='人工標音字庫'
-        # if new_jin_kang_piau_im__piau:
-        #     delete_sheet_by_name(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
-        # jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
-        #     wb=wb,
-        #     sheet_name=jin_kang_piau_im_sheet_name)
+        jin_kang_piau_im_sheet_name='人工標音字庫'
+        if new_jin_kang_piau_im__piau:
+            delete_sheet_by_name(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
+        jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+            wb=wb,
+            sheet_name=jin_kang_piau_im_sheet_name)
 
         # 指定【漢字注音】工作表為【作用工作表】
         sheet = wb.sheets[sheet_name]
@@ -184,27 +183,25 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                 else:
                     # 查找漢字讀音
                     han_ji = cell_value
-                    # if jin_kang_piau_im and han_ji != '':
-                    #     tai_gi_im_piau, han_ji_piau_im = jin_kang_piau_im_cu_han_ji_piau_im(
-                    #         wb=wb,
-                    #         jin_kang_piau_im=jin_kang_piau_im,
-                    #         piau_im=piau_im,
-                    #         piau_im_huat=piau_im_huat)
-                    #     # 將【台語音標】和【漢字標音】寫入儲存格
-                    #     sheet.range((row - 1, col)).value = tai_gi_im_piau
-                    #     sheet.range((row + 1, col)).value = han_ji_piau_im
-                    #     msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】《人工標音》]"
-                    #     # 【標音字庫】添加或更新【漢字】資料
-                    #     # jin_kang_piau_im_ji_khoo.add_or_update_entry(
-                    #     jin_kang_piau_im_ji_khoo.add_entry(
-                    #         han_ji=han_ji,
-                    #         tai_gi_im_piau=tai_gi_im_piau,
-                    #         kenn_ziann_im_piau=jin_kang_piau_im,
-                    #         coordinates=(row, col)
-                    #     )
-                    # else:
-                    if han_ji != '':
-                        # 查找【漢字】之轉【台語音標】，並依此進行轉換作業，取得【漢字標音】
+                    if jin_kang_piau_im and han_ji != '':
+                        tai_gi_im_piau, han_ji_piau_im = jin_kang_piau_im_cu_han_ji_piau_im(
+                            wb=wb,
+                            jin_kang_piau_im=jin_kang_piau_im,
+                            piau_im=piau_im,
+                            piau_im_huat=piau_im_huat)
+                        # 將【台語音標】和【漢字標音】寫入儲存格
+                        sheet.range((row - 1, col)).value = tai_gi_im_piau
+                        sheet.range((row + 1, col)).value = han_ji_piau_im
+                        msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】《人工標音》]"
+                        # 【標音字庫】添加或更新【漢字】資料
+                        # jin_kang_piau_im_ji_khoo.add_or_update_entry(
+                        jin_kang_piau_im_ji_khoo.add_entry(
+                            han_ji=han_ji,
+                            tai_gi_im_piau=tai_gi_im_piau,
+                            kenn_ziann_im_piau=jin_kang_piau_im,
+                            coordinates=(row, col)
+                        )
+                    else:
                         # 自【漢字庫】查找作業
                         result = han_ji_ca_piau_im(cursor=cursor,
                                                     han_ji=han_ji,
@@ -250,6 +247,10 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
             # -----------------------------------------------------------------
             # 若已到【結尾】或【超過總行數】，則跳出迴圈
             if EOF or line > TOTAL_LINES:
+                # 將【標音字庫】、【人工標音字庫】、【缺字表】三個字典，寫入 Excel 工作表
+                khuat_ji_piau_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=khuat_ji_piau_name)
+                piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=piau_im_sheet_name)
+                jin_kang_piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
                 break
             # 每當處理一行 15 個漢字後，亦換到下一行
             if col == end_col - 1: print('\n')
@@ -258,9 +259,6 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
         #----------------------------------------------------------------------
         # 作業結束前處理
         #----------------------------------------------------------------------
-        # 將【標音字庫】、【缺字表】三個字典，寫入 Excel 工作表
-        piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=piau_im_sheet_name)
-        khuat_ji_piau_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=khuat_ji_piau_name)
         # 關閉資料庫連線
         conn.close()
         logging_process_step("已完成【台語音標】和【漢字標音】標注工作。")
@@ -304,6 +302,7 @@ def process(wb):
                 db_name=db_name,                # "Ho_Lok_Ue.db",
                 module_name=module_name,        # "mod_河洛話",
                 function_name=function_name,    # "han_ji_ca_piau_im",
+                new_jin_kang_piau_im__piau=True # 新建人工標音字庫工作表
             )
         elif han_ji_khoo_name == "河洛話" and ue_im_lui_piat == "文讀音":
             ca_han_ji_thak_im(
@@ -315,6 +314,7 @@ def process(wb):
                 db_name=db_name,                # "Ho_Lok_Ue.db",
                 module_name=module_name,        # "mod_河洛話",
                 function_name=function_name,    # "han_ji_ca_piau_im",
+                new_jin_kang_piau_im__piau=True # 新建人工標音字庫工作表
             )
         elif han_ji_khoo_name == "廣韻":
             ca_han_ji_thak_im(

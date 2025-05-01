@@ -11612,3 +11612,76 @@ Traceback (most recent call last):
     tai_gi_im_piau = entry["tai_gi_im_piau"]
                      ~~~~~^^^^^^^^^^^^^^^^^^
 TypeError: string indices must be integers, not 'str'
+2025-05-01 09:19:01,644 - INFO - 《========== 程式開始執行：a210_人工標音 ==========》
+2025-05-01 09:19:01,644 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-01 09:19:01,662 - INFO - <----------- 作業開始！---------->
+2025-05-01 09:19:01,704 - ERROR - 在查找漢字標音時發生錯誤！，錯誤訊息: name 'ca_han_ji_thak_im' is not defined
+Traceback (most recent call last):
+  File "a210_人工標音.py", line 274, in process
+    ca_han_ji_thak_im(
+    ^^^^^^^^^^^^^^^^^
+NameError: name 'ca_han_ji_thak_im' is not defined
+2025-05-01 09:19:01,710 - ERROR - 程式異常終止：a210_人工標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a210_人工標音.py", line 362, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-05-01 09:19:02,095 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《登金陵鳳凰臺》.xlsx
+2025-05-01 09:28:27,718 - INFO - 《========== 程式開始執行：a210_人工標音 ==========》
+2025-05-01 09:28:27,718 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-01 09:28:27,735 - INFO - <----------- 作業開始！---------->
+2025-05-01 09:28:43,371 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-05-01 09:28:43,371 - INFO - 自動為【漢字】查找【台語音標】作業己完成！
+2025-05-01 09:28:43,371 - INFO - 【語音類型】：文讀音
+2025-05-01 09:28:43,372 - ERROR - 程式異常終止：a210_人工標音，錯誤訊息: name 'db_name' is not defined
+Traceback (most recent call last):
+  File "a210_人工標音.py", line 303, in main
+    status_code = process(wb)
+  File "a210_人工標音.py", line 252, in process
+    logging_process_step(f'【漢字庫】：{db_name}')
+                                        ^^^^^^^
+NameError: name 'db_name' is not defined
+2025-05-01 09:28:43,574 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《定風波》.xlsx
+2025-05-01 09:29:42,326 - INFO - 《========== 程式開始執行：a210_人工標音 ==========》
+2025-05-01 09:29:42,327 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-01 09:29:42,344 - INFO - <----------- 作業開始！---------->
+2025-05-01 09:29:57,941 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-05-01 09:29:57,941 - INFO - 自動為【漢字】查找【台語音標】作業己完成！
+2025-05-01 09:29:57,941 - INFO - 【語音類型】：文讀音
+2025-05-01 09:29:57,956 - INFO - <----------- 作業結束！---------->
+2025-05-01 09:29:58,145 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《定風波》.xlsx
+2025-05-01 09:29:58,145 - INFO - 《========== 程式終止執行：a210_人工標音 ==========》
+2025-05-01 09:37:49,757 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-05-01 09:37:49,758 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-01 09:37:49,775 - INFO - <----------- 作業開始！---------->
+2025-05-01 09:37:49,823 - ERROR - 在查找漢字標音時發生錯誤！，錯誤訊息: ca_han_ji_thak_im() got an unexpected keyword argument 'new_jin_kang_piau_im__piau'
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 310, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<7 lines>...
+        new_jin_kang_piau_im__piau=True # 新建人工標音字庫工作表
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+TypeError: ca_han_ji_thak_im() got an unexpected keyword argument 'new_jin_kang_piau_im__piau'
+2025-05-01 09:37:49,826 - ERROR - 程式異常終止：a200_查找及填入漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 398, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-05-01 09:37:50,197 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《定風波》.xlsx
+2025-05-01 09:38:36,728 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-05-01 09:38:36,728 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-01 09:38:36,745 - INFO - <----------- 作業開始！---------->
+2025-05-01 09:39:00,046 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-05-01 09:39:00,047 - INFO - 自動為【漢字】查找【台語音標】作業己完成！
+2025-05-01 09:39:00,047 - INFO - 【語音類型】：文讀音
+2025-05-01 09:39:00,047 - INFO - 【漢字庫】：Ho_Lok_Ue.db
+2025-05-01 09:39:00,059 - INFO - <----------- 作業結束！---------->
+2025-05-01 09:39:00,269 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《定風波》.xlsx
+2025-05-01 09:39:00,269 - INFO - 《========== 程式終止執行：a200_查找及填入漢字標音 ==========》
