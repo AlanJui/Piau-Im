@@ -11877,3 +11877,275 @@ UnboundLocalError: cannot access local variable 'e' where it is not associated w
 2025-05-01 13:22:53,055 - INFO - 【漢字庫】：Ho_Lok_Ue.db
 2025-05-01 13:22:53,251 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《定風波》.xlsx
 2025-05-01 13:22:53,251 - INFO - 《========== 程式終止執行：a300_手動更正漢字標音 ==========》
+2025-05-01 13:52:33,008 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-05-01 13:52:33,009 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-01 13:52:33,029 - INFO - <----------- 作業開始！---------->
+2025-05-01 13:52:33,117 - INFO - 已完成作業所需之初始化設定！
+2025-05-01 13:52:45,181 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-05-01 13:52:58,430 - INFO - 以【人工標音】更正之【台語音標】，已填入【標音字庫】之【校正音標】！
+2025-05-01 13:52:58,440 - INFO - <----------- 作業結束！---------->
+2025-05-01 14:53:54,192 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-05-01 14:53:54,193 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-01 14:53:54,209 - INFO - <----------- 作業開始！---------->
+2025-05-01 14:53:54,288 - INFO - 已完成作業所需之初始化設定！
+2025-05-01 14:54:05,171 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-05-01 14:54:18,560 - INFO - 以【人工標音】更正之【台語音標】，已填入【標音字庫】之【校正音標】！
+2025-05-01 14:57:15,485 - ERROR - 使用【標音字庫】之【校正音標】，改正【漢字注音】之【台語音標】作業異常！，錯誤訊息: cannot access local variable 'counter' where it is not associated with a value
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 539, in update_by_piau_im_ji_khoo
+    counter -= 1
+    ^^^^^^^
+UnboundLocalError: cannot access local variable 'counter' where it is not associated with a value
+2025-05-01 14:57:15,490 - ERROR - 處理以【標音字庫】更新【漢字注音】工作表之作業，發生執行異常！，錯誤訊息: cannot access local variable 'counter' where it is not associated with a value
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 626, in process
+    update_by_piau_im_ji_khoo(wb=wb,
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+                            sheet_name=sheet_name,
+                            ^^^^^^^^^^^^^^^^^^^^^^
+                            piau_im=piau_im,
+                            ^^^^^^^^^^^^^^^^
+                            piau_im_huat=piau_im_huat)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a300_手動更正漢字標音.py", line 539, in update_by_piau_im_ji_khoo
+    counter -= 1
+    ^^^^^^^
+UnboundLocalError: cannot access local variable 'counter' where it is not associated with a value
+2025-05-01 14:57:15,491 - ERROR - 程式異常終止：a300_手動更正漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 690, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-05-01 14:57:15,680 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《定風波》.xlsx
+2025-05-01 14:59:38,061 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-05-01 14:59:38,062 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-01 14:59:38,077 - INFO - <----------- 作業開始！---------->
+2025-05-01 14:59:38,141 - INFO - 已完成作業所需之初始化設定！
+2025-05-01 14:59:38,743 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-05-01 14:59:52,910 - INFO - 以【人工標音】更正之【台語音標】，已填入【標音字庫】之【校正音標】！
+2025-05-01 15:05:42,628 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-05-01 15:05:42,629 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-01 15:05:42,646 - INFO - <----------- 作業開始！---------->
+2025-05-01 15:05:42,718 - INFO - 已完成作業所需之初始化設定！
+2025-05-01 15:05:43,351 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-05-01 15:05:57,055 - INFO - 以【人工標音】更正之【台語音標】，已填入【標音字庫】之【校正音標】！
+2025-05-01 15:12:08,386 - ERROR - 使用【標音字庫】之【校正音標】，改正【漢字注音】之【台語音標】作業異常！，錯誤訊息: name 'total_count' is not defined
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 545, in update_by_piau_im_ji_khoo
+    msg = f"{han_ji} [{tai_gi_im_piau}] / [{kau_ziann_im_piau}]（自【標音字庫】回填）"
+                                                                         ^^^^^^
+NameError: name 'total_count' is not defined
+2025-05-01 15:12:08,398 - ERROR - 處理以【標音字庫】更新【漢字注音】工作表之作業，發生執行異常！，錯誤訊息: name 'total_count' is not defined
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 628, in process
+    update_by_piau_im_ji_khoo(wb=wb,
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+                            sheet_name=sheet_name,
+                            ^^^^^^^^^^^^^^^^^^^^^^
+                            piau_im=piau_im,
+                            ^^^^^^^^^^^^^^^^
+                            piau_im_huat=piau_im_huat)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a300_手動更正漢字標音.py", line 545, in update_by_piau_im_ji_khoo
+    msg = f"{han_ji} [{tai_gi_im_piau}] / [{kau_ziann_im_piau}]（自【標音字庫】回填）"
+                                                                         ^^^^^^
+NameError: name 'total_count' is not defined
+2025-05-01 15:12:08,406 - ERROR - 程式異常終止：a300_手動更正漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 692, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-05-01 15:12:08,599 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《定風波》.xlsx
+2025-05-01 15:12:23,211 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-05-01 15:12:23,212 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-01 15:12:23,227 - INFO - <----------- 作業開始！---------->
+2025-05-01 15:12:23,290 - INFO - 已完成作業所需之初始化設定！
+2025-05-01 15:12:23,918 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-05-01 15:12:37,342 - INFO - 以【人工標音】更正之【台語音標】，已填入【標音字庫】之【校正音標】！
+2025-05-01 15:14:21,633 - INFO - 以【標音字庫】之【校正音標】，更新【漢字注音】工作表之【台語音標】！
+2025-05-01 15:14:21,641 - INFO - <----------- 作業結束！---------->
+2025-05-01 15:19:28,573 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-05-01 15:19:28,574 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-01 15:19:28,591 - INFO - <----------- 作業開始！---------->
+2025-05-01 15:19:28,658 - INFO - 已完成作業所需之初始化設定！
+2025-05-01 15:19:29,471 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-05-01 15:19:42,771 - INFO - 以【人工標音】更正之【台語音標】，已填入【標音字庫】之【校正音標】！
+2025-05-01 15:19:43,191 - ERROR - 使用【標音字庫】之【校正音標】，改正【漢字注音】之【台語音標】作業異常！，錯誤訊息: '/a'
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 532, in update_by_piau_im_ji_khoo
+    han_ji_piau_im_cell.value = tlpa_tng_han_ji_piau_im(
+                                ~~~~~~~~~~~~~~~~~~~~~~~^
+        piau_im=piau_im,
+        ^^^^^^^^^^^^^^^^
+        piau_im_huat=piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+        tai_gi_im_piau=tai_gi_im_piau
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 542, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(piau_im_huat=piau_im_huat,
+                                                     siann_bu=siann_bu,
+                                                     un_bu=un_bu,
+                                                     tiau_ho=tiau_ho)
+  File "C:\work\Piau-Im\mod_標音.py", line 1307, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1035, in BP_piau_im
+    return self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=True)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1000, in _get_BP_syllable
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: '/a'
+2025-05-01 15:19:43,195 - ERROR - 處理以【標音字庫】更新【漢字注音】工作表之作業，發生執行異常！，錯誤訊息: '/a'
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 629, in process
+    update_by_piau_im_ji_khoo(wb=wb,
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+                            sheet_name=sheet_name,
+                            ^^^^^^^^^^^^^^^^^^^^^^
+                            piau_im=piau_im,
+                            ^^^^^^^^^^^^^^^^
+                            piau_im_huat=piau_im_huat)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a300_手動更正漢字標音.py", line 532, in update_by_piau_im_ji_khoo
+    han_ji_piau_im_cell.value = tlpa_tng_han_ji_piau_im(
+                                ~~~~~~~~~~~~~~~~~~~~~~~^
+        piau_im=piau_im,
+        ^^^^^^^^^^^^^^^^
+        piau_im_huat=piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+        tai_gi_im_piau=tai_gi_im_piau
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 542, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(piau_im_huat=piau_im_huat,
+                                                     siann_bu=siann_bu,
+                                                     un_bu=un_bu,
+                                                     tiau_ho=tiau_ho)
+  File "C:\work\Piau-Im\mod_標音.py", line 1307, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1035, in BP_piau_im
+    return self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=True)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1000, in _get_BP_syllable
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: '/a'
+2025-05-01 15:19:43,197 - ERROR - 程式異常終止：a300_手動更正漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 693, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-05-01 15:19:43,390 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《定風波》.xlsx
+2025-05-01 15:21:14,759 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-05-01 15:21:14,760 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-01 15:21:14,776 - INFO - <----------- 作業開始！---------->
+2025-05-01 15:21:14,856 - INFO - 已完成作業所需之初始化設定！
+2025-05-01 15:21:15,741 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-05-01 15:21:29,605 - INFO - 以【人工標音】更正之【台語音標】，已填入【標音字庫】之【校正音標】！
+2025-05-01 15:21:30,055 - ERROR - 使用【標音字庫】之【校正音標】，改正【漢字注音】之【台語音標】作業異常！，錯誤訊息: '/a'
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 532, in update_by_piau_im_ji_khoo
+    han_ji_piau_im_cell.value = tlpa_tng_han_ji_piau_im(
+                                ~~~~~~~~~~~~~~~~~~~~~~~^
+        piau_im=piau_im,
+        ^^^^^^^^^^^^^^^^
+        piau_im_huat=piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+        tai_gi_im_piau=tai_gi_im_piau
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 542, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(piau_im_huat=piau_im_huat,
+                                                     siann_bu=siann_bu,
+                                                     un_bu=un_bu,
+                                                     tiau_ho=tiau_ho)
+  File "C:\work\Piau-Im\mod_標音.py", line 1307, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1035, in BP_piau_im
+    return self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=True)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1000, in _get_BP_syllable
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: '/a'
+2025-05-01 15:21:30,060 - ERROR - 處理以【標音字庫】更新【漢字注音】工作表之作業，發生執行異常！，錯誤訊息: '/a'
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 629, in process
+    update_by_piau_im_ji_khoo(wb=wb,
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+                            sheet_name=sheet_name,
+                            ^^^^^^^^^^^^^^^^^^^^^^
+                            piau_im=piau_im,
+                            ^^^^^^^^^^^^^^^^
+                            piau_im_huat=piau_im_huat)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a300_手動更正漢字標音.py", line 532, in update_by_piau_im_ji_khoo
+    han_ji_piau_im_cell.value = tlpa_tng_han_ji_piau_im(
+                                ~~~~~~~~~~~~~~~~~~~~~~~^
+        piau_im=piau_im,
+        ^^^^^^^^^^^^^^^^
+        piau_im_huat=piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+        tai_gi_im_piau=tai_gi_im_piau
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 542, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(piau_im_huat=piau_im_huat,
+                                                     siann_bu=siann_bu,
+                                                     un_bu=un_bu,
+                                                     tiau_ho=tiau_ho)
+  File "C:\work\Piau-Im\mod_標音.py", line 1307, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1035, in BP_piau_im
+    return self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=True)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1000, in _get_BP_syllable
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: '/a'
+2025-05-01 15:21:30,061 - ERROR - 程式異常終止：a300_手動更正漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 693, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-05-01 15:21:30,262 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《定風波》.xlsx
+2025-05-01 15:22:40,450 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-05-01 15:22:40,451 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-01 15:22:40,466 - INFO - <----------- 作業開始！---------->
+2025-05-01 15:22:40,528 - INFO - 已完成作業所需之初始化設定！
+2025-05-01 15:22:41,178 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-05-01 15:22:55,379 - INFO - 以【人工標音】更正之【台語音標】，已填入【標音字庫】之【校正音標】！
+2025-05-01 15:26:56,823 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-05-01 15:26:56,824 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-01 15:26:56,845 - INFO - <----------- 作業開始！---------->
+2025-05-01 15:26:56,947 - INFO - 已完成作業所需之初始化設定！
+2025-05-01 15:26:57,708 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-05-01 15:27:11,130 - INFO - 以【人工標音】更正之【台語音標】，已填入【標音字庫】之【校正音標】！
+2025-05-01 15:29:35,173 - INFO - 以【標音字庫】之【校正音標】，更新【漢字注音】工作表之【台語音標】！
+2025-05-01 15:29:35,180 - INFO - <----------- 作業結束！---------->
+2025-05-01 15:31:56,733 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-05-01 15:31:56,734 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-01 15:31:56,749 - INFO - <----------- 作業開始！---------->
+2025-05-01 15:31:56,814 - INFO - 已完成作業所需之初始化設定！
+2025-05-01 15:31:57,602 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-05-01 15:32:11,788 - INFO - 以【人工標音】更正之【台語音標】，已填入【標音字庫】之【校正音標】！
+2025-05-01 15:33:57,565 - INFO - 以【標音字庫】之【校正音標】，更新【漢字注音】工作表之【台語音標】！
+2025-05-01 15:33:57,574 - INFO - <----------- 作業結束！---------->
+2025-05-01 15:36:55,020 - INFO - 依【漢字】之【台語音標】轉換【漢字音標音】作業己完成！
+2025-05-01 15:36:55,021 - INFO - 【語音類型】：文讀音
+2025-05-01 15:36:55,021 - INFO - 【漢字庫】：Ho_Lok_Ue.db
+2025-05-01 15:36:55,236 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《定風波》.xlsx
+2025-05-01 15:36:55,237 - INFO - 《========== 程式終止執行：a300_手動更正漢字標音 ==========》
