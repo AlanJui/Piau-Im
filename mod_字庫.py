@@ -274,3 +274,38 @@ class JiKhooDict:
 
         return ji_khoo
 
+    # def remove_coordinate(self, han_ji: str, tai_gi_im_piau: str, coordinate: tuple):
+    #     """
+    #     移除指定【漢字】與【台語音標】對應項目中的【座標】。
+    #     若該項目座標清單為空，則整筆項目從字典中移除。
+    #     """
+    #     if han_ji not in self.ji_khoo_dict:
+    #         return
+
+    #     entries = self.ji_khoo_dict[han_ji]
+    #     for entry in entries:
+    #         if entry["tai_gi_im_piau"] == tai_gi_im_piau:
+    #             if coordinate in entry["coordinates"]:
+    #                 entry["coordinates"].remove(coordinate)
+    #             if len(entry["coordinates"]) == 0:
+    #                 entries.remove(entry)
+    #             break
+
+
+    def remove_coordinate(self, han_ji: str, tai_gi_im_piau: str, coordinate: tuple):
+        """
+        移除指定【漢字】與【台語音標】對應項目中的【座標】。
+        若該項目座標清單為空，則整筆項目從字典中移除。
+        """
+        if han_ji not in self.ji_khoo_dict:
+            return
+
+        entries = self.ji_khoo_dict[han_ji]
+        for entry in entries:
+            if entry["tai_gi_im_piau"] == tai_gi_im_piau:
+                if coordinate in entry["coordinates"]:
+                    entry["coordinates"].remove(coordinate)
+                if len(entry["coordinates"]) == 0:
+                    entries.remove(entry)
+                break
+
