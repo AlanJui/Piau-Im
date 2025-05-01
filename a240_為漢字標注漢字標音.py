@@ -3,7 +3,6 @@
 # =========================================================================
 import logging
 import os
-import sqlite3
 import sys
 from pathlib import Path
 
@@ -14,11 +13,13 @@ from dotenv import load_dotenv
 # 載入自訂模組
 from mod_excel_access import ensure_sheet_exists, get_value_by_name
 from mod_file_access import save_as_new_file
-from mod_字庫 import JiKhooDict  # 漢字字庫物件
+
+# from mod_字庫 import JiKhooDict  # 漢字字庫物件
 from mod_帶調符音標 import is_han_ji
+
+# from mod_標音 import ca_ji_kiat_ko_tng_piau_im  # 查字典得台語音標及漢字標音
+# from mod_標音 import is_punctuation  # 是否為標點符號
 from mod_標音 import PiauIm  # 漢字標音物件
-from mod_標音 import ca_ji_kiat_ko_tng_piau_im  # 查字典得台語音標及漢字標音
-from mod_標音 import is_punctuation  # 是否為標點符號
 from mod_標音 import split_tai_gi_im_piau  # 分解台語音標
 
 # =========================================================================
@@ -118,9 +119,9 @@ def han_ji_piau_im(wb, sheet_name: str = '漢字注音'):
                     msg = f"{han_ji_cell.value}"
                 else:
                     # ---------------------------------------------------------
-                    # 確認【漢字】有【台語標音】時之處理作業
+                    # 確認【漢字】若有【台語標音】，須依此産生【漢字標音】之處理作業
                     # ---------------------------------------------------------
-                    if tai_gi_cell.value:        # 【漢字】沒用【人工標音】
+                    if tai_gi_cell.value:        # 【漢字】有【台語音標】，需依此産出【漢字標音】
                         siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(tai_gi_cell.value)
                         han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
                             piau_im_huat=han_ji_piau_im_huat,

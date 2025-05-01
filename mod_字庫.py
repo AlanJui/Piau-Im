@@ -211,6 +211,8 @@ class JiKhooDict:
         data = []
         for han_ji, entries in self.ji_khoo_dict.items():
             for entry in entries:
+                if not entry["coordinates"]:  # 若座標為空，跳過不寫入
+                    continue
                 coord_str = "; ".join(f"({r}, {c})" for r, c in entry["coordinates"])
                 data.append([han_ji, entry["tai_gi_im_piau"], entry["kenn_ziann_im_piau"], coord_str])
 
@@ -234,6 +236,26 @@ class JiKhooDict:
 
         self.write_to_excel_sheet(wb, "缺字表")
         print(f"已成功將字典資料寫入工作表 '{sheet_name}'。")
+
+    def remove_coordinate(self, han_ji: str, tai_gi_im_piau: str, coordinate: tuple):
+        """
+        移除指定漢字與音標下的某個座標；若座標清空則移除整筆項目。
+        """
+        if han_ji not in self.ji_khoo_dict:
+            return
+
+        entries = self.ji_khoo_dict[han_ji]
+        to_delete = None
+        for entry in entries:
+            if entry["tai_gi_im_piau"] == tai_gi_im_piau:
+                if coordinate in entry["coordinates"]:
+                    entry["coordinates"].remove(coordinate)
+                if len(entry["coordinates"]) == 0:
+                    to_delete = entry
+                break
+
+        if to_delete:
+            entries.remove(to_delete)
 
     @classmethod
     def create_ji_khoo_dict_from_sheet(cls, wb, sheet_name: str):
@@ -290,22 +312,4 @@ class JiKhooDict:
     #             if len(entry["coordinates"]) == 0:
     #                 entries.remove(entry)
     #             break
-
-
-    def remove_coordinate(self, han_ji: str, tai_gi_im_piau: str, coordinate: tuple):
-        """
-        移除指定【漢字】與【台語音標】對應項目中的【座標】。
-        若該項目座標清單為空，則整筆項目從字典中移除。
-        """
-        if han_ji not in self.ji_khoo_dict:
-            return
-
-        entries = self.ji_khoo_dict[han_ji]
-        for entry in entries:
-            if entry["tai_gi_im_piau"] == tai_gi_im_piau:
-                if coordinate in entry["coordinates"]:
-                    entry["coordinates"].remove(coordinate)
-                if len(entry["coordinates"]) == 0:
-                    entries.remove(entry)
-                break
 

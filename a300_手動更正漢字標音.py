@@ -184,16 +184,21 @@ def update_by_khuat_ji_piau(wb, sheet_name: str, piau_im: PiauIm, piau_im_huat: 
 
     try:
         # 在【缺字表】工作表，遍歷【表格】每個字典查不到【音標】之【漢字】
-        for han_ji, (total_count, tai_gi_im_piau, kenn_ziann_im_piau, coordinates) in ji_khoo_dict.items():
-            # 若【缺字表】表格中【總數】欄位值為 0，則略過
-            if total_count == 0:
-                row_no, col_no = coordinates[0]
-                msg = f"{han_ji}【{tai_gi_im_piau}】/【{kenn_ziann_im_piau}】：待校正【總數】為 {total_count}，略過！"
-                print(f"（{row_no}, {col_no}）= {msg}")
-                continue
+        # for han_ji, (total_count, tai_gi_im_piau, kenn_ziann_im_piau, coordinates) in ji_khoo_dict.items():
+        #     # 若【缺字表】表格中【總數】欄位值為 0，則略過
+        #     if total_count == 0:
+        #         row_no, col_no = coordinates[0]
+        #         msg = f"{han_ji}【{tai_gi_im_piau}】/【{kenn_ziann_im_piau}】：待校正【總數】為 {total_count}，略過！"
+        #         print(f"（{row_no}, {col_no}）= {msg}")
+        #         continue
 
-            original_total_count = total_count
-            counter = total_count
+        #     original_total_count = total_count
+        #     counter = total_count
+        for han_ji, entry in ji_khoo_dict.items():
+            tai_gi_im_piau = entry["tai_gi_im_piau"]
+            kenn_ziann_im_piau = entry["kenn_ziann_im_piau"]
+            coordinates = entry["coordinates"]
+
             # 遍歷【座標】欄位中每個座標，依【座標】所指向【漢字注音】工作表之儲存格，讀取【漢字】之【人工標音】
             for row, col in coordinates:
                 # 取得【漢字注音】表中的【漢字】儲存格物件
@@ -241,34 +246,37 @@ def update_by_khuat_ji_piau(wb, sheet_name: str, piau_im: PiauIm, piau_im_huat: 
                 han_ji_cell.color = (255, 255, 0)       # 將底色設為【黄色】
                 han_ji_cell.font.color = (255, 0, 0)    # 將文字顏色設為【紅色】
 
-                # 檢查是否符合更新條件：
-                # 若【漢字標音】儲存格亦空缺，則用【台語音標】生成【漢字標音】
-                if counter > 0:
-                    # 依取自【漢字注音】工作表【人工標音】儲存格之音標，更新【缺字表】表格之【校正音標】欄位資料
-                    ji_khoo_dict.add_or_update_entry(
-                        han_ji=han_ji,
-                        tai_gi_im_piau=tai_gi_im_piau,
-                        kenn_ziann_im_piau=kenn_ziann_im_piau,
-                        coordinates=(row, col)
-                    )
-                    # 將【缺字表】已填入【台語音標】之資料，回填【標音字庫】工作表，補登紀錄
-                    piau_im_ji_khoo_dict.add_or_update_entry(
-                        han_ji=han_ji,
-                        tai_gi_im_piau=tai_gi_im_piau,
-                        kenn_ziann_im_piau=kenn_ziann_im_piau,
-                        coordinates=(row, col)
-                    )
-                    # 減少剩餘更新次數，並同步回缺字表
-                    counter -= 1
-                    # 每寫入一次，total_count 減 1
-                    ji_khoo_dict[han_ji][0] = counter
+                # 顯示更新訊息
+                msg = f"{han_ji}：【{tai_gi_im_piau}】/【{kenn_ziann_im_piau}】<-- 【{jin_kang_im_piau}】"
+                print(f"({row}, {col}) = {msg}")
+                # # 檢查是否符合更新條件：
+                # # 若【漢字標音】儲存格亦空缺，則用【台語音標】生成【漢字標音】
+                # if counter > 0:
+                #     # 依取自【漢字注音】工作表【人工標音】儲存格之音標，更新【缺字表】表格之【校正音標】欄位資料
+                #     ji_khoo_dict.add_or_update_entry(
+                #         han_ji=han_ji,
+                #         tai_gi_im_piau=tai_gi_im_piau,
+                #         kenn_ziann_im_piau=kenn_ziann_im_piau,
+                #         coordinates=(row, col)
+                #     )
+                #     # 將【缺字表】已填入【台語音標】之資料，回填【標音字庫】工作表，補登紀錄
+                #     piau_im_ji_khoo_dict.add_or_update_entry(
+                #         han_ji=han_ji,
+                #         tai_gi_im_piau=tai_gi_im_piau,
+                #         kenn_ziann_im_piau=kenn_ziann_im_piau,
+                #         coordinates=(row, col)
+                #     )
+                #     # 減少剩餘更新次數，並同步回缺字表
+                #     counter -= 1
+                #     # 每寫入一次，total_count 減 1
+                #     ji_khoo_dict[han_ji][0] = counter
 
-                    # 顯示更新訊息
-                    msg = f"{han_ji}：【{tai_gi_im_piau}】/【{kenn_ziann_im_piau}】<-- 【{jin_kang_im_piau}】（原有 {original_total_count} 字；尚有 {counter} 字待補上）"
-                    print(f"({row}, {col}) = {msg}")
+                    # # 顯示更新訊息
+                    # msg = f"{han_ji}：【{tai_gi_im_piau}】/【{kenn_ziann_im_piau}】<-- 【{jin_kang_im_piau}】（原有 {original_total_count} 字；尚有 {counter} 字待補上）"
+                    # print(f"({row}, {col}) = {msg}")
 
-                    if counter == 0:
-                        break
+                    # if counter == 0:
+                    #     break
 
     except Exception as e:
         logging_exception(msg=f"處理【漢字】補【台語音標】作業異常！", error=e)
