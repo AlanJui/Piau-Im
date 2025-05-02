@@ -3,8 +3,9 @@
 # =========================================================================
 import logging
 import os
-import re
-import sqlite3
+
+# import re
+# import sqlite3
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -14,15 +15,22 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 # 載入自訂模組/函式
+from a320_人工標音更正漢字自動標音 import jin_kang_piau_im_cu_han_ji_piau_im
 from mod_excel_access import (
-    check_and_update_pronunciation,
-    create_dict_by_sheet,
-    ensure_sheet_exists,
+    convert_to_excel_address,
+    excel_address_to_row_col,
+    get_active_cell,
     get_active_cell_info,
-    get_ji_khoo,
+    get_row_col_from_coordinate,
     get_value_by_name,
-    maintain_ji_khoo,
 )
+from mod_字庫 import JiKhooDict  # 漢字字庫物件
+from mod_標音 import PiauIm
+
+# from mod_標音 import convert_tl_with_tiau_hu_to_tlpa  # 去除台語音標的聲調符號
+# from mod_標音 import is_punctuation  # 是否為標點符號
+# from mod_標音 import split_hong_im_hu_ho  # 分解漢字標音
+# from mod_標音 import tlpa_tng_han_ji_piau_im  # 漢字標音物件
 
 # =========================================================================
 # 載入環境變數
@@ -99,58 +107,132 @@ def check_han_ji_in_excel(wb, han_ji, excel_cell):
     return False
 
 
-def convert_to_excel_address(coord_str):
+def check_and_update_pronunciation(wb, han_ji, position, jin_kang_piau_im):
     """
-    轉換 `(row, col)` 格式為 Excel 座標 (如 `(9, 4)` 轉換為 "D9")
+    查詢【標音字庫】工作表，確認是否有該【漢字】與【座標】，
+    且【校正音標】是否為 'N/A'，若符合則更新為【人工標音】。
 
-    :param coord_str: 例如 "(9, 4)"
-    :return: Excel 座標字串，例如 "D9"
+    :param wb: Excel 活頁簿物件
+    :param han_ji: 查詢的漢字
+    :param position: (row, col) 該漢字的座標
+    :param artificial_pronounce: 需要更新的【人工標音】
+    :return: 是否更新成功 (True/False)
     """
-    coord_str = coord_str.strip("()")  # 去除括號
+    sheet_name = "標音字庫"
+
+    # 建置 PiauIm 物件，供作漢字拼音轉換作業
+    han_ji_khoo_field = '漢字庫'
+    han_ji_khoo_name = get_value_by_name(wb=wb, name=han_ji_khoo_field)
+    piau_im = PiauIm(han_ji_khoo=han_ji_khoo_name)           # 指定漢字自動查找使用的【漢字庫】
+    piau_im_huat = get_value_by_name(wb=wb, name='標音方法')   # 指定【台語音標】轉換成【漢字標音】的方法
+
+    # 建置自動及人工漢字標音字庫工作表：（1）【標音字庫】（2）【人工標音字】
+    piau_im_sheet_name = '標音字庫'
+    piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=piau_im_sheet_name)
+
+    jin_kang_piau_im_sheet_name='人工標音字庫'
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=jin_kang_piau_im_sheet_name)
+
     try:
-        row, col = map(int, coord_str.split(", "))
-        return f"{chr(64 + col)}{row}"  # 轉換成 Excel 座標
-    except ValueError:
-        return ""  # 避免解析錯誤
+        sheet = wb.sheets[sheet_name]
+    except Exception:
+        print(f"⚠️ 無法找到工作表: {sheet_name}")
+        return False
+
+    # 讀取資料範圍
+    data = sheet.range("A2").expand("table").value  # 讀取所有資料
+
+    # 確保資料為 2D 列表
+    if not isinstance(data[0], list):
+        data = [data]
+
+    for idx, row in enumerate(data):
+        row_han_ji = row[0]  # A 欄: 漢字
+        tai_gi_im_piau = row[1]  # B 欄: 台語音標
+        kenn_ziann_im_piau = row[2]  # C 欄: 校正音標
+        coordinates = row[3]  # D 欄: 座標 (可能是 "(9, 4); (25, 9)" 這類格式)
+        correction_pronounce_cell = sheet.range(f"D{idx+2}")  # D 欄: 校正音標
+
+        row, col = get_row_col_from_coordinate(coordinates)  # 取得座標的行列
+        cell = sheet.range((row, col))  # 取得該儲存格物件
+
+        if row_han_ji == han_ji and coordinates:
+            # 將座標解析成一個 set
+            coord_list = coordinates.split("; ")
+            parsed_coords = {convert_to_excel_address(coord) for coord in coord_list}
+
+            # 確認該座標是否存在於【標音字庫】中
+            # if convert_to_excel_address(str(position)) in parsed_coords:
+            position_address = convert_to_excel_address(str(position))
+            if position_address in parsed_coords:
+                # 檢查【漢字】標注之【人工標音】是否與【台語音標】不同
+                if jin_kang_piau_im != tai_gi_im_piau:
+                    tai_gi_im_piau, han_ji_piau_im = jin_kang_piau_im_cu_han_ji_piau_im(
+                        wb=wb,
+                        jin_kang_piau_im=jin_kang_piau_im,
+                        piau_im=piau_im,
+                        piau_im_huat=piau_im_huat)
+
+                    # 【標音字庫】添加或更新【漢字】及【台語音標】資料
+                    jin_kang_piau_im_ji_khoo.add_entry(
+                        han_ji=han_ji,
+                        tai_gi_im_piau=tai_gi_im_piau,
+                        kenn_ziann_im_piau=jin_kang_piau_im,
+                        coordinates=(row, col)
+                    )
+                    # ----- 新增程式邏輯：更新【標音字庫】 -----
+                    # Step 1: 在【標音字庫】搜尋該筆【漢字】+【台語音標】
+                    existing_entries = piau_im_ji_khoo.ji_khoo_dict.get(han_ji, [])
+
+                    # 標記是否找到
+                    entry_found = False
+
+                    for existing_entry in existing_entries:
+                        # Step 2: 若找到，移除該筆資料內的座標
+                        if (row, col) in existing_entry["coordinates"]:
+                            existing_entry["coordinates"].remove((row, col))
+                        entry_found = True
+                        break  # 找到即可離開迴圈
+
+                    # Step 3: 將此筆資料（校正音標為 'N/A'）於【標音字庫】底端新增
+                    piau_im_ji_khoo.add_entry(
+                        han_ji=han_ji,
+                        tai_gi_im_piau=tai_gi_im_piau,
+                        kenn_ziann_im_piau="N/A",  # 預設值
+                        coordinates=(row, col)
+                    )
+
+                    # 將文字顏色設為【紅色】
+                    cell.font.color = (255, 0, 0)
+                    # 將儲存格的填滿色彩設為【黄色】
+                    cell.color = (255, 255, 0)
+
+                    # 更新【校正音標】為【人工標音】
+                    # correction_pronounce_cell.value = jin_kang_piau_im
+                    correction_pronounce_cell.value = tai_gi_im_piau
+                    print(f"✅ {position}【{han_ji}】： 台語音標 {tai_gi_im_piau} -> 校正標音 {jin_kang_piau_im}")
+                    return True
+
+        #----------------------------------------------------------------------
+        # 作業結束前處理
+        #----------------------------------------------------------------------
+        # 將【標音字庫】、【人工標音字庫】，寫入 Excel 工作表
+        piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=piau_im_sheet_name)
+        jin_kang_piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
+
+        logging_process_step("作用中【漢字】儲存格之【人工標音】已更新至【標音字庫】。")
+        return EXIT_CODE_SUCCESS
+
+    print(f"❌ 未找到匹配的資料或不符合更新條件: {han_ji} ({position})")
+    return False
 
 
-def excel_address_to_row_col(cell_address):
-    """
-    將 Excel 儲存格地址 (如 'D9') 轉換為 (row, col) 格式。
 
-    :param cell_address: Excel 儲存格地址 (如 'D9', 'AA15')
-    :return: (row, col) 元組，例如 (9, 4)
-    """
-    match = re.match(r"([A-Z]+)(\d+)", cell_address)  # 用 regex 拆分字母(列) 和 數字(行)
-
-    if not match:
-        raise ValueError(f"無效的 Excel 儲存格地址: {cell_address}")
-
-    col_letters, row_number = match.groups()
-
-    # 將 Excel 字母列轉換成數字，例如 A -> 1, B -> 2, ..., Z -> 26, AA -> 27
-    col_number = 0
-    for letter in col_letters:
-        col_number = col_number * 26 + (ord(letter) - ord("A") + 1)
-
-    return int(row_number), col_number
-
-
-def get_active_cell(wb):
-    """
-    獲取目前作用中的 Excel 儲存格 (Active Cell)
-
-    :param wb: Excel 活頁簿物件 (xlwings.Book)
-    :return: (工作表名稱, 儲存格地址)，如 ("漢字注音", "D9")
-    """
-    active_cell = wb.app.selection  # 獲取目前作用中的儲存格
-    sheet_name = active_cell.sheet.name  # 獲取所在的工作表名稱
-    cell_address = active_cell.address.replace("$", "")  # 取得 Excel 格式地址 (去掉 "$")
-
-    return sheet_name, cell_address
-
-
-def ut01():
+def ut01(wb):
     han_ji = "傀"  # 要查找的漢字
     excel_cell = "D9"  # 要查找的 Excel 座標
 
@@ -163,7 +245,7 @@ def ut01():
     return EXIT_CODE_SUCCESS
 
 
-def ut02():
+def ut02(wb):
     # 作業流程：獲取當前作用中的 Excel 儲存格
     sheet_name, cell_address = get_active_cell(wb)
     print(f"✅ 目前作用中的儲存格：{sheet_name} 工作表 -> {cell_address}")
@@ -248,7 +330,7 @@ def main():
     finally:
         if wb:
             # xw.apps.active.quit()  # 確保 Excel 被釋放資源，避免開啟殘留
-            logging.info("a702_查找及填入漢字標音.py 程式已執行完畢！")
+            logging.info("a330_以作用儲存格之人工標音更標音字庫.py 程式已執行完畢！")
 
     # =========================================================================
     # 結束作業

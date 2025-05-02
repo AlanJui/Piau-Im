@@ -5,7 +5,7 @@ import sys
 import xlwings as xw
 from dotenv import load_dotenv
 
-from mod_excel_access import ensure_sheet_exists, get_total_rows_in_sheet
+from mod_excel_access import ensure_sheet_exists
 from mod_logging import logging_exception
 from mod_標音 import tlpa_tng_han_ji_piau_im
 

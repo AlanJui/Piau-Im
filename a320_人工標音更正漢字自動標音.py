@@ -12,13 +12,12 @@ from dotenv import load_dotenv
 
 # 載入自訂模組
 from mod_excel_access import delete_sheet_by_name, get_value_by_name
-from mod_file_access import load_module_function, save_as_new_file
+from mod_file_access import save_as_new_file
 from mod_字庫 import JiKhooDict  # 漢字字庫物件
 from mod_標音 import convert_tl_with_tiau_hu_to_tlpa  # 去除台語音標的聲調符號
-from mod_標音 import is_punctuation  # 是否為標點符號
 from mod_標音 import split_hong_im_hu_ho  # 分解漢字標音
 from mod_標音 import tlpa_tng_han_ji_piau_im  # 漢字標音物件
-from mod_標音 import PiauIm
+from mod_標音 import PiauIm, is_punctuation
 
 # =========================================================================
 # 常數定義
@@ -51,6 +50,7 @@ init_logging()
 # =========================================================================
 # 程式區域函式
 # =========================================================================
+
 def jin_kang_piau_im_cu_han_ji_piau_im(wb, jin_kang_piau_im: str, piau_im: PiauIm, piau_im_huat: str):
     """
     取人工標音【台語音標】
@@ -88,6 +88,7 @@ def jin_kang_piau_im_cu_han_ji_piau_im(wb, jin_kang_piau_im: str, piau_im: PiauI
     return tai_gi_im_piau, han_ji_piau_im
 
 
+
 def jin_kang_piau_imm(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="白話音", han_ji_khoo="河洛話",
                       new_jin_kang_piau_im__piau:bool=False):
     """查漢字讀音：依【漢字】查找【台語音標】，並依指定之【標音方法】輸出【漢字標音】"""
@@ -100,7 +101,6 @@ def jin_kang_piau_imm(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
 
         # 建置自動及人工漢字標音字庫工作表：（1）【標音字庫】（2）【人工標音字】
         piau_im_sheet_name = '標音字庫'
-        # delete_sheet_by_name(wb=wb, sheet_name=piau_im_sheet_name)
         piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
             wb=wb,
             sheet_name=piau_im_sheet_name)
@@ -178,7 +178,7 @@ def jin_kang_piau_imm(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                         sheet.range((row - 1, col)).value = tai_gi_im_piau
                         sheet.range((row + 1, col)).value = han_ji_piau_im
                         msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】《人工標音》]"
-                        # 【標音字庫】添加或更新【漢字】資料
+                        # 【標音字庫】添加或更新【漢字】及【台語音標】資料
                         jin_kang_piau_im_ji_khoo.add_entry(
                             han_ji=han_ji,
                             tai_gi_im_piau=tai_gi_im_piau,

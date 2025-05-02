@@ -16,7 +16,7 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 # 載入自訂模組
-from mod_file_access import save_as_new_file
+# from mod_file_access import save_as_new_file
 
 # =========================================================================
 # 常數定義
@@ -54,6 +54,71 @@ DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
 # =========================================================================
 # 程式用函式
 # =========================================================================
+
+def get_row_col_from_coordinate(coord_str):
+    """
+    自座標字串 `(row, col)` 取出 row, col 座標數值
+
+    :param coord_str: 例如 "(9, 4)"
+    :return: row, col 整數座標： 9, 4
+    """
+    coord_str = coord_str.strip("()")  # 去除括號
+    try:
+        row, col = map(int, coord_str.split(", "))
+        return int(row), int(col)  # 轉換成整數
+    except ValueError:
+        return ""  # 避免解析錯誤
+
+# def convert_to_excel_address(coord_str):
+#     """
+#     轉換 `(row, col)` 格式為 Excel 座標 (如 `(9, 4)` 轉換為 "D9")
+
+#     :param coord_str: 例如 "(9, 4)"
+#     :return: Excel 座標字串，例如 "D9"
+#     """
+#     coord_str = coord_str.strip("()")  # 去除括號
+#     try:
+#         row, col = map(int, coord_str.split(", "))
+#         return f"{chr(64 + col)}{row}"  # 轉換成 Excel 座標
+#     except ValueError:
+#         return ""  # 避免解析錯誤
+
+
+# def excel_address_to_row_col(cell_address):
+#     """
+#     將 Excel 儲存格地址 (如 'D9') 轉換為 (row, col) 格式。
+
+#     :param cell_address: Excel 儲存格地址 (如 'D9', 'AA15')
+#     :return: (row, col) 元組，例如 (9, 4)
+#     """
+#     match = re.match(r"([A-Z]+)(\d+)", cell_address)  # 用 regex 拆分字母(列) 和 數字(行)
+
+#     if not match:
+#         raise ValueError(f"無效的 Excel 儲存格地址: {cell_address}")
+
+#     col_letters, row_number = match.groups()
+
+#     # 將 Excel 字母列轉換成數字，例如 A -> 1, B -> 2, ..., Z -> 26, AA -> 27
+#     col_number = 0
+#     for letter in col_letters:
+#         col_number = col_number * 26 + (ord(letter) - ord("A") + 1)
+
+#     return int(row_number), col_number
+
+
+# def get_active_cell(wb):
+#     """
+#     獲取目前作用中的 Excel 儲存格 (Active Cell)
+
+#     :param wb: Excel 活頁簿物件 (xlwings.Book)
+#     :return: (工作表名稱, 儲存格地址)，如 ("漢字注音", "D9")
+#     """
+#     active_cell = wb.app.selection  # 獲取目前作用中的儲存格
+#     sheet_name = active_cell.sheet.name  # 獲取所在的工作表名稱
+#     cell_address = active_cell.address.replace("$", "")  # 取得 Excel 格式地址 (去掉 "$")
+
+#     return sheet_name, cell_address
+
 
 # 定義儲存格格式
 def set_range_format(range_obj, font_name, font_size, font_color, fill_color=None):
@@ -246,65 +311,6 @@ def excel_address_to_row_col(cell_address):
     return int(row_number), col_number
 
 
-def check_and_update_pronunciation(wb, han_ji, position, jin_kang_piau_im):
-    """
-    查詢【標音字庫】工作表，確認是否有該【漢字】與【座標】，
-    且【校正音標】是否為 'N/A'，若符合則更新為【人工標音】。
-
-    :param wb: Excel 活頁簿物件
-    :param han_ji: 查詢的漢字
-    :param position: (row, col) 該漢字的座標
-    :param artificial_pronounce: 需要更新的【人工標音】
-    :return: 是否更新成功 (True/False)
-    """
-    sheet_name = "標音字庫"
-
-    try:
-        sheet = wb.sheets[sheet_name]
-    except Exception:
-        print(f"⚠️ 無法找到工作表: {sheet_name}")
-        return False
-
-    # 讀取資料範圍
-    data = sheet.range("A2").expand("table").value  # 讀取所有資料
-
-    # 確保資料為 2D 列表
-    if not isinstance(data[0], list):
-        data = [data]
-
-    for idx, row in enumerate(data):
-        row_han_ji = row[0]  # A 欄: 漢字
-        tai_gi_im_piau = row[1]  # B 欄: 台語音標
-        kenn_ziann_im_piau = row[2]  # C 欄: 校正音標
-        coordinates = row[3]  # D 欄: 座標 (可能是 "(9, 4); (25, 9)" 這類格式)
-        correction_pronounce_cell = sheet.range(f"D{idx+2}")  # D 欄: 校正音標
-
-        if row_han_ji == han_ji and coordinates:
-            # 將座標解析成一個 set
-            coord_list = coordinates.split("; ")
-            parsed_coords = {convert_to_excel_address(coord) for coord in coord_list}
-
-            # 確認該座標是否存在於【標音字庫】中
-            # if convert_to_excel_address(str(position)) in parsed_coords:
-            position_address = convert_to_excel_address(str(position))
-            if position_address in parsed_coords:
-                # 檢查【漢字】標注之【人工標音】是否與【台語音標】不同
-                if jin_kang_piau_im != tai_gi_im_piau:
-                    # 更新【校正音標】為【人工標音】
-                    correction_pronounce_cell.value = jin_kang_piau_im
-                    print(f"✅ {position}【{han_ji}】： 台語音標 {tai_gi_im_piau} -> 校正標音 {jin_kang_piau_im}")
-                    return True
-                # # 檢查標正音標是否為 'N/A'
-                # if correction_pronounce_cell.value == "N/A":
-                #     # 更新【校正音標】為【人工標音】
-                #     correction_pronounce_cell.value = artificial_pronounce
-                #     print(f"✅ 更新成功: {han_ji} ({position}) -> {artificial_pronounce}")
-                #     return True
-
-    print(f"❌ 未找到匹配的資料或不符合更新條件: {han_ji} ({position})")
-    return False
-
-
 def convert_to_excel_address(coord_str):
     """
     轉換 `(row, col)` 格式為 Excel 座標 (如 `(9, 4)` 轉換為 "D9")
@@ -417,6 +423,7 @@ def ensure_sheet_exists(wb, sheet_name):
     except Exception as e:
         print(f"⚠️ 無法確保工作表存在: {e}")
         return None  # 若發生錯誤，返回 None
+
 
 def get_value_by_name(wb, name):
     try:
