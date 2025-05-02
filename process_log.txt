@@ -12317,3 +12317,19 @@ Traceback (most recent call last):
     row_col = tuple(map(int, coord.split(", ")))
 ValueError: invalid literal for int() with base 10: 'guat8'
 2025-05-02 21:49:45,349 - INFO - a330_以作用儲存格之人工標音更標音字庫.py 程式已執行完畢！
+2025-05-02 21:55:51,598 - INFO - 作業開始
+2025-05-02 21:55:51,599 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-02 21:55:58,954 - ERROR - 作業過程發生未知的異常錯誤: invalid literal for int() with base 10: 'guat8'
+Traceback (most recent call last):
+  File "a330_以作用儲存格之人工標音更新標音字庫.py", line 320, in main
+    result_code = process(wb)
+  File "a330_以作用儲存格之人工標音更新標音字庫.py", line 279, in process
+    success = check_and_update_pronunciation(wb, han_ji, active_cell, artificial_pronounce)
+  File "a330_以作用儲存格之人工標音更新標音字庫.py", line 131, in check_and_update_pronunciation
+    piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=piau_im_sheet_name)
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'guat8'
+2025-05-02 21:55:58,959 - INFO - a330_以作用儲存格之人工標音更標音字庫.py 程式已執行完畢！
