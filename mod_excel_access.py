@@ -274,9 +274,10 @@ def check_and_update_pronunciation(wb, han_ji, position, jin_kang_piau_im):
 
     for idx, row in enumerate(data):
         row_han_ji = row[0]  # A 欄: 漢字
+        tai_gi_im_piau = row[1]  # B 欄: 台語音標
+        kenn_ziann_im_piau = row[2]  # C 欄: 校正音標
+        coordinates = row[3]  # D 欄: 座標 (可能是 "(9, 4); (25, 9)" 這類格式)
         correction_pronounce_cell = sheet.range(f"D{idx+2}")  # D 欄: 校正音標
-        tai_gi_im_piau = row[2]  # E 欄: 座標 (可能是 "(9, 4); (25, 9)" 這類格式)
-        coordinates = row[4]  # E 欄: 座標 (可能是 "(9, 4); (25, 9)" 這類格式)
 
         if row_han_ji == han_ji and coordinates:
             # 將座標解析成一個 set

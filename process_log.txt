@@ -12156,3 +12156,30 @@ UnboundLocalError: cannot access local variable 'e' where it is not associated w
 2025-05-01 15:39:24,087 - INFO - <----------- 作業結束！---------->
 2025-05-01 15:39:24,251 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《定風波》.xlsx
 2025-05-01 15:39:24,251 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-05-02 15:16:09,128 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-05-02 15:16:09,129 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-02 15:16:09,146 - INFO - <----------- 作業開始！---------->
+2025-05-02 15:16:09,227 - INFO - 已完成作業所需之初始化設定！
+2025-05-02 15:16:09,902 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-05-02 15:16:23,488 - INFO - 以【人工標音】更正之【台語音標】，已填入【標音字庫】之【校正音標】！
+2025-05-02 15:16:36,309 - INFO - 以【標音字庫】之【校正音標】，更新【漢字注音】工作表之【台語音標】！
+2025-05-02 15:16:36,318 - INFO - <----------- 作業結束！---------->
+2025-05-02 15:26:11,702 - INFO - 作業開始
+2025-05-02 15:26:11,703 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-02 15:26:54,042 - ERROR - 作業過程發生未知的異常錯誤: list index out of range
+Traceback (most recent call last):
+  File "a330_以作用儲存格之人工標音更新標音字庫.py", line 238, in main
+    result_code = process(wb)
+  File "a330_以作用儲存格之人工標音更新標音字庫.py", line 197, in process
+    success = check_and_update_pronunciation(wb, han_ji, active_cell, artificial_pronounce)
+  File "C:\work\Piau-Im\mod_excel_access.py", line 279, in check_and_update_pronunciation
+    coordinates = row[4]  # E 欄: 座標 (可能是 "(9, 4); (25, 9)" 這類格式)
+                  ~~~^^^
+IndexError: list index out of range
+2025-05-02 15:26:54,046 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
+2025-05-02 15:27:43,949 - INFO - 作業開始
+2025-05-02 15:27:43,950 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-02 15:32:44,111 - INFO - 作業開始
+2025-05-02 15:32:44,112 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-02 15:36:36,784 - INFO - 作業異常終止！
+2025-05-02 15:36:36,785 - INFO - a702_查找及填入漢字標音.py 程式已執行完畢！
