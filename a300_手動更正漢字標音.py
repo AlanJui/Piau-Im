@@ -13,17 +13,13 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 # 載入自訂模組/函式
-from a100_作業中活頁檔填入漢字 import process as fill_hanji_in_cells
-from a240_為漢字標注漢字標音 import han_ji_piau_im  # 取得漢字標音
-
-# 載入自訂模組/函式
-from mod_excel_access import (
-    check_and_update_pronunciation,
+from a330_以作用儲存格之人工標音更新標音字庫 import check_and_update_pronunciation
+from mod_excel_access import (  # check_and_update_pronunciation,; save_as_new_file,; strip_cell,
     ensure_sheet_exists,
     get_value_by_name,
-    save_as_new_file,
     strip_cell,
 )
+from mod_file_access import save_as_new_file
 from mod_字庫 import JiKhooDict  # 漢字字庫物件
 from mod_帶調符音標 import cing_bo_iong_ji_bu, kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
 
@@ -33,6 +29,12 @@ from mod_標音 import convert_tl_with_tiau_hu_to_tlpa  # 去除台語音標的�
 from mod_標音 import is_punctuation  # 是否為標點符號
 from mod_標音 import split_hong_im_hu_ho  # 分解漢字標音
 from mod_標音 import tlpa_tng_han_ji_piau_im  # 台語音標轉台語音標
+
+# 載入自訂模組/函式
+# from a100_作業中活頁檔填入漢字 import process as fill_hanji_in_cells
+# from a240_為漢字標注漢字標音 import han_ji_piau_im  # 取得漢字標音
+
+
 
 # =========================================================================
 # 常數定義
@@ -207,9 +209,12 @@ def update_by_khuat_ji_piau(wb, sheet_name: str, piau_im: PiauIm, piau_im_huat: 
                 jin_kang_piau_im = strip_cell(jin_kang_piau_im_cell.value)
                 if not jin_kang_piau_im:
                     continue
-                if tai_gi_im_piau == 'N/A' and kenn_ziann_im_piau == 'N/A':
+                if tai_gi_im_piau == 'N/A' or tai_gi_im_piau == '':
+                    continue
+                elif kenn_ziann_im_piau == 'N/A' or kenn_ziann_im_piau == '':
                     # 若【缺字表】表格中【校正音標】欄位值為空，則略過
                     continue
+                # 若取得之【人工標音】，為【帶調符音標】時，則需轉換為【帶調號TLPA音標】
                 if kam_si_u_tiau_hu(jin_kang_piau_im):
                     jin_kang_im_piau = cing_bo_iong_ji_bu(jin_kang_piau_im_cell.value)
                     # 轉換成【帶調符TLPA音標】
@@ -217,7 +222,8 @@ def update_by_khuat_ji_piau(wb, sheet_name: str, piau_im: PiauIm, piau_im_huat: 
                     # 轉換成【帶調號TLPA音標】，並轉成小寫
                     tlpa_im_piau = tng_tiau_ho(tlpa_im_piau_u_tiau_hu).lower()
                 else:
-                    tlpa_im_piau = jin_kang_piau_im_cell.value
+                    # tlpa_im_piau = jin_kang_piau_im_cell.value
+                    tlpa_im_piau = jin_kang_piau_im
 
                 # 依【人工標音】轉換【漢字標音】
                 han_ji_piau_im = tlpa_tng_han_ji_piau_im(
@@ -570,6 +576,8 @@ def process(wb):
 
     #-------------------------------------------------------------------------
     # 將【缺字表】工作表，已填入【台語音標】之資料，登錄至【標音字庫】工作表
+    # 使用【缺字表】工作表中的【校正音標】，更正【漢字注音】工作表中之【台語音標】、【漢字標音】；
+    # 並依【缺字表】工作表中的【台語音標】儲存格內容，更新【標音字庫】工作表中之【台語音標】及【校正音標】欄位
     #-------------------------------------------------------------------------
     try:
         sheet_name = '缺字表'
@@ -603,7 +611,7 @@ def process(wb):
         return EXIT_CODE_PROCESS_FAILURE
     logging_process_step(f"以【人工標音】更正之【台語音標】，已填入【標音字庫】之【校正音標】！")
     #-------------------------------------------------------------------------
-    # 根據【標音字庫】工作表，更新【漢字注音】工作表中的【台語音標】
+    # 根據【標音字庫】工作表，更新【漢字注音】工作表中的【台語音標】及【漢字標音】欄位
     #-------------------------------------------------------------------------
     try:
         sheet_name = '標音字庫'

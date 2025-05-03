@@ -12333,3 +12333,219 @@ Traceback (most recent call last):
     row_col = tuple(map(int, coord.split(", ")))
 ValueError: invalid literal for int() with base 10: 'guat8'
 2025-05-02 21:55:58,959 - INFO - a330_以作用儲存格之人工標音更標音字庫.py 程式已執行完畢！
+2025-05-03 11:02:11,236 - INFO - 《========== 程式開始執行：a320_人工標音更正漢字自動標音 ==========》
+2025-05-03 11:02:11,237 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-03 11:02:11,254 - INFO - <----------- 作業開始！---------->
+2025-05-03 11:02:11,513 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a320_人工標音更正漢字自動標音.py", line 104, in jin_kang_piau_imm
+    piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=piau_im_sheet_name)
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'guat8'
+2025-05-03 11:02:11,517 - ERROR - 在查找漢字標音時發生錯誤！，錯誤訊息: invalid literal for int() with base 10: 'guat8'
+Traceback (most recent call last):
+  File "a320_人工標音更正漢字自動標音.py", line 267, in process
+    jin_kang_piau_imm(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<4 lines>...
+        # new_jin_kang_piau_im__piau=True # 新建人工標音字庫工作表
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a320_人工標音更正漢字自動標音.py", line 104, in jin_kang_piau_imm
+    piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=piau_im_sheet_name)
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'guat8'
+2025-05-03 11:02:11,517 - ERROR - 程式異常終止：a320_人工標音更正漢字自動標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a320_人工標音更正漢字自動標音.py", line 336, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-05-03 11:02:11,765 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《定風波》.xlsx
+2025-05-03 11:02:40,252 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-05-03 11:02:40,252 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-03 11:02:40,269 - INFO - <----------- 作業開始！---------->
+2025-05-03 11:03:00,868 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-05-03 11:03:00,868 - INFO - 自動為【漢字】查找【台語音標】作業己完成！
+2025-05-03 11:03:00,868 - INFO - 【語音類型】：文讀音
+2025-05-03 11:03:00,869 - INFO - 【漢字庫】：Ho_Lok_Ue.db
+2025-05-03 11:03:00,879 - INFO - <----------- 作業結束！---------->
+2025-05-03 11:03:01,052 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《定風波》.xlsx
+2025-05-03 11:03:01,052 - INFO - 《========== 程式終止執行：a200_查找及填入漢字標音 ==========》
+2025-05-03 17:24:43,439 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-05-03 17:24:43,440 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-03 17:24:43,460 - INFO - <----------- 作業開始！---------->
+2025-05-03 17:24:43,502 - INFO - 已完成作業所需之初始化設定！
+2025-05-03 17:24:43,667 - INFO - 完成：處理【缺字表】作業
+2025-05-03 17:24:43,817 - ERROR - 將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業，發生執行異常！，錯誤訊息: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "a310_缺字表修正後續作業.py", line 280, in process
+    khuat_ji_piau_poo_im_piau(wb)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "a310_缺字表修正後續作業.py", line 128, in khuat_ji_piau_poo_im_piau
+    if not isinstance(data[0], list):
+                      ~~~~^^^
+TypeError: 'NoneType' object is not subscriptable
+2025-05-03 17:24:43,820 - ERROR - 程式異常終止：a310_缺字表修正後續作業，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a310_缺字表修正後續作業.py", line 336, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-05-03 17:24:44,058 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《定風波》.xlsx
+2025-05-03 17:25:36,168 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-05-03 17:25:36,169 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-03 17:25:36,186 - INFO - <----------- 作業開始！---------->
+2025-05-03 17:25:36,202 - INFO - 已完成作業所需之初始化設定！
+2025-05-03 17:25:36,336 - INFO - 完成：處理【缺字表】作業
+2025-05-03 17:26:21,613 - ERROR - 將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業，發生執行異常！，錯誤訊息: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "a310_缺字表修正後續作業.py", line 280, in process
+    khuat_ji_piau_poo_im_piau(wb)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "a310_缺字表修正後續作業.py", line 128, in khuat_ji_piau_poo_im_piau
+    if not isinstance(data[0], list):
+                      ~~~~^^^
+TypeError: 'NoneType' object is not subscriptable
+2025-05-03 17:26:21,617 - ERROR - 程式異常終止：a310_缺字表修正後續作業，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a310_缺字表修正後續作業.py", line 336, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-05-03 17:26:21,924 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《定風波》.xlsx
+2025-05-03 17:26:37,806 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-05-03 17:26:37,807 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-03 17:26:37,846 - INFO - <----------- 作業開始！---------->
+2025-05-03 17:26:37,884 - INFO - 已完成作業所需之初始化設定！
+2025-05-03 17:26:38,147 - INFO - 完成：處理【缺字表】作業
+2025-05-03 17:27:41,467 - ERROR - 將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業，發生執行異常！，錯誤訊息: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "a310_缺字表修正後續作業.py", line 280, in process
+    khuat_ji_piau_poo_im_piau(wb)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "a310_缺字表修正後續作業.py", line 128, in khuat_ji_piau_poo_im_piau
+    if not isinstance(data[0], list):
+                      ~~~~^^^
+TypeError: 'NoneType' object is not subscriptable
+2025-05-03 17:27:41,471 - ERROR - 程式異常終止：a310_缺字表修正後續作業，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a310_缺字表修正後續作業.py", line 336, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-05-03 17:27:41,715 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《定風波》.xlsx
+2025-05-03 17:28:40,013 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-05-03 17:28:40,014 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-03 17:28:40,029 - INFO - <----------- 作業開始！---------->
+2025-05-03 17:28:40,051 - INFO - 已完成作業所需之初始化設定！
+2025-05-03 17:28:40,272 - INFO - 完成：處理【缺字表】作業
+2025-05-03 17:37:46,285 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-05-03 17:37:46,286 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-03 17:37:46,304 - INFO - <----------- 作業開始！---------->
+2025-05-03 17:37:46,327 - INFO - 已完成作業所需之初始化設定！
+2025-05-03 17:37:46,523 - INFO - 完成：處理【缺字表】作業
+2025-05-03 17:38:03,817 - INFO - 【缺字表】無資料內容，略過資料庫回填。
+2025-05-03 17:50:10,778 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-05-03 17:50:10,778 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-03 17:50:10,797 - INFO - <----------- 作業開始！---------->
+2025-05-03 17:50:10,850 - INFO - 已完成作業所需之初始化設定！
+2025-05-03 17:50:11,165 - INFO - 完成：處理【缺字表】作業
+2025-05-03 17:50:17,058 - ERROR - 將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業，發生執行異常！，錯誤訊息: 【缺字表】工作表內，無任何資料，略過後續處理作業。
+Traceback (most recent call last):
+  File "a310_缺字表修正後續作業.py", line 289, in process
+    khuat_ji_piau_poo_im_piau(wb)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "a310_缺字表修正後續作業.py", line 134, in khuat_ji_piau_poo_im_piau
+    raise ValueError("【缺字表】工作表內，無任何資料，略過後續處理作業。")
+ValueError: 【缺字表】工作表內，無任何資料，略過後續處理作業。
+2025-05-03 17:50:17,061 - ERROR - 程式異常終止：a310_缺字表修正後續作業，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a310_缺字表修正後續作業.py", line 345, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-05-03 17:50:17,305 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《定風波》.xlsx
+2025-05-03 18:07:49,590 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-05-03 18:07:49,590 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-03 18:07:49,606 - INFO - <----------- 作業開始！---------->
+2025-05-03 18:07:49,623 - INFO - 已完成作業所需之初始化設定！
+2025-05-03 18:07:49,749 - INFO - 完成：處理【缺字表】作業
+2025-05-03 18:07:57,515 - ERROR - 將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業，發生執行異常！，錯誤訊息: None
+Traceback (most recent call last):
+  File "a310_缺字表修正後續作業.py", line 289, in process
+    khuat_ji_piau_poo_im_piau(wb)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "a310_缺字表修正後續作業.py", line 134, in khuat_ji_piau_poo_im_piau
+    raise ValueError("【缺字表】工作表內，無任何資料，略過後續處理作業。")
+ValueError: 【缺字表】工作表內，無任何資料，略過後續處理作業。
+2025-05-03 18:07:57,753 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《定風波》.xlsx
+2025-05-03 18:07:57,753 - ERROR - 程式異常終止：a310_缺字表修正後續作業，錯誤訊息: None
+NoneType: None
+2025-05-03 18:17:29,621 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-05-03 18:17:29,622 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-03 18:17:29,639 - INFO - <----------- 作業開始！---------->
+2025-05-03 18:17:29,674 - INFO - 已完成作業所需之初始化設定！
+2025-05-03 18:17:29,777 - INFO - 完成：處理【缺字表】作業
+2025-05-03 18:17:34,936 - ERROR - 將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業，發生執行異常！，錯誤訊息: None
+Traceback (most recent call last):
+  File "a310_缺字表修正後續作業.py", line 289, in process
+    khuat_ji_piau_poo_im_piau(wb)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "a310_缺字表修正後續作業.py", line 134, in khuat_ji_piau_poo_im_piau
+    raise ValueError("【缺字表】工作表內，無任何資料，略過後續處理作業。")
+ValueError: 【缺字表】工作表內，無任何資料，略過後續處理作業。
+2025-05-03 18:17:34,939 - ERROR - 程式異常終止：a310_缺字表修正後續作業，錯誤訊息: None
+NoneType: None
+2025-05-03 18:17:35,135 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《定風波》.xlsx
+2025-05-03 18:27:35,228 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-05-03 18:27:35,229 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-03 18:27:35,244 - INFO - <----------- 作業開始！---------->
+2025-05-03 18:27:35,278 - INFO - 已完成作業所需之初始化設定！
+2025-05-03 18:27:35,422 - INFO - 完成：處理【缺字表】作業
+2025-05-03 18:27:39,871 - ERROR - 將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業，發生執行異常！，錯誤訊息: None
+Traceback (most recent call last):
+  File "a310_缺字表修正後續作業.py", line 289, in process
+    khuat_ji_piau_poo_im_piau(wb)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "a310_缺字表修正後續作業.py", line 134, in khuat_ji_piau_poo_im_piau
+    raise ValueError("【缺字表】工作表內，無任何資料，略過後續處理作業。")
+ValueError: 【缺字表】工作表內，無任何資料，略過後續處理作業。
+2025-05-03 18:27:39,875 - ERROR - 程式異常終止：a310_缺字表修正後續作業（非例外，而是返回失敗碼）
+2025-05-03 18:29:50,544 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-05-03 18:29:50,545 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-03 18:29:50,560 - INFO - <----------- 作業開始！---------->
+2025-05-03 18:29:50,585 - INFO - 已完成作業所需之初始化設定！
+2025-05-03 18:29:50,730 - INFO - 完成：處理【缺字表】作業
+2025-05-03 18:29:57,081 - ERROR - 將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業，發生執行異常！，錯誤訊息: None
+Traceback (most recent call last):
+  File "a310_缺字表修正後續作業.py", line 289, in process
+    khuat_ji_piau_poo_im_piau(wb)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "a310_缺字表修正後續作業.py", line 134, in khuat_ji_piau_poo_im_piau
+    raise ValueError("【缺字表】工作表內，無任何資料，略過後續處理作業。")
+ValueError: 【缺字表】工作表內，無任何資料，略過後續處理作業。
+2025-05-03 18:29:57,085 - ERROR - 程式異常終止：a310_缺字表修正後續作業（非例外，而是返回失敗碼）
+2025-05-03 18:36:36,947 - INFO - 《========== 程式開始執行：a310_缺字表修正後續作業 ==========》
+2025-05-03 18:36:36,947 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-03 18:36:36,963 - INFO - <----------- 作業開始！---------->
+2025-05-03 18:36:37,000 - INFO - 已完成作業所需之初始化設定！
+2025-05-03 18:36:37,133 - INFO - 完成：處理【缺字表】作業
+2025-05-03 18:36:50,810 - ERROR - 將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業，發生執行異常！，錯誤訊息: 【缺字表】工作表內，無任何資料，略過後續處理作業。
+Traceback (most recent call last):
+  File "a310_缺字表修正後續作業.py", line 289, in process
+    khuat_ji_piau_poo_im_piau(wb)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "a310_缺字表修正後續作業.py", line 134, in khuat_ji_piau_poo_im_piau
+    raise ValueError("【缺字表】工作表內，無任何資料，略過後續處理作業。")
+ValueError: 【缺字表】工作表內，無任何資料，略過後續處理作業。
+2025-05-03 18:36:58,460 - ERROR - 程式異常終止：a310_缺字表修正後續作業（非例外，而是返回失敗碼）

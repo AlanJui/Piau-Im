@@ -126,6 +126,13 @@
             "console": "integratedTerminal",
         },
         {
+            "name": "a320_人工標音更正漢字自動標音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a320_人工標音更正漢字自動標音.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "a330_以作用儲存格之人工標音更新標音字庫",
             "type": "debugpy",
             "request": "launch",

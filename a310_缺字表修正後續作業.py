@@ -124,7 +124,16 @@ def khuat_ji_piau_poo_im_piau(wb):
     # 讀取資料表範圍
     data = sheet.range("A2").expand("table").value
 
-    # 確保資料為 2D 列表
+    # # 確保資料為 2D 列表
+    # if not isinstance(data[0], list):
+    #     data = [data]
+    # 若資料為空（即表格沒有任何資料），直接跳出處理
+
+    # 若完全無資料或只有空列，視為異常處理
+    if not data or data == [[]]:
+        raise ValueError("【缺字表】工作表內，無任何資料，略過後續處理作業。")
+
+    # 若只有一列資料（如一筆記錄），資料可能不是 2D list，要包成 list
     if not isinstance(data[0], list):
         data = [data]
 
@@ -279,7 +288,9 @@ def process(wb):
         wb.sheets['缺字表'].activate()
         khuat_ji_piau_poo_im_piau(wb)
     except Exception as e:
-        logging_exc_error(msg=f"將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業，發生執行異常！", error=e)
+        logging_exc_error(
+            msg=f"將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業，發生執行異常！",
+            error=e)
         return EXIT_CODE_PROCESS_FAILURE
     logging_process_step(f"完成：將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業")
 
@@ -331,36 +342,32 @@ def main():
     # =========================================================================
     try:
         result_code = process(wb)
-        if result_code != EXIT_CODE_SUCCESS:
-            msg = f"程式異常終止：{program_name}"
-            logging_exc_error(msg=msg, error=e)
-            return EXIT_CODE_PROCESS_FAILURE
-
     except Exception as e:
         msg = f"程式異常終止：{program_name}"
         logging_exc_error(msg=msg, error=e)
         return EXIT_CODE_UNKNOWN_ERROR
 
-    finally:
-        #--------------------------------------------------------------------------
+    if result_code != EXIT_CODE_SUCCESS:
+        msg = f"程式異常終止：{program_name}（非例外，而是返回失敗碼）"
+        logging.error(msg)
+        return EXIT_CODE_PROCESS_FAILURE
+
+    #--------------------------------------------------------------------------
+    # 儲存檔案
+    #--------------------------------------------------------------------------
+    try:
+        # 要求畫面回到【漢字注音】工作表
+        wb.sheets['漢字注音'].activate()
         # 儲存檔案
-        #--------------------------------------------------------------------------
-        try:
-            # 要求畫面回到【漢字注音】工作表
-            wb.sheets['漢字注音'].activate()
-            # 儲存檔案
-            file_path = save_as_new_file(wb=wb)
-            if not file_path:
-                logging_exc_error(msg="儲存檔案失敗！", error=e)
-                return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
-            else:
-                logging_process_step(f"儲存檔案至路徑：{file_path}")
-        except Exception as e:
+        file_path = save_as_new_file(wb=wb)
+        if not file_path:
             logging_exc_error(msg="儲存檔案失敗！", error=e)
             return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
-
-        # if wb:
-        #     xw.apps.active.quit()  # 確保 Excel 被釋放資源，避免開啟殘留
+        else:
+            logging_process_step(f"儲存檔案至路徑：{file_path}")
+    except Exception as e:
+        logging_exc_error(msg="儲存檔案失敗！", error=e)
+        return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
 
     # =========================================================================
     # 結束程式
