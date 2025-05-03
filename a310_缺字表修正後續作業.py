@@ -140,10 +140,9 @@ def khuat_ji_piau_poo_im_piau(wb):
     idx = 0
     for row in data:
         han_ji = row[0] # 漢字
-        zong_siau = row[1] # 總數
-        tai_gi_im_piau = row[2] # 台語音標
-        hau_ziann_im_piau = row[3] # 台語音標
-        zo_piau = row[4] # (儲存格位置)座標
+        tai_gi_im_piau = row[1] # 台語音標
+        hau_ziann_im_piau = row[2] # 台語音標
+        zo_piau = row[3] # (儲存格位置)座標
 
         if han_ji and (tai_gi_im_piau != 'N/A' or hau_ziann_im_piau != 'N/A'):
             # 將 Excel 工作表存放的【台語音標（TLPA）】，改成資料庫保存的【台羅拼音（TL）】
@@ -152,7 +151,7 @@ def khuat_ji_piau_poo_im_piau(wb):
             tl_im_piau = convert_tlpa_to_tl(tlpa_im_piau_cleanned)
 
             insert_or_update_to_db(db_path, table_name, han_ji, tl_im_piau, piau_im_huat)
-            print(f"📌 {idx+1}. 【{han_ji}】：台羅音標：【{tl_im_piau}】、校正音標：【{hau_ziann_im_piau}】、台語音標=【{tai_gi_im_piau}】、座標：{zo_piau}")
+            print(f"📌 {idx+1}. 【{han_ji}】==> {zo_piau}：台羅音標：【{tl_im_piau}】、校正音標：【{hau_ziann_im_piau}】、台語音標=【{tai_gi_im_piau}】、座標：{zo_piau}")
             idx += 1
 
     logging_process_step(f"【缺字表】中的資料已成功回填至資料庫： {db_path} 的【{table_name}】資料表中。")
@@ -179,7 +178,7 @@ def update_khuat_ji_piau(wb):
 
     # 取得【缺字表】工作表
     try:
-        sheet = wb.sheets["缺字表"]
+        khuat_ji_piau_sheet = wb.sheets["缺字表"]
     except Exception as e:
         logging_exc_error("找不到名為『缺字表』的工作表", e)
         return EXIT_CODE_INVALID_INPUT
@@ -193,24 +192,26 @@ def update_khuat_ji_piau(wb):
 
     row = 2  # 從第 2 列開始（跳過標題列）
     while True:
-        han_ji = sheet.range(f"A{row}").value  # 讀取 A 欄（漢字）
+        han_ji = khuat_ji_piau_sheet.range(f"A{row}").value  # 讀取 A 欄（漢字）
         if not han_ji:  # 若 A 欄為空，則結束迴圈
             break
 
-        # 取得原始【台語音標】並轉換為 TLPA+ 格式
-        im_piau = sheet.range(f"C{row}").value
+        # 更新【缺字表】中【校正音標】欄（C 欄）
+        hau_ziann_im_piau = khuat_ji_piau_sheet.range(f"C{row}").value
+        if hau_ziann_im_piau == "N/A" or not hau_ziann_im_piau:  # 若 C 欄為空，則結束迴圈
+            row += 1
+            continue
 
-        tlpa_im_piau = tng_im_piau(im_piau)   # 將【音標】使用之【拼音字母】轉換成【TLPA拼音字母】；【音標調符】仍保持
+        tlpa_im_piau = tng_im_piau(hau_ziann_im_piau)   # 將【音標】使用之【拼音字母】轉換成【TLPA拼音字母】；【音標調符】仍保持
         tai_gi_im_piau = tng_tiau_ho(tlpa_im_piau).lower()  # 將【音標調符】轉換成【數值調號】
-        # tai_lo_im_piau = convert_tl_with_tiau_hu_to_tlpa(im_piau)
+        # 取得原始【台語音標】並轉換為 TLPA+ 格式
+        im_piau = khuat_ji_piau_sheet.range(f"B{row}").value
+        khuat_ji_piau_sheet.range(f"B{row}").value = tai_gi_im_piau  # 更新 C 欄（校正音標）
 
-        # 更新【缺字表】中【校正音標】欄（D 欄）
-        sheet.range(f"D{row}").value = tai_gi_im_piau
-
-        print(f"{row-1}. (A{row}) 【{han_ji}】： 原音標：{im_piau}, 校正音標：{tai_gi_im_piau}")
+        coordinates_str = khuat_ji_piau_sheet.range(f"D{row}").value
+        print(f"{row-1}. (A{row}) 【{han_ji}】==> {coordinates_str} ： 原音標：{im_piau}, 校正音標：{tai_gi_im_piau}")
 
         # 讀取【缺字表】中【座標】欄（E 欄）的內容，該內容可能含有多組座標，如 "(5, 17); (33, 8); (77, 5)"
-        coordinates_str = sheet.range(f"E{row}").value
         if coordinates_str:
             # 利用正規表達式解析所有形如 (row, col) 的座標
             coordinate_tuples = re.findall(r"\((\d+)\s*,\s*(\d+)\)", coordinates_str)
@@ -220,6 +221,8 @@ def update_khuat_ji_piau(wb):
                     c_coord = int(tup[1])
                 except ValueError:
                     continue  # 若轉換失敗，跳過該組座標
+
+                han_ji_cell = (r_coord, c_coord)  # 漢字儲存格座標
 
                 # 根據說明，【台語音標】應填入漢字儲存格上方一列 (row - 1)，相同欄位
                 target_row = r_coord - 1
@@ -247,6 +250,8 @@ def update_khuat_ji_piau(wb):
                 excel_address = han_ji_piau_im_sheet.range(tai_gi_im_piau_cell).address
                 excel_address = excel_address.replace("$", "")  # 去除 "$" 符號
                 print(f"   漢字標音：【{han_ji_piau_im}】，填入座標：{excel_address} = {han_ji_piau_im_cell}")
+                # 將【漢字注音】工作表之【漢字】儲存格之底色，重置為【無底色】
+                han_ji_piau_im_sheet.range(han_ji_cell).color = None
 
         row += 1  # 讀取下一列
 

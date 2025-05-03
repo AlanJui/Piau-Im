@@ -6,7 +6,6 @@ import os
 import re
 import sqlite3
 import sys
-import unicodedata
 from pathlib import Path
 
 import xlwings as xw
@@ -14,21 +13,17 @@ from dotenv import load_dotenv
 
 from a000_重置漢字標音工作表 import main as a000_main
 from a001_清除漢字注音工作表欲標音之漢字 import main as a002_main
-from a240_為漢字標注漢字標音 import han_ji_piau_im  # 依據【台語音標】查找【漢字標音】
+
+# from a240_為漢字標注漢字標音 import han_ji_piau_im  # 依據【台語音標】查找【漢字標音】
 from mod_excel_access import delete_sheet_by_name, ensure_sheet_exists
 from mod_file_access import save_as_new_file
 from mod_字庫 import JiKhooDict  # 漢字字庫物件
 from mod_帶調符音標 import (
-    apply_tone,
-    cing_tu_khong_ze_ji_guan,
-    clean_im_piau,
     fix_im_piau_spacing,
-    handle_o_dot,
     is_han_ji,
     is_im_piau,
     read_text_with_han_ji,
     read_text_with_im_piau,
-    separate_tone,
     tng_im_piau,
     tng_tiau_ho,
     tng_un_bu,
@@ -75,6 +70,21 @@ init_logging()
 # =========================================================================
 # 程式區域函式
 # =========================================================================
+def extract_and_set_title(wb, file_path):
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            first_line = f.readline().strip()
+            match = re.search(r"《(.*?)》", first_line)
+            if match:
+                title = match.group(1)
+                wb.names['TITLE'].refers_to_range.value = title
+                logging.info(f"✅ 已將文件標題《{title}》寫入 env 表 TITLE 名稱格。")
+            else:
+                logging.info("❕ 無《標題》可提取，未更新 TITLE。")
+    except Exception as e:
+        logging_exc_error("無法讀取或更新 TITLE 名稱。", error=e)
+
+
 def fill_in_han_ji(wb, text_with_han_ji:list, sheet_name:str='漢字注音', start_row:int=5):
     sheet = wb.sheets[sheet_name]
     sheet.activate()
@@ -204,6 +214,8 @@ def cue_han_ji_piau_im(wb, han_ji_list:list) -> list:
                         )
                         im_piau_list.append(im_piau)
                         msg = f"{han_ji}：查無此字！"
+                        # 若【漢字】查找不到讀音之【台語音標】，則將【漢字注音】工作表之【漢字】儲存格，設為紅色
+                        sheet.cells(row, col).color = (255, 0, 0)  # 設定儲存格顏色為紅色
                     else:
                         # 依【漢字庫】查找結果，輸出【台語音標】和【漢字標音】
                         siann_bu = result[0]['聲母']
@@ -527,13 +539,21 @@ def main():
     #--------------------------------------------------------------------------
     # 儲存檔案
     #--------------------------------------------------------------------------
+
+    # 試圖以【漢字】純文字檔案，設定【標題】名稱
+    try:
+        extract_and_set_title(wb, han_ji_file)
+    except Exception as e:
+        logging_exc_error("無法讀取或更新 TITLE 名稱。", error=e)
+
+    # 存檔
     try:
         # 要求畫面回到【漢字注音】工作表
         wb.sheets['漢字注音'].activate()
         # 儲存檔案
         file_path = save_as_new_file(wb=wb)
         if not file_path:
-            logging_exc_error(msg="儲存檔案失敗！", error=e)
+            logging.error("儲存檔案失敗！")
             return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
         else:
             logging_process_step(f"儲存檔案至路徑：{file_path}")
