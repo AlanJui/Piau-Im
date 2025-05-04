@@ -15,6 +15,7 @@ from dotenv import load_dotenv
 
 # 載入自訂模組/函式
 from mod_excel_access import get_value_by_name, save_as_new_file
+from mod_字庫 import JiKhooDict
 from mod_帶調符音標 import tng_im_piau, tng_tiau_ho
 from mod_標音 import PiauIm  # 漢字標音物件
 from mod_標音 import tlpa_tng_han_ji_piau_im  # 台語音標轉台語音標
@@ -161,10 +162,10 @@ def khuat_ji_piau_poo_im_piau(wb):
 def update_khuat_ji_piau(wb):
     """
     讀取 Excel 檔案，依據【缺字表】工作表中的資料執行下列作業：
-      1. 由 A 欄讀取漢字，從 C 欄取得原始【台語音標】，並轉換為 TLPA+ 格式後更新 D 欄（校正音標）。
-      2. 從 E 欄讀取座標字串（可能含有多組座標），每組座標指向【漢字注音】工作表中該漢字儲存格，
-         而【台語音標】應填入位於該漢字儲存格上方一列（row - 1）的相同欄位。
-         若該儲存格尚無值，則填入校正音標。
+      1. 由 A 欄讀取漢字，從 C 欄取得原始輸入之【校正音標】，並轉換為 TLPA+ 格式，然後更新 B 欄（台語音標）。
+      2. 從 D 欄讀取座標字串（可能含有多組座標），每組座標指向【漢字注音】工作表中該漢字儲存格，
+         將【缺字表】取得之【台語音標】，填入【漢字注音】工作表之【台語音標】欄位（於【漢字】儲存格上方一列（row - 1））;
+         並在【漢字】儲存格下方一列（row + 1）填入【漢字標音】。
     """
     # 取得本函式所需之【選項】參數
     try:
@@ -177,11 +178,17 @@ def update_khuat_ji_piau(wb):
     piau_im = PiauIm(han_ji_khoo=han_ji_khoo)
 
     # 取得【缺字表】工作表
+    khuat_ji_piau_sheet_name = '缺字表'
     try:
-        khuat_ji_piau_sheet = wb.sheets["缺字表"]
+        khuat_ji_piau_sheet = wb.sheets[khuat_ji_piau_sheet_name]
     except Exception as e:
         logging_exc_error("找不到名為『缺字表』的工作表", e)
         return EXIT_CODE_INVALID_INPUT
+
+    # # 建立【缺字表】dict
+    # khuat_ji_piau_dict = JiKhooDict.create_ji_khoo_dict_from_sheet(
+    #     wb=wb,
+    #     sheet_name=khuat_ji_piau_sheet_name)
 
     # 取得【漢字注音】工作表
     try:
@@ -189,6 +196,12 @@ def update_khuat_ji_piau(wb):
     except Exception as e:
         logging_exc_error("找不到名為『漢字注音』的工作表", e)
         return EXIT_CODE_INVALID_INPUT
+
+    # 建立【標音字庫】dict
+    piau_im_sheet_name = '標音字庫'
+    piau_im_ji_khoo_dict = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=piau_im_sheet_name)
 
     row = 2  # 從第 2 列開始（跳過標題列）
     while True:
@@ -252,8 +265,48 @@ def update_khuat_ji_piau(wb):
                 print(f"   漢字標音：【{han_ji_piau_im}】，填入座標：{excel_address} = {han_ji_piau_im_cell}")
                 # 將【漢字注音】工作表之【漢字】儲存格之底色，重置為【無底色】
                 han_ji_piau_im_sheet.range(han_ji_cell).color = None
+                #--------------------------------------------------------------------------
+                # 重整【標音字庫】工作表使用之 Dict
+                # 依據【缺字表】工作表之【漢字】+【台語音標】資料，在【標音字庫】工作表【添增】此筆資料紀錄
+                #--------------------------------------------------------------------------
+                def tiau_zing_piau_im_ji_khoo_dict(piau_im_ji_khoo_dict,
+                                                   han_ji:str, tai_gi_im_piau:str,
+                                                   row:int, col:int):
+
+                        # Step 1: 在【標音字庫】搜尋該筆【漢字】+【台語音標】
+                        existing_entries = piau_im_ji_khoo_dict.ji_khoo_dict.get(han_ji, [])
+
+                        # 標記是否找到
+                        entry_found = False
+
+                        for existing_entry in existing_entries:
+                            # Step 2: 若找到，移除該筆資料內的座標
+                            if (row, col) in existing_entry["coordinates"]:
+                                existing_entry["coordinates"].remove((row, col))
+                            entry_found = True
+                            break  # 找到即可離開迴圈
+
+                        # Step 3: 將此筆資料（校正音標為 'N/A'）於【標音字庫】底端新增
+                        piau_im_ji_khoo_dict.add_entry(
+                            han_ji=han_ji,
+                            tai_gi_im_piau=tai_gi_im_piau,
+                            kenn_ziann_im_piau="N/A",  # 預設值
+                            coordinates=(row, col)
+                        )
+                # 更新【標音字庫】工作表之資料紀錄
+                tiau_zing_piau_im_ji_khoo_dict(
+                    piau_im_ji_khoo_dict=piau_im_ji_khoo_dict,
+                    han_ji=han_ji,
+                    tai_gi_im_piau=tai_gi_im_piau,
+                    row=r_coord,
+                    col=c_coord,
+                )
+
 
         row += 1  # 讀取下一列
+
+    # 依據 Dict 內容，更新【標音字庫】工作表之資料紀錄
+    piau_im_ji_khoo_dict.write_to_excel_sheet(wb=wb, sheet_name=piau_im_sheet_name)
 
     return EXIT_CODE_SUCCESS
 
