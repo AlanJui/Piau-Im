@@ -449,12 +449,12 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
                     cell_value = str(int(cell_value))
                 ruby_tag = f"  <span>{cell_value}</span>\n"
                 msg = f"{cell_value}"
+                char_count += 1
             else:
                 # 當【儲存格】存放的是【漢字】時，則需標注漢字標音
                 han_ji = cell_value.strip()  # 消去空白字元
 
                 # 取得漢字的【台語音標】
-                # tai_gi_im_piau = sheet.range((row - 1, col)).value  # 取得漢字的台語音標
                 tai_gi_im_piau = sheet.range((row + Piau_Im_Row, col)).value  # 取得漢字的台語音標
                 # 當儲存格寫入之資料為 None 情況時之處理作法：給予空字串
                 tai_gi_im_piau = tai_gi_im_piau if tai_gi_im_piau is not None else ""
@@ -475,18 +475,16 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
                 )
                 # msg =f"({row}, {xw.utils.col_name(col)}) = {han_ji} [{tlpa_im_piau}] <-- {tai_gi_im_piau}"
                 msg =f"{han_ji} [{tlpa_im_piau}] /【{tai_gi_im_piau}】"
+                char_count += 1
 
             write_buffer += ruby_tag
-            char_count += 1
             print(f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}")
 
             # 檢查是否需要插入換行標籤
-            # if total_chars_per_line and total_chars_per_line != "預設":
-            if total_chars_per_line and total_chars_per_line != "0":
-                if char_count == total_chars_per_line:
-                    ruby_tag += "<br/>\n"
-                    char_count = 0  # 重置字數計數器
-                    print('《人工斷行》')
+            if total_chars_per_line != "0" and char_count >= total_chars_per_line:
+                write_buffer += "<br/>\n"
+                char_count = 0  # 重置字數計數器
+                print('《人工斷行》')
 
         # =========================================================
         # 換行處理：(1)每處理完 15 字後，換下一行 ；(2) 讀到【換行標示】
@@ -494,10 +492,7 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
         # 讀到【換行標示】，需要結束目前【段落】，並開始新的【段落】
         if cell_value == '\n':
             write_buffer += f"</p><p>\n"
-            # 檢查是否需要插入換行標籤
-            if total_chars_per_line and total_chars_per_line != "預設":
-                char_count = 0  # 重置字數計數器
-
+            char_count = 0  # 重置字數計數器
 
         line += 1
         if End_Of_File or line > TOTAL_LINES: break
