@@ -311,6 +311,155 @@ def update_khuat_ji_piau(wb):
     return EXIT_CODE_SUCCESS
 
 
+#---------------------------------------------------------------------------
+# 此函式之功用，等同 update_khuat_ji_piau()，但其程式碼之作法改不同。
+# update_khuat_ji_piau() 自【缺字表】工作表，直接讀取 table 資料進行更新；
+# 但此函式則是將【缺字表】工作表之 table 資料讀入，再以 dict item() 方式，逐筆讀取資料進行更新。
+#---------------------------------------------------------------------------
+
+from mod_excel_access import ensure_sheet_exists, get_value_by_name, strip_cell
+from mod_帶調符音標 import cing_bo_iong_ji_bu, kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
+
+
+def update_by_khuat_ji_piau(wb):
+    """
+    將字典中的所有漢字資料寫入 Excel 的「漢字注音」工作表。
+
+    :param wb: Excel 活頁簿物件。
+    :param sheet_name: 工作表名稱（例如「漢字注音」）。
+    """
+    # 取得本函式所需之【選項】參數
+    try:
+        han_ji_khoo = wb.names["漢字庫"].refers_to_range.value
+        piau_im_huat = wb.names["標音方法"].refers_to_range.value
+    except Exception as e:
+        logging_exc_error("找不到作業所需之選項設定", e)
+        return EXIT_CODE_INVALID_INPUT
+
+    piau_im = PiauIm(han_ji_khoo=han_ji_khoo)
+
+    try:
+        # 確保工作表存在
+        piau_im_ji_khoo_sheet_name = '漢字注音'
+        ensure_sheet_exists(wb, piau_im_ji_khoo_sheet_name)
+        han_ji_piau_im_sheet = wb.sheets[piau_im_ji_khoo_sheet_name]
+
+        # 依【工作表】內容建立【字庫字典】
+        khuat_ji_piau_sheet_name = '缺字表'
+        khuat_ji_khoo_dict = JiKhooDict.create_ji_khoo_dict_from_sheet(
+            wb=wb, sheet_name=khuat_ji_piau_sheet_name)
+
+        # 建置自動及人工漢字標音字庫工作表：【標音字庫】
+        piau_im_sheet_name = '標音字庫'
+        piau_im_ji_khoo_dict = JiKhooDict.create_ji_khoo_dict_from_sheet(
+            wb=wb, sheet_name=piau_im_sheet_name)
+    except Exception as e:
+        raise ValueError(f"無法找到或建立工作表：{e}")
+
+    try:
+        # 在【缺字表】工作表，遍歷【表格】每個字典查不到【音標】之【漢字】
+        for han_ji, entry in khuat_ji_khoo_dict.items():
+            tai_gi_im_piau = entry["tai_gi_im_piau"]
+            kenn_ziann_im_piau = entry["kenn_ziann_im_piau"]
+            coordinates = entry["coordinates"]
+
+            # 遍歷【座標】欄位中每個座標，依【座標】所指向【漢字注音】工作表之儲存格，讀取【漢字】之【人工標音】
+            for row, col in coordinates:
+                # 取得【漢字注音】表中的【漢字】儲存格物件
+                han_ji_cell = han_ji_piau_im_sheet.range((row, col))
+                # 取得【漢字注音】表中的【人工標音】儲存格內容
+                jin_kang_piau_im_cell = han_ji_piau_im_sheet.range((row - 2, col))
+
+                # 取得【漢字注音】表中的【台語音標】儲存格內容
+                tai_gi_cell = han_ji_piau_im_sheet.range((row - 1, col))
+                han_ji_piau_im_cell = han_ji_piau_im_sheet.range((row + 1, col))
+
+                # 如果【人工標音】為【帶調符音標】，則需確保轉換為【帶調號TLPA音標】
+                jin_kang_piau_im = strip_cell(jin_kang_piau_im_cell.value)
+                if not jin_kang_piau_im:
+                    continue
+                if tai_gi_im_piau == 'N/A' or tai_gi_im_piau == '':
+                    continue
+                elif kenn_ziann_im_piau == 'N/A' or kenn_ziann_im_piau == '':
+                    # 若【缺字表】表格中【校正音標】欄位值為空，則略過
+                    continue
+                # 若取得之【人工標音】，為【帶調符音標】時，則需轉換為【帶調號TLPA音標】
+                if kam_si_u_tiau_hu(jin_kang_piau_im):
+                    jin_kang_im_piau = cing_bo_iong_ji_bu(jin_kang_piau_im_cell.value)
+                    # 轉換成【帶調符TLPA音標】
+                    tlpa_im_piau_u_tiau_hu = tng_im_piau(jin_kang_im_piau)
+                    # 轉換成【帶調號TLPA音標】，並轉成小寫
+                    tlpa_im_piau = tng_tiau_ho(tlpa_im_piau_u_tiau_hu).lower()
+                else:
+                    # tlpa_im_piau = jin_kang_piau_im_cell.value
+                    tlpa_im_piau = jin_kang_piau_im
+
+                # 依【人工標音】轉換【漢字標音】
+                han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+                    piau_im=piau_im,
+                    piau_im_huat=piau_im_huat,
+                    tai_gi_im_piau=tlpa_im_piau
+                )
+
+                # 回填【缺字表】表格【校正音標】欄位
+                tai_gi_im_piau = tlpa_im_piau
+                kenn_ziann_im_piau = jin_kang_piau_im
+
+                # 更新【漢字注音】工作表中【台語音標】、【漢字標音】儲存格內容
+                tai_gi_cell.value = tai_gi_im_piau
+                han_ji_piau_im_cell.value = han_ji_piau_im
+
+                # ----- 新增程式邏輯：更新【標音字庫】 -----
+                # Step 1: 在【標音字庫】搜尋該筆【漢字】+【台語音標】
+                existing_entries = piau_im_ji_khoo_dict.ji_khoo_dict.get(han_ji, [])
+
+                # 標記是否找到
+                entry_found = False
+
+                for existing_entry in existing_entries:
+                    # Step 2: 若找到，移除該筆資料內的座標
+                    if (row, col) in existing_entry["coordinates"]:
+                        existing_entry["coordinates"].remove((row, col))
+                    entry_found = True
+                    break  # 找到即可離開迴圈
+
+                # Step 3: 將此筆資料（校正音標為 'N/A'）於【標音字庫】底端新增
+                piau_im_ji_khoo_dict.add_entry(
+                    han_ji=han_ji,
+                    tai_gi_im_piau=tai_gi_im_piau,
+                    kenn_ziann_im_piau="N/A",  # 預設值
+                    coordinates=(row, col)
+                )
+
+                # 重置【漢字】儲存格的底色和文字顏色
+                han_ji_cell.color = (255, 255, 0)       # 將底色設為【黄色】
+                han_ji_cell.font.color = (255, 0, 0)    # 將文字顏色設為【紅色】
+
+                # 顯示更新訊息
+                msg = f"{han_ji}：【{tai_gi_im_piau}】/【{kenn_ziann_im_piau}】<-- 【{jin_kang_im_piau}】"
+                print(f"({row}, {col}) = {msg}")
+
+    except Exception as e:
+        logging_exception(msg=f"處理【漢字】補【台語音標】作業異常！", error=e)
+        raise
+
+    #-----------------------------------------------------------------------------------------
+    # 作業結束前處理
+    #-----------------------------------------------------------------------------------------
+    try:
+        # 將【缺字表】字典保存之資料，回填【缺字表】工作表
+        khuat_ji_khoo_dict.write_to_excel_sheet(wb=wb, sheet_name=khuat_ji_piau_sheet_name)
+        piau_im_ji_khoo_dict.write_to_excel_sheet(wb=wb, sheet_name=piau_im_sheet_name)
+    except Exception as e:
+        logging_exception(msg=f"將【字典】存放之資料，更新工作表作業異常！", error=e)
+        raise
+    # 顯示【漢字注音】工作表
+    han_ji_piau_im_sheet.activate()
+    han_ji_piau_im_sheet.range('A1').select()
+
+    return EXIT_CODE_SUCCESS
+
+
 # =========================================================================
 # 本程式主要處理作業程序
 # =========================================================================
