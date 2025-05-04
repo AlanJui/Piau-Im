@@ -12839,3 +12839,209 @@ UnboundLocalError: cannot access local variable 'e' where it is not associated w
 2025-05-04 13:48:21,568 - INFO - <----------- 作業結束！---------->
 2025-05-04 13:48:21,808 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《六國論》.xlsx
 2025-05-04 13:48:21,808 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-05-04 14:21:16,574 - INFO - 已完成【漢字】查找標音作業。
+2025-05-04 14:21:26,328 - INFO - ✅ 已將文件標題《俗諺 001》寫入 env 表 TITLE 名稱格。
+2025-05-04 14:21:26,791 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《俗諺 001》.xlsx
+2025-05-04 14:22:15,248 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-05-04 14:22:15,248 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-04 14:22:15,264 - INFO - <----------- 作業開始！---------->
+2025-05-04 14:22:17,307 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a200_查找及填入漢字標音.py", line 175, in ca_han_ji_thak_im
+    elif cell_value == None or cell_value.strip() == "":  # 若儲存格內無值
+                               ^^^^^^^^^^^^^^^^
+AttributeError: 'float' object has no attribute 'strip'
+2025-05-04 14:22:17,308 - ERROR - 在查找漢字標音時發生錯誤！，錯誤訊息: 'float' object has no attribute 'strip'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a200_查找及填入漢字標音.py", line 298, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name,    # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\a200_查找及填入漢字標音.py", line 175, in ca_han_ji_thak_im
+    elif cell_value == None or cell_value.strip() == "":  # 若儲存格內無值
+                               ^^^^^^^^^^^^^^^^
+AttributeError: 'float' object has no attribute 'strip'
+2025-05-04 14:22:17,310 - ERROR - 程式異常終止：a200_查找及填入漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a200_查找及填入漢字標音.py", line 396, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-05-04 14:22:17,522 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《俗諺 001》.xlsx
+2025-05-04 14:23:35,791 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-05-04 14:23:35,791 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-04 14:23:35,809 - INFO - <----------- 作業開始！---------->
+2025-05-04 14:29:23,730 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-05-04 14:29:23,731 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-04 14:29:23,750 - INFO - <----------- 作業開始！---------->
+2025-05-04 14:36:04,132 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-05-04 14:36:04,133 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-04 14:36:04,178 - INFO - <----------- 作業開始！---------->
+2025-05-04 14:36:35,021 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 183, in ca_han_ji_thak_im
+    elif cell_value == None or cell_value.strip() == "":  # 若儲存格內無值
+                               ^^^^^^^^^^^^^^^^
+AttributeError: 'float' object has no attribute 'strip'
+2025-05-04 14:36:35,025 - ERROR - 在查找漢字標音時發生錯誤！，錯誤訊息: 'float' object has no attribute 'strip'
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 312, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name,    # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a200_查找及填入漢字標音.py", line 183, in ca_han_ji_thak_im
+    elif cell_value == None or cell_value.strip() == "":  # 若儲存格內無值
+                               ^^^^^^^^^^^^^^^^
+AttributeError: 'float' object has no attribute 'strip'
+2025-05-04 14:36:35,026 - ERROR - 程式異常終止：a200_查找及填入漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 410, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-05-04 14:36:35,268 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《俗諺 001》.xlsx
+2025-05-04 14:37:15,144 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-05-04 14:37:15,145 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-04 14:37:15,180 - INFO - <----------- 作業開始！---------->
+2025-05-04 14:37:43,733 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 183, in ca_han_ji_thak_im
+    elif cell_value == None or cell_value.strip() == "":  # 若儲存格內無值
+                               ^^^^^^^^^^^^^^^^
+AttributeError: 'float' object has no attribute 'strip'
+2025-05-04 14:37:43,737 - ERROR - 在查找漢字標音時發生錯誤！，錯誤訊息: 'float' object has no attribute 'strip'
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 312, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name,    # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a200_查找及填入漢字標音.py", line 183, in ca_han_ji_thak_im
+    elif cell_value == None or cell_value.strip() == "":  # 若儲存格內無值
+                               ^^^^^^^^^^^^^^^^
+AttributeError: 'float' object has no attribute 'strip'
+2025-05-04 14:37:43,738 - ERROR - 程式異常終止：a200_查找及填入漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 410, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-05-04 14:37:43,950 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《俗諺 001》.xlsx
+2025-05-04 14:37:56,034 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-05-04 14:37:56,035 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-04 14:37:56,051 - INFO - <----------- 作業開始！---------->
+2025-05-04 14:43:31,199 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-05-04 14:43:31,200 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-04 14:43:31,238 - INFO - <----------- 作業開始！---------->
+2025-05-04 14:46:10,881 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-05-04 14:46:10,882 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-04 14:46:10,897 - INFO - <----------- 作業開始！---------->
+2025-05-04 14:46:21,130 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-05-04 14:46:21,131 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-04 14:46:21,165 - INFO - <----------- 作業開始！---------->
+2025-05-04 14:46:29,850 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-05-04 14:46:29,851 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-04 14:46:29,868 - INFO - <----------- 作業開始！---------->
+2025-05-04 14:59:03,423 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-05-04 14:59:03,424 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-04 14:59:03,438 - INFO - <----------- 作業開始！---------->
+2025-05-04 14:59:15,037 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 189, in ca_han_ji_thak_im
+    if is_punctuation(str(cell_value)):
+       ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 284, in is_punctuation
+    return unicodedata.category(char)[0] in {'P', 'S'}
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^
+TypeError: category() argument must be a unicode character, not str
+2025-05-04 14:59:15,041 - ERROR - 在查找漢字標音時發生錯誤！，錯誤訊息: category() argument must be a unicode character, not str
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 295, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name,    # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a200_查找及填入漢字標音.py", line 189, in ca_han_ji_thak_im
+    if is_punctuation(str(cell_value)):
+       ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 284, in is_punctuation
+    return unicodedata.category(char)[0] in {'P', 'S'}
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^
+TypeError: category() argument must be a unicode character, not str
+2025-05-04 14:59:15,042 - ERROR - 程式異常終止：a200_查找及填入漢字標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 393, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-05-04 14:59:15,337 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《俗諺 001》.xlsx
+2025-05-04 15:13:02,886 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-05-04 15:13:02,887 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-04 15:13:02,903 - INFO - <----------- 作業開始！---------->
+2025-05-04 15:16:52,092 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-05-04 15:16:52,093 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-04 15:16:52,108 - INFO - <----------- 作業開始！---------->
+2025-05-04 15:18:49,813 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-05-04 15:18:49,814 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-04 15:18:49,829 - INFO - <----------- 作業開始！---------->
+2025-05-04 15:20:07,039 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-05-04 15:20:07,040 - INFO - 自動為【漢字】查找【台語音標】作業己完成！
+2025-05-04 15:20:07,040 - INFO - 【語音類型】：白話音
+2025-05-04 15:20:07,040 - INFO - 【漢字庫】：Ho_Lok_Ue.db
+2025-05-04 15:20:07,050 - INFO - <----------- 作業結束！---------->
+2025-05-04 15:20:07,297 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《俗諺 001》.xlsx
+2025-05-04 15:20:07,297 - INFO - 《========== 程式終止執行：a200_查找及填入漢字標音 ==========》
+2025-05-04 15:23:17,709 - INFO - 《========== 程式開始執行：a210_人工標音【同a320】 ==========》
+2025-05-04 15:23:17,710 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-04 15:23:17,725 - INFO - <----------- 作業開始！---------->
+2025-05-04 15:23:19,182 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a210_人工標音【同a320】.py", line 160, in jin_kang_piau_imm
+    elif cell_value == None or cell_value.strip() == "":  # 若儲存格內無值
+                               ^^^^^^^^^^^^^^^^
+AttributeError: 'float' object has no attribute 'strip'
+2025-05-04 15:23:19,183 - ERROR - 在查找漢字標音時發生錯誤！，錯誤訊息: 'float' object has no attribute 'strip'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a210_人工標音【同a320】.py", line 268, in process
+    jin_kang_piau_imm(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<4 lines>...
+        # new_jin_kang_piau_im__piau=True # 新建人工標音字庫工作表
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\a210_人工標音【同a320】.py", line 160, in jin_kang_piau_imm
+    elif cell_value == None or cell_value.strip() == "":  # 若儲存格內無值
+                               ^^^^^^^^^^^^^^^^
+AttributeError: 'float' object has no attribute 'strip'
+2025-05-04 15:23:19,185 - ERROR - 程式異常終止：a210_人工標音【同a320】，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a210_人工標音【同a320】.py", line 337, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-05-04 15:23:19,439 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《俗諺 001》.xlsx

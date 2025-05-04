@@ -15,12 +15,13 @@ from dotenv import load_dotenv
 from mod_excel_access import delete_sheet_by_name, get_value_by_name
 from mod_file_access import load_module_function, save_as_new_file
 from mod_字庫 import JiKhooDict  # 漢字字庫物件
-from mod_標音 import ca_ji_kiat_ko_tng_piau_im  # 查字典得台語音標及漢字標音
+
+# from mod_標音 import is_punctuation  # 是否為標點符號
+from mod_帶調符音標 import is_han_ji
 from mod_標音 import convert_tl_with_tiau_hu_to_tlpa  # 去除台語音標的聲調符號
-from mod_標音 import is_punctuation  # 是否為標點符號
 from mod_標音 import split_hong_im_hu_ho  # 分解漢字標音
 from mod_標音 import tlpa_tng_han_ji_piau_im  # 漢字標音物件
-from mod_標音 import PiauIm
+from mod_標音 import PiauIm, ca_ji_kiat_ko_tng_piau_im, is_punctuation  # 查字典得台語音標及漢字標音
 
 # =========================================================================
 # 常數定義
@@ -91,7 +92,11 @@ def jin_kang_piau_im_cu_han_ji_piau_im(wb, jin_kang_piau_im: str, piau_im: PiauI
 
 
 # def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im', new_jin_kang_piau_im__piau:bool=False):
-def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im'):
+def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3',
+                      ue_im_lui_piat="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db',
+                      module_name='mod_河洛話', function_name='han_ji_ca_piau_im',
+                      new_khuat_ji_piau_sheet:bool=False,
+                      new_piau_im_ji_khoo_sheet:bool=False):
     """查漢字讀音：依【漢字】查找【台語音標】，並依指定之【標音方法】輸出【漢字標音】"""
     try:
         # 載入【漢字庫】查找函數
@@ -109,13 +114,15 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
 
         # 建置自動及人工漢字標音字庫工作表：（1）【標音字庫】；（2）【人工標音字】；（3）【缺字表】
         khuat_ji_piau_name = '缺字表'
-        delete_sheet_by_name(wb=wb, sheet_name=khuat_ji_piau_name)
+        if new_khuat_ji_piau_sheet:
+            delete_sheet_by_name(wb=wb, sheet_name=khuat_ji_piau_name)
         khuat_ji_piau_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
             wb=wb,
             sheet_name=khuat_ji_piau_name)
 
         piau_im_sheet_name = '標音字庫'
-        delete_sheet_by_name(wb=wb, sheet_name=piau_im_sheet_name)
+        if new_piau_im_ji_khoo_sheet:
+            delete_sheet_by_name(wb=wb, sheet_name=piau_im_sheet_name)
         piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
             wb=wb,
             sheet_name=piau_im_sheet_name)
@@ -172,37 +179,36 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                     msg = "【文字終結】"
                 elif cell_value == '\n':
                     msg = "【換行】"
-                elif cell_value == None or cell_value.strip() == "":  # 若儲存格內無值
-                    if Two_Empty_Cells == 0:
-                        Two_Empty_Cells += 1
-                    elif Two_Empty_Cells == 1:
-                        EOF = True
-                    msg = "【空缺】"    # 表【儲存格】未填入任何字/符，不同於【空白】字元
                 # 若不為【標點符號】，則以【漢字】處理
-                elif is_punctuation(cell_value):
-                    msg = f"{cell_value}【標點符號】"
+                elif not is_han_ji(cell_value):
+                    # 若【儲存格】存放非漢字，則為：【標點符號】、【空白】或【數值】等
+                    # str_val = str(cell_value).strip()
+                    # if len(str_val) == 1 and is_punctuation(str_val):
+                    #     msg = f"{str_val}【標點符號】"
+                    # elif str_val.isdigit():
+                    #     msg = f"{str_val}【數字】"
+                    # elif str_val == "":
+                    #     if Two_Empty_Cells == 0:
+                    #         Two_Empty_Cells += 1
+                    #     elif Two_Empty_Cells == 1:
+                    #         EOF = True
+                    #     msg = "【空白】"    # 表【儲存格】未填入任何字/符，不同於【空白】字元
+
+                    # ✅ 若為全形／半形標點符號
+                    if is_punctuation(str(cell_value)):
+                        msg = f"{cell_value}【標點符號】"
+                    elif isinstance(cell_value, float) and cell_value.is_integer():
+                        cell_value = str(int(cell_value))
+                        msg = f"{cell_value}【英/數半形字元】"
+                    elif cell_value == None or cell_value.strip() == "":  # 若儲存格內無值
+                        if Two_Empty_Cells == 0:
+                            Two_Empty_Cells += 1
+                        elif Two_Empty_Cells == 1:
+                            EOF = True
+                        msg = "【空白】"    # 表【儲存格】未填入任何字/符，不同於【空白】字元
                 else:
                     # 查找漢字讀音
                     han_ji = cell_value
-                    # if jin_kang_piau_im and han_ji != '':
-                    #     tai_gi_im_piau, han_ji_piau_im = jin_kang_piau_im_cu_han_ji_piau_im(
-                    #         wb=wb,
-                    #         jin_kang_piau_im=jin_kang_piau_im,
-                    #         piau_im=piau_im,
-                    #         piau_im_huat=piau_im_huat)
-                    #     # 將【台語音標】和【漢字標音】寫入儲存格
-                    #     sheet.range((row - 1, col)).value = tai_gi_im_piau
-                    #     sheet.range((row + 1, col)).value = han_ji_piau_im
-                    #     msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】《人工標音》]"
-                    #     # 【標音字庫】添加或更新【漢字】資料
-                    #     # jin_kang_piau_im_ji_khoo.add_or_update_entry(
-                    #     jin_kang_piau_im_ji_khoo.add_entry(
-                    #         han_ji=han_ji,
-                    #         tai_gi_im_piau=tai_gi_im_piau,
-                    #         kenn_ziann_im_piau=jin_kang_piau_im,
-                    #         coordinates=(row, col)
-                    #     )
-                    # else:
                     if han_ji != '':
                         # 查找【漢字】之轉【台語音標】，並依此進行轉換作業，取得【漢字標音】
                         # 自【漢字庫】查找作業
@@ -241,7 +247,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                             )
                 # 顯示處理進度
                 col_name = xw.utils.col_name(col)   # 取得欄位名稱
-                print(f"【{xw.utils.col_name(col)}{row}】({row}, {col_name}) = {msg}")
+                print(f"【{xw.utils.col_name(col)}{row}】({row}, {col}) = {msg}")
 
                 # 若讀到【換行】或【文字終結】，跳出逐欄取字迴圈
                 if msg == "【換行】" or EOF:
@@ -393,7 +399,7 @@ def main():
         status_code = process(wb)
         if status_code != EXIT_CODE_SUCCESS:
             msg = f"程式異常終止：{program_name}"
-            logging_exc_error(msg=msg, error=e)
+            logging_exc_error(msg=msg, error=None)
             return EXIT_CODE_PROCESS_FAILURE
 
     except Exception as e:

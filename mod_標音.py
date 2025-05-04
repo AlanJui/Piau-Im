@@ -276,14 +276,29 @@ def convert_tl_with_tiau_hu_to_tlpa(im_piau: str) -> Optional[str]:
 # =========================================================
 # 判斷是否為標點符號的輔助函數
 # =========================================================
-def is_punctuation(char):
-    # 如果 char 是 None，直接返回 False
-    if char is None:
-        return False
 
-    # 可以根據需要擴充此列表以判斷各種標點符號
-    punctuation_marks = "，。！！？；：、（）「」『』《》……"
-    return char in punctuation_marks
+def is_punctuation(char):
+    """判斷是否為標點符號"""
+    import unicodedata
+    if not char or not isinstance(char, str):
+        return False
+    if len(char) != 1:
+        return False  # ✅ 只允許單一字元
+    return unicodedata.category(char)[0] in {'P', 'S'}
+
+
+# def is_punctuation(char):
+#     # 如果 char 是 None，直接返回 False
+#     # if not char or len(char) != 1:
+#     #     return False
+#     if not char or not isinstance(char, str):
+#         return False
+#     if len(char) != 1:
+#         return False  # ✅ 只允許單一字元
+
+#     # 可以根據需要擴充此列表以判斷各種標點符號
+#     punctuation_marks = "，。！！？；：、（）「」『』《》……"
+#     return char in punctuation_marks
 
 
 # =========================================================
