@@ -109,7 +109,9 @@ def title_piau_im(wb, title: str) -> str:
     # 産生標音物件
     piau_im = PiauIm(han_ji_khoo_name)
 
-    """將標題的文字加注【台語音標】"""
+    #---------------------------------------------------------------
+    # 將標題的文字加注【台語音標】
+    #---------------------------------------------------------------
     u_piau_im_title = ""
     for han_ji in title:
         tai_gi_im_piau = ""
@@ -342,9 +344,33 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
     #--------------------------------------------------------------------------
     # 輸出【文章】Div tag 及【文章標題】Ruby Tag
     #--------------------------------------------------------------------------
-    # 取得文章標題並加注【台語音標】
-    title = wb.names['TITLE'].refers_to_range.value
-    title_with_ruby = title_piau_im(wb, title)
+    # # 取得文章標題並加注【台語音標】
+    # title = wb.names['TITLE'].refers_to_range.value
+    # title_with_ruby = title_piau_im(wb, title)
+
+    #--------------------------------------------------------------------
+    # 取得文章標題：自 (5,4) 開始讀取到遇到 "》" 為止
+    #--------------------------------------------------------------------
+    title_chars = ""
+    title_cells = []  # ⬅️ 新增：用來記錄讀過的儲存格座標
+    row, col = 5, 4
+
+    while True:
+        cell_val = sheet.range((row, col)).value
+        if cell_val is None:
+            break
+        title_chars += cell_val
+        title_cells.append((row, col))  # ⬅️ 記下每一格位置
+        if cell_val == "》":
+            break
+        col += 1
+        if col > 18:  # 超出一列最大值（R欄=18），則換行至下一列
+            row += 1
+            col = 4
+
+    # 去除《與》符號，只傳入標題文字本體加注 ruby
+    title_han_ji = title_chars.replace("《", "").replace("》", "")
+    title_with_ruby = title_piau_im(wb, title_han_ji)
 
     # 設定文章內容使用之 div tag 及標題 Ruby Tag
     piau_im_format = wb.names['網頁格式'].refers_to_range.value
@@ -361,7 +387,9 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
     div_tag = (
         "<div class='%s'>\n"
         "  <p class='title'>\n"
+        "    <span>《</span>\n"
         "    %s\n"
+        "    <span>》</span>\n"
         "  </p>\n"
     )
     html_str = div_tag % (pai_ban_iong_huat, title_with_ruby)
@@ -396,8 +424,10 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
 
         # 逐欄取出儲存格內容
         for col in range(start_col, end_col):
-            ruby_tag = ""
+            if (row, col) in title_cells:
+                continue  # ⬅️ 跳過已處理過的標題儲存格
 
+            ruby_tag = ""
             cell_value = sheet.range((row, col)).value
             # 若【儲存格】內存放【整數值】，則轉為【字串】
             if cell_value == 'φ':       # 讀到【結尾標示】

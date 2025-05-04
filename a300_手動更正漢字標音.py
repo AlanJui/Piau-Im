@@ -444,10 +444,7 @@ def process(wb):
         print("======================================================================")
         print(f"使用【{sheet_name}】工作表中的【校正音標】，更正【台語音標】儲存格：")
         print("======================================================================")
-        # update_by_khuat_ji_piau(wb=wb,
-        #                         sheet_name=sheet_name,
-        #                         piau_im=piau_im,
-        #                         piau_im_huat=piau_im_huat)
+        # update_by_khuat_ji_piau(wb=wb)
         update_khuat_ji_piau(wb=wb)
     except Exception as e:
         logging_exc_error(msg=f"處理【缺字表】作業異常！", error=e)
