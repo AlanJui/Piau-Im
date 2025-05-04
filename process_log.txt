@@ -13045,3 +13045,44 @@ Traceback (most recent call last):
                                      ^
 UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
 2025-05-04 15:23:19,439 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《俗諺 001》.xlsx
+2025-05-04 15:24:49,234 - INFO - 《========== 程式開始執行：a320_人工標音更正漢字自動標音 ==========》
+2025-05-04 15:24:49,234 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-04 15:24:49,250 - INFO - <----------- 作業開始！---------->
+2025-05-04 15:24:50,536 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a320_人工標音更正漢字自動標音.py", line 159, in jin_kang_piau_imm
+    elif cell_value == None or cell_value.strip() == "":  # 若儲存格內無值
+                               ^^^^^^^^^^^^^^^^
+AttributeError: 'float' object has no attribute 'strip'
+2025-05-04 15:24:50,537 - ERROR - 在查找漢字標音時發生錯誤！，錯誤訊息: 'float' object has no attribute 'strip'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a320_人工標音更正漢字自動標音.py", line 267, in process
+    jin_kang_piau_imm(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<4 lines>...
+        # new_jin_kang_piau_im__piau=True # 新建人工標音字庫工作表
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\a320_人工標音更正漢字自動標音.py", line 159, in jin_kang_piau_imm
+    elif cell_value == None or cell_value.strip() == "":  # 若儲存格內無值
+                               ^^^^^^^^^^^^^^^^
+AttributeError: 'float' object has no attribute 'strip'
+2025-05-04 15:24:50,539 - ERROR - 程式異常終止：a320_人工標音更正漢字自動標音，錯誤訊息: cannot access local variable 'e' where it is not associated with a value
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a320_人工標音更正漢字自動標音.py", line 336, in main
+    logging_exc_error(msg=msg, error=e)
+                                     ^
+UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
+2025-05-04 15:24:50,787 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《俗諺 001》.xlsx
+2025-05-04 15:28:03,373 - INFO - 《========== 程式開始執行：a320_人工標音更正漢字自動標音 ==========》
+2025-05-04 15:28:03,374 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-05-04 15:28:03,389 - INFO - <----------- 作業開始！---------->
+2025-05-04 15:28:09,334 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-05-04 15:28:09,336 - INFO - 自動為【漢字】查找【台語音標】作業己完成！
+2025-05-04 15:28:09,337 - INFO - 【語音類型】：白話音
+2025-05-04 15:28:09,357 - INFO - <----------- 作業結束！---------->
+2025-05-04 15:28:09,610 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《俗諺 001》.xlsx
+2025-05-04 15:28:09,610 - INFO - 《========== 程式終止執行：a320_人工標音更正漢字自動標音 ==========》
