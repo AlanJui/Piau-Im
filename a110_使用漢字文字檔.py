@@ -30,8 +30,8 @@ from mod_帶調符音標 import (
     tng_un_bu,
     zing_li_zuan_ku,
 )
-from mod_標音 import PiauIm  # 漢字標音物件
 from mod_標音 import split_tai_gi_im_piau  # 分解台語音標
+from mod_標音 import PiauIm, is_punctuation  # 漢字標音物件
 from mod_河洛話 import han_ji_ca_piau_im
 
 # =========================================================================
@@ -192,54 +192,53 @@ def cue_han_ji_piau_im(wb, han_ji_list:list) -> list:
             elif han_ji == '\n':
                 im_piau_list.append('\n')
                 msg = "【換行】"
-            else:
                 # 若不為【漢字】，則以【標點符號】、【空白】或【半形字元】處置
-                if not is_han_ji(han_ji):
-                    im_piau_list.append(han_ji)
-                    msg = f"{han_ji}：略過！"
-                else:
-                    im_piau = ""
-                    # 自【漢字庫】查找作業
-                    result = han_ji_ca_piau_im(
-                        cursor=cursor,
+            elif not is_han_ji(han_ji):
+                im_piau_list.append(han_ji)
+                msg = f"{han_ji}：略過！"
+            else:
+                im_piau = ""
+                # 自【漢字庫】查找作業
+                result = han_ji_ca_piau_im(
+                    cursor=cursor,
+                    han_ji=han_ji,
+                    ue_im_lui_piat=ue_im_lui_piat)
+
+                # 若【漢字庫】查無此字，登錄至【缺字表】
+                if not result:
+                    khuat_ji_piau_ji_khoo.add_or_update_entry(
                         han_ji=han_ji,
-                        ue_im_lui_piat=ue_im_lui_piat)
+                        tai_gi_im_piau='N/A',
+                        kenn_ziann_im_piau='N/A',
+                        coordinates=(row, col)
+                    )
+                    im_piau_list.append(im_piau)
+                    msg = f"{han_ji}：查無此字！"
+                    # 若【漢字】查找不到讀音之【台語音標】，則將【漢字注音】工作表之【漢字】儲存格，設為紅色
+                    sheet.cells(row, col).color = (255, 0, 0)  # 設定儲存格顏色為紅色
+                else:
+                    # 依【漢字庫】查找結果，輸出【台語音標】和【漢字標音】
+                    siann_bu = result[0]['聲母']
+                    un_bu = result[0]['韻母']
+                    un_bu = tng_un_bu(un_bu)
+                    tiau_ho = result[0]['聲調']
+                    if tiau_ho == "6":
+                        # 若【聲調】為【6】，則將【聲調】改為【7】
+                        tiau_ho = "7"
+                    # 將【聲母】、【韻母】、【聲調】，合併成【台語音標】
+                    im_piau = ''.join([siann_bu, un_bu, tiau_ho])
 
-                    # 若【漢字庫】查無此字，登錄至【缺字表】
-                    if not result:
-                        khuat_ji_piau_ji_khoo.add_or_update_entry(
-                            han_ji=han_ji,
-                            tai_gi_im_piau='N/A',
-                            kenn_ziann_im_piau='N/A',
-                            coordinates=(row, col)
-                        )
-                        im_piau_list.append(im_piau)
-                        msg = f"{han_ji}：查無此字！"
-                        # 若【漢字】查找不到讀音之【台語音標】，則將【漢字注音】工作表之【漢字】儲存格，設為紅色
-                        sheet.cells(row, col).color = (255, 0, 0)  # 設定儲存格顏色為紅色
-                    else:
-                        # 依【漢字庫】查找結果，輸出【台語音標】和【漢字標音】
-                        siann_bu = result[0]['聲母']
-                        un_bu = result[0]['韻母']
-                        un_bu = tng_un_bu(un_bu)
-                        tiau_ho = result[0]['聲調']
-                        if tiau_ho == "6":
-                            # 若【聲調】為【6】，則將【聲調】改為【7】
-                            tiau_ho = "7"
-                        # 將【聲母】、【韻母】、【聲調】，合併成【台語音標】
-                        im_piau = ''.join([siann_bu, un_bu, tiau_ho])
-
-                        # 【標音字庫】添加或更新【漢字】資料
-                        piau_im_ji_khoo.add_or_update_entry(
-                            han_ji=han_ji,
-                            tai_gi_im_piau=im_piau,
-                            kenn_ziann_im_piau='N/A',
-                            coordinates=(row, col)
-                        )
-                        im_piau_list.append(im_piau)
-                        msg = f"{han_ji}： [{im_piau}]"
+                    # 【標音字庫】添加或更新【漢字】資料
+                    piau_im_ji_khoo.add_or_update_entry(
+                        han_ji=han_ji,
+                        tai_gi_im_piau=im_piau,
+                        kenn_ziann_im_piau='N/A',
+                        coordinates=(row, col)
+                    )
+                    im_piau_list.append(im_piau)
+                    msg = f"{han_ji}： [{im_piau}]"
             # 顯示處理進度
-            print(f"{idx}. ({row}, {col}) = {msg}")
+            print(f"{idx}. [{xw.utils.col_name(col)}{row}] ==> ({row}, {col}) = {msg}")
 
             if EOF:
                 break
@@ -281,8 +280,6 @@ def fill_in_ping_im(wb, han_ji_list:list, im_piau_list:list, use_tiau_ho:bool=Tr
     sheet.activate()
     sheet.range('A1').select()
 
-    # ue_im_lui_piat = wb.names['語音類型'].refers_to_range.value
-    # db_name = 'Ho_Lok_Ue.db' if han_ji_khoo == '河洛話' else 'Kong_Un.db'
     han_ji_khoo = wb.names['漢字庫'].refers_to_range.value      # 取得【漢字庫】名稱：河洛話、廣韻
     piau_im = PiauIm(han_ji_khoo)
     han_ji_piau_im_huat = wb.names['標音方法'].refers_to_range.value
@@ -342,12 +339,12 @@ def fill_in_ping_im(wb, han_ji_list:list, im_piau_list:list, use_tiau_ho:bool=Tr
                         tiau_ho=tiau_ho,
                     )
                     msg = f"{han_ji} [ {tlpa_im_piau} ] <-- {im_piau_list[idx]}"
+                    # 填入【音標】
+                    sheet.cells(row_im_piau, col).select()
+                    sheet.cells(row_im_piau, col).value = tlpa_im_piau
+                    sheet.cells(row_han_ji_piau_im, col).value = han_ji_piau_im
 
-        # 填入【音標】
-        sheet.cells(row_im_piau, col).select()
-        sheet.cells(row_im_piau, col).value = tlpa_im_piau
-        sheet.cells(row_han_ji_piau_im, col).value = han_ji_piau_im
-        print(f"{idx}. ({row_im_piau}, {col})：{msg}")
+        print(f"{idx+1}.【{xw.utils.col_name(col)}{row_han_ji_piau_im}】==> ({row_im_piau}, {col})：{msg}")
         idx += 1
         col += 1
         if han_ji == "\n":
