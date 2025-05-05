@@ -1,7 +1,6 @@
 # =========================================================================
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
-import argparse
 import logging
 import os
 import re
@@ -476,22 +475,25 @@ def fill_in_jin_kang_ping_im(wb, han_ji_list:list, ping_im_file:str, use_tiau_ho
 # 主作業程序
 # =========================================================================
 def main():
-    # 使用 argparse 處理命令列參數
-    parser = argparse.ArgumentParser(description="根據漢字檔產生台語音標與漢字標音")
-    parser.add_argument("han_ji_file", nargs="?", default="tmp_p1_han_ji.txt", help="漢字純文字檔路徑")
-    parser.add_argument("ping_im_file", nargs="?", default="", help="標音檔（可選）")
-    parser.add_argument("--peh_ue", action="store_true", help="將語音類型設定為白話音")
-    # parser.add_argument("--tiau_hu", action="store_false", help="使用【聲調符號】（不帶調號）的音標（TLPA 拼音）")
-    # use_tiau_hu = args.tiau_hu
-    # 預設為使用聲調號（tiau_ho = True），若加上 --tiau_hu，則關閉聲調號
-    parser.add_argument("--tiau_hu", action="store_false", dest="tiau_ho", help="TLPA音標改【聲調符號】（不帶調號數值）")
+    # 預設檔案名稱
+    default_han_ji_file = "tmp_p1_han_ji.txt"
+    # default_ping_im_file = "tmp_p2_ping_im.txt"
+    default_ping_im_file = ""
 
-    args = parser.parse_args()
+    # 檢查是否有指定檔案名稱，若無則使用預設檔名
+    # 命令列參數處理：sys.argv[1] = 漢字檔案, sys.argv[2] = 拼音檔案
+    han_ji_file = sys.argv[1] if len(sys.argv) > 1 else default_han_ji_file
+    ping_im_file = sys.argv[2] if len(sys.argv) > 2 else default_ping_im_file
 
-    han_ji_file = args.han_ji_file
-    ping_im_file = args.ping_im_file
-    use_peh_ue = args.peh_ue
-    use_tiau_ho = args.tiau_ho
+    # 檢查是否有 'ho' 參數，若有則使用標音格式二：【聲母】+【韻母】+【調號】
+    # if "hu" in sys.argv:  # 若命令行參數包含 'bp'，則使用 BP
+    #     use_tiau_ho = False
+    # else:
+    #     use_tiau_ho = True
+    use_tiau_ho = '--use_tiau_hu' not in sys.argv
+
+    # 檢查是否指定【語音類型】為【白話音】--peh_ue
+    use_peh_ue = '--peh_ue' in sys.argv
 
     # 以作用中的Excel活頁簿為作業標的
     # wb = xw.apps.active.books.active
@@ -500,7 +502,6 @@ def main():
         logging.error("無法找到作用中的Excel活頁簿。")
         return
 
-    # 若使用者指定 --peh_ue 參數，則將語音類型設定為白話音
     if use_peh_ue:
         try:
             # 設定【語音類型】為【白話音】--peh_ue
@@ -510,26 +511,18 @@ def main():
             logging_exc_error("無法設定【env】工作表，之【語音類型】欄，為【白話音】。", error=e)
             return EXIT_CODE_PROCESS_FAILURE
 
-    # 若使用者指定 --tiau_hu 參數，則將【標音方法】設定欄之【閩拼調號】，變更成【閩拼調符】
-    if not use_tiau_ho:
-        try:
-            piau_im_huat = wb.names['標音方法'].refers_to_range.value
-            if piau_im_huat == "閩拼調號":
-                # 若原本為【閩拼調號】，則將其變更為【閩拼調符】
-                wb.names['標音方法'].refers_to_range.value = '閩拼調符'
-                print("已將【env】工作表，之【標音方法】欄，設定為：【閩拼調符】。")
-        except Exception as e:
-            logging_exc_error("無法設定【env】工作表，之【標音方法】欄，為【閩拼調符】。", error=e)
-            return EXIT_CODE_PROCESS_FAILURE
+    # 備妥工作檔
+    # a002_main()   # 清除【漢字注音】工作表欲標音之漢字
+    # a000_main(wb)   # 重置【漢字標音】工作表【儲存格】
 
     #------------------------------------------------------------------------------
     # 填入【漢字】：讀取整篇文章之【漢字】純文字檔案；並填入【漢字注音】工作表。
     #------------------------------------------------------------------------------
-    # 讀取漢字檔，並填入 Excel
     text_with_han_ji = read_text_with_han_ji(filename=han_ji_file)
+    # 讀取整篇文章之【漢字】純文字檔案；並填入【漢字注音】工作表。
     text_with_han_ji = fill_in_han_ji(wb, text_with_han_ji)
 
-    # 建漢字清單：將 text_with_han_ji 整編為【漢字清單】
+    # 將 text_with_han_ji 整編為【漢字清單】
     han_ji_list = []
     for han_ji_ku in text_with_han_ji:
         for han_ji in han_ji_ku:
@@ -548,7 +541,7 @@ def main():
         start_row=5,
         piau_im_soo_zai=-1) # -1: 自動標音；-2: 人工標音
 
-    # 若提供人工標音檔案，則將【漢字】及【標音文檔】填入【漢字注音】工作表
+    # 將【漢字】及【標音文檔】填入【漢字注音】工作表
     if ping_im_file:
         fill_in_jin_kang_ping_im(wb,
             han_ji_list=han_ji_list,
@@ -581,8 +574,6 @@ def main():
     except Exception as e:
         logging_exc_error(msg="儲存檔案失敗！", error=e)
         return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
-
-    return EXIT_CODE_SUCCESS    # 作業成功結束
 
 if __name__ == "__main__":
     exit_code = main()

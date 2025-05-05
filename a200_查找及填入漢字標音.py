@@ -181,26 +181,15 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3',
                     msg = "【換行】"
                 # 若不為【標點符號】，則以【漢字】處理
                 elif not is_han_ji(cell_value):
-                    # 若【儲存格】存放非漢字，則為：【標點符號】、【空白】或【數值】等
-                    # str_val = str(cell_value).strip()
-                    # if len(str_val) == 1 and is_punctuation(str_val):
-                    #     msg = f"{str_val}【標點符號】"
-                    # elif str_val.isdigit():
-                    #     msg = f"{str_val}【數字】"
-                    # elif str_val == "":
-                    #     if Two_Empty_Cells == 0:
-                    #         Two_Empty_Cells += 1
-                    #     elif Two_Empty_Cells == 1:
-                    #         EOF = True
-                    #     msg = "【空白】"    # 表【儲存格】未填入任何字/符，不同於【空白】字元
+                    str_value = str(cell_value).strip()
 
                     # ✅ 若為全形／半形標點符號
-                    if is_punctuation(str(cell_value)):
+                    if is_punctuation(str_value):
                         msg = f"{cell_value}【標點符號】"
-                    elif isinstance(cell_value, float) and cell_value.is_integer():
+                    elif isinstance(str_value, float) and cell_value.is_integer():
                         cell_value = str(int(cell_value))
                         msg = f"{cell_value}【英/數半形字元】"
-                    elif cell_value == None or cell_value.strip() == "":  # 若儲存格內無值
+                    elif str_value == None or str_value == "":  # 若儲存格內無值
                         if Two_Empty_Cells == 0:
                             Two_Empty_Cells += 1
                         elif Two_Empty_Cells == 1:
