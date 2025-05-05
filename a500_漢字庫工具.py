@@ -107,8 +107,9 @@ def check_and_update_pronunciation(wb, han_ji, position, artificial_pronounce):
 
     for idx, row in enumerate(data):
         row_han_ji = row[0]  # A 欄: 漢字
-        correction_pronounce_cell = sheet.range(f"D{idx+2}")  # D 欄: 校正音標
-        coordinates = row[4]  # E 欄: 座標 (可能是 "(9, 4); (25, 9)" 這類格式)
+        # correction_pronounce_cell = sheet.range(f"C{idx+2}")  # C 欄: 校正音標
+        correction_pronounce_cell = sheet.range(f"B{idx+2}")  # B 欄: 台語音標
+        coordinates = row[3]  # D 欄: 座標 (可能是 "(9, 4); (25, 9)" 這類格式)
 
         if row_han_ji == han_ji and coordinates:
             # 將座標解析成一個 set
@@ -221,10 +222,10 @@ def khuat_ji_piau_poo_im_piau(wb):
     idx = 0
     for row in data:
         han_ji = row[0] # 漢字
-        zong_siau = row[1] # 總數
-        tai_gi_im_piau = row[2] # 台語音標
-        hau_ziann_im_piau = row[3] # 台語音標
-        zo_piau = row[4] # (儲存格位置)座標
+        # zong_siau = row[1] # 總數
+        tai_gi_im_piau = row[1] # 台語音標
+        hau_ziann_im_piau = row[2] # 台語音標
+        zo_piau = row[3] # (儲存格位置)座標
 
         if han_ji and (tai_gi_im_piau != 'N/A' or hau_ziann_im_piau != 'N/A'):
             # 將 Excel 工作表存放的【台語音標（TLPA）】，改成資料庫保存的【台羅拼音（TL）】
@@ -267,14 +268,15 @@ def update_database_from_excel(wb):
     try:
         for idx, row_data in enumerate(data, start=2):  # Excel A2 起始，Python Index 2
             han_ji = row_data[0]  # A 欄 (漢字)
-            hau_ziann_im_piau = row_data[3]  # D 欄 (校正音標)
+            # hau_ziann_im_piau = row_data[2]  # C 欄 (校正音標)
+            tai_gi_im_piau = row_data[1]  # B 欄 (台語音標)
 
             # 跳過無效資料
-            if not han_ji or not hau_ziann_im_piau or hau_ziann_im_piau == "N/A":
+            if not han_ji or not tai_gi_im_piau or tai_gi_im_piau == "N/A":
                 continue
 
             # 將 Excel 工作表存放的【台語音標（TLPA）】，改成資料庫保存的【台羅拼音（TL）】
-            tai_lo_im_piau = convert_tlpa_to_tl(hau_ziann_im_piau)
+            tai_lo_im_piau = convert_tlpa_to_tl(tai_gi_im_piau)
 
             # 檢查【台語音標】與【校正音標】兩欄位，若【校正音標】非空白，則以此欄位之【音標】輸入資料庫
 
@@ -292,14 +294,14 @@ def update_database_from_excel(wb):
                     SET 常用度 = ?, 更新時間 = CURRENT_TIMESTAMP
                     WHERE 漢字 = ? AND 台羅音標 = ?
                 """, (siong_iong_too, han_ji, tai_lo_im_piau))
-                print(f"🔄 更新資料庫: 漢字='{han_ji}', 台羅音標='{tai_lo_im_piau}', 常用度={siong_iong_too}, Excel 第 {idx} 列")
+                print(f"🔄 更新資料庫: 漢字='{han_ji}'，台語音標='{tai_gi_im_piau}' ==> 台羅音標='{tai_lo_im_piau}', 常用度={siong_iong_too}, Excel 第 {idx} 列")
             else:
                 # 如果不存在，新增一筆資料
                 cursor.execute("""
                     INSERT INTO 漢字庫 (漢字, 台羅音標, 常用度, 更新時間)
                     VALUES (?, ?, ?, CURRENT_TIMESTAMP)
                 """, (han_ji, tai_lo_im_piau, siong_iong_too))
-                print(f"📌 新增資料庫: 漢字='{han_ji}', 台羅音標='{tai_lo_im_piau}', 常用度={siong_iong_too}, Excel 第 {idx} 列")
+                print(f"📌 新增資料庫: 漢字='{han_ji}'，台語音標='{tai_gi_im_piau}' ==> 台羅音標='{tai_lo_im_piau}', 常用度={siong_iong_too}, Excel 第 {idx} 列")
 
         conn.commit()
         print("✅ 資料庫更新完成！")
