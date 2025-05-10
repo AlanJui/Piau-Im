@@ -231,6 +231,30 @@
             ]
         },
         {
+            "name": "a611_廣韻_漢字查標音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a611_廣韻_漢字查標音.py",
+            "console": "integratedTerminal",
+            "args": [
+                "東",
+                // "詼",
+                // "苦回 (《廣韻·上平聲·灰·恢》)"
+            ]
+        },
+        {
+            "name": "a612_廣韻_反切查標音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a612_廣韻_反切查標音.py",
+            "console": "integratedTerminal",
+            "args": [
+                "德紅",
+                // "詼",
+                // "苦回 (《廣韻·上平聲·灰·恢》)"
+            ]
+        },
+        {
             "name": "mod_字庫",
             "type": "debugpy",
             "request": "launch",
@@ -409,18 +433,6 @@
             "request": "launch",
             "program": "a999_自動生成index_html.py",
             "console": "integratedTerminal",
-        },
-        {
-            "name": "a600_漢字查廣韻擬音",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a600_漢字查廣韻擬音.py",
-            "console": "integratedTerminal",
-            "args": [
-                "不",
-                // "詼",
-                // "苦回 (《廣韻·上平聲·灰·恢》)"
-            ]
         },
         {
             "name": "a310_廣韻_漢字查標音",

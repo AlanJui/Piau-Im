@@ -86,7 +86,6 @@ if __name__ == "__main__":
         廣韻調名 = f'{清濁[-1]}{調}'
         台羅聲調 = Kong_Un_Siann_Tiau_Tng_Tai_Loo(廣韻調名)     # 將廣韻調名轉換成台羅聲調
         十五音 = piau_im.han_ji_piau_im_tng_huan(
-            piau_im=piau_im,
             piau_im_huat='十五音',
             siann_bu=聲母標音,
             un_bu=韻母標音,
