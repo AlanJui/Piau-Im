@@ -13329,3 +13329,35 @@ pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Exce
 2025-05-06 18:51:40,168 - INFO - <----------- 作業結束！---------->
 2025-05-06 18:51:40,387 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-雅俗通】《昔時賢文 053》.xlsx
 2025-05-06 18:51:40,387 - INFO - 《========== 程式終止執行：a200_查找及填入漢字標音 ==========》
+2025-05-18 11:29:00,381 - INFO - 已完成【漢字】查找標音作業。
+2025-05-18 11:29:04,550 - INFO - ✅ 已將文件標題《昔時賢文 053》寫入 env 表 TITLE 名稱格。
+2025-05-18 11:29:05,103 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《昔時賢文 053》.xlsx
+2025-05-18 11:29:22,218 - INFO - 已完成【漢字】查找標音作業。
+2025-05-18 11:29:27,147 - INFO - ✅ 已將文件標題《昔時賢文 053》寫入 env 表 TITLE 名稱格。
+2025-05-18 11:29:27,268 - ERROR - 儲存檔案失敗！，錯誤訊息: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', '您不能使用這個檔名存檔，因為已經有同樣檔名的檔案或增益集被開啟了。請選用其他的檔名，或將那個同名的檔案或增益集關閉。', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a110_使用漢字文字檔.py", line 572, in main
+    file_path = save_as_new_file(wb=wb)
+  File "C:\work\Piau-Im\mod_file_access.py", line 75, in save_as_new_file
+    wb.save(new_file_path)
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 1169, in save
+    self.impl.save(path, password=password)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 894, in save
+    self.xl.SaveAs(
+    ~~~~~~~~~~~~~~^
+        os.path.realpath(path), FileFormat=file_format, Password=password
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject Open>", line 4, in SaveAs
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', '您不能使用這個檔名存檔，因為已經有同樣檔名的檔案或增益集被開啟了。請選用其他的檔名，或將那個同名的檔案或增益集關閉。', 'xlmain11.chm', 0, -2146827284), None)
+2025-05-18 11:31:36,830 - INFO - 已完成【漢字】查找標音作業。
+2025-05-18 11:32:05,661 - INFO - ✅ 已將文件標題《忘盡心中情》寫入 env 表 TITLE 名稱格。
+2025-05-18 11:32:06,080 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《忘盡心中情》.xlsx
+2025-05-18 11:35:17,116 - INFO - 已完成【漢字】查找標音作業。
+2025-05-18 11:35:50,841 - INFO - ✅ 已將文件標題《忘盡心中情》寫入 env 表 TITLE 名稱格。
+2025-05-18 11:35:51,350 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《忘盡心中情》.xlsx
