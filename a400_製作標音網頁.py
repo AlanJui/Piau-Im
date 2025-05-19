@@ -413,7 +413,8 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
     # 取得【網頁每列字數】設定值：數值 0 表【預設】
     total_chars_per_line = int(wb.names['網頁每列字數'].refers_to_range.value)
     if total_chars_per_line == 0:
-        total_chars_per_line = None
+        # total_chars_per_line = None
+        total_chars_per_line = 0
 
     # 逐列處理作業
     End_Of_File = False
@@ -481,7 +482,7 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
             print(f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}")
 
             # 檢查是否需要插入換行標籤
-            if total_chars_per_line != "0" and char_count >= total_chars_per_line:
+            if total_chars_per_line != 0 and char_count >= total_chars_per_line:
                 write_buffer += "<br/>\n"
                 char_count = 0  # 重置字數計數器
                 print('《人工斷行》')
