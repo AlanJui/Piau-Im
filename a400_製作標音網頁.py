@@ -413,7 +413,6 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
     # 取得【網頁每列字數】設定值：數值 0 表【預設】
     total_chars_per_line = int(wb.names['網頁每列字數'].refers_to_range.value)
     if total_chars_per_line == 0:
-        # total_chars_per_line = None
         total_chars_per_line = 0
 
     # 逐列處理作業
@@ -445,11 +444,25 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
                 char_count = 0  # 重置字數計數器
                 break
             elif not is_han_ji(cell_value):
-                # 若【儲存格】存放非漢字，則為：【標點符號】、【空白】或【數值】等
-                if isinstance(cell_value, float) and cell_value.is_integer():
-                    cell_value = str(int(cell_value))
-                ruby_tag = f"  <span>{cell_value}</span>\n"
-                msg = f"{cell_value}"
+                # # 若【儲存格】存放非漢字，則為：【標點符號】、【空白】或【數值】等
+                # if isinstance(cell_value, float) and cell_value.is_integer():
+                #     cell_value = str(int(cell_value))
+                # ruby_tag = f"  <span>{cell_value}</span>\n"
+                # msg = f"{cell_value}"
+                # char_count += 1
+                str_value = str(cell_value).strip()
+                # ✅ 若為全形／半形標點符號
+                if is_punctuation(str_value):
+                    msg = f"{str_value}【標點符號】"
+                    ruby_tag = f"  <span>{str_value}</span>\n"
+                elif isinstance(str_value, float) and cell_value.is_integer():
+                    # str_value = str(int(str_value))
+                    msg = f"{str_value}【英/數半形字元】"
+                    ruby_tag = f"  <span>{str_value}</span>\n"
+                elif str_value == None or str_value == "":  # 若儲存格內無值
+                    msg = "【空白】"    # 表【儲存格】未填入任何字/符，不同於【空白】字元
+                    # ruby_tag = f"  <span>&nbsp;&nbsp;</span>\n"
+                    ruby_tag = f"  <span>　</span>\n"
                 char_count += 1
             else:
                 # 當【儲存格】存放的是【漢字】時，則需標注漢字標音
