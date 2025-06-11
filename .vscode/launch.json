@@ -5,6 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "a980_將漢字庫之拼音系統【自台羅轉換成注音二式】",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a980_rime_convert_phing_im.py",
+            "console": "integratedTerminal",
+            // "args": "${command:pickArgs}"
+            "args": [
+                "input.xlsx"
+                // "ho"
+            ]
+        },
+        {
             "name": "Python 偵錯: 目前檔案",
             "type": "debugpy",
             "request": "launch",
