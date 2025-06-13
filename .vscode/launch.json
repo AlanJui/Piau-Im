@@ -22,7 +22,8 @@
             "program": "a992_excel_to_rime_dict.py",
             "console": "integratedTerminal",
             "args": [
-                "漢字庫【台語注音二式】.xlsx",
+                // "漢字庫【台語注音二式】.xlsx",
+                "漢字庫.xlsx",
                 "zu_im_2.dict.yaml"
             ]
         },
