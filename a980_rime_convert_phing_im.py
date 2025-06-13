@@ -44,16 +44,38 @@ TL_INITIAL_MAP = {
 # 只處理這兩種韻母，其他一律保留不動
 TL_FINAL_MAP = {
     'onn': 'oonn',  # ㆧ
+    'io': 'ior',   # ㄧㄜ
     'o':   'or',    # ㄜ
 }
 
+# def convert_tl_to_bopo2(code: str) -> str:
+#     m = re.match(r'^([a-z]+)(\d+)$', code)
+#     if not m:
+#         return code
+#     body, tone = m.group(1), m.group(2)
+
+#     # 1. 聲母比對（從長到短）
+#     onset = ''
+#     rest  = body
+#     for key in sorted(TL_INITIAL_MAP, key=lambda x: -len(x)):
+#         if body.startswith(key):
+#             onset = TL_INITIAL_MAP[key]
+#             rest  = body[len(key):]
+#             break
+
+#     # 2. 韻母只對 TL_FINAL_MAP 裡的兩個 key 做轉換
+#     if rest in TL_FINAL_MAP:
+#         rest = TL_FINAL_MAP[rest]
+#     # 其餘 rest = 'ong','ok','om',... 都不會改變
+
+#     return f"{onset}{rest}{tone}"
 def convert_tl_to_bopo2(code: str) -> str:
     m = re.match(r'^([a-z]+)(\d+)$', code)
     if not m:
         return code
     body, tone = m.group(1), m.group(2)
 
-    # 1. 聲母比對（從長到短）
+    # 聲母（初聲）比對
     onset = ''
     rest  = body
     for key in sorted(TL_INITIAL_MAP, key=lambda x: -len(x)):
@@ -62,15 +84,18 @@ def convert_tl_to_bopo2(code: str) -> str:
             rest  = body[len(key):]
             break
 
-    # 2. 韻母只對 TL_FINAL_MAP 裡的兩個 key 做轉換
+    # 韻母只對 TL_FINAL_MAP 裡的三個 key 做轉換
     if rest in TL_FINAL_MAP:
         rest = TL_FINAL_MAP[rest]
-    # 其餘 rest = 'ong','ok','om',... 都不會改變
+    # 其餘（如 'iong','ok','om'）都不動
 
     return f"{onset}{rest}{tone}"
 
 
-def main(input_xlsx: str, output_xlsx: str = None):
+from typing import Optional
+
+
+def main(input_xlsx: str, output_xlsx: Optional[str] = None):
     wb = load_workbook(input_xlsx)
     if '漢字庫' not in wb.sheetnames:
         print("錯誤：找不到工作表「漢字庫」")
