@@ -352,46 +352,48 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
     # 取得文章標題：自 (5,4) 開始讀取到遇到 "》" 為止
     #--------------------------------------------------------------------
     title_chars = ""
+    title_with_ruby = ""
     title_cells = []  # ⬅️ 新增：用來記錄讀過的儲存格座標
     row, col = 5, 4
 
-    while True:
-        cell_val = sheet.range((row, col)).value
-        if cell_val is None:
-            break
-        title_chars += cell_val
-        title_cells.append((row, col))  # ⬅️ 記下每一格位置
-        if cell_val == "》":
-            break
-        col += 1
-        if col > 18:  # 超出一列最大值（R欄=18），則換行至下一列
-            row += 1
-            col = 4
-
-    # 去除《與》符號，只傳入標題文字本體加注 ruby
-    title_han_ji = title_chars.replace("《", "").replace("》", "")
-    title_with_ruby = title_piau_im(wb, title_han_ji)
+    if sheet.range((row, col)).value == "《":
+        while True:
+            cell_val = sheet.range((row, col)).value
+            if cell_val is None:
+                break
+            title_chars += cell_val
+            title_cells.append((row, col))  # ⬅️ 記下每一格位置
+            if cell_val == "》":
+                break
+            col += 1
+            if col > 18:  # 超出一列最大值（R欄=18），則換行至下一列
+                row += 1
+                col = 4
 
     # 設定文章內容使用之 div tag 及標題 Ruby Tag
     piau_im_format = wb.names['網頁格式'].refers_to_range.value
     pai_ban_iong_huat = zu_im_huat_list[piau_im_format][0]
-    # CSS 排版用法（CSS class 名稱）
-    # div_tag = (
-    #     "<div class='%s'>\n"
-    #     "  <p class='title'>\n"
-    #     "    <span>《</span>\n"
-    #     "    %s\n"
-    #     "    <span>》</span>\n"
-    #     "  </p>\n"
-    # )
-    div_tag = (
-        "<div class='%s'>\n"
-        "  <p class='title'>\n"
-        "    <span>《</span>\n"
-        "    %s\n"
-        "    <span>》</span>\n"
-        "  </p>\n"
-    )
+    if title_chars:
+        # 去除《與》符號，只傳入標題文字本體加注 ruby
+        title_han_ji = title_chars.replace("《", "").replace("》", "")
+        title_with_ruby = title_piau_im(wb, title_han_ji)
+
+        # CSS 排版用法（CSS class 名稱）
+        div_tag = (
+            "<div class='%s'>\n"
+            "  <p class='title'>\n"
+            "    <span>《</span>\n"
+            "    %s\n"
+            "    <span>》</span>\n"
+            "  </p>\n"
+        )
+    else:
+        div_tag = (
+            "<div class='%s'>\n"
+            "  <p class='title'>\n"
+            "    %s\n"
+            "  </p>\n"
+        )
     html_str = div_tag % (pai_ban_iong_huat, title_with_ruby)
     write_buffer += html_str
 
