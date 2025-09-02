@@ -101,7 +101,7 @@ def update_khuat_ji_piau(wb):
         # 更新【缺字表】中【校正音標】欄（D 欄）
         sheet.range(f"D{row}").value = tai_gi_im_piau
 
-        print(f"{row-1}. (A{row}) 【{han_ji}】： 原音標：{im_piau}, 校正音標：{tai_gi_im_piau}")
+        print(f"{row-1}. (A{row}) 【{han_ji}】： 取自【校正音標】欄，可能使用【調符】之【台語音標】：{im_piau}, 正規化之【台語音標】：{tai_gi_im_piau}")
 
         # 讀取【缺字表】中【座標】欄（E 欄）的內容，該內容可能含有多組座標，如 "(5, 17); (33, 8); (77, 5)"
         coordinates_str = sheet.range(f"E{row}").value

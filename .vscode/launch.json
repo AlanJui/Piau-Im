@@ -163,6 +163,14 @@
             "console": "integratedTerminal",
         },
         {
+            "name": "a230_缺字表補標音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a230_缺字表補標音.py",
+            "console": "integratedTerminal",
+            "args": []
+        },
+        {
             "name": "a240_為漢字標注漢字標音",
             "type": "debugpy",
             "request": "launch",
