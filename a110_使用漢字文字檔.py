@@ -135,10 +135,10 @@ def cue_han_ji_piau_im(wb, han_ji_list:list) -> list:
     #------------------------------------------------------------------------------
 
     # 建置 PiauIm 物件，供作漢字拼音轉換作業
-    han_ji_khoo_name = wb.names['漢字庫'].refers_to_range.value
+    # han_ji_khoo_name = wb.names['漢字庫'].refers_to_range.value
     ue_im_lui_piat = wb.names['語音類型'].refers_to_range.value    # 指定【台語音標】轉換成【漢字標音】的方法
-    piau_im_huat = wb.names['標音方法'].refers_to_range.value    # 指定【台語音標】轉換成【漢字標音】的方法
-    piau_im = PiauIm(han_ji_khoo=han_ji_khoo_name)            # 指定漢字自動查找使用的【漢字庫】
+    # piau_im_huat = wb.names['標音方法'].refers_to_range.value    # 指定【台語音標】轉換成【漢字標音】的方法
+    # piau_im = PiauIm(han_ji_khoo=han_ji_khoo_name)            # 指定漢字自動查找使用的【漢字庫】
 
     # 建置自動及人工漢字標音字庫工作表：（1）【標音字庫】；（2）【人工標音字】；（3）【缺字表】
     khuat_ji_piau_name = '缺字表'
@@ -163,10 +163,10 @@ def cue_han_ji_piau_im(wb, han_ji_list:list) -> list:
         sheet.activate()
 
         # 設定起始及結束的【列】位址（【第5列】、【第9列】、【第13列】等列）
-        TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
+        # TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
         ROWS_PER_LINE = 4
         start_row = 5
-        end_row = start_row + (TOTAL_LINES * ROWS_PER_LINE)
+        # end_row = start_row + (TOTAL_LINES * ROWS_PER_LINE)
 
         # 設定起始及結束的【欄】位址（【D欄=4】到【R欄=18】）
         CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
@@ -293,7 +293,7 @@ def fill_in_ping_im(wb, han_ji_list:list, im_piau_list:list, use_tiau_ho:bool=Tr
     #------------------------------------------------------------------------------
     # 填入【音標】
     #------------------------------------------------------------------------------
-    EOF = False
+    # EOF = False
     col = start_col
     idx = 0
     # 執行到此，【音標】應已轉換為【帶調號之TLPA音標】
@@ -308,7 +308,7 @@ def fill_in_ping_im(wb, han_ji_list:list, im_piau_list:list, use_tiau_ho:bool=Tr
         tlpa_im_piau = ""
         han_ji_piau_im = ""
         if han_ji == 'φ':
-            EOF = True
+            # EOF = True
             msg = "【文章終結】"
         elif han_ji == '\n':
             msg = "《換行》"
@@ -334,7 +334,8 @@ def fill_in_ping_im(wb, han_ji_list:list, im_piau_list:list, use_tiau_ho:bool=Tr
                         un_bu=un_bu,
                         tiau_ho=tiau_ho,
                     )
-                    msg = f"{han_ji} [ {tlpa_im_piau} ] <-- {im_piau_list[idx]}"
+                    # msg = f"{han_ji} [ {tlpa_im_piau} ] <-- {im_piau_list[idx]}"
+                    msg = f"{han_ji} [ {im_piau_list[idx]} ] ==> 台語音標： [ {tlpa_im_piau} ] / {han_ji_piau_im_huat}： [ {han_ji_piau_im} ]"
                     # 填入【音標】
                     sheet.cells(row_im_piau, col).select()
                     sheet.cells(row_im_piau, col).value = tlpa_im_piau

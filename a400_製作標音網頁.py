@@ -44,7 +44,11 @@ DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
 # =========================================================================
 # 設定日誌
 # =========================================================================
-from mod_logging import init_logging, logging_exc_error, logging_process_step
+from mod_logging import (  # noqa: E402
+    init_logging,
+    logging_exc_error,
+    logging_process_step,
+)
 
 init_logging()
 
@@ -81,7 +85,7 @@ def title_piau_im(wb, title: str) -> str:
         db_name = 'Ho_Lok_Ue.db' if han_ji_khoo_name == '河洛話' else 'Kong_Un.db'
         piau_im_huat = wb.names['標音方法'].refers_to_range.value
     except Exception as e:
-        logging_exc_error(f"【env】工作表找不到選項之設定值", e)
+        logging_exc_error("【env】工作表找不到選項之設定值", e)
         raise
 
     # 決定使用的模組名稱
@@ -320,6 +324,7 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
     zu_im_huat_list = {
         "SNI": ["fifteen_yin", "rt", "十五音切語"],
         "TPS": ["Piau_Im", "rt", "方音符號注音"],
+        "MPS2": ["Piau_Im", "rt", "注音二式"],
         "POJ": ["pin_yin", "rt", "白話字拼音"],
         "TL": ["pin_yin", "rt", "台羅拼音"],
         "BP": ["pin_yin", "rt", "閩拼標音"],
@@ -713,6 +718,9 @@ def main():
 if __name__ == "__main__":
     # 檢查是否有 '-2' 人工標音參數
     if "-2" in sys.argv:
+        Piau_Im_Row = -2
+    exit_code = main()
+    sys.exit(exit_code)    if "-2" in sys.argv:
         Piau_Im_Row = -2
     exit_code = main()
     sys.exit(exit_code)

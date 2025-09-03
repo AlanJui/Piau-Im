@@ -6,7 +6,10 @@ from typing import Optional
 
 from dotenv import load_dotenv
 
-from mod_excel_access import ensure_sheet_exists
+# 將 TLPA+ 【台語音標】轉換成 MPS2 【台語注音二式】
+from mod_convert_TLPA_to_MPS2 import convert_TLPA_to_MPS2
+
+# from mod_excel_access import ensure_sheet_exists
 from mod_帶調符音標 import kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
 
 # =========================================================================
@@ -1118,6 +1121,34 @@ class PiauIm:
 
         return piau_im
 
+    #================================================================
+    # 【國語注音符號第二式】簡稱為：注音二式，英文縮寫為：MPS2。
+    #================================================================
+    def MPS2_piau_im(self, siann_bu: str, un_bu: str, tiau_ho: str | int) -> str:
+        """將傳入的「TLPA+音標」之【聲母】、【韻母】、【調號】轉換為【注音二式/MPS2】音標
+        例：siann_bu='zi', un_bu='ann', tiau_ho=1  -> 'ziann1'
+
+        Args:
+            siann_bu (str): TLPA+音標的聲母
+            un_bu (str): TLPA+音標的韻母
+            tiau_ho (str): TLPA+音標的調號
+
+        Returns:
+            str: 閩拼方案的音標
+        """
+        siann = (siann_bu or "").strip().lower()
+        un = (un_bu or "").strip().lower()
+        tiau = str(tiau_ho).strip()
+
+        # 若調號不是純數字（或空），可視需要過濾非數字
+        if tiau and not tiau.isdigit():
+            tiau = re.sub(r"\D+", "", tiau)
+
+        TLPA_im_piau = f"{siann}{un}{tiau}"
+        im_piau = convert_TLPA_to_MPS2(TLPA_im_piau)
+        return im_piau
+        # return convert_TLPA_to_MPS2(TLPA_im_piau)
+
     def Cu_Hong_Im_Hu_Ho_Tiau_Hu(self, tai_lo_tiau_ho):
         """
         取方音符號：將【台羅調號】轉換成【方音符號調號】
@@ -1225,6 +1256,8 @@ class PiauIm:
             return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
         elif piau_im_huat == "方音符號":
             return self.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+        elif piau_im_huat == "注音二式":
+            return self.MPS2_piau_im(siann_bu, un_bu, tiau_ho)
         elif piau_im_huat == "台語音標":
             siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
             un = self.Un_Bu_Dict[un_bu]["台語音標"]
