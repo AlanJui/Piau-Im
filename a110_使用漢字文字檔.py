@@ -7,16 +7,12 @@ import os
 import re
 import sqlite3
 import sys
-from pathlib import Path
 
 import xlwings as xw
 from dotenv import load_dotenv
 
-from a000_重置漢字標音工作表 import main as a000_main
-from a001_清除漢字注音工作表欲標音之漢字 import main as a002_main
-
 # from a240_為漢字標注漢字標音 import han_ji_piau_im  # 依據【台語音標】查找【漢字標音】
-from mod_excel_access import delete_sheet_by_name, ensure_sheet_exists
+from mod_excel_access import delete_sheet_by_name
 from mod_file_access import save_as_new_file
 from mod_字庫 import JiKhooDict  # 漢字字庫物件
 from mod_帶調符音標 import (
@@ -30,8 +26,8 @@ from mod_帶調符音標 import (
     tng_un_bu,
     zing_li_zuan_ku,
 )
+from mod_標音 import PiauIm  # 漢字標音物件
 from mod_標音 import split_tai_gi_im_piau  # 分解台語音標
-from mod_標音 import PiauIm, is_punctuation  # 漢字標音物件
 from mod_河洛話 import han_ji_ca_piau_im
 
 # =========================================================================
@@ -58,10 +54,10 @@ DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
 # =========================================================================
 # 設定日誌
 # =========================================================================
-from mod_logging import (
+from mod_logging import logging_exception  # noqa: E402, F401
+from mod_logging import (  # noqa: E402
     init_logging,
     logging_exc_error,
-    logging_exception,
     logging_process_step,
 )
 
@@ -582,5 +578,12 @@ def main():
     return EXIT_CODE_SUCCESS    # 作業成功結束
 
 if __name__ == "__main__":
+    exit_code = main()
+    sys.exit(exit_code)
+if __name__ == "__main__":
+    exit_code = main()
+    sys.exit(exit_code)
+    exit_code = main()
+    sys.exit(exit_code)
     exit_code = main()
     sys.exit(exit_code)
