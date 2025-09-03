@@ -1136,7 +1136,11 @@ class PiauIm:
         Returns:
             str: 閩拼方案的音標
         """
-        siann = (siann_bu or "").strip().lower()
+        # if siann_bu in ("", None, "Ø", "ø"):
+        if siann_bu in ("Ø", "ø"):
+            siann = ""
+        else:
+            siann = (siann_bu or "").strip().lower()
         un = (un_bu or "").strip().lower()
         tiau = str(tiau_ho).strip()
 
@@ -1244,6 +1248,10 @@ class PiauIm:
         """選擇並執行對應的注音方法"""
         if piau_im_huat == "十五音":
             return self.SNI_piau_im(siann_bu, un_bu, tiau_ho)
+        elif piau_im_huat == "方音符號":
+            return self.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+        elif piau_im_huat == "注音二式":
+            return self.MPS2_piau_im(siann_bu, un_bu, tiau_ho)
         elif piau_im_huat == "雅俗通":
             return self.NST_piau_im(siann_bu, un_bu, tiau_ho)
         elif piau_im_huat == "白話字":
@@ -1254,10 +1262,6 @@ class PiauIm:
             return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
         elif piau_im_huat == "閩拼調符":
             return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
-        elif piau_im_huat == "方音符號":
-            return self.TPS_piau_im(siann_bu, un_bu, tiau_ho)
-        elif piau_im_huat == "注音二式":
-            return self.MPS2_piau_im(siann_bu, un_bu, tiau_ho)
         elif piau_im_huat == "台語音標":
             siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
             un = self.Un_Bu_Dict[un_bu]["台語音標"]

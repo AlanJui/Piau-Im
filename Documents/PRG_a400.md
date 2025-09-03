@@ -6,7 +6,11 @@
 ## 作業流程
 
 ```mermaid
-flowchart
+%%{init: {
+  "flowchart": { "useMaxWidth": false },
+  "themeVariables": { "fontSize": "18px" }
+}}%%
+flowchart LR
     A([開始]) --> B[初始化 載入環境變數 與 init_logging]
     B --> C{取得 Excel 作用中活頁簿}
     C -- 否 --> C1[回傳 EXIT_CODE_NO_FILE] --> Z([結束])
@@ -29,14 +33,8 @@ flowchart
 
 ```mermaid
 %%{init: {
-  "sequence": {
-    "useMaxWidth": false,     /* 不強制把圖壓到容器寬度 */
-    "wrap": true,             /* 長訊息自動換行 */
-    "actorFontSize": 18,
-    "messageFontSize": 18,
-    "noteFontSize": 16
-  },
-  "themeVariables": { "fontSize": "18px" }  /* 全域字體大小 */
+  "sequence": { "useMaxWidth": false, "wrap": true, "actorFontSize": 20, "messageFontSize": 18, "noteFontSize": 16 },
+  "themeVariables": { "fontSize": "18px" }
 }}%%
 sequenceDiagram
     actor User as 使用者

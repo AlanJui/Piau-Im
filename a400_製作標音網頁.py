@@ -120,6 +120,8 @@ def title_piau_im(wb, title: str) -> str:
     for han_ji in title:
         tai_gi_im_piau = ""
         han_ji_piau_im = ""
+        siong_piau_im = ""
+        zian_piau_im = ""
 
         if han_ji.strip() == "":
             continue
@@ -148,14 +150,16 @@ def title_piau_im(wb, title: str) -> str:
                     piau_im_huat=piau_im_huat
                 )
                 # 將【漢字】及【上方】/【右方】標音合併成一個 Ruby Tag
-                ruby_tag = concat_ruby_tag(
+                ruby_tag, siong_piau_im, zian_piau_im = concat_ruby_tag(
                     wb=wb,
                     piau_im=piau_im,    # 注音法物件
                     han_ji=han_ji,
                     tai_gi_im_piau=tai_gi_im_piau
                 )
                 u_piau_im_title += ruby_tag
-        print(f"{han_ji} = [{tai_gi_im_piau}] / [{han_ji_piau_im}]")
+        # print(f"{han_ji} = [{tai_gi_im_piau}] / [{han_ji_piau_im}]")
+        msg =f"{han_ji} [{tai_gi_im_piau}] ==》 上方標音：{siong_piau_im} / 右方標音： {zian_piau_im}】"
+        print(msg)
 
     return u_piau_im_title
 
@@ -185,7 +189,7 @@ def put_picture(wb, source_sheet_name):
 def concat_ruby_tag(wb, piau_im, han_ji, tai_gi_im_piau):
     """將漢字、台語音標及台語注音符號，合併成一個 Ruby Tag"""
     zu_im_list = split_tai_gi_im_piau(tai_gi_im_piau)
-    if zu_im_list[0] == "" or zu_im_list[0] == None:
+    if zu_im_list[0] == "" or zu_im_list[0] is None:
         siann_bu = "ø"  # 無聲母: ø
     else:
         siann_bu = zu_im_list[0]
@@ -311,7 +315,7 @@ def concat_ruby_tag(wb, piau_im, han_ji, tai_gi_im_piau):
         )
         ruby_tag = html_str % (han_ji, siong_piau_im, zian_piau_im)
 
-    return ruby_tag
+    return ruby_tag, siong_piau_im, zian_piau_im
 
 
 # =========================================================
@@ -439,13 +443,13 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
             # 若【儲存格】內存放【整數值】，則轉為【字串】
             if cell_value == 'φ':       # 讀到【結尾標示】
                 End_Of_File = True
-                msg = f"《文章終止》"
+                msg = "《文章終止》"
                 print(f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}")
                 break
             elif cell_value == '\n':    # 讀到【換行標示】
                 # 若遇到換行字元，退出迴圈
-                ruby_tag = f"</p><p>\n"
-                msg = f"《換行》"
+                ruby_tag = "</p><p>\n"
+                msg = "《換行》"
                 char_count += 1
                 print(f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}")
                 char_count = 0  # 重置字數計數器
@@ -466,10 +470,10 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
                     # str_value = str(int(str_value))
                     msg = f"{str_value}【英/數半形字元】"
                     ruby_tag = f"  <span>{str_value}</span>\n"
-                elif str_value == None or str_value == "":  # 若儲存格內無值
+                elif str_value is None or str_value == "":  # 若儲存格內無值
                     msg = "【空白】"    # 表【儲存格】未填入任何字/符，不同於【空白】字元
                     # ruby_tag = f"  <span>&nbsp;&nbsp;</span>\n"
-                    ruby_tag = f"  <span>　</span>\n"
+                    ruby_tag = "  <span>　</span>\n"
                 char_count += 1
             else:
                 # 當【儲存格】存放的是【漢字】時，則需標注漢字標音
@@ -488,14 +492,14 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
                     tlpa_im_piau = tai_gi_im_piau
 
                 # 將已注音之漢字加入【漢字注音表】
-                ruby_tag = concat_ruby_tag(
+                ruby_tag, siong_piau_im, zian_piau_im = concat_ruby_tag(
                     wb=wb,
                     piau_im=piau_im,    # 注音法物件
                     han_ji=han_ji,
                     tai_gi_im_piau=tlpa_im_piau
                 )
                 # msg =f"({row}, {xw.utils.col_name(col)}) = {han_ji} [{tlpa_im_piau}] <-- {tai_gi_im_piau}"
-                msg =f"{han_ji} [{tlpa_im_piau}] /【{tai_gi_im_piau}】"
+                msg =f"{han_ji} [{tlpa_im_piau}] ==》 上方標音：{siong_piau_im} / 右方標音： {zian_piau_im}】"
                 char_count += 1
 
             write_buffer += ruby_tag
@@ -512,7 +516,7 @@ def build_web_page(wb, sheet, source_chars, total_length, page_type='含頁頭',
         # =========================================================
         # 讀到【換行標示】，需要結束目前【段落】，並開始新的【段落】
         if cell_value == '\n':
-            write_buffer += f"</p><p>\n"
+            write_buffer += "</p><p>\n"
             char_count = 0  # 重置字數計數器
 
         line += 1
@@ -571,7 +575,7 @@ def tng_sing_bang_iah(wb, sheet_name='漢字注音', han_ji_source='V3', page_ty
     output_path = os.path.join(output_dir, output_file)
 
     # 開啟文字檔，準備寫入網頁內容
-    f = open(output_path, 'w', encoding='utf-8')
+    open(output_path, 'w', encoding='utf-8')
 
     # 取得 V3 儲存格的字串
     source_chars = sheet.range(han_ji_source).value
@@ -582,7 +586,7 @@ def tng_sing_bang_iah(wb, sheet_name='漢字注音', han_ji_source='V3', page_ty
         # ==========================================================
         # 自「漢字注音表」，製作各種注音法之 HTML 網頁
         # ==========================================================
-        print(f"開始製作【漢字注音】網頁！")
+        print("開始製作【漢字注音】網頁！")
         html_content = build_web_page(
             wb=wb,
             sheet=sheet,
@@ -604,7 +608,7 @@ def tng_sing_bang_iah(wb, sheet_name='漢字注音', han_ji_source='V3', page_ty
 
         # 輸出到網頁檔案：建立 HTML 檔案時傳入 head_extra
         create_html_file(output_path, html_content, web_page_title, head_extra)
-        logging_process_step(f"【漢字注音】工作表轉製網頁作業完畢！")
+        logging_process_step("【漢字注音】工作表轉製網頁作業完畢！")
 
     return EXIT_CODE_SUCCESS
 
@@ -718,9 +722,6 @@ def main():
 if __name__ == "__main__":
     # 檢查是否有 '-2' 人工標音參數
     if "-2" in sys.argv:
-        Piau_Im_Row = -2
-    exit_code = main()
-    sys.exit(exit_code)    if "-2" in sys.argv:
         Piau_Im_Row = -2
     exit_code = main()
     sys.exit(exit_code)

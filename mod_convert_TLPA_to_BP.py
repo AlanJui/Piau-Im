@@ -1,9 +1,9 @@
 """
-convert_TLPA_to_MPS2.py
+convert_TLPA_to_BP.py
 
-將【台語音標（TLPA+）】轉換成【台語注音二式（MPS2）】。
+將【台語音標（TLPA+）】轉換成【閩拼方案（BP）】。
 用法：
-    python convert_TLPA_to_MPS2.py tl_ji_khoo_peh_ue.dict.yaml output.dict.yaml
+    python convert_TLPA_to_BP.py tl_ji_khoo_peh_ue.dict.yaml output.dict.yaml
 """
 
 import re
@@ -67,37 +67,48 @@ FINAL_MAP = {
     "m": "m",
 }
 
-def convert_TLPA_to_MPS2(code: str) -> str:
+
+def convert_TLPA_to_BP(tai_gi_im_piau: str) -> str:
     """
-    將一個【台語音標/TLPA】（如 'tsiann1'）轉成【注音二式/MPS2】（'ziann1'）。
+    將一個【台語音標/TLPA】（如 'tsiann1'）轉成【注音二式/BP】（'ziann1'）。
     保留後面的數字（聲調）。
     """
-    m = re.match(r"^([a-z]+)(\d+)$", code)
+    m = re.match(r"^([a-z]+)(\d+)$", tai_gi_im_piau)
     if not m:
         # 如果不符合「全英文字母+數字」格式，就原樣回傳
-        return code
+        return tai_gi_im_piau
 
     body, tone = m.group(1), m.group(2)
 
-    # 1. 轉聲母：從長到短比對 prefix
+    # 1) 轉聲母：從長到短比對 prefix
     onset = ""
     rest = body
     for key in sorted(INITIAL_MAP.keys(), key=lambda x: -len(x)):
         if body.startswith(key):
             onset = INITIAL_MAP[key]
-            rest = body[len(key) :]
+            rest = body[len(key):]
             break
 
-    # 2. 轉韻母：整段比對
+    # 2) 轉韻母：整段比對（含特例 o→or）
     if rest in FINAL_MAP:
         rest = FINAL_MAP[rest]
     else:
-        # 若末尾是「o」卻不在 FINAL_MAP，做一次 o→or
         if rest.endswith("o"):
             rest = rest[:-1] + "or"
 
-    return f"{onset}{rest}{tone}"
+    # 2b)【零聲母補 y/w】規則：
+    #    無聲母（onset == ""）且韻母以 i / u 起頭，需補 yi / wu
+    if onset == "" and rest:
+        first = rest[0]
+        if first == "i":
+            # 避免重複補：若已經是 yi… 就不再加
+            if not rest.startswith("yi"):
+                rest = "y" + rest
+        elif first == "u":
+            if not rest.startswith("wu"):
+                rest = "w" + rest
 
+    return f"{onset}{rest}{tone}"
 
 def main(infile: str, outfile: str):
     with open(infile, "r", encoding="utf-8") as fin:
@@ -121,7 +132,7 @@ def main(infile: str, outfile: str):
         # 假設詞條以「欄位1\t欄位2\t...」格式，至少要有兩欄
         parts = line.rstrip("\n").split("\t")
         if len(parts) >= 2:
-            parts[1] = convert_TLPA_to_MPS2(parts[1])
+            parts[1] = convert_TLPA_to_BP(parts[1])
             out_lines.append("\t".join(parts) + "\n")
         else:
             out_lines.append(line)
@@ -129,8 +140,9 @@ def main(infile: str, outfile: str):
     with open(outfile, "w", encoding="utf-8") as fout:
         fout.writelines(out_lines)
 
+
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("用法：python convert_TLPA_to_MPS2.py <輸入檔> <輸出檔>")
+        print("用法：python convert_TL_to_BP.py <輸入檔> <輸出檔>")
         sys.exit(1)
     main(sys.argv[1], sys.argv[2])

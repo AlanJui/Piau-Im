@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 convert_TLPA_to_MPS2.py
 
@@ -67,6 +69,7 @@ FINAL_MAP = {
     "m": "m",
 }
 
+
 def convert_TLPA_to_MPS2(code: str) -> str:
     """
     將一個【台語音標/TLPA】（如 'tsiann1'）轉成【注音二式/MPS2】（'ziann1'）。
@@ -128,6 +131,7 @@ def main(infile: str, outfile: str):
 
     with open(outfile, "w", encoding="utf-8") as fout:
         fout.writelines(out_lines)
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
