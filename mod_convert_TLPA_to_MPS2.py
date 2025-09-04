@@ -12,18 +12,21 @@ import sys
 # 聲母（初聲）映射表，注意要從長到短比對 prefix
 INITIAL_MAP = {
     # 四字母（如果有更長的 key，也放最前面）
-    "ci": "ci",  # ㄑ → ci (台羅：tshi)
+    # "ci": "ci",  # ㄑ → ci (台羅：tshi)
     # 三字母
-    "zi": "zi",  # ㄐ → zi (台羅：tsi)
+    # "zi": "zi",  # ㄐ → zi (台羅：tsi)
     # 二字母
-    "c": "c",  # ㄘ → c (台羅：tshi)
-    "z": "z",  # ㄗ → z (台羅：tsi)
+    # "si": "si",  # ㄒ → si
+    "ng": "ng",  # ㆣ → ng
     "ph": "p",  # ㄆ → p (台羅：ph)
     "th": "t",  # ㄊ → t (台羅：th)
     "kh": "k",  # ㄎ → k (台羅：kh)
     "ji": "zzi",  # ㆢ → zzi (台羅：ji)
-    "si": "si",  # ㄒ → si
     # 一字母
+    "c": "c",  # ㄘ → c (台羅：tshi)
+    "z": "z",  # ㄗ → z (台羅：tsi)
+    "s": "s",  # ㄙ → s
+    "j": "zz",  # ㆡ → zz
     "b": "bb",  # ㆠ → bb
     "p": "b",  # ㄅ → b
     "m": "m",  # ㄇ → m
@@ -33,49 +36,48 @@ INITIAL_MAP = {
     "k": "g",  # ㄍ → g
     "g": "gg",  # ㆣ → gg
     "h": "h",  # ㄏ → h
-    "j": "zz",  # ㆡ → zz
-    "s": "s",  # ㄙ → s
 }
 
 # 韻母（襯聲）映射表，台羅→注音二式（多數相同，唯「o」→「or」需要特別處理）
 FINAL_MAP = {
-    "i": "i",
-    "inn": "inn",
-    "u": "u",
-    "unn": "unn",
-    "a": "a",
-    "ann": "ann",
-    "oo": "oo",
     "oonn": "oonn",
-    "o": "or",  # ㄜ
-    "e": "e",
-    "enn": "enn",
-    "ai": "ai",
     "ainn": "ainn",
-    "au": "au",
     "aunn": "aunn",
+    "ang": "ang",
+    "ann": "ann",
+    "inn": "inn",
+    "unn": "unn",
+    "enn": "enn",
+    "ong": "ong",
+    "ing": "ing",
+    "oo": "oo",
+    "ik": "iek",
+    "ai": "ai",
+    "au": "au",
     "an": "an",
     "en": "en",
-    "ang": "ang",
     "ir": "ir",
     "am": "am",
     "om": "om",
-    "ong": "ong",
     # 如果你的字典裡有「-ng」或「-ing」「-m」等，也可加進來：
-    "-ng": "-ng",
-    "ing": "ing",
-    "m": "m",
+    # "ng": "ng",
+    # "m": "m",
+    "i": "i",
+    "u": "u",
+    "a": "a",
+    "o": "or",  # ㄜ
+    "e": "e",
 }
 
-def convert_TLPA_to_MPS2(code: str) -> str:
+def convert_TLPA_to_MPS2(TLPA_piau_im: str) -> str:
     """
     將一個【台語音標/TLPA】（如 'tsiann1'）轉成【注音二式/MPS2】（'ziann1'）。
     保留後面的數字（聲調）。
     """
-    m = re.match(r"^([a-z]+)(\d+)$", code)
+    m = re.match(r"^([a-z]+)(\d+)$", TLPA_piau_im)
     if not m:
         # 如果不符合「全英文字母+數字」格式，就原樣回傳
-        return code
+        return TLPA_piau_im
 
     body, tone = m.group(1), m.group(2)
 
