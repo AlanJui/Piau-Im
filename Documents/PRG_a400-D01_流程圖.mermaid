@@ -1,0 +1,26 @@
+---
+title: "PRG_a400-D01_流程圖"
+---
+
+%%{init: {
+  "flowchart": { "useMaxWidth": false },
+  "themeVariables": { "fontSize": "18px" }
+}}%%
+
+flowchart TD
+    A([開始]) --> B[初始化 載入環境變數 與 init_logging]
+    B --> C{取得 Excel 作用中活頁簿}
+    C -- 否 --> C1[回傳 EXIT_CODE_NO_FILE] --> Z([結束])
+    C -- 是 --> D[呼叫 process wb]
+    D --> E[tng_sing_bang_iah 產製網頁]
+    E --> F{V3 是否有字串}
+    F -- 否 --> G[無內容 仍回傳 EXIT_CODE_SUCCESS] --> H[回到主流程]
+    F -- 是 --> I[build_web_page 組 HTML 內容]
+    I --> J[彙整 env 名稱 組 meta 標籤]
+    J --> K[create_html_file 輸出 HTML 檔案]
+    K --> H[回到主流程]
+    H --> L[finally 儲存檔案 save_as_new_file]
+    L --> M{儲存是否成功}
+    M -- 否 --> M1[回傳 EXIT_CODE_SAVE_FAILURE] --> Z
+    M -- 是 --> N[記錄儲存路徑]
+    N --> O([結束 EXIT_CODE_SUCCESS])
