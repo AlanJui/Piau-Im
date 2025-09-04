@@ -47,6 +47,7 @@ TEST_CASES = [
 
 class TestConvertTLPAtoBP(unittest.TestCase):
     def test_cases(self):
+        print("\n開始執行 TLPA → BP 轉換測試...")
         for han_ji, tlpa, expected in TEST_CASES:
             with self.subTest(han_ji=han_ji, tlpa=tlpa):
                 got = convert_func(tlpa)

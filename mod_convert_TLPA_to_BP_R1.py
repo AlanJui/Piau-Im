@@ -101,29 +101,33 @@ def convert_TLPA_to_BP(tai_gi_im_piau: str) -> str:
         if rest.endswith("o"):
             rest = rest[:-1] + "or"
 
-    # 3)【零聲母 + i/u】規則
+    # 3)【零聲母 + i/u】規則（依您新指示精修）：
+    #   - 若 onset 為空字串，且 rest 有內容，才檢查
     if onset == "" and rest:
+        # 取韻母第一字母
         first = rest[0]
 
+        # 3.1 處理 i
         if first == "i":
-            # i 後面是母音：移到聲母 y，刪掉韻母開頭 i（1.2）
+            # 3.1.1 若 i 後接母音（a/e/i/o/u），把 i 改到聲母（= y），並消去韻母裡的 i
             if len(rest) >= 2 and rest[1] in VOWELS:
                 onset = "y"
-                rest = rest[1:]
+                rest = rest[1:]  # 去掉開頭的 i
             else:
-                # i 後面不是母音：移到聲母 y，但韻母保留 i（1.1）
-                onset = "y"
-                # rest 保持以 i 起頭，例如 i / in / inn
+                # 3.1.2 若 i 後沒有接母音（如 i, in, inn ...），在韻母前補 y
+                if not rest.startswith("yi"):
+                    rest = "y" + rest
 
+        # 3.2 處理 u
         elif first == "u":
-            # u 後面是母音：移到聲母 w，刪掉韻母開頭 u（2.2）
+            # 3.2.1 若 u 後接母音（a/e/i/o/u），把 u 改到聲母（= w），並消去韻母裡的 u
             if len(rest) >= 2 and rest[1] in VOWELS:
                 onset = "w"
-                rest = rest[1:]
+                rest = rest[1:]  # 去掉開頭的 u
             else:
-                # u 後面不是母音：移到聲母 w，但韻母保留 u（2.1）
-                onset = "w"
-                # rest 保持以 u 起頭，例如 u / un / unn
+                # 3.2.2 若 u 後沒有接母音（如 u, un, unn ...），在韻母前補 w
+                if not rest.startswith("wu"):
+                    rest = "w" + rest
 
     return f"{onset}{rest}{tone}"
 
