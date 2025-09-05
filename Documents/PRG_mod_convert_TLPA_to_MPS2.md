@@ -51,7 +51,8 @@ flowchart TD
 ## 台語音標【調號】轉成【台語二式音標】
 
 ```plantuml
-@starjson
+@startjson
+title 台語音標聲調對照表
 {
     "1": "陰平",
     "2": "上聲",
@@ -65,12 +66,27 @@ flowchart TD
 @endjson
 ```
 
+```plantuml
+@startjson
+title 閩拼音標聲調對照表
+{
+    "1": "陰平",
+    "2": "陽平",
+    "3": "上聲",
+    "4": "上聲",
+    "5": "陰去",
+    "6": "陽去",
+    "7": "陰入",
+    "8": "陽入"
+}
+@endjson
+```
 
 ## PlantUML 活動圖
 
 想研究 PlantUML 在【流程圖】繪製之便利性。
 
-###  主流程
+### 主流程
 
 ```plantuml
 @startuml
@@ -98,7 +114,7 @@ stop
 @enduml
 ```
 
-###  模組：convert_TLPA_to_MPS2
+### 模組：convert_TLPA_to_MPS2
 
 ```plantuml
 @startuml
@@ -130,3 +146,4 @@ else (是)
   stop
 @enduml
 ```
+

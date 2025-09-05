@@ -10,32 +10,34 @@ import re
 import sys
 
 # 聲母（初聲）映射表，注意要從長到短比對 prefix
-INITIAL_MAP = {
-    # 四字母（如果有更長的 key，也放最前面）
-    # "ci": "ci",  # ㄑ → ci (台羅：tshi)
-    # 三字母
-    # "zi": "zi",  # ㄐ → zi (台羅：tsi)
+SIANN_BU_MAP = {
+    "tsh": "c",
+    "ts": "z",
     # 二字母
-    # "si": "si",  # ㄒ → si
-    "ng": "ng",  # ㆣ → ng
     "ph": "p",  # ㄆ → p (台羅：ph)
     "th": "t",  # ㄊ → t (台羅：th)
     "kh": "k",  # ㄎ → k (台羅：kh)
-    "ji": "zzi",  # ㆢ → zzi (台羅：ji)
+    "ng": "ng", # ㆣ → ng
     # 一字母
-    "c": "c",  # ㄘ → c (台羅：tshi)
-    "z": "z",  # ㄗ → z (台羅：tsi)
-    "s": "s",  # ㄙ → s
-    "j": "zz",  # ㆡ → zz
+    "p": "b",   # ㄅ → b
     "b": "bb",  # ㆠ → bb
-    "p": "b",  # ㄅ → b
-    "m": "m",  # ㄇ → m
-    "t": "d",  # ㄉ → d
-    "n": "n",  # ㄋ → n
-    "l": "l",  # ㄌ → l
-    "k": "g",  # ㄍ → g
+    "m": "m",   # ㄇ → m
+    "t": "d",   # ㄉ → d
+    "n": "n",   # ㄋ → n
+    "l": "l",   # ㄌ → l
+    "k": "g",   # ㄍ → g
     "g": "gg",  # ㆣ → gg
-    "h": "h",  # ㄏ → h
+    "h": "h",   # ㄏ → h
+    "z": "z",   # ㄗ → z (台羅：tsi)
+    "j": "zz",  # ㆡ → zz
+    "c": "c",   # ㄘ → c (台羅：tshi)
+    "s": "s",   # ㄙ → s
+}
+
+# 齒音（TLPA: 舌尖前音/TL: 舌齒音）+ i 對照：
+CI_IM_MAP = {
+    # "j": "zz",   # ㆡ：j -> zz
+    "zzi": "jji", # ㆢ：ji → jj+i
 }
 
 # 韻母（襯聲）映射表，台羅→注音二式（多數相同，唯「o」→「or」需要特別處理）
@@ -59,9 +61,6 @@ FINAL_MAP = {
     "ir": "ir",
     "am": "am",
     "om": "om",
-    # 如果你的字典裡有「-ng」或「-ing」「-m」等，也可加進來：
-    # "ng": "ng",
-    # "m": "m",
     "i": "i",
     "u": "u",
     "a": "a",
@@ -74,19 +73,23 @@ def convert_TLPA_to_MPS2(TLPA_piau_im: str) -> str:
     將一個【台語音標/TLPA】（如 'tsiann1'）轉成【注音二式/MPS2】（'ziann1'）。
     保留後面的數字（聲調）。
     """
+    # 確認傳入之【台語音標】符合格式=聲母+韻母+聲調=英文字母+數字
     m = re.match(r"^([a-z]+)(\d+)$", TLPA_piau_im)
     if not m:
         # 如果不符合「全英文字母+數字」格式，就原樣回傳
         return TLPA_piau_im
 
+    # 提取：聲母、韻母和聲調
     body, tone = m.group(1), m.group(2)
 
     # 1. 轉聲母：從長到短比對 prefix
     onset = ""
     rest = body
-    for key in sorted(INITIAL_MAP.keys(), key=lambda x: -len(x)):
+    siann = ""
+    for key in sorted(SIANN_BU_MAP.keys(), key=lambda x: -len(x)):
         if body.startswith(key):
-            onset = INITIAL_MAP[key]
+            onset = SIANN_BU_MAP[key]
+            siann = SIANN_BU_MAP[key]
             rest = body[len(key) :]
             break
 
@@ -97,6 +100,12 @@ def convert_TLPA_to_MPS2(TLPA_piau_im: str) -> str:
         # 若末尾是「o」卻不在 FINAL_MAP，做一次 o→or
         if rest.endswith("o"):
             rest = rest[:-1] + "or"
+    # 3. 處理【齒音+ i】的特殊規則
+    if siann in ("z", "c", "s", "zz") and rest.startswith("i"):
+        ci_im_ga_i = f"{siann}i"
+        if ci_im_ga_i in CI_IM_MAP:
+            str = CI_IM_MAP[ci_im_ga_i]
+            onset = str[:-1]  # 去掉最後的 i
 
     return f"{onset}{rest}{tone}"
 
