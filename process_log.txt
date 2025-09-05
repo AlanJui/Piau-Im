@@ -14166,3 +14166,21 @@ pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Exce
 2025-09-04 21:22:34,756 - INFO - <----------- 作業結束！---------->
 2025-09-04 21:22:34,936 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-注音二式】《詩經．小雅．鹿鳴》.xlsx
 2025-09-04 21:22:34,936 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-09-05 09:41:51,031 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-09-05 09:41:51,032 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-09-05 09:41:51,047 - INFO - <----------- 作業開始！---------->
+2025-09-05 09:41:51,103 - INFO - 已完成作業所需之初始化設定！
+2025-09-05 09:41:51,214 - ERROR - 無法為【缺字表】建【缺字表字典表格】，錯誤訊息: invalid literal for int() with base 10: 'kiam1'
+Traceback (most recent call last):
+  File "a300_手動更正漢字標音.py", line 95, in update_khuat_ji_piau_by_jin_kang_piau_im
+    khuat_ji_khoo_dict = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb, sheet_name=khuat_ji_piau_sheet_name)
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'kiam1'
+2025-09-05 09:41:51,228 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-09-05 09:42:19,130 - INFO - 以【人工標音】更正之【台語音標】，已填入【標音字庫】之【校正音標】！
+2025-09-05 09:42:19,743 - INFO - 以【標音字庫】之【校正音標】，更新【漢字注音】工作表之【台語音標】！
+2025-09-05 09:42:19,748 - INFO - <----------- 作業結束！---------->
+2025-09-05 09:42:19,993 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-注音二式】《蒹葭》.xlsx
+2025-09-05 09:42:19,993 - INFO - 《========== 程式終止執行：a300_手動更正漢字標音 ==========》

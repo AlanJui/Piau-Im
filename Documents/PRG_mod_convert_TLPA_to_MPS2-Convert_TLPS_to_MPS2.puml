@@ -1,0 +1,28 @@
+@startuml
+start
+:接收 TLPA 音標字串;
+if (是否符合格式?) then (否)
+  #pink:直接回傳原字串;
+  stop
+else (是)
+  :分割為聲母與韻母+聲調;
+  :比對聲母映射表;
+  if (是否找到對應聲母?) then (否)
+    #pink:聲母保持不變;
+  else (是)
+    :替換為對應聲母;
+  endif
+  :比對韻母映射表;
+  if (韻母是否在映射表中?) then (否)
+    if (<color:red>韻母是否以 "o" 結尾?) then (是)
+      :替換 "o" 為 "or";
+    else (否)
+      #pink:保持韻母不變;
+    endif
+  else (是)
+    :替換為對應韻母;
+  endif
+  :合併聲母、韻母與聲調;
+  :回傳轉換後的 MPS2 字串;
+  stop
+@enduml

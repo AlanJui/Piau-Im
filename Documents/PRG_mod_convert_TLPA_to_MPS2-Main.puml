@@ -1,0 +1,23 @@
+@startuml
+start
+:讀取輸入檔案;
+:逐行處理檔案內容;
+repeat
+  :是否進入詞條區?;
+  if (是) then (是)
+    if (是否為空行或註解?) then (是)
+      :跳過該行;
+    else (否)
+      :分割行為多欄;
+      if (是否有至少兩欄?) then (是)
+        :呼叫 convert_TLPA_to_MPS2;
+        :更新第二欄內容;
+      else (否)
+        :跳過該行;
+      endif
+    endif
+  endif
+repeat while (還有未處理的行?)
+:寫入輸出檔案;
+stop
+@enduml
