@@ -17,56 +17,57 @@ SIANN_BU_MAP = {
     "ph": "p",  # ㄆ → p (台羅：ph)
     "th": "t",  # ㄊ → t (台羅：th)
     "kh": "k",  # ㄎ → k (台羅：kh)
-    "ng": "ng", # ㆣ → ng
+    "ng": "ng",  # ㆣ → ng
     # 一字母
-    "p": "b",   # ㄅ → b
+    "p": "b",  # ㄅ → b
     "b": "bb",  # ㆠ → bb
-    "m": "m",   # ㄇ → m
-    "t": "d",   # ㄉ → d
-    "n": "n",   # ㄋ → n
-    "l": "l",   # ㄌ → l
-    "k": "g",   # ㄍ → g
+    "m": "m",  # ㄇ → m
+    "t": "d",  # ㄉ → d
+    "n": "n",  # ㄋ → n
+    "l": "l",  # ㄌ → l
+    "k": "g",  # ㄍ → g
     "g": "gg",  # ㆣ → gg
-    "h": "h",   # ㄏ → h
-    "z": "z",   # ㄗ → z (台羅：tsi)
+    "h": "h",  # ㄏ → h
+    "z": "z",  # ㄗ → z (台羅：tsi)
     "j": "zz",  # ㆡ → zz
-    "c": "c",   # ㄘ → c (台羅：tshi)
-    "s": "s",   # ㄙ → s
+    "c": "c",  # ㄘ → c (台羅：tshi)
+    "s": "s",  # ㄙ → s
 }
 
 # 齒音（TLPA: 舌尖前音/TL: 舌齒音）+ i 對照：
 CI_IM_MAP = {
     # "j": "zz",   # ㆡ：j -> zz
-    "zzi": "jji", # ㆢ：ji → jj+i
+    "zzi": "jji",  # ㆢ：ji → jj+i
 }
 
 # 韻母（襯聲）映射表，台羅→注音二式（多數相同，唯「o」→「or」需要特別處理）
 FINAL_MAP = {
     "oonn": "oonn",
-    "ainn": "ainn",
-    "aunn": "aunn",
-    "ang": "ang",
-    "ann": "ann",
-    "inn": "inn",
-    "unn": "unn",
-    "enn": "enn",
-    "ong": "ong",
-    "ing": "ing",
+    # "ainn": "ainn",
+    # "aunn": "aunn",
+    # "ang": "ang",
+    # "ann": "ann",
+    # "inn": "inn",
+    # "unn": "unn",
+    # "enn": "enn",
+    # "ong": "ong",
+    # "ing": "ing",
     "oo": "oo",
     "ik": "iek",
-    "ai": "ai",
-    "au": "au",
-    "an": "an",
-    "en": "en",
-    "ir": "ir",
-    "am": "am",
-    "om": "om",
-    "i": "i",
-    "u": "u",
-    "a": "a",
+    # "ai": "ai",
+    # "au": "au",
+    # "an": "an",
+    # "en": "en",
+    # "ir": "ir",
+    # "am": "am",
+    # "om": "om",
+    # "a": "a",
+    # "i": "i",
+    # "u": "u",
+    # "e": "e",
     "o": "or",  # ㄜ
-    "e": "e",
 }
+
 
 def convert_TLPA_to_MPS2(TLPA_piau_im: str) -> str:
     """
@@ -96,10 +97,11 @@ def convert_TLPA_to_MPS2(TLPA_piau_im: str) -> str:
     # 2. 轉韻母：整段比對
     if rest in FINAL_MAP:
         rest = FINAL_MAP[rest]
-    else:
-        # 若末尾是「o」卻不在 FINAL_MAP，做一次 o→or
-        if rest.endswith("o"):
-            rest = rest[:-1] + "or"
+    # else:
+    #     # 若末尾是「o」卻不在 FINAL_MAP，做一次 o→or
+    #     if rest.endswith("o"):
+    #         rest = rest[:-1] + "or"
+
     # 3. 處理【齒音+ i】的特殊規則
     if siann in ("z", "c", "s", "zz") and rest.startswith("i"):
         ci_im_ga_i = f"{siann}i"
@@ -139,6 +141,7 @@ def main(infile: str, outfile: str):
 
     with open(outfile, "w", encoding="utf-8") as fout:
         fout.writelines(out_lines)
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
