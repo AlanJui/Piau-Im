@@ -34,31 +34,42 @@ if not callable(convert_func):
     raise AttributeError("在 mod_convert_TLPA_to_MPS2.py 找不到可呼叫的函式：convert_TLPA_to_MPS2（或可能名稱不同）")
 
 TEST_CASES = [
+    #----------------------------------------------
+    ("尖", "ziam1", "jiam1"),   # ㄐ：z+i -> j+i
     # 台羅音標（TL）
     ("熱", "jiat8", "jjiat8" ), # ㆢ：ji → jj+i
     ("入", "jip4", "jjip4" ),   # ㆢ：ji → jj+i
     ("熱", "juah8", "zzuah8"),  # ㆡ：j -> zz
     ("曾", "tsan1", "zan1"),    # ㄗ：ts -> z
-    ("尖", "tsiam1", "ziam1"),  # ㄐ：ts+i -> z+i
+    ("尖", "tsiam1", "jiam1"),  # ㄐ：ts+i -> z+i
     ("出", "tshut4", "cut4"),   # ㄘ：tsh -> c
-    ("手", "tshiu2", "ciu2"),   # ㄑ：tsh+i -> c+i
-    ("衫", "sann1", "sann1"),   # ㄙ：s -> s
-    ("寫", "sia2", "sia2"),     # ㄒ：s+i -> s+i
-    # 台語音標（TL）
+    ("手", "tshiu2", "chiu2"),  # ㄑ：tsh+i -> ch+i
+    #----------------------------------------------
+    # 台語音標（TLPA）
+    ("邊", "pian1", "bian1"),   # ㄅ：p -> b
+    ("文", "bun5", "bbun5"),    # ㆠ：b -> bb
+    ("頗", "pho7", "por7"),     # ㄆ：ph -> p
+    ("毛", "moo7", "moo7"),     # ㄇ：m -> bbn
+    #----------------------------------------------
+    ("地", "te2", "de2"),       # ㄉ：t -> d
+    ("他", "thann1", "tann1"),  # ㄊ：th -> t
+    ("耐", "nai2", "nai2"),     # ㄋ：n -> ln
+    ("柳", "liu2", "liu2"),     # ㄌ：l -> l
+    #----------------------------------------------
     ("曾", "zan1", "zan1"),     # ㄗ：z -> z
-    ("尖", "ziam1", "ziam1"),   # ㄐ：z+i -> z+i
+    ("熱", "juah8", "zzuah8"),  # ㆡ：j -> zz
     ("出", "cut4", "cut4"),     # ㄘ：c -> c
-    ("手", "ciu2", "ciu2"),     # ㄑ：c+i -> c+i
-    # 閩拼專用測試案例：零聲母 + i/u 規則
-    # ("依", "i1", "yi1"),
-    # ("因", "in1", "yin1"),
-    # ("鴉", "ia1", "ya1"),
-    # ("煙", "ian1", "yan1"),
-    # ("用", "iong7", "yong7"),
-    # ("烏", "u1", "wu1"),
-    # ("運", "un7", "wun7"),
-    # ("媧", "ua1", "wa1"),
-    # ("彎", "uan1", "wan1"),
+    ("衫", "sann1", "sann1"),   # ㄙ：s -> sh
+    #----------------------------------------------
+    ("尖", "ziam1", "jiam1"),   # ㄐ：z+i -> j+i
+    ("入", "jip4", "jjip4" ),   # ㆢ：j+i → jj+i
+    ("手", "ciu2", "chiu2"),    # ㄑ：c+i -> ch+i
+    ("寫", "sia2", "shia2"),    # ㄒ：s+i -> sh+i
+    #----------------------------------------------
+    ("求", "kiu5", "giu5"),     # ㄍ：k -> g
+    ("語", "gi2", "ggi2"),      # ㆣ：g -> gg
+    ("去", "khi2", "ki2"),      # ㄎ：kh -> k
+    ("雅", "nga2", "nga2"),     # ㄫ：ng -> ggn
 ]
 
 class TestConvertTLPAtoBP(unittest.TestCase):
