@@ -9,8 +9,8 @@ convert_TLPA_to_MPS2.py
 import re
 import sys
 
-# 聲母（初聲）映射表，注意要從長到短比對 prefix
-SIANN_BU_MAP = {
+# 聲母轉換對照表（【索引】字串排序，需由長到短）
+SIANN_BU_TNG_UANN_PIAU = {
     "tsh": "c",
     "ts": "z",
     # 二字母
@@ -34,14 +34,15 @@ SIANN_BU_MAP = {
     "s": "s",  # ㄙ → s
 }
 
-# 齒音（TLPA: 舌尖前音/TL: 舌齒音）+ i 對照：
-CI_IM_MAP = {
+# 【齒音聲母+i】轉換對照表
+# 【齒音聲母】：TLPA: 舌尖前音/TL: 舌齒音
+CI_IM_TNG_UANN_PIAU = {
     # "j": "zz",   # ㆡ：j -> zz
     "zzi": "jji",  # ㆢ：ji → jj+i
 }
 
-# 韻母（襯聲）映射表，台羅→注音二式（多數相同，唯「o」→「or」需要特別處理）
-FINAL_MAP = {
+# 韻母轉換對照表（【索引】字串排序，需由長到短）
+UN_BU_TNG_UANN_PIAU = {
     "oonn": "oonn",
     # "ainn": "ainn",
     # "aunn": "aunn",
@@ -80,36 +81,34 @@ def convert_TLPA_to_MPS2(TLPA_piau_im: str) -> str:
         # 如果不符合「全英文字母+數字」格式，就原樣回傳
         return TLPA_piau_im
 
-    # 提取：聲母、韻母和聲調
-    body, tone = m.group(1), m.group(2)
+    # 提取：【無調號標音】（聲母+韻母）和【聲調】
+    mo_tiau_piau_im, tiau = m.group(1), m.group(2)
 
     # 1. 轉聲母：從長到短比對 prefix
-    onset = ""
-    rest = body
     siann = ""
-    for key in sorted(SIANN_BU_MAP.keys(), key=lambda x: -len(x)):
-        if body.startswith(key):
-            onset = SIANN_BU_MAP[key]
-            siann = SIANN_BU_MAP[key]
-            rest = body[len(key) :]
+    un = mo_tiau_piau_im
+    for key in sorted(SIANN_BU_TNG_UANN_PIAU.keys(), key=lambda x: -len(x)):
+        if mo_tiau_piau_im.startswith(key):
+            siann = SIANN_BU_TNG_UANN_PIAU[key]
+            un = mo_tiau_piau_im[len(key) :]
             break
 
     # 2. 轉韻母：整段比對
-    if rest in FINAL_MAP:
-        rest = FINAL_MAP[rest]
+    if un in UN_BU_TNG_UANN_PIAU:
+        un = UN_BU_TNG_UANN_PIAU[un]
     # else:
     #     # 若末尾是「o」卻不在 FINAL_MAP，做一次 o→or
     #     if rest.endswith("o"):
     #         rest = rest[:-1] + "or"
 
-    # 3. 處理【齒音+ i】的特殊規則
-    if siann in ("z", "c", "s", "zz") and rest.startswith("i"):
-        ci_im_ga_i = f"{siann}i"
-        if ci_im_ga_i in CI_IM_MAP:
-            str = CI_IM_MAP[ci_im_ga_i]
-            onset = str[:-1]  # 去掉最後的 i
+    # 3. 處理【齒音連i】的特殊狀況：【齒音聲母】+ i（【韻母】首拼音字母）
+    if siann in ("z", "c", "s", "zz") and un.startswith("i"):
+        ci_im_lian_i = f"{siann}i"
+        if ci_im_lian_i in CI_IM_TNG_UANN_PIAU:
+            str = CI_IM_TNG_UANN_PIAU[ci_im_lian_i]
+            siann = str[:-1]  # 去掉最後的 i
 
-    return f"{onset}{rest}{tone}"
+    return f"{siann}{un}{tiau}"
 
 
 def main(infile: str, outfile: str):
