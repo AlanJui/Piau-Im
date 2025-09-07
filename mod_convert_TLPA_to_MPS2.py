@@ -3,7 +3,7 @@ convert_TLPA_to_MPS2.py
 
 將【台語音標（TLPA+）】轉換成【台語注音二式（MPS2）】。
 用法：
-    python convert_TLPA_to_MPS2.py tl_ji_khoo_peh_ue.dict.yaml output.dict.yaml
+    python convert_TLPA_to_MPS2.py tl_ji_khoo_peh_ue.txt mps2_ji_khoo.txt
 """
 
 import re
@@ -14,42 +14,42 @@ SIANN_BU_TNG_UANN_PIAU = {
     "tsh": "c",
     "ts": "z",
     # 二字母
-    "ph": "p",   # ㄆ → p (雙唇音/清音：塞音/送氣)
-    "th": "t",   # ㄊ → t (齒齦音/清音：塞音/送氣)
-    "kh": "k",   # ㄎ → k（軟顎音/清音：塞音/送氣）
+    "ph": "p",  # ㄆ → p (雙唇音/清音：塞音/送氣)
+    "th": "t",  # ㄊ → t (齒齦音/清音：塞音/送氣)
+    "kh": "k",  # ㄎ → k（軟顎音/清音：塞音/送氣）
     "ng": "ng",  # ㄫ → ng（軟顎音/濁音：鼻音）
     # 一字母
     # 雙唇音
-    "p": "b",    # ㄅ → b（雙唇音/清音：塞音不送氣）
-    "b": "bb",   # ㆠ → bb（雙唇音/濁音：塞音不送氣）
-    "m": "m",    # ㄇ → m（雙唇音/濁音：鼻音）
-    #------------------------------
+    "p": "b",  # ㄅ → b（雙唇音/清音：塞音不送氣）
+    "b": "bb",  # ㆠ → bb（雙唇音/濁音：塞音不送氣）
+    "m": "m",  # ㄇ → m（雙唇音/濁音：鼻音）
+    # ------------------------------
     # 齒齦音
-    "t": "d",    # ㄉ → d（齒齦音/清音：塞音/不送氣）
-    "n": "n",    # ㄋ → n（齒齦音/濁音：鼻音）
-    "l": "l",    # ㄌ → l（齒齦音/濁音：邊音）
-    #------------------------------
+    "t": "d",  # ㄉ → d（齒齦音/清音：塞音/不送氣）
+    "n": "n",  # ㄋ → n（齒齦音/濁音：鼻音）
+    "l": "l",  # ㄌ → l（齒齦音/濁音：邊音）
+    # ------------------------------
     # 齒齦音
-    "z": "z",    # ㄗ → z (齒齦音/清音：塞音/不送氣)
-    "j": "zz",   # ㆡ → zz（齒齦音/濁音：塞擦音/不送氣）
-    "c": "c",    # ㄘ → c (齒齦音/清音：塞音/送氣)
-    "s": "s",    # ㄙ → s（齒齦音/清音：擦音）
-    #------------------------------
+    "z": "z",  # ㄗ → z (齒齦音/清音：塞音/不送氣)
+    "j": "zz",  # ㆡ → zz（齒齦音/濁音：塞擦音/不送氣）
+    "c": "c",  # ㄘ → c (齒齦音/清音：塞音/送氣)
+    "s": "s",  # ㄙ → s（齒齦音/清音：擦音）
+    # ------------------------------
     # 軟顎音
-    "k": "g",    # ㄍ → g（軟顎音/清音：塞音/不送氣）
-    "g": "gg",   # ㆣ → gg（軟顎音/濁音：塞音/不送氣）
-    #------------------------------
+    "k": "g",  # ㄍ → g（軟顎音/清音：塞音/不送氣）
+    "g": "gg",  # ㆣ → gg（軟顎音/濁音：塞音/不送氣）
+    # ------------------------------
     # 聲門音
-    "h": "h",    # ㄏ → h（聲門音／擦音：聲門音／清音）
+    "h": "h",  # ㄏ → h（聲門音／擦音：聲門音／清音）
 }
 
 # 【齒音聲母+i】轉換對照表
 # 【齒音聲母】：TLPA: 舌尖前音/TL: 舌齒音
 CI_IM_TNG_UANN_PIAU = {
     "zzi": "jji",  # ㆢ：ji → jj+i
-    "zi": "ji",    # ㄐ：z+i → j+i
-    "ci": "chi",   # ㄑ：c+i → ch+i
-    "si": "shi",   # ㄒ：s+i → sh+i
+    "zi": "ji",  # ㄐ：z+i → j+i
+    "ci": "chi",  # ㄑ：c+i → ch+i
+    "si": "shi",  # ㄒ：s+i → sh+i
 }
 
 # 韻母轉換對照表（【索引】字串排序，需由長到短）
@@ -126,8 +126,8 @@ def convert_TLPA_to_MPS2(TLPA_piau_im: str) -> str:
     if siann in ("z", "c", "s", "zz") and un.startswith("i"):
         ci_im_lian_i = f"{siann}i"
         if ci_im_lian_i in CI_IM_TNG_UANN_PIAU:
-            str = CI_IM_TNG_UANN_PIAU[ci_im_lian_i]
-            siann = str[:-1]  # 去掉最後的 i
+            ci_im_lian_i_tng_uann = CI_IM_TNG_UANN_PIAU[ci_im_lian_i]
+            siann = ci_im_lian_i_tng_uann[:-1]  # 去掉最後的 i
 
     return f"{siann}{un}{tiau}"
 
@@ -137,7 +137,6 @@ def main(infile: str, outfile: str):
         lines = fin.readlines()
 
     out_lines = []
-    in_entries = False
     for line in lines:
         # 找到「...」之後即進入詞條區
         if not in_entries:
@@ -146,19 +145,22 @@ def main(infile: str, outfile: str):
                 in_entries = True
             continue
 
-        # 在詞條區，跳過空行或註解
+        # 略過註解行或空白行
         if not line.strip() or line.startswith("#"):
             out_lines.append(line)
             continue
 
-        # 假設詞條以「欄位1\t欄位2\t...」格式，至少要有兩欄
-        parts = line.rstrip("\n").split("\t")
+        # 轉換【第二欄】中的【台語音標】
+        parts = line.rstrip("\n").split("\t")  # 假設詞條以「欄位1\t欄位2\t...」格式，至少要有兩欄
         if len(parts) >= 2:
+            # 轉換第二欄中之【台語音標】，並將結果覆蓋回去
             parts[1] = convert_TLPA_to_MPS2(parts[1])
+            # 將轉換結果放入【轉換結果】陣列底端
             out_lines.append("\t".join(parts) + "\n")
         else:
             out_lines.append(line)
 
+    # 將轉換結果寫入輸出檔
     with open(outfile, "w", encoding="utf-8") as fout:
         fout.writelines(out_lines)
 
