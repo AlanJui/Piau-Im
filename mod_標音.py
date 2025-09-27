@@ -1264,6 +1264,8 @@ class PiauIm:
             return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
         elif piau_im_huat == "台語音標":
             siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            if siann in ("", None, "Ø", "ø"):
+                siann = ""
             un = self.Un_Bu_Dict[un_bu]["台語音標"]
             return f"{siann}{un}{tiau_ho}"
         return ""

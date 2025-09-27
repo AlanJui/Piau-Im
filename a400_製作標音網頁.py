@@ -158,7 +158,7 @@ def title_piau_im(wb, title: str) -> str:
                 )
                 u_piau_im_title += ruby_tag
         # print(f"{han_ji} = [{tai_gi_im_piau}] / [{han_ji_piau_im}]")
-        msg =f"{han_ji} [{tai_gi_im_piau}] ==》 上方標音：{siong_piau_im} / 右方標音： {zian_piau_im}】"
+        msg =f"{han_ji} [{tai_gi_im_piau}] ==》 上方標音：{siong_piau_im} / 右方標音： {zian_piau_im}"
         print(msg)
 
     return u_piau_im_title
