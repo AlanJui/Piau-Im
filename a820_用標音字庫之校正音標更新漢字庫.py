@@ -3,7 +3,6 @@
 # =========================================================================
 import logging
 import os
-import re
 import sqlite3
 import sys
 from datetime import datetime
@@ -41,13 +40,12 @@ EXIT_CODE_UNKNOWN_ERROR = 99
 
 
 # =========================================================================
-# 功能 2：使用【標音字庫】更新【漢字庫】資料表
+# 功能 1：使用【缺字表】更新【漢字庫】資料表
 # =========================================================================
-def update_database_from_pronunciation_library(wb):
+def update_database_from_missing_characters(wb):
     """
-    使用【標音字庫】工作表的資料更新 SQLite 資料庫的【漢字庫】資料表。
-    - 將【校正音標】轉換為【台羅音標】後寫入資料庫。
-    - 若【校正音標】為 "N/A"，則略過不寫入。
+    使用【缺字表】工作表的資料更新 SQLite 資料庫的【漢字庫】資料表。
+    - 將【台語音標】轉換為【台羅音標】後寫入資料庫。
 
     :param wb: Excel 活頁簿物件
     :return: EXIT_CODE_SUCCESS or EXIT_CODE_FAILURE
@@ -77,17 +75,17 @@ def update_database_from_pronunciation_library(wb):
     try:
         for idx, row_data in enumerate(data, start=2):  # Excel A2 起始，Python Index 2
             han_ji = row_data[0]  # A 欄: 漢字
-            correction_im_piau = row_data[3]  # D 欄: 校正音標
+            tai_lo_im_piau = row_data[2]  # C 欄: 校正音標
 
-            # 若【校正音標】為 "N/A"，則略過不寫入
-            if not han_ji or not correction_im_piau or correction_im_piau == "N/A":
+            # 若：非漢字、校正音標為空、校正音標未填（值="N/A"），則跳過
+            if not han_ji or not tai_lo_im_piau or tai_lo_im_piau == "N/A":
                 continue  # 跳過無效資料
 
             # **轉換台語音標（TLPA）→ 台羅音標（TL）**
-            tl_im_piau = convert_tlpa_to_tl(correction_im_piau)
+            tl_im_piau = convert_tlpa_to_tl(tai_lo_im_piau)
 
             # **在 INSERT 之前，顯示 Console 訊息**
-            print(f"📌 寫入資料庫: 漢字='{han_ji}', 校正音標='{correction_im_piau}', 轉換後台羅音標='{tl_im_piau}', Excel 第 {idx} 列")
+            print(f"📌 寫入資料庫: 漢字='{han_ji}', 台語音標='{tai_lo_im_piau}', 轉換後台羅音標='{tl_im_piau}', Excel 第 {idx} 列")
 
             cursor.execute("""
                 INSERT INTO 漢字庫 (漢字, 台羅音標, 常用度, 摘要說明, 更新時間)
@@ -114,14 +112,14 @@ def main():
     if len(sys.argv) > 1:
         mode = sys.argv[1]
     else:
-        mode = "2"
+        mode = "1"
 
     wb = xw.apps.active.books.active
 
-    if mode == "2":
-        return update_database_from_pronunciation_library(wb)
+    if mode == "1":
+        return update_database_from_missing_characters(wb)
     else:
-        print("❌ 錯誤：請輸入有效模式 (2)")
+        print("❌ 錯誤：請輸入有效模式 (1)")
         return EXIT_CODE_INVALID_INPUT
 
 if __name__ == "__main__":

@@ -50,7 +50,7 @@ def update_database_from_missing_characters(wb):
     :param wb: Excel 活頁簿物件
     :return: EXIT_CODE_SUCCESS or EXIT_CODE_FAILURE
     """
-    sheet_name = "缺字表"
+    sheet_name = "人工標音字庫"
     try:
         sheet = wb.sheets[sheet_name]
     except Exception:

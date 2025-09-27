@@ -340,6 +340,13 @@
             "console": "integratedTerminal",
         },
         {
+            "name": "a815_人工標音字庫表更新漢字典",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a815_人工標音字庫表更新漢字典.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "a820_用標音字庫之校正音標更新漢字庫",
             "type": "debugpy",
             "request": "launch",
