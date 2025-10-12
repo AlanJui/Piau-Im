@@ -14539,3 +14539,66 @@ pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Exce
 2025-09-27 14:27:32,998 - INFO - <----------- 作業結束！---------->
 2025-09-27 14:27:33,168 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-注音二式】《涼州詞》.xlsx
 2025-09-27 14:27:33,168 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-10-11 19:49:24,186 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-10-11 19:49:24,187 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-10-11 19:49:24,208 - INFO - <----------- 作業開始！---------->
+2025-10-11 19:49:24,213 - ERROR - 程式異常終止：a400_製作標音網頁，錯誤訊息: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a400_製作標音網頁.py", line 683, in main
+    result_code = process(wb)
+  File "a400_製作標音網頁.py", line 624, in process
+    status_code = tng_sing_bang_iah(
+        wb=wb,
+    ...<2 lines>...
+        page_type='含頁頭'
+    )
+  File "a400_製作標音網頁.py", line 538, in tng_sing_bang_iah
+    han_ji_khoo = wb.names['漢字庫'].refers_to_range.value
+                  ~~~~~~~~^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4622, in __getitem__
+    return self(item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4581, in __call__
+    return Name(impl=self.impl(name_or_index))
+                     ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2286, in __call__
+    return Name(xl=self.xl(name_or_index))
+                   ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-10-11 19:49:24,257 - ERROR - 儲存檔案失敗！，錯誤訊息: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147352565), None)
+Traceback (most recent call last):
+  File "a400_製作標音網頁.py", line 700, in main
+    wb.sheets['漢字注音'].activate()
+    ~~~~~~~~~^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 89, in __getitem__
+    return self(key)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 5218, in __call__
+    return Sheet(impl=self.impl(name_or_index))
+                      ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 943, in __call__
+    return Sheet(xl=self.xl(name_or_index))
+                    ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147352565), None)
+2025-10-12 18:52:38,951 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-10-12 18:52:38,952 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-10-12 18:52:38,971 - INFO - <----------- 作業開始！---------->
+2025-10-12 18:52:43,255 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-10-12 18:52:43,263 - INFO - <----------- 作業結束！---------->
+2025-10-12 18:52:43,493 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-注音二式】《涼州詞》.xlsx
+2025-10-12 18:52:43,493 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-10-12 21:42:20,255 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-10-12 21:42:20,256 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-10-12 21:42:20,271 - INFO - <----------- 作業開始！---------->
+2025-10-12 21:42:24,262 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-10-12 21:42:24,270 - INFO - <----------- 作業結束！---------->
+2025-10-12 21:42:24,471 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-注音二式】《涼州詞》.xlsx
+2025-10-12 21:42:24,472 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
