@@ -18,10 +18,14 @@ from mod_字庫 import JiKhooDict  # 漢字字庫物件
 
 # from mod_標音 import is_punctuation  # 是否為標點符號
 from mod_帶調符音標 import is_han_ji
-from mod_標音 import convert_tl_with_tiau_hu_to_tlpa  # 去除台語音標的聲調符號
-from mod_標音 import split_hong_im_hu_ho  # 分解漢字標音
-from mod_標音 import tlpa_tng_han_ji_piau_im  # 漢字標音物件
-from mod_標音 import PiauIm, ca_ji_kiat_ko_tng_piau_im, is_punctuation  # 查字典得台語音標及漢字標音
+from mod_標音 import (  # 查字典得台語音標及漢字標音
+    PiauIm,
+    ca_ji_kiat_ko_tng_piau_im,
+    convert_tl_with_tiau_hu_to_tlpa,  # 去除台語音標的聲調符號
+    is_punctuation,
+    split_hong_im_hu_ho,  # 分解漢字標音
+    tlpa_tng_han_ji_piau_im,  # 漢字標音物件
+)
 
 # =========================================================================
 # 常數定義
@@ -173,7 +177,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3',
                 cell.color = None
 
                 cell_value = cell.value
-                jin_kang_piau_im = cell.offset(-2, 0).value  # 人工標音
+                # jin_kang_piau_im = cell.offset(-2, 0).value  # 人工標音
                 if cell_value == 'φ':
                     EOF = True
                     msg = "【文字終結】"

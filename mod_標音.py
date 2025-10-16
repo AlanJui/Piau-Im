@@ -1106,7 +1106,9 @@ class PiauIm:
         tiau_ho = replace_superscript_digits(str(tiau_ho))
         tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
 
-        siann_bu = 'ø' if siann_bu == 'Ø' else siann_bu
+        # siann_bu = 'ø' if siann_bu == 'Ø' else siann_bu
+        if siann_bu == 'Ø' or siann_bu == '':
+            siann_bu = 'ø'
         siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
         un = self.Un_Bu_Dict[un_bu][piau_im_huat]
         # tiau = self.TONE_MARKS[piau_im_huat][tiau_ho]
