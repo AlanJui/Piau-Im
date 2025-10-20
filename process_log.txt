@@ -14602,3 +14602,151 @@ pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, Non
 2025-10-12 21:42:24,270 - INFO - <----------- 作業結束！---------->
 2025-10-12 21:42:24,471 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-注音二式】《涼州詞》.xlsx
 2025-10-12 21:42:24,472 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-10-16 19:16:27,389 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-10-16 19:16:27,390 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-10-16 19:16:27,408 - INFO - <----------- 作業開始！---------->
+2025-10-16 19:16:52,227 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 219, in ca_han_ji_thak_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 123, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1252, in han_ji_piau_im_tng_huan
+    return self.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1110, in TPS_piau_im
+    siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-10-16 19:16:52,232 - ERROR - 在查找漢字標音時發生錯誤！，錯誤訊息: ''
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 304, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name,    # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a200_查找及填入漢字標音.py", line 219, in ca_han_ji_thak_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 123, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1252, in han_ji_piau_im_tng_huan
+    return self.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1110, in TPS_piau_im
+    siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-10-16 19:16:52,233 - ERROR - 程式異常終止：a200_查找及填入漢字標音，錯誤訊息: None
+NoneType: None
+2025-10-16 19:16:52,610 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-方音符號】《涼州詞》.xlsx
+2025-10-16 19:18:27,640 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-10-16 19:18:27,641 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-10-16 19:18:27,657 - INFO - <----------- 作業開始！---------->
+2025-10-16 19:18:37,584 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 219, in ca_han_ji_thak_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 123, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1252, in han_ji_piau_im_tng_huan
+    return self.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1110, in TPS_piau_im
+    siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-10-16 19:18:37,588 - ERROR - 在查找漢字標音時發生錯誤！，錯誤訊息: ''
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 304, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name,    # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a200_查找及填入漢字標音.py", line 219, in ca_han_ji_thak_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 123, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1252, in han_ji_piau_im_tng_huan
+    return self.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1110, in TPS_piau_im
+    siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-10-16 19:18:37,589 - ERROR - 程式異常終止：a200_查找及填入漢字標音，錯誤訊息: None
+NoneType: None
+2025-10-16 19:18:37,845 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-方音符號】《涼州詞》.xlsx
+2025-10-16 19:43:15,872 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-10-16 19:43:15,873 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-10-16 19:43:15,888 - INFO - <----------- 作業開始！---------->
+2025-10-16 19:53:44,597 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-10-16 19:53:44,598 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-10-16 19:53:44,611 - INFO - <----------- 作業開始！---------->
+2025-10-16 19:54:24,189 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-10-16 19:54:24,190 - INFO - 自動為【漢字】查找【台語音標】作業己完成！
+2025-10-16 19:54:24,190 - INFO - 【語音類型】：文讀音
+2025-10-16 19:54:24,190 - INFO - 【漢字庫】：Ho_Lok_Ue.db
+2025-10-16 19:54:24,208 - INFO - <----------- 作業結束！---------->
+2025-10-16 19:54:24,482 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-方音符號】《涼州詞》.xlsx
+2025-10-16 19:54:24,482 - INFO - 《========== 程式終止執行：a200_查找及填入漢字標音 ==========》
+2025-10-16 21:07:09,148 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-10-16 21:07:09,149 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-10-16 21:07:09,164 - INFO - <----------- 作業開始！---------->
