@@ -14750,3 +14750,148 @@ NoneType: None
 2025-10-16 21:07:09,148 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
 2025-10-16 21:07:09,149 - INFO - 專案根目錄為: C:\work\Piau-Im
 2025-10-16 21:07:09,164 - INFO - <----------- 作業開始！---------->
+2025-10-31 22:36:03,678 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-10-31 22:36:03,679 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-10-31 22:36:03,695 - INFO - <----------- 作業開始！---------->
+2025-10-31 22:37:04,368 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-10-31 22:37:04,376 - INFO - <----------- 作業結束！---------->
+2025-10-31 22:37:04,797 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調號】《出師表》.xlsx
+2025-10-31 22:37:04,797 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-10-31 22:39:15,234 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-10-31 22:39:15,235 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-10-31 22:39:15,249 - INFO - <----------- 作業開始！---------->
+2025-10-31 22:39:15,418 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 123, in ca_han_ji_thak_im
+    khuat_ji_piau_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=khuat_ji_piau_name)
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'N/A'
+2025-10-31 22:39:15,422 - ERROR - 在查找漢字標音時發生錯誤！，錯誤訊息: invalid literal for int() with base 10: 'N/A'
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 308, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name,    # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a200_查找及填入漢字標音.py", line 123, in ca_han_ji_thak_im
+    khuat_ji_piau_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=khuat_ji_piau_name)
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'N/A'
+2025-10-31 22:39:15,423 - ERROR - 程式異常終止：a200_查找及填入漢字標音，錯誤訊息: None
+NoneType: None
+2025-10-31 22:39:15,887 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-方音符號】《出師表》.xlsx
+2025-10-31 22:40:55,460 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-10-31 22:40:55,461 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-10-31 22:40:55,476 - INFO - <----------- 作業開始！---------->
+2025-10-31 22:42:18,476 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-10-31 22:42:18,477 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-10-31 22:42:18,491 - INFO - <----------- 作業開始！---------->
+2025-10-31 22:43:01,880 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-10-31 22:43:01,881 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-10-31 22:43:01,924 - INFO - <----------- 作業開始！---------->
+2025-10-31 22:44:08,290 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 130, in ca_han_ji_thak_im
+    piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=piau_im_sheet_name)
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'N/A'
+2025-10-31 22:44:08,294 - ERROR - 在查找漢字標音時發生錯誤！，錯誤訊息: invalid literal for int() with base 10: 'N/A'
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 308, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name,    # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a200_查找及填入漢字標音.py", line 130, in ca_han_ji_thak_im
+    piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=piau_im_sheet_name)
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'N/A'
+2025-10-31 22:44:08,295 - ERROR - 程式異常終止：a200_查找及填入漢字標音，錯誤訊息: None
+NoneType: None
+2025-10-31 22:44:08,742 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-方音符號】《出師表》.xlsx
+2025-10-31 22:44:27,059 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-10-31 22:44:27,060 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-10-31 22:44:27,074 - INFO - <----------- 作業開始！---------->
+2025-10-31 22:45:14,486 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-10-31 22:45:14,487 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-10-31 22:45:14,500 - INFO - <----------- 作業開始！---------->
+2025-10-31 22:48:33,181 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-10-31 22:48:33,182 - INFO - 自動為【漢字】查找【台語音標】作業己完成！
+2025-10-31 22:48:33,182 - INFO - 【語音類型】：文讀音
+2025-10-31 22:48:33,182 - INFO - 【漢字庫】：Ho_Lok_Ue.db
+2025-10-31 22:48:33,196 - INFO - <----------- 作業結束！---------->
+2025-10-31 22:48:33,591 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-方音符號】《出師表》.xlsx
+2025-10-31 22:48:33,591 - INFO - 《========== 程式終止執行：a200_查找及填入漢字標音 ==========》
+2025-10-31 22:55:13,865 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-10-31 22:55:13,866 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-10-31 22:55:13,882 - INFO - <----------- 作業開始！---------->
+2025-10-31 22:55:19,608 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 130, in ca_han_ji_thak_im
+    piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=piau_im_sheet_name)
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'N/A'
+2025-10-31 22:55:19,612 - ERROR - 在查找漢字標音時發生錯誤！，錯誤訊息: invalid literal for int() with base 10: 'N/A'
+Traceback (most recent call last):
+  File "a200_查找及填入漢字標音.py", line 308, in process
+    ca_han_ji_thak_im(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<6 lines>...
+        function_name=function_name,    # "han_ji_ca_piau_im",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a200_查找及填入漢字標音.py", line 130, in ca_han_ji_thak_im
+    piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=piau_im_sheet_name)
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'N/A'
+2025-10-31 22:55:19,613 - ERROR - 程式異常終止：a200_查找及填入漢字標音，錯誤訊息: None
+NoneType: None
+2025-10-31 22:55:20,365 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-方音符號】《蘭亭集序》.xlsx
+2025-10-31 22:56:02,801 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-10-31 22:56:02,802 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-10-31 22:56:02,817 - INFO - <----------- 作業開始！---------->
+2025-10-31 22:56:43,216 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-10-31 22:56:43,216 - INFO - 自動為【漢字】查找【台語音標】作業己完成！
+2025-10-31 22:56:43,217 - INFO - 【語音類型】：文讀音
+2025-10-31 22:56:43,217 - INFO - 【漢字庫】：Ho_Lok_Ue.db
+2025-10-31 22:56:43,225 - INFO - <----------- 作業結束！---------->
+2025-10-31 22:56:43,385 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-方音符號】《蘭亭集序》.xlsx
+2025-10-31 22:56:43,385 - INFO - 《========== 程式終止執行：a200_查找及填入漢字標音 ==========》
+2025-10-31 22:56:54,623 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-10-31 22:56:54,623 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-10-31 22:56:54,640 - INFO - <----------- 作業開始！---------->
+2025-10-31 22:57:27,387 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-10-31 22:57:27,397 - INFO - <----------- 作業結束！---------->
+2025-10-31 22:57:27,561 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-方音符號】《蘭亭集序》.xlsx
+2025-10-31 22:57:27,561 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
