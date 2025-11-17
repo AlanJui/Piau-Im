@@ -243,8 +243,8 @@ def fill_han_ji_and_ping_im(wb, han_ji_filename:str, ping_im_filename:str, use_t
 # =========================================================================
 def main():
     # 預設檔案名稱
-    default_han_ji_file = "tmp_p1_han_ji.txt"
-    default_ping_im_file = "tmp_p2_ping_im.txt"
+    default_han_ji_file = "_tmp_p1_han_ji.txt"
+    default_ping_im_file = "_tmp_p2_ping_im.txt"
 
     # 檢查是否有指定檔案名稱，若無則使用預設檔名
     # 命令列參數處理：sys.argv[1] = 漢字檔案, sys.argv[2] = 拼音檔案

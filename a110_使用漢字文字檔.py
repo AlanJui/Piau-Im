@@ -472,7 +472,7 @@ def fill_in_jin_kang_ping_im(wb, han_ji_list:list, ping_im_file:str, use_tiau_ho
 def main():
     # 使用 argparse 處理命令列參數
     parser = argparse.ArgumentParser(description="根據漢字檔產生台語音標與漢字標音")
-    parser.add_argument("han_ji_file", nargs="?", default="tmp_p1_han_ji.txt", help="漢字純文字檔路徑")
+    parser.add_argument("han_ji_file", nargs="?", default="_tmp_p1_han_ji.txt", help="漢字純文字檔路徑")
     parser.add_argument("ping_im_file", nargs="?", default="", help="標音檔（可選）")
     parser.add_argument("--peh_ue", action="store_true", help="將語音類型設定為白話音")
     # parser.add_argument("--tiau_hu", action="store_false", help="使用【聲調符號】（不帶調號）的音標（TLPA 拼音）")

@@ -474,7 +474,7 @@ def fill_hanzi_and_tlpa(wb, use_tiau_ho=True, filename='tmp.txt', sheet_name='�
 # =========================================================================
 def main():
     # 檢查是否有指定檔案名稱，若無則使用預設檔名
-    filename = sys.argv[1] if len(sys.argv) > 1 else "tmp.txt"
+    filename = sys.argv[1] if len(sys.argv) > 1 else "_tmp.txt"
     # 檢查是否有 'ho' 參數，若有則使用標音格式二：【聲母】+【韻母】+【調號】
     if "hu" in sys.argv:  # 若命令行參數包含 'bp'，則使用 BP
         use_tiau_ho = False

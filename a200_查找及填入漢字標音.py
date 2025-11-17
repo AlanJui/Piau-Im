@@ -18,14 +18,10 @@ from mod_字庫 import JiKhooDict  # 漢字字庫物件
 
 # from mod_標音 import is_punctuation  # 是否為標點符號
 from mod_帶調符音標 import is_han_ji
-from mod_標音 import (  # 查字典得台語音標及漢字標音
-    PiauIm,
-    ca_ji_kiat_ko_tng_piau_im,
-    convert_tl_with_tiau_hu_to_tlpa,  # 去除台語音標的聲調符號
-    is_punctuation,
-    split_hong_im_hu_ho,  # 分解漢字標音
-    tlpa_tng_han_ji_piau_im,  # 漢字標音物件
-)
+from mod_標音 import convert_tl_with_tiau_hu_to_tlpa  # 去除台語音標的聲調符號
+from mod_標音 import split_hong_im_hu_ho  # 分解漢字標音
+from mod_標音 import tlpa_tng_han_ji_piau_im  # 漢字標音物件
+from mod_標音 import PiauIm, ca_ji_kiat_ko_tng_piau_im, is_punctuation  # 查字典得台語音標及漢字標音
 
 # =========================================================================
 # 常數定義
@@ -95,7 +91,6 @@ def jin_kang_piau_im_cu_han_ji_piau_im(wb, jin_kang_piau_im: str, piau_im: PiauI
     return tai_gi_im_piau, han_ji_piau_im
 
 
-# def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db', module_name='mod_河洛話', function_name='han_ji_ca_piau_im', new_jin_kang_piau_im__piau:bool=False):
 def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3',
                       ue_im_lui_piat="白話音", han_ji_khoo="河洛話", db_name='Ho_Lok_Ue.db',
                       module_name='mod_河洛話', function_name='han_ji_ca_piau_im',
@@ -231,7 +226,6 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3',
                             sheet.range((row + 1, col)).value = han_ji_piau_im
                             msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
                             # 【標音字庫】添加或更新【漢字】資料
-                            # piau_im_ji_khoo.add_or_update_entry(
                             piau_im_ji_khoo.add_entry(
                                 han_ji=han_ji,
                                 tai_gi_im_piau=tai_gi_im_piau,

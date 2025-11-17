@@ -100,7 +100,7 @@
             "program": "a110_使用漢字文字檔.py",
             "console": "integratedTerminal",
             "args": [
-                "tmp_p1_han_ji.txt",
+                "_tmp_p1_han_ji.txt",
             ]
         },
         {
@@ -110,8 +110,8 @@
             "program": "a110_使用漢字文字檔.py",
             "console": "integratedTerminal",
             "args": [
-                "tmp_p1_han_ji.txt",
-                "tmp_p2_ping_im.txt",
+                "_tmp_p1_han_ji.txt",
+                "_tmp_p2_ping_im.txt",
             ]
         },
         {
@@ -121,7 +121,7 @@
             "program": "a110_使用漢字文字檔.py",
             "console": "integratedTerminal",
             "args": [
-                "tmp_p1_han_ji.txt",
+                "_tmp_p1_han_ji.txt",
                 "--peh_ue",
             ]
         },
@@ -132,7 +132,7 @@
             "program": "a110_使用漢字文字檔.py",
             "console": "integratedTerminal",
             "args": [
-                "tmp_p1_han_ji.txt",
+                "_tmp_p1_han_ji.txt",
                 "--peh_ue",
                 "--tiau_hu",
             ]
