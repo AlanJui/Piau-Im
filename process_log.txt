@@ -15220,3 +15220,167 @@ NoneType: None
 2025-11-18 14:35:57,326 - INFO - <----------- 作業開始！---------->
 2025-11-18 14:35:57,377 - INFO - 已完成作業所需之初始化設定！
 2025-11-18 14:35:58,020 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-11-18 15:03:29,163 - INFO - 《========== 程式開始執行：a320_人工標音更正漢字自動標音 ==========》
+2025-11-18 15:03:29,164 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-11-18 15:03:29,179 - INFO - <----------- 作業開始！---------->
+2025-11-18 15:11:08,871 - INFO - 《========== 程式開始執行：a320_人工標音更正漢字自動標音 ==========》
+2025-11-18 15:11:08,872 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-11-18 15:11:08,887 - INFO - <----------- 作業開始！---------->
+2025-11-18 15:11:26,158 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a320_人工標音更正漢字自動標音.py", line 137, in jin_kang_piau_imm
+    sheet.range((row, 1)).select()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2839, in select
+    self.impl.select()
+    ~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1500, in select
+    return self.xl.Select()
+           ~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject <unknown>>", line 2, in Select
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+2025-11-18 15:11:26,204 - ERROR - 在查找漢字標音時發生錯誤！，錯誤訊息: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a320_人工標音更正漢字自動標音.py", line 282, in process
+    jin_kang_piau_imm(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<4 lines>...
+        # new_jin_kang_piau_im__piau=True # 新建人工標音字庫工作表
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a320_人工標音更正漢字自動標音.py", line 137, in jin_kang_piau_imm
+    sheet.range((row, 1)).select()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2839, in select
+    self.impl.select()
+    ~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1500, in select
+    return self.xl.Select()
+           ~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject <unknown>>", line 2, in Select
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+2025-11-18 15:11:26,205 - ERROR - 程式異常終止：a320_人工標音更正漢字自動標音，錯誤訊息: None
+NoneType: None
+2025-11-18 15:11:26,565 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《雪中紅》.xlsx
+2025-11-18 15:11:49,965 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-11-18 15:11:49,966 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-11-18 15:11:49,979 - INFO - <----------- 作業開始！---------->
+2025-11-18 15:12:17,670 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-11-18 15:12:17,671 - INFO - 自動為【漢字】查找【台語音標】作業己完成！
+2025-11-18 15:12:17,671 - INFO - 【語音類型】：白話音
+2025-11-18 15:12:17,671 - INFO - 【漢字庫】：Ho_Lok_Ue.db
+2025-11-18 15:12:17,680 - INFO - <----------- 作業結束！---------->
+2025-11-18 15:12:17,855 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《雪中紅》.xlsx
+2025-11-18 15:12:17,855 - INFO - 《========== 程式終止執行：a200_查找及填入漢字標音 ==========》
+2025-11-18 15:12:55,337 - INFO - 《========== 程式開始執行：a320_人工標音更正漢字自動標音 ==========》
+2025-11-18 15:12:55,338 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-11-18 15:12:55,351 - INFO - <----------- 作業開始！---------->
+2025-11-18 15:14:02,205 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a320_人工標音更正漢字自動標音.py", line 137, in jin_kang_piau_imm
+    sheet.range((row, 1)).select()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2839, in select
+    self.impl.select()
+    ~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1500, in select
+    return self.xl.Select()
+           ~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject <unknown>>", line 2, in Select
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+2025-11-18 15:14:02,210 - ERROR - 在查找漢字標音時發生錯誤！，錯誤訊息: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a320_人工標音更正漢字自動標音.py", line 282, in process
+    jin_kang_piau_imm(
+    ~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<4 lines>...
+        # new_jin_kang_piau_im__piau=True # 新建人工標音字庫工作表
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a320_人工標音更正漢字自動標音.py", line 137, in jin_kang_piau_imm
+    sheet.range((row, 1)).select()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 2839, in select
+    self.impl.select()
+    ~~~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 1500, in select
+    return self.xl.Select()
+           ~~~~~~~~~~~~~~^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject <unknown>>", line 2, in Select
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 355, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+        *(dispid, LCID, wFlags, retType, argTypes) + args
+    )
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Range 的 Select 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+2025-11-18 15:14:02,212 - ERROR - 程式異常終止：a320_人工標音更正漢字自動標音，錯誤訊息: None
+NoneType: None
+2025-11-18 15:14:02,556 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《雪中紅》.xlsx
+2025-11-18 15:14:22,774 - INFO - 《========== 程式開始執行：a320_人工標音更正漢字自動標音 ==========》
+2025-11-18 15:14:22,775 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-11-18 15:14:22,788 - INFO - <----------- 作業開始！---------->
+2025-11-18 15:14:56,183 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-11-18 15:14:56,184 - INFO - 自動為【漢字】查找【台語音標】作業己完成！
+2025-11-18 15:14:56,184 - INFO - 【語音類型】：白話音
+2025-11-18 15:14:56,197 - INFO - <----------- 作業結束！---------->
+2025-11-18 15:14:56,369 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《雪中紅》.xlsx
+2025-11-18 15:14:56,369 - INFO - 《========== 程式終止執行：a320_人工標音更正漢字自動標音 ==========》
+2025-11-18 15:24:03,462 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-11-18 15:24:03,462 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-11-18 15:24:03,476 - INFO - <----------- 作業開始！---------->
+2025-11-18 15:24:19,940 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：a0，錯誤訊息: 0
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 128, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1292, in han_ji_piau_im_tng_huan
+    return self.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1153, in TPS_piau_im
+    tiau = Tiau_Ho_Remap[tiau_ho]
+           ~~~~~~~~~~~~~^^^^^^^^^
+KeyError: 0
+2025-11-18 15:24:24,373 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-11-18 15:24:24,374 - INFO - 自動為【漢字】查找【台語音標】作業己完成！
+2025-11-18 15:24:24,374 - INFO - 【語音類型】：白話音
+2025-11-18 15:24:24,374 - INFO - 【漢字庫】：Ho_Lok_Ue.db
+2025-11-18 15:24:24,381 - INFO - <----------- 作業結束！---------->
+2025-11-18 15:24:24,584 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-方音符號】《雪中紅》.xlsx
+2025-11-18 15:24:24,584 - INFO - 《========== 程式終止執行：a200_查找及填入漢字標音 ==========》
+2025-11-18 15:25:29,773 - INFO - 《========== 程式開始執行：a320_人工標音更正漢字自動標音 ==========》
+2025-11-18 15:25:29,774 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-11-18 15:25:29,787 - INFO - <----------- 作業開始！---------->
+2025-11-18 15:25:50,870 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-11-18 15:25:50,870 - INFO - 自動為【漢字】查找【台語音標】作業己完成！
+2025-11-18 15:25:50,870 - INFO - 【語音類型】：白話音
+2025-11-18 15:25:50,882 - INFO - <----------- 作業結束！---------->
+2025-11-18 15:25:51,063 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-方音符號】《雪中紅》.xlsx
+2025-11-18 15:25:51,063 - INFO - 《========== 程式終止執行：a320_人工標音更正漢字自動標音 ==========》
