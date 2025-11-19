@@ -92,6 +92,15 @@ un_bu_tng_huan_map_dict = {
 # =========================================================================
 # 將【漢字庫】查詢所得結果，解析出【台語音標】，並依據使用者設定輸出【漢字標音】
 # =========================================================================
+def format_han_ji_piau_im(value):
+    if isinstance(value, str):
+        return value  # 已是字串
+
+    if isinstance(value, (list, tuple)):
+        return " ".join(filter(None, value))  # 序列 -> 去空值後 join
+
+    return str(value)  # 其他型別備援
+
 def ca_ji_kiat_ko_tng_piau_im(result, han_ji_khoo: str, piau_im, piau_im_huat: str):
     """查字結果出標音：查詢【漢字庫】取得之【查找結果】，將之切分：聲、韻、調"""
     if han_ji_khoo == "河洛話":
@@ -144,7 +153,7 @@ def ca_ji_kiat_ko_tng_piau_im(result, han_ji_khoo: str, piau_im, piau_im_huat: s
     if not ok:
         return tai_gi_im_piau, ""
     else:
-        return tai_gi_im_piau, han_ji_piau_im
+        return tai_gi_im_piau, format_han_ji_piau_im(han_ji_piau_im)
 
 
 # =========================================================================
@@ -575,12 +584,25 @@ def tlpa_tng_han_ji_piau_im(piau_im, piau_im_huat, tai_gi_im_piau):
         # siann_bu = "Ø"
         siann_bu = 'ø'
 
-    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(piau_im_huat=piau_im_huat,
-                                                     siann_bu=siann_bu,
-                                                     un_bu=un_bu,
-                                                     tiau_ho=tiau_ho)
-    return han_ji_piau_im
+    ok = False
+    han_ji_piau_im = ""
+    try:
+        han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+            piau_im_huat=piau_im_huat,
+            siann_bu=siann_bu,
+            un_bu=un_bu,
+            tiau_ho=tiau_ho,
+        )
+        if han_ji_piau_im: # 傳回非空字串，表示【漢字標音】之轉換成功
+            ok = True
+        else:
+            logging_warning(f"【台語音標】：[{tai_gi_im_piau}]，轉換成【{piau_im_huat}漢字標音】拚音/注音系統失敗！")
+    except Exception as e:
+        logging_exception(f"piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：{tai_gi_im_piau}", e)
+        han_ji_piau_im = ""
 
+    # 若 ok 為 False，表示轉換失敗，則將【台語音標】直接傳回
+    return han_ji_piau_im
 
 # =========================================================
 # 判斷是否為標點符號的輔助函數
@@ -1005,7 +1027,7 @@ class PiauIm:
     #  - 二合字母 oo 及 ng，標於前一個字母上；比如 ng 標示在字母 n 上。
     #  - 三合字母 ere，標於最後的字母 e 上。
     #================================================================
-    def _get_BP_syllable(self, siann_bu, un_bu, tiau_ho, with_tone_number=True) -> Optional[Tuple[str, str, str]]:
+    def _get_BP_syllable(self, siann_bu, un_bu, tiau_ho, with_tone_number=True) -> str:
         """
         產生未附聲調符號的【閩拼音節】，可選擇附數字調號或不附（方便後續加符號）
         """
@@ -1029,12 +1051,12 @@ class PiauIm:
             tiau_ho_int = 7 if int(tiau_ho) == 6 else int(tiau_ho)
         except (TypeError, ValueError):
             logging_warning(f"無法將【調號】轉為整數: {tiau_ho}")
-            return None  # 避免程式執行至此，抛出執行時期錯誤，終止程式執行
+            return ""  # 避免程式執行至此，抛出執行時期錯誤，終止程式執行
 
         tiau = Tiau_Ho_Remap.get(tiau_ho_int)
         if tiau is None:
             logging_warning(f"無法對映【調號】: {tiau_ho_int}；\n【聲母】: {siann_bu}；【韻母】: {un_bu}；【調號】: {tiau_ho}")
-            return None  # 避免程式執行至此，抛出執行時期錯誤，終止程式執行
+            return ""  # 避免程式執行至此，抛出執行時期錯誤，終止程式執行
 
         # 聲母轉換
         if siann_bu in ("", None, "Ø", "ø"):
@@ -1044,13 +1066,13 @@ class PiauIm:
             siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
             if not siann:
                 logging_warning(f"無法對映【聲母】: {siann_bu}；\n【聲母】: {siann_bu}；【韻母】: {un_bu}；【調號】: {tiau_ho}")
-                return "", "", ""  # 避免程式執行至此，抛出執行時期錯誤，終止程式執行
+                return ""  # 避免程式執行至此，抛出執行時期錯誤，終止程式執行
 
         # 韻母轉換
         un = self.Un_Bu_Dict[un_bu][piau_im_huat]
         if not un:
             logging_warning(f"無法對映【韻母】: {un_bu}；\n【聲母】: {siann_bu}；【韻母】: {un_bu}；【調號】: {tiau_ho}")
-            return "", "", ""  # 避免程式執行至此，抛出執行時期錯誤，終止程式執行
+            return ""  # 避免程式執行至此，抛出執行時期錯誤，終止程式執行
 
         # 閩拼特例：零聲母 + i/u 開頭的韻母
         # 當聲母為「空白」，韻母為首之【羅馬拼音字母】為：i 或 u 時之調整作業
@@ -1067,7 +1089,12 @@ class PiauIm:
                     un = "w" + un  # u 後無其它韻母字母，增添 w
                 else:
                     un = "w" + un[1:]  # u 後有其它韻母字母，將 u 改為 w
-        syllable = (siann, un, str(tiau)) if not with_tone_number else (f"{siann}{un}{tiau}", "", "")
+
+        # syllable = (siann, un, str(tiau)) if not with_tone_number else (f"{siann}{un}{tiau}", "", "")
+        if with_tone_number:
+            syllable = f"{siann}{un}{tiau}"
+        else:
+            syllable = f"{siann}{un}"
         return syllable
 
     def BP_piau_im(self, siann_bu, un_bu, tiau_ho):

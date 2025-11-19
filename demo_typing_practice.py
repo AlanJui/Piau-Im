@@ -5,7 +5,7 @@
 
 import xlwings as xw
 
-from auto_typing_practice import create_typing_practice_sheet
+from a710_製作打字練習工作表 import create_typing_practice_sheet
 
 
 def demo_usage():

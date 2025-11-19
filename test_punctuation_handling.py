@@ -4,7 +4,7 @@
 
 import xlwings as xw
 
-from auto_typing_practice import is_line_break, is_punctuation
+from a710_製作打字練習工作表 import is_line_break, is_punctuation
 
 
 def test_punctuation_detection():

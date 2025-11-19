@@ -44,12 +44,12 @@ def is_punctuation(char):
     """
     if char is None or str(char).strip() == '':
         return False
-    
+
     # 常見的中文標點符號
     chinese_punctuation = '，。！？；：「」『』（）【】《》〈〉、—…～'
     # 常見的英文標點符號
     english_punctuation = ',.!?;:"()[]{}/<>-_=+*&^%$#@`~|\\\'\"'
-    
+
     return str(char) in chinese_punctuation or str(char) in english_punctuation
 
 
@@ -59,7 +59,7 @@ def is_line_break(char):
     """
     if char is None:
         return False
-    
+
     return char == '\n' or str(char).strip() == '' or char == 10
 
 
@@ -123,6 +123,49 @@ def decompose_pronunciation(pronunciation):
     return result
 
 
+def _has_meaningful_data(values):
+    """Return True if any cell in the provided values contains non-blank data."""
+    def _is_blank(cell):
+        if cell is None:
+            return True
+        if isinstance(cell, str) and cell.strip() == '':
+            return True
+        return False
+
+    if values is None:
+        return False
+
+    if not isinstance(values, list):
+        return not _is_blank(values)
+
+    for row in values:
+        cells = row if isinstance(row, list) else [row]
+        for cell in cells:
+            if not _is_blank(cell):
+                return True
+    return False
+
+
+def calculate_total_rows(sheet, start_col='D', end_col='R', base_row=3, rows_per_group=4):
+    """Compute how many row groups exist based on the described worksheet layout."""
+    total_rows = 0
+    current_base = base_row
+
+    while True:
+        han_row = current_base + 2
+        pronunciation_row = current_base + 3
+        target_range = sheet.range(f'{start_col}{han_row}:{end_col}{pronunciation_row}')
+        values = target_range.value
+
+        if not _has_meaningful_data(values):
+            break
+
+        total_rows += 1
+        current_base += rows_per_group
+
+    return total_rows
+
+
 def create_typing_practice_sheet():
     """
     主函數：製作打字練習表
@@ -145,7 +188,8 @@ def create_typing_practice_sheet():
             print("已建立新的【打字練習表】工作表")
 
         # 清空打字練習表的內容（從第4行開始）
-        typing_sheet.range('B4:M2000').clear()
+        # typing_sheet.range('B4:M2000').clear()
+        typing_sheet.range('B4:M2000').clear_contents()
 
         # 不設定 E3:M3 的標題，按需求不透過程式置入
 
@@ -160,13 +204,21 @@ def create_typing_practice_sheet():
         # 第3列：{D11:R14} - 第3格D13, 第4格D14
         # 第4列：{D15:R18} - 第3格D17, 第4格D18
         # 第5列：{D19:R22} - 第3格D21, 第4格D22
-        # 終結符號在第6列：D25
+        # ... 以此類推
+        # 根據【漢字注音】工作表，計算【總列數】
+        total_rows = calculate_total_rows(han_ji_sheet)
+        if total_rows == 0:
+            print("【漢字注音】工作表沒有可用資料，結束處理")
+            return
 
         # 計算各列的起始行號：3, 7, 11, 15, 19, 23
-        row_starts = [3 + i * 4 for i in range(6)]  # [3, 7, 11, 15, 19, 23]
+        row_starts = [3 + i * 4 for i in range(total_rows)]  # [3, 7, 11, 15, 19, 23]
 
         for row_group_index, base_row in enumerate(row_starts):
-            print(f"\n處理第 {row_group_index + 1} 列群組，基準行: {base_row}")
+            # print(f"\n處理第 {row_group_index + 1} 列群組，基準行: {base_row}")
+            print(f"\n----------------------------------------------------------")
+            print(f"第 {row_group_index + 1} 列（漢字行: {base_row+2}）")
+            print(f"----------------------------------------------------------")
 
             # 每列處理 D到R欄 (第4到第18欄)
             for col_index in range(4, 19):  # D(4) 到 R(18)
@@ -181,23 +233,25 @@ def create_typing_practice_sheet():
                     han_zi = han_ji_sheet.range(f'{col_letter}{han_zi_row}').value
                     pronunciation = han_ji_sheet.range(f'{col_letter}{pronunciation_row}').value
 
-                    print(f"處理 {col_letter}{han_zi_row}/{col_letter}{pronunciation_row}: 漢字={repr(han_zi)}, 標音={repr(pronunciation)}")
+                    # print(f"處理 {col_letter}{han_zi_row}/{col_letter}{pronunciation_row}: 漢字={repr(han_zi)}, 標音={repr(pronunciation)}")
+                    print(f"{col_index-3}.【{col_letter}{han_zi_row}】: 漢字={repr(han_zi)}, 標音={repr(pronunciation)}")
+                    print("\n")
 
                     # 檢查是否遇到終結符號
                     if han_zi == 'φ':
-                        print("遇到終結符號，停止處理")
+                        print("    ==> 遇到終結符號，停止處理")
                         break
 
                     # 檢查是否為換行控制字元
                     if is_line_break(han_zi):
-                        print(f"欄位 {col_letter} 遇到換行控制字元，在打字練習表留空白行")
+                        print(f"    ==> 欄位 {col_letter} 遇到換行控制字元，在打字練習表留空白行")
                         # 留空白行（不填任何資料）
                         current_row += 1
                         continue
 
                     # 檢查是否為標點符號
                     if is_punctuation(han_zi):
-                        print(f"欄位 {col_letter} 是標點符號: {han_zi}")
+                        # print(f"    ==> 欄位 {col_letter} 是標點符號: {han_zi}")
                         # 標點符號只填入B欄，C欄及後續欄位留空
                         typing_sheet.range(f'B{current_row}').api.Value2 = str(han_zi)
                         current_row += 1
@@ -205,11 +259,11 @@ def create_typing_practice_sheet():
 
                     # 檢查資料是否有效
                     if han_zi is None or pronunciation is None:
-                        print(f"欄位 {col_letter} 資料為空，跳過")
+                        print(f"    ==> 欄位 {col_letter} 資料為空，跳過")
                         continue
 
                     # 處理正常的漢字和標音
-                    print(f"處理正常漢字: {han_zi} - {pronunciation}")
+                    # print(f"漢字: {han_zi} - {pronunciation}")
 
                     # 填入純文字資料（不改變格式）
                     typing_sheet.range(f'B{current_row}').api.Value2 = str(han_zi)
@@ -217,7 +271,7 @@ def create_typing_practice_sheet():
 
                     # 分解標音符號
                     decomposed = decompose_pronunciation(str(pronunciation))
-                    print(f"分解結果: {decomposed}")
+                    print(f"    ==> 鍵盤按鍵: {decomposed}\n")
 
                     # 將分解後的字元填入 E~M 欄（純文字）
                     for i, char in enumerate(decomposed):
@@ -238,7 +292,7 @@ def create_typing_practice_sheet():
         # 使用【打字練習表（模版）】或【打字練習表 (模版)】工作表來統一格式
         template_sheet_names = ['打字練習表（模版）', '打字練習表 (模版)']
         template_sheet = None
-        
+
         for template_name in template_sheet_names:
             try:
                 template_sheet = wb.sheets[template_name]
@@ -246,19 +300,19 @@ def create_typing_practice_sheet():
                 break
             except Exception:
                 continue
-        
+
         if template_sheet:
             # 取得模版的格式
             template_range = template_sheet.range('B4:M4')
             template_range.api.Copy()
-            
+
             # 應用到打字練習表的所有資料列
             data_rows = current_row - 4  # 計算實際資料列數
             if data_rows > 0:
                 target_range = typing_sheet.range(f'B4:M{3 + data_rows}')
                 target_range.api.PasteSpecial(-4122)  # xlPasteFormats
                 print(f"已將模版格式應用到 {data_rows} 列資料")
-            
+
             # 清除剪貼板
             wb.app.api.CutCopyMode = False
         else:

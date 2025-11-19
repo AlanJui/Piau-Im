@@ -2,7 +2,7 @@
 測試自動製作打字練習表的功能
 """
 
-from auto_typing_practice import decompose_pronunciation, get_tone_key_mapping
+from a710_製作打字練習工作表 import decompose_pronunciation, get_tone_key_mapping
 
 
 def test_decompose_pronunciation():

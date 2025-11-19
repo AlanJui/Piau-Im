@@ -139,6 +139,7 @@ def jin_kang_piau_imm(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
             # 逐欄取出漢字處理
             for col in range(start_col, end_col):
                 # Initialize variables to avoid using them before assignment
+                jin_kang_piau_im = ""
                 tai_gi_im_piau = ""
                 han_ji_piau_im = ""
 
@@ -151,23 +152,20 @@ def jin_kang_piau_imm(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                 cell.color = None
 
                 cell_value = cell.value
-                jin_kang_piau_im = cell.offset(-2, 0).value  # 人工標音
+                han_ji = cell_value
+                jin_kang_piau_im = cell.offset(-2, 0).value     # 人工標音
+                tai_gi_im_piau = cell.offset(-1, 0).value       # 台語音標
+                han_ji_piau_im = cell.offset(+1, 0).value       # 漢字標音
+
                 if cell_value == 'φ':
                     EOF = True
                     msg = "【文字終結】"
                 elif cell_value == '\n':
                     msg = "【換行】"
-                # elif cell_value == None or cell_value.strip() == "":  # 若儲存格內無值
-                #     if Two_Empty_Cells == 0:
-                #         Two_Empty_Cells += 1
-                #     elif Two_Empty_Cells == 1:
-                #         EOF = True
-                #     msg = "【空缺】"    # 表【儲存格】未填入任何字/符，不同於【空白】字元
-                # # 若不為【標點符號】，則以【漢字】處理
-                # elif is_punctuation(cell_value):
-                #     msg = f"{cell_value}【標點符號】"
-                # 若【儲存格】存放非漢字，則為：【標點符號】、【空白】或【數值】等
                 elif not is_han_ji(cell_value):
+                    #--------------------------------------------------------------
+                    # 若【儲存格】內存非漢字，則有可能為：【標點符號】、【空白】或【數值】等
+                    #--------------------------------------------------------------
                     # ✅ 若為全形／半形標點符號
                     if is_punctuation(str(cell_value)):
                         msg = f"{cell_value}【標點符號】"
@@ -180,19 +178,32 @@ def jin_kang_piau_imm(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                         elif Two_Empty_Cells == 1:
                             EOF = True
                         msg = "【空白】"    # 表【儲存格】未填入任何字/符，不同於【空白】字元
+                elif jin_kang_piau_im is None:
+                    # 人工標音欄位無值，則取出已存在的【台語音標】及【漢字標音】
+                    # han_ji = cell_value
+                    # tai_gi_im_piau = sheet.range((row - 1, col)).value
+                    # han_ji_piau_im = sheet.range((row + 1, col)).value
+                    # tai_gi_im_piau = cell.offset(-1, 0).value       # 台語音標
+                    msg = f"{han_ji}： 《無》/ [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
                 else:
                     # 查找漢字讀音
                     han_ji = cell_value
                     if jin_kang_piau_im and han_ji != '':
+                        #-----------------------------------------------------------------------------------------
+                        # 若 cell_value 為【漢字】且 jin_kang_piau_im（人工標音）有值，則表：使用者有輸入【人工標音】
+                        # 此後，【人工標音】等同【台語音標】；然後依此新【台語音標】，並配合指定之【標音方法】轉換成【漢字標音】
+                        #-----------------------------------------------------------------------------------------
                         tai_gi_im_piau, han_ji_piau_im = jin_kang_piau_im_cu_han_ji_piau_im(
                             wb=wb,
                             jin_kang_piau_im=jin_kang_piau_im,
                             piau_im=piau_im,
                             piau_im_huat=piau_im_huat)
                         # 將【台語音標】和【漢字標音】寫入儲存格
-                        sheet.range((row - 1, col)).value = tai_gi_im_piau
-                        sheet.range((row + 1, col)).value = han_ji_piau_im
-                        msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】《人工標音》]"
+                        # sheet.range((row - 1, col)).value = tai_gi_im_piau
+                        # sheet.range((row + 1, col)).value = han_ji_piau_im
+                        cell.offset(-1, 0).value = tai_gi_im_piau      # 台語音標
+                        cell.offset(+1, 0).value = han_ji_piau_im      # 漢字標音
+                        msg = f"{han_ji}： [{jin_kang_piau_im}] / [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
                         # 【標音字庫】添加或更新【漢字】及【台語音標】資料
                         jin_kang_piau_im_ji_khoo.add_entry(
                             han_ji=han_ji,
@@ -259,7 +270,7 @@ def jin_kang_piau_imm(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
         return EXIT_CODE_SUCCESS
     except Exception as e:
         # 你可以在這裡加上紀錄或處理，例如:
-        logging.exception("自動為【漢字】查找【台語音標】作業，發生例外！")
+        logging.exception(f"自動為【漢字】查找【台語音標】作業，發生例外！\n{e}")
         # 再次拋出異常，讓外層函式能捕捉
         raise
 

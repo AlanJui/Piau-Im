@@ -298,6 +298,14 @@
             ]
         },
         {
+            "name": "a710_製作打字練習工作表",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a710_製作打字練習工作表.py",
+            "console": "integratedTerminal",
+            "args": []
+        },
+        {
             "name": "mod_字庫",
             "type": "debugpy",
             "request": "launch",
