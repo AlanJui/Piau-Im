@@ -303,7 +303,16 @@
             "request": "launch",
             "program": "a710_製作打字練習工作表.py",
             "console": "integratedTerminal",
-            "args": []
+        },
+        {
+            "name": "a710_製作打字練習工作表（閩拼）",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a710_製作打字練習工作表.py",
+            "console": "integratedTerminal",
+            "args": [
+                "bp"
+            ]
         },
         {
             "name": "mod_字庫",

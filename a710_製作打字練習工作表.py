@@ -3,16 +3,41 @@
 使用 xlwings 從【漢字注音】工作表製作【打字練習表】
 """
 
+import argparse
 import re
 
 import xlwings as xw
 
 
-def get_tone_key_mapping():
+def get_tone_key_mapping(tone_map_type='roman'):
     """
     取得聲調與按鍵的對照表
     """
     # 羅馬拼音聲調對照表
+    roman_tone_map = {
+        '1': ';',   # 陰平
+        '2': '\\',  # 陰上
+        '3': '_',   # 陰去
+        '4': '[',   # 陰入
+        '5': '/',   # 陽平
+        '6': '\\',  # 陽上（在實際使用中可能不常見）
+        '7': '-',   # 陽去
+        '8': ']'    # 陽入
+    }
+
+    # 閩拚聲調對照表
+    bp_tone_map = {
+        '1': ';',   # 陰平
+        '2': '/',   # 陽平
+        '3': '\\',  # 陰上
+        '4': '\\',  # 陽上（在實際使用中可能不常見）
+        '5': '_',   # 陰去
+        '6': '-',   # 陽去
+        '7': '[',   # 陰入
+        '8': ']'    # 陽入
+    }
+
+    # 台語音標及台羅拼音聲調對照表
     roman_tone_map = {
         '1': ';',   # 陰平
         '2': '\\',  # 陰上
@@ -35,7 +60,10 @@ def get_tone_key_mapping():
         ' ': ' '    # 陰平（空白鍵）
     }
 
-    return roman_tone_map, bopomofo_tone_map
+    if tone_map_type == 'bp':
+        return bp_tone_map, bopomofo_tone_map
+    else:
+        return roman_tone_map, bopomofo_tone_map
 
 
 def is_punctuation(char):
@@ -63,7 +91,7 @@ def is_line_break(char):
     return char == '\n' or str(char).strip() == '' or char == 10
 
 
-def decompose_pronunciation(pronunciation):
+def decompose_pronunciation(pronunciation, tone_map_type='roman'):
     """
     將注音符號或羅馬拼音分解成個別字元
 
@@ -73,7 +101,7 @@ def decompose_pronunciation(pronunciation):
     Returns:
         list: 分解後的字元列表
     """
-    roman_tone_map, bopomofo_tone_map = get_tone_key_mapping()
+    roman_tone_map, bopomofo_tone_map = get_tone_key_mapping(tone_map_type)
 
     # 檢查是否為羅馬拼音（含數字）
     if re.search(r'\d', pronunciation):
@@ -166,9 +194,12 @@ def calculate_total_rows(sheet, start_col='D', end_col='R', base_row=3, rows_per
     return total_rows
 
 
-def create_typing_practice_sheet():
+def create_typing_practice_sheet(tone_map_type='roman'):
     """
     主函數：製作打字練習表
+
+    Args:
+        tone_map_type (str): 聲調對照類型，'roman' 或 'bp'，預設為 'roman'
     """
     try:
         # 取得作用中的活頁簿
@@ -270,7 +301,7 @@ def create_typing_practice_sheet():
                     typing_sheet.range(f'C{current_row}').api.Value2 = str(pronunciation)
 
                     # 分解標音符號
-                    decomposed = decompose_pronunciation(str(pronunciation))
+                    decomposed = decompose_pronunciation(str(pronunciation), tone_map_type)
                     print(f"    ==> 鍵盤按鍵: {decomposed}\n")
 
                     # 將分解後的字元填入 E~M 欄（純文字）
@@ -339,14 +370,27 @@ def main():
     """
     主程式入口點
     """
+    # 設定命令列參數解析
+    parser = argparse.ArgumentParser(description='自動製作打字練習表')
+    parser.add_argument(
+        'tone_map_type',
+        nargs='?',
+        default='roman',
+        choices=['roman', 'bp'],
+        help='聲調對照類型：roman (羅馬拼音，預設) 或 bp (閩拚)'
+    )
+
+    args = parser.parse_args()
+
     print("=== 自動製作打字練習表 ===")
+    print(f"聲調對照類型: {args.tone_map_type}")
     print("請確保:")
     print("1. Excel 已開啟並有作用中的活頁簿")
     print("2. 活頁簿中包含【漢字注音】工作表")
     print("3. 漢字注音工作表的資料格式正確")
     print()
 
-    success = create_typing_practice_sheet()
+    success = create_typing_practice_sheet(args.tone_map_type)
 
     if success:
         print("\n✓ 打字練習表製作成功！")
