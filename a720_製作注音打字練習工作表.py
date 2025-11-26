@@ -187,7 +187,10 @@ def decompose_pronunciation(pronunciation, tone_map_type='tlpa'):
             if index == counter:
                 if chars[counter - 1] in ['ㆴ', 'ㆵ', 'ㆻ', 'ㆷ']:
                     # 若最後一個字元，是【入聲韻尾】，則視為【陰入調】
-                    result.append(tiau_key_map[str(4)])
+                    if tone_map_type == 'tlpa':
+                        result.append(tiau_key_map[str(4)])
+                    else:
+                        result.append(tiau_key_map[str(7)])
                 else:
                     # 若最後一個字元，亦不是【入聲韻尾】，則視為【陰平調】
                     result.append(tiau_key_map[str(1)])
