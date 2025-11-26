@@ -298,17 +298,27 @@
             ]
         },
         {
-            "name": "a710_製作打字練習工作表",
+            "name": "a710_製作拚音打字練習工作表",
             "type": "debugpy",
             "request": "launch",
-            "program": "a710_製作打字練習工作表.py",
+            "program": "a710_製作拚音打字練習工作表.py",
             "console": "integratedTerminal",
         },
         {
-            "name": "a710_製作打字練習工作表（閩拼）",
+            "name": "a710_製作拚音打字練習工作表（閩拼）",
             "type": "debugpy",
             "request": "launch",
-            "program": "a710_製作打字練習工作表.py",
+            "program": "a710_製作拚音打字練習工作表.py",
+            "console": "integratedTerminal",
+            "args": [
+                "bp"
+            ]
+        },
+        {
+            "name": "a720_製作注音打字練習工作表（閩拼）",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a720_製作注音打字練習工作表.py",
             "console": "integratedTerminal",
             "args": [
                 "bp"

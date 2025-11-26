@@ -15627,3 +15627,1290 @@ NoneType: None
 2025-11-19 11:50:18,159 - INFO - <----------- 作業結束！---------->
 2025-11-19 11:50:18,506 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《雪中紅》.xlsx
 2025-11-19 11:50:18,506 - INFO - 《========== 程式終止執行：a320_人工標音更正漢字自動標音 ==========》
+2025-11-25 21:15:58,979 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-11-25 21:15:58,980 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-11-25 21:15:58,996 - INFO - <----------- 作業開始！---------->
+2025-11-25 21:15:59,713 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：seh4，錯誤訊息: 'h'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1137, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 902, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'h'
+2025-11-25 21:15:59,933 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：ting3，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:00,600 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：kin1，錯誤訊息: 'n'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1137, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 902, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'n'
+2025-11-25 21:16:00,835 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：ia7，錯誤訊息: not enough values to unpack (expected 3, got 2)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 2)
+2025-11-25 21:16:01,072 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：hong1，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:01,313 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：han5，錯誤訊息: 'n'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1137, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 902, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'n'
+2025-11-25 21:16:01,547 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：hoo7，錯誤訊息: 'o'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1137, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 902, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'o'
+2025-11-25 21:16:01,760 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：sui2，錯誤訊息: 'i'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1137, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 902, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'i'
+2025-11-25 21:16:01,970 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：ling2，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:02,298 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：kho2，錯誤訊息: not enough values to unpack (expected 3, got 2)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 2)
+2025-11-25 21:16:02,535 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：pi2，錯誤訊息: not enough values to unpack (expected 3, got 2)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 2)
+2025-11-25 21:16:02,922 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：hue1，錯誤訊息: 'e'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1137, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 902, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'e'
+2025-11-25 21:16:03,148 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：lak4，錯誤訊息: 'k'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1137, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 902, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'k'
+2025-11-25 21:16:03,388 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：hong1，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:03,607 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：thin5，錯誤訊息: 'n'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1137, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 902, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'n'
+2025-11-25 21:16:03,901 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：ki3，錯誤訊息: not enough values to unpack (expected 3, got 2)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 2)
+2025-11-25 21:16:04,109 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：lian5，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:04,333 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：i2，錯誤訊息: not enough values to unpack (expected 3, got 2)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 2)
+2025-11-25 21:16:04,553 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：hun1，錯誤訊息: 'n'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1137, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 902, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'n'
+2025-11-25 21:16:04,761 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：khui1，錯誤訊息: 'i'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1137, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 902, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'i'
+2025-11-25 21:16:05,030 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：m7，錯誤訊息: not enough values to unpack (expected 3, got 1)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 1)
+2025-11-25 21:16:05,250 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：thong1，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:05,472 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：hok8，錯誤訊息: 'k'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1137, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 902, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'k'
+2025-11-25 21:16:05,688 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：kang2，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:05,964 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：khi2，錯誤訊息: not enough values to unpack (expected 3, got 2)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 2)
+2025-11-25 21:16:06,293 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：uat4，錯誤訊息: 't'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1137, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 902, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 't'
+2025-11-25 21:16:06,536 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：thau5，錯誤訊息: 'o'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1137, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 902, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'o'
+2025-11-25 21:16:06,745 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：zi2，錯誤訊息: not enough values to unpack (expected 3, got 2)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 2)
+2025-11-25 21:16:06,950 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：u7，錯誤訊息: not enough values to unpack (expected 3, got 2)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 2)
+2025-11-25 21:16:07,159 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：ka1，錯誤訊息: not enough values to unpack (expected 3, got 2)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 2)
+2025-11-25 21:16:07,411 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：thiam1，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:07,618 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：sim1，錯誤訊息: 'm'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1137, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 902, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'm'
+2025-11-25 21:16:07,821 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：hi1，錯誤訊息: not enough values to unpack (expected 3, got 2)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 2)
+2025-11-25 21:16:08,326 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：lit8，錯誤訊息: 't'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1137, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 902, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 't'
+2025-11-25 21:16:08,585 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：su1，錯誤訊息: not enough values to unpack (expected 3, got 2)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 2)
+2025-11-25 21:16:08,787 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：ia7，錯誤訊息: not enough values to unpack (expected 3, got 2)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 2)
+2025-11-25 21:16:08,988 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：bang7，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:09,199 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：ui7，錯誤訊息: not enough values to unpack (expected 3, got 2)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 2)
+2025-11-25 21:16:09,437 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：li2，錯誤訊息: not enough values to unpack (expected 3, got 2)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 2)
+2025-11-25 21:16:09,646 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：zit8，錯誤訊息: 't'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1137, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 902, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 't'
+2025-11-25 21:16:09,844 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：lang5，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:10,124 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：bian5，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:10,377 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：bian5，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:10,600 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：zing5，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:10,800 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：i3，錯誤訊息: not enough values to unpack (expected 3, got 2)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 2)
+2025-11-25 21:16:11,107 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：bang7，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:11,603 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：pian3，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:11,826 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：siann5，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:12,033 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：khong1，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:12,448 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：cin1，錯誤訊息: 'n'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1137, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 902, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'n'
+2025-11-25 21:16:12,696 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：ciunn7，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:12,912 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：li2，錯誤訊息: not enough values to unpack (expected 3, got 2)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 2)
+2025-11-25 21:16:13,139 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：e5，錯誤訊息: not enough values to unpack (expected 3, got 1)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 1)
+2025-11-25 21:16:13,404 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：bang7，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:13,697 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：gun2，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:13,907 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：e5，錯誤訊息: not enough values to unpack (expected 3, got 1)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 1)
+2025-11-25 21:16:14,139 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：sim1，錯誤訊息: 'm'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1137, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 902, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'm'
+2025-11-25 21:16:14,599 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：khin1，錯誤訊息: 'n'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1137, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 902, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'n'
+2025-11-25 21:16:14,813 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：sang1，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:15,105 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：ui7，錯誤訊息: not enough values to unpack (expected 3, got 2)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 2)
+2025-11-25 21:16:15,341 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：li2，錯誤訊息: not enough values to unpack (expected 3, got 2)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 2)
+2025-11-25 21:16:15,614 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：gua2，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:15,827 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：sim1，錯誤訊息: 'm'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1137, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 902, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'm'
+2025-11-25 21:16:16,041 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：tim5，錯誤訊息: 'm'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1137, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 902, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'm'
+2025-11-25 21:16:16,267 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：tang7，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:16,641 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：a0，錯誤訊息: not enough values to unpack (expected 3, got 1)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 1)
+2025-11-25 21:16:17,297 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：m7，錯誤訊息: not enough values to unpack (expected 3, got 1)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 1)
+2025-11-25 21:16:17,721 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：ting3，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:17,940 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：ciu1，錯誤訊息: 'u'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1137, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 902, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'u'
+2025-11-25 21:16:18,154 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：u7，錯誤訊息: not enough values to unpack (expected 3, got 2)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 2)
+2025-11-25 21:16:18,417 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：hong5，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:18,638 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：tang1，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:18,950 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：zi2，錯誤訊息: not enough values to unpack (expected 3, got 2)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 2)
+2025-11-25 21:16:19,179 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：u7，錯誤訊息: not enough values to unpack (expected 3, got 2)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 2)
+2025-11-25 21:16:19,434 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：mui5，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:19,655 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：kui3，錯誤訊息: 'i'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1137, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 902, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'i'
+2025-11-25 21:16:19,869 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：seh4，錯誤訊息: 'h'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1137, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 902, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'h'
+2025-11-25 21:16:20,080 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：ting3，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1331, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1124, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-11-25 21:16:21,244 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-11-25 21:16:21,244 - INFO - 自動為【漢字】查找【台語音標】作業己完成！
+2025-11-25 21:16:21,244 - INFO - 【語音類型】：白話音
+2025-11-25 21:16:21,245 - INFO - 【漢字庫】：Ho_Lok_Ue.db
+2025-11-25 21:16:21,261 - INFO - <----------- 作業結束！---------->
+2025-11-25 21:16:21,579 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調符】《雪中紅》.xlsx
+2025-11-25 21:16:21,579 - INFO - 《========== 程式終止執行：a200_查找及填入漢字標音 ==========》
+2025-11-25 21:17:45,335 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-11-25 21:17:45,336 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-11-25 21:17:45,354 - INFO - <----------- 作業開始！---------->
+2025-11-25 21:18:01,723 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：a0，錯誤訊息: 0
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 137, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1319, in han_ji_piau_im_tng_huan
+    return self.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1180, in TPS_piau_im
+    tiau = Tiau_Ho_Remap[tiau_ho]
+           ~~~~~~~~~~~~~^^^^^^^^^
+KeyError: 0
+2025-11-25 21:18:06,083 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-11-25 21:18:06,083 - INFO - 自動為【漢字】查找【台語音標】作業己完成！
+2025-11-25 21:18:06,084 - INFO - 【語音類型】：白話音
+2025-11-25 21:18:06,084 - INFO - 【漢字庫】：Ho_Lok_Ue.db
+2025-11-25 21:18:06,096 - INFO - <----------- 作業結束！---------->
+2025-11-25 21:18:06,325 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-方音符號】《雪中紅》.xlsx
+2025-11-25 21:18:06,325 - INFO - 《========== 程式終止執行：a200_查找及填入漢字標音 ==========》
+2025-11-25 21:21:15,546 - INFO - 《========== 程式開始執行：a300_手動更正漢字標音 ==========》
+2025-11-25 21:21:15,547 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-11-25 21:21:15,583 - INFO - <----------- 作業開始！---------->
+2025-11-25 21:21:15,680 - INFO - 已完成作業所需之初始化設定！
+2025-11-25 21:21:16,599 - INFO - 【漢字庫】缺漏之【台語音標】，己填入【標音字庫】之【校正音標】！
+2025-11-25 21:21:56,418 - INFO - 以【人工標音】更正之【台語音標】，已填入【標音字庫】之【校正音標】！
+2025-11-25 21:22:10,060 - INFO - 以【標音字庫】之【校正音標】，更新【漢字注音】工作表之【台語音標】！
+2025-11-25 21:22:10,092 - INFO - <----------- 作業結束！---------->
+2025-11-25 21:22:10,441 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-方音符號】《雪中紅》.xlsx
+2025-11-25 21:22:10,441 - INFO - 《========== 程式終止執行：a300_手動更正漢字標音 ==========》
