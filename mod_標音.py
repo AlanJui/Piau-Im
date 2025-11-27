@@ -306,7 +306,6 @@ def convert_tl_with_tiau_hu_to_tlpa(im_piau: str) -> Optional[str]:
 # =========================================================
 # 判斷是否為標點符號的輔助函數
 # =========================================================
-
 def is_punctuation(char):
     """判斷是否為標點符號"""
     import unicodedata
@@ -315,21 +314,6 @@ def is_punctuation(char):
     if len(char) != 1:
         return False  # ✅ 只允許單一字元
     return unicodedata.category(char)[0] in {'P', 'S'}
-
-
-# def is_punctuation(char):
-#     # 如果 char 是 None，直接返回 False
-#     # if not char or len(char) != 1:
-#     #     return False
-#     if not char or not isinstance(char, str):
-#         return False
-#     if len(char) != 1:
-#         return False  # ✅ 只允許單一字元
-
-#     # 可以根據需要擴充此列表以判斷各種標點符號
-#     punctuation_marks = "，。！！？；：、（）「」『』《》……"
-#     return char in punctuation_marks
-
 
 # =========================================================
 # 判斷是否為標點符號的輔助函數
@@ -361,6 +345,9 @@ def extract_han_ji(text):
         text = str(text or "")
     return ''.join([c for c in text if is_han_ji(c)])
 
+#====================================================================
+# 韻母轉換函數
+#====================================================================
 def un_bu_tng_huan(un_bu: str) -> str:
     """
     將輸入的韻母依照轉換字典進行轉換
@@ -402,7 +389,9 @@ def un_bu_tng_huan(un_bu: str) -> str:
     # 韻母轉換，若不存在於字典中則返回原始韻母
     return un_bu_tng_huan_map_dict.get(un_bu, un_bu)
 
-
+#====================================================================
+# 【台語音標】韻母轉換函數
+#====================================================================
 def tai_gi_im_piau_tng_un_bu(tai_gi_im_piau: str) -> str:
     """
     將輸入的整體【台語音標】依韻母轉換字典進行韻母轉換
@@ -428,17 +417,21 @@ def tai_gi_im_piau_tng_un_bu(tai_gi_im_piau: str) -> str:
     return tai_gi_im_piau
 
 # ============================================================================
-
-
+# 將使用【上標數字】表示的【調號】，轉換為普通數字
+# ============================================================================
 def replace_superscript_digits(input_str):
     return ''.join(superscript_digit_mapping.get(char, char) for char in input_str)
 
 
+# ============================================================================
+# 將使用【上標數字】表示的【調號】，轉換為普通數字
+# ============================================================================
 def split_tai_lo(input_str):
     # 將上標數字替換為普通數字
     input_str = replace_superscript_digits(input_str)
     # 使用正則表達式匹配聲母、韻母和調號
-    pattern = r'^([ptkhmnljw]?)([aeiouáéíóúâêîôûäëïöü]+)([0-9])?$'
+    # pattern = r'^([ptkhmnljw]?)([aeiouáéíóúâêîôûäëïöü]+)([0-9])?$'
+    pattern = r'^([ptkhmnlzcsjw]?)([aeiouáéíóúâêîôûäëïöü]+)([0-9])?$'
     match = re.match(pattern, input_str)
     if match:
         siann_bu = match.group(1)
@@ -448,17 +441,9 @@ def split_tai_lo(input_str):
     else:
         return None, None, None
 
-
-# ==========================================================
-# 自【台語音標】解構出：聲母、韻母、聲調
-# ----------------------------------------------------------
-# 【台羅音標】到【台語音標】的轉換規則
-# tai_loo_to_tai_gi_mapping = {
-#     'tsh': 'c',
-#     'ts': 'z'
-# }
-# ==========================================================
-
+# ============================================================================
+# 將【台語音標】分解為【聲母】、【韻母】、【調號】
+# ============================================================================
 def split_tai_gi_im_piau(im_piau: str, po_ci: bool = False):
     # 如果輸入之【音標】為【帶調符音標】，則需確保轉換為【帶調號TLPA音標】
     if kam_si_u_tiau_hu(im_piau):

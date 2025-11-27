@@ -5,41 +5,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "a991_將漢字庫之拼音系統【自台羅轉換成注音二式】",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a991_update_bopo2_in_excel.py",
-            "console": "integratedTerminal",
-            "args": [
-                "漢字庫.xlsx",
-                // "漢字庫【台語注音二式】.xlsx",
-            ]
-        },
-        {
-            "name": "a992_將【台語注音二式】漢字庫輸出成 RIME 字典檔",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a992_excel_to_rime_dict.py",
-            "console": "integratedTerminal",
-            "args": [
-                // "漢字庫【台語注音二式】.xlsx",
-                "漢字庫.xlsx",
-                "zu_im_2.dict.yaml"
-            ]
-        },
-        {
-            "name": "a980_將漢字庫之拼音系統【自台羅轉換成注音二式】",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a980_rime_convert_phing_im.py",
-            "console": "integratedTerminal",
-            // "args": "${command:pickArgs}"
-            "args": [
-                "input.xlsx"
-                // "ho"
-            ]
-        },
-        {
             "name": "Python 偵錯: 目前檔案",
             "type": "debugpy",
             "request": "launch",
@@ -575,6 +540,41 @@
                 "-i",
                 "【河洛話注音】上有力量的每日祈禱文"
             ]
-        }
+        },
+        {
+            "name": "a991_將漢字庫之拼音系統【自台羅轉換成注音二式】",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a991_update_bopo2_in_excel.py",
+            "console": "integratedTerminal",
+            "args": [
+                "漢字庫.xlsx",
+                // "漢字庫【台語注音二式】.xlsx",
+            ]
+        },
+        {
+            "name": "a992_將【台語注音二式】漢字庫輸出成 RIME 字典檔",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a992_excel_to_rime_dict.py",
+            "console": "integratedTerminal",
+            "args": [
+                // "漢字庫【台語注音二式】.xlsx",
+                "漢字庫.xlsx",
+                "zu_im_2.dict.yaml"
+            ]
+        },
+        {
+            "name": "a980_將漢字庫之拼音系統【自台羅轉換成注音二式】",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a980_rime_convert_phing_im.py",
+            "console": "integratedTerminal",
+            // "args": "${command:pickArgs}"
+            "args": [
+                "input.xlsx"
+                // "ho"
+            ]
+        },
     ]
 }

@@ -318,8 +318,7 @@ def create_typing_practice_sheet(tone_map_type='roman'):
                     tai_gi_piau_im = han_ji_sheet.range(f'{col_letter}{tai_gi_row}').value
 
                     # print(f"處理 {col_letter}{han_zi_row}/{col_letter}{pronunciation_row}: 漢字={repr(han_zi)}, 標音={repr(pronunciation)}")
-                    print(f"{col_index-3}.【{col_letter}{han_ji_row}】: 漢字={repr(han_ji)}, 標音={repr(pronunciation)}")
-                    print("\n")
+                    print(f"\n{col_index-3}.【{col_letter}{han_ji_row}】: 漢字={repr(han_ji)} [{tai_gi_piau_im}], 漢字標音={repr(pronunciation)}")
 
                     # 檢查是否遇到終結符號
                     if han_ji == 'φ':
@@ -328,10 +327,11 @@ def create_typing_practice_sheet(tone_map_type='roman'):
 
                     # 檢查是否為換行控制字元
                     if is_line_break(han_ji):
-                        print(f"    ==> 欄位 {col_letter} 遇到換行控制字元，在打字練習表留空白行")
+                        print(f"    ==> 欄位 {col_letter} 遇到換行控制字元，在打字練習表留空白行，跳至下一列")
                         # 留空白行（不填任何資料）
                         current_row += 1
-                        continue
+                        # 跳出當前列的處理，進入下一列
+                        break
 
                     # 檢查是否為標點符號
                     if is_punctuation(han_ji):
