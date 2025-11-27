@@ -5,6 +5,8 @@ from typing import Optional, Tuple
 
 import xlwings as xw
 
+from mod_un_bu_tng_huan import convert_tlpa_to_zu_im
+
 # from a720_製作注音打字練習工作表 import calculate_total_rows
 from mod_帶調符音標 import kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
 
@@ -46,6 +48,117 @@ init_logging()
 # =========================================================================
 # Excel 相關輔助函數
 # =========================================================================
+def calculate_total_rows(sheet, start_col=START_COL, end_col=END_COL, base_row=BASE_ROW, rows_per_group=ROWS_PER_GROUP):
+    """Compute how many row groups exist based on the described worksheet layout."""
+    total_rows = 0
+    current_base = base_row
+
+    while True:
+        han_row = current_base + 2
+        pronunciation_row = current_base + 3
+        target_range = sheet.range(f'{start_col}{han_row}:{end_col}{pronunciation_row}')
+        values = target_range.value
+
+        if not _has_meaningful_data(values):
+            break
+
+        total_rows += 1
+        current_base += rows_per_group
+
+    return total_rows
+
+#============================================================================
+# 音節尾字為調號（數字）擷取函數
+#============================================================================
+tlpa_tng_zu_im_un_bu_map = {
+    "a":"ㄚ",
+    "i":"ㄧ",
+    "ir":"ㆨ",
+    "u":"ㄨ",
+    "e":"ㆤ",
+    "oo":"ㆦ",
+    "o":"ㄜ",
+    "m":"ㆬ",
+    "n":"ㄣ",
+    "ng":"ㆭ",
+    "ai":"ㄞ",
+    "au":"ㄠ",
+    "am":"ㆰ",
+    "an":"ㄢ",
+    "ang":"ㄤ",
+    "om":"ㆱ",
+    "ong":"ㆲ",
+    "ann":"ㆩ",
+    "inn":"ㆪ",
+    "unn":"ㆫ",
+    "enn":"ㆥ",
+    "onn":"ㆧ",
+    "ainn":"ㆮ",
+    "aunn":"ㆯ",
+}
+
+tlpa_tng_zu_im_siann_bu_map = {
+    "b":"ㆠ",
+    "p":"ㄅ",
+    "ph":"ㄆ",
+    "m":"ㄇ",
+    "n":"ㄋ",
+    "t":"ㄉ",
+    "th":"ㄊ",
+    "l":"ㄌ",
+    "g":"ㆣ",
+    "k":"ㄍ",
+    "kh":"ㄎ",
+    "ng":"ㄫ",
+    "j":"ㆡ",
+    "z":"ㄗ",
+    "c":"ㄘ",
+    "s":"ㄙ",
+    "h":"ㄏ",
+}
+
+#============================================================================
+# 音節尾字為調號（數字）擷取函數
+#============================================================================
+# 常用上標轉換表（補足您可能遇到的上標字元）
+_SUPERSCRIPT_MAP = {
+    '\u2070': '0',  # ⁰
+    '\u00B9': '1',  # ¹
+    '\u00B2': '2',  # ²
+    '\u00B3': '3',  # ³
+    '\u2074': '4',  # ⁴
+    '\u2075': '5',  # ⁵
+    '\u2076': '6',  # ⁶
+    '\u2077': '7',  # ⁷
+    '\u2078': '8',  # ⁸
+    '\u2079': '9',  # ⁹
+}
+_SUPER_TRANS = str.maketrans(_SUPERSCRIPT_MAP)
+
+def extract_tone_if_last_is_digit(s: str):
+    """
+    如果尾字是（或是上標）數字，就回傳 (core_without_tone, tone_str)；
+    否則回傳 (normalized_core, None)。
+
+    會先把已知上標數字轉為一般數字，再檢查最後一個字元。
+    """
+    if not s:
+        return None, None
+
+    s = s.strip()
+    if not s:
+        return None, None
+
+    # 先把上標數字轉成一般數字（若有）
+    s_norm = s.translate(_SUPER_TRANS)
+
+    # 若尾字為數字（單字元），擷取出來
+    if s_norm and s_norm[-1].isdigit():
+        return s_norm[:-1], s_norm[-1]
+
+    return s_norm, None
+
+
 def _has_meaningful_data(values):
     """Return True if any cell in the provided values contains non-blank data."""
     def _is_blank(cell):
@@ -67,25 +180,6 @@ def _has_meaningful_data(values):
             if not _is_blank(cell):
                 return True
     return False
-
-def calculate_total_rows(sheet, start_col=START_COL, end_col=END_COL, base_row=BASE_ROW, rows_per_group=ROWS_PER_GROUP):
-    """Compute how many row groups exist based on the described worksheet layout."""
-    total_rows = 0
-    current_base = base_row
-
-    while True:
-        han_row = current_base + 2
-        pronunciation_row = current_base + 3
-        target_range = sheet.range(f'{start_col}{han_row}:{end_col}{pronunciation_row}')
-        values = target_range.value
-
-        if not _has_meaningful_data(values):
-            break
-
-        total_rows += 1
-        current_base += rows_per_group
-
-    return total_rows
 
 
 def is_punctuation(char):
@@ -157,6 +251,27 @@ def un_bu_tng_huan(un_bu: str) -> str:
     # 韻母轉換，若不存在於字典中則返回原始韻母
     return un_bu_tng_huan_map_dict.get(un_bu, un_bu)
 
+
+# ============================================================================
+# 將使用【上標數字】表示的【調號】，轉換為普通數字
+# ============================================================================
+def replace_superscript_digits(input_str):
+    # 上標數字與普通數字的映射字典
+    superscript_digit_mapping = {
+        '⁰': '0',
+        '¹': '1',
+        '²': '2',
+        '³': '3',
+        '⁴': '4',
+        '⁵': '5',
+        '⁶': '6',
+        '⁷': '7',
+        '⁸': '8',
+        '⁹': '9',
+    }
+    return ''.join(superscript_digit_mapping.get(char, char) for char in input_str)
+
+
 #====================================================================
 # 【台語音標】韻母轉換函數
 #====================================================================
@@ -211,46 +326,46 @@ def tai_gi_im_piau_tng_un_bu(tai_gi_im_piau: str) -> str:
     # 若無法解析，返回原始輸入
     return tai_gi_im_piau
 
-# ============================================================================
-# 將使用【上標數字】表示的【調號】，轉換為普通數字
-# ============================================================================
-def replace_superscript_digits(input_str):
-    # 上標數字與普通數字的映射字典
-    superscript_digit_mapping = {
-        '⁰': '0',
-        '¹': '1',
-        '²': '2',
-        '³': '3',
-        '⁴': '4',
-        '⁵': '5',
-        '⁶': '6',
-        '⁷': '7',
-        '⁸': '8',
-        '⁹': '9',
-    }
-    return ''.join(superscript_digit_mapping.get(char, char) for char in input_str)
 
 # ============================================================================
-# 將【台語音標】分解為【聲母】、【韻母】、【調號】
+# 判斷【音節】最後之【字元】是否為【調號】（數值）
+# ============================================================================
+def kam_u_tiau_ho(im_piau: str) -> bool:
+    if not im_piau:
+        return False
+    s = im_piau.rstrip()  # 去掉尾端空白（如果需要）
+    return s[-1].isdigit() if s else False
+
+
+def kam_u_tiau_ho_re(im_piau: str) -> bool:
+    if not im_piau:
+        return False
+    return bool(re.search(r'\d$', im_piau.strip()))
+
+
+# ============================================================================
+# 將【不帶調號】的【台語音標】分解為【聲母】、【韻母】、【調號】
 # ============================================================================
 def split_tai_gi_im_piau(im_piau: str, po_ci: bool = False):
+    if not im_piau:
+        return ["", "", ""]
+
     # 如果輸入之【音標】為【帶調符音標】，則需確保轉換為【帶調號TLPA音標】
     if kam_si_u_tiau_hu(im_piau):
         im_piau = tng_im_piau(im_piau)
         im_piau = tng_tiau_ho(im_piau)
+
     # 將輸入的台語音標轉換為小寫
     im_piau = im_piau.lower()
-    # 查檢【台語音標】是否符合【標準】=【聲母】+【韻母】+【調號】
-    tiau = im_piau[-1]
-    tiau = replace_superscript_digits(str(tiau))
+    im_piau, tiau = extract_tone_if_last_is_digit(im_piau)
 
     # 矯正未標明陰平/陰入調號的情況
-    if tiau in ['p', 't', 'k', 'h']:
-        tiau = '4'
-        im_piau += tiau
-    elif tiau in ['a', 'e', 'i', 'o', 'u', 'm', 'n', 'g']:
-        tiau = '1'
-        im_piau += tiau
+    # if tiau in ['p', 't', 'k', 'h']:
+    #     tiau = '4'
+    #     im_piau += tiau
+    # elif tiau in ['a', 'e', 'i', 'o', 'u', 'm', 'n', 'g']:
+    #     tiau = '1'
+    #     im_piau += tiau
 
     # 聲母相容性轉換
     if im_piau.startswith("tsh"):
@@ -273,7 +388,8 @@ def split_tai_gi_im_piau(im_piau: str, po_ci: bool = False):
         siann_bu_match = siann_bu_pattern.match(im_piau)
         if siann_bu_match:
             siann_bu = siann_bu_match.group()
-            un_bu = im_piau[len(siann_bu):-1]
+            # un_bu = im_piau[len(siann_bu):-1]
+            un_bu = im_piau[len(siann_bu):]
         else:
             siann_bu = ""
             un_bu = im_piau[:-1]
@@ -378,6 +494,7 @@ def convert_tl_without_tiau_hu(tai_lo: str) -> str:
         return tai_lo + tone_number
 
     return tai_lo  # 若無聲調符號則不變更
+
 
 def convert_tl_to_tlpa(tai_lo: str) -> Optional[str]:
     """
@@ -566,6 +683,18 @@ def process(tone_map_type: str) -> bool:
                 han_ji = han_ji_zu_im_sheet.range(f'{col_letter}{han_ji_row}').value
                 pronunciation = han_ji_zu_im_sheet.range(f'{col_letter}{pronunciation_row}').value
                 tai_gi_piau_im = han_ji_zu_im_sheet.range(f'{col_letter}{tai_gi_row}').value
+
+                # 將【台語音標】轉換為指定的【漢字標音】拼音系統
+                if tai_gi_piau_im is not None:
+                    # result = split_tai_gi_im_piau(tai_gi_piau_im)
+                    # siann_bu = result[0]    # 聲母
+                    # un_bu = result[1]       # 韻母
+                    # tiau_ho = result[2]     # 調號
+                    siann, un, tiau = split_tai_gi_im_piau(tai_gi_piau_im)
+
+                    zu_im_siann = tlpa_tng_zu_im_siann_bu_map.get(siann, siann)
+                    zu_im_un = convert_tlpa_to_zu_im(un, False)
+                    zu_im = f"{zu_im_siann}{un}{tiau}"
 
                 # 檢查是否遇到終結符號
                 if han_ji == 'φ':

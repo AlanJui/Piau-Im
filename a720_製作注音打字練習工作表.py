@@ -94,6 +94,9 @@ def get_tone_key_mapping(tone_map_type='tlpa'):
         return tlpa_zu_im_hu_tiau_map, tlpa_zu_im_tiau_key_map
 
 
+#============================================================================
+# 判斷是否為標點符號
+#============================================================================
 def is_punctuation(char):
     """
     判斷是否為標點符號
