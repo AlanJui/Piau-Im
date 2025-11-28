@@ -5,6 +5,8 @@ from typing import Optional, Tuple
 
 import xlwings as xw
 
+from mod_BP_tng_huan import convert_siann_bu, convert_to_tiau_hu, convert_un_bu
+from mod_BP_tng_huan_ping_im import convert_TLPA_to_BP
 from mod_TLPA_tng_BP import (
     convert_tlpa_to_zu_im_by_siann_bu,
     convert_tlpa_to_zu_im_by_tiau,
@@ -12,7 +14,6 @@ from mod_TLPA_tng_BP import (
     convert_tlpa_to_zu_im_by_un_kap_tiau,
     kam_u_tiau_ho,
 )
-from mod_TLPA_tng_BP_by_ping_im import convert_TLPA_to_BP
 
 # from a720_製作注音打字練習工作表 import calculate_total_rows
 from mod_帶調符音標 import kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
@@ -602,26 +603,42 @@ def process(tone_map_type: str) -> bool:
                 tai_gi_piau_im = han_ji_zu_im_sheet.range(f'{col_letter}{tai_gi_row}').value
 
                 # 將【台語音標】轉換為【閩拼】拼音系統
-                if tai_gi_piau_im is not None:
+                if tone_map_type == 'bp' and tai_gi_piau_im is not None:
                     siann, un, tiau = convert_TLPA_to_BP(tai_gi_piau_im)
 
-                    zu_im_siann = convert_tlpa_to_zu_im_by_siann_bu(siann)
-                    zu_im_un = convert_tlpa_to_zu_im_by_un_kap_tiau(un, False)
-                    tiau_hu = convert_tlpa_to_zu_im_by_tiau(tiau)
-                    # bp_im_piau = f"{siann}{un}{tiau}"
+                    zu_im_siann = ""
+                    if siann == "y":
+                        siann = ""
+                        if un.startswith("i") and len(un) == 1:
+                            un = "i"
+                        else:
+                            un = f"y{un}"
+                            if un[1] in ["i", "e", "a", "o", "u"]:
+                                un = un.replace("y", "i", 1)
+                    elif siann == "w":
+                        siann = ""
+                        if un.startswith("u") and len(un) == 1:
+                            un = "u"
+                        else:
+                            un = f"w{un}"
+                            if un[1] in ["i", "e", "a", "o", "u"]:
+                                un = un.replace("w", "u", 1)
+                    zu_im_siann = convert_siann_bu(siann)
+                    zu_im_un = convert_un_bu(un)
+                    tiau_hu = convert_to_tiau_hu(tiau)
                     bp_zu_im = f"{zu_im_siann}{zu_im_un}{tiau_hu}"
                     pronunciation = bp_zu_im
 
                 # 將【台語音標】轉換為指定的【漢字標音】拼音系統
-                # if tai_gi_piau_im is not None:
-                #     siann, un, tiau = split_tai_gi_im_piau(tai_gi_piau_im)
+                if tone_map_type == 'tlpa' and tai_gi_piau_im is not None:
+                    siann, un, tiau = split_tai_gi_im_piau(tai_gi_piau_im)
 
-                #     zu_im_siann = convert_tlpa_to_zu_im_by_siann_bu(siann)
-                #     zu_im_un = convert_tlpa_to_zu_im_by_un_kap_tiau(un, False)
-                #     # zu_im_un = convert_tlpa_to_zu_im_by_un_bu(un)
-                #     tiau_hu = convert_tlpa_to_zu_im_by_tiau(tiau)
-                #     zu_im = f"{zu_im_siann}{zu_im_un}{tiau_hu}"
-                #     pronunciation = zu_im
+                    zu_im_siann = convert_tlpa_to_zu_im_by_siann_bu(siann)
+                    zu_im_un = convert_tlpa_to_zu_im_by_un_kap_tiau(un, False)
+                    # zu_im_un = convert_tlpa_to_zu_im_by_un_bu(un)
+                    tiau_hu = convert_tlpa_to_zu_im_by_tiau(tiau)
+                    zu_im = f"{zu_im_siann}{zu_im_un}{tiau_hu}"
+                    pronunciation = zu_im
 
                 # 檢查是否遇到終結符號
                 if han_ji == 'φ':

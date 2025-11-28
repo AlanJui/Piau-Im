@@ -290,6 +290,16 @@
             ]
         },
         {
+            "name": "a730",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a730.py",
+            "console": "integratedTerminal",
+            "args": [
+                "bp"
+            ]
+        },
+        {
             "name": "mod_字庫",
             "type": "debugpy",
             "request": "launch",
