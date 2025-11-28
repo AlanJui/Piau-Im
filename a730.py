@@ -5,7 +5,14 @@ from typing import Optional, Tuple
 
 import xlwings as xw
 
-from mod_un_bu_tng_huan import convert_tlpa_to_zu_im
+from mod_TLPA_tng_BP import (
+    convert_tlpa_to_zu_im_by_siann_bu,
+    convert_tlpa_to_zu_im_by_tiau,
+    convert_tlpa_to_zu_im_by_un_bu,
+    convert_tlpa_to_zu_im_by_un_kap_tiau,
+    kam_u_tiau_ho,
+)
+from mod_TLPA_tng_BP_by_ping_im import convert_TLPA_to_BP
 
 # from a720_製作注音打字練習工作表 import calculate_total_rows
 from mod_帶調符音標 import kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
@@ -67,97 +74,6 @@ def calculate_total_rows(sheet, start_col=START_COL, end_col=END_COL, base_row=B
 
     return total_rows
 
-#============================================================================
-# 音節尾字為調號（數字）擷取函數
-#============================================================================
-tlpa_tng_zu_im_un_bu_map = {
-    "a":"ㄚ",
-    "i":"ㄧ",
-    "ir":"ㆨ",
-    "u":"ㄨ",
-    "e":"ㆤ",
-    "oo":"ㆦ",
-    "o":"ㄜ",
-    "m":"ㆬ",
-    "n":"ㄣ",
-    "ng":"ㆭ",
-    "ai":"ㄞ",
-    "au":"ㄠ",
-    "am":"ㆰ",
-    "an":"ㄢ",
-    "ang":"ㄤ",
-    "om":"ㆱ",
-    "ong":"ㆲ",
-    "ann":"ㆩ",
-    "inn":"ㆪ",
-    "unn":"ㆫ",
-    "enn":"ㆥ",
-    "onn":"ㆧ",
-    "ainn":"ㆮ",
-    "aunn":"ㆯ",
-}
-
-tlpa_tng_zu_im_siann_bu_map = {
-    "b":"ㆠ",
-    "p":"ㄅ",
-    "ph":"ㄆ",
-    "m":"ㄇ",
-    "n":"ㄋ",
-    "t":"ㄉ",
-    "th":"ㄊ",
-    "l":"ㄌ",
-    "g":"ㆣ",
-    "k":"ㄍ",
-    "kh":"ㄎ",
-    "ng":"ㄫ",
-    "j":"ㆡ",
-    "z":"ㄗ",
-    "c":"ㄘ",
-    "s":"ㄙ",
-    "h":"ㄏ",
-}
-
-#============================================================================
-# 音節尾字為調號（數字）擷取函數
-#============================================================================
-# 常用上標轉換表（補足您可能遇到的上標字元）
-_SUPERSCRIPT_MAP = {
-    '\u2070': '0',  # ⁰
-    '\u00B9': '1',  # ¹
-    '\u00B2': '2',  # ²
-    '\u00B3': '3',  # ³
-    '\u2074': '4',  # ⁴
-    '\u2075': '5',  # ⁵
-    '\u2076': '6',  # ⁶
-    '\u2077': '7',  # ⁷
-    '\u2078': '8',  # ⁸
-    '\u2079': '9',  # ⁹
-}
-_SUPER_TRANS = str.maketrans(_SUPERSCRIPT_MAP)
-
-def extract_tone_if_last_is_digit(s: str):
-    """
-    如果尾字是（或是上標）數字，就回傳 (core_without_tone, tone_str)；
-    否則回傳 (normalized_core, None)。
-
-    會先把已知上標數字轉為一般數字，再檢查最後一個字元。
-    """
-    if not s:
-        return None, None
-
-    s = s.strip()
-    if not s:
-        return None, None
-
-    # 先把上標數字轉成一般數字（若有）
-    s_norm = s.translate(_SUPER_TRANS)
-
-    # 若尾字為數字（單字元），擷取出來
-    if s_norm and s_norm[-1].isdigit():
-        return s_norm[:-1], s_norm[-1]
-
-    return s_norm, None
-
 
 def _has_meaningful_data(values):
     """Return True if any cell in the provided values contains non-blank data."""
@@ -210,46 +126,46 @@ def is_line_break(char):
 #====================================================================
 # 韻母轉換函數
 #====================================================================
-def un_bu_tng_huan(un_bu: str) -> str:
-    """
-    將輸入的韻母依照轉換字典進行轉換
-    :param un_bu: str - 韻母輸入
-    :return: str - 轉換後的韻母結果
-    """
+# def un_bu_tng_huan(un_bu: str) -> str:
+#     """
+#     將輸入的韻母依照轉換字典進行轉換
+#     :param un_bu: str - 韻母輸入
+#     :return: str - 轉換後的韻母結果
+#     """
 
-    # 韻母起頭替換規則（優先進行）
-    if un_bu.startswith("oa"):
-        # 白話字：oa ==> 閩南語：ua
-        un_bu = "u" + un_bu[1:]  # oan → uan, oann → uann
-    elif un_bu.startswith("oe"):
-        # 白話字：oe ==> 閩南語：ue
-        un_bu = "u" + un_bu[1:]  # oe → ue, oeh → ueh
+#     # 韻母起頭替換規則（優先進行）
+#     if un_bu.startswith("oa"):
+#         # 白話字：oa ==> 閩南語：ua
+#         un_bu = "u" + un_bu[1:]  # oan → uan, oann → uann
+#     elif un_bu.startswith("oe"):
+#         # 白話字：oe ==> 閩南語：ue
+#         un_bu = "u" + un_bu[1:]  # oe → ue, oeh → ueh
 
-    # 韻母轉換字典
-    un_bu_tng_huan_map_dict = {
-        'ee': 'e',          # ee（ㄝ）= [ɛ]
-        'er': 'e',          # er（ㄜ）= [ə]
-        'erh': 'eh',        # er（ㄜ）= [ə]
-        'or': 'o',          # or（ㄜ）= [ə]
-        'ere': 'ue',        # ere = [əe]
-        'ereh': 'ueh',      # ereh = [əeh]
-        'ir': 'i',          # ir（ㆨ）= [ɯ] / [ɨ]
-        'eng': 'ing',       # 白話字：eng ==> 閩南語：ing
-        'oai': 'uai',       # 白話字：oai ==> 閩南語：uai
-        'ei': 'e',          # 雅俗通十五音：稽
-        'ou': 'oo',         # 雅俗通十五音：沽
-        # 'onn': 'oonn',      # 雅俗通十五音：扛
-        'uei': 'ue',        # 雅俗通十五音：檜
-        'ueinn': 'uenn',    # 雅俗通十五音：檜
-        'ur': 'u',          # 雅俗通十五音：艍
-        'eng': 'ing',       # 白話字：eng ==> 台語音標：ing
-        'ek': 'ik',         # 白話字：ek ==> 台語音標：ik
-        'o͘': 'oo',          # 白話字：o͘ (o + U+0358) ==> 台語音標：oo
-        'ⁿ': 'nn',          # 白話字：ⁿ ==> 台語音標：nn
-    }
+#     # 韻母轉換字典
+#     un_bu_tng_huan_map_dict = {
+#         'ee': 'e',          # ee（ㄝ）= [ɛ]
+#         'er': 'e',          # er（ㄜ）= [ə]
+#         'erh': 'eh',        # er（ㄜ）= [ə]
+#         'or': 'o',          # or（ㄜ）= [ə]
+#         'ere': 'ue',        # ere = [əe]
+#         'ereh': 'ueh',      # ereh = [əeh]
+#         'ir': 'i',          # ir（ㆨ）= [ɯ] / [ɨ]
+#         'eng': 'ing',       # 白話字：eng ==> 閩南語：ing
+#         'oai': 'uai',       # 白話字：oai ==> 閩南語：uai
+#         'ei': 'e',          # 雅俗通十五音：稽
+#         'ou': 'oo',         # 雅俗通十五音：沽
+#         # 'onn': 'oonn',      # 雅俗通十五音：扛
+#         'uei': 'ue',        # 雅俗通十五音：檜
+#         'ueinn': 'uenn',    # 雅俗通十五音：檜
+#         'ur': 'u',          # 雅俗通十五音：艍
+#         'eng': 'ing',       # 白話字：eng ==> 台語音標：ing
+#         'ek': 'ik',         # 白話字：ek ==> 台語音標：ik
+#         'o͘': 'oo',          # 白話字：o͘ (o + U+0358) ==> 台語音標：oo
+#         'ⁿ': 'nn',          # 白話字：ⁿ ==> 台語音標：nn
+#     }
 
-    # 韻母轉換，若不存在於字典中則返回原始韻母
-    return un_bu_tng_huan_map_dict.get(un_bu, un_bu)
+#     # 韻母轉換，若不存在於字典中則返回原始韻母
+#     return un_bu_tng_huan_map_dict.get(un_bu, un_bu)
 
 
 # ============================================================================
@@ -275,72 +191,72 @@ def replace_superscript_digits(input_str):
 #====================================================================
 # 【台語音標】韻母轉換函數
 #====================================================================
-def tai_gi_im_piau_tng_un_bu(tai_gi_im_piau: str) -> str:
-    """
-    將輸入的整體【台語音標】依韻母轉換字典進行韻母轉換
-    :param tai_gi_im_piau: str - 整體台語音標 (例如 "kere1")
-    :return: str - 韻母轉換後的台語音標 (例如 "kue1")
-    """
+# def tai_gi_im_piau_tng_un_bu(tai_gi_im_piau: str) -> str:
+#     """
+#     將輸入的整體【台語音標】依韻母轉換字典進行韻母轉換
+#     :param tai_gi_im_piau: str - 整體台語音標 (例如 "kere1")
+#     :return: str - 韻母轉換後的台語音標 (例如 "kue1")
+#     """
 
-    # 使用正則表達式拆解聲母、韻母、聲調
-    match = re.match(r"([ptkghmnzcsjlrw]?)([a-z]+)(\d?)", tai_gi_im_piau, re.I)
-    if match:
-        siann_bu = match.group(1)  # 聲母
-        un_bu = match.group(2)     # 韻母
-        tiau_ho = match.group(3)   # 聲調
+#     # 使用正則表達式拆解聲母、韻母、聲調
+#     match = re.match(r"([ptkghmnzcsjlrw]?)([a-z]+)(\d?)", tai_gi_im_piau, re.I)
+#     if match:
+#         siann_bu = match.group(1)  # 聲母
+#         un_bu = match.group(2)     # 韻母
+#         tiau_ho = match.group(3)   # 聲調
 
-        # 韻母轉換字典
-        un_bu_tng_huan_map_dict = {
-            'ee': 'e',          # ee（ㄝ）= [ɛ]
-            'er': 'e',          # er（ㄜ）= [ə]
-            'erh': 'eh',        # er（ㄜ）= [ə]
-            'or': 'o',          # or（ㄜ）= [ə]
-            'ere': 'ue',        # ere = [əe]
-            'ereh': 'ueh',      # ereh = [əeh]
-            'ir': 'i',          # ir（ㆨ）= [ɯ] / [ɨ]
-            'eng': 'ing',       # 白話字：eng ==> 閩南語：ing
-            'oa': 'ua',         # 白話字：oa ==> 閩南語：ua
-            'oe': 'ue',         # 白話字：oe ==> 閩南語：ue
-            'oai': 'uai',       # 白話字：oai ==> 閩南語：uai
-            'ei': 'e',          # 雅俗通十五音：稽
-            'ou': 'oo',         # 雅俗通十五音：沽
-            # 'onn': 'oonn',      # 雅俗通十五音：扛
-            'uei': 'ue',        # 雅俗通十五音：檜
-            'ueinn': 'uenn',    # 雅俗通十五音：檜
-            'ur': 'u',          # 雅俗通十五音：艍
-            'oa': 'ua',         # 白話字：oa ==> 台語音標：ua
-            'oe': 'ue',         # 白話字：oe ==> 台語音標：ue
-            'eng': 'ing',       # 白話字：eng ==> 台語音標：ing
-            'ek': 'ik',         # 白話字：ek ==> 台語音標：ik
-            'o͘': 'oo',          # 白話字：o͘ (o + U+0358) ==> 台語音標：oo
-            'ⁿ': 'nn',          # 白話字：ⁿ ==> 台語音標：nn
-        }
+#         # 韻母轉換字典
+#         un_bu_tng_huan_map_dict = {
+#             'ee': 'e',          # ee（ㄝ）= [ɛ]
+#             'er': 'e',          # er（ㄜ）= [ə]
+#             'erh': 'eh',        # er（ㄜ）= [ə]
+#             'or': 'o',          # or（ㄜ）= [ə]
+#             'ere': 'ue',        # ere = [əe]
+#             'ereh': 'ueh',      # ereh = [əeh]
+#             'ir': 'i',          # ir（ㆨ）= [ɯ] / [ɨ]
+#             'eng': 'ing',       # 白話字：eng ==> 閩南語：ing
+#             'oa': 'ua',         # 白話字：oa ==> 閩南語：ua
+#             'oe': 'ue',         # 白話字：oe ==> 閩南語：ue
+#             'oai': 'uai',       # 白話字：oai ==> 閩南語：uai
+#             'ei': 'e',          # 雅俗通十五音：稽
+#             'ou': 'oo',         # 雅俗通十五音：沽
+#             # 'onn': 'oonn',      # 雅俗通十五音：扛
+#             'uei': 'ue',        # 雅俗通十五音：檜
+#             'ueinn': 'uenn',    # 雅俗通十五音：檜
+#             'ur': 'u',          # 雅俗通十五音：艍
+#             'oa': 'ua',         # 白話字：oa ==> 台語音標：ua
+#             'oe': 'ue',         # 白話字：oe ==> 台語音標：ue
+#             'eng': 'ing',       # 白話字：eng ==> 台語音標：ing
+#             'ek': 'ik',         # 白話字：ek ==> 台語音標：ik
+#             'o͘': 'oo',          # 白話字：o͘ (o + U+0358) ==> 台語音標：oo
+#             'ⁿ': 'nn',          # 白話字：ⁿ ==> 台語音標：nn
+#         }
 
-        # 韻母轉換
-        converted_un_bu = un_bu_tng_huan_map_dict.get(un_bu, un_bu)
+#         # 韻母轉換
+#         converted_un_bu = un_bu_tng_huan_map_dict.get(un_bu, un_bu)
 
-        # 合併轉換後的台語音標
-        converted_tai_gi_im_piau = f"{siann_bu}{converted_un_bu}{tiau_ho}"
-        return converted_tai_gi_im_piau
+#         # 合併轉換後的台語音標
+#         converted_tai_gi_im_piau = f"{siann_bu}{converted_un_bu}{tiau_ho}"
+#         return converted_tai_gi_im_piau
 
-    # 若無法解析，返回原始輸入
-    return tai_gi_im_piau
+#     # 若無法解析，返回原始輸入
+#     return tai_gi_im_piau
 
 
 # ============================================================================
 # 判斷【音節】最後之【字元】是否為【調號】（數值）
 # ============================================================================
-def kam_u_tiau_ho(im_piau: str) -> bool:
-    if not im_piau:
-        return False
-    s = im_piau.rstrip()  # 去掉尾端空白（如果需要）
-    return s[-1].isdigit() if s else False
+# def kam_u_tiau_ho(im_piau: str) -> bool:
+#     if not im_piau:
+#         return False
+#     s = im_piau.rstrip()  # 去掉尾端空白（如果需要）
+#     return s[-1].isdigit() if s else False
 
 
-def kam_u_tiau_ho_re(im_piau: str) -> bool:
-    if not im_piau:
-        return False
-    return bool(re.search(r'\d$', im_piau.strip()))
+# def kam_u_tiau_ho_re(im_piau: str) -> bool:
+#     if not im_piau:
+#         return False
+#     return bool(re.search(r'\d$', im_piau.strip()))
 
 
 # ============================================================================
@@ -357,7 +273,7 @@ def split_tai_gi_im_piau(im_piau: str, po_ci: bool = False):
 
     # 將輸入的台語音標轉換為小寫
     im_piau = im_piau.lower()
-    im_piau, tiau = extract_tone_if_last_is_digit(im_piau)
+    im_piau, tiau = kam_u_tiau_ho(im_piau)
 
     # 矯正未標明陰平/陰入調號的情況
     # if tiau in ['p', 't', 'k', 'h']:
@@ -392,10 +308,11 @@ def split_tai_gi_im_piau(im_piau: str, po_ci: bool = False):
             un_bu = im_piau[len(siann_bu):]
         else:
             siann_bu = ""
-            un_bu = im_piau[:-1]
+            # un_bu = im_piau[:-1]
+            un_bu = im_piau
 
     # 轉換韻母
-    un_bu = un_bu_tng_huan(un_bu)
+    un_bu = convert_tlpa_to_zu_im_by_un_bu(un_bu)
 
     # 調整聲母大小寫
     if po_ci:
@@ -684,17 +601,27 @@ def process(tone_map_type: str) -> bool:
                 pronunciation = han_ji_zu_im_sheet.range(f'{col_letter}{pronunciation_row}').value
                 tai_gi_piau_im = han_ji_zu_im_sheet.range(f'{col_letter}{tai_gi_row}').value
 
-                # 將【台語音標】轉換為指定的【漢字標音】拼音系統
+                # 將【台語音標】轉換為【閩拼】拼音系統
                 if tai_gi_piau_im is not None:
-                    # result = split_tai_gi_im_piau(tai_gi_piau_im)
-                    # siann_bu = result[0]    # 聲母
-                    # un_bu = result[1]       # 韻母
-                    # tiau_ho = result[2]     # 調號
-                    siann, un, tiau = split_tai_gi_im_piau(tai_gi_piau_im)
+                    siann, un, tiau = convert_TLPA_to_BP(tai_gi_piau_im)
 
-                    zu_im_siann = tlpa_tng_zu_im_siann_bu_map.get(siann, siann)
-                    zu_im_un = convert_tlpa_to_zu_im(un, False)
-                    zu_im = f"{zu_im_siann}{un}{tiau}"
+                    zu_im_siann = convert_tlpa_to_zu_im_by_siann_bu(siann)
+                    zu_im_un = convert_tlpa_to_zu_im_by_un_kap_tiau(un, False)
+                    tiau_hu = convert_tlpa_to_zu_im_by_tiau(tiau)
+                    # bp_im_piau = f"{siann}{un}{tiau}"
+                    bp_zu_im = f"{zu_im_siann}{zu_im_un}{tiau_hu}"
+                    pronunciation = bp_zu_im
+
+                # 將【台語音標】轉換為指定的【漢字標音】拼音系統
+                # if tai_gi_piau_im is not None:
+                #     siann, un, tiau = split_tai_gi_im_piau(tai_gi_piau_im)
+
+                #     zu_im_siann = convert_tlpa_to_zu_im_by_siann_bu(siann)
+                #     zu_im_un = convert_tlpa_to_zu_im_by_un_kap_tiau(un, False)
+                #     # zu_im_un = convert_tlpa_to_zu_im_by_un_bu(un)
+                #     tiau_hu = convert_tlpa_to_zu_im_by_tiau(tiau)
+                #     zu_im = f"{zu_im_siann}{zu_im_un}{tiau_hu}"
+                #     pronunciation = zu_im
 
                 # 檢查是否遇到終結符號
                 if han_ji == 'φ':
