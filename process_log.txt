@@ -16933,3 +16933,22 @@ Traceback (most recent call last):
     self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
     ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
 pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147352565), None)
+2025-11-29 23:36:26,994 - ERROR - 無法取得【漢字注音】工作表，請確認該工作表是否存在於活頁簿中。，錯誤訊息: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147352565), None)
+Traceback (most recent call last):
+  File "a730.py", line 543, in process
+    han_ji_zu_im_sheet = wb.sheets['漢字注音']
+                         ~~~~~~~~~^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 90, in __getitem__
+    return self(key)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 5240, in __call__
+    return Sheet(impl=self.impl(name_or_index))
+                      ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 943, in __call__
+    return Sheet(xl=self.xl(name_or_index))
+                    ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147352565), None)

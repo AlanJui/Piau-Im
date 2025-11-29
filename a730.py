@@ -5,7 +5,12 @@ from typing import Optional, Tuple
 
 import xlwings as xw
 
-from mod_BP_tng_huan import convert_siann_bu, convert_to_tiau_hu, convert_un_bu
+from mod_BP_tng_huan import (
+    convert_bp_im_piau_to_zu_im,
+    convert_siann_bu,
+    convert_to_tiau_hu,
+    convert_un_bu,
+)
 from mod_BP_tng_huan_ping_im import convert_TLPA_to_BP
 from mod_TLPA_tng_BP import (
     convert_tlpa_to_zu_im_by_siann_bu,
@@ -518,6 +523,72 @@ def tlpa_tng_han_ji_piau_im(piau_im, piau_im_huat, tai_gi_im_piau):
     # 若 ok 為 False，表示轉換失敗，則將【台語音標】直接傳回
     return han_ji_piau_im
 
+
+def decompose_bp_zu_im(bp_zu_im, tone_map_type='tlpa'):
+    """
+    將注音符號或羅馬拼音分解成個別字元
+
+    Args:
+        bp_zu_im (str): 注音符號
+
+    Returns:
+        list: 分解後的字元列表
+    """
+
+    # 【調符】與【調號】對映：hu_tiau_map
+    # 【調號】與【按鍵】對映：tiau_key_map
+    hu_tiau_map = {
+        "˫": "陽去",   # 陽去
+        "˪": "陰去",   # 陰去
+        "ˋ": "上聲",  # 上聲
+        "ˊ": "陽平",  # 陽平
+        "˙": "陽入",   # 陽入
+        "⁰": "輕聲",   # 輕聲
+    }
+
+    tiau_kian_map = {
+        "陰平": ":",    # 陰平（無調號）
+        "陽去": "5",   # 陽去
+        "陰去": "3",   # 陰去
+        "上聲": "4",  # 上聲
+        "陽平": "6",  # 陽平
+        "陰入": "[",    # 陰入（無調號）
+        "陽入": "]",   # 陽入
+        "輕聲": "7",   # 輕聲
+    }
+
+    # 方音符號處理
+    chars = list(bp_zu_im)
+    result = []
+    okay = False
+    counter = len(chars)
+    index = 0
+
+    for i, char in enumerate(chars):
+        # hu_tiau_map = ['˪', '˫', 'ˋ', 'ˊ', '˙']
+        if char in hu_tiau_map:
+            # 是聲調符號，轉換為按鍵
+            tiau_ho = hu_tiau_map[char]
+            result.append(tiau_kian_map[tiau_ho])
+            okay = True
+        else:
+            result.append(char)
+        index += 1
+
+    # 如果沒有聲調符號，則可能是：【陰平調】或【陰入調】
+    if not okay:
+        if index == counter:
+            if chars[counter - 1] in ['ㆴ', 'ㆵ', 'ㆻ', 'ㆷ']:
+                # 若最後一個字元，是【入聲韻尾】，則視為【陰入調】
+                result.append(tiau_kian_map["陰入"])
+            else:
+                # 若最後一個字元，亦不是【入聲韻尾】，則視為【陰平調】
+                result.append(tiau_kian_map["陰平"])
+
+    return result
+
+
+
 def process(tone_map_type: str) -> bool:
     """
     主處理函數
@@ -602,44 +673,6 @@ def process(tone_map_type: str) -> bool:
                 pronunciation = han_ji_zu_im_sheet.range(f'{col_letter}{pronunciation_row}').value
                 tai_gi_piau_im = han_ji_zu_im_sheet.range(f'{col_letter}{tai_gi_row}').value
 
-                # 將【台語音標】轉換為【閩拼】拼音系統
-                if tone_map_type == 'bp' and tai_gi_piau_im is not None:
-                    siann, un, tiau = convert_TLPA_to_BP(tai_gi_piau_im)
-
-                    zu_im_siann = ""
-                    if siann == "y":
-                        siann = ""
-                        if un.startswith("i") and len(un) == 1:
-                            un = "i"
-                        else:
-                            un = f"y{un}"
-                            if un[1] in ["i", "e", "a", "o", "u"]:
-                                un = un.replace("y", "i", 1)
-                    elif siann == "w":
-                        siann = ""
-                        if un.startswith("u") and len(un) == 1:
-                            un = "u"
-                        else:
-                            un = f"w{un}"
-                            if un[1] in ["i", "e", "a", "o", "u"]:
-                                un = un.replace("w", "u", 1)
-                    zu_im_siann = convert_siann_bu(siann)
-                    zu_im_un = convert_un_bu(un)
-                    tiau_hu = convert_to_tiau_hu(tiau)
-                    bp_zu_im = f"{zu_im_siann}{zu_im_un}{tiau_hu}"
-                    pronunciation = bp_zu_im
-
-                # 將【台語音標】轉換為指定的【漢字標音】拼音系統
-                if tone_map_type == 'tlpa' and tai_gi_piau_im is not None:
-                    siann, un, tiau = split_tai_gi_im_piau(tai_gi_piau_im)
-
-                    zu_im_siann = convert_tlpa_to_zu_im_by_siann_bu(siann)
-                    zu_im_un = convert_tlpa_to_zu_im_by_un_kap_tiau(un, False)
-                    # zu_im_un = convert_tlpa_to_zu_im_by_un_bu(un)
-                    tiau_hu = convert_tlpa_to_zu_im_by_tiau(tiau)
-                    zu_im = f"{zu_im_siann}{zu_im_un}{tiau_hu}"
-                    pronunciation = zu_im
-
                 # 檢查是否遇到終結符號
                 if han_ji == 'φ':
                     print("    ==> 遇到終結符號，停止處理")
@@ -666,9 +699,40 @@ def process(tone_map_type: str) -> bool:
                     print(f"    ==> 欄位 {col_letter} 資料為空，跳過")
                     continue
 
+                # 使用【閩拚音標】轉換成【注音符號】（以方音符號為基礎）當【漢字標音】
+                if tone_map_type == 'bp' and tai_gi_piau_im is not None:
+                    siann, un, tiau = convert_TLPA_to_BP(tai_gi_piau_im)
+
+                    bp_im_piau = f"{siann}{un}{tiau}"
+                    zu_im_siann, zu_im_un, zu_im_tiau_hu = convert_bp_im_piau_to_zu_im(bp_im_piau)
+                    bp_zu_im = f"{zu_im_siann}{zu_im_un}{zu_im_tiau_hu}"
+                    pronunciation = bp_zu_im
+
+                # 使用【台語音標】轉換成【方音符號】當【漢字標音】
+                if tone_map_type == 'tlpa' and tai_gi_piau_im is not None:
+                    siann, un, tiau = split_tai_gi_im_piau(tai_gi_piau_im)
+
+                    zu_im_siann = convert_tlpa_to_zu_im_by_siann_bu(siann)
+                    zu_im_un = convert_tlpa_to_zu_im_by_un_kap_tiau(un, False)
+                    # zu_im_un = convert_tlpa_to_zu_im_by_un_bu(un)
+                    tiau_hu = convert_tlpa_to_zu_im_by_tiau(tiau)
+                    zu_im = f"{zu_im_siann}{zu_im_un}{tiau_hu}"
+                    pronunciation = zu_im
+
                 # 填入純文字資料（不改變格式）
                 typing_sheet.range(f'B{current_row}').api.Value2 = str(han_ji)
                 typing_sheet.range(f'C{current_row}').api.Value2 = str(pronunciation)
+
+                # 分解標音符號
+                # tone_map_type = 'tfs'
+                decomposed = decompose_bp_zu_im(str(pronunciation), tone_map_type)
+                print(f"    ==> 鍵盤按鍵: {decomposed}\n")
+
+                # 將分解後的字元填入 E~M 欄（純文字）
+                for i, char in enumerate(decomposed):
+                    if i < 9:  # 最多填入9個字元（E~M欄）
+                        col_letter_target = chr(69 + i)  # E=69, F=70, ...
+                        typing_sheet.range(f'{col_letter_target}{current_row}').api.Value2 = char
 
                 # 顯示目前處理之【儲存格】位置與內容
                 print(f"\n{col_index-3}.【{col_letter}{han_ji_row}】: 漢字={repr(han_ji)} [{tai_gi_piau_im}], 漢字標音={repr(pronunciation)}")

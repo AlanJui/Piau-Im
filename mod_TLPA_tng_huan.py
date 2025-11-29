@@ -1,5 +1,5 @@
 """
-閩拚音標（BP）轉換模組
+台語音標（TLPA）轉換模組
 """
 
 # =========================================================================
@@ -32,7 +32,7 @@ init_logging()
 
 
 # 台語音標【聲母】轉【方音符號】對映表
-BP_ZU_IM_SIANN_MAP = {
+TLPA_ZU_IM_SIANN_MAP = {
     "bb":"ㆠ",
     "b":"ㄅ",
     "p":"ㄆ",
@@ -56,25 +56,25 @@ BP_ZU_IM_SIANN_MAP = {
 
 
 # 台語音標單獨韻母對映表
-BP_ZU_IM_UN_MAP = {
-    "niah": "ㄥㄧㄚㆷ",
+TLPA_ZU_IM_UN_MAP = {
+    "niah": "ㄧㆩㆷ",
     "iang": "ㄧㄤ",
-    "niao": "ㄥㄧㄠ",
+    "niao": "ㄧㆯ",
     "iaoh": "ㄧㄠㆷ",
     "iong": "ㄧㆲ",
-    "niuh": "ㄥㄧㄨㆷ",
+    "niuh": "ㄧㆫㆷ",
     "uang": "ㄨㄤ",
-    "nuai": "ㄥㄨㄞ",
+    "nuai": "ㄨㆮ",
     "uaih": "ㄨㄞㆷ",
-    "uaih": "ㄥㄨㄞㆷ",
-    "nah": "ㄥㄚㆷ",
+    "uaih": "ㄨㆮㆷ",
+    "nah": "ㆩㆷ",
     "ang": "ㄤ",
-    "nai": "ㄥㄞ",
+    "nai": "ㆮ",
     "aih": "ㄞㆷ",
     "aoh": "ㄠㆷ",
-    "neh": "ㄥㆤㆷ",
+    "neh": "ㆥㆷ",
     "ing": "ㄧㄥ",
-    "nia": "ㄥㄧㄚ",
+    "nia": "ㄧㆩ",
     "iah": "ㄧㄚㆷ",
     "iam": "ㄧㆰ",
     "ian": "ㄧㄢ",
@@ -82,23 +82,23 @@ BP_ZU_IM_UN_MAP = {
     "iat": "ㄧㄚㆵ",
     "iak": "ㄧㄚㆻ",
     "iao": "ㄧㄠ",
-    "nio": "ㄥㄧㆦ",
+    "nio": "ㄧㆧ",
     "ioh": "ㄧㄜㆷ",
     "iok": "ㄧㆦㆻ",
-    "niu": "ㄥㄧㄨ",
+    "niu": "ㄧㆫ",
     "ooh": "ㆦㆷ",
     "noh": "ㆧㆷ",
     "ong": "ㆲ",
-    "nua": "ㄥㄨㄚ",
+    "nua": "ㄨㆩ",
     "uah": "ㄨㄚㆷ",
     "uan": "ㄨㄢ",
     "uat": "ㄨㄚㆵ",
     "uai": "ㄨㄞ",
     "ueh": "ㄨㆤㆷ",
-    "nui": "ㄥㄨㄧ",
+    "nui": "ㄨㆪ",
     "uih": "ㄨㄧㆷ",
     "ngh": "ㆭㆷ",
-    "na": "ㄥㄚ",
+    "na": "ㆩ",
     "ah": "ㄚㆷ",
     "am": "ㆰ",
     "an": "ㄢ",
@@ -107,9 +107,9 @@ BP_ZU_IM_UN_MAP = {
     "ak": "ㄚㆻ",
     "ai": "ㄞ",
     "ao": "ㄠ",
-    "ne": "ㄥㆤ",
+    "ne": "ㆥ",
     "eh": "ㆤㆷ",
-    "ni": "ㄥㄧ",
+    "ni": "ㆪ",
     "ih": "ㄧㆷ",
     "im": "ㄧㆬ",
     "in": "ㄧㄣ",
@@ -142,7 +142,7 @@ BP_ZU_IM_UN_MAP = {
 }
 
 # 聲調符號對映表
-BP_ZU_IM_HO_TIAU_MAP = {
+TLPA_ZU_IM_HO_TIAU_MAP = {
     "1": "陰平",   # 陰平（無調號）
     "6": "陽去",   # 去
     "5": "陰去",   # 陰去
@@ -154,7 +154,7 @@ BP_ZU_IM_HO_TIAU_MAP = {
 }
 
 # 閩拚音標之【注音輸入法】：【聲調】與【調符】對照表
-BP_ZU_IM_TIAU_HU_MAP = {
+TLPA_ZU_IM_TIAU_HU_MAP = {
     "陰平": "",    # 陰平（無調號）
     "陽去": "˫",   # 陽去
     "陰去": "˪",   # 陰去
@@ -166,7 +166,7 @@ BP_ZU_IM_TIAU_HU_MAP = {
 }
 
 # 閩拚音標之【注音輸入法】：【聲調】與【按鍵】對照表
-BP_ZU_IM_TIAU_KIAN_MAP = {
+TLPA_ZU_IM_TIAU_KIAN_MAP = {
     "陰平": ":",    # 陰平（無調號）
     "陽去": "5",   # 陽去
     "陰去": "3",   # 陰去
@@ -239,10 +239,10 @@ def convert_to_tiau_hu(tiau_ho):
     if not tiau_ho:
         return ""
 
-    if tiau_ho in BP_ZU_IM_HO_TIAU_MAP:
+    if tiau_ho in TLPA_ZU_IM_HO_TIAU_MAP:
         # 依【調號】取得【聲調】，再依【聲調】取得【調符】
-        tiau_mia = BP_ZU_IM_HO_TIAU_MAP[tiau_ho]
-        return BP_ZU_IM_TIAU_HU_MAP[tiau_mia]
+        tiau_mia = TLPA_ZU_IM_HO_TIAU_MAP[tiau_ho]
+        return TLPA_ZU_IM_TIAU_HU_MAP[tiau_mia]
 
     return ""
 
@@ -259,7 +259,7 @@ def convert_siann_bu(siann_bu):
     Returns:
         方音符號聲母（如 "ㆠ", "ㄅ", "ㄇ" 等）
     """
-    return BP_ZU_IM_SIANN_MAP.get(siann_bu, siann_bu)
+    return TLPA_ZU_IM_SIANN_MAP.get(siann_bu, siann_bu)
 
 
 #============================================================================
@@ -278,8 +278,8 @@ def convert_un_bu(un_bu):
     if not un_bu:
         return ""
 
-    if un_bu in BP_ZU_IM_UN_MAP:
-        return BP_ZU_IM_UN_MAP[un_bu]
+    if un_bu in TLPA_ZU_IM_UN_MAP:
+        return TLPA_ZU_IM_UN_MAP[un_bu]
 
     # 無法轉換則返回原字串
     return un_bu
@@ -311,8 +311,8 @@ def convert_tlpa_to_zu_im_by_un_kap_tiau(un_kap_tiau, include_tiau=True):
     zu_im = convert_tlpa_to_zu_im_by_un_bu(un_bu_part)
 
     # 加上聲調符號
-    if include_tiau and tiau in BP_ZU_IM_HO_TIAU_MAP:
-        zu_im += BP_ZU_IM_HO_TIAU_MAP[tiau]
+    if include_tiau and tiau in TLPA_ZU_IM_HO_TIAU_MAP:
+        zu_im += TLPA_ZU_IM_HO_TIAU_MAP[tiau]
 
     return zu_im
 
@@ -464,7 +464,7 @@ def main():
         ("gim1", "ㄍㄧㆬ"),
         ("ya6", "ㄧㄚ˫"),
         ("hong1", "ㄏㆲ"),
-        ("gnua2", "ㄍㄥㄨㄚˊ"),
+        ("gnua2", "ㄍㄨㆩˊ"),
         ("hoo6", "ㄏㆦ˫"),
         ("zui3", "ㄗㄨㄧˋ"),
         ("ling3", "ㄌㄧㄥˋ"),
