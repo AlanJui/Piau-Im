@@ -30,7 +30,6 @@ from mod_TLPA_tng_BP import convert_tlpa_to_zu_im_by_un_bu
 
 init_logging()
 
-
 # 台語音標【聲母】轉【方音符號】對映表
 BP_ZU_IM_SIANN_MAP = {
     "bb":"ㆠ",
@@ -53,7 +52,6 @@ BP_ZU_IM_SIANN_MAP = {
     "y": "",  # 零聲母
     "w": "",  # 零聲母
 }
-
 
 # 台語音標單獨韻母對映表
 BP_ZU_IM_UN_MAP = {
@@ -221,6 +219,33 @@ def kam_u_tiau_ho(im_piau: str):
 
     return im_piau_norm, None
 
+def split_tiau_ho(im_piau: str):
+    """
+    如果尾字是（或是上標）數字，就回傳 (im_piau_without_tiau, tiau_ho)；
+    否則回傳 (normalized_im_piau, None)。
+
+    會先把已知上標數字轉為一般數字，再檢查最後一個字元。
+    """
+    if not im_piau:
+        return None, None
+
+    # 清除前後【空白】
+    im_piau = im_piau.strip()
+    if not im_piau:
+        return None, None
+
+    # 先把上標數字轉成一般數字（若有）
+    im_piau_norm = im_piau.translate(_SUPER_TRANS)
+
+    # 確認傳入之【閩拚音標】符合格式=聲母+韻母+聲調=羅馬拚音字母+數字
+    u_hap = re.match(r"^([a-z]+)(\d+)$", im_piau_norm)
+    if not u_hap:
+        # 如果不符合「全英文字母+數字」格式，就原樣回傳
+        return [im_piau, None]
+
+    # 提取：【無調音標】（聲母+韻母）和【調號】
+    bo_tiau_piau_im, tiau = u_hap.group(1), u_hap.group(2)
+    return bo_tiau_piau_im, tiau
 
 #============================================================================
 # 將台語音標【調號】轉換為方音符號的【調符】
@@ -261,7 +286,6 @@ def convert_siann_bu(siann_bu):
     """
     return BP_ZU_IM_SIANN_MAP.get(siann_bu, siann_bu)
 
-
 #============================================================================
 # 將台語音標【韻母】轉換為方音符號
 #============================================================================
@@ -283,7 +307,6 @@ def convert_un_bu(un_bu):
 
     # 無法轉換則返回原字串
     return un_bu
-
 
 def convert_tlpa_to_zu_im_by_un_kap_tiau(un_kap_tiau, include_tiau=True):
     """
@@ -316,7 +339,6 @@ def convert_tlpa_to_zu_im_by_un_kap_tiau(un_kap_tiau, include_tiau=True):
 
     return zu_im
 
-
 #============================================================================
 # 將【閩拚音標】解構成：聲母、韻母、調號
 #============================================================================
@@ -329,14 +351,17 @@ def split_bp_im_piau(bp_im_piau: str):
     if not bp_im_piau:
         return [siann, un, tiau]
 
-    # 確認傳入之【閩拚音標】符合格式=聲母+韻母+聲調=羅馬拚音字母+數字
-    u_hap = re.match(r"^([a-z]+)(\d+)$", bp_im_piau)
-    if not u_hap:
-        # 如果不符合「全英文字母+數字」格式，就原樣回傳
-        return [siann, un, tiau]
+    # # 確認傳入之【閩拚音標】符合格式=聲母+韻母+聲調=羅馬拚音字母+數字
+    # u_hap = re.match(r"^([a-z]+)(\d+)$", bp_im_piau)
+    # if not u_hap:
+    #     # 如果不符合「全英文字母+數字」格式，就原樣回傳
+    #     return [siann, un, tiau]
+
+    # # 提取：【無調音標】（聲母+韻母）和【調號】
+    # bo_tiau_piau_im, tiau = u_hap.group(1), u_hap.group(2)
 
     # 提取：【無調音標】（聲母+韻母）和【調號】
-    bo_tiau_piau_im, tiau = u_hap.group(1), u_hap.group(2)
+    bo_tiau_piau_im, tiau = split_tiau_ho(bp_im_piau)
 
     #------------------------------------------------------------------------
     # 自【無調音標】分離【聲母】與【韻母】
@@ -361,7 +386,6 @@ def split_bp_im_piau(bp_im_piau: str):
         siann = ""
         un = bo_tiau_piau_im
     return [siann, un, tiau]
-
 
 #============================================================================
 # 將【閩拚音標】轉換成【注音符號】
@@ -393,10 +417,8 @@ def convert_bp_im_piau_to_zu_im(bp_im_piau: str):
     zu_im_siann = convert_siann_bu(siann)
     zu_im_un = convert_un_bu(un)
     tiau_hu = convert_to_tiau_hu(tiau)
-    # bp_zu_im = f"{zu_im_siann}{zu_im_un}{tiau_hu}"
 
     return [zu_im_siann, zu_im_un, tiau_hu]
-
 
 #============================================================================
 # 測試個案
@@ -452,14 +474,7 @@ def test02():
         status = "✓" if result == list(expected) else "✗"
         print(f"{bp_im_piau:10} → {result} 預期: {expected} {status}")
 
-def main():
-    """測試台語音標轉方音符號"""
-    # test01()
-
-    """測試台語音標轉方音符號試"""
-    test02()
-
-    """測試【閩拚音標】轉換為【注音符號】"""
+def test03():
     test_cases = [
         ("gim1", "ㄍㄧㆬ"),
         ("ya6", "ㄧㄚ˫"),
@@ -478,6 +493,16 @@ def main():
         result = f"{zu_im_siann}{zu_im_un}{tiau_hu}"
         status = "✓" if result == expected else "✗"
         print(f"{bp_im_piau:15} {result:20} {expected:20} {status:5}")
+
+def main():
+    """測試台語音標轉方音符號"""
+    # test01()
+
+    """測試台語音標轉方音符號試"""
+    # test02()
+
+    """測試【閩拚音標】轉換為【注音符號】"""
+    test03()
 
 if __name__ == "__main__":
     main()
