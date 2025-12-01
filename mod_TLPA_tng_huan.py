@@ -166,7 +166,43 @@ TLPA_HO_MIA_MAP = {
     "0": "輕聲",   # 輕聲
 }
 
-# 閩拚音標之【注音輸入法】：【聲調】與【調符】對照表
+# 聲調符號對映表
+TLPA_PHING_IM_HO_TIAU_MAP = {
+    "1": "陰平",   # 陰平（無調號）
+    "6": "陽去",   # 去
+    "5": "陰去",   # 陰去
+    "3": "上聲",   # 上聲
+    "2": "陽平",   # 陽平
+    "7": "陰入",   # 陰入（無調號）
+    "8": "陽入",   # 陽入
+    "0": "輕聲",   # 輕聲
+}
+
+# 【拚音輸入法】：【聲調】與【調符】對照表
+TLPA_PHING_IM_TIAU_HU_MAP = {
+    "陰平": "",           # 陰平（無調號）
+    "陽去": "\u030b",     # 陽去 U+030B (˫) 雙銳音符
+    "陰去": "\u0300",     # 陰去 U+0300 (̀) 重音符
+    "上聲": "\u0301",     # 上聲 U+0301 (́) 銳音符
+    "陽平": "\u0302",     # 陽平 U+0302 (̂) 揚抑符
+    "陰入": "",           # 陰入（無調號）
+    "陽入": "\u030d",     # 陽入 U+030D (̍) 垂直線上符
+    "輕聲": "\u2070",     # 輕聲 U+2070 (⁰) 上標零
+}
+
+# 【拚音輸入法】：【聲調】與【按鍵】對照表
+TLPA_PHING_IM_TIAU_KIAN_MAP = {
+    "陰平": ":",   # 陰平
+    "陽去": "5",   # 陽去
+    "陰去": "3",   # 陰去
+    "上聲": "4",   # 上聲
+    "陽平": "6",   # 陽平
+    "陰入": "[",   # 陰入
+    "陽入": "]",   # 陽入
+    "輕聲": "7",   # 輕聲
+}
+
+# 【注音輸入法】：【聲調】與【調符】對照表
 TLPA_ZU_IM_TIAU_HU_MAP = {
     "陰平": "",    # 陰平（無調號）
     "陽去": "˫",   # 陽去
@@ -178,7 +214,7 @@ TLPA_ZU_IM_TIAU_HU_MAP = {
     "輕聲": "⁰",   # 輕聲
 }
 
-# 閩拚音標之【注音輸入法】：【聲調】與【按鍵】對照表
+# 【注音輸入法】：【聲調】與【按鍵】對照表
 TLPA_ZU_IM_TIAU_KIAN_MAP = {
     "陰平": ":",   # 陰平（無調號）
     "陽去": "5",   # 陽去
@@ -189,6 +225,27 @@ TLPA_ZU_IM_TIAU_KIAN_MAP = {
     "陽入": "]",   # 陽入
     "輕聲": "7",   # 輕聲
 }
+
+def get_tlpa_phing_im_kian_from_tiau(tiau_ho):
+    """
+    由【調號】取得【按鍵】
+
+    Args:
+        tiau_ho: 台語音標調號（如 "1", "2", "3", "5", "7", "8", "0"）
+
+    Returns:
+        台語音標按鍵（如 ":", "6", "4", "3", "[", "]", "7" 等）
+    """
+
+    if not tiau_ho:
+        return ""
+
+    if tiau_ho in TLPA_PHING_IM_HO_TIAU_MAP:
+        # 依【調號】取得【聲調】，再依【聲調】取得【按鍵】
+        tiau_mia = TLPA_PHING_IM_HO_TIAU_MAP[tiau_ho]
+        return TLPA_PHING_IM_TIAU_KIAN_MAP[tiau_mia]
+
+    return ""
 
 #============================================================================
 # 音節尾字為調號（數字）擷取函數
@@ -207,32 +264,6 @@ _SUPERSCRIPT_MAP = {
     '\u2079': '9',  # ⁹
 }
 _SUPER_TRANS = str.maketrans(_SUPERSCRIPT_MAP)
-
-#============================================================================
-# 是否音標尾字為調號（數字）
-#============================================================================
-# def kam_u_tiau_ho(im_piau: str):
-#     """
-#     如果尾字是（或是上標）數字，就回傳 (im_piau_without_tiau, tiau_ho)；
-#     否則回傳 (normalized_im_piau, None)。
-
-#     會先把已知上標數字轉為一般數字，再檢查最後一個字元。
-#     """
-#     if not im_piau:
-#         return None, None
-
-#     im_piau = im_piau.strip()
-#     if not im_piau:
-#         return None, None
-
-#     # 先把上標數字轉成一般數字（若有）
-#     im_piau_norm = im_piau.translate(_SUPER_TRANS)
-
-#     # 若尾字為數字（單字元），擷取出來
-#     if im_piau_norm and im_piau_norm[-1].isdigit():
-#         return im_piau_norm[:-1], im_piau_norm[-1]
-
-#     return im_piau_norm, None
 
 def split_tiau_ho(im_piau: str):
     """
