@@ -211,28 +211,28 @@ _SUPER_TRANS = str.maketrans(_SUPERSCRIPT_MAP)
 #============================================================================
 # 是否音標尾字為調號（數字）
 #============================================================================
-def kam_u_tiau_ho(im_piau: str):
-    """
-    如果尾字是（或是上標）數字，就回傳 (im_piau_without_tiau, tiau_ho)；
-    否則回傳 (normalized_im_piau, None)。
+# def kam_u_tiau_ho(im_piau: str):
+#     """
+#     如果尾字是（或是上標）數字，就回傳 (im_piau_without_tiau, tiau_ho)；
+#     否則回傳 (normalized_im_piau, None)。
 
-    會先把已知上標數字轉為一般數字，再檢查最後一個字元。
-    """
-    if not im_piau:
-        return None, None
+#     會先把已知上標數字轉為一般數字，再檢查最後一個字元。
+#     """
+#     if not im_piau:
+#         return None, None
 
-    im_piau = im_piau.strip()
-    if not im_piau:
-        return None, None
+#     im_piau = im_piau.strip()
+#     if not im_piau:
+#         return None, None
 
-    # 先把上標數字轉成一般數字（若有）
-    im_piau_norm = im_piau.translate(_SUPER_TRANS)
+#     # 先把上標數字轉成一般數字（若有）
+#     im_piau_norm = im_piau.translate(_SUPER_TRANS)
 
-    # 若尾字為數字（單字元），擷取出來
-    if im_piau_norm and im_piau_norm[-1].isdigit():
-        return im_piau_norm[:-1], im_piau_norm[-1]
+#     # 若尾字為數字（單字元），擷取出來
+#     if im_piau_norm and im_piau_norm[-1].isdigit():
+#         return im_piau_norm[:-1], im_piau_norm[-1]
 
-    return im_piau_norm, None
+#     return im_piau_norm, None
 
 def split_tiau_ho(im_piau: str):
     """
@@ -359,7 +359,6 @@ def convert_tl_with_tiau_hu_to_tlpa(im_piau_with_tiau_hu: str) -> list:
 
     return [siann, un, tiau]
 
-
 #============================================================================
 # 將台語音標【調號】轉換為方音符號的【調符】
 #============================================================================
@@ -455,7 +454,7 @@ def convert_tlpa_to_zu_im_by_un_kap_tiau(un_kap_tiau, include_tiau=True):
 #============================================================================
 # 將【閩拚音標】解構成：聲母、韻母、調號
 #============================================================================
-def split_tlpa_im_piau(im_piau: str):
+def split_tlpa_im_piau(im_piau: str) -> list:
     siann = ""
     un = ""
     tiau = ""
@@ -512,7 +511,6 @@ def convert_tlpa_im_piau_to_zu_im(im_piau: str):
     tiau_hu = convert_to_tiau_hu(tiau)
 
     return [zu_im_siann, zu_im_un, tiau_hu]
-
 
 #============================================================================
 # 測試個案

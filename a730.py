@@ -1,27 +1,17 @@
 import argparse
-import re
-import unicodedata
-from typing import Optional, Tuple
 
 import xlwings as xw
 
-from mod_BP_tng_huan import (
-    convert_bp_im_piau_to_zu_im,
-    convert_siann_bu,
-    convert_to_tiau_hu,
-    convert_un_bu,
-)
+from mod_BP_tng_huan import convert_bp_im_piau_to_zu_im
 from mod_BP_tng_huan_ping_im import convert_TLPA_to_BP
+from mod_excel_access import calculate_total_rows
+from mod_piau_im_tng_huan import is_line_break, is_punctuation
 from mod_TLPA_tng_BP import (
     convert_tlpa_to_zu_im_by_siann_bu,
     convert_tlpa_to_zu_im_by_tiau,
-    convert_tlpa_to_zu_im_by_un_bu,
     convert_tlpa_to_zu_im_by_un_kap_tiau,
-    kam_u_tiau_ho,
 )
-
-# from a720_製作注音打字練習工作表 import calculate_total_rows
-from mod_帶調符音標 import kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
+from mod_TLPA_tng_huan import split_tlpa_im_piau
 
 # from dotenv import load_dotenv
 
@@ -29,12 +19,6 @@ from mod_帶調符音標 import kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
 # =========================================================================
 # 常數定義
 # =========================================================================
-# 【漢字注音】工作表
-START_COL = 'D'
-END_COL = 'R'
-BASE_ROW = 3
-ROWS_PER_GROUP = 4
-
 # 定義 Exit Code
 EXIT_CODE_SUCCESS = 0  # 成功
 EXIT_CODE_FAILURE = 1  # 失敗
@@ -59,104 +43,8 @@ init_logging()
 
 
 # =========================================================================
-# Excel 相關輔助函數
+# 程式主體與功能函數
 # =========================================================================
-def calculate_total_rows(sheet, start_col=START_COL, end_col=END_COL, base_row=BASE_ROW, rows_per_group=ROWS_PER_GROUP):
-    """Compute how many row groups exist based on the described worksheet layout."""
-    total_rows = 0
-    current_base = base_row
-
-    while True:
-        han_row = current_base + 2
-        pronunciation_row = current_base + 3
-        target_range = sheet.range(f'{start_col}{han_row}:{end_col}{pronunciation_row}')
-        values = target_range.value
-
-        if not _has_meaningful_data(values):
-            break
-
-        total_rows += 1
-        current_base += rows_per_group
-
-    return total_rows
-
-
-def _has_meaningful_data(values):
-    """Return True if any cell in the provided values contains non-blank data."""
-    def _is_blank(cell):
-        if cell is None:
-            return True
-        if isinstance(cell, str) and cell.strip() == '':
-            return True
-        return False
-
-    if values is None:
-        return False
-
-    if not isinstance(values, list):
-        return not _is_blank(values)
-
-    for row in values:
-        cells = row if isinstance(row, list) else [row]
-        for cell in cells:
-            if not _is_blank(cell):
-                return True
-    return False
-
-
-def is_punctuation(char):
-    """
-    判斷是否為標點符號
-    """
-    if char is None or str(char).strip() == '':
-        return False
-
-    # 常見的中文標點符號
-    chinese_punctuation = '，。！？；：「」『』（）【】《》〈〉、—…～'
-    # 常見的英文標點符號
-    english_punctuation = ',.!?;:"()[]{}/<>-_=+*&^%$#@`~|\\\'\"'
-
-    return str(char) in chinese_punctuation or str(char) in english_punctuation
-
-
-def is_line_break(char):
-    """
-    判斷是否為換行控制字元
-    """
-    if char is None:
-        return False
-
-    return char == '\n' or str(char).strip() == '' or char == 10
-
-# def tlpa_tng_han_ji_piau_im(piau_im, piau_im_huat, tai_gi_im_piau):
-#     tai_gi_im_piau_iong_tiau_ho = convert_tl_with_tiau_hu_to_tlpa(tai_gi_im_piau)
-#     siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(tai_gi_im_piau_iong_tiau_ho)
-
-#     if siann_bu == "" or siann_bu == None:
-#         # siann_bu = "Ø"
-#         siann_bu = 'ø'
-
-#     ok = False
-#     han_ji_piau_im = ""
-#     try:
-#         han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
-#             piau_im_huat=piau_im_huat,
-#             siann_bu=siann_bu,
-#             un_bu=un_bu,
-#             tiau_ho=tiau_ho,
-#         )
-#         if han_ji_piau_im: # 傳回非空字串，表示【漢字標音】之轉換成功
-#             ok = True
-#         else:
-#             logging_warning(f"【台語音標】：[{tai_gi_im_piau}]，轉換成【{piau_im_huat}漢字標音】拚音/注音系統失敗！")
-#     except Exception as e:
-#         logging_exception(f"piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：{tai_gi_im_piau}", e)
-#         han_ji_piau_im = ""
-
-#     # 若 ok 為 False，表示轉換失敗，則將【台語音標】直接傳回
-#     return han_ji_piau_im
-
-
 def decompose_bp_zu_im(bp_zu_im, tone_map_type='tlpa'):
     """
     將注音符號或羅馬拼音分解成個別字元
@@ -219,8 +107,6 @@ def decompose_bp_zu_im(bp_zu_im, tone_map_type='tlpa'):
                 result.append(tiau_kian_map["陰平"])
 
     return result
-
-
 
 def process(tone_map_type: str) -> bool:
     """
@@ -343,7 +229,7 @@ def process(tone_map_type: str) -> bool:
 
                 # 使用【台語音標】轉換成【方音符號】當【漢字標音】
                 if tone_map_type == 'tlpa' and tai_gi_piau_im is not None:
-                    siann, un, tiau = split_tai_gi_im_piau(tai_gi_piau_im)
+                    siann, un, tiau = split_tlpa_im_piau(tai_gi_piau_im)
 
                     zu_im_siann = convert_tlpa_to_zu_im_by_siann_bu(siann)
                     zu_im_un = convert_tlpa_to_zu_im_by_un_kap_tiau(un, False)

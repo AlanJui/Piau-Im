@@ -17,10 +17,17 @@ from dotenv import load_dotenv
 
 # 載入自訂模組
 from mod_file_access import save_as_new_file
+from mod_piau_im_tng_huan import _has_meaningful_data
 
 # =========================================================================
 # 常數定義
 # =========================================================================
+# 【漢字注音】工作表
+START_COL = 'D'
+END_COL = 'R'
+BASE_ROW = 3
+ROWS_PER_GROUP = 4
+
 # 定義 Exit Code
 EXIT_CODE_SUCCESS = 0  # 成功
 EXIT_CODE_NO_FILE = 1  # 無法找到檔案
@@ -54,6 +61,29 @@ DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
 # =========================================================================
 # 程式用函式
 # =========================================================================
+
+# -------------------------------------------------------------------------
+# 計算工作表中有效列數
+# -------------------------------------------------------------------------
+def calculate_total_rows(sheet, start_col=START_COL, end_col=END_COL, base_row=BASE_ROW, rows_per_group=ROWS_PER_GROUP):
+    """Compute how many row groups exist based on the described worksheet layout."""
+    total_rows = 0
+    current_base = base_row
+
+    while True:
+        han_row = current_base + 2
+        pronunciation_row = current_base + 3
+        target_range = sheet.range(f'{start_col}{han_row}:{end_col}{pronunciation_row}')
+        values = target_range.value
+
+        if not _has_meaningful_data(values):
+            break
+
+        total_rows += 1
+        current_base += rows_per_group
+
+    return total_rows
+
 
 def get_row_col_from_coordinate(coord_str):
     """
