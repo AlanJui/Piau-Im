@@ -290,20 +290,20 @@
             ]
         },
         {
-            "name": "a730",
+            "name": "a730_注音符號打字練習表",
             "type": "debugpy",
             "request": "launch",
-            "program": "a730.py",
+            "program": "a730_注音符號打字練習表.py",
             "console": "integratedTerminal",
             "args": [
                 "bp"
             ]
         },
         {
-            "name": "a740_拚音打字練習表",
+            "name": "a740_羅馬拚音打字練習表",
             "type": "debugpy",
             "request": "launch",
-            "program": "a740_拚音打字練習表.py",
+            "program": "a740_羅馬拚音打字練習表.py",
             "console": "integratedTerminal",
             "args": [
                 "bp"
