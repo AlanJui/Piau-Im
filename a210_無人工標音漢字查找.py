@@ -199,12 +199,6 @@ def jin_kang_piau_imm(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                                 existing_entry["coordinates"].remove((row, col))
                             entry_found = True
                             break  # 找到即可離開迴圈
-                            # if existing_entry["tai_gi_im_piau"] == tai_gi_im_piau:
-                            #     # Step 2: 若找到，移除該筆資料內的座標
-                            #     if (row, col) in existing_entry["coordinates"]:
-                            #         existing_entry["coordinates"].remove((row, col))
-                            #     entry_found = True
-                            #     break  # 找到即可離開迴圈
 
                         # Step 3: 將此筆資料（校正音標為 'N/A'）於【標音字庫】底端新增
                         piau_im_ji_khoo.add_entry(

@@ -16980,3 +16980,585 @@ pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, Non
 2025-12-01 21:57:26,392 - INFO - <----------- 作業結束！---------->
 2025-12-01 21:57:26,776 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《雪中紅》.xlsx
 2025-12-01 21:57:26,776 - INFO - 《========== 程式終止執行：a320_人工標音更正漢字自動標音 ==========》
+2025-12-02 20:00:24,249 - INFO - 《========== 程式開始執行：a210_無人工標音漢字查找 ==========》
+2025-12-02 20:00:24,250 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-02 20:00:24,269 - INFO - <----------- 作業開始！---------->
+2025-12-02 20:00:44,061 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-02 20:00:44,062 - INFO - 自動為【漢字】查找【台語音標】作業己完成！
+2025-12-02 20:00:44,062 - INFO - 【語音類型】：白話音
+2025-12-02 20:00:44,070 - INFO - <----------- 作業結束！---------->
+2025-12-02 20:00:44,349 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《雪中紅》.xlsx
+2025-12-02 20:00:44,350 - INFO - 《========== 程式終止執行：a210_無人工標音漢字查找 ==========》
+2025-12-02 20:01:51,841 - INFO - 《========== 程式開始執行：a210_無人工標音漢字查找 ==========》
+2025-12-02 20:01:51,843 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-02 20:01:51,857 - INFO - <----------- 作業開始！---------->
+2025-12-02 20:34:23,271 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a200_查找及填入漢字標音_refactored.py", line 380, in main
+    wb = xw.Book.caller()
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 1047, in caller
+    raise Exception(
+    ...<2 lines>...
+    )
+Exception: Book.caller() must not be called directly. Call through Excel or set a mock caller first with Book.set_mock_caller().
+2025-12-02 20:35:08,877 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a200_查找及填入漢字標音_refactored.py", line 380, in main
+    wb = xw.Book.caller()
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 1047, in caller
+    raise Exception(
+    ...<2 lines>...
+    )
+Exception: Book.caller() must not be called directly. Call through Excel or set a mock caller first with Book.set_mock_caller().
+2025-12-02 20:36:07,016 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a200_查找及填入漢字標音_refactored.py", line 380, in main
+    wb = xw.Book.caller()
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 1047, in caller
+    raise Exception(
+    ...<2 lines>...
+    )
+Exception: Book.caller() must not be called directly. Call through Excel or set a mock caller first with Book.set_mock_caller().
+2025-12-02 20:38:20,617 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a201.py", line 380, in main
+    wb = xw.Book.caller()
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 1047, in caller
+    raise Exception(
+    ...<2 lines>...
+    )
+Exception: Book.caller() must not be called directly. Call through Excel or set a mock caller first with Book.set_mock_caller().
+2025-12-02 20:38:41,551 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a201.py", line 380, in main
+    wb = xw.Book.caller()
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 1047, in caller
+    raise Exception(
+    ...<2 lines>...
+    )
+Exception: Book.caller() must not be called directly. Call through Excel or set a mock caller first with Book.set_mock_caller().
+2025-12-02 20:43:11,054 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a201.py", line 380, in main
+    wb = xw.Book.caller()
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 1047, in caller
+    raise Exception(
+    ...<2 lines>...
+    )
+Exception: Book.caller() must not be called directly. Call through Excel or set a mock caller first with Book.set_mock_caller().
+2025-12-02 20:48:18,649 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a201.py", line 380, in main
+    wb = xw.Book.caller()
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 1047, in caller
+    raise Exception(
+    ...<2 lines>...
+    )
+Exception: Book.caller() must not be called directly. Call through Excel or set a mock caller first with Book.set_mock_caller().
+2025-12-02 20:51:40,752 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a201.py", line 380, in main
+    wb = xw.Book.caller()
+  File "C:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 1047, in caller
+    raise Exception(
+    ...<2 lines>...
+    )
+Exception: Book.caller() must not be called directly. Call through Excel or set a mock caller first with Book.set_mock_caller().
+2025-12-02 20:55:20,892 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a201.py", line 380, in main
+    wb = xw.Book.caller()
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 1047, in caller
+    raise Exception(
+    ...<2 lines>...
+    )
+Exception: Book.caller() must not be called directly. Call through Excel or set a mock caller first with Book.set_mock_caller().
+2025-12-02 20:55:36,449 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a201.py", line 380, in main
+    wb = xw.Book.caller()
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 1047, in caller
+    raise Exception(
+    ...<2 lines>...
+    )
+Exception: Book.caller() must not be called directly. Call through Excel or set a mock caller first with Book.set_mock_caller().
+2025-12-02 20:56:08,725 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a201.py", line 380, in main
+    wb = xw.Book.caller()
+  File "C:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 1047, in caller
+    raise Exception(
+    ...<2 lines>...
+    )
+Exception: Book.caller() must not be called directly. Call through Excel or set a mock caller first with Book.set_mock_caller().
+2025-12-02 21:05:42,265 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a201.py", line 268, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a201.py", line 333, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a201.py", line 121, in process_cell
+    return self._process_han_ji(cell_value, cell, row, col)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a201.py", line 170, in _process_han_ji
+    tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im(result)
+                                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "a201.py", line 199, in _convert_piau_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=self.piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 111, in ca_ji_kiat_ko_tng_piau_im
+    siann_bu = result[0]['聲母']
+               ~~~~~~~~~^^^^^^^^
+KeyError: '聲母'
+2025-12-02 21:05:42,270 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a201.py", line 397, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a201.py", line 268, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a201.py", line 333, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a201.py", line 121, in process_cell
+    return self._process_han_ji(cell_value, cell, row, col)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a201.py", line 170, in _process_han_ji
+    tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im(result)
+                                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "a201.py", line 199, in _convert_piau_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=self.piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 111, in ca_ji_kiat_ko_tng_piau_im
+    siann_bu = result[0]['聲母']
+               ~~~~~~~~~^^^^^^^^
+KeyError: '聲母'
+2025-12-02 21:18:58,854 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a201.py", line 268, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a201.py", line 333, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a201.py", line 121, in process_cell
+    return self._process_han_ji(cell_value, cell, row, col)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a201.py", line 170, in _process_han_ji
+    tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im(result)
+                                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "a201.py", line 199, in _convert_piau_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=self.piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 111, in ca_ji_kiat_ko_tng_piau_im
+    siann_bu = result[0]['聲母']
+               ~~~~~~~~~^^^^^^^^
+KeyError: '聲母'
+2025-12-02 21:18:58,860 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a201.py", line 397, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a201.py", line 268, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a201.py", line 333, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a201.py", line 121, in process_cell
+    return self._process_han_ji(cell_value, cell, row, col)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a201.py", line 170, in _process_han_ji
+    tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im(result)
+                                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "a201.py", line 199, in _convert_piau_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=self.piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 111, in ca_ji_kiat_ko_tng_piau_im
+    siann_bu = result[0]['聲母']
+               ~~~~~~~~~^^^^^^^^
+KeyError: '聲母'
+2025-12-02 21:25:42,237 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a201.py", line 268, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a201.py", line 333, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a201.py", line 121, in process_cell
+    return self._process_han_ji(cell_value, cell, row, col)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a201.py", line 170, in _process_han_ji
+    tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im(result)
+                                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "a201.py", line 199, in _convert_piau_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=self.piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 111, in ca_ji_kiat_ko_tng_piau_im
+    siann_bu = result[0]['聲母']
+               ~~~~~~~~~^^^^^^^^
+KeyError: '聲母'
+2025-12-02 21:25:42,242 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a201.py", line 397, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a201.py", line 268, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a201.py", line 333, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a201.py", line 121, in process_cell
+    return self._process_han_ji(cell_value, cell, row, col)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a201.py", line 170, in _process_han_ji
+    tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im(result)
+                                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "a201.py", line 199, in _convert_piau_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=self.piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 111, in ca_ji_kiat_ko_tng_piau_im
+    siann_bu = result[0]['聲母']
+               ~~~~~~~~~^^^^^^^^
+KeyError: '聲母'
+2025-12-02 21:27:13,653 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a201.py", line 268, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a201.py", line 333, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a201.py", line 121, in process_cell
+    return self._process_han_ji(cell_value, cell, row, col)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a201.py", line 170, in _process_han_ji
+    tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im(result)
+                                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "a201.py", line 199, in _convert_piau_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=self.piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 111, in ca_ji_kiat_ko_tng_piau_im
+    siann_bu = result[0]['聲母']
+               ~~~~~~~~~^^^^^^^^
+KeyError: '聲母'
+2025-12-02 21:27:13,659 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a201.py", line 397, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a201.py", line 268, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a201.py", line 333, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a201.py", line 121, in process_cell
+    return self._process_han_ji(cell_value, cell, row, col)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a201.py", line 170, in _process_han_ji
+    tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im(result)
+                                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "a201.py", line 199, in _convert_piau_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=self.piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 111, in ca_ji_kiat_ko_tng_piau_im
+    siann_bu = result[0]['聲母']
+               ~~~~~~~~~^^^^^^^^
+KeyError: '聲母'
+2025-12-02 21:27:48,610 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a201.py", line 268, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a201.py", line 333, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a201.py", line 121, in process_cell
+    return self._process_han_ji(cell_value, cell, row, col)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a201.py", line 170, in _process_han_ji
+    tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im(result)
+                                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "a201.py", line 199, in _convert_piau_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=self.piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 111, in ca_ji_kiat_ko_tng_piau_im
+    siann_bu = result[0]['聲母']
+               ~~~~~~~~~^^^^^^^^
+KeyError: '聲母'
+2025-12-02 21:27:48,614 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a201.py", line 397, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a201.py", line 268, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a201.py", line 333, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a201.py", line 121, in process_cell
+    return self._process_han_ji(cell_value, cell, row, col)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a201.py", line 170, in _process_han_ji
+    tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im(result)
+                                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "a201.py", line 199, in _convert_piau_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=self.piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 111, in ca_ji_kiat_ko_tng_piau_im
+    siann_bu = result[0]['聲母']
+               ~~~~~~~~~^^^^^^^^
+KeyError: '聲母'
+2025-12-02 21:32:32,908 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-12-02 21:32:32,909 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-02 21:32:32,926 - INFO - <----------- 作業開始！---------->
+2025-12-02 21:33:14,384 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a201.py", line 268, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a201.py", line 333, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a201.py", line 121, in process_cell
+    return self._process_han_ji(cell_value, cell, row, col)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a201.py", line 170, in _process_han_ji
+    tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im(result)
+                                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "a201.py", line 199, in _convert_piau_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=self.piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 111, in ca_ji_kiat_ko_tng_piau_im
+    siann_bu = result[0]['聲母']
+               ~~~~~~~~~^^^^^^^^
+KeyError: '聲母'
+2025-12-02 21:33:14,389 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a201.py", line 397, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a201.py", line 268, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a201.py", line 333, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a201.py", line 121, in process_cell
+    return self._process_han_ji(cell_value, cell, row, col)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a201.py", line 170, in _process_han_ji
+    tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im(result)
+                                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "a201.py", line 199, in _convert_piau_im
+    tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        result=result,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        piau_im_huat=self.piau_im_huat
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 111, in ca_ji_kiat_ko_tng_piau_im
+    siann_bu = result[0]['聲母']
+               ~~~~~~~~~^^^^^^^^
+KeyError: '聲母'
