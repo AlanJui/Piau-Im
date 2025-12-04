@@ -82,6 +82,7 @@ class CellProcessor:
         piau_im_huat: str,
         ue_im_lui_piat: str,
         han_ji_khoo: str,
+        jin_kang_piau_im_ji_khoo: JiKhooDict,
         piau_im_ji_khoo: JiKhooDict,
         khuat_ji_piau_ji_khoo: JiKhooDict,
     ):
@@ -90,6 +91,7 @@ class CellProcessor:
         self.piau_im_huat = piau_im_huat
         self.ue_im_lui_piat = ue_im_lui_piat
         self.han_ji_khoo = han_ji_khoo
+        self.jin_kang_piau_im_ji_khoo = jin_kang_piau_im_ji_khoo
         self.piau_im_ji_khoo = piau_im_ji_khoo
         self.khuat_ji_piau_ji_khoo = khuat_ji_piau_ji_khoo
 
@@ -110,6 +112,10 @@ class CellProcessor:
 
         cell_value = cell.value
 
+        jin_kang_piau_im = cell.offset(-2, 0).value  # 人工標音
+        if jin_kang_piau_im and str(jin_kang_piau_im).strip() != "":
+            return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+
         # 檢查特殊字元
         if cell_value == 'φ':
             return "【文字終結】", True
@@ -124,6 +130,29 @@ class CellProcessor:
         """重置儲存格樣式"""
         cell.font.color = (0, 0, 0)  # 黑色
         cell.color = None  # 無填滿
+
+    def _process_jin_kang_piau_im(self, jin_kang_piau_im, cell, row, col) -> Tuple[str, bool]:
+        """處理人工標音內容"""
+        tai_gi_im_piau, han_ji_piau_im = jin_kang_piau_im_ca_han_ji_piau_im(
+            jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+            piau_im=self.piau_im,
+            piau_im_huat=self.piau_im_huat,
+        )
+        # 寫入儲存格
+        cell.offset(-1, 0).value = tai_gi_im_piau  # 上方儲存格：台語音標
+        cell.offset(1, 0).value = han_ji_piau_im    # 下方儲存格：漢字標音
+
+        # 記錄到標音字庫
+        self.piau_im_ji_khoo.add_entry(
+            han_ji=cell.value,
+            tai_gi_im_piau=tai_gi_im_piau,
+            kenn_ziann_im_piau='N/A',
+            coordinates=(row, col)
+        )
+
+        msg = f"{cell.value}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
+        is_eof = False
+        return msg, is_eof
 
     def _process_non_han_ji(self, cell_value) -> Tuple[str, bool]:
         """處理非漢字內容"""
@@ -208,6 +237,44 @@ class CellProcessor:
 # =========================================================================
 # 主要處理函數
 # =========================================================================
+def jin_kang_piau_im_ca_han_ji_piau_im(jin_kang_piau_im: str, piau_im: PiauIm, piau_im_huat: str):
+    """
+    取人工標音【台語音標】
+    """
+
+    if '〔' in jin_kang_piau_im and '〕' in jin_kang_piau_im:
+        # 將人工輸入的〔台語音標〕轉換成【方音符號】
+        im_piau = jin_kang_piau_im.split('〔')[1].split('〕')[0]
+        tai_gi_im_piau = convert_tl_with_tiau_hu_to_tlpa(im_piau)
+        # 依使用者指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
+        han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+            piau_im=piau_im,
+            piau_im_huat=piau_im_huat,
+            tai_gi_im_piau=tai_gi_im_piau
+        )
+    elif '【' in jin_kang_piau_im and '】' in jin_kang_piau_im:
+        # 將人工輸入的【方音符號】轉換成【台語音標】
+        han_ji_piau_im = jin_kang_piau_im.split('【')[1].split('】')[0]
+        siann, un, tiau = split_hong_im_hu_ho(han_ji_piau_im)
+        # 依使用者指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
+        tai_gi_im_piau = piau_im.hong_im_tng_tai_gi_im_piau(
+            siann=siann,
+            un=un,
+            tiau=tiau)['台語音標']
+    else:
+        # 將人工輸入的【台語音標】，解構為【聲母】、【韻母】、【聲調】
+        tai_gi_im_piau = convert_tl_with_tiau_hu_to_tlpa(jin_kang_piau_im)
+        # 依指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
+        han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+            piau_im=piau_im,
+            piau_im_huat=piau_im_huat,
+            tai_gi_im_piau=tai_gi_im_piau
+        )
+
+    return tai_gi_im_piau, han_ji_piau_im
+
+
+
 def ca_han_ji_thak_im(
     wb,
     sheet_name: str = '漢字注音',
@@ -215,8 +282,9 @@ def ca_han_ji_thak_im(
     ue_im_lui_piat: str = "白話音",
     han_ji_khoo: str = "河洛話",
     db_name: str = 'Ho_Lok_Ue.db',
-    new_khuat_ji_piau_sheet: bool = False,
+    new_jin_kang_piau_im_ji_khoo_sheet: bool = False,
     new_piau_im_ji_khoo_sheet: bool = False,
+    new_khuat_ji_piau_sheet: bool = False,
 ) -> int:
     """
     查詢漢字讀音並標注
@@ -228,8 +296,9 @@ def ca_han_ji_thak_im(
         ue_im_lui_piat: 語音類別（白話音/文言音）
         han_ji_khoo: 漢字庫名稱
         db_name: 資料庫名稱
-        new_khuat_ji_piau_sheet: 是否建立新的缺字表
+        new_jin_kang_piau_im_ji_khoo_sheet: 是否建立新的人工標音字庫表
         new_piau_im_ji_khoo_sheet: 是否建立新的標音字庫表
+        new_khuat_ji_piau_sheet: 是否建立新的缺字表
 
     Returns:
         處理結果代碼
@@ -243,10 +312,11 @@ def ca_han_ji_thak_im(
         piau_im = PiauIm(han_ji_khoo=config.han_ji_khoo_name)
 
         # 建立字庫工作表
-        piau_im_ji_khoo, khuat_ji_piau_ji_khoo = _initialize_ji_khoo(
+        jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo = _initialize_ji_khoo(
             wb=wb,
-            new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
+            new_jin_kang_piau_im_ji_khoo_sheet=new_jin_kang_piau_im_ji_khoo_sheet,
             new_piau_im_ji_khoo_sheet=new_piau_im_ji_khoo_sheet,
+            new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
         )
 
         # 建立儲存格處理器
@@ -256,6 +326,7 @@ def ca_han_ji_thak_im(
             piau_im_huat=config.piau_im_huat,
             ue_im_lui_piat=ue_im_lui_piat,
             han_ji_khoo=han_ji_khoo,
+            jin_kang_piau_im_ji_khoo=jin_kang_piau_im_ji_khoo,
             piau_im_ji_khoo=piau_im_ji_khoo,
             khuat_ji_piau_ji_khoo=khuat_ji_piau_ji_khoo,
         )
@@ -274,6 +345,7 @@ def ca_han_ji_thak_im(
         # 寫回字庫到 Excel
         _save_ji_khoo_to_excel(
             wb=wb,
+            jin_kang_piau_im_ji_khoo=jin_kang_piau_im_ji_khoo,
             piau_im_ji_khoo=piau_im_ji_khoo,
             khuat_ji_piau_ji_khoo=khuat_ji_piau_ji_khoo,
         )
@@ -288,18 +360,19 @@ def ca_han_ji_thak_im(
 
 def _initialize_ji_khoo(
     wb,
-    new_khuat_ji_piau_sheet: bool,
+    new_jin_kang_piau_im_ji_khoo_sheet: bool,
     new_piau_im_ji_khoo_sheet: bool,
+    new_khuat_ji_piau_sheet: bool,
 ) -> Tuple[JiKhooDict, JiKhooDict]:
     """初始化字庫工作表"""
 
-    # 缺字表
-    khuat_ji_piau_name = '缺字表'
-    if new_khuat_ji_piau_sheet:
-        delete_sheet_by_name(wb=wb, sheet_name=khuat_ji_piau_name)
-    khuat_ji_piau_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+    # 人工標音字庫
+    jin_kang_piau_im_sheet_name = '人工標音字庫'
+    if new_jin_kang_piau_im_ji_khoo_sheet:
+        delete_sheet_by_name(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
         wb=wb,
-        sheet_name=khuat_ji_piau_name
+        sheet_name=jin_kang_piau_im_sheet_name
     )
 
     # 標音字庫
@@ -311,7 +384,16 @@ def _initialize_ji_khoo(
         sheet_name=piau_im_sheet_name
     )
 
-    return piau_im_ji_khoo, khuat_ji_piau_ji_khoo
+    # 缺字表
+    khuat_ji_piau_name = '缺字表'
+    if new_khuat_ji_piau_sheet:
+        delete_sheet_by_name(wb=wb, sheet_name=khuat_ji_piau_name)
+    khuat_ji_piau_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=khuat_ji_piau_name
+    )
+
+    return jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo
 
 
 def _process_sheet(sheet, config: ProcessConfig, processor: CellProcessor):
@@ -362,10 +444,12 @@ def _process_sheet(sheet, config: ProcessConfig, processor: CellProcessor):
 
 def _save_ji_khoo_to_excel(
     wb,
+    jin_kang_piau_im_ji_khoo: JiKhooDict,
     piau_im_ji_khoo: JiKhooDict,
     khuat_ji_piau_ji_khoo: JiKhooDict,
 ):
     """儲存字庫到 Excel"""
+    jin_kang_piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name='人工標音字庫')
     piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name='標音字庫')
     khuat_ji_piau_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name='缺字表')
 
