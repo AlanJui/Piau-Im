@@ -447,6 +447,37 @@ def split_bp_im_piau(bp_im_piau: str):
 #============================================================================
 # 將【閩拚音標】轉換成【注音符號】
 #============================================================================
+def convert_bp_siann_un_tiau_to_zu_im(siann: str, un: str, tiau: str):
+    zu_im_siann = ""
+    zu_im_un = ""
+    tiau_hu = ""
+
+    # siann, un, tiau = split_bp_im_piau(bp_im_piau)
+
+    if siann == "y":
+        siann = ""
+        if un.startswith("i") and len(un) == 1:
+            un = "i"
+        else:
+            un = f"y{un}"
+            if un[1] in ["i", "e", "a", "o", "u"]:
+                un = un.replace("y", "i", 1)
+    elif siann == "w":
+        siann = ""
+        if un.startswith("u") and len(un) == 1:
+            un = "u"
+        else:
+            un = f"w{un}"
+            if un[1] in ["i", "e", "a", "o", "u"]:
+                un = un.replace("w", "u", 1)
+
+    zu_im_siann = convert_siann_bu(siann)
+    zu_im_un = convert_un_bu(un)
+    tiau_hu = convert_to_tiau_hu(tiau)
+
+    return [zu_im_siann, zu_im_un, tiau_hu]
+
+
 def convert_bp_im_piau_to_zu_im(bp_im_piau: str):
     zu_im_siann = ""
     zu_im_un = ""

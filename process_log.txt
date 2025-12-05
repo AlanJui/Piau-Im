@@ -18162,3 +18162,688 @@ KeyError: 0
 2025-12-05 13:40:30,589 - INFO - <----------- 作業結束！---------->
 2025-12-05 13:40:30,944 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《雪中紅》.xlsx
 2025-12-05 13:40:30,944 - INFO - 《========== 程式終止執行：a401_generate_web_page ==========》
+2025-12-05 23:13:47,837 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：m7，錯誤訊息: can only concatenate str (not "NoneType") to str
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 578, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1344, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1148, in BP_zu_im
+    zu_im_siann, zu_im_un, zu_im_tiau = convert_bp_im_piau_to_zu_im(bp_phing_im)
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_BP_tng_huan.py", line 455, in convert_bp_im_piau_to_zu_im
+    siann, un, tiau = split_bp_im_piau(bp_im_piau)
+                      ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_BP_tng_huan.py", line 432, in split_bp_im_piau
+    if un_hua_hu_im_pattern.match(bo_tiau_piau_im + tiau):
+                                  ~~~~~~~~~~~~~~~~^~~~~~
+TypeError: can only concatenate str (not "NoneType") to str
+2025-12-05 23:13:51,314 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：u7，錯誤訊息: can only concatenate str (not "NoneType") to str
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 578, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1344, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1148, in BP_zu_im
+    zu_im_siann, zu_im_un, zu_im_tiau = convert_bp_im_piau_to_zu_im(bp_phing_im)
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_BP_tng_huan.py", line 455, in convert_bp_im_piau_to_zu_im
+    siann, un, tiau = split_bp_im_piau(bp_im_piau)
+                      ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_BP_tng_huan.py", line 432, in split_bp_im_piau
+    if un_hua_hu_im_pattern.match(bo_tiau_piau_im + tiau):
+                                  ~~~~~~~~~~~~~~~~^~~~~~
+TypeError: can only concatenate str (not "NoneType") to str
+2025-12-05 23:14:03,361 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：e5，錯誤訊息: can only concatenate str (not "NoneType") to str
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 578, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1344, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1148, in BP_zu_im
+    zu_im_siann, zu_im_un, zu_im_tiau = convert_bp_im_piau_to_zu_im(bp_phing_im)
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_BP_tng_huan.py", line 455, in convert_bp_im_piau_to_zu_im
+    siann, un, tiau = split_bp_im_piau(bp_im_piau)
+                      ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_BP_tng_huan.py", line 432, in split_bp_im_piau
+    if un_hua_hu_im_pattern.match(bo_tiau_piau_im + tiau):
+                                  ~~~~~~~~~~~~~~~~^~~~~~
+TypeError: can only concatenate str (not "NoneType") to str
+2025-12-05 23:14:04,589 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：e5，錯誤訊息: can only concatenate str (not "NoneType") to str
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 578, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1344, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1148, in BP_zu_im
+    zu_im_siann, zu_im_un, zu_im_tiau = convert_bp_im_piau_to_zu_im(bp_phing_im)
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_BP_tng_huan.py", line 455, in convert_bp_im_piau_to_zu_im
+    siann, un, tiau = split_bp_im_piau(bp_im_piau)
+                      ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_BP_tng_huan.py", line 432, in split_bp_im_piau
+    if un_hua_hu_im_pattern.match(bo_tiau_piau_im + tiau):
+                                  ~~~~~~~~~~~~~~~~^~~~~~
+TypeError: can only concatenate str (not "NoneType") to str
+2025-12-05 23:14:11,933 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：iu7，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 578, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1344, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1144, in BP_zu_im
+    siann, un, tiau = convert_TLPA_to_BP(TLPA_im_piau)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-05 23:14:13,481 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：u7，錯誤訊息: can only concatenate str (not "NoneType") to str
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 578, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1344, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1148, in BP_zu_im
+    zu_im_siann, zu_im_un, zu_im_tiau = convert_bp_im_piau_to_zu_im(bp_phing_im)
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_BP_tng_huan.py", line 455, in convert_bp_im_piau_to_zu_im
+    siann, un, tiau = split_bp_im_piau(bp_im_piau)
+                      ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_BP_tng_huan.py", line 432, in split_bp_im_piau
+    if un_hua_hu_im_pattern.match(bo_tiau_piau_im + tiau):
+                                  ~~~~~~~~~~~~~~~~^~~~~~
+TypeError: can only concatenate str (not "NoneType") to str
+2025-12-05 23:14:17,160 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-05 23:34:44,390 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：m7，錯誤訊息: can only concatenate str (not "NoneType") to str
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 578, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1344, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1148, in BP_zu_im
+    zu_im_siann, zu_im_un, zu_im_tiau = convert_bp_im_piau_to_zu_im(bp_phing_im)
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_BP_tng_huan.py", line 455, in convert_bp_im_piau_to_zu_im
+    siann, un, tiau = split_bp_im_piau(bp_im_piau)
+                      ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_BP_tng_huan.py", line 432, in split_bp_im_piau
+    if un_hua_hu_im_pattern.match(bo_tiau_piau_im + tiau):
+                                  ~~~~~~~~~~~~~~~~^~~~~~
+TypeError: can only concatenate str (not "NoneType") to str
+2025-12-05 23:34:44,395 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 344, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 420, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 117, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 180, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 163, in _jin_kang_piau_im_ca_han_ji_piau_im
+    siann, un, tiau = tlpa_tng_han_ji_piau_im(
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 0)
+2025-12-05 23:34:44,396 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 486, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 344, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 420, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 117, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 180, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 163, in _jin_kang_piau_im_ca_han_ji_piau_im
+    siann, un, tiau = tlpa_tng_han_ji_piau_im(
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 0)
+2025-12-05 23:39:43,816 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：m7，錯誤訊息: can only concatenate str (not "NoneType") to str
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 578, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1344, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1148, in BP_zu_im
+    zu_im_siann, zu_im_un, zu_im_tiau = convert_bp_im_piau_to_zu_im(bp_phing_im)
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_BP_tng_huan.py", line 455, in convert_bp_im_piau_to_zu_im
+    siann, un, tiau = split_bp_im_piau(bp_im_piau)
+                      ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_BP_tng_huan.py", line 432, in split_bp_im_piau
+    if un_hua_hu_im_pattern.match(bo_tiau_piau_im + tiau):
+                                  ~~~~~~~~~~~~~~~~^~~~~~
+TypeError: can only concatenate str (not "NoneType") to str
+2025-12-05 23:39:43,821 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 344, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 420, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 117, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 180, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 163, in _jin_kang_piau_im_ca_han_ji_piau_im
+    siann, un, tiau = tlpa_tng_han_ji_piau_im(
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 0)
+2025-12-05 23:39:43,822 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 486, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 344, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 420, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 117, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 180, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 163, in _jin_kang_piau_im_ca_han_ji_piau_im
+    siann, un, tiau = tlpa_tng_han_ji_piau_im(
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 0)
+2025-12-05 23:41:50,425 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：m7，錯誤訊息: can only concatenate str (not "NoneType") to str
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 578, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1344, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1148, in BP_zu_im
+    zu_im_siann, zu_im_un, zu_im_tiau = convert_bp_im_piau_to_zu_im(bp_phing_im)
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_BP_tng_huan.py", line 455, in convert_bp_im_piau_to_zu_im
+    siann, un, tiau = split_bp_im_piau(bp_im_piau)
+                      ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_BP_tng_huan.py", line 432, in split_bp_im_piau
+    if un_hua_hu_im_pattern.match(bo_tiau_piau_im + tiau):
+                                  ~~~~~~~~~~~~~~~~^~~~~~
+TypeError: can only concatenate str (not "NoneType") to str
+2025-12-05 23:41:50,429 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 344, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 420, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 117, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 180, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 163, in _jin_kang_piau_im_ca_han_ji_piau_im
+    siann, un, tiau = tlpa_tng_han_ji_piau_im(
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 0)
+2025-12-05 23:41:50,430 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 486, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 344, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 420, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 117, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 180, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 163, in _jin_kang_piau_im_ca_han_ji_piau_im
+    siann, un, tiau = tlpa_tng_han_ji_piau_im(
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 0)
+2025-12-05 23:44:15,249 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：m7，錯誤訊息: can only concatenate str (not "NoneType") to str
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 578, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1344, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1148, in BP_zu_im
+    zu_im_siann, zu_im_un, zu_im_tiau = convert_bp_im_piau_to_zu_im(bp_phing_im)
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_BP_tng_huan.py", line 455, in convert_bp_im_piau_to_zu_im
+    siann, un, tiau = split_bp_im_piau(bp_im_piau)
+                      ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_BP_tng_huan.py", line 432, in split_bp_im_piau
+    if un_hua_hu_im_pattern.match(bo_tiau_piau_im + tiau):
+                                  ~~~~~~~~~~~~~~~~^~~~~~
+TypeError: can only concatenate str (not "NoneType") to str
+2025-12-05 23:44:15,254 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 344, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 420, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 117, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 180, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 163, in _jin_kang_piau_im_ca_han_ji_piau_im
+    siann, un, tiau = tlpa_tng_han_ji_piau_im(
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 0)
+2025-12-05 23:44:15,255 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 486, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 344, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 420, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 117, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 180, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 163, in _jin_kang_piau_im_ca_han_ji_piau_im
+    siann, un, tiau = tlpa_tng_han_ji_piau_im(
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 0)
+2025-12-05 23:49:23,611 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：m7，錯誤訊息: can only concatenate str (not "NoneType") to str
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 578, in tlpa_tng_han_ji_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1344, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1148, in BP_zu_im
+    zu_im_siann, zu_im_un, zu_im_tiau = convert_bp_im_piau_to_zu_im(bp_phing_im)
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_BP_tng_huan.py", line 455, in convert_bp_im_piau_to_zu_im
+    siann, un, tiau = split_bp_im_piau(bp_im_piau)
+                      ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_BP_tng_huan.py", line 432, in split_bp_im_piau
+    if un_hua_hu_im_pattern.match(bo_tiau_piau_im + tiau):
+                                  ~~~~~~~~~~~~~~~~^~~~~~
+TypeError: can only concatenate str (not "NoneType") to str
+2025-12-05 23:49:23,616 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 344, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 420, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 117, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 180, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 163, in _jin_kang_piau_im_ca_han_ji_piau_im
+    siann, un, tiau = tlpa_tng_han_ji_piau_im(
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 0)
+2025-12-05 23:49:23,618 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 486, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 344, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 420, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 117, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 180, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 163, in _jin_kang_piau_im_ca_han_ji_piau_im
+    siann, un, tiau = tlpa_tng_han_ji_piau_im(
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 0)
+2025-12-06 00:11:06,497 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 349, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 425, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 117, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 185, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 166, in _jin_kang_piau_im_ca_han_ji_piau_im
+    zu_im_siann, zu_im_un, zu_im_tiau = piau_im.han_ji_piau_im_tng_huan(
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        piau_im=piau_im,
+        ^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        tiau_ho=tiau,
+        ^^^^^^^^^^^^^
+    )
+    ^
+TypeError: PiauIm.han_ji_piau_im_tng_huan() got an unexpected keyword argument 'piau_im'
+2025-12-06 00:11:06,501 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 491, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 349, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 425, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 117, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 185, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 166, in _jin_kang_piau_im_ca_han_ji_piau_im
+    zu_im_siann, zu_im_un, zu_im_tiau = piau_im.han_ji_piau_im_tng_huan(
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        piau_im=piau_im,
+        ^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        tiau_ho=tiau,
+        ^^^^^^^^^^^^^
+    )
+    ^
+TypeError: PiauIm.han_ji_piau_im_tng_huan() got an unexpected keyword argument 'piau_im'
+2025-12-06 00:44:39,463 - INFO - 已完成【台語音標】和【漢字標音】標注工作。

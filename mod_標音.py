@@ -6,6 +6,11 @@ from typing import Optional, Tuple
 
 from dotenv import load_dotenv
 
+from mod_BP_tng_huan import (
+    convert_bp_im_piau_to_zu_im,
+    convert_bp_siann_un_tiau_to_zu_im,
+)
+
 # 將 TLPA+ 【台語音標】轉換成 MPS2 【台語注音二式】
 from mod_convert_TLPA_to_MPS2 import convert_TLPA_to_MPS2
 
@@ -1126,15 +1131,23 @@ class PiauIm:
 
         return f"{siann}{un}"
 
+    #================================================================
+    # 閩拚注音（BP Zu Im）
+    #================================================================
+    def BP_zu_im(self, siann_bu, un_bu, tiau_ho):
+        # piau_im_huat = "閩拚注音"
+
+        # 將上標數字替換為普通數字
+        tiau_ho = replace_superscript_digits(str(tiau_ho))
+
+        # 將【閩拚音標】轉換成【閩拚注音】
+        zu_im_siann, zu_im_un, zu_im_tiau = convert_bp_siann_un_tiau_to_zu_im(siann_bu, un_bu, tiau_ho)
+
+        return [zu_im_siann, zu_im_un, zu_im_tiau]
+
 
     #================================================================
     # 方音符號注音（TPS）
-    # TPS_mapping_dict = {
-    #     "p": "ㆴ˙",
-    #     "t": "ㆵ˙",
-    #     "k": "ㆻ˙",
-    #     "h": "ㆷ˙",
-    # }
     #================================================================
     def TPS_piau_im(self, siann_bu, un_bu, tiau_ho):
         piau_im_huat = "方音符號"
@@ -1152,7 +1165,7 @@ class PiauIm:
             5: "ˊ",
             7: "˫",
             8: "\u02D9",
-            0: "\u2070",
+            0: "\u02D9",
         }
 
         # 將上標數字替換為普通數字
@@ -1298,7 +1311,6 @@ class PiauIm:
     #================================================================
     # 轉換【漢字標音】
     #================================================================
-    # def han_ji_piau_im_tng_huan(self, piau_im, piau_im_huat, siann_bu, un_bu, tiau_ho):
     def han_ji_piau_im_tng_huan(self, piau_im_huat, siann_bu, un_bu, tiau_ho):
         """選擇並執行對應的注音方法"""
         if piau_im_huat == "十五音":
@@ -1317,6 +1329,8 @@ class PiauIm:
             return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
         elif piau_im_huat == "閩拼調符":
             return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+        elif piau_im_huat == "閩拼注音":
+            return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
         elif piau_im_huat == "台語音標":
             siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
             if siann in ("", None, "Ø", "ø"):

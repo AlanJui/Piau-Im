@@ -10,9 +10,9 @@ from typing import Optional, Tuple
 import xlwings as xw
 from dotenv import load_dotenv
 
-from mod_ca_ji_tian import HanJiTian  # 新的查字典模組
-
 # 載入自訂模組
+from mod_BP_tng_huan_ping_im import convert_TLPA_to_BP
+from mod_ca_ji_tian import HanJiTian  # 新的查字典模組
 from mod_excel_access import delete_sheet_by_name, get_value_by_name
 from mod_字庫 import JiKhooDict
 from mod_帶調符音標 import is_han_ji
@@ -159,11 +159,18 @@ class CellProcessor:
             # 將人工輸入的【台語音標】，解構為【聲母】、【韻母】、【聲調】
             tai_gi_im_piau = convert_tl_with_tiau_hu_to_tlpa(jin_kang_piau_im)
             # 依指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
-            han_ji_piau_im = tlpa_tng_han_ji_piau_im(
-                piau_im=piau_im,
-                piau_im_huat=piau_im_huat,
-                tai_gi_im_piau=tai_gi_im_piau
-            )
+            if piau_im_huat == "閩拼注音":
+                # 將【台語音標】轉換成【閩拚音標】
+                siann, un, tiau = convert_TLPA_to_BP(tai_gi_im_piau)
+                # 將【閩拚音標】轉換成【閩拚注音】
+                zu_im_siann, zu_im_un, zu_im_tiau = piau_im.BP_zu_im(siann, un, tiau)
+                han_ji_piau_im = f"{zu_im_siann}{zu_im_un}{zu_im_tiau}"
+            else:
+                han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+                    piau_im=piau_im,
+                    piau_im_huat=piau_im_huat,
+                    tai_gi_im_piau=tai_gi_im_piau
+                )
 
         return tai_gi_im_piau, han_ji_piau_im
 
