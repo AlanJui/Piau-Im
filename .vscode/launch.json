@@ -186,6 +186,14 @@
             "args": []
         },
         {
+            "name": "a401_generate_web_page",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a401_generate_web_page.py",
+            "console": "integratedTerminal",
+            "args": []
+        },
+        {
             "name": "a400-2_製作標音網頁(使用人工標音)",
             "type": "debugpy",
             "request": "launch",

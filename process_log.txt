@@ -17566,3 +17566,599 @@ KeyError: '聲母'
 2025-12-04 11:41:50,970 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
 2025-12-04 12:44:32,334 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
 2025-12-04 22:17:47,782 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-05 11:48:23,036 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-05 11:48:23,037 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-05 11:48:23,053 - INFO - <----------- 作業開始！---------->
+2025-12-05 11:48:23,444 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 422, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 292, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 261, in generate_title_with_ruby
+    tai_gi_im_piau = wb.names['TITLE_PIAU_IM'].refers_to_range.value
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4646, in __getitem__
+    return self(item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4605, in __call__
+    return Name(impl=self.impl(name_or_index))
+                     ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2288, in __call__
+    return Name(xl=self.xl(name_or_index))
+                   ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-12-05 11:48:23,462 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 534, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 492, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 422, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 292, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 261, in generate_title_with_ruby
+    tai_gi_im_piau = wb.names['TITLE_PIAU_IM'].refers_to_range.value
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4646, in __getitem__
+    return self(item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4605, in __call__
+    return Name(impl=self.impl(name_or_index))
+                     ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2288, in __call__
+    return Name(xl=self.xl(name_or_index))
+                   ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-12-05 11:48:24,293 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《雪中紅》.xlsx
+2025-12-05 11:49:14,710 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-05 11:49:14,711 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-05 11:49:44,419 - INFO - <----------- 作業開始！---------->
+2025-12-05 11:49:58,542 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 422, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 292, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 261, in generate_title_with_ruby
+    tai_gi_im_piau = wb.names['TITLE_PIAU_IM'].refers_to_range.value
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4646, in __getitem__
+    return self(item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4605, in __call__
+    return Name(impl=self.impl(name_or_index))
+                     ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2288, in __call__
+    return Name(xl=self.xl(name_or_index))
+                   ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-12-05 11:49:58,553 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 534, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 492, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 422, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 292, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 261, in generate_title_with_ruby
+    tai_gi_im_piau = wb.names['TITLE_PIAU_IM'].refers_to_range.value
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4646, in __getitem__
+    return self(item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4605, in __call__
+    return Name(impl=self.impl(name_or_index))
+                     ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2288, in __call__
+    return Name(xl=self.xl(name_or_index))
+                   ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-12-05 11:49:58,879 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《雪中紅》.xlsx
+2025-12-05 11:50:07,444 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-05 11:50:07,446 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-05 11:50:13,749 - INFO - <----------- 作業開始！---------->
+2025-12-05 11:51:38,477 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-05 11:51:38,478 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-05 11:51:44,635 - INFO - <----------- 作業開始！---------->
+2025-12-05 11:52:51,960 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 422, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 292, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 261, in generate_title_with_ruby
+    tai_gi_im_piau = wb.names['TITLE_PIAU_IM'].refers_to_range.value
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4646, in __getitem__
+    return self(item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4605, in __call__
+    return Name(impl=self.impl(name_or_index))
+                     ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2288, in __call__
+    return Name(xl=self.xl(name_or_index))
+                   ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-12-05 11:52:51,967 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 534, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 492, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 422, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 292, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 261, in generate_title_with_ruby
+    tai_gi_im_piau = wb.names['TITLE_PIAU_IM'].refers_to_range.value
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4646, in __getitem__
+    return self(item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4605, in __call__
+    return Name(impl=self.impl(name_or_index))
+                     ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2288, in __call__
+    return Name(xl=self.xl(name_or_index))
+                   ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-12-05 11:52:52,240 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《雪中紅》.xlsx
+2025-12-05 11:52:59,972 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-05 11:52:59,973 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-05 11:52:59,987 - INFO - <----------- 作業開始！---------->
+2025-12-05 11:53:02,933 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 422, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 292, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 261, in generate_title_with_ruby
+    tai_gi_im_piau = wb.names['TITLE_PIAU_IM'].refers_to_range.value
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4646, in __getitem__
+    return self(item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4605, in __call__
+    return Name(impl=self.impl(name_or_index))
+                     ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2288, in __call__
+    return Name(xl=self.xl(name_or_index))
+                   ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-12-05 11:53:02,939 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 534, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 492, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 422, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 292, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 261, in generate_title_with_ruby
+    tai_gi_im_piau = wb.names['TITLE_PIAU_IM'].refers_to_range.value
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4646, in __getitem__
+    return self(item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4605, in __call__
+    return Name(impl=self.impl(name_or_index))
+                     ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2288, in __call__
+    return Name(xl=self.xl(name_or_index))
+                   ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-12-05 11:53:03,189 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《雪中紅》.xlsx
+2025-12-05 11:53:11,002 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-05 11:53:11,003 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-05 11:53:11,017 - INFO - <----------- 作業開始！---------->
+2025-12-05 12:02:20,223 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 422, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 292, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 261, in generate_title_with_ruby
+    tai_gi_im_piau = wb.names['TITLE_PIAU_IM'].refers_to_range.value
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4646, in __getitem__
+    return self(item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4605, in __call__
+    return Name(impl=self.impl(name_or_index))
+                     ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2288, in __call__
+    return Name(xl=self.xl(name_or_index))
+                   ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-12-05 12:02:20,228 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 534, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 492, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 422, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 292, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 261, in generate_title_with_ruby
+    tai_gi_im_piau = wb.names['TITLE_PIAU_IM'].refers_to_range.value
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4646, in __getitem__
+    return self(item)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 4605, in __call__
+    return Name(impl=self.impl(name_or_index))
+                     ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 2288, in __call__
+    return Name(xl=self.xl(name_or_index))
+                   ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 236, in __call__
+    v = self._inner(*args, **kwargs)
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\win32com\client\dynamic.py", line 213, in __call__
+    self._oleobj_.Invoke(*allArgs), self._olerepr_.defaultDispatchName, None
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2146827284), None)
+2025-12-05 12:02:20,580 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《雪中紅》.xlsx
+2025-12-05 12:02:28,570 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-05 12:02:28,571 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-05 12:02:29,201 - INFO - <----------- 作業開始！---------->
+2025-12-05 12:06:32,530 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-05 12:06:32,531 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-05 12:06:32,547 - INFO - <----------- 作業開始！---------->
+2025-12-05 12:06:41,635 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 423, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 293, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 266, in generate_title_with_ruby
+    ruby_tag, _, _ = self.generate_ruby_tag(han_ji, tai_gi_im_piau)
+                     ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a401_generate_web_page.py", line 134, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1304, in han_ji_piau_im_tng_huan
+    return self.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1157, in TPS_piau_im
+    tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
+                   ~~~^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '號'
+2025-12-05 12:06:41,640 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: invalid literal for int() with base 10: '號'
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 535, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 493, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 423, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 293, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 266, in generate_title_with_ruby
+    ruby_tag, _, _ = self.generate_ruby_tag(han_ji, tai_gi_im_piau)
+                     ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a401_generate_web_page.py", line 134, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1304, in han_ji_piau_im_tng_huan
+    return self.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1157, in TPS_piau_im
+    tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
+                   ~~~^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '號'
+2025-12-05 12:06:41,995 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《雪中紅》.xlsx
+2025-12-05 12:06:49,563 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-05 12:06:49,564 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-05 12:06:49,580 - INFO - <----------- 作業開始！---------->
+2025-12-05 12:11:01,215 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-05 12:11:01,216 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-05 12:11:01,232 - INFO - <----------- 作業開始！---------->
+2025-12-05 13:12:56,870 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-05 13:12:56,871 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-05 13:12:56,888 - INFO - <----------- 作業開始！---------->
+2025-12-05 13:13:18,060 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 136, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1304, in han_ji_piau_im_tng_huan
+    return self.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1165, in TPS_piau_im
+    tiau = Tiau_Ho_Remap[tiau_ho]
+           ~~~~~~~~~~~~~^^^^^^^^^
+KeyError: 0
+2025-12-05 13:13:18,065 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: 0
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 573, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 531, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 136, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1304, in han_ji_piau_im_tng_huan
+    return self.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1165, in TPS_piau_im
+    tiau = Tiau_Ho_Remap[tiau_ho]
+           ~~~~~~~~~~~~~^^^^^^^^^
+KeyError: 0
+2025-12-05 13:13:18,292 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《雪中紅》.xlsx
+2025-12-05 13:23:13,804 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-05 13:23:13,804 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-05 13:23:13,834 - INFO - <----------- 作業開始！---------->
+2025-12-05 13:26:11,268 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 136, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1304, in han_ji_piau_im_tng_huan
+    return self.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1165, in TPS_piau_im
+    tiau = Tiau_Ho_Remap[tiau_ho]
+           ~~~~~~~~~~~~~^^^^^^^^^
+KeyError: 0
+2025-12-05 13:26:11,295 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: 0
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 573, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 531, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 136, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1304, in han_ji_piau_im_tng_huan
+    return self.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1165, in TPS_piau_im
+    tiau = Tiau_Ho_Remap[tiau_ho]
+           ~~~~~~~~~~~~~^^^^^^^^^
+KeyError: 0
+2025-12-05 13:26:11,594 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《雪中紅》.xlsx
+2025-12-05 13:26:20,150 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-05 13:26:20,150 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-05 13:26:20,164 - INFO - <----------- 作業開始！---------->
+2025-12-05 13:34:19,230 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-05 13:34:19,231 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-05 13:34:19,247 - INFO - <----------- 作業開始！---------->
+2025-12-05 13:36:44,236 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 136, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1306, in han_ji_piau_im_tng_huan
+    return self.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1167, in TPS_piau_im
+    tiau = Tiau_Ho_Remap[tiau_ho]
+           ~~~~~~~~~~~~~^^^^^^^^^
+KeyError: 0
+2025-12-05 13:36:44,242 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: 0
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 573, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 531, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 136, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1306, in han_ji_piau_im_tng_huan
+    return self.TPS_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1167, in TPS_piau_im
+    tiau = Tiau_Ho_Remap[tiau_ho]
+           ~~~~~~~~~~~~~^^^^^^^^^
+KeyError: 0
+2025-12-05 13:36:44,560 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《雪中紅》.xlsx
+2025-12-05 13:37:00,225 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-05 13:37:00,226 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-05 13:37:00,244 - INFO - <----------- 作業開始！---------->
+2025-12-05 13:39:13,603 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 136, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1306, in han_ji_piau_im_tng_huan
+    elif piau_im_huat == "方音符號":
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1167, in TPS_piau_im
+    # tiau = self.TONE_MARKS[piau_im_huat][tiau_ho]
+KeyError: 0
+2025-12-05 13:39:13,610 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: 0
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 573, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 531, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 136, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1306, in han_ji_piau_im_tng_huan
+    elif piau_im_huat == "方音符號":
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1167, in TPS_piau_im
+    # tiau = self.TONE_MARKS[piau_im_huat][tiau_ho]
+KeyError: 0
+2025-12-05 13:39:13,965 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《雪中紅》.xlsx
+2025-12-05 13:39:22,303 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-05 13:39:22,304 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-05 13:39:22,319 - INFO - <----------- 作業開始！---------->
+2025-12-05 13:40:30,568 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-12-05 13:40:30,589 - INFO - <----------- 作業結束！---------->
+2025-12-05 13:40:30,944 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼調號】《雪中紅》.xlsx
+2025-12-05 13:40:30,944 - INFO - 《========== 程式終止執行：a401_generate_web_page ==========》
