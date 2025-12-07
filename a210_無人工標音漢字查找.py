@@ -22,6 +22,7 @@ from mod_標音 import (
     convert_tl_with_tiau_hu_to_tlpa,
     is_punctuation,
     split_hong_im_hu_ho,
+    split_tai_gi_im_piau,
     tlpa_tng_han_ji_piau_im,
 )
 
@@ -136,9 +137,12 @@ class CellProcessor:
         取人工標音【台語音標】
         """
 
+        # 清除使用者輸入前後的空白，避免後續拆解時產生「空白聲母」導致注音前多一格空白
+        jin_kang_piau_im = (jin_kang_piau_im or "").strip()
+
         if '〔' in jin_kang_piau_im and '〕' in jin_kang_piau_im:
             # 將人工輸入的〔台語音標〕轉換成【方音符號】
-            im_piau = jin_kang_piau_im.split('〔')[1].split('〕')[0]
+            im_piau = jin_kang_piau_im.split('〔')[1].split('〕')[0].strip()
             tai_gi_im_piau = convert_tl_with_tiau_hu_to_tlpa(im_piau)
             # 依使用者指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
             han_ji_piau_im = tlpa_tng_han_ji_piau_im(
@@ -148,7 +152,7 @@ class CellProcessor:
             )
         elif '【' in jin_kang_piau_im and '】' in jin_kang_piau_im:
             # 將人工輸入的【方音符號】轉換成【台語音標】
-            han_ji_piau_im = jin_kang_piau_im.split('【')[1].split('】')[0]
+            han_ji_piau_im = jin_kang_piau_im.split('【')[1].split('】')[0].strip()
             siann, un, tiau = split_hong_im_hu_ho(han_ji_piau_im)
             # 依使用者指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
             tai_gi_im_piau = piau_im.hong_im_tng_tai_gi_im_piau(
@@ -160,9 +164,9 @@ class CellProcessor:
             tai_gi_im_piau = convert_tl_with_tiau_hu_to_tlpa(jin_kang_piau_im)
             # 依指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
             if piau_im_huat == "閩拼注音":
-                # 將【台語音標】轉換成【閩拚音標】
-                siann, un, tiau = convert_TLPA_to_BP(tai_gi_im_piau)
-                # 將【閩拚音標】轉換成【閩拚注音】
+                # 將【台語音標】分解為【聲母】、【韻母】、【聲調】
+                siann, un, tiau = split_tai_gi_im_piau(tai_gi_im_piau)
+                # 將【台語音標】轉換成【閩拚注音】
                 zu_im_siann, zu_im_un, zu_im_tiau = piau_im.BP_zu_im(siann, un, tiau)
                 han_ji_piau_im = f"{zu_im_siann}{zu_im_un}{zu_im_tiau}"
             else:

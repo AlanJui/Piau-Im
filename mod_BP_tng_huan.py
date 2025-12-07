@@ -475,7 +475,8 @@ def convert_bp_siann_un_tiau_to_zu_im(siann: str, un: str, tiau: str):
     zu_im_un = convert_un_bu(un)
     tiau_hu = convert_to_tiau_hu(tiau)
 
-    return [zu_im_siann, zu_im_un, tiau_hu]
+    # return [zu_im_siann, zu_im_un, tiau_hu]
+    return zu_im_siann, zu_im_un, tiau_hu
 
 
 def convert_bp_im_piau_to_zu_im(bp_im_piau: str):

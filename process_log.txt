@@ -18847,3 +18847,1581 @@ Traceback (most recent call last):
     ^
 TypeError: PiauIm.han_ji_piau_im_tng_huan() got an unexpected keyword argument 'piau_im'
 2025-12-06 00:44:39,463 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-06 14:55:48,233 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 343, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 419, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 117, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 179, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 166, in _jin_kang_piau_im_ca_han_ji_piau_im
+    zu_im_siann, zu_im_un, zu_im_tiau = piau_im.BP_zu_im(siann, un, tiau)
+                                        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1147, in BP_zu_im
+    siann_bu, un_bu, tiau_ho = convert_TLPA_to_BP(siann_bu, un_bu)
+                               ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+TypeError: convert_TLPA_to_BP() takes 1 positional argument but 2 were given
+2025-12-06 14:55:48,238 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 485, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 343, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 419, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 117, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 179, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 166, in _jin_kang_piau_im_ca_han_ji_piau_im
+    zu_im_siann, zu_im_un, zu_im_tiau = piau_im.BP_zu_im(siann, un, tiau)
+                                        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1147, in BP_zu_im
+    siann_bu, un_bu, tiau_ho = convert_TLPA_to_BP(siann_bu, un_bu)
+                               ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+TypeError: convert_TLPA_to_BP() takes 1 positional argument but 2 were given
+2025-12-06 20:24:21,107 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 343, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 419, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 117, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 179, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 166, in _jin_kang_piau_im_ca_han_ji_piau_im
+    zu_im_siann, zu_im_un, zu_im_tiau = piau_im.BP_zu_im(siann, un, tiau)
+                                                         ^^^^^
+UnboundLocalError: cannot access local variable 'siann' where it is not associated with a value
+2025-12-06 20:24:21,111 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 485, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 343, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 419, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 117, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 179, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 166, in _jin_kang_piau_im_ca_han_ji_piau_im
+    zu_im_siann, zu_im_un, zu_im_tiau = piau_im.BP_zu_im(siann, un, tiau)
+                                                         ^^^^^
+UnboundLocalError: cannot access local variable 'siann' where it is not associated with a value
+2025-12-06 20:27:02,061 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 343, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 419, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 117, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 179, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 166, in _jin_kang_piau_im_ca_han_ji_piau_im
+    zu_im_siann, zu_im_un, zu_im_tiau = piau_im.BP_zu_im(piau_im, siann, un, tiau)
+                                                                  ^^^^^
+UnboundLocalError: cannot access local variable 'siann' where it is not associated with a value
+2025-12-06 20:27:02,066 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 485, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 343, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 419, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 117, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 179, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 166, in _jin_kang_piau_im_ca_han_ji_piau_im
+    zu_im_siann, zu_im_un, zu_im_tiau = piau_im.BP_zu_im(piau_im, siann, un, tiau)
+                                                                  ^^^^^
+UnboundLocalError: cannot access local variable 'siann' where it is not associated with a value
+2025-12-06 20:40:58,395 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-06 21:26:49,147 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-06 21:31:46,433 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-06 21:31:46,434 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-06 21:31:46,447 - INFO - <----------- 作業開始！---------->
+2025-12-06 21:31:46,801 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 325, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 294, in generate_title_with_ruby
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tai_gi_im_piau
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 130, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1338, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1133, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 898, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'h'
+2025-12-06 21:31:46,806 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: 'h'
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 573, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 531, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 325, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 294, in generate_title_with_ruby
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tai_gi_im_piau
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 130, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1338, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1133, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 898, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'h'
+2025-12-06 21:31:47,149 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-06 21:33:13,088 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-06 21:33:13,089 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-06 21:33:13,101 - INFO - <----------- 作業開始！---------->
+2025-12-06 21:33:13,385 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 325, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 294, in generate_title_with_ruby
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tai_gi_im_piau
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 130, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1338, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1133, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 898, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'h'
+2025-12-06 21:33:13,390 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: 'h'
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 573, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 531, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 325, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 294, in generate_title_with_ruby
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tai_gi_im_piau
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 130, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1338, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1133, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 898, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'h'
+2025-12-06 21:33:13,664 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-06 21:33:33,463 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-06 21:33:33,464 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-06 21:33:48,659 - INFO - <----------- 作業開始！---------->
+2025-12-06 21:35:18,840 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 325, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 294, in generate_title_with_ruby
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tai_gi_im_piau
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 130, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1338, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1133, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 898, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'h'
+2025-12-06 21:35:18,845 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: 'h'
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 573, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 531, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 325, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 294, in generate_title_with_ruby
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tai_gi_im_piau
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 130, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1338, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1133, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 898, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'h'
+2025-12-06 21:35:19,148 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-06 21:35:28,490 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-06 21:35:28,491 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-06 21:35:42,065 - INFO - <----------- 作業開始！---------->
+2025-12-06 21:37:35,953 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 325, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 294, in generate_title_with_ruby
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tai_gi_im_piau
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 130, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1338, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1133, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 898, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'h'
+2025-12-06 21:37:35,961 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: 'h'
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 573, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 531, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 325, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 294, in generate_title_with_ruby
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tai_gi_im_piau
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 130, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1338, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1133, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 898, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: 'h'
+2025-12-06 21:37:36,401 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-06 21:37:47,261 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-06 21:37:47,262 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-06 21:37:47,276 - INFO - <----------- 作業開始！---------->
+2025-12-06 21:49:18,987 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-06 21:49:18,988 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-06 21:49:19,001 - INFO - <----------- 作業開始！---------->
+2025-12-06 21:50:42,963 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 130, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1338, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1120, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-06 21:50:42,968 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 573, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 531, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 130, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1338, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1120, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-06 21:50:43,238 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-06 21:51:00,796 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-06 21:51:00,797 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-06 21:51:00,811 - INFO - <----------- 作業開始！---------->
+2025-12-06 21:53:04,530 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 130, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1338, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1120, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-06 21:53:04,536 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 573, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 531, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 130, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1338, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1120, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-06 21:53:04,839 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-06 21:53:12,098 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-06 21:53:12,099 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-06 21:53:12,113 - INFO - <----------- 作業開始！---------->
+2025-12-06 21:57:05,448 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 130, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1338, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1120, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-06 21:57:05,453 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 573, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 531, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 130, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1338, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1120, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-06 21:57:05,757 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-06 21:57:17,960 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-06 21:57:17,961 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-06 21:57:17,975 - INFO - <----------- 作業開始！---------->
+2025-12-06 22:02:36,373 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 130, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1338, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1120, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-06 22:02:36,380 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 573, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 531, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 130, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1338, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1120, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    ^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-06 22:02:36,671 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-06 22:02:46,680 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-06 22:02:46,681 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-06 22:02:46,695 - INFO - <----------- 作業開始！---------->
+2025-12-06 22:09:46,427 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-06 22:09:46,428 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-06 22:09:46,441 - INFO - <----------- 作業開始！---------->
+2025-12-06 22:11:10,829 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-06 22:11:10,830 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-06 22:11:10,845 - INFO - <----------- 作業開始！---------->
+2025-12-06 22:12:51,635 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 130, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1340, in han_ji_piau_im_tng_huan
+    if siann in ("", None, "Ø", "ø"):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1135, in BP_piau_im_with_tiau_hu
+    #================================================================
+  File "C:\work\Piau-Im\mod_標音.py", line 898, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: '7'
+2025-12-06 22:12:51,642 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: '7'
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 573, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 531, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 130, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1340, in han_ji_piau_im_tng_huan
+    if siann in ("", None, "Ø", "ø"):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1135, in BP_piau_im_with_tiau_hu
+    #================================================================
+  File "C:\work\Piau-Im\mod_標音.py", line 898, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: '7'
+2025-12-06 22:12:51,927 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-06 22:13:01,231 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-06 22:13:01,232 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-06 22:13:01,248 - INFO - <----------- 作業開始！---------->
+2025-12-06 22:13:18,939 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 130, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1335, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1130, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 898, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: '7'
+2025-12-06 22:13:18,946 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: '7'
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 573, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 531, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 130, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1335, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1130, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 898, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: '7'
+2025-12-06 22:13:19,209 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-06 22:13:31,006 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-06 22:13:31,007 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-06 22:13:31,023 - INFO - <----------- 作業開始！---------->
+2025-12-06 22:15:37,376 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-06 22:15:37,377 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-06 22:15:37,393 - INFO - <----------- 作業開始！---------->
+2025-12-06 22:18:05,455 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 136, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1337, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1146, in BP_zu_im
+    bp_siann, bp_un, bp_tiau = convert_TLPA_to_BP(tlpa_im_piau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-06 22:18:05,461 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 573, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 531, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 136, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1337, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1146, in BP_zu_im
+    bp_siann, bp_un, bp_tiau = convert_TLPA_to_BP(tlpa_im_piau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-06 22:18:05,744 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-06 22:25:24,146 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-06 22:25:24,147 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-06 22:25:24,161 - INFO - <----------- 作業開始！---------->
+2025-12-06 22:25:24,524 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 136, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1337, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1146, in BP_zu_im
+    bp_siann, bp_un, bp_tiau = convert_TLPA_to_BP(tlpa_im_piau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-06 22:25:24,528 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 573, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 531, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 136, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1337, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1146, in BP_zu_im
+    bp_siann, bp_un, bp_tiau = convert_TLPA_to_BP(tlpa_im_piau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-06 22:25:24,779 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-06 22:26:01,475 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-06 22:26:01,476 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-06 22:26:01,490 - INFO - <----------- 作業開始！---------->
+2025-12-06 22:26:01,844 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 136, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1337, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1146, in BP_zu_im
+    bp_siann, bp_un, bp_tiau = convert_TLPA_to_BP(tlpa_im_piau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-06 22:26:01,848 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 573, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 531, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 136, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1337, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1146, in BP_zu_im
+    bp_siann, bp_un, bp_tiau = convert_TLPA_to_BP(tlpa_im_piau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-06 22:26:02,093 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-07 10:42:50,090 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 347, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 423, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 118, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 183, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 170, in _jin_kang_piau_im_ca_han_ji_piau_im
+    zu_im_siann, zu_im_un, zu_im_tiau = piau_im.BP_zu_im(siann, un, tiau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 10:42:50,094 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 489, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 347, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 423, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 118, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 183, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 170, in _jin_kang_piau_im_ca_han_ji_piau_im
+    zu_im_siann, zu_im_un, zu_im_tiau = piau_im.BP_zu_im(siann, un, tiau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 10:45:34,207 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 347, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 423, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 118, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 183, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 170, in _jin_kang_piau_im_ca_han_ji_piau_im
+    zu_im_siann, zu_im_un, zu_im_tiau = piau_im.BP_zu_im(siann, un, tiau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 10:45:34,211 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 489, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 347, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 423, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 118, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 183, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 170, in _jin_kang_piau_im_ca_han_ji_piau_im
+    zu_im_siann, zu_im_un, zu_im_tiau = piau_im.BP_zu_im(siann, un, tiau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 10:47:30,914 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 347, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 423, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 118, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 183, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 170, in _jin_kang_piau_im_ca_han_ji_piau_im
+    zu_im_siann, zu_im_un, zu_im_tiau = piau_im.BP_zu_im(siann, un, tiau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 10:47:30,918 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 489, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 347, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 423, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 118, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 183, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 170, in _jin_kang_piau_im_ca_han_ji_piau_im
+    zu_im_siann, zu_im_un, zu_im_tiau = piau_im.BP_zu_im(siann, un, tiau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 10:51:50,832 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 347, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 423, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 118, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 183, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 170, in _jin_kang_piau_im_ca_han_ji_piau_im
+    zu_im_siann, zu_im_un, zu_im_tiau = piau_im.BP_zu_im(siann, un, tiau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 10:51:50,836 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 489, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 347, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 423, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 118, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 183, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 170, in _jin_kang_piau_im_ca_han_ji_piau_im
+    zu_im_siann, zu_im_un, zu_im_tiau = piau_im.BP_zu_im(siann, un, tiau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 10:53:18,884 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 347, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 423, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 118, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 183, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 170, in _jin_kang_piau_im_ca_han_ji_piau_im
+    zu_im_siann, zu_im_un, zu_im_tiau = piau_im.BP_zu_im(siann, un, tiau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 10:53:18,888 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 489, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 347, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 423, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 118, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 183, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 170, in _jin_kang_piau_im_ca_han_ji_piau_im
+    zu_im_siann, zu_im_un, zu_im_tiau = piau_im.BP_zu_im(siann, un, tiau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 10:55:13,828 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 347, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 423, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 118, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 183, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 170, in _jin_kang_piau_im_ca_han_ji_piau_im
+    zu_im_siann, zu_im_un, zu_im_tiau = piau_im.BP_zu_im(siann, un, tiau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 10:55:13,833 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 489, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 347, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 423, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 118, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 183, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 170, in _jin_kang_piau_im_ca_han_ji_piau_im
+    zu_im_siann, zu_im_un, zu_im_tiau = piau_im.BP_zu_im(siann, un, tiau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 10:59:35,731 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 347, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 423, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 118, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 183, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 170, in _jin_kang_piau_im_ca_han_ji_piau_im
+    zu_im_siann, zu_im_un, zu_im_tiau = piau_im.BP_zu_im(siann, un, tiau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 10:59:35,737 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 489, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 347, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 423, in _process_sheet
+    msg, is_eof = processor.process_cell(cell, row, col)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 118, in process_cell
+    return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "a210_無人工標音漢字查找.py", line 183, in _process_jin_kang_piau_im
+    tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        piau_im=self.piau_im,
+        ^^^^^^^^^^^^^^^^^^^^^
+        piau_im_huat=self.piau_im_huat,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 170, in _jin_kang_piau_im_ca_han_ji_piau_im
+    zu_im_siann, zu_im_un, zu_im_tiau = piau_im.BP_zu_im(siann, un, tiau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 11:11:32,165 - INFO - 已完成【台語音標】和【漢字標音】標注工作。

@@ -11,6 +11,9 @@ from mod_BP_tng_huan import (
     convert_bp_siann_un_tiau_to_zu_im,
 )
 
+# 將【台語音標】轉換成【閩拼音標】
+from mod_BP_tng_huan_ping_im import convert_TLPA_to_BP
+
 # 將 TLPA+ 【台語音標】轉換成 MPS2 【台語注音二式】
 from mod_convert_TLPA_to_MPS2 import convert_TLPA_to_MPS2
 
@@ -102,7 +105,8 @@ def format_han_ji_piau_im(value):
         return value  # 已是字串
 
     if isinstance(value, (list, tuple)):
-        return " ".join(filter(None, value))  # 序列 -> 去空值後 join
+        # return " ".join(filter(None, value))  # 序列 -> 去空值後 join
+        return "".join(filter(None, value))  # 序列 -> 去空值後 join
 
     return str(value)  # 其他型別備援
 
@@ -1082,11 +1086,7 @@ class PiauIm:
                 else:
                     un = "w" + un[1:]  # u 後有其它韻母字母，將 u 改為 w
 
-        # syllable = (siann, un, str(tiau)) if not with_tone_number else (f"{siann}{un}{tiau}", "", "")
-        if with_tone_number:
-            syllable = f"{siann}{un}{tiau}"
-        else:
-            syllable = f"{siann}{un}"
+        syllable = (siann, un, str(tiau)) if with_tone_number else (siann, un, "")
         return syllable
 
     def BP_piau_im(self, siann_bu, un_bu, tiau_ho):
@@ -1113,7 +1113,8 @@ class PiauIm:
         #----------------------------------------
         # 取得【閩拼方案】之【聲母】、【韻母】、【調號】
         #----------------------------------------
-        siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+        # siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+        siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho)
 
         #----------------------------------------
         # 在【韻母】之【羅馬拼音字母】之上標示【聲調】符號
@@ -1138,12 +1139,17 @@ class PiauIm:
         # piau_im_huat = "閩拚注音"
 
         # 將上標數字替換為普通數字
-        tiau_ho = replace_superscript_digits(str(tiau_ho))
+        # tiau_ho = replace_superscript_digits(str(tiau_ho))
 
+        # 將【台語音標】轉換成【閩拼音標】
+        tlpa_im_piau = f"{siann_bu}{un_bu}{tiau_ho}"
+        bp_siann, bp_un, bp_tiau = convert_TLPA_to_BP(tlpa_im_piau)
         # 將【閩拚音標】轉換成【閩拚注音】
-        zu_im_siann, zu_im_un, zu_im_tiau = convert_bp_siann_un_tiau_to_zu_im(siann_bu, un_bu, tiau_ho)
+        # zu_im_siann, zu_im_un, zu_im_tiau = convert_bp_siann_un_tiau_to_zu_im(bp_siann, bp_un, bp_tiau)
+        # return f"{zu_im_siann}{zu_im_un}{zu_im_tiau}"
 
-        return [zu_im_siann, zu_im_un, zu_im_tiau]
+        # 將【閩拚音標】轉換成【閩拚注音】，再回傳【閩拚注音】之：聲母、韻母、調號
+        return convert_bp_siann_un_tiau_to_zu_im(bp_siann, bp_un, bp_tiau)
 
 
     #================================================================
