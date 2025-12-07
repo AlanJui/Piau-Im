@@ -1089,7 +1089,7 @@ class PiauIm:
         syllable = (siann, un, str(tiau)) if with_tone_number else (siann, un, "")
         return syllable
 
-    def BP_piau_im(self, siann_bu, un_bu, tiau_ho):
+    def BP_piau_im(self, siann_bu, un_bu, tiau_ho) -> str :
         """將傳入的「TLPA+音標」之【聲母】、【韻母】、【調號】轉換為【閩拼方案】的音標。
         若是執行過程中發生錯誤，則回傳空字串。
 
@@ -1107,7 +1107,9 @@ class PiauIm:
         if result is None:
             # 已由 _get_BP_syllable() 紀錄 warning；此處只需回傳預設值
             return ""
-        return result
+
+        bp_im_piau = f"{result[0]}{result[1]}{result[2]}"
+        return bp_im_piau
 
     def BP_piau_im_with_tiau_hu(self, siann_bu, un_bu, tiau_ho):
         #----------------------------------------
@@ -1142,14 +1144,17 @@ class PiauIm:
         # tiau_ho = replace_superscript_digits(str(tiau_ho))
 
         # 將【台語音標】轉換成【閩拼音標】
-        tlpa_im_piau = f"{siann_bu}{un_bu}{tiau_ho}"
+        if siann_bu == 'ø' or siann_bu == 'Ø' or siann_bu == '':
+            tlpa_im_piau = f"{un_bu}{tiau_ho}"
+        else:
+            tlpa_im_piau = f"{siann_bu}{un_bu}{tiau_ho}"
         bp_siann, bp_un, bp_tiau = convert_TLPA_to_BP(tlpa_im_piau)
         # 將【閩拚音標】轉換成【閩拚注音】
-        # zu_im_siann, zu_im_un, zu_im_tiau = convert_bp_siann_un_tiau_to_zu_im(bp_siann, bp_un, bp_tiau)
-        # return f"{zu_im_siann}{zu_im_un}{zu_im_tiau}"
+        zu_im_siann, zu_im_un, zu_im_tiau = convert_bp_siann_un_tiau_to_zu_im(bp_siann, bp_un, bp_tiau)
+        return f"{zu_im_siann}{zu_im_un}{zu_im_tiau}"
 
         # 將【閩拚音標】轉換成【閩拚注音】，再回傳【閩拚注音】之：聲母、韻母、調號
-        return convert_bp_siann_un_tiau_to_zu_im(bp_siann, bp_un, bp_tiau)
+        # return convert_bp_siann_un_tiau_to_zu_im(bp_siann, bp_un, bp_tiau)
 
 
     #================================================================

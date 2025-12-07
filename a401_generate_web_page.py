@@ -10,6 +10,8 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 # 載入自訂模組
+from mod_BP_tng_huan import convert_bp_im_piau_to_zu_im
+from mod_BP_tng_huan_ping_im import convert_TLPA_to_BP
 from mod_ca_ji_tian import HanJiTian
 from mod_excel_access import delete_sheet_by_name, get_value_by_name
 from mod_file_access import save_as_new_file
@@ -103,7 +105,7 @@ class WebPageGenerator:
         self.piau_im = piau_im
         self.ji_tian = ji_tian
 
-    def generate_ruby_tag(self, han_ji: str, tai_gi_im_piau: str) -> tuple:
+    def generate_ruby_tag(self, wb, han_ji: str, tai_gi_im_piau: str) -> tuple:
         """
         生成 Ruby 標籤
 
@@ -115,6 +117,8 @@ class WebPageGenerator:
             (ruby_tag, siong_piau_im, zian_piau_im)
         """
         zu_im_list = split_tai_gi_im_piau(tai_gi_im_piau)
+
+        # 零聲母處理
         if zu_im_list[0] == "" or zu_im_list[0] is None:
             siann_bu = "ø"  # 無聲母: ø
         else:
@@ -236,6 +240,7 @@ class WebPageGenerator:
             含有 Ruby 標籤的標題 HTML
         """
         title_chars = ""
+        tlpa_im_piau_list = []
         title_with_ruby = ""
         row, col = 5, 4
 
@@ -245,6 +250,8 @@ class WebPageGenerator:
                 if cell_val is None:
                     break
                 title_chars += cell_val
+                if cell_val != "《" and cell_val != "》":
+                    tlpa_im_piau_list.append(sheet.range((row-1, col)).value)
                 if cell_val == "》":
                     break
                 col += 1
@@ -255,6 +262,7 @@ class WebPageGenerator:
         if title_chars:
             # 去除《與》符號，只傳入標題文字本體加注 ruby
             title_han_ji = title_chars.replace("《", "").replace("》", "")
+            i = 0
             for han_ji in title_han_ji:
                 tai_gi_im_piau = ""
                 han_ji_piau_im = ""
@@ -262,6 +270,7 @@ class WebPageGenerator:
                 zian_piau_im = ""
 
                 if han_ji.strip() == "":
+                    i += 1
                     continue
                 elif han_ji == '\n':
                     # 若讀到換行字元，則直接輸出換行標籤
@@ -271,32 +280,16 @@ class WebPageGenerator:
                     tag = f"<span>{han_ji}</span>"
                     title_with_ruby += tag
                 else:
-                    # 自【漢字庫】查找作業
-                    result = self.ji_tian.han_ji_ca_piau_im(
-                        han_ji=han_ji,
-                        ue_im_lui_piat=self.config.ue_im_lui_piat
+                    # 取得對應的台語音標
+                    tai_gi_im_piau = tlpa_im_piau_list[i] if i < len(tlpa_im_piau_list) else ""
+                    # 將【漢字】及【上方】/【右方】標音合併成一個 Ruby Tag
+                    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                        wb=wb, han_ji=han_ji, tai_gi_im_piau=tai_gi_im_piau
                     )
-                    # 若【漢字庫】查無此字
-                    if not result:
-                        msg = f"【{han_ji}】查無此字！"
-                        logging.warning(msg)
-                        tag = f"<span>{han_ji}</span>"
-                        title_with_ruby += tag
-                    else:
-                        # 依【漢字庫】查找結果，輸出【台語音標】和【漢字標音】
-                        tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
-                            result=result,
-                            han_ji_khoo=self.config.han_ji_khoo_name,
-                            piau_im=self.piau_im,
-                            piau_im_huat=self.config.piau_im_huat
-                        )
-                        # 將【漢字】及【上方】/【右方】標音合併成一個 Ruby Tag
-                        ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
-                            han_ji, tai_gi_im_piau
-                        )
-                        title_with_ruby += ruby_tag
-                        msg = f"{han_ji} [{tai_gi_im_piau}] ==》 上方標音：{siong_piau_im} / 右方標音：{zian_piau_im}"
-                        print(msg)
+                    title_with_ruby += ruby_tag
+                    msg = f"{han_ji} [{tai_gi_im_piau}] ==》 上方標音：{siong_piau_im} / 右方標音：{zian_piau_im}"
+                    print(msg)
+                i += 1
 
         return title_with_ruby
 
@@ -401,7 +394,9 @@ class WebPageGenerator:
                         tlpa_im_piau = tai_gi_im_piau
 
                     ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
-                        han_ji, tlpa_im_piau
+                        wb=wb,
+                        han_ji=han_ji,
+                        tai_gi_im_piau=tlpa_im_piau,
                     )
                     write_buffer += ruby_tag
                     msg = f"{han_ji} [{tlpa_im_piau}] ==》 上方標音：{siong_piau_im} / 右方標音：{zian_piau_im}"

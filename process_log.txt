@@ -20425,3 +20425,640 @@ Traceback (most recent call last):
     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ValueError: too many values to unpack (expected 3)
 2025-12-07 11:11:32,165 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-07 11:13:39,339 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-07 11:19:23,700 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-07 11:23:16,995 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 11:23:16,996 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 11:23:17,013 - INFO - <----------- 作業開始！---------->
+2025-12-07 11:23:17,380 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 136, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1339, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1146, in BP_zu_im
+    bp_siann, bp_un, bp_tiau = convert_TLPA_to_BP(tlpa_im_piau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 11:23:17,385 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 573, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 531, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 461, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 403, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        han_ji, tlpa_im_piau
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 136, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1339, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1146, in BP_zu_im
+    bp_siann, bp_un, bp_tiau = convert_TLPA_to_BP(tlpa_im_piau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 11:23:17,650 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-07 11:31:52,298 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 11:31:52,299 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 11:31:52,314 - INFO - <----------- 作業開始！---------->
+2025-12-07 11:37:28,062 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 11:37:28,063 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 11:37:28,077 - INFO - <----------- 作業開始！---------->
+2025-12-07 11:51:56,317 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 11:51:56,318 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 11:51:56,331 - INFO - <----------- 作業開始！---------->
+2025-12-07 11:55:34,728 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 467, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 407, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+        tai_gi_im_piau=tlpa_im_piau,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 140, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1339, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1146, in BP_zu_im
+    bp_siann, bp_un, bp_tiau = convert_TLPA_to_BP(tlpa_im_piau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 11:55:34,733 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 579, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 537, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 467, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 407, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+        tai_gi_im_piau=tlpa_im_piau,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 140, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1339, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1146, in BP_zu_im
+    bp_siann, bp_un, bp_tiau = convert_TLPA_to_BP(tlpa_im_piau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 11:55:34,992 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-07 11:56:45,871 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 11:56:45,872 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 11:56:45,885 - INFO - <----------- 作業開始！---------->
+2025-12-07 12:03:48,653 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 467, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 407, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+        tai_gi_im_piau=tlpa_im_piau,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 140, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1339, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1146, in BP_zu_im
+    bp_siann, bp_un, bp_tiau = convert_TLPA_to_BP(tlpa_im_piau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 12:03:48,659 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 579, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 537, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 467, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 407, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+        tai_gi_im_piau=tlpa_im_piau,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 140, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1339, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1146, in BP_zu_im
+    bp_siann, bp_un, bp_tiau = convert_TLPA_to_BP(tlpa_im_piau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 12:03:48,924 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-07 12:49:59,566 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 12:49:59,567 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 12:49:59,583 - INFO - <----------- 作業開始！---------->
+2025-12-07 12:50:49,640 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 12:50:49,641 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 12:50:49,656 - INFO - <----------- 作業開始！---------->
+2025-12-07 12:51:13,237 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 466, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 406, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+        tai_gi_im_piau=tlpa_im_piau,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 139, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1339, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1146, in BP_zu_im
+    bp_siann, bp_un, bp_tiau = convert_TLPA_to_BP(tlpa_im_piau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 12:51:13,241 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 578, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 536, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 466, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 406, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+        tai_gi_im_piau=tlpa_im_piau,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 139, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1339, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1146, in BP_zu_im
+    bp_siann, bp_un, bp_tiau = convert_TLPA_to_BP(tlpa_im_piau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 12:51:13,483 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-07 12:51:53,898 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 12:51:53,899 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 12:51:53,914 - INFO - <----------- 作業開始！---------->
+2025-12-07 12:52:34,885 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 12:52:34,886 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 12:52:34,901 - INFO - <----------- 作業開始！---------->
+2025-12-07 12:55:13,249 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 466, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 406, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+        tai_gi_im_piau=tlpa_im_piau,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 139, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1339, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1146, in BP_zu_im
+    bp_siann, bp_un, bp_tiau = convert_TLPA_to_BP(tlpa_im_piau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 12:55:13,255 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 578, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 536, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 466, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 406, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+        tai_gi_im_piau=tlpa_im_piau,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 139, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1339, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1146, in BP_zu_im
+    bp_siann, bp_un, bp_tiau = convert_TLPA_to_BP(tlpa_im_piau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 12:55:13,503 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-07 12:57:09,155 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 12:57:09,156 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 12:57:09,172 - INFO - <----------- 作業開始！---------->
+2025-12-07 13:05:29,412 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 13:05:29,413 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 13:05:29,428 - INFO - <----------- 作業開始！---------->
+2025-12-07 13:05:29,784 - INFO - 無法將【調號】轉為整數: 
+2025-12-07 13:05:29,785 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 472, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 412, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+        tai_gi_im_piau=tlpa_im_piau,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 145, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1339, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1146, in BP_zu_im
+    bp_siann, bp_un, bp_tiau = convert_TLPA_to_BP(tlpa_im_piau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 13:05:29,789 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 584, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 542, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 472, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 412, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+        tai_gi_im_piau=tlpa_im_piau,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 145, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1339, in han_ji_piau_im_tng_huan
+    return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1146, in BP_zu_im
+    bp_siann, bp_un, bp_tiau = convert_TLPA_to_BP(tlpa_im_piau)
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 13:05:30,012 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-07 13:09:07,162 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 13:09:07,163 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 13:09:07,177 - INFO - <----------- 作業開始！---------->
+2025-12-07 13:19:03,839 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 13:19:03,840 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 13:19:03,854 - INFO - <----------- 作業開始！---------->
+2025-12-07 13:22:41,311 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 13:22:41,313 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 13:22:41,328 - INFO - <----------- 作業開始！---------->
+2025-12-07 13:30:02,536 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 474, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 414, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+        tai_gi_im_piau=tlpa_im_piau,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 147, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1339, in han_ji_piau_im_tng_huan
+    elif piau_im_huat == "閩拼調符":
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1146, in BP_zu_im
+    tlpa_im_piau = f"{un_bu}{tiau_ho}"
+    ^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 13:30:02,543 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: too many values to unpack (expected 3)
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 586, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 544, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 474, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 414, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+        tai_gi_im_piau=tlpa_im_piau,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 147, in generate_ruby_tag
+    zian_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.zian_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1339, in han_ji_piau_im_tng_huan
+    elif piau_im_huat == "閩拼調符":
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1146, in BP_zu_im
+    tlpa_im_piau = f"{un_bu}{tiau_ho}"
+    ^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+2025-12-07 13:30:02,806 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-07 13:30:10,418 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 13:30:10,419 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 13:30:10,434 - INFO - <----------- 作業開始！---------->
+2025-12-07 13:33:48,595 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-12-07 13:33:48,607 - INFO - <----------- 作業結束！---------->
+2025-12-07 13:33:48,826 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-07 13:33:48,826 - INFO - 《========== 程式終止執行：a401_generate_web_page ==========》
+2025-12-07 13:43:45,663 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-07 13:46:58,035 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-07 13:47:30,757 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 13:47:30,757 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 13:47:30,772 - INFO - <----------- 作業開始！---------->
+2025-12-07 13:49:50,076 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 13:49:50,077 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 13:49:50,091 - INFO - <----------- 作業開始！---------->
+2025-12-07 13:53:45,536 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 13:53:45,537 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 13:53:45,552 - INFO - <----------- 作業開始！---------->
+2025-12-07 13:54:16,519 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-12-07 13:54:16,527 - INFO - <----------- 作業結束！---------->
+2025-12-07 13:54:16,755 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-07 13:54:16,755 - INFO - 《========== 程式終止執行：a401_generate_web_page ==========》
+2025-12-07 13:55:10,015 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-12-07 13:55:10,017 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 13:55:10,032 - INFO - <----------- 作業開始！---------->
+2025-12-07 13:55:20,214 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-12-07 13:55:20,222 - INFO - <----------- 作業結束！---------->
+2025-12-07 13:55:20,472 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-07 13:55:20,473 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-12-07 13:56:39,724 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-12-07 13:56:39,725 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 13:56:39,739 - INFO - <----------- 作業開始！---------->
+2025-12-07 13:59:43,349 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-12-07 13:59:43,357 - INFO - <----------- 作業結束！---------->
+2025-12-07 13:59:43,568 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-07 13:59:43,568 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-12-07 14:03:27,525 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-12-07 14:03:27,527 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 14:03:27,543 - INFO - <----------- 作業開始！---------->
+2025-12-07 14:03:35,641 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-12-07 14:03:35,649 - INFO - <----------- 作業結束！---------->
+2025-12-07 14:03:35,850 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-07 14:03:35,850 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-12-07 14:06:20,222 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-12-07 14:06:20,224 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 14:06:20,239 - INFO - <----------- 作業開始！---------->
+2025-12-07 14:06:28,744 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-12-07 14:06:28,752 - INFO - <----------- 作業結束！---------->
+2025-12-07 14:06:28,965 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-07 14:06:28,965 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-12-07 14:09:58,400 - INFO - 《========== 程式開始執行：a400_製作標音網頁 ==========》
+2025-12-07 14:09:58,401 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 14:09:58,415 - INFO - <----------- 作業開始！---------->
+2025-12-07 14:10:07,358 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-12-07 14:10:07,365 - INFO - <----------- 作業結束！---------->
+2025-12-07 14:10:07,584 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-07 14:10:07,584 - INFO - 《========== 程式終止執行：a400_製作標音網頁 ==========》
+2025-12-07 14:10:15,188 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 14:10:15,189 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 14:10:15,204 - INFO - <----------- 作業開始！---------->
+2025-12-07 14:10:18,499 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-12-07 14:10:18,506 - INFO - <----------- 作業結束！---------->
+2025-12-07 14:10:18,716 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-07 14:10:18,716 - INFO - 《========== 程式終止執行：a401_generate_web_page ==========》
+2025-12-07 14:11:28,903 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 14:11:28,904 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 14:11:28,917 - INFO - <----------- 作業開始！---------->
+2025-12-07 14:19:02,076 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 14:19:02,077 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 14:19:02,090 - INFO - <----------- 作業開始！---------->
+2025-12-07 14:23:05,476 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 14:23:05,477 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 14:23:05,490 - INFO - <----------- 作業開始！---------->
+2025-12-07 14:28:34,532 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 14:28:34,533 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 14:28:34,547 - INFO - <----------- 作業開始！---------->
+2025-12-07 14:29:15,959 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-12-07 14:29:15,967 - INFO - <----------- 作業結束！---------->
+2025-12-07 14:29:16,183 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-07 14:29:16,183 - INFO - 《========== 程式終止執行：a401_generate_web_page ==========》
+2025-12-07 14:31:23,054 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 14:31:23,055 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 14:31:23,070 - INFO - <----------- 作業開始！---------->
+2025-12-07 14:32:19,587 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 456, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 318, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 286, in generate_title_with_ruby
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb, han_ji=han_ji, tai_gi_im_piau=tai_gi_im_piau
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 134, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1342, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1132, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 898, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: '7'
+2025-12-07 14:32:19,592 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: '7'
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 568, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 526, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 456, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 318, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 286, in generate_title_with_ruby
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb, han_ji=han_ji, tai_gi_im_piau=tai_gi_im_piau
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 134, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1342, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1132, in BP_piau_im_with_tiau_hu
+    target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 898, in bp_un_bu_ga_tiau_ho
+    return f"{guan_im}{tiau_hu_dict[tiau]}"
+                       ~~~~~~~~~~~~^^^^^^
+KeyError: '7'
+2025-12-07 14:32:19,833 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-07 14:32:36,132 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-07 14:32:36,133 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-07 14:32:36,146 - INFO - <----------- 作業開始！---------->
