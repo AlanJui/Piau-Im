@@ -181,7 +181,7 @@ class CellProcessor:
     def _process_jin_kang_piau_im(self, jin_kang_piau_im, cell, row, col) -> Tuple[str, bool]:
         """處理人工標音內容"""
         tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
-            jin_kang_piau_im=str(jin_kang_piau_im).strip(),
+            jin_kang_piau_im=str(jin_kang_piau_im),
             piau_im=self.piau_im,
             piau_im_huat=self.piau_im_huat,
         )
