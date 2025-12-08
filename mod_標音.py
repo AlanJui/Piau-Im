@@ -12,7 +12,10 @@ from mod_BP_tng_huan import (
 )
 
 # 將【台語音標】轉換成【閩拼音標】
-from mod_BP_tng_huan_ping_im import convert_TLPA_to_BP
+from mod_BP_tng_huan_ping_im import (
+    convert_TLPA_to_BP,
+    convert_TLPA_to_BP_with_tone_marks,
+)
 
 # 將 TLPA+ 【台語音標】轉換成 MPS2 【台語注音二式】
 from mod_convert_TLPA_to_MPS2 import convert_TLPA_to_MPS2
@@ -1113,26 +1116,50 @@ class PiauIm:
 
     def BP_piau_im_with_tiau_hu(self, siann_bu, un_bu, tiau_ho):
         #----------------------------------------
-        # 取得【閩拼方案】之【聲母】、【韻母】、【調號】
+        # 將【台語音標】轉換成 【閩拼音標】
         #----------------------------------------
-        # siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
-        siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho)
+        # siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho)
+
+        # tlpa_im_piau = f"{siann_bu}{un_bu}{tiau_ho}"
+        # bp_im_piau_list = convert_TLPA_to_BP(tlpa_im_piau)
+        # bp_im_piau = ''.join(bp_im_piau_list) if bp_im_piau_list[0] is not None else None
+
+        # 零聲母處理
+        if siann_bu == "" or siann_bu is None or siann_bu == "ø":
+            tlpa_im_piau = f"{un_bu}{tiau_ho}"
+        else:
+            tlpa_im_piau = f"{siann_bu}{un_bu}{tiau_ho}"
 
         #----------------------------------------
-        # 在【韻母】之【羅馬拼音字母】之上標示【聲調】符號
+        # 將【閩拼音標】之【韻母】加上【聲調】符號
         #----------------------------------------
+        bp_with_tone = convert_TLPA_to_BP_with_tone_marks(tlpa_im_piau)
 
-        # 韻腹標調位置規則
-        pattern = r"(a|oo|ere|iu|ui|ng|e|o|i|u|m)"
-        match = re.search(pattern, un, re.I)
-        if match:
-            found = match.group(1)
-            idx = {"iu": 1, "ui": 1, "oo": 0, "ng": 0, "ere": 2}.get(found, 0)
-            target = list(found)
-            target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
-            un = un.replace(found, ''.join(target))
+        return bp_with_tone
 
-        return f"{siann}{un}"
+
+    # def BP_piau_im_with_tiau_hu(self, siann_bu, un_bu, tiau_ho):
+    #     #----------------------------------------
+    #     # 取得【閩拼方案】之【聲母】、【韻母】、【調號】
+    #     #----------------------------------------
+    #     # siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho, with_tone_number=False)
+    #     siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho)
+
+    #     #----------------------------------------
+    #     # 在【韻母】之【羅馬拼音字母】之上標示【聲調】符號
+    #     #----------------------------------------
+
+    #     # 韻腹標調位置規則
+    #     pattern = r"(a|oo|ere|iu|ui|ng|e|o|i|u|m)"
+    #     match = re.search(pattern, un, re.I)
+    #     if match:
+    #         found = match.group(1)
+    #         idx = {"iu": 1, "ui": 1, "oo": 0, "ng": 0, "ere": 2}.get(found, 0)
+    #         target = list(found)
+    #         target[idx] = self.bp_un_bu_ga_tiau_ho(target[idx], tiau)
+    #         un = un.replace(found, ''.join(target))
+
+    #     return f"{siann}{un}"
 
     #================================================================
     # 閩拚注音（BP Zu Im）

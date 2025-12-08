@@ -21062,3 +21062,233 @@ KeyError: '7'
 2025-12-07 14:32:36,132 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
 2025-12-07 14:32:36,133 - INFO - 專案根目錄為: C:\work\Piau-Im
 2025-12-07 14:32:36,146 - INFO - <----------- 作業開始！---------->
+2025-12-08 21:07:40,061 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-08 21:07:40,062 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-08 21:07:40,079 - INFO - <----------- 作業開始！---------->
+2025-12-08 21:10:37,093 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-08 21:10:37,094 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-08 21:10:37,107 - INFO - <----------- 作業開始！---------->
+2025-12-08 21:13:19,868 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-08 21:13:19,869 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-08 21:13:19,884 - INFO - <----------- 作業開始！---------->
+2025-12-08 21:14:21,324 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-08 21:14:21,324 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-08 21:14:21,338 - INFO - <----------- 作業開始！---------->
+2025-12-08 21:15:52,050 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-08 21:15:52,051 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-08 21:15:52,063 - INFO - <----------- 作業開始！---------->
+2025-12-08 21:17:55,924 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-08 21:17:55,925 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-08 21:17:55,938 - INFO - <----------- 作業開始！---------->
+2025-12-08 21:20:40,458 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-08 21:20:40,459 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-08 21:20:40,472 - INFO - <----------- 作業開始！---------->
+2025-12-08 21:25:07,423 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-08 21:25:07,425 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-08 21:25:07,438 - INFO - <----------- 作業開始！---------->
+2025-12-08 21:28:33,111 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-08 21:28:33,112 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-08 21:28:33,126 - INFO - <----------- 作業開始！---------->
+2025-12-08 21:34:04,045 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-08 21:34:04,046 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-08 21:34:04,059 - INFO - <----------- 作業開始！---------->
+2025-12-08 21:51:11,021 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-08 21:51:11,021 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-08 21:51:11,035 - INFO - <----------- 作業開始！---------->
+2025-12-08 21:51:30,735 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 456, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 318, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 286, in generate_title_with_ruby
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb, han_ji=han_ji, tai_gi_im_piau=tai_gi_im_piau
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 134, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1370, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1127, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = split_tai_gi_im_piau(tlpa_im_piau)
+                                           ^^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'tlpa_im_piau' where it is not associated with a value
+2025-12-08 21:51:30,740 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: cannot access local variable 'tlpa_im_piau' where it is not associated with a value
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 568, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 526, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 456, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 318, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 286, in generate_title_with_ruby
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb, han_ji=han_ji, tai_gi_im_piau=tai_gi_im_piau
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 134, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1370, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im_with_tiau_hu(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1127, in BP_piau_im_with_tiau_hu
+    siann, un, tiau = split_tai_gi_im_piau(tlpa_im_piau)
+                                           ^^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'tlpa_im_piau' where it is not associated with a value
+2025-12-08 21:51:30,836 - ERROR - 儲存檔案失敗！，錯誤訊息: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Workbook 的 SaveAs 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 583, in main
+    file_path = save_as_new_file(wb=wb)
+  File "C:\work\Piau-Im\mod_file_access.py", line 75, in save_as_new_file
+    wb.save(new_file_path)
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 1174, in save
+    self.impl.save(path, password=password)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 894, in save
+    self.xl.SaveAs(
+    ~~~~~~~~~~~~~~^
+        os.path.realpath(path), FileFormat=file_format, Password=password
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject <unknown>>", line 4, in SaveAs
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Workbook 的 SaveAs 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+2025-12-08 21:51:51,618 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-08 21:51:51,619 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-08 21:51:51,632 - INFO - <----------- 作業開始！---------->
+2025-12-08 21:53:03,854 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 456, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 318, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 286, in generate_title_with_ruby
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb, han_ji=han_ji, tai_gi_im_piau=tai_gi_im_piau
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 134, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1370, in han_ji_piau_im_tng_huan
+    elif piau_im_huat == "閩拼注音":
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1127, in BP_piau_im_with_tiau_hu
+    # 零聲母處理
+UnboundLocalError: cannot access local variable 'tlpa_im_piau' where it is not associated with a value
+2025-12-08 21:53:03,859 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: cannot access local variable 'tlpa_im_piau' where it is not associated with a value
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 568, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 526, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 456, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 318, in generate_web_page
+    title_with_ruby = self.generate_title_with_ruby(sheet, wb)
+  File "a401_generate_web_page.py", line 286, in generate_title_with_ruby
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb, han_ji=han_ji, tai_gi_im_piau=tai_gi_im_piau
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 134, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1370, in han_ji_piau_im_tng_huan
+    elif piau_im_huat == "閩拼注音":
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1127, in BP_piau_im_with_tiau_hu
+    # 零聲母處理
+UnboundLocalError: cannot access local variable 'tlpa_im_piau' where it is not associated with a value
+2025-12-08 21:53:03,944 - ERROR - 儲存檔案失敗！，錯誤訊息: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Workbook 的 SaveAs 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 583, in main
+    file_path = save_as_new_file(wb=wb)
+  File "C:\work\Piau-Im\mod_file_access.py", line 75, in save_as_new_file
+    wb.save(new_file_path)
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 1174, in save
+    self.impl.save(path, password=password)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 894, in save
+    self.xl.SaveAs(
+    ~~~~~~~~~~~~~~^
+        os.path.realpath(path), FileFormat=file_format, Password=password
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject <unknown>>", line 4, in SaveAs
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Workbook 的 SaveAs 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+2025-12-08 21:53:16,944 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-08 21:53:16,945 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-08 21:53:16,958 - INFO - <----------- 作業開始！---------->
+2025-12-08 21:59:30,560 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-12-08 21:59:30,569 - INFO - <----------- 作業結束！---------->
+2025-12-08 21:59:30,646 - ERROR - 儲存檔案失敗！，錯誤訊息: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Workbook 的 SaveAs 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 583, in main
+    file_path = save_as_new_file(wb=wb)
+  File "C:\work\Piau-Im\mod_file_access.py", line 75, in save_as_new_file
+    wb.save(new_file_path)
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\main.py", line 1174, in save
+    self.impl.save(path, password=password)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 894, in save
+    self.xl.SaveAs(
+    ~~~~~~~~~~~~~~^
+        os.path.realpath(path), FileFormat=file_format, Password=password
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\work\Piau-Im\.venv\Lib\site-packages\xlwings\_xlwindows.py", line 122, in __call__
+    v = self.__method(*args, **kwargs)
+  File "<COMObject <unknown>>", line 4, in SaveAs
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Excel', 'Class Workbook 的 SaveAs 方法失敗', 'xlmain11.chm', 0, -2146827284), None)
+2025-12-08 22:01:40,242 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-08 22:01:40,243 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-08 22:01:40,255 - INFO - <----------- 作業開始！---------->
+2025-12-08 22:01:44,607 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-12-08 22:01:44,621 - INFO - <----------- 作業結束！---------->
+2025-12-08 22:01:45,568 - INFO - 儲存檔案至路徑：.\output7\【河洛白話注音-閩拼注音】《雪中紅》.xlsx
+2025-12-08 22:01:45,568 - INFO - 《========== 程式終止執行：a401_generate_web_page ==========》
+2025-12-08 22:05:33,238 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-08 22:07:16,379 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-08 22:08:30,524 - INFO - 已完成【台語音標】和【漢字標音】標注工作。

@@ -129,7 +129,7 @@ BP_TIAU_MIA_TNG_TIAU_HO = {
 }
 
 
-def convert_TLPA_to_BP(TLPA_piau_im: str):
+def convert_TLPA_to_BP(tlpa_im_piau: str):
     """
     將一個 【台語音標】（TLPA）轉換成帶【聲調符號】的【閩拼音標】（BP）。如：
     【滾】==> kun3【台語音標】==> gun3【帶調號閩拼音標】。
@@ -154,7 +154,7 @@ def convert_TLPA_to_BP(TLPA_piau_im: str):
     - str: 轉換後的 BP 詞條；若輸入格式不符則回傳原字串。
     """
     # 確認傳入之【台語音標】符合格式=聲母+韻母+聲調=英文字母+數字
-    m = re.match(r"^([a-z]+)(\d+)$", TLPA_piau_im)
+    m = re.match(r"^([a-z]+)(\d+)$", tlpa_im_piau)
     if not m:
         # 如果不符合「全英文字母+數字」格式，就原樣回傳
         return None, None, None
@@ -227,7 +227,7 @@ def convert_TLPA_to_BP(TLPA_piau_im: str):
     return [siann, un, tiau]
 
 
-def convert_TLPA_to_BP_with_tone_marks(tlpa_piau_im: str) -> str:
+def convert_TLPA_to_BP_with_tone_marks(tlpa_im_piau: str) -> str:
     """
     將一個 【台語音標】（TLPA）轉換成帶【聲調符號】的【閩拼音標】（BP）。如：
     【滾】==> kun3【台語音標】==> gun3【帶調號閩拼音標】 ==> gǔn【帶調符閩拚音標】。
@@ -254,26 +254,49 @@ def convert_TLPA_to_BP_with_tone_marks(tlpa_piau_im: str) -> str:
     - str: 轉換後的【帶調符閩拼音標】；若輸入格式不符則回傳【None】。
     """
 
+    # # 聲調符號對應表（帶調號母音 → 對應數字）
+    # tone_mapping = {
+    #     "å": ("a","0"), "ā": ("a","1"), "á": ("a","2"), "ǎ": ("a","3"), "à": ("a","5"), "â": ("a","6"), "āh": ("a","7"), "áh": ("a","8"), "a̋": ("a","9"),
+    #     "e̊": ("e","0"), "ē": ("e","1"), "é": ("e","2"), "ě": ("e","3"), "è": ("e","5"), "ê": ("e","6"), "ēh": ("e","7"), "éh": ("e","8"), "e̋": ("e","9"),
+    #     "i̊": ("i","0"), "ī": ("i","1"), "í": ("i","2"), "ǐ": ("i","3"), "ì": ("i","5"), "î": ("i","6"), "īh": ("i","7"), "íh": ("i","8"), "i̋": ("i","9"),
+    #     "o̊": ("o","0"), "ō": ("o","1"), "ó": ("o","2"), "ǒ": ("o","3"), "ò": ("o","5"), "ô": ("o","6"), "ōh": ("o","7"), "óh": ("o","8"), "ő": ("o","9"),
+    #     "ů": ("u","0"), "ū": ("u","1"), "ú": ("u","2"), "ǔ": ("u","3"), "ù": ("u","5"), "û": ("u","6"), "ūh": ("u","7"), "úh": ("u","8"), "ű": ("u","9"),
+    #     "m̊": ("m","0"), "m̄": ("m","1"), "ḿ": ("m","2"), "m̌": ("m","3"), "m̀": ("m","5"), "m̂": ("m","6"), "m̄h": ("m","7"), "ḿh": ("m","8"), "m̋": ("m","9"),
+    #     "n̊": ("n","0"), "n̄": ("n","1"), "ń": ("n","2"), "ň": ("n","3"), "ǹ": ("n","5"), "n̂": ("n","6"), "n̄h": ("n","7"), "ńh": ("n","8"), "n̋": ("n","9"),
+    # }
+
+    # 調號需轉為字串格式以匹配 mapping
     tiau_ho_to_tiau_hu_mapping = {
-        0: "\u030A",  # 陰平
-        1: "\u0304",  # 陰平
-        2: "\u0301",  # 陽平
-        3: "\u030C",  # 上声
-        5: "\u0300",  # 陰去
-        6: "\u0302",  # 陽去
-        7: "\u0304",  # 陰入
-        8: "\u0301",  # 陽入
+        "0": "\u030A",  # 輕聲
+        "1": "\u0304",  # 陰平
+        "2": "\u0301",  # 陽平
+        "3": "\u030C",  # 上聲
+        "5": "\u0300",  # 陰去
+        "6": "\u0302",  # 陽去
+        "7": "\u0304",  # 陰入
+        "8": "\u0301",  # 陽入
     }
-    # 聲調符號對應表（帶調號母音 → 對應數字）
-    tone_mapping = {
-        "å": ("a","0"), "ā": ("a","1"), "á": ("a","2"), "ǎ": ("a","3"), "à": ("a","5"), "â": ("a","6"), "āh": ("a","7"), "áh": ("a","8"), "a̋": ("a","9"),
-        "e̊": ("e","0"), "ē": ("e","1"), "é": ("e","2"), "ě": ("e","3"), "è": ("e","5"), "ê": ("e","6"), "ēh": ("e","7"), "éh": ("e","8"), "e̋": ("e","9"),
-        "i̊": ("i","0"), "ī": ("i","1"), "í": ("i","2"), "ǐ": ("i","3"), "ì": ("i","5"), "î": ("i","6"), "īh": ("i","7"), "íh": ("i","8"), "i̋": ("i","9"),
-        "o̊": ("o","0"), "ō": ("o","1"), "ó": ("o","2"), "ǒ": ("o","3"), "ò": ("o","5"), "ô": ("o","6"), "ōh": ("o","7"), "óh": ("o","8"), "ő": ("o","9"),
-        "ů": ("u","0"), "ū": ("u","1"), "ú": ("u","2"), "ǔ": ("u","3"), "ù": ("u","5"), "û": ("u","6"), "ūh": ("u","7"), "úh": ("u","8"), "ű": ("u","9"),
-        "m̊": ("m","0"), "m̄": ("m","1"), "ḿ": ("m","2"), "m̌": ("m","3"), "m̀": ("m","5"), "m̂": ("m","6"), "m̄h": ("m","7"), "ḿh": ("m","8"), "m̋": ("m","9"),
-        "n̊": ("n","0"), "n̄": ("n","1"), "ń": ("n","2"), "ň": ("n","3"), "ǹ": ("n","5"), "n̂": ("n","6"), "n̄h": ("n","7"), "ńh": ("n","8"), "n̋": ("n","9"),
-    }
+
+    # 步驟 1: 將【台語音標】轉換成【閩拼音標】
+    bp_im_piau = convert_TLPA_to_BP(tlpa_im_piau)
+    if bp_im_piau is None or bp_im_piau[0] is None:
+        return None
+
+    siann, un, tiau = bp_im_piau
+
+    # 步驟 2: 已完成（在 convert_TLPA_to_BP 中）
+    # 步驟 3: 已完成（在 convert_TLPA_to_BP 中）
+
+    # 步驟 4: 在韻母中響度最高的元音字母上加上聲調符號
+    if not un or tiau not in tiau_ho_to_tiau_hu_mapping:
+        # 若韻母為空或調號不在對應表中，直接返回
+        # return f"{siann}{un}{tiau}"
+        return None
+
+    # 找出韻母中響度最高的元音位置
+    max_priority = -1
+    target_index = -1
+
     # 韻母中元音的響度優先順序（用於決定調符標注位置）
     # 響度從高到低：a > o > e > i/u > m/n
     vowel_priority = {
@@ -285,38 +308,6 @@ def convert_TLPA_to_BP_with_tone_marks(tlpa_piau_im: str) -> str:
         'm': 1,
         'n': 1,
     }
-
-    # 步驟 1: 將【台語音標】轉換成【閩拼音標】
-    result = convert_TLPA_to_BP(tlpa_piau_im)
-    if result is None or result[0] is None:
-        return None
-
-    siann, un, tiau = result
-
-    # 步驟 2: 已完成（在 convert_TLPA_to_BP 中）
-    # 步驟 3: 已完成（在 convert_TLPA_to_BP 中）
-
-    # 調號需轉為字串格式以匹配 mapping
-    tiau_ho_to_tiau_hu_mapping = {
-        "0": "\u030A",  # 陰平（輕聲）
-        "1": "\u0304",  # 陰平
-        "2": "\u0301",  # 陽平
-        "3": "\u030C",  # 上聲
-        "5": "\u0300",  # 陰去
-        "6": "\u0302",  # 陽去
-        "7": "\u0304",  # 陰入
-        "8": "\u0301",  # 陽入
-    }
-
-    # 步驟 4: 在韻母中響度最高的元音字母上加上聲調符號
-    if not un or tiau not in tiau_ho_to_tiau_hu_mapping:
-        # 若韻母為空或調號不在對應表中，直接返回
-        return f"{siann}{un}{tiau}"
-
-    # 找出韻母中響度最高的元音位置
-    max_priority = -1
-    target_index = -1
-
     for i, char in enumerate(un):
         if char in vowel_priority:
             priority = vowel_priority[char]
@@ -326,7 +317,8 @@ def convert_TLPA_to_BP_with_tone_marks(tlpa_piau_im: str) -> str:
 
     # 若找不到元音，直接返回無調符的音標
     if target_index == -1:
-        return f"{siann}{un}"
+        # return f"{siann}{un}"
+        return  None
 
     # 在目標元音上加上調符
     tone_mark = tiau_ho_to_tiau_hu_mapping[tiau]
