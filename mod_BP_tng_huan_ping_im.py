@@ -342,3 +342,76 @@ def convert_TLPA_to_BP_with_tone_marks(tlpa_piau_im: str) -> str:
 
     # 步驟 5: 回傳帶調符的閩拼音標
     return f"{siann}{un_with_tone}"
+
+
+def test01():
+    test_cases = [
+        "tsiann1",  # 轉換為 ziann1
+        "iao2",     # 轉換為 iao2
+        "m7",       # 韻化聲母 m，不轉換
+        "ng5",      # 韻化聲母 ng，不轉換
+        "i3",       # 零聲母 + i 為元音
+        "im2",      # 零聲母 + i 為元音
+        "ik6",      # 零聲母 + i 為元音
+        "iao5",     # 零聲母 + i 為介音
+        "iang3",    # 零聲母 + i 為介音
+        "iong1",    # 零聲母 + i 為介音
+        "u4",       # 零聲母 + u 為元音
+        "un1",      # 零聲母 + u 為元音
+        "ut7",      # 零聲母 + u 為元音
+        "uan2",     # 零聲母 + u 為介音
+        "uai3",     # 零聲母 + u 為介音
+        "ui5",      # 零聲母 + u 為介音
+    ]
+
+    for case in test_cases:
+        bp_im_piau = convert_TLPA_to_BP(case)
+        bp_with_tone = convert_TLPA_to_BP_with_tone_marks(case)
+        print(f"TLPA: {case} => BP: {bp_im_piau} => BP with tone marks: {bp_with_tone}")
+
+if __name__ == "__main__":
+    # 測試範例
+    # test01()
+
+    test_cases = [
+        ("同", "tong5", "dong2", "dóng"),
+        ("滾", "kun2", "gun3", "gǔn"),
+        ("腰", "iau1", "yao1", "yāo"),
+        ("伊", "i1", "yi1", "yī"),
+        ("音", "im1", "yim1", "yīm"),
+        ("油", "iu5", "yu2", "yú"),
+        ("溫", "un1", "wun1", "wūn"),
+        ("央", "iong1", "yong1", "yōng"),
+        ("彎", "uan1", "wan1", "wān"),
+        # ("春", "tshun1", "cun1", "cūn"),
+        ("春", "cun1", "cun1", "cūn"),
+        ("眠", "bian5", "bbian2", "bbián"),
+        ("不", "put4", "but7", "būt"),
+        ("覺", "kak4", "gak7", "gāk"),
+        ("曉", "hiau2", "hiao3", "hiǎo"),
+        ("處", "cu2", "cu3", "cǔ"),
+        ("聞", "bun5", "bbun2", "bbún"),
+        ("啼", "thi5", "ti2", "tí"),
+        ("鳥", "niau2", "lniao3", "lniǎo"),
+        ("夜", "ia2", "ya3", "yǎ"),
+        ("來", "lai5", "lai2", "lái"),
+        ("風", "hong1", "hong1", "hōng"),
+        ("雨", "u2", "wu3", "wǔ"),
+        ("聲", "sing1", "sing1", "sīng"),
+        ("花", "hua1", "hua1", "huā"),
+        ("落", "lok8", "lok8", "lók"),
+        ("知", "ti1", "di1", "dī"),
+        ("多", "to1", "do1", "dō"),
+        ("少", "siau3", "siao5", "siào"),
+    ]
+
+    print("=" * 70)
+    print("測試 convert_TLPA_to_BP_with_tone_marks")
+    print("=" * 70)
+
+    for han_ji, tlpa_im_piau, expected_bp_im_piau, expected_bp_with_tone in test_cases:
+        bp_im_piau_list = convert_TLPA_to_BP(tlpa_im_piau)
+        bp_im_piau = ''.join(bp_im_piau_list) if bp_im_piau_list[0] is not None else None
+        bp_with_tone = convert_TLPA_to_BP_with_tone_marks(tlpa_im_piau)
+        result = "PASS" if (bp_im_piau == expected_bp_im_piau and bp_with_tone == expected_bp_with_tone) else "FAIL"
+        print(f"{han_ji:4s} 台語音標：{tlpa_im_piau} ==> 閩拚音標：{bp_im_piau} ==> 預期: {expected_bp_im_piau} | 帶調符閩拼音標：{bp_with_tone} ==> 預期：{expected_bp_with_tone} ==> {result}")
