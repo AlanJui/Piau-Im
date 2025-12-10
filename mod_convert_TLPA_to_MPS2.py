@@ -136,6 +136,7 @@ def main(infile: str, outfile: str):
     with open(infile, "r", encoding="utf-8") as fin:
         lines = fin.readlines()
 
+    in_entries = False
     out_lines = []
     for line in lines:
         # 找到「...」之後即進入詞條區
