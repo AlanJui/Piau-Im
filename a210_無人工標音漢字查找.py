@@ -283,9 +283,9 @@ def ca_han_ji_thak_im(
     ue_im_lui_piat: str = "白話音",
     han_ji_khoo: str = "河洛話",
     db_name: str = 'Ho_Lok_Ue.db',
-    new_jin_kang_piau_im_ji_khoo_sheet: bool = False,
-    new_piau_im_ji_khoo_sheet: bool = False,
-    new_khuat_ji_piau_sheet: bool = False,
+    new_jin_kang_piau_im_ji_khoo_sheet: bool = True,
+    new_piau_im_ji_khoo_sheet: bool = True,
+    new_khuat_ji_piau_sheet: bool = True,
 ) -> int:
     """
     查詢漢字讀音並標注

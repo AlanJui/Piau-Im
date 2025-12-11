@@ -1370,9 +1370,10 @@ class PiauIm:
         elif piau_im_huat == "閩拼注音":
             return self.BP_zu_im(siann_bu, un_bu, tiau_ho)
         elif piau_im_huat == "台語音標":
-            siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
-            if siann in ("", None, "Ø", "ø"):
+            if siann_bu in ("", None, "Ø", "ø"):
                 siann = ""
+            else:
+                siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
             un = self.Un_Bu_Dict[un_bu]["台語音標"]
             return f"{siann}{un}{tiau_ho}"
         return ""

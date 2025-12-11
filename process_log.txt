@@ -21296,3 +21296,1061 @@ pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, 'Microsoft Exce
 2025-12-10 14:00:09,044 - INFO - ✅ 已將文件標題《短歌行》寫入 env 表 TITLE 名稱格。
 2025-12-10 14:00:09,388 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-注音二式】《短歌行》.xlsx
 2025-12-10 14:10:03,437 - INFO - 已完成【漢字】查找標音作業。
+2025-12-10 14:18:19,296 - INFO - 已完成【漢字】查找標音作業。
+2025-12-10 14:20:05,499 - INFO - 《========== 程式開始執行：a100_作業中活頁檔填入漢字 ==========》
+2025-12-10 14:20:05,500 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-10 14:20:05,517 - INFO - <----------- 作業開始！---------->
+2025-12-10 14:20:05,534 - INFO - 【待注音漢字】總字數為: 173
+2025-12-10 14:24:35,522 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 316, in ca_han_ji_thak_im
+    jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo = _initialize_ji_khoo(
+                                                                       ~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 374, in _initialize_ji_khoo
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=jin_kang_piau_im_sheet_name
+    )
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'N/A'
+2025-12-10 14:24:35,526 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 482, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 316, in ca_han_ji_thak_im
+    jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo = _initialize_ji_khoo(
+                                                                       ~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 374, in _initialize_ji_khoo
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=jin_kang_piau_im_sheet_name
+    )
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'N/A'
+2025-12-10 14:25:04,575 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-12-10 14:25:04,576 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-10 14:25:04,592 - INFO - <----------- 作業開始！---------->
+2025-12-10 14:25:45,565 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-12-10 14:25:45,566 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-10 14:25:45,580 - INFO - <----------- 作業開始！---------->
+2025-12-10 14:25:56,196 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：i2，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-10 14:25:56,417 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：iu1，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-10 14:25:56,899 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：i2，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-10 14:25:57,077 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：iu1，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-10 14:25:57,232 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：ui5，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-10 14:25:57,330 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：iu2，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-10 14:25:58,052 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：iu1，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-10 14:25:58,143 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：iu1，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-10 14:25:58,555 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：ui7，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-10 14:25:59,299 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：iu1，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-10 14:25:59,396 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：iu1，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-10 14:25:59,786 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：ia2，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-10 14:26:00,171 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：iu2，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-10 14:26:01,708 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：iu1，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-10 14:26:02,564 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：uat8，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-10 14:26:02,953 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：ong2，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-10 14:26:03,053 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：iong7，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-10 14:26:03,639 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：ian3，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-10 14:26:04,050 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：un1，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-10 14:26:04,601 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：oo1，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-10 14:26:05,647 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：i1，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-10 14:26:05,978 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：iam3，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-10 14:26:06,383 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：iam3，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-10 14:26:07,846 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-10 14:26:07,846 - INFO - 自動為【漢字】查找【台語音標】作業己完成！
+2025-12-10 14:26:07,846 - INFO - 【語音類型】：文讀音
+2025-12-10 14:26:07,846 - INFO - 【漢字庫】：Ho_Lok_Ue.db
+2025-12-10 14:26:07,855 - INFO - <----------- 作業結束！---------->
+2025-12-10 14:26:08,111 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-台語音標】《定風波》.xlsx
+2025-12-10 14:26:08,112 - INFO - 《========== 程式終止執行：a200_查找及填入漢字標音 ==========》
+2025-12-10 14:27:52,690 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 316, in ca_han_ji_thak_im
+    jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo = _initialize_ji_khoo(
+                                                                       ~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 374, in _initialize_ji_khoo
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=jin_kang_piau_im_sheet_name
+    )
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'N/A'
+2025-12-10 14:27:52,694 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 482, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 316, in ca_han_ji_thak_im
+    jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo = _initialize_ji_khoo(
+                                                                       ~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 374, in _initialize_ji_khoo
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=jin_kang_piau_im_sheet_name
+    )
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'N/A'
+2025-12-10 14:28:38,607 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 316, in ca_han_ji_thak_im
+    jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo = _initialize_ji_khoo(
+                                                                       ~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 374, in _initialize_ji_khoo
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=jin_kang_piau_im_sheet_name
+    )
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'N/A'
+2025-12-10 14:28:38,611 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 482, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 316, in ca_han_ji_thak_im
+    jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo = _initialize_ji_khoo(
+                                                                       ~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 374, in _initialize_ji_khoo
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=jin_kang_piau_im_sheet_name
+    )
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'N/A'
+2025-12-11 21:45:15,062 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 316, in ca_han_ji_thak_im
+    jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo = _initialize_ji_khoo(
+                                                                       ~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 374, in _initialize_ji_khoo
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=jin_kang_piau_im_sheet_name
+    )
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'N/A'
+2025-12-11 21:45:15,079 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 482, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 316, in ca_han_ji_thak_im
+    jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo = _initialize_ji_khoo(
+                                                                       ~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 374, in _initialize_ji_khoo
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=jin_kang_piau_im_sheet_name
+    )
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'N/A'
+2025-12-11 21:46:15,289 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 316, in ca_han_ji_thak_im
+    jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo = _initialize_ji_khoo(
+                                                                       ~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 374, in _initialize_ji_khoo
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=jin_kang_piau_im_sheet_name
+    )
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'N/A'
+2025-12-11 21:46:15,293 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 482, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 316, in ca_han_ji_thak_im
+    jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo = _initialize_ji_khoo(
+                                                                       ~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 374, in _initialize_ji_khoo
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=jin_kang_piau_im_sheet_name
+    )
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'N/A'
+2025-12-11 21:47:31,913 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 316, in ca_han_ji_thak_im
+    jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo = _initialize_ji_khoo(
+                                                                       ~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 374, in _initialize_ji_khoo
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=jin_kang_piau_im_sheet_name
+    )
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'N/A'
+2025-12-11 21:47:31,918 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 482, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 316, in ca_han_ji_thak_im
+    jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo = _initialize_ji_khoo(
+                                                                       ~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 374, in _initialize_ji_khoo
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=jin_kang_piau_im_sheet_name
+    )
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'N/A'
+2025-12-11 21:47:59,253 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 316, in ca_han_ji_thak_im
+    jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo = _initialize_ji_khoo(
+                                                                       ~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 374, in _initialize_ji_khoo
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=jin_kang_piau_im_sheet_name
+    )
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'N/A'
+2025-12-11 21:47:59,257 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 482, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 316, in ca_han_ji_thak_im
+    jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo = _initialize_ji_khoo(
+                                                                       ~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 374, in _initialize_ji_khoo
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=jin_kang_piau_im_sheet_name
+    )
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'N/A'
+2025-12-11 21:48:30,157 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 316, in ca_han_ji_thak_im
+    jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo = _initialize_ji_khoo(
+                                                                       ~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 374, in _initialize_ji_khoo
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=jin_kang_piau_im_sheet_name
+    )
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'N/A'
+2025-12-11 21:48:30,161 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 482, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 316, in ca_han_ji_thak_im
+    jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo = _initialize_ji_khoo(
+                                                                       ~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 374, in _initialize_ji_khoo
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=jin_kang_piau_im_sheet_name
+    )
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'N/A'
+2025-12-11 21:50:34,867 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 316, in ca_han_ji_thak_im
+    jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo = _initialize_ji_khoo(
+                                                                       ~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 374, in _initialize_ji_khoo
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=jin_kang_piau_im_sheet_name
+    )
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'N/A'
+2025-12-11 21:50:34,872 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 482, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 316, in ca_han_ji_thak_im
+    jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo = _initialize_ji_khoo(
+                                                                       ~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 374, in _initialize_ji_khoo
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=jin_kang_piau_im_sheet_name
+    )
+  File "C:\work\Piau-Im\mod_字庫.py", line 291, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'N/A'
+2025-12-11 21:56:17,031 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：i2，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:17,551 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：iu1，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:18,728 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：i2，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:19,167 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：iu1，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:19,516 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：ui5，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:19,742 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：u7，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:21,556 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：iu1，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:21,778 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：iu1，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:23,163 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：ui7，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:24,949 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：iu1，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:25,173 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：iu1，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:26,129 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：ia2，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:27,104 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：u7，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:30,889 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：iu1，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:31,850 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：m7，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:32,888 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：uat8，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:33,801 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：ong2，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:34,017 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：ing7，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:35,346 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：ian3，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:36,273 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：un1，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:37,556 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：oo1，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:40,046 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：i1，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:40,633 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：m7，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:40,852 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：iam3，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:41,572 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：m7，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:41,791 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：iam3，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:43,426 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：e7，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 21:56:44,726 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-11 22:03:19,420 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：i2，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 22:11:43,856 - ERROR - piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：i2，錯誤訊息: ''
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\mod_標音.py", line 149, in ca_ji_kiat_ko_tng_piau_im
+    han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=piau_im_huat,
+    ...<2 lines>...
+        tiau_ho=tiau_ho,
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1373, in han_ji_piau_im_tng_huan
+    siann = self.Siann_Bu_Dict[siann_bu]["台語音標"] or ""
+            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: ''
+2025-12-11 22:19:38,221 - INFO - 已完成【台語音標】和【漢字標音】標注工作。

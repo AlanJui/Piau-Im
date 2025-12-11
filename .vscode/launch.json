@@ -121,13 +121,6 @@
             "console": "integratedTerminal",
         },
         {
-            "name": "a201",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a201.py",
-            "console": "integratedTerminal",
-        },
-        {
             "name": "a210_無人工標音漢字查找",
             "type": "debugpy",
             "request": "launch",
