@@ -117,6 +117,29 @@ class JiKhooDict:
         else:
             raise ValueError(f"漢字 '{han_ji}' 不存在於字典中。")
 
+    def get_tai_gi_im_piau_by_han_ji(self, han_ji: str) -> str:
+        """
+        根據漢字查詢台語音標
+        若該漢字有多個音標，返回第一個
+        若查無結果，返回空字串
+
+        Args:
+            han_ji: 要查詢的漢字
+
+        Returns:
+            str: 台語音標，若無則返回空字串
+        """
+        if han_ji in self.ji_khoo_dict:
+            entries = self.ji_khoo_dict[han_ji]
+            if entries and len(entries) > 0:
+                # 返回第一個音標
+                tai_gi_im_piau = entries[0].get("tai_gi_im_piau", "")
+                # 若該音標為 N/A 則返回空字串
+                if tai_gi_im_piau == "N/A":
+                    return ""
+                return tai_gi_im_piau
+        return ""
+
     def update_kau_ziang_im_piau(self, han_ji: str, tai_gi_im_piau: str, kenn_ziann_im_piau: str, coordinates: tuple):
         """
         將人工標音或校正音標更新至字典。

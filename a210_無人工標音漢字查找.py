@@ -132,7 +132,7 @@ class CellProcessor:
         cell.font.color = (0, 0, 0)  # 黑色
         cell.color = None  # 無填滿
 
-    def _jin_kang_piau_im_ca_han_ji_piau_im(self, jin_kang_piau_im: str, piau_im: PiauIm, piau_im_huat: str):
+    def _jin_kang_piau_im_ca_han_ji_piau_im(self, han_ji: str, jin_kang_piau_im: str, piau_im: PiauIm, piau_im_huat: str):
         """
         取人工標音【台語音標】
         """
@@ -159,6 +159,20 @@ class CellProcessor:
                 siann=siann,
                 un=un,
                 tiau=tiau)['台語音標']
+        elif jin_kang_piau_im.startswith('=') and jin_kang_piau_im.endswith('='):
+            # 若【人工標音】欄輸入為【=】，表【台語音標】欄自【人工標音字庫】工作表之【台語音標】欄取標音
+            tai_gi_im_piau = self.jin_kang_piau_im_ji_khoo.get_tai_gi_im_piau_by_han_ji(han_ji=han_ji)
+            # 若查無結果，則設為空字串
+            if not tai_gi_im_piau:
+                tai_gi_im_piau = ''
+                han_ji_piau_im = ''
+            else:
+                # 依指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
+                han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+                    piau_im=piau_im,
+                    piau_im_huat=piau_im_huat,
+                    tai_gi_im_piau=tai_gi_im_piau
+                )
         else:
             # 將人工輸入的【台語音標】，解構為【聲母】、【韻母】、【聲調】
             tai_gi_im_piau = convert_tl_with_tiau_hu_to_tlpa(jin_kang_piau_im)
@@ -174,6 +188,7 @@ class CellProcessor:
     def _process_jin_kang_piau_im(self, jin_kang_piau_im, cell, row, col) -> Tuple[str, bool]:
         """處理人工標音內容"""
         tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
+            han_ji=cell.value,
             jin_kang_piau_im=str(jin_kang_piau_im),
             piau_im=self.piau_im,
             piau_im_huat=self.piau_im_huat,
@@ -184,6 +199,13 @@ class CellProcessor:
 
         # 記錄到標音字庫
         self.piau_im_ji_khoo.add_entry(
+            han_ji=cell.value,
+            tai_gi_im_piau=tai_gi_im_piau,
+            kenn_ziann_im_piau='N/A',
+            coordinates=(row, col)
+        )
+        # 記錄到人工標音字庫
+        self.jin_kang_piau_im_ji_khoo.add_entry(
             han_ji=cell.value,
             tai_gi_im_piau=tai_gi_im_piau,
             kenn_ziann_im_piau='N/A',
