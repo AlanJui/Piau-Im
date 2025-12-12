@@ -344,6 +344,9 @@ class WebPageGenerator:
             total_chars_per_line = 0
 
         for row in range(self.config.start_row, self.config.end_row, self.config.ROWS_PER_LINE):
+            if title_with_ruby and row == self.config.start_row:
+                # 已經處理過標題列，跳過
+                continue
             sheet.range((row, 1)).select()
 
             for col in range(self.config.start_col, self.config.end_col):
