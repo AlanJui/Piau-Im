@@ -22410,3 +22410,285 @@ KeyError: ''
 2025-12-12 11:20:09,765 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調符】《短歌行》.xlsx
 2025-12-12 11:20:09,765 - INFO - 《========== 程式終止執行：a401_generate_web_page ==========》
 2025-12-12 12:34:38,717 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-12 20:51:30,253 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-12 20:55:22,343 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-12 22:09:18,951 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-12 22:11:56,597 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-12 22:12:33,066 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-12 22:12:33,067 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-12 22:12:33,081 - INFO - <----------- 作業開始！---------->
+2025-12-12 22:12:41,609 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 393, in generate_web_page
+    if kam_si_u_tiau_hu(tai_gi_im_piau):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+IndexError: string index out of range
+2025-12-12 22:12:41,613 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: string index out of range
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 571, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 529, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 393, in generate_web_page
+    if kam_si_u_tiau_hu(tai_gi_im_piau):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+IndexError: string index out of range
+2025-12-12 22:12:41,841 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調符】《蘭亭集序》.xlsx
+2025-12-12 22:14:41,669 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-12 22:14:41,669 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-12 22:14:41,686 - INFO - <----------- 作業開始！---------->
+2025-12-12 22:14:51,559 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 393, in generate_web_page
+    if kam_si_u_tiau_hu(tai_gi_im_piau):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+IndexError: string index out of range
+2025-12-12 22:14:51,563 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: string index out of range
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 571, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 529, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 393, in generate_web_page
+    if kam_si_u_tiau_hu(tai_gi_im_piau):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+IndexError: string index out of range
+2025-12-12 22:14:51,826 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調符】《蘭亭集序》.xlsx
+2025-12-12 22:17:51,792 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-12 22:17:51,792 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-12 22:17:51,810 - INFO - <----------- 作業開始！---------->
+2025-12-12 22:18:02,045 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 393, in generate_web_page
+    if kam_si_u_tiau_hu(tai_gi_im_piau):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+IndexError: string index out of range
+2025-12-12 22:18:02,050 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: string index out of range
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 571, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 529, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 393, in generate_web_page
+    if kam_si_u_tiau_hu(tai_gi_im_piau):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+IndexError: string index out of range
+2025-12-12 22:18:02,319 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調符】《蘭亭集序》.xlsx
+2025-12-12 22:19:08,400 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-12 22:19:08,401 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-12 22:19:08,422 - INFO - <----------- 作業開始！---------->
+2025-12-12 22:28:12,821 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 393, in generate_web_page
+    if kam_si_u_tiau_hu(tai_gi_im_piau):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+IndexError: string index out of range
+2025-12-12 22:28:12,827 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: string index out of range
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 571, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 529, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 393, in generate_web_page
+    if kam_si_u_tiau_hu(tai_gi_im_piau):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+IndexError: string index out of range
+2025-12-12 22:28:13,069 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調符】《蘭亭集序》.xlsx
+2025-12-12 22:29:31,437 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-12 22:29:31,438 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-12 22:29:31,459 - INFO - <----------- 作業開始！---------->
+2025-12-12 22:34:19,403 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 393, in generate_web_page
+    if kam_si_u_tiau_hu(tai_gi_im_piau):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+IndexError: string index out of range
+2025-12-12 22:34:19,410 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: string index out of range
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 571, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 529, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 393, in generate_web_page
+    if kam_si_u_tiau_hu(tai_gi_im_piau):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+IndexError: string index out of range
+2025-12-12 22:34:19,676 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調符】《蘭亭集序》.xlsx
+2025-12-12 22:36:23,375 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-12 22:36:23,376 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-12 22:36:23,391 - INFO - <----------- 作業開始！---------->
+2025-12-12 22:36:48,000 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 393, in generate_web_page
+    if kam_si_u_tiau_hu(tai_gi_im_piau):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+IndexError: string index out of range
+2025-12-12 22:36:48,005 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: string index out of range
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 571, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 529, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 393, in generate_web_page
+    if kam_si_u_tiau_hu(tai_gi_im_piau):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+IndexError: string index out of range
+2025-12-12 22:36:48,252 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調符】《蘭亭集序》.xlsx
+2025-12-12 22:39:33,335 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-12 22:39:33,336 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-12 22:39:33,351 - INFO - <----------- 作業開始！---------->
+2025-12-12 22:42:46,087 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 393, in generate_web_page
+    if kam_si_u_tiau_hu(tai_gi_im_piau):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+IndexError: string index out of range
+2025-12-12 22:42:46,094 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: string index out of range
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 571, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 529, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 393, in generate_web_page
+    if kam_si_u_tiau_hu(tai_gi_im_piau):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+IndexError: string index out of range
+2025-12-12 22:42:46,361 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調符】《蘭亭集序》.xlsx
+2025-12-12 22:43:07,650 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-12 22:43:07,651 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-12 22:43:07,668 - INFO - <----------- 作業開始！---------->
+2025-12-12 22:44:04,783 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 393, in generate_web_page
+    if kam_si_u_tiau_hu(tai_gi_im_piau):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+IndexError: string index out of range
+2025-12-12 22:44:04,788 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: string index out of range
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 571, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 529, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 393, in generate_web_page
+    if kam_si_u_tiau_hu(tai_gi_im_piau):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+IndexError: string index out of range
+2025-12-12 22:44:05,076 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調符】《蘭亭集序》.xlsx
+2025-12-12 22:44:17,153 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-12 22:44:17,154 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-12 22:44:17,170 - INFO - <----------- 作業開始！---------->
+2025-12-12 22:44:35,998 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-12 22:44:35,999 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-12 22:44:36,014 - INFO - <----------- 作業開始！---------->
+2025-12-12 22:48:07,225 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-12 22:48:56,445 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-12 22:48:56,446 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-12 22:48:56,460 - INFO - <----------- 作業開始！---------->
+2025-12-12 22:50:51,171 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-12-12 22:50:51,187 - INFO - <----------- 作業結束！---------->
+2025-12-12 22:50:51,428 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調符】《蘭亭集序》.xlsx
+2025-12-12 22:50:51,429 - INFO - 《========== 程式終止執行：a401_generate_web_page ==========》
