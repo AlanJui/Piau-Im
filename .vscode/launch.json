@@ -143,6 +143,13 @@
             "console": "integratedTerminal",
         },
         {
+            "name": "a250_作用儲存格查找漢字標音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a250_作用儲存格查找漢字標音.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "a300_手動更正漢字標音",
             "type": "debugpy",
             "request": "launch",
