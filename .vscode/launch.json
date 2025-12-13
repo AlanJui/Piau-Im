@@ -325,41 +325,6 @@
             ]
         },
         {
-            "name": "mod_字庫",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "mod_字庫.py",
-            "console": "integratedTerminal",
-        },
-        {
-            "name": "mod_excel",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "mod_excel_access.py",
-            "console": "integratedTerminal",
-        },
-        {
-            "name": "mod_台羅音標漢字庫",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "mod_台羅音標漢字庫.py",
-            "console": "integratedTerminal",
-        },
-        {
-            "name": "mod_雅俗通",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "mod_雅俗通.py",
-            "console": "integratedTerminal",
-        },
-        {
-            "name": "csv01_更新漢字表資料",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "csv01_更新【漢字表】資料.py",
-            "console": "integratedTerminal",
-        },
-        {
             "name": "a810_缺字表更新漢字典資料庫",
             "type": "debugpy",
             "request": "launch",
@@ -456,6 +421,41 @@
                 // "-i 【河洛話注音】金剛般若波羅蜜經。無為福勝分第十一.xlsx",
                 // "-o Tai_Gi_Zu_Im_Bun.xlsx",
             ]
+        },
+        {
+            "name": "mod_字庫",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "mod_字庫.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "mod_excel",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "mod_excel_access.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "mod_台羅音標漢字庫",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "mod_台羅音標漢字庫.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "mod_雅俗通",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "mod_雅俗通.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "csv01_更新漢字表資料",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "csv01_更新【漢字表】資料.py",
+            "console": "integratedTerminal",
         },
         {
             "type": "msedge",
