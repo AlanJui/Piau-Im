@@ -22717,3 +22717,19 @@ IndexError: string index out of range
 2025-12-13 14:04:15,313 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
 2025-12-13 14:31:26,123 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
 2025-12-13 14:41:54,649 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-13 21:36:44,511 - ERROR - 主程式執行錯誤
+Traceback (most recent call last):
+  File "a802_批次式更新漢字庫.py", line 321, in main
+    exit_code = update_database_from_missing_characters(wb)
+  File "a802_批次式更新漢字庫.py", line 81, in update_database_from_missing_characters
+    if not isinstance(data[0], list):
+                      ~~~~^^^
+TypeError: 'NoneType' object is not subscriptable
+2025-12-13 21:38:26,434 - ERROR - 主程式執行錯誤
+Traceback (most recent call last):
+  File "a802_批次式更新漢字庫.py", line 321, in main
+    exit_code = update_database_from_missing_characters(wb)
+  File "a802_批次式更新漢字庫.py", line 81, in update_database_from_missing_characters
+    if not isinstance(data[0], list):
+                      ~~~~^^^
+TypeError: 'NoneType' object is not subscriptable

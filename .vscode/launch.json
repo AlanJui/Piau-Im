@@ -325,6 +325,23 @@
             ]
         },
         {
+            "name": "a801_更新漢字庫",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a801_更新漢字庫.py",
+            "console": "integratedTerminal",
+            "args": [
+                "1"
+            ]
+        },
+        {
+            "name": "a802_批次式更新漢字庫",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a802_批次式更新漢字庫.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "a810_缺字表更新漢字典資料庫",
             "type": "debugpy",
             "request": "launch",
