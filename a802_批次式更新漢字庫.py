@@ -35,13 +35,17 @@ def upsert_han_ji_record(han_ji: str, tai_lo_im_piau: str, siong_iong_too: float
     """
     插入或更新漢字記錄（使用 UPSERT 語法）
 
+    若記錄不存在，則插入新記錄。
+    若記錄已存在且【常用度】不同，則更新【常用度】、【摘要說明】、【更新時間】。
+    若記錄已存在但【常用度】相同，則不做任何更新。
+
     Args:
         han_ji: 漢字
         tai_lo_im_piau: 台羅音標
         siong_iong_too: 常用度（文讀音 0.8 / 白話音 0.6）
 
     Returns:
-        int: 影響的記錄數
+        int: 影響的記錄數（0=無異動, 1=新增或更新）
     """
     try:
         cursor = db_manager.execute("""
@@ -51,6 +55,7 @@ def upsert_han_ji_record(han_ji: str, tai_lo_im_piau: str, siong_iong_too: float
             SET 常用度 = excluded.常用度,
                 摘要說明 = excluded.摘要說明,
                 更新時間 = excluded.更新時間
+            WHERE 漢字庫.常用度 != excluded.常用度
         """, (han_ji, tai_lo_im_piau, siong_iong_too, "NA", datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
         return cursor.rowcount
     except Exception as e:
@@ -148,9 +153,10 @@ def update_database_from_worksheet(wb, sheet_name: str) -> int:
                 )
 
                 if rowcount == 0:
-                    print(f"⚠️ 第 {idx} 列資料更新失敗！")
+                    # print(f"⇒⇨⮕  資料：【{han_ji}】、【{tl_im_piau}】、【{siong_iong_too}】已存於資料表中，未執行任何更新作業！")
+                    print(f"⚠️  資料：【{han_ji} ({tl_im_piau})】、【{siong_iong_too}】已存於資料表中，未執行任何更新作業！")
                 else:
-                    print(f"✅ 第 {idx} 列資料已更新至資料庫。")
+                    print(f"✅ 已在資料表，新增【{han_ji}（{tl_im_piau}）】或更新【常用度：{siong_iong_too}】。")
 
         # 交易自動 commit
         print("\n" + "=" * 80)
