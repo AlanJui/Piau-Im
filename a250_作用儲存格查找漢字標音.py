@@ -115,7 +115,11 @@ class CellProcessor:
 
         jin_kang_piau_im = cell.offset(-2, 0).value  # 人工標音
         if jin_kang_piau_im and str(jin_kang_piau_im).strip() != "":
-            return  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            msg, sing_kong =  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+            if sing_kong:
+                return (msg, False)
+            else:
+                return (msg, False)
 
         # 檢查特殊字元
         if cell_value == 'φ':
@@ -123,9 +127,9 @@ class CellProcessor:
         elif cell_value == '\n':
             return "【換行】", False
         elif not is_han_ji(cell_value):
-            return self._process_non_han_ji(cell_value)
+            return self._process_non_han_ji(cell_value), False
         else:
-            return self._process_han_ji(cell_value, cell, row, col)
+            return self._process_han_ji(cell_value, cell, row, col), False
 
     def _reset_cell_style(self, cell):
         """重置儲存格樣式"""
@@ -136,6 +140,9 @@ class CellProcessor:
         """
         取人工標音【台語音標】
         """
+
+        tai_gi_im_piau = ''
+        han_ji_piau_im = ''
 
         # 清除使用者輸入前後的空白，避免後續拆解時產生「空白聲母」導致注音前多一格空白
         jin_kang_piau_im = (jin_kang_piau_im or "").strip()
@@ -187,34 +194,70 @@ class CellProcessor:
 
     def _process_jin_kang_piau_im(self, jin_kang_piau_im, cell, row, col) -> Tuple[str, bool]:
         """處理人工標音內容"""
+        # 預設未能依【人工標音】欄，找到對應的【台語音標】和【漢字標音】
+        sing_kong = False
+        han_ji=cell.value
+        jin_kang_piau_im = str(jin_kang_piau_im).strip()
+
+        # 執行【人工標音】處理作業
         tai_gi_im_piau, han_ji_piau_im = self._jin_kang_piau_im_ca_han_ji_piau_im(
-            han_ji=cell.value,
+            han_ji=han_ji,
             jin_kang_piau_im=str(jin_kang_piau_im),
             piau_im=self.piau_im,
             piau_im_huat=self.piau_im_huat,
         )
+        if tai_gi_im_piau != '':
+            # 依指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
+            han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+                piau_im=self.piau_im,
+                piau_im_huat=self.piau_im_huat,
+                tai_gi_im_piau=tai_gi_im_piau
+            )
+            # 記錄到人工標音字庫
+            self.jin_kang_piau_im_ji_khoo.add_entry(
+                han_ji=cell.value,
+                tai_gi_im_piau=tai_gi_im_piau,
+                kenn_ziann_im_piau='N/A',
+                coordinates=(row, col)
+            )
+            # 記錄到標音字庫
+            self.piau_im_ji_khoo.add_entry(
+                han_ji=cell.value,
+                tai_gi_im_piau=tai_gi_im_piau,
+                kenn_ziann_im_piau='N/A',
+                coordinates=(row, col)
+            )
+            # msg = f"使用【人工標音={cell.offset(-2, 0).value}】"
+        elif  tai_gi_im_piau == '' and cell.offset(-2, 0).value == '=':
+            # 【人工標音】欄輸入為【=】，但【人工標音字庫】工作表查無結果，再自【標音字庫】工作表，嚐試查找【台語音標】
+            tai_gi_im_piau = self.piau_im_ji_khoo.get_tai_gi_im_piau_by_han_ji(han_ji=han_ji)
+            if tai_gi_im_piau != '':
+                # 依指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
+                han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+                    piau_im=self.piau_im,
+                    piau_im_huat=self.piau_im_huat,
+                    tai_gi_im_piau=tai_gi_im_piau
+                )
+                cell.offset(-2, 0).value = ''  # 清空【人工標音】欄【=】
+                # msg = f"使用【人工標音={cell.offset(-2, 0).value}】，但改自【標音字庫】"
+            else:
+                # 若找不到【人工標音】對應的【台語音標】，則記錄到【缺字表】
+                self.khuat_ji_piau_ji_khoo.add_entry(
+                    han_ji=cell.value,
+                    tai_gi_im_piau='N/A',
+                    kenn_ziann_im_piau='N/A',
+                    coordinates=(row, col)
+                )
+                # msg = f"【{cell.value}】人工標音查無結果！", sing_kong
+
         # 寫入儲存格
         cell.offset(-1, 0).value = tai_gi_im_piau  # 上方儲存格：台語音標
         cell.offset(1, 0).value = han_ji_piau_im    # 下方儲存格：漢字標音
 
-        # 記錄到標音字庫
-        self.piau_im_ji_khoo.add_entry(
-            han_ji=cell.value,
-            tai_gi_im_piau=tai_gi_im_piau,
-            kenn_ziann_im_piau='N/A',
-            coordinates=(row, col)
-        )
-        # 記錄到人工標音字庫
-        self.jin_kang_piau_im_ji_khoo.add_entry(
-            han_ji=cell.value,
-            tai_gi_im_piau=tai_gi_im_piau,
-            kenn_ziann_im_piau='N/A',
-            coordinates=(row, col)
-        )
-
-        msg = f"{cell.value}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
-        is_eof = False
-        return msg, is_eof
+        # 依據【人工標音】欄，在【人工標音字庫】工作表找到相對應的【台語音標】和【漢字標音】
+        msg = f"{cell.value}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】（人工標音：【{jin_kang_piau_im}】）"
+        sing_kong = True
+        return msg, sing_kong
 
     def _process_non_han_ji(self, cell_value) -> Tuple[str, bool]:
         """處理非漢字內容"""

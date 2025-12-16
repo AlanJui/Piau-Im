@@ -22733,3 +22733,93 @@ Traceback (most recent call last):
     if not isinstance(data[0], list):
                       ~~~~^^^
 TypeError: 'NoneType' object is not subscriptable
+2025-12-16 11:36:36,345 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 338, in ca_han_ji_thak_im
+    jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo = _initialize_ji_khoo(
+                                                                       ~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 405, in _initialize_ji_khoo
+    piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=piau_im_sheet_name
+    )
+  File "C:\work\Piau-Im\mod_字庫.py", line 314, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'han5'
+2025-12-16 11:36:36,350 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 504, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 338, in ca_han_ji_thak_im
+    jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo = _initialize_ji_khoo(
+                                                                       ~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+    ...<2 lines>...
+        new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 405, in _initialize_ji_khoo
+    piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=piau_im_sheet_name
+    )
+  File "C:\work\Piau-Im\mod_字庫.py", line 314, in create_ji_khoo_dict_from_sheet
+    row_col = tuple(map(int, coord.split(", ")))
+ValueError: invalid literal for int() with base 10: 'han5'
+2025-12-16 11:44:11,226 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-16 13:04:32,309 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-16 13:05:47,461 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-16 13:05:47,462 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-16 13:05:47,478 - INFO - <----------- 作業開始！---------->
+2025-12-16 13:05:59,939 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 393, in generate_web_page
+    if kam_si_u_tiau_hu(tai_gi_im_piau):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+IndexError: string index out of range
+2025-12-16 13:05:59,944 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: string index out of range
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 571, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 529, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 393, in generate_web_page
+    if kam_si_u_tiau_hu(tai_gi_im_piau):
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_帶調符音標.py", line 582, in kam_si_u_tiau_hu
+    if im_piau[-1] in "123456789":
+       ~~~~~~~^^^^
+IndexError: string index out of range
+2025-12-16 13:06:00,211 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調符】《寒窯賦》.xlsx
+2025-12-16 13:09:29,676 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-16 16:16:30,793 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-16 16:35:40,013 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-16 16:53:33,292 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-16 17:02:33,227 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-16 17:06:48,116 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-16 17:07:51,985 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-16 17:11:07,012 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-16 17:11:51,415 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
