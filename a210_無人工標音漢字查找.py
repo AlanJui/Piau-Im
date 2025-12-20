@@ -472,6 +472,8 @@ def _process_sheet(sheet, config: ProcessConfig, processor: CellProcessor):
         # 逐欄處理
         for col in range(config.start_col, config.end_col):
             cell = sheet.range((row, col))
+            # 設定作用儲存格為目前儲存格
+            cell.select()
 
             # 處理儲存格
             msg, is_eof = processor.process_cell(cell, row, col)
@@ -540,11 +542,15 @@ def main():
             return EXIT_CODE_NO_FILE
 
         # 執行處理
+        ue_im_lui_piat = get_value_by_name(wb=wb, name='語音類型')
+        han_ji_khoo = get_value_by_name(wb=wb, name='漢字庫')
+        sheet_name = '漢字注音'
+        wb.sheets[sheet_name].activate()
         exit_code = ca_han_ji_thak_im(
             wb=wb,
-            sheet_name='漢字注音',
-            ue_im_lui_piat="白話音",
-            han_ji_khoo="河洛話",
+            sheet_name=sheet_name,
+            ue_im_lui_piat=ue_im_lui_piat,
+            han_ji_khoo=han_ji_khoo,
             db_name=DB_HO_LOK_UE,
             new_khuat_ji_piau_sheet=False,
             new_piau_im_ji_khoo_sheet=False,

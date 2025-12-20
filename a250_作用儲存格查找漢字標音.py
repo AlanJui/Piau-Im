@@ -227,7 +227,6 @@ class CellProcessor:
                 kenn_ziann_im_piau='N/A',
                 coordinates=(row, col)
             )
-            # msg = f"使用【人工標音={cell.offset(-2, 0).value}】"
         elif  tai_gi_im_piau == '' and cell.offset(-2, 0).value == '=':
             # 【人工標音】欄輸入為【=】，但【人工標音字庫】工作表查無結果，再自【標音字庫】工作表，嚐試查找【台語音標】
             tai_gi_im_piau = self.piau_im_ji_khoo.get_tai_gi_im_piau_by_han_ji(han_ji=han_ji)
@@ -239,7 +238,6 @@ class CellProcessor:
                     tai_gi_im_piau=tai_gi_im_piau
                 )
                 cell.offset(-2, 0).value = ''  # 清空【人工標音】欄【=】
-                # msg = f"使用【人工標音={cell.offset(-2, 0).value}】，但改自【標音字庫】"
             else:
                 # 若找不到【人工標音】對應的【台語音標】，則記錄到【缺字表】
                 self.khuat_ji_piau_ji_khoo.add_entry(
@@ -248,7 +246,6 @@ class CellProcessor:
                     kenn_ziann_im_piau='N/A',
                     coordinates=(row, col)
                 )
-                # msg = f"【{cell.value}】人工標音查無結果！", sing_kong
 
         # 寫入儲存格
         cell.offset(-1, 0).value = tai_gi_im_piau  # 上方儲存格：台語音標
@@ -522,12 +519,17 @@ def main():
             return EXIT_CODE_NO_FILE
 
         # 執行處理
+        ue_im_lui_piat = get_value_by_name(wb=wb, name='語音類型')
+        han_ji_khoo = get_value_by_name(wb=wb, name='漢字庫')
+        db_name = DB_HO_LOK_UE if han_ji_khoo == '河洛話' else DB_KONG_UN
+        sheet_name = '漢字注音'
+        wb.sheets[sheet_name].activate()
         exit_code = ca_han_ji_thak_im(
             wb=wb,
-            sheet_name='漢字注音',
-            ue_im_lui_piat="白話音",
-            han_ji_khoo="河洛話",
-            db_name=DB_HO_LOK_UE,
+            sheet_name=sheet_name,
+            ue_im_lui_piat=ue_im_lui_piat,
+            han_ji_khoo=han_ji_khoo,
+            db_name=db_name,
             new_khuat_ji_piau_sheet=False,
             new_piau_im_ji_khoo_sheet=False,
         )

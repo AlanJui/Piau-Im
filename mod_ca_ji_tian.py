@@ -90,13 +90,13 @@ class HanJiTian:
             cursor = conn.cursor()
 
             # 將文白通用音視為第一優選
-            common_reading_condition = "常用度 >= 0.81 AND 常用度 <= 1.0"
+            common_reading_condition = "常用度 > 0.80 AND 常用度 <= 1.0"
 
             # 根據不同讀音類型，添加額外的查詢條件
             if ue_im_lui_piat == "文讀音":
-                reading_condition = f"({common_reading_condition}) OR (常用度 >= 0.61 AND 常用度 < 0.81)"
+                reading_condition = f"({common_reading_condition}) OR (常用度 > 0.60 AND 常用度 <= 0.80)"
             elif ue_im_lui_piat == "白話音":
-                reading_condition = f"({common_reading_condition}) OR (常用度 > 0.40 AND 常用度 < 0.61)"
+                reading_condition = f"({common_reading_condition}) OR (常用度 > 0.40 AND 常用度 <= 0.60)"
             elif ue_im_lui_piat == "其它":
                 reading_condition = "常用度 > 0.00 AND 常用度 <= 0.40"
             else:

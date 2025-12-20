@@ -129,7 +129,7 @@ BP_TIAU_MIA_TNG_TIAU_HO = {
 }
 
 
-def convert_TLPA_to_BP(tlpa_im_piau: str):
+def convert_TLPA_to_BP(tlpa_im_piau: str) -> list[str] | tuple[None, None, None]:
     """
     將一個 【台語音標】（TLPA）轉換成帶【聲調符號】的【閩拼音標】（BP）。如：
     【滾】==> kun3【台語音標】==> gun3【帶調號閩拼音標】。
@@ -151,7 +151,7 @@ def convert_TLPA_to_BP(tlpa_im_piau: str):
     - TLPA_piau_im (str): 要轉換的 TLPA 詞條，如 "tsiann1"、"iao2" 等。
 
     回傳值：
-    - str: 轉換後的 BP 詞條；若輸入格式不符則回傳原字串。
+    - tuple: (聲母, 韻母, 聲調) 列表；若輸入格式不符則回傳 (None, None, None)。
     """
     # 確認傳入之【台語音標】符合格式=聲母+韻母+聲調=英文字母+數字
     m = re.match(r"^([a-z]+)(\d+)$", tlpa_im_piau)
@@ -223,7 +223,6 @@ def convert_TLPA_to_BP(tlpa_im_piau: str):
     # 4. 【台語音標】調號轉換成【閩拼音標】調號
     tiau_mia = TLPA_TIAU_HO_TNG_TIAU_MIA.get(tiau, tiau)
     tiau = BP_TIAU_MIA_TNG_TIAU_HO.get(tiau_mia, tiau_mia)
-    # return f"{siann}{un}{tiau}"
     return [siann, un, tiau]
 
 

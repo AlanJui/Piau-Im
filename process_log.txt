@@ -22858,3 +22858,498 @@ IndexError: string index out of range
 2025-12-19 20:13:18,787 - INFO - <----------- 作業結束！---------->
 2025-12-19 20:13:19,084 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調符】《短歌行》.xlsx
 2025-12-19 20:13:19,084 - INFO - 《========== 程式終止執行：a401_generate_web_page ==========》
+2025-12-20 11:02:26,685 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-20 11:02:26,686 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-20 11:02:26,706 - INFO - <----------- 作業開始！---------->
+2025-12-20 11:02:42,535 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-12-20 11:02:42,547 - INFO - <----------- 作業結束！---------->
+2025-12-20 11:02:42,743 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調符】《蘭亭集序》.xlsx
+2025-12-20 11:02:42,744 - INFO - 《========== 程式終止執行：a401_generate_web_page ==========》
+2025-12-20 11:10:22,143 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-20 11:10:31,573 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-20 11:10:49,979 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-20 11:10:49,979 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-20 11:10:49,996 - INFO - <----------- 作業開始！---------->
+2025-12-20 11:11:07,775 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-12-20 11:11:07,797 - INFO - <----------- 作業結束！---------->
+2025-12-20 11:11:08,171 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調符】《蘭亭集序》.xlsx
+2025-12-20 11:11:08,171 - INFO - 《========== 程式終止執行：a401_generate_web_page ==========》
+2025-12-20 11:18:00,510 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-20 11:18:07,674 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-20 11:18:07,674 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-20 11:18:07,688 - INFO - <----------- 作業開始！---------->
+2025-12-20 11:18:11,394 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "C:\work\Piau-Im\a401_generate_web_page.py", line 399, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+        tai_gi_im_piau=tlpa_im_piau,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\a401_generate_web_page.py", line 134, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1367, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1107, in BP_piau_im
+    result: Optional[str] = self._get_BP_syllable(
+                            ~~~~~~~~~~~~~~~~~~~~~^
+        siann_bu, un_bu, tiau_ho, with_tone_number=True
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 1071, in _get_BP_syllable
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'iek'
+2025-12-20 11:18:11,396 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: 'iek'
+Traceback (most recent call last):
+  File "C:\work\Piau-Im\a401_generate_web_page.py", line 571, in main
+    result_code = process(wb)
+  File "C:\work\Piau-Im\a401_generate_web_page.py", line 529, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "C:\work\Piau-Im\a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "C:\work\Piau-Im\a401_generate_web_page.py", line 399, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+        tai_gi_im_piau=tlpa_im_piau,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\a401_generate_web_page.py", line 134, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1367, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1107, in BP_piau_im
+    result: Optional[str] = self._get_BP_syllable(
+                            ~~~~~~~~~~~~~~~~~~~~~^
+        siann_bu, un_bu, tiau_ho, with_tone_number=True
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 1071, in _get_BP_syllable
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'iek'
+2025-12-20 11:18:11,601 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調符】《蘭亭集序》.xlsx
+2025-12-20 12:57:49,906 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-20 13:02:08,456 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-20 13:02:08,457 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-20 13:02:08,475 - INFO - <----------- 作業開始！---------->
+2025-12-20 13:02:13,015 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 399, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+        tai_gi_im_piau=tlpa_im_piau,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 134, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1367, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1107, in BP_piau_im
+    result: Optional[str] = self._get_BP_syllable(
+                            ~~~~~~~~~~~~~~~~~~~~~^
+        siann_bu, un_bu, tiau_ho, with_tone_number=True
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 1071, in _get_BP_syllable
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'iek'
+2025-12-20 13:02:13,019 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: 'iek'
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 571, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 529, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 399, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+        tai_gi_im_piau=tlpa_im_piau,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 134, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1367, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1107, in BP_piau_im
+    result: Optional[str] = self._get_BP_syllable(
+                            ~~~~~~~~~~~~~~~~~~~~~^
+        siann_bu, un_bu, tiau_ho, with_tone_number=True
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 1071, in _get_BP_syllable
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'iek'
+2025-12-20 13:02:13,235 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調符】《蘭亭集序》.xlsx
+2025-12-20 13:02:50,627 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-20 13:02:50,628 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-20 13:02:50,641 - INFO - <----------- 作業開始！---------->
+2025-12-20 13:02:53,940 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 399, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+        tai_gi_im_piau=tlpa_im_piau,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 134, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1367, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1107, in BP_piau_im
+    result: Optional[str] = self._get_BP_syllable(
+                            ~~~~~~~~~~~~~~~~~~~~~^
+        siann_bu, un_bu, tiau_ho, with_tone_number=True
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 1071, in _get_BP_syllable
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'iek'
+2025-12-20 13:02:53,945 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: 'iek'
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 571, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 529, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 399, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+        tai_gi_im_piau=tlpa_im_piau,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 134, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1367, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1107, in BP_piau_im
+    result: Optional[str] = self._get_BP_syllable(
+                            ~~~~~~~~~~~~~~~~~~~~~^
+        siann_bu, un_bu, tiau_ho, with_tone_number=True
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 1071, in _get_BP_syllable
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'iek'
+2025-12-20 13:02:54,140 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調符】《蘭亭集序》.xlsx
+2025-12-20 13:05:59,235 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-20 13:05:59,236 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-20 13:05:59,252 - INFO - <----------- 作業開始！---------->
+2025-12-20 13:09:05,578 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-20 13:09:05,579 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-20 13:09:05,594 - INFO - <----------- 作業開始！---------->
+2025-12-20 13:15:10,759 - ERROR - 製作標音網頁作業發生例外！
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 399, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+        tai_gi_im_piau=tlpa_im_piau,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 134, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1367, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1107, in BP_piau_im
+    result: Optional[str] = self._get_BP_syllable(
+                            ~~~~~~~~~~~~~~~~~~~~~^
+        siann_bu, un_bu, tiau_ho, with_tone_number=True
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 1071, in _get_BP_syllable
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'iek'
+2025-12-20 13:15:10,765 - ERROR - 程式異常終止：a401_generate_web_page，錯誤訊息: 'iek'
+Traceback (most recent call last):
+  File "a401_generate_web_page.py", line 571, in main
+    result_code = process(wb)
+  File "a401_generate_web_page.py", line 529, in process
+    status_code = generate_web_page(
+        wb=wb,
+        sheet_name='漢字注音',
+    )
+  File "a401_generate_web_page.py", line 459, in generate_web_page
+    html_content = generator.generate_web_page(sheet, wb)
+  File "a401_generate_web_page.py", line 399, in generate_web_page
+    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                                            ~~~~~~~~~~~~~~~~~~~~~~^
+        wb=wb,
+        ^^^^^^
+        han_ji=han_ji,
+        ^^^^^^^^^^^^^^
+        tai_gi_im_piau=tlpa_im_piau,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a401_generate_web_page.py", line 134, in generate_ruby_tag
+    siong_piau_im = self.piau_im.han_ji_piau_im_tng_huan(
+        piau_im_huat=self.config.siong_pinn_piau_im,
+    ...<2 lines>...
+        tiau_ho=zu_im_list[2],
+    )
+  File "C:\work\Piau-Im\mod_標音.py", line 1367, in han_ji_piau_im_tng_huan
+    return self.BP_piau_im(siann_bu, un_bu, tiau_ho)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\work\Piau-Im\mod_標音.py", line 1107, in BP_piau_im
+    result: Optional[str] = self._get_BP_syllable(
+                            ~~~~~~~~~~~~~~~~~~~~~^
+        siann_bu, un_bu, tiau_ho, with_tone_number=True
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\work\Piau-Im\mod_標音.py", line 1071, in _get_BP_syllable
+    un = self.Un_Bu_Dict[un_bu][piau_im_huat]
+         ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'iek'
+2025-12-20 13:15:11,016 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調符】《蘭亭集序》.xlsx
+2025-12-20 13:23:43,537 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-20 13:23:43,537 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-20 13:23:43,556 - INFO - <----------- 作業開始！---------->
+2025-12-20 13:43:26,814 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-20 13:43:26,815 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-20 13:43:26,829 - INFO - <----------- 作業開始！---------->
+2025-12-20 13:45:01,946 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-12-20 13:45:01,959 - INFO - <----------- 作業結束！---------->
+2025-12-20 13:45:02,147 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調符】《蘭亭集序》.xlsx
+2025-12-20 13:45:02,148 - INFO - 《========== 程式終止執行：a401_generate_web_page ==========》
+2025-12-20 13:48:48,259 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-20 13:49:24,419 - INFO - 《========== 程式開始執行：a200_查找及填入漢字標音 ==========》
+2025-12-20 13:49:24,419 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-20 13:49:24,433 - INFO - <----------- 作業開始！---------->
+2025-12-20 13:50:07,075 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-20 13:50:07,076 - INFO - 自動為【漢字】查找【台語音標】作業己完成！
+2025-12-20 13:50:07,076 - INFO - 【語音類型】：文讀音
+2025-12-20 13:50:07,076 - INFO - 【漢字庫】：Ho_Lok_Ue.db
+2025-12-20 13:50:07,091 - INFO - <----------- 作業結束！---------->
+2025-12-20 13:50:07,303 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調符】《蘭亭集序》.xlsx
+2025-12-20 13:50:07,303 - INFO - 《========== 程式終止執行：a200_查找及填入漢字標音 ==========》
+2025-12-20 14:25:09,479 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-20 14:28:24,452 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 401, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 471, in _process_sheet
+    sheet.range((row, 1)).activate()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Range' object has no attribute 'activate'
+2025-12-20 14:28:24,456 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 547, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 401, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 471, in _process_sheet
+    sheet.range((row, 1)).activate()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Range' object has no attribute 'activate'
+2025-12-20 14:28:47,619 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 401, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 471, in _process_sheet
+    sheet.range((row, 1)).activate()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Range' object has no attribute 'activate'
+2025-12-20 14:28:47,624 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 547, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 401, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 471, in _process_sheet
+    sheet.range((row, 1)).activate()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Range' object has no attribute 'activate'
+2025-12-20 14:29:27,239 - ERROR - 自動為【漢字】查找【台語音標】作業，發生例外！
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 401, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 475, in _process_sheet
+    cell.activate()
+    ^^^^^^^^^^^^^
+AttributeError: 'Range' object has no attribute 'activate'
+2025-12-20 14:29:27,243 - ERROR - 程式執行失敗
+Traceback (most recent call last):
+  File "a210_無人工標音漢字查找.py", line 546, in main
+    exit_code = ca_han_ji_thak_im(
+        wb=wb,
+    ...<5 lines>...
+        new_piau_im_ji_khoo_sheet=False,
+    )
+  File "a210_無人工標音漢字查找.py", line 401, in ca_han_ji_thak_im
+    _process_sheet(
+    ~~~~~~~~~~~~~~^
+        sheet=sheet,
+        ^^^^^^^^^^^^
+        config=config,
+        ^^^^^^^^^^^^^^
+        processor=processor,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "a210_無人工標音漢字查找.py", line 475, in _process_sheet
+    cell.activate()
+    ^^^^^^^^^^^^^
+AttributeError: 'Range' object has no attribute 'activate'
+2025-12-20 14:34:39,590 - INFO - 已完成【台語音標】和【漢字標音】標注工作。
+2025-12-20 14:35:09,607 - INFO - 《========== 程式開始執行：a401_generate_web_page ==========》
+2025-12-20 14:35:09,607 - INFO - 專案根目錄為: C:\work\Piau-Im
+2025-12-20 14:35:09,624 - INFO - <----------- 作業開始！---------->
+2025-12-20 14:35:25,413 - INFO - 【漢字注音】工作表轉製網頁作業完畢！
+2025-12-20 14:35:25,426 - INFO - <----------- 作業結束！---------->
+2025-12-20 14:35:25,636 - INFO - 儲存檔案至路徑：.\output7\【河洛文讀注音-閩拼調符】《蘭亭集序》.xlsx
+2025-12-20 14:35:25,636 - INFO - 《========== 程式終止執行：a401_generate_web_page ==========》
