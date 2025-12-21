@@ -344,7 +344,6 @@ def ca_han_ji_thak_im(
     cell: str = 'V3',
     ue_im_lui_piat: str = "白話音",
     han_ji_khoo: str = "河洛話",
-    db_name: str = 'Ho_Lok_Ue.db',
     new_jin_kang_piau_im_ji_khoo_sheet: bool = False,
     new_piau_im_ji_khoo_sheet: bool = False,
     new_khuat_ji_piau_sheet: bool = False,
@@ -358,7 +357,6 @@ def ca_han_ji_thak_im(
         cell: 起始儲存格
         ue_im_lui_piat: 語音類別（白話音/文言音）
         han_ji_khoo: 漢字庫名稱
-        db_name: 資料庫名稱
         new_jin_kang_piau_im_ji_khoo_sheet: 是否建立新的人工標音字庫表
         new_piau_im_ji_khoo_sheet: 是否建立新的標音字庫表
         new_khuat_ji_piau_sheet: 是否建立新的缺字表
@@ -371,6 +369,7 @@ def ca_han_ji_thak_im(
         config = ProcessConfig(wb)
 
         # 初始化字典物件
+        db_name = DB_HO_LOK_UE if han_ji_khoo == '河洛話' else DB_KONG_UN
         ji_tian = HanJiTian(db_name)
         piau_im = PiauIm(han_ji_khoo=config.han_ji_khoo_name)
 
@@ -521,7 +520,6 @@ def main():
         # 執行處理
         ue_im_lui_piat = get_value_by_name(wb=wb, name='語音類型')
         han_ji_khoo = get_value_by_name(wb=wb, name='漢字庫')
-        db_name = DB_HO_LOK_UE if han_ji_khoo == '河洛話' else DB_KONG_UN
         sheet_name = '漢字注音'
         wb.sheets[sheet_name].activate()
         exit_code = ca_han_ji_thak_im(
@@ -529,7 +527,6 @@ def main():
             sheet_name=sheet_name,
             ue_im_lui_piat=ue_im_lui_piat,
             han_ji_khoo=han_ji_khoo,
-            db_name=db_name,
             new_khuat_ji_piau_sheet=False,
             new_piau_im_ji_khoo_sheet=False,
         )

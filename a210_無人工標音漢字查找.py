@@ -343,7 +343,6 @@ def ca_han_ji_thak_im(
     cell: str = 'V3',
     ue_im_lui_piat: str = "白話音",
     han_ji_khoo: str = "河洛話",
-    db_name: str = 'Ho_Lok_Ue.db',
     new_jin_kang_piau_im_ji_khoo_sheet: bool = True,
     new_piau_im_ji_khoo_sheet: bool = True,
     new_khuat_ji_piau_sheet: bool = True,
@@ -357,7 +356,6 @@ def ca_han_ji_thak_im(
         cell: 起始儲存格
         ue_im_lui_piat: 語音類別（白話音/文言音）
         han_ji_khoo: 漢字庫名稱
-        db_name: 資料庫名稱
         new_jin_kang_piau_im_ji_khoo_sheet: 是否建立新的人工標音字庫表
         new_piau_im_ji_khoo_sheet: 是否建立新的標音字庫表
         new_khuat_ji_piau_sheet: 是否建立新的缺字表
@@ -370,6 +368,7 @@ def ca_han_ji_thak_im(
         config = ProcessConfig(wb)
 
         # 初始化字典物件
+        db_name = DB_HO_LOK_UE if han_ji_khoo == '河洛話' else DB_KONG_UN
         ji_tian = HanJiTian(db_name)
         piau_im = PiauIm(han_ji_khoo=config.han_ji_khoo_name)
 
@@ -551,7 +550,6 @@ def main():
             sheet_name=sheet_name,
             ue_im_lui_piat=ue_im_lui_piat,
             han_ji_khoo=han_ji_khoo,
-            db_name=DB_HO_LOK_UE,
             new_khuat_ji_piau_sheet=False,
             new_piau_im_ji_khoo_sheet=False,
         )
