@@ -250,6 +250,7 @@ def clear_han_ji_kap_piau_im(wb, sheet_name='漢字注音'):
 
     sheet.range(cells_range).clear_contents()     # 清除 C3:R{end_of_row} 範圍的內容
 
+    sheet.range('V3').value = ""  # 清空 V3 儲存格內容
 
 # 依工作表名稱，刪除工作表
 def delete_sheet_by_name(wb, sheet_name: str, show_msg: bool=False):
