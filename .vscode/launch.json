@@ -75,6 +75,26 @@
             ]
         },
         {
+            "name": "a101_將漢字標音匯出成文字檔",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a101_將漢字標音匯出成文字檔.py",
+            "console": "integratedTerminal",
+            // "args": [
+            //     "_tmp_p1_han_ji.txt",
+            // ]
+        },
+        {
+            "name": "a102_漢字標音整合匯出",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a102_漢字標音整合匯出.py",
+            "console": "integratedTerminal",
+            // "args": [
+            //     "_tmp_p1_han_ji.txt",
+            // ]
+        },
+        {
             "name": "a110_使用漢字文檔",
             "type": "debugpy",
             "request": "launch",
