@@ -341,6 +341,13 @@
             ]
         },
         {
+            "name": "a800_更新漢字庫之漢字標音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a800_更新漢字庫之漢字標音.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "a801_更新漢字庫",
             "type": "debugpy",
             "request": "launch",
