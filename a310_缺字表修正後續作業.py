@@ -198,10 +198,14 @@ def update_khuat_ji_piau(wb):
         return EXIT_CODE_INVALID_INPUT
 
     # 建立【標音字庫】dict
-    piau_im_sheet_name = '標音字庫'
-    piau_im_ji_khoo_dict = JiKhooDict.create_ji_khoo_dict_from_sheet(
-        wb=wb,
-        sheet_name=piau_im_sheet_name)
+    try:
+        piau_im_sheet_name = '標音字庫'
+        piau_im_ji_khoo_dict = JiKhooDict.create_ji_khoo_dict_from_sheet(
+            wb=wb,
+            sheet_name=piau_im_sheet_name)
+    except Exception as e:
+        logging_exc_error("無法取用『標音字庫』工作表", e)
+        return EXIT_CODE_PROCESS_FAILURE
 
     row = 2  # 從第 2 列開始（跳過標題列）
     while True:
