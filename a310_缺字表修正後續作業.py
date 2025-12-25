@@ -152,10 +152,10 @@ def khuat_ji_piau_poo_im_piau(wb):
             tl_im_piau = convert_tlpa_to_tl(tlpa_im_piau_cleanned)
 
             insert_or_update_to_db(db_path, table_name, han_ji, tl_im_piau, piau_im_huat)
-            print(f"📌 {idx+1}. 【{han_ji}】==> {zo_piau}：台羅音標：【{tl_im_piau}】、校正音標：【{hau_ziann_im_piau}】、台語音標=【{tai_gi_im_piau}】、座標：{zo_piau}")
+            print(f"\n📌 {idx+1}. 【{han_ji}】==> {zo_piau}：台羅音標：【{tl_im_piau}】、校正音標：【{hau_ziann_im_piau}】、台語音標=【{tai_gi_im_piau}】、座標：{zo_piau}")
             idx += 1
 
-    logging_process_step(f"【缺字表】中的資料已成功回填至資料庫： {db_path} 的【{table_name}】資料表中。")
+    logging_process_step(f"\n【缺字表】中的資料已成功回填至資料庫： {db_path} 的【{table_name}】資料表中。")
     return EXIT_CODE_SUCCESS
 
 #--------------------------------------------------------------------------
@@ -264,7 +264,7 @@ def update_khuat_ji_piau(wb):
         # 讀取【缺字表】中【座標】欄（D 欄）的內容
         # 欄中內容可能含有多組座標，如 "(5, 17); (33, 8); (77, 5)"，表【漢字注音】工作表中有多處需要更新
         coordinates_str = khuat_ji_piau_sheet.range(f"D{row}").value
-        print(f"{row-1}. (A{row}) 【{han_ji}】==> {coordinates_str} ： 原音標：{im_piau}, 校正音標：{tai_gi_im_piau}")
+        print(f"{row-1}. (A{row}) 【{han_ji}】==> {coordinates_str} ： 台語音標：{im_piau}, 校正音標：{tai_gi_im_piau}\n")
 
         # 將【座標】欄位內容解析成 (row, col) 座標：此座標指向【漢字注音】工作表中之【漢字】儲存格位置
         if coordinates_str:
@@ -287,7 +287,7 @@ def update_khuat_ji_piau(wb):
                 han_ji_piau_im_sheet.range(tai_gi_im_piau_cell).value = tai_gi_im_piau
                 excel_address = han_ji_piau_im_sheet.range(tai_gi_im_piau_cell).address
                 excel_address = excel_address.replace("$", "")  # 去除 "$" 符號
-                print(f"   台語音標：【{tai_gi_im_piau}】，填入座標：{excel_address} = {tai_gi_im_piau_cell}")
+                print(f"   台語音標：【{tai_gi_im_piau}】，填入【漢字注音】工作表之 {excel_address} 儲存格 = {tai_gi_im_piau_cell}")
 
                 # 轉換【台語音標】，取得【漢字標音】
                 han_ji_piau_im = tlpa_tng_han_ji_piau_im(
@@ -300,9 +300,9 @@ def update_khuat_ji_piau(wb):
 
                 # 將【校正音標】填入【漢字注音】工作表漢字之【台語音標】儲存格
                 han_ji_piau_im_sheet.range(han_ji_piau_im_cell).value = han_ji_piau_im
-                excel_address = han_ji_piau_im_sheet.range(tai_gi_im_piau_cell).address
+                excel_address = han_ji_piau_im_sheet.range(han_ji_piau_im_cell).address
                 excel_address = excel_address.replace("$", "")  # 去除 "$" 符號
-                print(f"   漢字標音：【{han_ji_piau_im}】，填入座標：{excel_address} = {han_ji_piau_im_cell}")
+                print(f"   漢字標音：【{han_ji_piau_im}】，填入【漢字注音】工作表之 {excel_address} 儲存格 = {han_ji_piau_im_cell}\n")
 
                 # 將【漢字注音】工作表之【漢字】儲存格之底色，重置為【無底色】
                 han_ji_piau_im_sheet.range(han_ji_cell).color = None
@@ -327,7 +327,7 @@ def update_khuat_ji_piau(wb):
 # =========================================================================
 # 本程式主要處理作業程序
 # =========================================================================
-def process(wb):
+def process(wb, sheet_name: str):
     """
     更新【漢字注音】表中【台語音標】儲存格的內容，依據【標音字庫】中的【校正音標】欄位進行更新，並將【校正音標】覆蓋至原【台語音標】。
     """
@@ -345,7 +345,7 @@ def process(wb):
     # 【缺字表】工作表，原先找不到【音標】之漢字，已補填【台語音標】之後續處理作業
     #-------------------------------------------------------------------------
     try:
-        wb.sheets['缺字表'].activate()
+        wb.sheets[sheet_name].activate()
         update_khuat_ji_piau(wb)
     except Exception as e:
         logging_exc_error(msg=f"處理【缺字表】作業異常！", error=e)
@@ -363,7 +363,7 @@ def process(wb):
             msg=f"將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業，發生執行異常！",
             error=e)
         return EXIT_CODE_PROCESS_FAILURE
-    logging_process_step(f"完成：將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業")
+    # logging_process_step(f"完成：將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業")
 
     #--------------------------------------------------------------------------
     # 結束作業
@@ -412,7 +412,8 @@ def main():
     # (3) 執行【處理作業】
     # =========================================================================
     try:
-        result_code = process(wb)
+        sheet_name = '缺字表'
+        result_code = process(wb, sheet_name=sheet_name)
     except Exception as e:
         msg = f"程式異常終止：{program_name}"
         logging_exc_error(msg=msg, error=e)

@@ -14,7 +14,7 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 # 載入自訂模組/函式
-from mod_excel_access import delete_sheet_by_name, get_value_by_name, save_as_new_file
+from mod_excel_access import get_value_by_name, save_as_new_file
 from mod_字庫 import JiKhooDict
 from mod_帶調符音標 import tng_im_piau, tng_tiau_ho
 from mod_標音 import PiauIm  # 漢字標音物件
@@ -87,24 +87,41 @@ def insert_or_update_to_db(db_path, table_name: str, han_ji: str, tai_gi_im_piau
     row = cursor.fetchone()
 
     siong_iong_too = 0.8 if piau_im_huat == "文讀音" else 0.6
-    if row:
-        # 更新資料
-        cursor.execute(f"""
-        UPDATE {table_name}
-        SET 台羅音標 = ?, 更新時間 = ?
-        WHERE 識別號 = ?;
-        """, (tai_gi_im_piau, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), row[0]))
-    else:
-        # 若語音類型為：【文讀音】，設定【常用度】欄位值為 0.8
-        cursor.execute(f"""
-        INSERT INTO {table_name} (漢字, 台羅音標, 常用度, 摘要說明)
-        VALUES (?, ?, ?, NULL);
-        """, (han_ji, tai_gi_im_piau, siong_iong_too))
 
-    conn.commit()
-    conn.close()
+    try:
+        if row:
+            # 更新資料
+            cursor.execute(f"""
+            UPDATE {table_name}
+            SET 台羅音標 = ?, 更新時間 = ?
+            WHERE 識別號 = ?;
+            """, (tai_gi_im_piau, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), row[0]))
+        else:
+            # 若語音類型為：【文讀音】，設定【常用度】欄位值為 0.8
+            cursor.execute(f"""
+            INSERT INTO {table_name} (漢字, 台羅音標, 常用度, 摘要說明)
+            VALUES (?, ?, ?, NULL);
+            """, (han_ji, tai_gi_im_piau, siong_iong_too))
 
-def update_han_ji_khoo_db(wb):
+        conn.commit()
+    except sqlite3.IntegrityError as e:
+        # 記錄 UNIQUE constraint 錯誤，但不中斷程式
+        # error_msg = f"資料庫約束錯誤（已跳過）：漢字={han_ji}, 台語音標={tai_gi_im_piau}, 錯誤={str(e)}"
+        error_msg = f"已有相同之紀錄：漢字={han_ji}, 台語音標={tai_gi_im_piau}, 錯誤={str(e)}"
+        print(f"  ⚠️  {error_msg}")
+        logging.warning(error_msg)
+        conn.rollback()
+    except Exception as e:
+        # 記錄其他錯誤
+        error_msg = f"資料庫操作錯誤（已跳過）：漢字={han_ji}, 台語音標={tai_gi_im_piau}, 錯誤={str(e)}"
+        print(f"  ❌ {error_msg}")
+        logging.error(error_msg)
+        conn.rollback()
+    finally:
+        conn.close()
+
+
+def update_han_ji_khoo_db(wb, source_sheet_name: str):
     """
     依據工作表中的【漢字】、【校正音標】欄位，更新資料庫中的【漢字庫】資料表。
 
@@ -113,21 +130,17 @@ def update_han_ji_khoo_db(wb):
     :param db_path: 資料庫檔案路徑。
     :param table_name: 資料表名稱。
     """
-    sheet_name = "缺字表"
-    sheet = wb.sheets[sheet_name]
-    piau_im_huat = get_value_by_name(wb=wb, name="語音類型")
+    sheet = wb.sheets[source_sheet_name]
+    piau_im_huat = get_value_by_name(wb=wb, name='標音方法')    # 指定【台語音標】轉換成【漢字標音】的方法
+    han_ji_khoo_name = get_value_by_name(wb=wb, name='漢字庫') # 取得【漢字庫】名稱：河洛話、廣韻
     db_path = "Ho_Lok_Ue.db"  # 替換為你的資料庫檔案路徑
     table_name = "漢字庫"         # 替換為你的資料表名稱
+    # piau_im_huat = get_value_by_name(wb=wb, name="語音類型")
     hue_im = wb.names['語音類型'].refers_to_range.value
     siong_iong_too = 0.8 if hue_im == "文讀音" else 0.6  # 根據語音類型設定常用度
 
     # 讀取資料表範圍
     data = sheet.range("A2").expand("table").value
-
-    # # 確保資料為 2D 列表
-    # if not isinstance(data[0], list):
-    #     data = [data]
-    # 若資料為空（即表格沒有任何資料），直接跳出處理
 
     # 若完全無資料或只有空列，視為異常處理
     if not data or data == [[]]:
@@ -141,7 +154,7 @@ def update_han_ji_khoo_db(wb):
     for row in data:
         han_ji = row[0] # 漢字
         tai_gi_im_piau = row[1] # 台語音標
-        hau_ziann_im_piau = row[2] # 台語音標
+        hau_ziann_im_piau = row[2] # 校正音標
         zo_piau = row[3] # (儲存格位置)座標
 
         if han_ji and (tai_gi_im_piau != 'N/A' or hau_ziann_im_piau != 'N/A'):
@@ -150,12 +163,14 @@ def update_han_ji_khoo_db(wb):
             tlpa_im_piau_cleanned = tng_tiau_ho(tlpa_im_piau).lower()  # 將【音標調符】轉換成【數值調號】
             tl_im_piau = convert_tlpa_to_tl(tlpa_im_piau_cleanned)
 
+            # print(f"\n📌 {idx+1}. 【{han_ji}】台羅音標：【{tl_im_piau}】、校正音標：【{hau_ziann_im_piau}】、台語音標=【{tai_gi_im_piau}】、座標：{zo_piau}")
+            print(f"\n📌 {idx+1}. 【{han_ji}】台羅音標：{tl_im_piau}、校正音標：{hau_ziann_im_piau}、台語音標=【{tai_gi_im_piau}】、座標：{zo_piau}")
             insert_or_update_to_db(db_path, table_name, han_ji, tl_im_piau, piau_im_huat)
-            print(f"\n📌 {idx+1}. 【{han_ji}】==> {zo_piau}：台羅音標：【{tl_im_piau}】、校正音標：【{hau_ziann_im_piau}】、台語音標=【{tai_gi_im_piau}】、座標：{zo_piau}")
             idx += 1
 
     logging_process_step(f"\n【缺字表】中的資料已成功回填至資料庫： {db_path} 的【{table_name}】資料表中。")
     return EXIT_CODE_SUCCESS
+
 
 #--------------------------------------------------------------------------
 # 重整【標音字庫】查詢表：重整【標音字庫】工作表使用之 Dict
@@ -186,10 +201,15 @@ def tiau_zing_piau_im_ji_khoo_dict(piau_im_ji_khoo_dict,
         coordinates=(row, col)
     )
 
-def update_han_ji_zu_im_piau_by_jin_kang_piau_im_ji_khoo_piau(wb, source_sheet_name:str, target_sheet_name='漢字注音',
-                      new_jin_kang_piau_im__piau:bool=False):
+
+#-------------------------------------------------------------------------
+# 將【缺字表】工作表，已填入【台語音標】之資料，登錄至【標音字庫】工作表
+# 使用【缺字表】工作表中的【校正音標】，更正【漢字注音】工作表中之【台語音標】、【漢字標音】；
+# 並依【缺字表】工作表中的【台語音標】儲存格內容，更新【標音字庫】工作表中之【台語音標】及【校正音標】欄位
+#-------------------------------------------------------------------------
+def update_han_ji_zu_im(wb, source_sheet_name: str, target_sheet_name: str):
     """
-    讀取 Excel 檔案，依據【人工標音字庫】工作表中的資料執行下列作業：
+    讀取 Excel 檔案，依據【缺字表】工作表中的資料執行下列作業：
       1. 由 A 欄讀取漢字，從 C 欄取得原始輸入之【校正音標】，並轉換為 TLPA+ 格式，然後更新 B 欄（台語音標）。
       2. 從 D 欄讀取座標字串（可能含有多組座標），每組座標指向【漢字注音】工作表中該漢字儲存格，
          將【缺字表】取得之【台語音標】，填入【漢字注音】工作表之【台語音標】欄位（於【漢字】儲存格上方一列（row - 1））;
@@ -205,18 +225,18 @@ def update_han_ji_zu_im_piau_by_jin_kang_piau_im_ji_khoo_piau(wb, source_sheet_n
 
     piau_im = PiauIm(han_ji_khoo=han_ji_khoo)
 
-    # 取得【來源工作表】（人工標音字庫）
+    # 取得【來源工作表】
     try:
-        khuat_ji_piau_sheet = wb.sheets[source_sheet_name]
+        source_sheet = wb.sheets[source_sheet_name]
     except Exception as e:
-        logging_exc_error(f"找不到名為『{source_sheet_name}』的工作表", e)
+        logging_exc_error(f"找不到名為『{source_sheet_name}』的來源工作表", e)
         return EXIT_CODE_INVALID_INPUT
 
-    # 取得【目標工作表】（漢字注音）
+    # 取得【漢字注音】工作表
     try:
         target_sheet = wb.sheets[target_sheet_name]
     except Exception as e:
-        logging_exc_error(f"找不到名為『{target_sheet_name}』的工作表", e)
+        logging_exc_error(f"找不到名為『{target_sheet_name}』的標的工作表", e)
         return EXIT_CODE_INVALID_INPUT
 
     #-------------------------------------------------------------------------
@@ -232,32 +252,36 @@ def update_han_ji_zu_im_piau_by_jin_kang_piau_im_ji_khoo_piau(wb, source_sheet_n
         return EXIT_CODE_PROCESS_FAILURE
 
     #-------------------------------------------------------------------------
-    # 在【人工標音字庫】工作表中，逐列讀取資料進行處理：【校正音標】欄（C）有填音標者，
+    # 在【缺字表】工作表中，逐列讀取資料進行處理：【校正音標】欄（C）有填音標者，
     # 將【校正音標】正規化為 TLPA+ 格式，並更新【台語音標】欄（B）；
     # 並依據【座標】欄（D）內容，將【校正音標】填入【漢字注音】工作表中相對應之【台語音標】儲存格，
     # 以及使用【校正音標】轉換後之【漢字標音】填入【漢字注音】工作表中相對應之【漢字標音】儲存格。
     #-------------------------------------------------------------------------
     row = 2  # 從第 2 列開始（跳過標題列）
     while True:
-        han_ji = khuat_ji_piau_sheet.range(f"A{row}").value  # 讀取 A 欄（漢字）
+        han_ji = source_sheet.range(f"A{row}").value  # 讀取 A 欄（漢字）
         if not han_ji:  # 若 A 欄為空，則結束迴圈
             break
 
         # 更新【缺字表】中【校正音標】欄（C 欄）
-        hau_ziann_im_piau = khuat_ji_piau_sheet.range(f"C{row}").value
+        hau_ziann_im_piau = source_sheet.range(f"C{row}").value
         if hau_ziann_im_piau == "N/A" or not hau_ziann_im_piau:  # 若 C 欄為空，則結束迴圈
+            tai_gi_im_piau = source_sheet.range(f"B{row}").value
+            hau_ziann_im_piau = source_sheet.range(f"C{row}").value
+            coordinates_str = source_sheet.range(f"D{row}").value
+            print(f"{row-1}. (A{row}) 【{han_ji}】==> {coordinates_str} ： 台語音標：{tai_gi_im_piau}, 校正音標：{hau_ziann_im_piau}\n")
             row += 1
             continue
 
         tlpa_im_piau = tng_im_piau(hau_ziann_im_piau)   # 將【音標】使用之【拼音字母】轉換成【TLPA拼音字母】；【音標調符】仍保持
         tai_gi_im_piau = tng_tiau_ho(tlpa_im_piau).lower()  # 將【音標調符】轉換成【數值調號】
         # 取得原始【台語音標】並轉換為 TLPA+ 格式
-        im_piau = khuat_ji_piau_sheet.range(f"B{row}").value
-        # khuat_ji_piau_sheet.range(f"B{row}").value = tai_gi_im_piau  # 更新 C 欄（校正音標）
+        im_piau = source_sheet.range(f"B{row}").value
+        source_sheet.range(f"B{row}").value = tai_gi_im_piau  # 更新 C 欄（校正音標）
 
         # 讀取【缺字表】中【座標】欄（D 欄）的內容
         # 欄中內容可能含有多組座標，如 "(5, 17); (33, 8); (77, 5)"，表【漢字注音】工作表中有多處需要更新
-        coordinates_str = khuat_ji_piau_sheet.range(f"D{row}").value
+        coordinates_str = source_sheet.range(f"D{row}").value
         print(f"{row-1}. (A{row}) 【{han_ji}】==> {coordinates_str} ： 台語音標：{im_piau}, 校正音標：{tai_gi_im_piau}\n")
 
         # 將【座標】欄位內容解析成 (row, col) 座標：此座標指向【漢字注音】工作表中之【漢字】儲存格位置
@@ -326,39 +350,40 @@ def process(wb, sheet_name: str):
     更新【漢字注音】表中【台語音標】儲存格的內容，依據【標音字庫】中的【校正音標】欄位進行更新，並將【校正音標】覆蓋至原【台語音標】。
     """
     logging_process_step("<----------- 作業開始！---------->")
-    # ------------------------------------------------------------------------------
-    # 以【人工標音字庫】工作表中各【校正音標】欄之注音，更新【漢字注音】工作表
-    # 中【台語音標】及【漢字標音】儲存格內容
-    # ------------------------------------------------------------------------------
+    source_sheet_name = sheet_name
+    target_sheet_name = '漢字注音'
+
+    # 取得【標的工作表】（漢字注音）
     try:
-        wb.sheets[sheet_name].activate()
-        # 以【人工標音字庫】工作表中各【校正音標】欄之注音，更新【漢字注音】工作表
-        update_han_ji_zu_im_piau_by_jin_kang_piau_im_ji_khoo_piau(
-            wb=wb,
-            source_sheet_name=sheet_name,
-            target_sheet_name="漢字注音",
-            new_jin_kang_piau_im__piau=False # 不用新建【人工標音字庫】工作表
-        )
+        target_sheet = wb.sheets[target_sheet_name]
+        target_sheet.activate()
     except Exception as e:
-        logging_exc_error(msg=f"處理【{sheet_name}】作業異常！", error=e)
+        logging_exc_error(msg=f"找不到【{target_sheet_name}】工作表 ！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
 
-    print("------------------------------------------------------")
-    msg = f'使用【{sheet_name}】工作表，更新【漢字注音】工作表之己完成！'
-    logging_process_step(msg)
+    # 取得【來源工作表】（標音字庫）
+    try:
+        source_sheet = wb.sheets[source_sheet_name]
+        source_sheet.activate()
+    except Exception as e:
+        logging_exc_error(msg=f"找不到【{source_sheet_name}】工作表 ！", error=e)
+        return EXIT_CODE_PROCESS_FAILURE
+
+    logging_process_step(f"已完成作業所需之初始化設定！")
 
     #-------------------------------------------------------------------------
-    # 將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業
+    # 將【標音字庫】工作表之【漢字】與【台語音標】存入【漢字庫】作業
     #-------------------------------------------------------------------------
     try:
-        wb.sheets['人工標音字庫'].activate()
-        update_han_ji_khoo_db(wb)
+        wb.sheets[source_sheet_name].activate()
+        update_han_ji_khoo_db(wb, source_sheet_name=source_sheet_name)
     except Exception as e:
         logging_exc_error(
-            msg=f"將【{sheet_name}】之【漢字】與【台語音標】存入【漢字庫】作業，發生執行異常！",
+            msg=f"以【{source_sheet_name}】工作表之【漢字】與【台語音標】，更新【漢字庫】作業，發生執行異常！",
             error=e)
         return EXIT_CODE_PROCESS_FAILURE
-    # logging_process_step(f"完成：將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業")
+
+    logging_process_step(f"以【{source_sheet_name}】工作表之【漢字】與【台語音標】，更新【漢字庫】作業已完成！")
 
     #--------------------------------------------------------------------------
     # 結束作業
@@ -407,8 +432,7 @@ def main():
     # (3) 執行【處理作業】
     # =========================================================================
     try:
-        sheet_name = '人工標音字庫'
-        result_code = process(wb, sheet_name=sheet_name)
+        result_code = process(wb, sheet_name='標音字庫')
     except Exception as e:
         msg = f"程式異常終止：{program_name}"
         logging_exc_error(msg=msg, error=e)

@@ -15,7 +15,7 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 # 載入自訂模組/函式
-from a320_人工標音更正漢字自動標音 import jin_kang_piau_im_cu_han_ji_piau_im
+# from a320_人工標音更正漢字自動標音 import jin_kang_piau_im_cu_han_ji_piau_im
 from mod_excel_access import (
     convert_to_excel_address,
     excel_address_to_row_col,
