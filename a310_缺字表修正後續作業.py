@@ -158,6 +158,34 @@ def khuat_ji_piau_poo_im_piau(wb):
     logging_process_step(f"【缺字表】中的資料已成功回填至資料庫： {db_path} 的【{table_name}】資料表中。")
     return EXIT_CODE_SUCCESS
 
+#--------------------------------------------------------------------------
+# 重整【標音字庫】查詢表：重整【標音字庫】工作表使用之 Dict
+# 依據【缺字表】工作表之【漢字】+【台語音標】資料，在【標音字庫】工作表【添增】此筆資料紀錄
+#--------------------------------------------------------------------------
+def tiau_zing_piau_im_ji_khoo_dict(piau_im_ji_khoo_dict,
+                                    han_ji:str, tai_gi_im_piau:str,
+                                    row:int, col:int):
+
+    # Step 1: 在【標音字庫】搜尋該筆【漢字】+【台語音標】
+    existing_entries = piau_im_ji_khoo_dict.ji_khoo_dict.get(han_ji, [])
+
+    # 標記是否找到
+    entry_found = False
+
+    for existing_entry in existing_entries:
+        # Step 2: 若找到，移除該筆資料內的座標
+        if (row, col) in existing_entry["coordinates"]:
+            existing_entry["coordinates"].remove((row, col))
+        entry_found = True
+        break  # 找到即可離開迴圈
+
+    # Step 3: 將此筆資料（校正音標為 'N/A'）於【標音字庫】底端新增
+    piau_im_ji_khoo_dict.add_entry(
+        han_ji=han_ji,
+        tai_gi_im_piau=tai_gi_im_piau,
+        kenn_ziann_im_piau="N/A",  # 預設值
+        coordinates=(row, col)
+    )
 
 #-------------------------------------------------------------------------
 # 將【缺字表】工作表，已填入【台語音標】之資料，登錄至【標音字庫】工作表
@@ -197,7 +225,9 @@ def update_khuat_ji_piau(wb):
         logging_exc_error("找不到名為『漢字注音』的工作表", e)
         return EXIT_CODE_INVALID_INPUT
 
-    # 建立【標音字庫】dict
+    #-------------------------------------------------------------------------
+    # 建立【標音字庫】查詢表（dict）
+    #-------------------------------------------------------------------------
     try:
         piau_im_sheet_name = '標音字庫'
         piau_im_ji_khoo_dict = JiKhooDict.create_ji_khoo_dict_from_sheet(
@@ -207,6 +237,12 @@ def update_khuat_ji_piau(wb):
         logging_exc_error("無法取用『標音字庫』工作表", e)
         return EXIT_CODE_PROCESS_FAILURE
 
+    #-------------------------------------------------------------------------
+    # 在【缺字表】工作表中，逐列讀取資料進行處理：【校正音標】欄（C）有填音標者，
+    # 將【校正音標】正規化為 TLPA+ 格式，並更新【台語音標】欄（B）；
+    # 並依據【座標】欄（D）內容，將【校正音標】填入【漢字注音】工作表中相對應之【台語音標】儲存格，
+    # 以及使用【校正音標】轉換後之【漢字標音】填入【漢字注音】工作表中相對應之【漢字標音】儲存格。
+    #-------------------------------------------------------------------------
     row = 2  # 從第 2 列開始（跳過標題列）
     while True:
         han_ji = khuat_ji_piau_sheet.range(f"A{row}").value  # 讀取 A 欄（漢字）
@@ -225,10 +261,12 @@ def update_khuat_ji_piau(wb):
         im_piau = khuat_ji_piau_sheet.range(f"B{row}").value
         khuat_ji_piau_sheet.range(f"B{row}").value = tai_gi_im_piau  # 更新 C 欄（校正音標）
 
+        # 讀取【缺字表】中【座標】欄（D 欄）的內容
+        # 欄中內容可能含有多組座標，如 "(5, 17); (33, 8); (77, 5)"，表【漢字注音】工作表中有多處需要更新
         coordinates_str = khuat_ji_piau_sheet.range(f"D{row}").value
         print(f"{row-1}. (A{row}) 【{han_ji}】==> {coordinates_str} ： 原音標：{im_piau}, 校正音標：{tai_gi_im_piau}")
 
-        # 讀取【缺字表】中【座標】欄（E 欄）的內容，該內容可能含有多組座標，如 "(5, 17); (33, 8); (77, 5)"
+        # 將【座標】欄位內容解析成 (row, col) 座標：此座標指向【漢字注音】工作表中之【漢字】儲存格位置
         if coordinates_str:
             # 利用正規表達式解析所有形如 (row, col) 的座標
             coordinate_tuples = re.findall(r"\((\d+)\s*,\s*(\d+)\)", coordinates_str)
@@ -251,14 +289,12 @@ def update_khuat_ji_piau(wb):
                 excel_address = excel_address.replace("$", "")  # 去除 "$" 符號
                 print(f"   台語音標：【{tai_gi_im_piau}】，填入座標：{excel_address} = {tai_gi_im_piau_cell}")
 
-                #--------------------------------------------------------------------------
-                # 【漢字標音】
-                #--------------------------------------------------------------------------
-                # 使用【台語音標】轉換，取得【漢字標音】
+                # 轉換【台語音標】，取得【漢字標音】
                 han_ji_piau_im = tlpa_tng_han_ji_piau_im(
                     piau_im=piau_im, piau_im_huat=piau_im_huat, tai_gi_im_piau=tai_gi_im_piau
                 )
-                # 根據說明，【漢字標音】應填入漢字儲存格下方一列 (row + 1)，相同欄位
+
+                # 將【漢字標音】填入【漢字注音】工作表，【漢字】儲存格下之【漢字標音】儲存格（即：row + 1)
                 target_row = r_coord + 1
                 han_ji_piau_im_cell = (target_row, c_coord)
 
@@ -267,36 +303,10 @@ def update_khuat_ji_piau(wb):
                 excel_address = han_ji_piau_im_sheet.range(tai_gi_im_piau_cell).address
                 excel_address = excel_address.replace("$", "")  # 去除 "$" 符號
                 print(f"   漢字標音：【{han_ji_piau_im}】，填入座標：{excel_address} = {han_ji_piau_im_cell}")
+
                 # 將【漢字注音】工作表之【漢字】儲存格之底色，重置為【無底色】
                 han_ji_piau_im_sheet.range(han_ji_cell).color = None
-                #--------------------------------------------------------------------------
-                # 重整【標音字庫】工作表使用之 Dict
-                # 依據【缺字表】工作表之【漢字】+【台語音標】資料，在【標音字庫】工作表【添增】此筆資料紀錄
-                #--------------------------------------------------------------------------
-                def tiau_zing_piau_im_ji_khoo_dict(piau_im_ji_khoo_dict,
-                                                   han_ji:str, tai_gi_im_piau:str,
-                                                   row:int, col:int):
 
-                        # Step 1: 在【標音字庫】搜尋該筆【漢字】+【台語音標】
-                        existing_entries = piau_im_ji_khoo_dict.ji_khoo_dict.get(han_ji, [])
-
-                        # 標記是否找到
-                        entry_found = False
-
-                        for existing_entry in existing_entries:
-                            # Step 2: 若找到，移除該筆資料內的座標
-                            if (row, col) in existing_entry["coordinates"]:
-                                existing_entry["coordinates"].remove((row, col))
-                            entry_found = True
-                            break  # 找到即可離開迴圈
-
-                        # Step 3: 將此筆資料（校正音標為 'N/A'）於【標音字庫】底端新增
-                        piau_im_ji_khoo_dict.add_entry(
-                            han_ji=han_ji,
-                            tai_gi_im_piau=tai_gi_im_piau,
-                            kenn_ziann_im_piau="N/A",  # 預設值
-                            coordinates=(row, col)
-                        )
                 # 更新【標音字庫】工作表之資料紀錄
                 tiau_zing_piau_im_ji_khoo_dict(
                     piau_im_ji_khoo_dict=piau_im_ji_khoo_dict,
@@ -305,7 +315,6 @@ def update_khuat_ji_piau(wb):
                     row=r_coord,
                     col=c_coord,
                 )
-
 
         row += 1  # 讀取下一列
 
