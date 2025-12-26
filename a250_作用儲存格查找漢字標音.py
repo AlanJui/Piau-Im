@@ -11,18 +11,16 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 # 載入自訂模組
-from mod_BP_tng_huan_ping_im import convert_TLPA_to_BP
 from mod_ca_ji_tian import HanJiTian  # 新的查字典模組
 from mod_excel_access import delete_sheet_by_name, get_value_by_name
 from mod_字庫 import JiKhooDict
 from mod_帶調符音標 import is_han_ji
 from mod_標音 import (
     PiauIm,
-    ca_ji_kiat_ko_tng_piau_im,
+    ca_ji_tng_piau_im,
     convert_tl_with_tiau_hu_to_tlpa,
     is_punctuation,
     split_hong_im_hu_ho,
-    split_tai_gi_im_piau,
     tlpa_tng_han_ji_piau_im,
 )
 
@@ -270,6 +268,27 @@ class CellProcessor:
         else:
             return f"{cell_value}【其他字元】", False
 
+    def _convert_piau_im(self, entry) -> Tuple[str, str]:
+        """
+        將查詢結果轉換為音標
+
+        Args:
+            result: 查詢結果列表
+
+        Returns:
+            (tai_gi_im_piau, han_ji_piau_im)
+        """
+        # 使用原有的轉換邏輯
+        # 這裡需要適配 result 的格式
+        # 假設 result 是從 HanJiSuTian 回傳的格式
+        tai_gi_im_piau, han_ji_piau_im = ca_ji_tng_piau_im(
+            entry=entry,
+            han_ji_khoo=self.han_ji_khoo,
+            piau_im=self.piau_im,
+            piau_im_huat=self.piau_im_huat
+        )
+        return tai_gi_im_piau, han_ji_piau_im
+
     def _process_han_ji(
         self,
         han_ji: str,
@@ -297,43 +316,21 @@ class CellProcessor:
             )
             return f"【{han_ji}】查無此字！", False
 
-        # 轉換音標
-        tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im(result)
+        # 有多個讀音 len(result) > 1
+        print(f"漢字儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）：【{han_ji}】有 {len(result)} 個讀音...")
+        for idx, entry in enumerate(result):
+            # 轉換音標
+            tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im(entry)
 
-        # 寫入儲存格
-        cell.offset(-1, 0).value = tai_gi_im_piau  # 上方儲存格：台語音標
-        cell.offset(1, 0).value = han_ji_piau_im    # 下方儲存格：漢字標音
+            # 寫入儲存格
+            cell.offset(-1, 0).value = tai_gi_im_piau  # 上方儲存格：台語音標
+            cell.offset(1, 0).value = han_ji_piau_im    # 下方儲存格：漢字標音
 
-        # 記錄到標音字庫
-        self.piau_im_ji_khoo.add_entry(
-            han_ji=han_ji,
-            tai_gi_im_piau=tai_gi_im_piau,
-            kenn_ziann_im_piau='N/A',
-            coordinates=(row, col)
-        )
+            msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
 
-        return f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】", False
-
-    def _convert_piau_im(self, result: list) -> Tuple[str, str]:
-        """
-        將查詢結果轉換為音標
-
-        Args:
-            result: 查詢結果列表
-
-        Returns:
-            (tai_gi_im_piau, han_ji_piau_im)
-        """
-        # 使用原有的轉換邏輯
-        # 這裡需要適配 result 的格式
-        # 假設 result 是從 HanJiSuTian 回傳的格式
-        tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
-            result=result,
-            han_ji_khoo=self.han_ji_khoo,
-            piau_im=self.piau_im,
-            piau_im_huat=self.piau_im_huat
-        )
-        return tai_gi_im_piau, han_ji_piau_im
+            # 顯示處理進度
+            col_name = xw.utils.col_name(col)
+            print(f"{idx + 1}. {msg}")
 
 # =========================================================================
 # 主要處理函數
@@ -405,14 +402,13 @@ def ca_han_ji_thak_im(
         )
 
         # 寫回字庫到 Excel
-        _save_ji_khoo_to_excel(
-            wb=wb,
-            jin_kang_piau_im_ji_khoo=jin_kang_piau_im_ji_khoo,
-            piau_im_ji_khoo=piau_im_ji_khoo,
-            khuat_ji_piau_ji_khoo=khuat_ji_piau_ji_khoo,
-        )
+        # _save_ji_khoo_to_excel(
+        #     wb=wb,
+        #     jin_kang_piau_im_ji_khoo=jin_kang_piau_im_ji_khoo,
+        #     piau_im_ji_khoo=piau_im_ji_khoo,
+        #     khuat_ji_piau_ji_khoo=khuat_ji_piau_ji_khoo,
+        # )
 
-        logging_process_step("已完成【台語音標】和【漢字標音】標注工作。")
         return EXIT_CODE_SUCCESS
 
     except Exception as e:
@@ -464,22 +460,22 @@ def _process_sheet(sheet, config: ProcessConfig, processor: CellProcessor):
     # 自【作用儲存格】取得【Excel 儲存格座標】(列,欄) 座標
     active_cell = sheet.api.Application.ActiveCell
     if active_cell:
+        # 顯示【作用儲存格】位置
         active_row = active_cell.Row
+        active_col = active_cell.Column
+        active_col_name = xw.utils.col_name(active_col)
+        print(f"作用儲存格：{active_col_name}{active_row}（{active_cell.Row}, {active_cell.Column}）")
+
         # 調整 row 值至【漢字】列（每 4 列為一組，漢字在第 3 列：5, 9, 13, ... ）
         line_start_row = 3  # 第一行【標音儲存格】所在 Excel 列號: 3
         line_no = (active_row - line_start_row + 1) // config.ROWS_PER_LINE
         row = config.start_row + (line_no * config.ROWS_PER_LINE)
         col = active_cell.Column
         cell = sheet.range((row, col))
-        cell.select()
+        # cell.select()
 
         # 處理儲存格
-        is_eof = False
-        msg, is_eof = processor.process_cell(cell, row, col)
-
-        # 顯示處理進度
-        col_name = xw.utils.col_name(col)
-        print(f"【{col_name}{row}】({row}, {col}) = {msg}")
+        processor.process_cell(cell, row, col)
 
 
 def _save_ji_khoo_to_excel(

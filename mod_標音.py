@@ -113,6 +113,66 @@ def format_han_ji_piau_im(value):
 
     return str(value)  # 其他型別備援
 
+
+def ca_ji_tng_piau_im(entry, han_ji_khoo: str, piau_im, piau_im_huat: str):
+    """查字結果的單筆紀錄出標音：查詢【漢字庫】取得之【查找結果】，將之切分：聲、韻、調"""
+    if han_ji_khoo == "河洛話":
+        #-----------------------------------------------------------------
+        # 【白話音】：依《河洛話漢字庫》標注【台語音標】和【方音符號】
+        #-----------------------------------------------------------------
+        # 將【台語音標】分解為【聲母】、【韻母】、【聲調】
+        # siann_bu = entry['聲母']
+        # un_bu = entry['韻母']
+        # tiau_ho = entry['聲調']
+        siann_bu = entry.get('聲母', '')
+        un_bu = entry.get('韻母', '')
+        tiau_ho = entry.get('聲調', '')
+        un_bu = tai_gi_im_piau_tng_un_bu(un_bu)
+        if tiau_ho == "6":
+            # 若【聲調】為【6】，則將【聲調】改為【7】
+            tiau_ho = "7"
+    else:
+        #-----------------------------------------------：------------------
+        # 【文讀音】：依《廣韻字庫》標注【台語音標】和【方音符號】
+        #-----------------------------------------------------------------
+        siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(entry[0]['標音'])
+        if siann_bu == "" or siann_bu == None:
+            siann_bu = "ø"
+
+    # 將【聲母】、【韻母】、【聲調】，合併成【台語音標】
+    # tai_gi_im_piau = siann_bu + un_bu + tiau_ho
+    tai_gi_im_piau = ''.join([siann_bu, un_bu, tiau_ho])
+
+    # 標音法為：【十五音】或【雅俗通】，且【聲母】為空值，則將【聲母】設為【ø】
+    if (piau_im_huat == "十五音" or piau_im_huat == "雅俗通") and (siann_bu == "" or siann_bu == None):
+        siann_bu = "ø"
+
+    ok = False
+    han_ji_piau_im = ""
+    try:
+        han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
+            piau_im_huat=piau_im_huat,
+            siann_bu=siann_bu,
+            un_bu=un_bu,
+            tiau_ho=tiau_ho,
+        )
+        if han_ji_piau_im: # 傳回非空字串，表示【漢字標音】之轉換成功
+            ok = True
+        else:
+            logging_warning(f"【台語音標】：[{tai_gi_im_piau}]，轉換成【{piau_im_huat}漢字標音】拚音/注音系統失敗！")
+    except Exception as e:
+        logging_exception(f"piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：{tai_gi_im_piau}", e)
+        han_ji_piau_im = ""
+        ok = False
+
+    # 若 ok 為 False，表示轉換失敗，則將【台語音標】直接傳回
+    if not ok:
+        return tai_gi_im_piau, ""
+    else:
+        return tai_gi_im_piau, format_han_ji_piau_im(han_ji_piau_im)
+
+
+
 def ca_ji_kiat_ko_tng_piau_im(result, han_ji_khoo: str, piau_im, piau_im_huat: str):
     """查字結果出標音：查詢【漢字庫】取得之【查找結果】，將之切分：聲、韻、調"""
     if han_ji_khoo == "河洛話":

@@ -22,11 +22,18 @@ from mod_piau_im_tng_huan import _has_meaningful_data
 # =========================================================================
 # 常數定義
 # =========================================================================
-# 【漢字注音】工作表
-START_COL = 'D'
-END_COL = 'R'
-BASE_ROW = 3
+# 【漢字注音】工作表儲存格位置常數
+# START_COL = 'D'
+# END_COL = 'R'
+START_COL = 4  # D 欄
+END_COL = 18   # R 欄
 ROWS_PER_GROUP = 4
+ROWS_PER_LINE = 4
+
+BASE_ROW_NO = 3
+TAI_GI_IM_PIAU_OFFSET = 1
+HAN_JI_OFFSET = 2
+HAN_JI_PIAU_IM_OFFSET = 3
 
 # 定義 Exit Code
 EXIT_CODE_SUCCESS = 0  # 成功
@@ -65,7 +72,7 @@ DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
 # -------------------------------------------------------------------------
 # 計算工作表中有效列數
 # -------------------------------------------------------------------------
-def calculate_total_rows(sheet, start_col=START_COL, end_col=END_COL, base_row=BASE_ROW, rows_per_group=ROWS_PER_GROUP):
+def calculate_total_rows(sheet, start_col=START_COL, end_col=END_COL, base_row=BASE_ROW_NO, rows_per_group=ROWS_PER_GROUP):
     """Compute how many row groups exist based on the described worksheet layout."""
     total_rows = 0
     current_base = base_row
@@ -355,6 +362,68 @@ def convert_to_excel_address(coord_str):
         return f"{chr(64 + col)}{row}"  # 轉換成 Excel 座標
     except ValueError:
         return ""  # 避免解析錯誤
+
+
+def get_line_no_by_row(current_row_no, base_row_no=BASE_ROW_NO, rows_per_group=ROWS_PER_LINE):
+    """
+    根據儲存格的 row 座標，計算其所屬的行號 (line no)。
+
+    :param row: 儲存格的 row 座標 (整數)
+    :param base_row: 每頁起始列 (預設為 3)
+    :param rows_per_group: 每行佔用的列數 (預設為 4)
+    :return: 行號 (line no)，從 1 開始計數
+    """
+    if current_row_no < base_row_no:
+        raise ValueError(f"儲存格的 row 列號（{current_row_no}）必須大於等於基準列（{BASE_ROW_NO}）。")
+    line_no = ((current_row_no - base_row_no) // rows_per_group) + 1
+    return line_no
+
+
+def get_row_by_line_no(line_no):
+    """
+    根據行號 (line no)，計算其對應的儲存格 row 座標。
+
+    :param line_no: 行號 (從 1 開始計數)
+    :param base_row: 每頁起始列 (預設為 3)
+    :param rows_per_group: 每行佔用的列數 (預設為 4)
+    :return: 對應的儲存格 row 座標 (整數)
+    """
+    if line_no < 1:
+        raise ValueError("行號必須大於等於 1。")
+    line_base_row_no = BASE_ROW_NO + ((line_no - 1) * ROWS_PER_LINE)
+    tai_gi_im_piau_row_no = line_base_row_no + TAI_GI_IM_PIAU_OFFSET
+    han_ji_row_no = line_base_row_no + HAN_JI_OFFSET
+    han_ji_piau_im_row_no = line_base_row_no + HAN_JI_PIAU_IM_OFFSET
+    return line_base_row_no, tai_gi_im_piau_row_no, han_ji_row_no, han_ji_piau_im_row_no
+
+
+def get_active_cell_address():
+    """
+    獲取目前作用中的 Excel 儲存格地址 (Active Cell Address)
+
+    :return: 儲存格地址字串，例如 "D9"
+    """
+    try:
+        # 獲取 Excel 應用程式
+        excel_app = win32com.client.GetObject(Class="Excel.Application")
+        if excel_app is None:
+            print("❌ 沒有作用中的 Excel 檔案。")
+            return None
+
+        # 獲取作用中的儲存格
+        active_cell = excel_app.ActiveCell
+        if active_cell is None:
+            print("❌ 沒有作用中的 Excel 儲存格。")
+            return None
+
+        # 獲取儲存格地址
+        cell_address = active_cell.Address.replace("$", "")  # 去掉 "$"
+        # print(f"✅ 作用中的儲存格地址：{cell_address}")
+        return cell_address
+
+    except Exception as e:
+        print(f"❌ 獲取作用中的儲存格地址失敗: {e}")
+        return None
 
 
 def get_active_cell_info(wb):
