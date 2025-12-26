@@ -95,6 +95,16 @@
             // ]
         },
         {
+            "name": "a103_整句漢字標音匯出",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a103_整句漢字標音匯出.py",
+            "console": "integratedTerminal",
+            // "args": [
+            //     "_tmp_p1_han_ji.txt",
+            // ]
+        },
+        {
             "name": "a110_使用漢字文檔",
             "type": "debugpy",
             "request": "launch",
