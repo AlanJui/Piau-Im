@@ -214,10 +214,10 @@
             "console": "integratedTerminal",
         },
         {
-            "name": "a330_以【標音字庫】更新【漢字注音】工作表",
+            "name": "a330_以標音字庫更新漢字注音工作表",
             "type": "debugpy",
             "request": "launch",
-            "program": "a330_以【標音字庫】更新【漢字注音】工作表.py",
+            "program": "a330_以標音字庫更新漢字注音工作表.py",
             "console": "integratedTerminal",
         },
         {
