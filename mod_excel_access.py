@@ -22,15 +22,24 @@ from mod_piau_im_tng_huan import _has_meaningful_data
 # =========================================================================
 # 常數定義
 # =========================================================================
-# 【漢字注音】工作表儲存格位置常數
-# START_COL = 'D'
-# END_COL = 'R'
+
+#--------------------------------------------------------------------------
+# 儲存格位置常數
+#  - 每 1 【行】，內含 4 row ；第 1 行之 row no 為：3
+#  - row 1: 人工標音儲存格 ===> row_no= 3,  7, 11, ...
+#  - row 2: 台語音標儲存格 ===> row_no= 4,  8, 12, ...
+#  - row 3: 漢字儲存格     ===> row_no= 5,  9, 13, ...
+#  - row 4: 漢字標音儲存格 ===> row_no= 6, 10, 14, ...
+#
+# 依【作用儲存格】的 row no 求得：line_no = ((row_no - start_row_no) // rows_per_line) + 1
+#
+# 依【line_no】求得【基準列 row no】：base_row_no = start_row_no + ((line_no - 1) * rows_per_line)
+#--------------------------------------------------------------------------
+ROWS_PER_LINE = 4
+START_ROW_NO = 3  # 第 1 行的起始列號
 START_COL = 4  # D 欄
 END_COL = 18   # R 欄
-ROWS_PER_GROUP = 4
-ROWS_PER_LINE = 4
 
-BASE_ROW_NO = 3
 TAI_GI_IM_PIAU_OFFSET = 1
 HAN_JI_OFFSET = 2
 HAN_JI_PIAU_IM_OFFSET = 3
@@ -72,7 +81,7 @@ DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
 # -------------------------------------------------------------------------
 # 計算工作表中有效列數
 # -------------------------------------------------------------------------
-def calculate_total_rows(sheet, start_col=START_COL, end_col=END_COL, base_row=BASE_ROW_NO, rows_per_group=ROWS_PER_GROUP):
+def calculate_total_rows(sheet, start_col=START_COL, end_col=END_COL, base_row=START_ROW_NO, rows_per_group=ROWS_PER_LINE):
     """Compute how many row groups exist based on the described worksheet layout."""
     total_rows = 0
     current_base = base_row
@@ -364,7 +373,7 @@ def convert_to_excel_address(coord_str):
         return ""  # 避免解析錯誤
 
 
-def get_line_no_by_row(current_row_no, base_row_no=BASE_ROW_NO, rows_per_group=ROWS_PER_LINE):
+def get_line_no_by_row(current_row_no, start_row_no=START_ROW_NO, rows_per_line=ROWS_PER_LINE):
     """
     根據儲存格的 row 座標，計算其所屬的行號 (line no)。
 
@@ -373,13 +382,13 @@ def get_line_no_by_row(current_row_no, base_row_no=BASE_ROW_NO, rows_per_group=R
     :param rows_per_group: 每行佔用的列數 (預設為 4)
     :return: 行號 (line no)，從 1 開始計數
     """
-    if current_row_no < base_row_no:
-        raise ValueError(f"儲存格的 row 列號（{current_row_no}）必須大於等於基準列（{BASE_ROW_NO}）。")
-    line_no = ((current_row_no - base_row_no) // rows_per_group) + 1
+    if current_row_no < start_row_no:
+        raise ValueError(f"儲存格的 row 列號（{current_row_no}）必須大於等於基準列（{START_ROW_NO}）。")
+    line_no = ((current_row_no - start_row_no) // rows_per_line) + 1
     return line_no
 
 
-def get_row_by_line_no(line_no):
+def get_row_by_line_no(line_no, start_row_no=START_ROW_NO, rows_per_line=ROWS_PER_LINE):
     """
     根據行號 (line no)，計算其對應的儲存格 row 座標。
 
@@ -390,7 +399,7 @@ def get_row_by_line_no(line_no):
     """
     if line_no < 1:
         raise ValueError("行號必須大於等於 1。")
-    line_base_row_no = BASE_ROW_NO + ((line_no - 1) * ROWS_PER_LINE)
+    line_base_row_no = start_row_no + ((line_no - 1) * rows_per_line)
     tai_gi_im_piau_row_no = line_base_row_no + TAI_GI_IM_PIAU_OFFSET
     han_ji_row_no = line_base_row_no + HAN_JI_OFFSET
     han_ji_piau_im_row_no = line_base_row_no + HAN_JI_PIAU_IM_OFFSET

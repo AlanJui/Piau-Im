@@ -47,12 +47,26 @@ EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
 EXIT_CODE_PROCESS_FAILURE = 3  # 過程失敗
 EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 
+#--------------------------------------------------------------------------
 # 儲存格位置常數
+#  - 每 1 【行】，內含 4 row ；第 1 行之 row no 為：3
+#  - row 1: 人工標音儲存格 ===> row_no= 3,  7, 11, ...
+#  - row 2: 台語音標儲存格 ===> row_no= 4,  8, 12, ...
+#  - row 3: 漢字儲存格     ===> row_no= 5,  9, 13, ...
+#  - row 4: 漢字標音儲存格 ===> row_no= 6, 10, 14, ...
+#
+# 依【作用儲存格】的 row no 求得：line_no = ((row_no - start_row_no) // rows_per_line) + 1
+#
+# 依【line_no】求得【基準列 row no】：base_row_no = start_row_no + ((line_no - 1) * rows_per_line)
+#--------------------------------------------------------------------------
 ROWS_PER_LINE = 4
-HAN_JI_OFFSET = 3
-HAN_JI_PIAU_IM_OFFSET = 4
+START_ROW = 3  # 第 1 行的起始列號
 START_COL = 4  # D 欄
 END_COL = 18   # R 欄
+
+TAI_GI_PIAU_IM_OFFSET = 1
+HAN_JI_OFFSET = 2
+HAN_JI_PIAU_IM_OFFSET = 3
 
 
 # =========================================================================
@@ -135,21 +149,23 @@ def process(wb):
     print(f"作用儲存格列號：{current_row_no}")
 
     #--------------------------------------------------------------------------
-    # （2）依 row no 求得：line_no = (row_no + 1) // 4
+    # （2）依 row no 求得：line_no = (row_no - start_row_no + 1) // 4
     #--------------------------------------------------------------------------
-    line_no = (current_row_no + 1) // ROWS_PER_LINE
-    print(f"作用儲存格所在行號：{line_no}")
+    line_no = ((current_row_no - START_ROW) // ROWS_PER_LINE) + 1
+    base_row_no = START_ROW + ((line_no - 1) * ROWS_PER_LINE)
+    print(f"作用儲存格行號：{line_no}")
+    print(f"基準列號：{base_row_no}")
 
     #--------------------------------------------------------------------------
     # （3）依 line_no 求得【漢字】儲存格之 row_no
     #--------------------------------------------------------------------------
-    han_ji_row_no = ((line_no - 1) * ROWS_PER_LINE) + HAN_JI_OFFSET + 2
+    han_ji_row_no = base_row_no + HAN_JI_OFFSET
     print(f"漢字列號：{han_ji_row_no}")
 
     #--------------------------------------------------------------------------
     # （4）依 line_no 求得【漢字標音】儲存格之 row_no
     #--------------------------------------------------------------------------
-    han_ji_piau_im_row_no = ((line_no - 1) * ROWS_PER_LINE) + HAN_JI_PIAU_IM_OFFSET + 2
+    han_ji_piau_im_row_no = base_row_no + HAN_JI_PIAU_IM_OFFSET
     print(f"標音列號：{han_ji_piau_im_row_no}")
 
     #--------------------------------------------------------------------------
