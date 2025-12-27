@@ -117,11 +117,28 @@ def move_left(sheet, current_row: int, current_col: int) -> tuple:
     if current_col == START_COL:
         line_no = get_line_number(current_row)
         if line_no > 1:
-            # 跳到前一行的行尾
+            # 跳到前一行，找到最後一個有內容的儲存格
             new_line = line_no - 1
             new_row = get_row_from_line(new_line)
-            new_col = END_COL
-            return new_row, new_col
+
+            # 從行尾往回找，找到第一個有內容或換行符的儲存格
+            for col in range(END_COL, START_COL - 1, -1):
+                cell = sheet.range((new_row, col))
+                cell_value = cell.value
+                cell_formula = cell.formula
+
+                # 如果是換行符，跳過
+                if cell_formula and '=CHAR(10)' in cell_formula.upper():
+                    continue
+                if cell_value == '\n':
+                    continue
+
+                # 找到有內容的儲存格
+                if cell_value is not None and str(cell_value).strip():
+                    return new_row, col
+
+            # 如果都沒有內容，就跳到行首
+            return new_row, START_COL
         else:
             # 已在第一行行首，不移動
             return current_row, current_col
