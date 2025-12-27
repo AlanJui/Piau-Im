@@ -14,7 +14,7 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 # 載入自訂模組/函式
-from mod_excel_access import delete_sheet_by_name, get_value_by_name, save_as_new_file
+from mod_excel_access import get_value_by_name, save_as_new_file
 from mod_字庫 import JiKhooDict
 from mod_帶調符音標 import tng_im_piau, tng_tiau_ho
 from mod_標音 import PiauIm  # 漢字標音物件

@@ -12,13 +12,17 @@ from typing import Callable
 import xlwings as xw
 from dotenv import load_dotenv
 
-from a301_以作用儲存格之人工標音更新標音字庫 import check_and_update_pronunciation
-
 # 載入自訂模組/函式
 from a310_缺字表修正後續作業 import process as update_khuat_ji_piau_by_jin_kang_piau_im
 from a320_人工標音更正漢字自動標音 import process as update_by_jin_kang_piau_im
 from a330_以標音字庫更新漢字注音工作表 import process as update_by_piau_im_ji_khoo
-from mod_excel_access import ensure_sheet_exists, get_value_by_name, strip_cell
+from mod_excel_access import (
+    convert_to_excel_address,
+    ensure_sheet_exists,
+    get_row_col_from_coordinate,
+    get_value_by_name,
+    strip_cell,
+)
 from mod_file_access import save_as_new_file
 from mod_字庫 import JiKhooDict  # 漢字字庫物件
 from mod_帶調符音標 import (
@@ -70,6 +74,130 @@ init_logging()
 # =========================================================================
 # 本程式主要處理作業程序
 # =========================================================================
+def check_and_update_pronunciation(wb, han_ji, position, jin_kang_piau_im):
+    """
+    查詢【標音字庫】工作表，確認是否有該【漢字】與【座標】，
+    且【校正音標】是否為 'N/A'，若符合則更新為【人工標音】。
+
+    :param wb: Excel 活頁簿物件
+    :param han_ji: 查詢的漢字
+    :param position: (row, col) 該漢字的座標
+    :param artificial_pronounce: 需要更新的【人工標音】
+    :return: 是否更新成功 (True/False)
+    """
+    sheet_name = "標音字庫"
+
+    # 建置 PiauIm 物件，供作漢字拼音轉換作業
+    han_ji_khoo_field = '漢字庫'
+    han_ji_khoo_name = get_value_by_name(wb=wb, name=han_ji_khoo_field)
+    piau_im = PiauIm(han_ji_khoo=han_ji_khoo_name)           # 指定漢字自動查找使用的【漢字庫】
+    piau_im_huat = get_value_by_name(wb=wb, name='標音方法')   # 指定【台語音標】轉換成【漢字標音】的方法
+
+    # 建置自動及人工漢字標音字庫工作表：（1）【標音字庫】（2）【人工標音字】
+    piau_im_sheet_name = '標音字庫'
+    piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=piau_im_sheet_name)
+
+    jin_kang_piau_im_sheet_name='人工標音字庫'
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=jin_kang_piau_im_sheet_name)
+
+    try:
+        sheet = wb.sheets[sheet_name]
+    except Exception:
+        print(f"⚠️ 無法找到工作表: {sheet_name}")
+        return False
+
+    # 讀取資料範圍
+    data = sheet.range("A2").expand("table").value  # 讀取所有資料
+
+    # 確保資料為 2D 列表
+    if not isinstance(data[0], list):
+        data = [data]
+
+    for idx, row in enumerate(data):
+        row_han_ji = row[0]  # A 欄: 漢字
+        tai_gi_im_piau = row[1]  # B 欄: 台語音標
+        kenn_ziann_im_piau = row[2]  # C 欄: 校正音標
+        coordinates = row[3]  # D 欄: 座標 (可能是 "(9, 4); (25, 9)" 這類格式)
+        correction_pronounce_cell = sheet.range(f"D{idx+2}")  # D 欄: 校正音標
+
+        row, col = get_row_col_from_coordinate(coordinates)  # 取得座標的行列
+        cell = sheet.range((row, col))  # 取得該儲存格物件
+
+        if row_han_ji == han_ji and coordinates:
+            # 將座標解析成一個 set
+            coord_list = coordinates.split("; ")
+            parsed_coords = {convert_to_excel_address(coord) for coord in coord_list}
+
+            # 確認該座標是否存在於【標音字庫】中
+            # if convert_to_excel_address(str(position)) in parsed_coords:
+            position_address = convert_to_excel_address(str(position))
+            if position_address in parsed_coords:
+                # 檢查【漢字】標注之【人工標音】是否與【台語音標】不同
+                if jin_kang_piau_im != tai_gi_im_piau:
+                    tai_gi_im_piau, han_ji_piau_im = jin_kang_piau_im_cu_han_ji_piau_im(
+                        wb=wb,
+                        jin_kang_piau_im=jin_kang_piau_im,
+                        piau_im=piau_im,
+                        piau_im_huat=piau_im_huat)
+
+                    # 【標音字庫】添加或更新【漢字】及【台語音標】資料
+                    jin_kang_piau_im_ji_khoo.add_entry(
+                        han_ji=han_ji,
+                        tai_gi_im_piau=tai_gi_im_piau,
+                        kenn_ziann_im_piau=jin_kang_piau_im,
+                        coordinates=(row, col)
+                    )
+                    # ----- 新增程式邏輯：更新【標音字庫】 -----
+                    # Step 1: 在【標音字庫】搜尋該筆【漢字】+【台語音標】
+                    existing_entries = piau_im_ji_khoo.ji_khoo_dict.get(han_ji, [])
+
+                    # 標記是否找到
+                    entry_found = False
+
+                    for existing_entry in existing_entries:
+                        # Step 2: 若找到，移除該筆資料內的座標
+                        if (row, col) in existing_entry["coordinates"]:
+                            existing_entry["coordinates"].remove((row, col))
+                        entry_found = True
+                        break  # 找到即可離開迴圈
+
+                    # Step 3: 將此筆資料（校正音標為 'N/A'）於【標音字庫】底端新增
+                    piau_im_ji_khoo.add_entry(
+                        han_ji=han_ji,
+                        tai_gi_im_piau=tai_gi_im_piau,
+                        kenn_ziann_im_piau="N/A",  # 預設值
+                        coordinates=(row, col)
+                    )
+
+                    # 將文字顏色設為【紅色】
+                    cell.font.color = (255, 0, 0)
+                    # 將儲存格的填滿色彩設為【黄色】
+                    cell.color = (255, 255, 0)
+
+                    # 更新【校正音標】為【人工標音】
+                    # correction_pronounce_cell.value = jin_kang_piau_im
+                    correction_pronounce_cell.value = tai_gi_im_piau
+                    print(f"✅ {position}【{han_ji}】： 台語音標 {tai_gi_im_piau} -> 校正標音 {jin_kang_piau_im}")
+                    return True
+
+        #----------------------------------------------------------------------
+        # 作業結束前處理
+        #----------------------------------------------------------------------
+        # 將【標音字庫】、【人工標音字庫】，寫入 Excel 工作表
+        piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=piau_im_sheet_name)
+        jin_kang_piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
+
+        logging_process_step("作用中【漢字】儲存格之【人工標音】已更新至【標音字庫】。")
+        return EXIT_CODE_SUCCESS
+
+    print(f"❌ 未找到匹配的資料或不符合更新條件: {han_ji} ({position})")
+    return False
+
+
 def process(wb):
     """
     更新【漢字注音】表中【台語音標】儲存格的內容，依據【標音字庫】中的【校正音標】欄位進行更新，並將【校正音標】覆蓋至原【台語音標】。
