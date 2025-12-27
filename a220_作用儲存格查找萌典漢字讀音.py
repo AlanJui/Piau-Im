@@ -360,37 +360,29 @@ class CellProcessor:
             print(f"{idx + 1}. {msg}")
 
         # 讓使用者選擇讀音
-        if len(result) > 1:
-            user_input = input("\n請選擇讀音編號（直接按 Enter 略過，輸入編號後按 Enter 填入）：").strip()
+        user_input = input("\n請選擇讀音編號（直接按 Enter 略過，輸入編號後按 Enter 填入）：").strip()
 
-            if user_input == "":
-                # 只瀏覽，不填入
-                print("略過填入")
-                return f"【{han_ji}】已顯示 {len(result)} 個讀音（未填入）", False
+        if user_input == "":
+            # 只瀏覽，不填入
+            print("略過填入")
+            return f"【{han_ji}】已顯示 {len(result)} 個讀音（未填入）", False
 
-            try:
-                choice = int(user_input)
-                if 1 <= choice <= len(result):
-                    # 填入選擇的讀音
-                    tai_gi_im_piau, han_ji_piau_im = piau_im_options[choice - 1]
-                    cell.offset(-2, 0).value = tai_gi_im_piau  # 上方儲存格：台語音標
-                    cell.offset(-1, 0).value = tai_gi_im_piau  # 上方儲存格：台語音標
-                    cell.offset(1, 0).value = han_ji_piau_im    # 下方儲存格：漢字標音
-                    print(f"已填入第 {choice} 個讀音：[{tai_gi_im_piau}] /【{han_ji_piau_im}】")
-                    return f"【{han_ji}】已填入第 {choice} 個讀音", True
-                else:
-                    print(f"無效的選擇：{choice}（超出範圍）")
-                    return f"【{han_ji}】選擇無效", False
-            except ValueError:
-                print(f"無效的輸入：{user_input}")
-                return f"【{han_ji}】輸入無效", False
-        else:
-            # 只有一個讀音，直接填入
-            tai_gi_im_piau, han_ji_piau_im = piau_im_options[0]
-            cell.offset(-1, 0).value = tai_gi_im_piau  # 上方儲存格：台語音標
-            cell.offset(1, 0).value = han_ji_piau_im    # 下方儲存格：漢字標音
-            print(f"已填入：[{tai_gi_im_piau}] /【{han_ji_piau_im}】")
-            return f"【{han_ji}】已填入讀音", True
+        try:
+            choice = int(user_input)
+            if 1 <= choice <= len(result):
+                # 填入選擇的讀音
+                tai_gi_im_piau, han_ji_piau_im = piau_im_options[choice - 1]
+                cell.offset(-2, 0).value = tai_gi_im_piau  # 上方儲存格：台語音標
+                cell.offset(-1, 0).value = tai_gi_im_piau  # 上方儲存格：台語音標
+                cell.offset(1, 0).value = han_ji_piau_im    # 下方儲存格：漢字標音
+                print(f"已填入第 {choice} 個讀音：[{tai_gi_im_piau}] /【{han_ji_piau_im}】")
+                return f"【{han_ji}】已填入第 {choice} 個讀音", True
+            else:
+                print(f"無效的選擇：{choice}（超出範圍）")
+                return f"【{han_ji}】選擇無效", False
+        except ValueError:
+            print(f"無效的輸入：{user_input}")
+            return f"【{han_ji}】輸入無效", False
 
 # =========================================================================
 # 主要處理函數
@@ -554,7 +546,7 @@ def _save_ji_khoo_to_excel(
 # 主程式
 # =========================================================================
 def main():
-    """主程式 - 從 Excel 呼叫或直接執行"""
+    """主程式 - 從 Excel 呼叫或直接執行（無限循環模式）"""
     try:
         # 取得 Excel 活頁簿
         wb = None
@@ -573,22 +565,52 @@ def main():
             logging.error("無法取得 Excel 活頁簿")
             return EXIT_CODE_NO_FILE
 
-        # 執行處理
+        # 取得設定值
         ue_im_lui_piat = get_value_by_name(wb=wb, name='語音類型')
         han_ji_khoo = get_value_by_name(wb=wb, name='漢字庫')
         sheet_name = '漢字注音'
-        wb.sheets[sheet_name].activate()
-        exit_code = ca_han_ji_thak_im(
-            wb=wb,
-            sheet_name=sheet_name,
-            ue_im_lui_piat=ue_im_lui_piat,
-            han_ji_khoo=han_ji_khoo,
-            new_khuat_ji_piau_sheet=False,
-            new_piau_im_ji_khoo_sheet=False,
-        )
 
-        return exit_code
+        print("=" * 70)
+        print("無限循環模式：請在 Excel 中選擇任一儲存格後按 Enter 查詢")
+        print("按 Ctrl+C 終止程式")
+        print("=" * 70)
 
+        # 無限循環
+        while True:
+            try:
+                # 等待使用者按 Enter
+                input("\n請在 Excel 選擇【作用儲存格】後按 Enter 繼續（Ctrl+C 終止）...")
+
+                # 確保工作表為作用中
+                wb.sheets[sheet_name].activate()
+
+                # 執行處理
+                exit_code = ca_han_ji_thak_im(
+                    wb=wb,
+                    sheet_name=sheet_name,
+                    ue_im_lui_piat=ue_im_lui_piat,
+                    han_ji_khoo=han_ji_khoo,
+                    new_khuat_ji_piau_sheet=False,
+                    new_piau_im_ji_khoo_sheet=False,
+                )
+
+                if exit_code != EXIT_CODE_SUCCESS:
+                    print(f"⚠️  處理結果：exit_code = {exit_code}")
+
+            except KeyboardInterrupt:
+                print("\n\n使用者中斷程式（Ctrl+C）")
+                print("=" * 70)
+                return EXIT_CODE_SUCCESS
+            except Exception as e:
+                logging.error(f"處理錯誤：{e}")
+                print(f"❌ 錯誤：{e}")
+                # 發生錯誤時繼續循環，不中斷程式
+                continue
+
+    except KeyboardInterrupt:
+        print("\n\n使用者中斷程式（Ctrl+C）")
+        print("=" * 70)
+        return EXIT_CODE_SUCCESS
     except Exception as e:
         logging.exception("程式執行失敗")
         return EXIT_CODE_UNKNOWN_ERROR
