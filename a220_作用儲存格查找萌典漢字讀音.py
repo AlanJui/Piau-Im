@@ -347,21 +347,50 @@ class CellProcessor:
         if not result:
             return f"【{han_ji}】查無此字！", False
 
-        # 有多個讀音 len(result) > 1
+        # 有多個讀音
         print(f"漢字儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）：【{han_ji}】有 {len(result)} 個讀音...")
+
+        # 顯示所有讀音選項
+        piau_im_options = []
         for idx, tai_lo_ping_im in enumerate(result):
             # 轉換音標
             tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im(tai_lo_ping_im)
+            piau_im_options.append((tai_gi_im_piau, han_ji_piau_im))
+            msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
+            print(f"{idx + 1}. {msg}")
 
-            # 寫入儲存格
+        # 讓使用者選擇讀音
+        if len(result) > 1:
+            user_input = input("\n請選擇讀音編號（直接按 Enter 略過，輸入編號後按 Enter 填入）：").strip()
+
+            if user_input == "":
+                # 只瀏覽，不填入
+                print("略過填入")
+                return f"【{han_ji}】已顯示 {len(result)} 個讀音（未填入）", False
+
+            try:
+                choice = int(user_input)
+                if 1 <= choice <= len(result):
+                    # 填入選擇的讀音
+                    tai_gi_im_piau, han_ji_piau_im = piau_im_options[choice - 1]
+                    cell.offset(-2, 0).value = tai_gi_im_piau  # 上方儲存格：台語音標
+                    cell.offset(-1, 0).value = tai_gi_im_piau  # 上方儲存格：台語音標
+                    cell.offset(1, 0).value = han_ji_piau_im    # 下方儲存格：漢字標音
+                    print(f"已填入第 {choice} 個讀音：[{tai_gi_im_piau}] /【{han_ji_piau_im}】")
+                    return f"【{han_ji}】已填入第 {choice} 個讀音", True
+                else:
+                    print(f"無效的選擇：{choice}（超出範圍）")
+                    return f"【{han_ji}】選擇無效", False
+            except ValueError:
+                print(f"無效的輸入：{user_input}")
+                return f"【{han_ji}】輸入無效", False
+        else:
+            # 只有一個讀音，直接填入
+            tai_gi_im_piau, han_ji_piau_im = piau_im_options[0]
             cell.offset(-1, 0).value = tai_gi_im_piau  # 上方儲存格：台語音標
             cell.offset(1, 0).value = han_ji_piau_im    # 下方儲存格：漢字標音
-
-            msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
-
-            # 顯示處理進度
-            col_name = xw.utils.col_name(col)
-            print(f"{idx + 1}. {msg}")
+            print(f"已填入：[{tai_gi_im_piau}] /【{han_ji_piau_im}】")
+            return f"【{han_ji}】已填入讀音", True
 
 # =========================================================================
 # 主要處理函數
