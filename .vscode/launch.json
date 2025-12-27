@@ -174,10 +174,17 @@
             "console": "integratedTerminal",
         },
         {
-            "name": "a220_自萌典查找缺字表之漢字讀音",
+            "name": "a220_作用儲存格查找萌典漢字讀音",
             "type": "debugpy",
             "request": "launch",
-            "program": "a220_自萌典查找缺字表之漢字讀音.py",
+            "program": "a220_作用儲存格查找萌典漢字讀音.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "a222_自萌典查找缺字表之漢字讀音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a222_自萌典查找缺字表之漢字讀音.py",
             "console": "integratedTerminal",
         },
         {
