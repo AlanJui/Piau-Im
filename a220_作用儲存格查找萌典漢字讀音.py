@@ -123,12 +123,12 @@ class CellProcessor:
         cell_value = cell.value
 
         jin_kang_piau_im = cell.offset(-2, 0).value  # 人工標音
-        if jin_kang_piau_im and str(jin_kang_piau_im).strip() != "":
-            msg, sing_kong =  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
-            if sing_kong:
-                return (msg, False)
-            else:
-                return (msg, False)
+        # if jin_kang_piau_im and str(jin_kang_piau_im).strip() != "":
+        #     msg, sing_kong =  self._process_jin_kang_piau_im(jin_kang_piau_im, cell, row, col)
+        #     if sing_kong:
+        #         return (msg, False)
+        #     else:
+        #         return (msg, False)
 
         # 檢查特殊字元
         if cell_value == 'φ':
