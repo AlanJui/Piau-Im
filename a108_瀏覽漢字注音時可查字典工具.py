@@ -303,8 +303,8 @@ def activate_excel_window(wb):
         win32gui.SetForegroundWindow(excel_hwnd)
         print("✓ 已切換到 Excel 視窗")
 
-        # 等待一下讓視窗切換完成
-        time.sleep(0.3)
+        # 等待更長時間讓視窗切換完成
+        time.sleep(0.5)
 
     except Exception as e:
         logging.error(f"無法激活 Excel 視窗：{e}")
@@ -319,6 +319,7 @@ def activate_console_window(console_hwnd):
         console_hwnd: 終端機視窗句柄
     """
     if not HAS_WIN32 or not console_hwnd:
+        print("提示：無法自動切換視窗")
         return
 
     try:
@@ -329,9 +330,10 @@ def activate_console_window(console_hwnd):
 
         # 將終端機視窗切換到前景
         win32gui.SetForegroundWindow(console_hwnd)
+        print("✓ 已切換到終端機視窗")
 
-        # 等待一下讓視窗切換完成
-        time.sleep(0.2)
+        # 等待更長時間確保視窗切換完成
+        time.sleep(0.5)
 
     except Exception as e:
         logging.error(f"無法激活終端機視窗：{e}")
@@ -592,15 +594,29 @@ class NavigationController:
 
     def query_dictionary(self):
         """查詢字典並讓使用者選擇讀音"""
+        print("\n" + "=" * 70)
+        print("進入字典查詢模式")
+        print("=" * 70)
+
         # 暫停鍵盤監聽，讓 input() 能正常接收輸入
         if self.listener:
-            print("\n[暫停鍵盤監聽，切換到輸入模式]")
+            print("[步驟 1] 暫停鍵盤監聽...")
             self.listener.stop()
-            time.sleep(0.2)  # 等待監聽器完全停止
+            time.sleep(0.3)  # 等待監聽器完全停止
 
         # 切換到終端機視窗，讓輸入進入終端機而不是 Excel
+        print("[步驟 2] 切換到終端機視窗...")
         if self.console_hwnd:
             activate_console_window(self.console_hwnd)
+        else:
+            print("提示：請確保輸入焦點在終端機視窗")
+            time.sleep(0.5)
+
+        # 額外提示：請用戶手動點擊終端機視窗以確保焦點正確
+        print("\n" + "!" * 70)
+        print("重要提示：請點擊此終端機視窗，確保輸入焦點正確！")
+        print("!" * 70)
+        input("\n請點擊此終端機視窗後按 Enter 繼續...")
 
         try:
             # 執行字典查詢
@@ -612,20 +628,25 @@ class NavigationController:
                 piau_im_huat=self.piau_im_huat
             )
         finally:
+            print("\n" + "=" * 70)
+            print("返回導航模式")
+            print("=" * 70)
+
             # 切換回 Excel 視窗
+            print("[步驟 1] 切換回 Excel 視窗...")
             if self.excel_hwnd:
                 activate_excel_window(self.wb)
 
             # 重新啟動鍵盤監聽
+            print("[步驟 2] 重新啟動鍵盤監聽...")
             if self.listener:
-                print("\n[重新啟動鍵盤監聽]")
                 self.listener = keyboard.Listener(
                     on_press=self.on_key_press,
                     suppress=True
                 )
                 self.listener.start()
-                time.sleep(0.2)  # 等待監聽器啟動
-                print("✓ 繼續使用方向鍵導航...\n")
+                time.sleep(0.3)  # 等待監聽器啟動
+            print("✓ 已恢復導航模式，請繼續使用方向鍵\n")
 
 
 def read_han_ji_with_keyboard(wb) -> int:
