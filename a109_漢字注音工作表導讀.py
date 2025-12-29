@@ -18,12 +18,17 @@
 #      游標會跳到前一行（如：D5、D9...）
 # （5）當【作用儲存格】游標位於某行的行尾儲存格（如：R5、R9...）時，按【→】鍵，
 #      游標會跳到下一行（如：D9、D13...）
+# （6）按【Esc】鍵，可結束本程式的執行。
+# （7）按【Ctrl+C】鍵，可中斷本程式的執行。
+# （8）按【空白】/【Q】鍵，可查詢【萌台語字典】。（a220_作用儲存格查找萌典漢字讀音.py）
+# （9）按【S】鍵，可查詢【個人字典】。 （a222_依作用儲存格在個人字典查找漢字讀音.py）
 
 # =========================================================================
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
 import logging
 import os
+import subprocess
 import sys
 import time
 
@@ -39,12 +44,46 @@ except ImportError:
     print("警告：未安裝 pynput 套件，將使用輸入模式")
     print("可執行：pip install pynput")
 
+# Windows API（用於視窗切換）
+try:
+    import win32con
+    import win32gui
+    HAS_WIN32 = True
+except ImportError:
+    HAS_WIN32 = False
+    print("警告：未安裝 pywin32 套件，可能無法自動切換視窗")
+    print("可執行：pip install pywin32")
+
+# COM 執行緒初始化（用於多執行緒環境）
+try:
+    import pythoncom
+    HAS_PYTHONCOM = True
+except ImportError:
+    HAS_PYTHONCOM = False
+
+# 載入 a222 的核心查詢功能（個人字典）
+try:
+    from a222_依作用儲存格在個人字典查找漢字讀音 import ca_han_ji_thak_im as ca_han_ji_thak_im_a222
+    HAS_A222 = True
+except ImportError as e:
+    HAS_A222 = False
+    print(f"警告：無法載入 a222 模組：{e}")
+
+# 載入 a220 的核心查詢功能（萌典）
+try:
+    from a220_作用儲存格查找萌典漢字讀音 import ca_han_ji_thak_im as ca_han_ji_thak_im_a220
+    HAS_A220 = True
+except ImportError as e:
+    HAS_A220 = False
+    print(f"警告：無法載入 a220 模組：{e}")
+
 # =========================================================================
 # 常數定義
 # =========================================================================
 EXIT_CODE_SUCCESS = 0
 EXIT_CODE_NO_FILE = 1
 EXIT_CODE_INVALID_INPUT = 2
+EXIT_CODE_ERROR = 10
 EXIT_CODE_UNKNOWN_ERROR = 99
 
 # 工作表設定
@@ -240,6 +279,74 @@ def get_total_lines(wb) -> int:
 
 
 # =========================================================================
+# 視窗切換函數
+# =========================================================================
+def activate_excel_window(wb):
+    """
+    激活 Excel 視窗，使其成為前景視窗
+
+    Args:
+        wb: Excel 工作簿物件
+    """
+    if not HAS_WIN32:
+        print("提示：無法自動切換到 Excel 視窗（需要 pywin32 套件）")
+        print("請手動點擊 Excel 視窗以顯示十字游標")
+        return
+
+    try:
+        # 取得 Excel 視窗句柄
+        excel_hwnd = wb.app.api.Hwnd
+
+        # 檢查視窗是否存在
+        if not win32gui.IsWindow(excel_hwnd):
+            print("無法找到 Excel 視窗")
+            return
+
+        # 如果視窗最小化，先還原
+        if win32gui.IsIconic(excel_hwnd):
+            win32gui.ShowWindow(excel_hwnd, win32con.SW_RESTORE)
+
+        # 將 Excel 視窗切換到前景
+        win32gui.SetForegroundWindow(excel_hwnd)
+        print("✓ 已切換到 Excel 視窗")
+
+        # 等待視窗切換完成
+        time.sleep(0.5)
+
+    except Exception as e:
+        logging.error(f"無法激活 Excel 視窗：{e}")
+
+
+def activate_console_window(console_hwnd):
+    """
+    激活終端機視窗，使其成為前景視窗
+
+    Args:
+        console_hwnd: 終端機視窗句柄
+    """
+    if not HAS_WIN32:
+        print("提示：無法自動切換到終端機視窗（需要 pywin32 套件）")
+        return
+
+    if not console_hwnd:
+        print("提示：無法取得終端機視窗句柄")
+        return
+
+    try:
+        if win32gui.IsWindow(console_hwnd):
+            win32gui.SetForegroundWindow(console_hwnd)
+            print("✓ 已切換到終端機視窗")
+            time.sleep(0.2)
+        else:
+            print("提示：終端機視窗不存在，請手動點擊終端機視窗")
+    except Exception as e:
+        # Windows 對 SetForegroundWindow 有限制，可能會失敗
+        # 這不是致命錯誤，只需提示用戶手動點擊
+        print(f"提示：無法自動切換視窗，請手動點擊終端機視窗")
+        logging.debug(f"SetForegroundWindow 失敗：{e}")
+
+
+# =========================================================================
 # 主要處理函數（使用鍵盤監聽）
 # =========================================================================
 class NavigationController:
@@ -253,6 +360,19 @@ class NavigationController:
         self.total_lines = get_total_lines(wb)
         self.running = True
         self.pending_action = None  # 待執行的動作
+        self.listener = None  # 鍵盤監聽器
+
+        # 儲存視窗句柄（用於切換視窗）
+        self.console_hwnd = None
+        self.excel_hwnd = None
+        if HAS_WIN32:
+            try:
+                # 取得當前 console 視窗句柄
+                self.console_hwnd = win32gui.GetForegroundWindow()
+                # 取得 Excel 視窗句柄（使用 xlwings API）
+                self.excel_hwnd = wb.app.api.Hwnd
+            except Exception as e:
+                logging.warning(f"無法取得視窗句柄：{e}")
 
     def move_to_cell(self, row, col):
         """移動到指定儲存格"""
@@ -273,6 +393,17 @@ class NavigationController:
                 self.pending_action = 'left'
             elif key == keyboard.Key.right:
                 self.pending_action = 'right'
+            elif key == keyboard.Key.space:
+                # 空白鍵：查詢萌典
+                self.pending_action = 'query_moedict'
+            elif hasattr(key, 'char') and key.char:
+                # 處理字元鍵
+                if key.char.lower() == 'q':
+                    # Q 鍵：查詢萌典
+                    self.pending_action = 'query_moedict'
+                elif key.char.lower() == 's':
+                    # S 鍵：查詢個人字典
+                    self.pending_action = 'query_personal'
             elif key == keyboard.Key.esc:
                 self.pending_action = 'esc'
                 self.running = False
@@ -303,11 +434,165 @@ class NavigationController:
                 if new_row != self.current_row or new_col != self.current_col:
                     self.move_to_cell(new_row, new_col)
 
+            elif action == 'query_moedict':
+                # 查詢萌典
+                self.query_moedict_dictionary()
+
+            elif action == 'query_personal':
+                # 查詢個人字典
+                self.query_personal_dictionary()
+
             elif action == 'esc':
                 print("\n按下 ESC 鍵，程式結束")
 
         except Exception as e:
             logging.error(f"執行動作錯誤：{e}")
+
+    def query_moedict_dictionary(self):
+        """查詢萌典字典"""
+        print("\n" + "=" * 70)
+        print("進入萌典字典查詢模式")
+        print("=" * 70)
+
+        # 暫停鍵盤監聽
+        if self.listener:
+            self.listener.stop()
+            time.sleep(0.3)
+
+        try:
+            if HAS_A220:
+                # 直接調用 a220 的核心函數，不進入無限循環
+                print("\n查詢萌典字典中...")
+
+                # 取得設定值
+                try:
+                    from mod_excel_access import get_value_by_name
+                    ue_im_lui_piat = get_value_by_name(wb=self.wb, name='語音類型')
+                    han_ji_khoo = get_value_by_name(wb=self.wb, name='漢字庫')
+                except:
+                    ue_im_lui_piat = "白話音"
+                    han_ji_khoo = "河洛話"
+
+                # 調用查詢函數
+                exit_code = ca_han_ji_thak_im_a220(
+                    wb=self.wb,
+                    sheet_name='漢字注音',
+                    ue_im_lui_piat=ue_im_lui_piat,
+                    han_ji_khoo=han_ji_khoo,
+                    new_khuat_ji_piau_sheet=False,
+                    new_piau_im_ji_khoo_sheet=False,
+                )
+
+                if exit_code == 0:
+                    print("\n✓ 查詢完成")
+                else:
+                    print(f"\n⚠️  查詢結果：exit_code = {exit_code}")
+            else:
+                # 回退到 subprocess 方式
+                print("\n執行 a220_作用儲存格查找萌典漢字讀音.py...")
+                result = subprocess.run(
+                    [sys.executable, "a220_作用儲存格查找萌典漢字讀音.py"],
+                    cwd=os.path.dirname(os.path.abspath(__file__)),
+                    capture_output=False,
+                    text=True
+                )
+                if result.returncode != 0:
+                    print(f"⚠️  a220 程式執行失敗，返回碼：{result.returncode}")
+        except KeyboardInterrupt:
+            print("\n\n使用者中斷查詢")
+        except Exception as e:
+            logging.error(f"執行萌典查詢失敗：{e}")
+            print(f"❌ 執行萌典查詢失敗：{e}")
+        finally:
+            print("\n" + "=" * 70)
+            print("返回導航模式")
+            print("=" * 70)
+
+            # 切換回 Excel 視窗
+            activate_excel_window(self.wb)
+
+            # 重新啟動鍵盤監聽
+            if self.listener:
+                self.listener = keyboard.Listener(
+                    on_press=self.on_key_press,
+                    suppress=True
+                )
+                self.listener.start()
+                time.sleep(0.3)
+            print("✓ 已恢復導航模式\n")
+
+    def query_personal_dictionary(self):
+        """查詢個人字典"""
+        print("\n" + "=" * 70)
+        print("進入個人字典查詢模式")
+        print("=" * 70)
+
+        # 暫停鍵盤監聽
+        if self.listener:
+            self.listener.stop()
+            time.sleep(0.3)
+
+        try:
+            if HAS_A222:
+                # 直接調用 a222 的核心函數，不進入無限循環
+                print("\n查詢個人字典中...")
+
+                # 取得設定值
+                try:
+                    from mod_excel_access import get_value_by_name
+                    ue_im_lui_piat = get_value_by_name(wb=self.wb, name='語音類型')
+                    han_ji_khoo = get_value_by_name(wb=self.wb, name='漢字庫')
+                except:
+                    ue_im_lui_piat = "白話音"
+                    han_ji_khoo = "河洛話"
+
+                # 調用查詢函數
+                exit_code = ca_han_ji_thak_im_a222(
+                    wb=self.wb,
+                    sheet_name='漢字注音',
+                    ue_im_lui_piat=ue_im_lui_piat,
+                    han_ji_khoo=han_ji_khoo,
+                    new_khuat_ji_piau_sheet=False,
+                    new_piau_im_ji_khoo_sheet=False,
+                )
+
+                if exit_code == 0:
+                    print("\n✓ 查詢完成")
+                else:
+                    print(f"\n⚠️  查詢結果：exit_code = {exit_code}")
+            else:
+                # 回退到 subprocess 方式
+                print("\n執行 a222_依作用儲存格在個人字典查找漢字讀音.py...")
+                result = subprocess.run(
+                    [sys.executable, "a222_依作用儲存格在個人字典查找漢字讀音.py"],
+                    cwd=os.path.dirname(os.path.abspath(__file__)),
+                    capture_output=False,
+                    text=True
+                )
+                if result.returncode != 0:
+                    print(f"⚠️  a222 程式執行失敗，返回碼：{result.returncode}")
+        except KeyboardInterrupt:
+            print("\n\n使用者中斷查詢")
+        except Exception as e:
+            logging.error(f"執行個人字典查詢失敗：{e}")
+            print(f"❌ 執行個人字典查詢失敗：{e}")
+        finally:
+            print("\n" + "=" * 70)
+            print("返回導航模式")
+            print("=" * 70)
+
+            # 切換回 Excel 視窗
+            activate_excel_window(self.wb)
+
+            # 重新啟動鍵盤監聽
+            if self.listener:
+                self.listener = keyboard.Listener(
+                    on_press=self.on_key_press,
+                    suppress=True
+                )
+                self.listener.start()
+                time.sleep(0.3)
+            print("✓ 已恢復導航模式\n")
 
 
 def read_han_ji_with_keyboard(wb) -> int:
@@ -337,16 +622,27 @@ def read_han_ji_with_keyboard(wb) -> int:
         print("操作說明：")
         print("  ← (Left Arrow)  : 向左移動")
         print("  → (Right Arrow) : 向右移動")
+        print("  空白 / Q 鍵     : 查詢萌典字典")
+        print("  S 鍵            : 查詢個人字典")
         print("  ESC             : 結束程式")
         print("=" * 70)
         print(f"總行數：{controller.total_lines}")
         print(f"每行字數：{END_COL - START_COL + 1}")
         print("=" * 70)
-        print("\n請使用方向鍵導航...")
 
-        # 啟動鍵盤監聽（在背景執行緒）
-        listener = keyboard.Listener(on_press=controller.on_key_press)
-        listener.start()
+        # 切換到 Excel 視窗，讓十字游標顯示
+        print("\n正在切換到 Excel 視窗...")
+        activate_excel_window(wb)
+
+        print("\n請使用方向鍵導航...")
+        print("提示：程式會攔截按鍵，不會影響 Excel 儲存格內容")
+
+        # 啟動鍵盤監聽（在背景執行緒，使用 suppress=True 攔截所有按鍵）
+        controller.listener = keyboard.Listener(
+            on_press=controller.on_key_press,
+            suppress=True  # 攔截按鍵，不讓 Excel 接收
+        )
+        controller.listener.start()
 
         try:
             # 主迴圈：在主執行緒處理待執行的動作
@@ -354,7 +650,8 @@ def read_han_ji_with_keyboard(wb) -> int:
                 controller.process_pending_action()
                 time.sleep(0.05)  # 避免 CPU 佔用過高
         finally:
-            listener.stop()
+            if controller.listener:
+                controller.listener.stop()
 
         print("=" * 70)
         print("程式結束")
