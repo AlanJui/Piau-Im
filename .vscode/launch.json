@@ -192,10 +192,11 @@
             "console": "integratedTerminal",
         },
         {
-            "name": "a222_自萌典查找缺字表之漢字讀音",
+            "name": "a222_依作用儲存格在個人字典查找漢字讀音",
             "type": "debugpy",
             "request": "launch",
-            "program": "a222_自萌典查找缺字表之漢字讀音.py",
+            // "program": "${fileBasename}",
+            "program": "a222_依作用儲存格在個人字典查找漢字讀音.py",
             "console": "integratedTerminal",
         },
         {
@@ -205,6 +206,13 @@
             "program": "a230_缺字表補標音.py",
             "console": "integratedTerminal",
             "args": []
+        },
+        {
+            "name": "a232_自萌典查找缺字表之漢字讀音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a232_自萌典查找缺字表之漢字讀音.py",
+            "console": "integratedTerminal",
         },
         {
             "name": "a240_為漢字標注漢字標音",
@@ -529,6 +537,13 @@
             "type": "debugpy",
             "request": "launch",
             "program": "mod_字庫.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "mod_ca_ji_tian",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "mod_ca_ji_tian.py",
             "console": "integratedTerminal",
         },
         {

@@ -222,11 +222,11 @@ def han_ji_ca_piau_im_list(
         >>> for han_ji, piau_im_list in result.items():
         >>>     print(f"{han_ji}: {piau_im_list}")
     """
-    su_tian = HanJiTian(db_path)
+    ji_tian = HanJiTian(db_path)
     results = {}
 
     for han_ji in han_ji_list:
-        results[han_ji] = su_tian.han_ji_ca_piau_im(han_ji, ue_im_lui_piat)
+        results[han_ji] = ji_tian.han_ji_ca_piau_im(han_ji, ue_im_lui_piat)
 
     return results
 
@@ -243,11 +243,12 @@ def test():
     print("測試 1: 使用 HanJiTian 類別查詢文讀音")
     print("=" * 70)
 
-    su_tian = HanJiTian("Ho_Lok_Ue.db")
+    ji_tian = HanJiTian("Ho_Lok_Ue.db")
 
-    test_chars = ["東", "西", "南", "北", "中"]
+    # test_chars = ["東", "西", "南", "北", "中"]
+    test_chars = ["白", "石", "當", "中", "隆"]
     for han_ji in test_chars:
-        result = su_tian.han_ji_ca_piau_im(han_ji, ue_im_lui_piat="文讀音")
+        result = ji_tian.han_ji_ca_piau_im(han_ji, ue_im_lui_piat="文讀音")
         print(f"\n漢字: {han_ji} (文讀音)")
         if result:
             for item in result:
@@ -261,7 +262,7 @@ def test():
     print("=" * 70)
 
     for han_ji in ["東", "西"]:
-        result = su_tian.han_ji_ca_piau_im(han_ji, ue_im_lui_piat="白話音")
+        result = ji_tian.han_ji_ca_piau_im(han_ji, ue_im_lui_piat="白話音")
         print(f"\n漢字: {han_ji} (白話音)")
         if result:
             for item in result:
