@@ -348,7 +348,7 @@ class CellProcessor:
             return f"【{han_ji}】查無此字！", False
 
         # 有多個讀音
-        print(f"漢字儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）：【{han_ji}】有 {len(result)} 個讀音...")
+        print(f"漢字儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）：【{han_ji}】有 {len(result)} 個讀音：{result}")
 
         # 顯示所有讀音選項
         piau_im_options = []
