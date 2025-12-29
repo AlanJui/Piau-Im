@@ -328,17 +328,88 @@ def activate_console_window(console_hwnd):
         print("提示：無法自動切換到終端機視窗（需要 pywin32 套件）")
         return
 
-    if not console_hwnd:
-        print("提示：無法取得終端機視窗句柄")
-        return
-
     try:
-        if win32gui.IsWindow(console_hwnd):
-            win32gui.SetForegroundWindow(console_hwnd)
+        import win32api
+        import win32process
+
+        # 嘗試找到正確的 Console 視窗
+        current_hwnd = console_hwnd
+
+        # 如果提供的句柄無效，嘗試找到 Python 控制台或 PowerShell 視窗
+        if not current_hwnd or not win32gui.IsWindow(current_hwnd):
+            def enum_handler(hwnd, result_list):
+                if win32gui.IsWindowVisible(hwnd):
+                    title = win32gui.GetWindowText(hwnd)
+                    if any(keyword in title.lower() for keyword in ['python', 'powershell', 'cmd', 'terminal', 'piau-im', 'vscode']):
+                        result_list.append(hwnd)
+
+            windows = []
+            win32gui.EnumWindows(enum_handler, windows)
+            if windows:
+                current_hwnd = windows[0]
+
+        if current_hwnd and win32gui.IsWindow(current_hwnd):
+            # 如果視窗最小化，先還原
+            if win32gui.IsIconic(current_hwnd):
+                win32gui.ShowWindow(current_hwnd, win32con.SW_RESTORE)
+                time.sleep(0.3)
+
+            # 【強化版】使用 AttachThreadInput 解決 Windows 前景視窗限制
+            try:
+                # 獲取當前前景視窗的線程ID
+                current_thread_id = win32api.GetCurrentThreadId()
+                # 獲取目標視窗的線程ID
+                target_thread_id, _ = win32process.GetWindowThreadProcessId(current_hwnd)
+
+                # 如果線程不同，嘗試附加線程輸入
+                if current_thread_id != target_thread_id:
+                    try:
+                        win32process.AttachThreadInput(current_thread_id, target_thread_id, True)
+                        logging.debug(f"成功附加線程輸入: {current_thread_id} -> {target_thread_id}")
+                    except Exception as e:
+                        logging.debug(f"AttachThreadInput 失敗: {e}")
+
+                # 方法 1: 使用 BringWindowToTop
+                win32gui.BringWindowToTop(current_hwnd)
+                time.sleep(0.1)
+
+                # 方法 2: 使用 ShowWindow 激活
+                win32gui.ShowWindow(current_hwnd, win32con.SW_SHOW)
+                time.sleep(0.1)
+
+                # 方法 3: 設為前景視窗
+                win32gui.SetForegroundWindow(current_hwnd)
+                time.sleep(0.3)
+
+                # 方法 4: 再次嘗試激活
+                win32gui.SetActiveWindow(current_hwnd)
+
+                # 分離線程輸入
+                if current_thread_id != target_thread_id:
+                    try:
+                        win32process.AttachThreadInput(current_thread_id, target_thread_id, False)
+                    except Exception as e:
+                        logging.debug(f"DetachThreadInput 失敗: {e}")
+
+            except Exception as e:
+                # SetActiveWindow 可能失敗，這是正常的
+                logging.debug(f"視窗激活過程出現錯誤（可預期）：{e}")
+
             print("✓ 已切換到終端機視窗")
-            time.sleep(0.2)
+
+            # 等待更長時間確保視窗完全激活並準備接收輸入
+            time.sleep(1.0)
+
+            # 驗證視窗是否成為前景視窗
+            foreground = win32gui.GetForegroundWindow()
+            if foreground != current_hwnd:
+                print(f"⚠️  視窗切換可能未完成")
+                print(f"提示：請用滑鼠點擊一次終端機視窗以確保輸入焦點正確")
+            else:
+                # 即使前景視窗正確，仍然建議用戶確認
+                print(f"提示：如果無法輸入，請用滑鼠點擊一次終端機視窗")
         else:
-            print("提示：終端機視窗不存在，請手動點擊終端機視窗")
+            print("提示：無法找到終端機視窗，請手動點擊終端機視窗")
     except Exception as e:
         # Windows 對 SetForegroundWindow 有限制，可能會失敗
         # 這不是致命錯誤，只需提示用戶手動點擊
@@ -367,12 +438,42 @@ class NavigationController:
         self.excel_hwnd = None
         if HAS_WIN32:
             try:
-                # 取得當前 console 視窗句柄
-                self.console_hwnd = win32gui.GetForegroundWindow()
                 # 取得 Excel 視窗句柄（使用 xlwings API）
                 self.excel_hwnd = wb.app.api.Hwnd
+
+                # 取得當前前景視窗（應該是 Console）
+                current_foreground = win32gui.GetForegroundWindow()
+
+                # 驗證這是否是 Console 視窗
+                if current_foreground:
+                    title = win32gui.GetWindowText(current_foreground)
+                    # 如果標題包含 Python, PowerShell, CMD 等，這就是 Console
+                    if any(keyword in title.lower() for keyword in ['python', 'powershell', 'cmd', 'terminal', 'piau-im', 'vscode']):
+                        self.console_hwnd = current_foreground
+                    else:
+                        # 否則嘗試搜尋 Console 視窗
+                        self.console_hwnd = self._find_console_window()
+
+                logging.info(f"Console 視窗句柄：{self.console_hwnd}")
+                logging.info(f"Excel 視窗句柄：{self.excel_hwnd}")
             except Exception as e:
                 logging.warning(f"無法取得視窗句柄：{e}")
+
+    def _find_console_window(self):
+        """搜尋 Console 視窗"""
+        try:
+            windows = []
+            def enum_handler(hwnd, result_list):
+                if win32gui.IsWindowVisible(hwnd):
+                    title = win32gui.GetWindowText(hwnd)
+                    if any(keyword in title.lower() for keyword in ['python', 'powershell', 'cmd', 'terminal', 'piau-im', 'vscode']):
+                        result_list.append(hwnd)
+
+            win32gui.EnumWindows(enum_handler, windows)
+            return windows[0] if windows else None
+        except Exception as e:
+            logging.warning(f"搜尋 Console 視窗失敗：{e}")
+            return None
 
     def move_to_cell(self, row, col):
         """移動到指定儲存格"""
@@ -464,6 +565,9 @@ class NavigationController:
                 # 直接調用 a220 的核心函數，不進入無限循環
                 print("\n查詢萌典字典中...")
 
+                # 切換到終端機視窗（確保用戶可以輸入）
+                activate_console_window(self.console_hwnd)
+
                 # 取得設定值
                 try:
                     from mod_excel_access import get_value_by_name
@@ -536,6 +640,9 @@ class NavigationController:
             if HAS_A222:
                 # 直接調用 a222 的核心函數，不進入無限循環
                 print("\n查詢個人字典中...")
+
+                # 切換到終端機視窗（確保用戶可以輸入）
+                activate_console_window(self.console_hwnd)
 
                 # 取得設定值
                 try:
