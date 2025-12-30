@@ -6,22 +6,6 @@
 # 更顯有趣。另外，操作者無需借助滑鼠指標，僅需使用【←】或【→】按鍵，便能在上/下行
 # 移動。譬如：在【第2行】的行尾（即儲存格：R9）時，按【→】鍵，游標會跳到【第3行】
 # 的行首（即儲存格：D13）。
-#
-# 規格說明：
-# （1）行號與【漢字儲存格】的對映關係如下：
-#       -【第1行】的儲存格：D5, E5, F5,... ,R5；
-#       -【第2行】的儲存格：D9, E9, F9,... ,R9；
-#       -【第3行】的儲存格：D13, E13, F13,... ,R13；
-# （2）程式開始執行時，【作用儲存格】落於【漢字注音】工作表的第1行行首儲存格（即：D5）。
-# （3）操作鍵只提供【←】及【→】兩個方向鍵，分別用以控制游標向前或向後移動。
-# （4）當【作用儲存格】游標位於某行的行首儲存格（如：D9、D13...）時，按【←】鍵，
-#      游標會跳到前一行（如：D5、D9...）
-# （5）當【作用儲存格】游標位於某行的行尾儲存格（如：R5、R9...）時，按【→】鍵，
-#      游標會跳到下一行（如：D9、D13...）
-# （6）按【Esc】鍵，可結束本程式的執行。
-# （7）按【Ctrl+C】鍵，可中斷本程式的執行。
-# （8）按【空白】/【Q】鍵，可查詢【萌台語字典】。（a220_作用儲存格查找萌典漢字讀音.py）
-# （9）按【S】鍵，可查詢【個人字典】。 （a222_依作用儲存格在個人字典查找漢字讀音.py）
 
 # =========================================================================
 # 載入程式所需套件/模組/函式庫
@@ -138,6 +122,65 @@ def get_row_from_line(line_no: int) -> int:
         該行漢字儲存格的列號
     """
     return START_ROW + (line_no - 1) * ROWS_PER_LINE
+
+
+def move_up(sheet, current_row: int, current_col: int) -> tuple:
+    """
+    向上移動游標到上一行的相同欄位（或行首）
+
+    Args:
+        sheet: Excel 工作表物件
+        current_row: 當前列號
+        current_col: 當前欄號
+
+    Returns:
+        (new_row, new_col): 新的列號和欄號
+    """
+    line_no = get_line_number(current_row)
+    if line_no > 1:
+        # 移動到上一行的相同欄位
+        new_line = line_no - 1
+        new_row = get_row_from_line(new_line)
+        new_col = current_col
+
+        # 檢查目標儲存格是否有效（不超過行尾）
+        if new_col > END_COL:
+            new_col = END_COL
+
+        return new_row, new_col
+    else:
+        # 已在第一行，不移動
+        return current_row, current_col
+
+
+def move_down(sheet, current_row: int, current_col: int, total_lines: int) -> tuple:
+    """
+    向下移動游標到下一行的相同欄位（或行首）
+
+    Args:
+        sheet: Excel 工作表物件
+        current_row: 當前列號
+        current_col: 當前欄號
+        total_lines: 總行數
+
+    Returns:
+        (new_row, new_col): 新的列號和欄號
+    """
+    line_no = get_line_number(current_row)
+    if line_no < total_lines:
+        # 移動到下一行的相同欄位
+        new_line = line_no + 1
+        new_row = get_row_from_line(new_line)
+        new_col = current_col
+
+        # 檢查目標儲存格是否有效（不超過行尾）
+        if new_col > END_COL:
+            new_col = END_COL
+
+        return new_row, new_col
+    else:
+        # 已在最後一行，不移動
+        return current_row, current_col
 
 
 def move_left(sheet, current_row: int, current_col: int) -> tuple:
@@ -432,6 +475,9 @@ class NavigationController:
         self.running = True
         self.pending_action = None  # 待執行的動作
         self.listener = None  # 鍵盤監聽器
+        self.last_move_time = None  # 上次移動時間（用於延遲檢查）
+        self.auto_skip_delay = 0.5  # 自動跳過換行的延遲時間（秒）
+        self.auto_skip_enabled = True  # 是否啟用自動跳過換行
 
         # 儲存視窗句柄（用於切換視窗）
         self.console_hwnd = None
@@ -475,17 +521,63 @@ class NavigationController:
             logging.warning(f"搜尋 Console 視窗失敗：{e}")
             return None
 
-    def move_to_cell(self, row, col):
+    def move_to_cell(self, row, col, reset_timer=True):
         """移動到指定儲存格"""
         self.current_row = row
         self.current_col = col
         self.sheet.range((row, col)).select()
 
+        # 記錄移動時間，用於延遲檢查
+        if reset_timer:
+            self.last_move_time = time.time()
+
         # 顯示當前位置
+        current_cell = self.sheet.range((row, col))
+        cell_value = current_cell.value
         line_no = get_line_number(row)
         col_letter = xw.utils.col_name(col)
-        cell_value = self.sheet.range((row, col)).value or ""
-        print(f"→ 第 {line_no} 行，{col_letter}{row}【{cell_value}】")
+        display_value = cell_value or ""
+        print(f"→ 第 {line_no} 行，{col_letter}{row}【{display_value}】")
+
+    def check_and_skip_newline(self):
+        """檢查當前儲存格是否為換行符號，如果是則自動跳到下一行"""
+        if not self.auto_skip_enabled:
+            return
+
+        # 檢查是否已經過了延遲時間
+        if self.last_move_time is None:
+            return
+
+        elapsed = time.time() - self.last_move_time
+        if elapsed < self.auto_skip_delay:
+            return  # 還沒到延遲時間
+
+        # 延遲時間已到，檢查當前儲存格
+        current_cell = self.sheet.range((self.current_row, self.current_col))
+        cell_value = current_cell.value
+        cell_formula = current_cell.formula
+
+        is_newline = False
+        # 檢查公式是否為 =CHAR(10)
+        if cell_formula and '=CHAR(10)' in str(cell_formula).upper():
+            is_newline = True
+        # 檢查值是否為換行符
+        elif cell_value is not None:
+            if cell_value == '\n' or cell_value == chr(10):
+                is_newline = True
+
+        if is_newline:
+            # 當前儲存格是換行符號，自動跳到下一行
+            line_no = get_line_number(self.current_row)
+            if line_no < self.total_lines:
+                print("  [偵測到換行符號，自動跳到下一行]")
+                new_line = line_no + 1
+                new_row = get_row_from_line(new_line)
+                new_col = START_COL
+                # 移動到下一行，不重置計時器避免無限循環
+                self.move_to_cell(new_row, new_col, reset_timer=False)
+                # 清除計時器
+                self.last_move_time = None
 
     def on_key_press(self, key):
         """鍵盤按下事件處理 - 只設置動作標記"""
@@ -494,6 +586,10 @@ class NavigationController:
                 self.pending_action = 'left'
             elif key == keyboard.Key.right:
                 self.pending_action = 'right'
+            elif key == keyboard.Key.up:
+                self.pending_action = 'up'
+            elif key == keyboard.Key.down:
+                self.pending_action = 'down'
             elif key == keyboard.Key.space:
                 # 空白鍵：查詢萌典
                 self.pending_action = 'query_moedict'
@@ -524,14 +620,30 @@ class NavigationController:
 
         try:
             if action == 'left':
-                # 向左移動
+                # 向左移動（重置延遲計時器）
+                self.last_move_time = None
                 new_row, new_col = move_left(self.sheet, self.current_row, self.current_col)
                 if new_row != self.current_row or new_col != self.current_col:
                     self.move_to_cell(new_row, new_col)
 
             elif action == 'right':
-                # 向右移動
+                # 向右移動（重置延遲計時器）
+                self.last_move_time = None
                 new_row, new_col = move_right(self.sheet, self.current_row, self.current_col, self.total_lines)
+                if new_row != self.current_row or new_col != self.current_col:
+                    self.move_to_cell(new_row, new_col)
+
+            elif action == 'up':
+                # 向上移動（重置延遲計時器）
+                self.last_move_time = None
+                new_row, new_col = move_up(self.sheet, self.current_row, self.current_col)
+                if new_row != self.current_row or new_col != self.current_col:
+                    self.move_to_cell(new_row, new_col)
+
+            elif action == 'down':
+                # 向下移動（重置延遲計時器）
+                self.last_move_time = None
+                new_row, new_col = move_down(self.sheet, self.current_row, self.current_col, self.total_lines)
                 if new_row != self.current_row or new_col != self.current_col:
                     self.move_to_cell(new_row, new_col)
 
@@ -729,6 +841,8 @@ def read_han_ji_with_keyboard(wb) -> int:
         print("操作說明：")
         print("  ← (Left Arrow)  : 向左移動")
         print("  → (Right Arrow) : 向右移動")
+        print("  ↑ (Up Arrow)    : 向上移動到上一行")
+        print("  ↓ (Down Arrow)  : 向下移動到下一行")
         print("  空白 / Q 鍵     : 查詢萌典字典")
         print("  S 鍵            : 查詢個人字典")
         print("  ESC             : 結束程式")
@@ -755,6 +869,8 @@ def read_han_ji_with_keyboard(wb) -> int:
             # 主迴圈：在主執行緒處理待執行的動作
             while controller.running:
                 controller.process_pending_action()
+                # 檢查是否需要自動跳過換行符號
+                controller.check_and_skip_newline()
                 time.sleep(0.05)  # 避免 CPU 佔用過高
         finally:
             if controller.listener:
