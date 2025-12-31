@@ -171,6 +171,13 @@
             ]
         },
         {
+            "name": "a109_漢字注音工作表導讀",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a109_漢字注音工作表導讀.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "a200_查找及填入漢字標音",
             "type": "debugpy",
             "request": "launch",

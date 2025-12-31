@@ -321,6 +321,64 @@ def get_total_lines(wb) -> int:
         return 10
 
 
+def hide_manual_annotation_style(wb):
+    """
+    隱藏【人工標音儲存格】樣式的文字
+    將字型顏色改為與填滿顏色相同（象牙白）
+
+    Args:
+        wb: Excel 工作簿物件
+    """
+    try:
+        # 取得 Excel API 物件
+        excel_app = wb.app.api
+        workbook = wb.api
+
+        # 查找【人工標音儲存格】樣式
+        style_name = "人工標音儲存格"
+        try:
+            style = workbook.Styles(style_name)
+            # 將字型顏色改為象牙白（RGB: 255, 255, 240）
+            # Excel 使用 BGR 格式，所以順序相反
+            style.Font.Color = 0xF0FFFF  # BGR: 240, 255, 255 (象牙白)
+            print(f"✓ 已隱藏【{style_name}】樣式的文字（字型顏色改為象牙白）")
+        except:
+            print(f"⚠️  找不到【{style_name}】樣式，跳過隱藏操作")
+
+    except Exception as e:
+        logging.warning(f"隱藏人工標音樣式失敗：{e}")
+        print(f"⚠️  隱藏人工標音樣式失敗：{e}")
+
+
+def restore_manual_annotation_style(wb):
+    """
+    恢復【人工標音儲存格】樣式的文字
+    將字型顏色改回紅色
+
+    Args:
+        wb: Excel 工作簿物件
+    """
+    try:
+        # 取得 Excel API 物件
+        excel_app = wb.app.api
+        workbook = wb.api
+
+        # 查找【人工標音儲存格】樣式
+        style_name = "人工標音儲存格"
+        try:
+            style = workbook.Styles(style_name)
+            # 將字型顏色改回紅色（RGB: 255, 0, 0）
+            # Excel 使用 BGR 格式，所以順序相反
+            style.Font.Color = 0x0000FF  # BGR: 0, 0, 255 (紅色)
+            print(f"✓ 已恢復【{style_name}】樣式的文字（字型顏色改回紅色）")
+        except:
+            print(f"⚠️  找不到【{style_name}】樣式，跳過恢復操作")
+
+    except Exception as e:
+        logging.warning(f"恢復人工標音樣式失敗：{e}")
+        print(f"⚠️  恢復人工標音樣式失敗：{e}")
+
+
 # =========================================================================
 # 視窗切換函數
 # =========================================================================
@@ -689,10 +747,15 @@ class NavigationController:
                     ue_im_lui_piat = "白話音"
                     han_ji_khoo = "河洛話"
 
+                # 取得當前作用儲存格位置
+                current_cell = f"{xw.utils.col_name(self.current_col)}{self.current_row}"
+                print(f"當前儲存格：{current_cell}")
+
                 # 調用查詢函數
                 exit_code = ca_han_ji_thak_im_a220(
                     wb=self.wb,
                     sheet_name='漢字注音',
+                    cell=current_cell,
                     ue_im_lui_piat=ue_im_lui_piat,
                     han_ji_khoo=han_ji_khoo,
                     new_khuat_ji_piau_sheet=False,
@@ -765,10 +828,15 @@ class NavigationController:
                     ue_im_lui_piat = "白話音"
                     han_ji_khoo = "河洛話"
 
+                # 取得當前作用儲存格位置
+                current_cell = f"{xw.utils.col_name(self.current_col)}{self.current_row}"
+                print(f"當前儲存格：{current_cell}")
+
                 # 調用查詢函數
                 exit_code = ca_han_ji_thak_im_a222(
                     wb=self.wb,
                     sheet_name='漢字注音',
+                    cell=current_cell,
                     ue_im_lui_piat=ue_im_lui_piat,
                     han_ji_khoo=han_ji_khoo,
                     new_khuat_ji_piau_sheet=False,
@@ -851,6 +919,10 @@ def read_han_ji_with_keyboard(wb) -> int:
         print(f"每行字數：{END_COL - START_COL + 1}")
         print("=" * 70)
 
+        # 【進入導讀模式前】隱藏人工標音文字
+        print("\n正在隱藏人工標音文字...")
+        hide_manual_annotation_style(wb)
+
         # 切換到 Excel 視窗，讓十字游標顯示
         print("\n正在切換到 Excel 視窗...")
         activate_excel_window(wb)
@@ -876,6 +948,10 @@ def read_han_ji_with_keyboard(wb) -> int:
             if controller.listener:
                 controller.listener.stop()
 
+        # 【程式結束前】恢復人工標音文字顏色
+        print("\n正在恢復人工標音文字顏色...")
+        restore_manual_annotation_style(wb)
+
         print("=" * 70)
         print("程式結束")
         print("=" * 70)
@@ -886,6 +962,11 @@ def read_han_ji_with_keyboard(wb) -> int:
         return EXIT_CODE_NO_FILE
     except Exception as e:
         logging.error(f"程式執行錯誤：{e}")
+        # 發生錯誤時也要恢復樣式
+        try:
+            restore_manual_annotation_style(wb)
+        except:
+            pass
         return EXIT_CODE_ERROR
 
 
