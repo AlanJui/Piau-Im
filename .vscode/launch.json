@@ -207,6 +207,13 @@
             "console": "integratedTerminal",
         },
         {
+            "name": "a224_引用既有的漢字標音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a224_引用既有的漢字標音.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "a230_缺字表補標音",
             "type": "debugpy",
             "request": "launch",
