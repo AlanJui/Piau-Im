@@ -61,6 +61,14 @@ except ImportError as e:
     HAS_A220 = False
     print(f"警告：無法載入 a220 模組：{e}")
 
+# 載入 a224 的核心查詢功能（引用既有標音）
+try:
+    from a224_引用既有的漢字標音 import ca_han_ji_thak_im as ca_han_ji_thak_im_a224
+    HAS_A224 = True
+except ImportError as e:
+    HAS_A224 = False
+    print(f"警告：無法載入 a224 模組：{e}")
+
 # =========================================================================
 # 常數定義
 # =========================================================================
@@ -659,6 +667,9 @@ class NavigationController:
                 elif key.char.lower() == 's':
                     # S 鍵：查詢個人字典
                     self.pending_action = 'query_personal'
+                elif key.char == '=':
+                    # = 鍵：填入人工標音標記
+                    self.pending_action = 'fill_manual_mark'
             elif key == keyboard.Key.esc:
                 self.pending_action = 'esc'
                 self.running = False
@@ -712,6 +723,10 @@ class NavigationController:
             elif action == 'query_personal':
                 # 查詢個人字典
                 self.query_personal_dictionary()
+
+            elif action == 'fill_manual_mark':
+                # 填入人工標音標記
+                self.fill_manual_annotation_mark()
 
             elif action == 'esc':
                 print("\n按下 ESC 鍵，程式結束")
@@ -881,6 +896,121 @@ class NavigationController:
                 time.sleep(0.3)
             print("✓ 已恢復導航模式\n")
 
+    def fill_manual_annotation_mark(self):
+        """填入人工標音標記【=】到當前儲存格上方兩列的人工標音儲存格，並執行 a224 查詢更新標音"""
+        try:
+            # 計算人工標音儲存格的位置（當前儲存格上方兩列）
+            manual_annotation_row = self.current_row - 2
+            manual_annotation_col = self.current_col
+
+            # 確認位置有效
+            if manual_annotation_row < 1:
+                print("⚠️  無法填入：當前位置沒有人工標音儲存格")
+                return
+
+            # 填入【=】字元
+            target_cell = self.sheet.range((manual_annotation_row, manual_annotation_col))
+            target_cell.value = "="
+
+            # 顯示訊息
+            col_letter = xw.utils.col_name(manual_annotation_col)
+            current_cell_address = f"{xw.utils.col_name(self.current_col)}{self.current_row}"
+            target_cell_address = f"{col_letter}{manual_annotation_row}"
+
+            print(f"\n✓ 已在 {target_cell_address} 填入人工標音標記【=】")
+            print(f"  (當前漢字儲存格：{current_cell_address})")
+
+            # 執行 a224 查詢以更新標音
+            print("\n" + "=" * 70)
+            print("執行 a224 程式：引用既有的漢字標音")
+            print("=" * 70)
+
+            # 暫停鍵盤監聽
+            if self.listener:
+                self.listener.stop()
+                time.sleep(0.3)
+
+            try:
+                if HAS_A224:
+                    # 直接調用 a224 的核心函數
+                    print("\n查詢並更新標音中...")
+
+                    # 切換到終端機視窗（確保用戶可以輸入）
+                    activate_console_window(self.console_hwnd)
+
+                    # 取得設定值
+                    try:
+                        from mod_excel_access import get_value_by_name
+                        ue_im_lui_piat = get_value_by_name(wb=self.wb, name='語音類型')
+                        han_ji_khoo = get_value_by_name(wb=self.wb, name='漢字庫')
+                    except:
+                        ue_im_lui_piat = "白話音"
+                        han_ji_khoo = "河洛話"
+
+                    # 取得當前作用儲存格位置
+                    current_cell = f"{xw.utils.col_name(self.current_col)}{self.current_row}"
+                    print(f"當前儲存格：{current_cell}")
+
+                    # 調用查詢函數
+                    exit_code = ca_han_ji_thak_im_a224(
+                        wb=self.wb,
+                        sheet_name='漢字注音',
+                        cell=current_cell,
+                        ue_im_lui_piat=ue_im_lui_piat,
+                        han_ji_khoo=han_ji_khoo,
+                        new_khuat_ji_piau_sheet=False,
+                        new_piau_im_ji_khoo_sheet=False,
+                    )
+
+                    if exit_code == 0:
+                        print("\n✓ 查詢完成")
+                    else:
+                        print(f"\n⚠️  查詢結果：exit_code = {exit_code}")
+                else:
+                    # 回退到 subprocess 方式
+                    print("\n執行 a224_引用既有的漢字標音.py...")
+                    result = subprocess.run(
+                        [sys.executable, "a224_引用既有的漢字標音.py"],
+                        cwd=os.path.dirname(os.path.abspath(__file__)),
+                        capture_output=False,
+                        text=True
+                    )
+                    if result.returncode != 0:
+                        print(f"⚠️  a224 程式執行失敗，返回碼：{result.returncode}")
+            except KeyboardInterrupt:
+                print("\n\n使用者中斷查詢")
+            except Exception as e:
+                logging.error(f"執行 a224 查詢失敗：{e}")
+                print(f"❌ 執行 a224 查詢失敗：{e}")
+            finally:
+                print("\n" + "=" * 70)
+                print("返回導航模式")
+                print("=" * 70)
+
+                # 切換回 Excel 視窗
+                activate_excel_window(self.wb)
+
+                if self.listener:
+                    self.listener = keyboard.Listener(
+                        on_press=self.on_key_press,
+                        suppress=True
+                    )
+                    self.listener.start()
+                    time.sleep(0.3)
+                print("✓ 已恢復導航模式\n")
+
+        except Exception as e:
+            logging.error(f"填入人工標音標記失敗：{e}")
+            print(f"\n❌ 填入失敗：{e}\n")
+            # 確保恢復鍵盤監聽
+            if self.listener:
+                self.listener = keyboard.Listener(
+                    on_press=self.on_key_press,
+                    suppress=True
+                )
+                self.listener.start()
+
+
 
 def read_han_ji_with_keyboard(wb) -> int:
     """
@@ -913,6 +1043,7 @@ def read_han_ji_with_keyboard(wb) -> int:
         print("  ↓ (Down Arrow)  : 向下移動到下一行")
         print("  空白 / Q 鍵     : 查詢萌典字典")
         print("  S 鍵            : 查詢個人字典")
+        print("  = 鍵            : 填入人工標音標記")
         print("  ESC             : 結束程式")
         print("=" * 70)
         print(f"總行數：{controller.total_lines}")

@@ -243,6 +243,7 @@ class CellProcessor:
                 kenn_ziann_im_piau='N/A',
                 coordinates=(row, col)
             )
+            print(f"已將【{cell.value}】之【人工標音】記錄到【人工標音字庫】工作表的【校正音標】儲存格。")
             sing_kong = True
         elif  tai_gi_im_piau == '' and cell.offset(-2, 0).value == '=':
             # 【人工標音】欄輸入為【=】，但【人工標音字庫】工作表查無結果，再自【標音字庫】工作表，嚐試查找【台語音標】
@@ -255,6 +256,7 @@ class CellProcessor:
                     tai_gi_im_piau=tai_gi_im_piau
                 )
                 # cell.offset(-2, 0).value = ''  # 清空【人工標音】欄【=】
+                print(f"自【人工標音字庫】引用【{cell.value}】既有的【人工標音】。")
                 sing_kong = True
             else:
                 # 若在【人工標音字庫】找不到【人工標音】對應的【台語音標】，則自【標音字庫】工作表查找
@@ -267,6 +269,7 @@ class CellProcessor:
                         tai_gi_im_piau=tai_gi_im_piau
                     )
                     cell.offset(-2, 0).value = ''  # 清空【人工標音】欄【=】
+                    print(f"【{cell.value}】的【人工標音】，在【人工標音字庫】找不到，改用【標音字庫】中的【台語音標】替代。")
                     sing_kong = True
                 else:
                     # 若找不到【人工標音】對應的【台語音標】，則記錄到【缺字表】

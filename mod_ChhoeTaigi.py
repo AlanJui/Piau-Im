@@ -97,14 +97,29 @@ def moe_dict_search(query: str, verbose: bool = True):
                                 if 'f' in definition:
                                     explanation = definition['f']
                                     # 移除標記符號
-                                    explanation = explanation.replace('`', '').replace('~', '')
+                                    # ` 和 ~ 是舊的標記
+                                    # ￹ (U+FFF9), ￺ (U+FFFA), ￻ (U+FFFB) 是萌典的例句標記
+                                    explanation = (
+                                        explanation.replace('`', '')
+                                        .replace('~', '')
+                                        .replace('\ufff9', '')  # 移除 ￹
+                                        .replace('\ufffa', '')  # 移除 ￺
+                                        .replace('\ufffb', '')  # 移除 ￻
+                                    )
                                     print(f"  {d_idx}. {explanation}")
 
                                 # 顯示例句
                                 if 'e' in definition:
                                     examples = definition['e']
                                     for example in examples:
-                                        example_text = example.replace('`', '').replace('~', '')
+                                        # 移除例句中的標記符號
+                                        example_text = (
+                                            example.replace('`', '')
+                                            .replace('~', '')
+                                            .replace('\ufff9', '')  # 移除 ￹
+                                            .replace('\ufffa', '')  # 移除 ￺
+                                            .replace('\ufffb', '')  # 移除 ￻
+                                        )
                                         print(f"     例：{example_text}")
 
                         print("-" * 70)
