@@ -651,8 +651,30 @@ def split_hong_im_hu_ho(hong_im_piau_im):
 # ==========================================================
 # 台語音標轉換為【漢字標音】之注音符號或羅馬字音標
 # ==========================================================
+def im_piau_iong_tiau_ho(im_piau: str) -> bool:
+    """
+    判斷台語音標/台羅拚音是否帶有調號（最後一個字元是否為數字）
+
+    Args:
+        tai_gi_im_piau: 台語音標字串
+
+    Returns:
+        True: 有調號
+        False: 無調號
+    """
+    if not im_piau:
+        return False
+
+    return im_piau[-1].isdigit()
+
+
 def tlpa_tng_han_ji_piau_im(piau_im, piau_im_huat, tai_gi_im_piau):
-    tai_gi_im_piau_iong_tiau_ho = convert_tl_with_tiau_hu_to_tlpa(tai_gi_im_piau)
+    # 若傳入函數之參數【tai_gi_im_piau】，為【帶聲調符號】之【台語音標】，
+    # 則先轉換為【帶調號】之【台語音標】
+    if not im_piau_iong_tiau_ho(tai_gi_im_piau):
+        tai_gi_im_piau_iong_tiau_ho = convert_tl_with_tiau_hu_to_tlpa(tai_gi_im_piau)
+    else:
+        tai_gi_im_piau_iong_tiau_ho = tai_gi_im_piau
     siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(tai_gi_im_piau_iong_tiau_ho)
 
     if siann_bu == "" or siann_bu == None:
