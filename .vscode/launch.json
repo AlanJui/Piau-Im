@@ -214,6 +214,16 @@
             "console": "integratedTerminal",
         },
         {
+            "name": "a226_依人工標音查找台語音標與轉換漢字標音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a226_依人工標音查找台語音標與轉換漢字標音.py",
+            "console": "integratedTerminal",
+            "args": [
+                // "-test",
+            ]
+        },
+        {
             "name": "a230_缺字表補標音",
             "type": "debugpy",
             "request": "launch",

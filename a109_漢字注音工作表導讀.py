@@ -10,6 +10,7 @@
 # =========================================================================
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
+import argparse
 import logging
 import os
 import subprocess
@@ -466,37 +467,50 @@ def activate_console_window(console_hwnd):
             # 【強化版】使用 AttachThreadInput 解決 Windows 前景視窗限制
             try:
                 # 獲取當前前景視窗的線程ID
-                current_thread_id = win32api.GetCurrentThreadId()
+                foreground_hwnd = win32gui.GetForegroundWindow()
+                foreground_thread_id, _ = win32process.GetWindowThreadProcessId(foreground_hwnd)
                 # 獲取目標視窗的線程ID
                 target_thread_id, _ = win32process.GetWindowThreadProcessId(current_hwnd)
 
                 # 如果線程不同，嘗試附加線程輸入
-                if current_thread_id != target_thread_id:
+                if foreground_thread_id != target_thread_id:
                     try:
-                        win32process.AttachThreadInput(current_thread_id, target_thread_id, True)
-                        logging.debug(f"成功附加線程輸入: {current_thread_id} -> {target_thread_id}")
+                        win32process.AttachThreadInput(foreground_thread_id, target_thread_id, True)
+                        logging.debug(f"成功附加線程輸入: {foreground_thread_id} -> {target_thread_id}")
                     except Exception as e:
                         logging.debug(f"AttachThreadInput 失敗: {e}")
 
-                # 方法 1: 使用 BringWindowToTop
-                win32gui.BringWindowToTop(current_hwnd)
-                time.sleep(0.1)
+                # 多次嘗試激活視窗
+                for attempt in range(3):
+                    # 方法 1: 使用 BringWindowToTop
+                    win32gui.BringWindowToTop(current_hwnd)
+                    time.sleep(0.1)
 
-                # 方法 2: 使用 ShowWindow 激活
-                win32gui.ShowWindow(current_hwnd, win32con.SW_SHOW)
-                time.sleep(0.1)
+                    # 方法 2: 使用 ShowWindow 激活
+                    win32gui.ShowWindow(current_hwnd, win32con.SW_SHOW)
+                    time.sleep(0.1)
 
-                # 方法 3: 設為前景視窗
-                win32gui.SetForegroundWindow(current_hwnd)
-                time.sleep(0.3)
+                    # 方法 3: 設為前景視窗
+                    win32gui.SetForegroundWindow(current_hwnd)
+                    time.sleep(0.3)
+
+                    # 檢查是否成功
+                    if win32gui.GetForegroundWindow() == current_hwnd:
+                        logging.debug(f"第 {attempt + 1} 次嘗試成功")
+                        break
+
+                    time.sleep(0.2)
 
                 # 方法 4: 再次嘗試激活
-                win32gui.SetActiveWindow(current_hwnd)
+                try:
+                    win32gui.SetActiveWindow(current_hwnd)
+                except:
+                    pass
 
                 # 分離線程輸入
-                if current_thread_id != target_thread_id:
+                if foreground_thread_id != target_thread_id:
                     try:
-                        win32process.AttachThreadInput(current_thread_id, target_thread_id, False)
+                        win32process.AttachThreadInput(foreground_thread_id, target_thread_id, False)
                     except Exception as e:
                         logging.debug(f"DetachThreadInput 失敗: {e}")
 
@@ -504,19 +518,19 @@ def activate_console_window(console_hwnd):
                 # SetActiveWindow 可能失敗，這是正常的
                 logging.debug(f"視窗激活過程出現錯誤（可預期）：{e}")
 
-            print("✓ 已切換到終端機視窗")
-
             # 等待更長時間確保視窗完全激活並準備接收輸入
-            time.sleep(1.0)
+            time.sleep(1.5)
 
             # 驗證視窗是否成為前景視窗
             foreground = win32gui.GetForegroundWindow()
             if foreground != current_hwnd:
-                print(f"⚠️  視窗切換可能未完成")
-                print(f"提示：請用滑鼠點擊一次終端機視窗以確保輸入焦點正確")
+                print("⚠️  視窗切換可能未完成")
+                print("✓ 已切換到終端機視窗")
+                print("\n重要提示：請立即用滑鼠點擊一次終端機視窗，然後繼續操作！")
+                time.sleep(2.0)  # 給用戶時間手動點擊
             else:
-                # 即使前景視窗正確，仍然建議用戶確認
-                print(f"提示：如果無法輸入，請用滑鼠點擊一次終端機視窗")
+                print("✓ 已切換到終端機視窗")
+                print("視窗焦點已正確設置")
         else:
             print("提示：無法找到終端機視窗，請手動點擊終端機視窗")
     except Exception as e:
@@ -532,9 +546,10 @@ def activate_console_window(console_hwnd):
 class NavigationController:
     """導航控制器 - 使用鍵盤監聽"""
 
-    def __init__(self, wb, sheet):
+    def __init__(self, wb, sheet, edit_mode=False):
         self.wb = wb
         self.sheet = sheet
+        self.edit_mode = edit_mode  # 是否為校稿模式
         self.current_row = START_ROW
         self.current_col = START_COL
         self.total_lines = get_total_lines(wb)
@@ -657,16 +672,19 @@ class NavigationController:
             elif key == keyboard.Key.down:
                 self.pending_action = 'down'
             elif key == keyboard.Key.space:
-                # 空白鍵：查詢萌典
-                self.pending_action = 'query_moedict'
+                # 空白鍵：查詢個人字典
+                self.pending_action = 'query_personal'
             elif hasattr(key, 'char') and key.char:
                 # 處理字元鍵
                 if key.char.lower() == 'q':
-                    # Q 鍵：查詢萌典
-                    self.pending_action = 'query_moedict'
-                elif key.char.lower() == 's':
-                    # S 鍵：查詢個人字典
+                    # Q 鍵：查詢個人字典
                     self.pending_action = 'query_personal'
+                elif key.char.lower() == 's':
+                    # S 鍵：查詢萌典
+                    self.pending_action = 'query_moedict'
+                elif key.char.lower() == 'e':
+                    # E 鍵：手動輸入人工標音
+                    self.pending_action = 'manual_input'
                 elif key.char == '=':
                     # = 鍵：填入人工標音標記
                     self.pending_action = 'fill_manual_mark'
@@ -727,6 +745,10 @@ class NavigationController:
             elif action == 'fill_manual_mark':
                 # 填入人工標音標記
                 self.fill_manual_annotation_mark()
+
+            elif action == 'manual_input':
+                # 手動輸入人工標音
+                self.manual_input_annotation()
 
             elif action == 'esc':
                 print("\n按下 ESC 鍵，程式結束")
@@ -1010,14 +1032,107 @@ class NavigationController:
                 )
                 self.listener.start()
 
+    def manual_input_annotation(self):
+        """手動輸入人工標音到當前儲存格上方兩列的人工標音儲存格"""
+        try:
+            # 計算人工標音儲存格的位置（當前儲存格上方兩列）
+            manual_annotation_row = self.current_row - 2
+            manual_annotation_col = self.current_col
+
+            # 確認位置有效
+            if manual_annotation_row < 1:
+                print("⚠️  無法輸入：當前位置沒有人工標音儲存格")
+                return
+
+            # 顯示當前儲存格資訊
+            col_letter = xw.utils.col_name(manual_annotation_col)
+            current_cell_address = f"{xw.utils.col_name(self.current_col)}{self.current_row}"
+            target_cell_address = f"{col_letter}{manual_annotation_row}"
+            current_han_ji = self.sheet.range((self.current_row, self.current_col)).value or ""
+
+            print("\n" + "=" * 70)
+            print("手動輸入人工標音模式")
+            print("=" * 70)
+            print(f"當前漢字儲存格：{current_cell_address}【{current_han_ji}】")
+            print(f"人工標音儲存格：{target_cell_address}")
+            print("\n輸入說明：")
+            print("  - 可輸入帶調符的台羅拼音（如：Tông, Sióng）")
+            print("  - 可輸入帶調號的台羅拼音（如：Tong5, Siong2）")
+            print("  - 可使用 Ctrl+V 貼上複製的內容")
+            print("  - 按 Enter 確認輸入，直接按 Enter 則放棄輸入")
+            print("=" * 70)
+
+            # 暫停鍵盤監聽
+            if self.listener:
+                self.listener.stop()
+                time.sleep(0.3)
+
+            try:
+                # 切換到終端機視窗以接收輸入
+                activate_console_window(self.console_hwnd)
+
+                # 取得使用者輸入
+                user_input = input("\n請輸入台語音標：").strip()
+
+                if user_input:
+                    # 填入人工標音
+                    target_cell = self.sheet.range((manual_annotation_row, manual_annotation_col))
+                    target_cell.value = user_input
+                    print(f"\n✓ 已在 {target_cell_address} 填入人工標音：【{user_input}】")
+
+                    # 呼叫 a224 程式以更新台語音標與漢字標音
+                    print("\n正在更新台語音標與漢字標音...")
+                    try:
+                        ca_han_ji_thak_im_a224(manual_annotation_row, self.current_row)
+                        print("✓ 已完成台語音標與漢字標音更新")
+                    except Exception as e:
+                        logging.error(f"更新台語音標與漢字標音失敗：{e}")
+                        print(f"❌ 更新失敗：{e}")
+                else:
+                    print("\n取消輸入")
+
+            except KeyboardInterrupt:
+                print("\n\n使用者中斷輸入")
+            except Exception as e:
+                logging.error(f"手動輸入人工標音失敗：{e}")
+                print(f"\n❌ 輸入失敗：{e}")
+            finally:
+                print("\n" + "=" * 70)
+                print("返回導航模式")
+                print("=" * 70)
+
+                # 切換回 Excel 視窗
+                activate_excel_window(self.wb)
+
+                # 重新啟動鍵盤監聽
+                if self.listener:
+                    self.listener = keyboard.Listener(
+                        on_press=self.on_key_press,
+                        suppress=True
+                    )
+                    self.listener.start()
+                    time.sleep(0.3)
+                print("✓ 已恢復導航模式\n")
+
+        except Exception as e:
+            logging.error(f"手動輸入人工標音失敗：{e}")
+            print(f"\n❌ 輸入失敗：{e}\n")
+            # 確保恢復鍵盤監聽
+            if self.listener:
+                self.listener = keyboard.Listener(
+                    on_press=self.on_key_press,
+                    suppress=True
+                )
+                self.listener.start()
 
 
-def read_han_ji_with_keyboard(wb) -> int:
+def read_han_ji_with_keyboard(wb, edit_mode=False) -> int:
     """
     漢字注音工作表導讀主程式（使用鍵盤監聽）
 
     Args:
         wb: Excel 工作簿物件
+        edit_mode: 是否為校稿模式（True=校稿模式，不修改樣式；False=導讀模式，隱藏人工標音）
 
     Returns:
         退出代碼
@@ -1028,13 +1143,16 @@ def read_han_ji_with_keyboard(wb) -> int:
         sheet.activate()
 
         # 初始化控制器
-        controller = NavigationController(wb, sheet)
+        controller = NavigationController(wb, sheet, edit_mode=edit_mode)
 
         # 移動到第一行行首（D5）
         controller.move_to_cell(START_ROW, START_COL)
 
         print("=" * 70)
-        print("漢字注音工作表導讀（鍵盤監聽模式）")
+        if edit_mode:
+            print("漢字注音工作表導讀（鍵盤監聽模式 - 校稿模式）")
+        else:
+            print("漢字注音工作表導讀（鍵盤監聽模式）")
         print("=" * 70)
         print("操作說明：")
         print("  ← (Left Arrow)  : 向左移動")
@@ -1043,16 +1161,22 @@ def read_han_ji_with_keyboard(wb) -> int:
         print("  ↓ (Down Arrow)  : 向下移動到下一行")
         print("  空白 / Q 鍵     : 查詢萌典字典")
         print("  S 鍵            : 查詢個人字典")
+        print("  E 鍵            : 手動輸入人工標音")
         print("  = 鍵            : 填入人工標音標記")
         print("  ESC             : 結束程式")
         print("=" * 70)
         print(f"總行數：{controller.total_lines}")
         print(f"每行字數：{END_COL - START_COL + 1}")
+        if edit_mode:
+            print("模式：校稿模式（保留人工標音顏色）")
+        else:
+            print("模式：導讀模式（隱藏人工標音顏色）")
         print("=" * 70)
 
-        # 【進入導讀模式前】隱藏人工標音文字
-        print("\n正在隱藏人工標音文字...")
-        hide_manual_annotation_style(wb)
+        # 【進入導讀模式前】根據模式決定是否隱藏人工標音文字
+        if not edit_mode:
+            print("\n正在隱藏人工標音文字...")
+            hide_manual_annotation_style(wb)
 
         # 切換到 Excel 視窗，讓十字游標顯示
         print("\n正在切換到 Excel 視窗...")
@@ -1079,9 +1203,10 @@ def read_han_ji_with_keyboard(wb) -> int:
             if controller.listener:
                 controller.listener.stop()
 
-        # 【程式結束前】恢復人工標音文字顏色
-        print("\n正在恢復人工標音文字顏色...")
-        restore_manual_annotation_style(wb)
+        # 【程式結束前】根據模式決定是否恢復人工標音文字顏色
+        if not edit_mode:
+            print("\n正在恢復人工標音文字顏色...")
+            restore_manual_annotation_style(wb)
 
         print("=" * 70)
         print("程式結束")
@@ -1093,11 +1218,12 @@ def read_han_ji_with_keyboard(wb) -> int:
         return EXIT_CODE_NO_FILE
     except Exception as e:
         logging.error(f"程式執行錯誤：{e}")
-        # 發生錯誤時也要恢復樣式
-        try:
-            restore_manual_annotation_style(wb)
-        except:
-            pass
+        # 發生錯誤時也要根據模式決定是否恢復樣式
+        if not edit_mode:
+            try:
+                restore_manual_annotation_style(wb)
+            except:
+                pass
         return EXIT_CODE_ERROR
 
 
@@ -1202,6 +1328,24 @@ def read_han_ji_zu_im_sheet(wb) -> int:
 def main():
     """主程式"""
     try:
+        # 解析命令行參數
+        parser = argparse.ArgumentParser(
+            description='漢字注音工作表導讀程式',
+            formatter_class=argparse.RawDescriptionHelpFormatter,
+            epilog='''
+使用範例：
+  python a109_漢字注音工作表導讀.py          # 導讀模式（隱藏人工標音）
+  python a109_漢字注音工作表導讀.py -edit    # 校稿模式（顯示人工標音）
+            '''
+        )
+        parser.add_argument(
+            '-edit',
+            action='store_true',
+            help='啟用校稿模式（不隱藏人工標音文字顏色）'
+        )
+        args = parser.parse_args()
+        edit_mode = args.edit
+
         # 取得 Excel 活頁簿
         wb = None
         try:
@@ -1221,8 +1365,9 @@ def main():
 
         # 根據是否安裝 pynput 決定使用哪種模式
         if HAS_PYNPUT:
-            print("使用鍵盤監聽模式")
-            return read_han_ji_with_keyboard(wb)
+            mode_text = "校稿模式" if edit_mode else "導讀模式"
+            print(f"使用鍵盤監聽模式 - {mode_text}")
+            return read_han_ji_with_keyboard(wb, edit_mode=edit_mode)
         else:
             print("使用輸入模式")
             return read_han_ji_zu_im_sheet(wb)
