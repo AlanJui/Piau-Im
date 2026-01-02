@@ -171,6 +171,16 @@
             ]
         },
         {
+            "name": "a109（校稿檢視模式）",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a109_漢字注音工作表導讀.py",
+            "console": "integratedTerminal",
+            "args": [
+                "-edit"
+            ]
+        },
+        {
             "name": "a109_漢字注音工作表導讀",
             "type": "debugpy",
             "request": "launch",
@@ -498,6 +508,13 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a850_使用Excel重建漢字庫.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "a851_自Excel匯入漢字及台語音標",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a851_自Excel匯入漢字及台語音標.py",
             "console": "integratedTerminal",
         },
         {
