@@ -64,7 +64,7 @@ except ImportError as e:
 
 # 載入 a224 的核心查詢功能（引用既有標音）
 try:
-    from a224_引用既有的漢字標音 import ca_han_ji_thak_im as ca_han_ji_thak_im_a224
+    from a224_引用既有的漢字標音 import jin_kang_piau_im_ca_taigi_im_piau
     HAS_A224 = True
 except ImportError as e:
     HAS_A224 = False
@@ -688,6 +688,9 @@ class NavigationController:
                 elif key.char == '=':
                     # = 鍵：填入人工標音標記
                     self.pending_action = 'fill_manual_mark'
+            elif key == keyboard.Key.delete:
+                # Del 鍵：清除人工標音
+                self.pending_action = 'clear_manual_annotation'
             elif key == keyboard.Key.esc:
                 self.pending_action = 'esc'
                 self.running = False
@@ -749,6 +752,10 @@ class NavigationController:
             elif action == 'manual_input':
                 # 手動輸入人工標音
                 self.manual_input_annotation()
+
+            elif action == 'clear_manual_annotation':
+                # 清除人工標音
+                self.clear_manual_annotation()
 
             elif action == 'esc':
                 print("\n按下 ESC 鍵，程式結束")
@@ -974,15 +981,7 @@ class NavigationController:
                     print(f"當前儲存格：{current_cell}")
 
                     # 調用查詢函數
-                    exit_code = ca_han_ji_thak_im_a224(
-                        wb=self.wb,
-                        sheet_name='漢字注音',
-                        cell=current_cell,
-                        ue_im_lui_piat=ue_im_lui_piat,
-                        han_ji_khoo=han_ji_khoo,
-                        new_khuat_ji_piau_sheet=False,
-                        new_piau_im_ji_khoo_sheet=False,
-                    )
+                    exit_code = jin_kang_piau_im_ca_taigi_im_piau(wb=self.wb)
 
                     if exit_code == 0:
                         print("\n✓ 查詢完成")
@@ -1083,8 +1082,14 @@ class NavigationController:
                     # 呼叫 a224 程式以更新台語音標與漢字標音
                     print("\n正在更新台語音標與漢字標音...")
                     try:
-                        ca_han_ji_thak_im_a224(manual_annotation_row, self.current_row)
-                        print("✓ 已完成台語音標與漢字標音更新")
+                        if HAS_A224:
+                            exit_code = jin_kang_piau_im_ca_taigi_im_piau(wb=self.wb)
+                            if exit_code == 0:
+                                print("✓ 已完成台語音標與漢字標音更新")
+                            else:
+                                print(f"⚠️  更新結果：exit_code = {exit_code}")
+                        else:
+                            print("⚠️  a224 模組未載入，無法更新")
                     except Exception as e:
                         logging.error(f"更新台語音標與漢字標音失敗：{e}")
                         print(f"❌ 更新失敗：{e}")
@@ -1124,6 +1129,55 @@ class NavigationController:
                     suppress=True
                 )
                 self.listener.start()
+
+
+    def clear_manual_annotation(self):
+        """清除當前儲存格上方兩列的人工標音儲存格內容"""
+        try:
+            # 計算人工標音儲存格的位置（當前儲存格上方兩列）
+            manual_annotation_row = self.current_row - 2
+            manual_annotation_col = self.current_col
+
+            # 確認位置有效
+            if manual_annotation_row < 1:
+                print("\n⚠️  無法清除：當前位置沒有人工標音儲存格")
+                return
+
+            # 取得儲存格資訊
+            col_letter = xw.utils.col_name(manual_annotation_col)
+            target_cell_address = f"{col_letter}{manual_annotation_row}"
+            target_cell = self.sheet.range((manual_annotation_row, manual_annotation_col))
+            current_value = target_cell.value or ""
+
+            # 如果儲存格已經是空的
+            if not current_value:
+                print(f"\n⚠️  人工標音儲存格 {target_cell_address} 已經是空的")
+                return
+
+            print(f"\n清除人工標音：{target_cell_address}【{current_value}】")
+
+            # 清除儲存格內容
+            target_cell.value = ""
+            print(f"✓ 已清除 {target_cell_address} 的人工標音")
+
+            # 呼叫 a224 程式以更新台語音標與漢字標音
+            print("\n正在更新台語音標與漢字標音...")
+            try:
+                if HAS_A224:
+                    exit_code = jin_kang_piau_im_ca_taigi_im_piau(wb=self.wb)
+                    if exit_code == 0:
+                        print("✓ 已完成台語音標與漢字標音更新\n")
+                    else:
+                        print(f"⚠️  更新結果：exit_code = {exit_code}\n")
+                else:
+                    print("⚠️  a224 模組未載入，無法更新\n")
+            except Exception as e:
+                logging.error(f"更新台語音標與漢字標音失敗：{e}")
+                print(f"❌ 更新失敗：{e}\n")
+
+        except Exception as e:
+            logging.error(f"清除人工標音失敗：{e}")
+            print(f"\n❌ 清除失敗：{e}\n")
 
 
 def read_han_ji_with_keyboard(wb, edit_mode=False) -> int:
