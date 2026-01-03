@@ -129,6 +129,56 @@ class JiKhooDict:
         else:
             raise ValueError(f"漢字 '{han_ji}' 不存在於字典中。")
 
+    def get_coordinates_by_han_ji_and_tai_gi_im_piau(self, han_ji: str, tai_gi_im_piau: str) -> list:
+        """
+        根據漢字與台語音標查詢工作表中的所有座標列表
+        若查無結果，返回空列表
+
+        Args:
+            han_ji: 要查詢的漢字
+            tai_gi_im_piau: 要查詢的台語音標
+
+        Returns:
+            list: 座標列表，若無則返回空列表
+        """
+        if han_ji in self.ji_khoo_dict:
+            for entry in self.ji_khoo_dict[han_ji]:
+                if entry["tai_gi_im_piau"] == tai_gi_im_piau:
+                    return entry.get("coordinates", [])
+        return []
+
+    def get_row_by_han_ji_and_tai_gi_im_piau(self, han_ji: str, tai_gi_im_piau: str) -> int:
+        """
+        根據漢字與台語音標查詢工作表所在列號
+        若查無結果，返回 -1
+
+        Args:
+            han_ji: 要查詢的漢字
+            tai_gi_im_piau: 要查詢的台語音標
+
+        Returns:
+            int: 工作表的列號，若無則返回 -1
+        """
+        #  列號從 2 開始（第1列是標題）
+        row_no = 2
+
+        # 遍歷所有漢字及其對應的音標項目
+        for current_han_ji, entries in self.ji_khoo_dict.items():
+            for entry in entries:
+                # 跳過沒有座標的項目（這些不會寫入 Excel）
+                if not entry.get("coordinates"):
+                    continue
+
+                # 檢查是否匹配目標漢字和音標
+                if current_han_ji == han_ji and entry.get("tai_gi_im_piau", "") == tai_gi_im_piau:
+                    return row_no
+
+                # 每個有效項目佔一行
+                row_no += 1
+
+        # 找不到匹配項目
+        return -1
+
     def get_tai_gi_im_piau_by_han_ji(self, han_ji: str) -> str:
         """
         根據漢字查詢台語音標
@@ -331,22 +381,22 @@ class JiKhooDict:
 
         return ji_khoo
 
-    # def remove_coordinate(self, han_ji: str, tai_gi_im_piau: str, coordinate: tuple):
-    #     """
-    #     移除指定【漢字】與【台語音標】對應項目中的【座標】。
-    #     若該項目座標清單為空，則整筆項目從字典中移除。
-    #     """
-    #     if han_ji not in self.ji_khoo_dict:
-    #         return
+    def remove_coordinate(self, han_ji: str, tai_gi_im_piau: str, coordinate: tuple):
+        """
+        移除指定【漢字】與【台語音標】對應項目中的【座標】。
+        若該項目座標清單為空，則整筆項目從字典中移除。
+        """
+        if han_ji not in self.ji_khoo_dict:
+            return
 
-    #     entries = self.ji_khoo_dict[han_ji]
-    #     for entry in entries:
-    #         if entry["tai_gi_im_piau"] == tai_gi_im_piau:
-    #             if coordinate in entry["coordinates"]:
-    #                 entry["coordinates"].remove(coordinate)
-    #             if len(entry["coordinates"]) == 0:
-    #                 entries.remove(entry)
-    #             break
+        entries = self.ji_khoo_dict[han_ji]
+        for entry in entries:
+            if entry["tai_gi_im_piau"] == tai_gi_im_piau:
+                if coordinate in entry["coordinates"]:
+                    entry["coordinates"].remove(coordinate)
+                if len(entry["coordinates"]) == 0:
+                    entries.remove(entry)
+                break
 
 # =========================================================================
 # 作業用類別
@@ -886,6 +936,91 @@ def main():
         logging_exception(msg="處理過程中發生未知錯誤！", error=e)
         return EXIT_CODE_UNKNOWN_ERROR
 
+def test1():
+    wb = None
+    # 取得【作用中活頁簿】
+    try:
+        wb = xw.apps.active.books.active    # 取得 Excel 作用中的活頁簿檔案
+    except Exception as e:
+        print(f"發生錯誤: {e}")
+        logging.error(f"無法找到作用中的 Excel 工作簿: {e}", exc_info=True)
+        return EXIT_CODE_NO_FILE
+
+    # 若無法取得【作用中活頁簿】，則因無法繼續作業，故返回【作業異常終止代碼】結束。
+    if not wb:
+        return EXIT_CODE_NO_FILE
+
+    try:
+        piau_im_ji_khoo_sheet = wb.sheets['標音字庫']
+        piau_im_ji_khoo_dict = JiKhooDict.create_ji_khoo_dict_from_sheet(
+            wb=wb,
+            sheet_name='標音字庫')
+        khuat_ji_piau_sheet = wb.sheets['缺字表']
+        khuat_ji_piau_dict = JiKhooDict.create_ji_khoo_dict_from_sheet(
+            wb=wb,
+            sheet_name='缺字表')
+        jin_kang_piau_im_sheet = wb.sheets['人工標音字庫']
+        jin_kang_piau_im_dict = JiKhooDict.create_ji_khoo_dict_from_sheet(
+            wb=wb,
+            sheet_name='人工標音字庫')
+
+        # 設定作用儲存格
+        sheet = wb.sheets['漢字注音'].activate()
+        # active_cell = sheet.range('F5')
+        active_cell = wb.sheets['漢字注音'].range('F5')
+        active_cell.select()
+        han_ji = active_cell.value
+        tai_gi_im_piau = active_cell.offset(-1, 0).value
+        print(f"開始測試：作用儲存格：{active_cell.address}，漢字：{han_ji}，台語音標：{tai_gi_im_piau}")
+
+        # print(f"作用儲存格：{active_cell.address}，漢字：{han_ji}")
+        # tai_gi_im_piau = piau_im_ji_khoo_dict.get_tai_gi_im_piau_by_han_ji(han_ji=han_ji)
+        # print(f"標音字庫查到的台語音標：{tai_gi_im_piau}")
+
+        row_no = piau_im_ji_khoo_dict.get_row_by_han_ji_and_tai_gi_im_piau(
+            han_ji=han_ji,
+            tai_gi_im_piau=tai_gi_im_piau
+        )
+        print(f"{han_ji}（{tai_gi_im_piau}）落在【標音字庫】的 Row 號：{row_no}")
+
+        coord_list = piau_im_ji_khoo_dict.get_coordinates_by_han_ji_and_tai_gi_im_piau(
+            han_ji=han_ji,
+            tai_gi_im_piau=tai_gi_im_piau
+        )
+        print(f"在【標音字庫】工作表，{han_ji}（{tai_gi_im_piau}）的座標清單：{coord_list}")
+
+        # 刪除座標測試
+        coord = coord_list[0]
+        print(f"從【標音字庫】工作表，移除 {han_ji}（{tai_gi_im_piau}）的座標：{coord} ...")
+        piau_im_ji_khoo_dict.remove_coordinate(
+            han_ji=han_ji,
+            tai_gi_im_piau=tai_gi_im_piau,
+            coordinate=coord
+        )
+
+        # for coord in coord_list:
+        #     print(f"從【標音字庫】工作表，移除 {han_ji}（{tai_gi_im_piau}）的座標：{coord} ...")
+        #     piau_im_ji_khoo_dict.remove_coordinate(
+        #         han_ji=han_ji,
+        #         tai_gi_im_piau=tai_gi_im_piau,
+        #         coordinate=coord
+        #     )
+
+        # 儲存回 Excel
+        print(f"將更新後的【標音字庫】寫回 Excel 工作表...")
+        piau_im_ji_khoo_dict.write_to_excel_sheet(
+            wb=wb,
+            sheet_name='標音字庫'
+        )
+
+        print("測試結束。")
+    except Exception as e:
+        msg = f"程式異常終止：test1"
+        print(msg)
+        return EXIT_CODE_UNKNOWN_ERROR
+
 if __name__ == "__main__":
     import sys
-    sys.exit(main())
+
+    # sys.exit(main())
+    sys.exit(test1())
