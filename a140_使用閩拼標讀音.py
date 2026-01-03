@@ -79,13 +79,13 @@ def read_text_with_tlpa(filename):
     return text_with_tlpa
 
 # 用途：檢查是否為漢字
-def is_hanzi(char):
+def is_hanji(char):
     return 'CJK UNIFIED IDEOGRAPH' in unicodedata.name(char, '')
 
 # =========================================================================
 # 用途：移除標點符號並轉換拼音格式（TLPA 或 BP）
 # =========================================================================
-def clean_pinyin(word, use_bp=False):
+def clean_pingim(word, use_bp=False):
     word = ''.join(ch for ch in word if ch not in PUNCTUATIONS)  # 移除標點符號
     if use_bp:
         for tlpa, bp in TLPA_TO_BP.items():
@@ -103,34 +103,33 @@ def clean_pinyin(word, use_bp=False):
 # =========================================================================
 # 用途：將漢字及拼音填入Excel指定工作表
 # =========================================================================
-def fill_hanzi_and_pinyin(wb, filename, use_bp=False, sheet_name='漢字注音', start_row=5):
+def fill_hanji_and_pingim(wb, filename, use_bp=False, sheet_name='漢字注音', start_row=5):
     sheet = wb.sheets[sheet_name]
     sheet.activate()
     sheet.range('A1').select()
 
-    text_with_pinyin = read_text_with_tlpa(filename)
+    text_with_pingim = read_text_with_tlpa(filename)
 
-    for idx, (hanzi, pinyin) in enumerate(text_with_pinyin):
+    for idx, (hanji, pingim) in enumerate(text_with_pingim):
         row_hanzi = start_row + idx * 4      # 漢字位置
-        row_pinyin = row_hanzi - 1           # 拼音位置
-
+        row_pingim = row_hanzi - 1           # 拼音位置
         # 漢字逐字填入（從D欄開始）
-        for col_idx, char in enumerate(hanzi):
+        for col_idx, char in enumerate(hanji):
             col = 4 + col_idx  # D欄是第4欄
             sheet.cells(row_hanzi, col).value = char
             sheet.cells(row_hanzi, col).select()  # 每字填入後選取以便畫面滾動
 
         # 拼音逐詞填入（從D欄開始），檢查下方儲存格是否為漢字
-        pinyin_words = [clean_pinyin(word, use_bp) for word in pinyin.split()]
+        pingim_words = [clean_pingim(word, use_bp) for word in pingim.split()]
         col = 4
         word_idx = 0
 
-        while word_idx < len(pinyin_words):
+        while word_idx < len(pingim_words):
             cell_char = sheet.cells(row_hanzi, col).value
-            if cell_char and is_hanzi(cell_char):
-                sheet.cells(row_pinyin, col).value = pinyin_words[word_idx]
+            if cell_char and is_hanji(cell_char):
+                sheet.cells(row_pingim, col).value = pingim_words[word_idx]
                 word_idx += 1
-                print(f"({row_hanzi}, {col}) 已填入: {cell_char} - {pinyin_words[word_idx-1]}")
+                print(f"({row_hanzi}, {col}) 已填入: {cell_char} - {pingim_words[word_idx-1]}")
             col += 1
 
     logging.info(f"已將漢字及拼音填入【{sheet_name}】工作表！")
@@ -147,7 +146,7 @@ def main():
         logging.error("無法找到作用中的Excel活頁簿。")
         return
 
-    fill_hanzi_and_pinyin(wb, filename, use_bp)
+    fill_hanji_and_pingim(wb, filename, use_bp)
 
 if __name__ == "__main__":
     main()
