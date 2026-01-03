@@ -306,22 +306,20 @@
             "args": []
         },
         {
-            "name": "a401_generate_web_page",
+            "name": "a410_批次式漢字標音網頁製作",
             "type": "debugpy",
             "request": "launch",
-            "program": "a401_generate_web_page.py",
+            "program": "a410_批次式漢字標音網頁製作.py",
             "console": "integratedTerminal",
             "args": []
         },
         {
-            "name": "a400-2_製作標音網頁(使用人工標音)",
+            "name": "a420_批次式漢字注音工作表製作",
             "type": "debugpy",
             "request": "launch",
-            "program": "a400_製作標音網頁.py",
+            "program": "a420_批次式漢字注音工作表製作.py",
             "console": "integratedTerminal",
-            "args": [
-                "-2"
-            ]
+            "args": []
         },
         {
             "name": "a500_漢字庫工具",

@@ -115,43 +115,6 @@ def get_row_col_from_coordinate(coord_str):
     except ValueError:
         return ""  # 避免解析錯誤
 
-# def convert_to_excel_address(coord_str):
-#     """
-#     轉換 `(row, col)` 格式為 Excel 座標 (如 `(9, 4)` 轉換為 "D9")
-
-#     :param coord_str: 例如 "(9, 4)"
-#     :return: Excel 座標字串，例如 "D9"
-#     """
-#     coord_str = coord_str.strip("()")  # 去除括號
-#     try:
-#         row, col = map(int, coord_str.split(", "))
-#         return f"{chr(64 + col)}{row}"  # 轉換成 Excel 座標
-#     except ValueError:
-#         return ""  # 避免解析錯誤
-
-
-# def excel_address_to_row_col(cell_address):
-#     """
-#     將 Excel 儲存格地址 (如 'D9') 轉換為 (row, col) 格式。
-
-#     :param cell_address: Excel 儲存格地址 (如 'D9', 'AA15')
-#     :return: (row, col) 元組，例如 (9, 4)
-#     """
-#     match = re.match(r"([A-Z]+)(\d+)", cell_address)  # 用 regex 拆分字母(列) 和 數字(行)
-
-#     if not match:
-#         raise ValueError(f"無效的 Excel 儲存格地址: {cell_address}")
-
-#     col_letters, row_number = match.groups()
-
-#     # 將 Excel 字母列轉換成數字，例如 A -> 1, B -> 2, ..., Z -> 26, AA -> 27
-#     col_number = 0
-#     for letter in col_letters:
-#         col_number = col_number * 26 + (ord(letter) - ord("A") + 1)
-
-#     return int(row_number), col_number
-
-
 # def get_active_cell(wb):
 #     """
 #     獲取目前作用中的 Excel 儲存格 (Active Cell)
@@ -251,6 +214,82 @@ def reset_cells_format_in_sheet(wb, sheet_name="漢字注音"):
 
 
 #--------------------------------------------------------------------------
+# 座標位址轉換函式
+#--------------------------------------------------------------------------
+# def convert_to_excel_address(coord_str):
+#     """
+#     轉換 `(row, col)` 格式為 Excel 座標 (如 `(9, 4)` 轉換為 "D9")
+
+#     :param coord_str: 例如 "(9, 4)"
+#     :return: Excel 座標字串，例如 "D9"
+#     """
+#     coord_str = coord_str.strip("()")  # 去除括號
+#     try:
+#         row, col = map(int, coord_str.split(", "))
+#         return f"{chr(64 + col)}{row}"  # 轉換成 Excel 座標
+#     except ValueError:
+#         return ""  # 避免解析錯誤
+
+
+# def excel_address_to_row_col(cell_address):
+#     """
+#     將 Excel 儲存格地址 (如 'D9') 轉換為 (row, col) 格式。
+
+#     :param cell_address: Excel 儲存格地址 (如 'D9', 'AA15')
+#     :return: (row, col) 元組，例如 (9, 4)
+#     """
+#     match = re.match(r"([A-Z]+)(\d+)", cell_address)  # 用 regex 拆分字母(列) 和 數字(行)
+
+#     if not match:
+#         raise ValueError(f"無效的 Excel 儲存格地址: {cell_address}")
+
+#     col_letters, row_number = match.groups()
+
+#     # 將 Excel 字母列轉換成數字，例如 A -> 1, B -> 2, ..., Z -> 26, AA -> 27
+#     col_number = 0
+#     for letter in col_letters:
+#         col_number = col_number * 26 + (ord(letter) - ord("A") + 1)
+
+#     return int(row_number), col_number
+
+
+def excel_address_to_row_col(cell_address):
+    """
+    將 Excel 儲存格地址 (如 'D9') 轉換為 (row, col) 格式。
+
+    :param cell_address: Excel 儲存格地址 (如 'D9', 'AA15')
+    :return: (row, col) 元組，例如 (9, 4)
+    """
+    match = re.match(r"([A-Z]+)(\d+)", cell_address)  # 用 regex 拆分字母(列) 和 數字(行)
+
+    if not match:
+        raise ValueError(f"無效的 Excel 儲存格地址: {cell_address}")
+
+    col_letters, row_number = match.groups()
+
+    # 將 Excel 字母列轉換成數字，例如 A -> 1, B -> 2, ..., Z -> 26, AA -> 27
+    col_number = 0
+    for letter in col_letters:
+        col_number = col_number * 26 + (ord(letter) - ord("A") + 1)
+
+    return int(row_number), col_number
+
+def convert_to_excel_address(coord_str):
+    """
+    轉換 `(row, col)` 格式為 Excel 座標 (如 `(9, 4)` 轉換為 "D9")
+
+    :param coord_str: 例如 "(9, 4)"
+    :return: Excel 座標字串，例如 "D9"
+    """
+    coord_str = coord_str.strip("()")  # 去除括號
+    try:
+        row, col = map(int, coord_str.split(", "))
+        return f"{chr(64 + col)}{row}"  # 轉換成 Excel 座標
+    except ValueError:
+        return ""  # 避免解析錯誤
+
+
+#--------------------------------------------------------------------------
 # 清除儲存格內容
 #--------------------------------------------------------------------------
 def clear_han_ji_kap_piau_im(wb, sheet_name='漢字注音'):
@@ -268,35 +307,6 @@ def clear_han_ji_kap_piau_im(wb, sheet_name='漢字注音'):
 
     sheet.range('V3').value = ""  # 清空 V3 儲存格內容
 
-# 依工作表名稱，刪除工作表
-def delete_sheet_by_name(wb, sheet_name: str, show_msg: bool=False):
-    """
-    刪除指定名稱的工作表
-    wb: Excel 活頁簿物件
-    sheet_name: 要刪除的工作表名稱
-    """
-    try:
-        # 檢查工作表是否存在
-        if sheet_name in [sheet.name for sheet in wb.sheets]:
-            sheet = wb.sheets[sheet_name]
-            sheet.delete()  # 刪除工作表
-            if show_msg: print(f"已成功刪除工作表：{sheet_name}")
-        else:
-            if show_msg: print(f"無法刪除，工作表 {sheet_name} 不存在")
-    except Exception as e:
-        if show_msg: print(f"刪除工作表時發生錯誤：{e}")
-
-
-# 使用 List 刪除工作表
-def delete_sheets_by_list(wb, sheet_list: list, show_msg: bool=False):
-    """
-    刪除指定名稱的工作表
-    wb: Excel 活頁簿物件
-    sheet_list: 要刪除的工作表名稱清單
-    """
-    for sheet_name in sheet_list:
-        delete_sheet_by_name(wb, sheet_name, show_msg)
-
 # 可以正確區分空白字符和換行符，從而避免將 \n 誤判為空白
 def strip_cell(x):
     """轉成字串並去除頭尾空白，若空則回傳 None，但保留換行符 \n"""
@@ -306,7 +316,6 @@ def strip_cell(x):
     if x_str.strip() == "" and x_str != "\n":  # 空白但不是換行符
         return None
     return x_str.strip() if x_str != "\n" else "\n"  # 保留換行符
-
 
 def get_active_excel_file():
     """
@@ -334,43 +343,6 @@ def get_active_excel_file():
     except Exception as e:
         print(f"❌ 獲取作用中的 Excel 檔案失敗: {e}")
         return None
-
-
-def excel_address_to_row_col(cell_address):
-    """
-    將 Excel 儲存格地址 (如 'D9') 轉換為 (row, col) 格式。
-
-    :param cell_address: Excel 儲存格地址 (如 'D9', 'AA15')
-    :return: (row, col) 元組，例如 (9, 4)
-    """
-    match = re.match(r"([A-Z]+)(\d+)", cell_address)  # 用 regex 拆分字母(列) 和 數字(行)
-
-    if not match:
-        raise ValueError(f"無效的 Excel 儲存格地址: {cell_address}")
-
-    col_letters, row_number = match.groups()
-
-    # 將 Excel 字母列轉換成數字，例如 A -> 1, B -> 2, ..., Z -> 26, AA -> 27
-    col_number = 0
-    for letter in col_letters:
-        col_number = col_number * 26 + (ord(letter) - ord("A") + 1)
-
-    return int(row_number), col_number
-
-
-def convert_to_excel_address(coord_str):
-    """
-    轉換 `(row, col)` 格式為 Excel 座標 (如 `(9, 4)` 轉換為 "D9")
-
-    :param coord_str: 例如 "(9, 4)"
-    :return: Excel 座標字串，例如 "D9"
-    """
-    coord_str = coord_str.strip("()")  # 去除括號
-    try:
-        row, col = map(int, coord_str.split(", "))
-        return f"{chr(64 + col)}{row}"  # 轉換成 Excel 座標
-    except ValueError:
-        return ""  # 避免解析錯誤
 
 
 def get_line_no_by_row(current_row_no, start_row_no=START_ROW_NO, rows_per_line=ROWS_PER_LINE):
@@ -505,6 +477,37 @@ def get_sheet_data(sheet, start_cell):
         return []
     return data if isinstance(data[0], list) else [data]
 
+
+#--------------------------------------------------------------------------
+# 工作表操作函式
+#--------------------------------------------------------------------------
+# 依工作表名稱，刪除工作表
+def delete_sheet_by_name(wb, sheet_name: str, show_msg: bool=False):
+    """
+    刪除指定名稱的工作表
+    wb: Excel 活頁簿物件
+    sheet_name: 要刪除的工作表名稱
+    """
+    try:
+        # 檢查工作表是否存在
+        if sheet_name in [sheet.name for sheet in wb.sheets]:
+            sheet = wb.sheets[sheet_name]
+            sheet.delete()  # 刪除工作表
+            if show_msg: print(f"已成功刪除工作表：{sheet_name}")
+        else:
+            if show_msg: print(f"無法刪除，工作表 {sheet_name} 不存在")
+    except Exception as e:
+        if show_msg: print(f"刪除工作表時發生錯誤：{e}")
+
+# 使用 List 刪除工作表
+def delete_sheets_by_list(wb, sheet_list: list, show_msg: bool=False):
+    """
+    刪除指定名稱的工作表
+    wb: Excel 活頁簿物件
+    sheet_list: 要刪除的工作表名稱清單
+    """
+    for sheet_name in sheet_list:
+        delete_sheet_by_name(wb, sheet_name, show_msg)
 
 def ensure_sheet_exists(wb, sheet_name):
     """
