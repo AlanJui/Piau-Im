@@ -53,8 +53,61 @@ EXIT_CODE_PROCESS_FAILURE = 3  # 過程失敗
 EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 
 class JiKhooDict:
-    def __init__(self):
+    def __init__(self, name: str = ''):
+        self.name = name
         self.ji_khoo_dict = {}
+
+    @classmethod
+    def create_ji_khoo_dict_from_sheet(cls, wb, sheet_name: str):
+        """_summary_
+        cls: 指 class JiKhooDict 本身
+        Args:
+            wb (_type_): _description_
+            sheet_name (str): _description_
+
+        Raises:
+            ValueError: _description_
+            ValueError: _description_
+
+        Returns:
+            _type_: _description_
+        """
+        from mod_excel_access import ensure_sheet_exists
+
+        if not ensure_sheet_exists(wb, sheet_name):
+            raise ValueError(f"無法找到工作表 '{sheet_name}'。")
+
+        try:
+            sheet = wb.sheets[sheet_name]
+        except Exception as e:
+            raise ValueError(f"無法找到工作表 '{sheet_name}'：{e}")
+
+        data = sheet.range("A2").expand("table").value
+        ji_khoo = cls(sheet_name)
+
+        if data is None:
+            return ji_khoo
+        if not isinstance(data[0], list):
+            data = [data]
+
+        for row in data:
+            han_ji = row[0] or ""
+            tai_gi_im_piau = row[1] or "N/A"
+            kenn_ziann_im_piau = row[2] or "N/A"
+            coords_str = row[3] or ""
+
+            coordinates = []
+            if coords_str:
+                coords_list = coords_str.split("; ")
+                for coord in coords_list:
+                    coord = coord.strip("()")
+                    row_col = tuple(map(int, coord.split(", ")))
+                    coordinates.append(row_col)
+
+            for coord in coordinates:
+                ji_khoo.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coord)
+
+        return ji_khoo
 
     def items(self):
         for han_ji, entries in self.ji_khoo_dict.items():
@@ -342,62 +395,6 @@ class JiKhooDict:
         if to_delete:
             entries.remove(to_delete)
 
-    @classmethod
-    def create_ji_khoo_dict_from_sheet(cls, wb, sheet_name: str):
-        from mod_excel_access import ensure_sheet_exists
-
-        if not ensure_sheet_exists(wb, sheet_name):
-            raise ValueError(f"無法找到工作表 '{sheet_name}'。")
-
-        try:
-            sheet = wb.sheets[sheet_name]
-        except Exception as e:
-            raise ValueError(f"無法找到工作表 '{sheet_name}'：{e}")
-
-        data = sheet.range("A2").expand("table").value
-        ji_khoo = cls()
-
-        if data is None:
-            return ji_khoo
-        if not isinstance(data[0], list):
-            data = [data]
-
-        for row in data:
-            han_ji = row[0] or ""
-            tai_gi_im_piau = row[1] or "N/A"
-            kenn_ziann_im_piau = row[2] or "N/A"
-            coords_str = row[3] or ""
-
-            coordinates = []
-            if coords_str:
-                coords_list = coords_str.split("; ")
-                for coord in coords_list:
-                    coord = coord.strip("()")
-                    row_col = tuple(map(int, coord.split(", ")))
-                    coordinates.append(row_col)
-
-            for coord in coordinates:
-                ji_khoo.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coord)
-
-        return ji_khoo
-
-    def remove_coordinate(self, han_ji: str, tai_gi_im_piau: str, coordinate: tuple):
-        """
-        移除指定【漢字】與【台語音標】對應項目中的【座標】。
-        若該項目座標清單為空，則整筆項目從字典中移除。
-        """
-        if han_ji not in self.ji_khoo_dict:
-            return
-
-        entries = self.ji_khoo_dict[han_ji]
-        for entry in entries:
-            if entry["tai_gi_im_piau"] == tai_gi_im_piau:
-                if coordinate in entry["coordinates"]:
-                    entry["coordinates"].remove(coordinate)
-                if len(entry["coordinates"]) == 0:
-                    entries.remove(entry)
-                break
-
 # =========================================================================
 # 作業用類別
 # =========================================================================
@@ -405,6 +402,7 @@ class ProcessConfig:
     """處理配置資料類別"""
 
     def __init__(self, wb, hanji_piau_im_sheet: str):
+        self.wb = wb
         # 【漢字注音】工作表描述
         self.hanji_piau_im_sheet = hanji_piau_im_sheet
         self.TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
@@ -441,6 +439,7 @@ class CellProcessor:
         piau_im_ji_khoo: JiKhooDict,
         khuat_ji_piau_ji_khoo: JiKhooDict,
     ):
+        self.config = config
         self.ji_tian = config.ji_tian
         self.piau_im = config.piau_im
         self.piau_im_huat = config.piau_im_huat
@@ -515,6 +514,59 @@ class CellProcessor:
 
         return tai_gi_im_piau, han_ji_piau_im
 
+    def new_entry_in_ji_khoo_dict(self,
+            han_ji: str, tai_gi_im_piau: str, kenn_ziann_im_piau: str, row: int, col: int):
+        """更新字典內容"""
+        self.piau_im_ji_khoo.add_or_update_entry(
+            han_ji=han_ji,
+            tai_gi_im_piau=tai_gi_im_piau,
+            kenn_ziann_im_piau=kenn_ziann_im_piau,
+            coordinates=(row, col)
+        )
+
+    def update_entry_in_ji_khoo_dict(self, wb,
+            ji_khoo: JiKhooDict,
+            han_ji: str, tai_gi_im_piau: str, kenn_ziann_im_piau: str, row: int, col: int):
+        """更新字典內容"""
+        # ji_khoo_name = '標音字庫'
+        ji_khoo_name = ji_khoo.name if hasattr(ji_khoo, 'name') else '標音字庫'
+        target = f"（{row}, {col}）：{han_ji}【{tai_gi_im_piau}】"
+        print(f"更新【{ji_khoo_name}】：{target}")
+        # 取得該筆資料在【標音字庫】的 Row 號
+        piau_im_ji_khoo_dict = ji_khoo
+        row_no = piau_im_ji_khoo_dict.get_row_by_han_ji_and_tai_gi_im_piau(
+            han_ji=han_ji,
+            tai_gi_im_piau=tai_gi_im_piau
+        )
+        print(f"{target}落在【標音字庫】工作表的列號：{row_no}")
+        # 依【漢字】與【台語音標】取得在【標音字庫】工作表中的【座標】清單
+        coord_list = piau_im_ji_khoo_dict.get_coordinates_by_han_ji_and_tai_gi_im_piau(
+            han_ji=han_ji,
+            tai_gi_im_piau=tai_gi_im_piau
+        )
+        print(f"{target}對映的座標清單：{coord_list}")
+        # 自座標清單中，移除目前處理的座標
+        coord_to_remove = (row, col)
+        if coord_to_remove in coord_list:
+            # (row, col)座標落在座標清單中
+            print(f"座標 {coord_to_remove} 有在座標清單之中。")
+            # 自座標清單中移除該座標
+            piau_im_ji_khoo_dict.remove_coordinate(
+                han_ji=han_ji,
+                tai_gi_im_piau=tai_gi_im_piau,
+                coordinate=coord_to_remove
+            )
+            print(f"{target}已自座標清單中移除。")
+            # 儲存回 Excel
+            print(f"將更新後的【標音字庫】寫回 Excel 工作表...")
+            piau_im_ji_khoo_dict.write_to_excel_sheet(
+                wb=wb,
+                sheet_name='標音字庫'
+            )
+        else:
+            print(f"座標 {coord_to_remove} 不在座標清單之中。")
+        return
+
     def _process_jin_kang_piau_im(self, jin_kang_piau_im, cell, row, col):
         """處理人工標音內容"""
         # 預設未能依【人工標音】欄，找到對應的【台語音標】和【漢字標音】
@@ -564,6 +616,16 @@ class CellProcessor:
                 )
                 # cell.offset(-2, 0).value = ''  # 清空【人工標音】欄【=】
                 print(f"自【人工標音字庫】引用【{cell.value}】既有的【人工標音】。")
+                # 因【人工標音】欄為【=】，故而在【標音字庫】工作表中的紀錄，需自原有的【座標】欄位移除目前處理的座標除
+                self.update_entry_in_ji_khoo_dict(
+                    wb=self.config.wb,
+                    ji_khoo=self.piau_im_ji_khoo,
+                    han_ji=han_ji,
+                    tai_gi_im_piau=tai_gi_im_piau,
+                    kenn_ziann_im_piau='N/A',
+                    row=row,
+                    col=col
+                )
                 sing_kong = True
             else:
                 # 若在【人工標音字庫】找不到【人工標音】對應的【台語音標】，則自【標音字庫】工作表查找
@@ -892,6 +954,29 @@ def process(wb):
                 sheet_name='標音字庫'
             )
 
+        def test_update_entry_in_ji_khoo_dict():
+            print("開始測試 update_entry_in_ji_khoo_dict() 方法...")
+            row = 5
+            col = 6
+            # 設定作用儲存格
+            sheet = wb.sheets['漢字注音'].activate()
+            active_cell = wb.sheets['漢字注音'].range((row, col))
+            active_cell.select()
+            han_ji = active_cell.value
+            tai_gi_im_piau = active_cell.offset(-1, 0).value
+
+            target = f"（{row}, {col}）：{han_ji}【{tai_gi_im_piau}】"
+            ji_khoo_name = '標音字庫'
+            print(f"更新【{ji_khoo_name}】，作用儲存格：{target}")
+
+            processor.update_entry_in_ji_khoo_dict(
+                wb=wb, ji_khoo=piau_im_ji_khoo_dict,
+                han_ji=han_ji,
+                tai_gi_im_piau=tai_gi_im_piau,
+                kenn_ziann_im_piau='N/A',
+                row=row,  col=col
+            )
+
         def _test_normaal_mode():
             """測試一般模式"""
             sheet_name = f'漢字注音'
@@ -908,7 +993,8 @@ def process(wb):
         # 測試作業
         # --------------------------------------------------------------------------
         # _test_normaal_mode()
-        _test100()
+        # _test100()
+        test_update_entry_in_ji_khoo_dict()
 
         print('=' * 40)
         print("測試結束。")
