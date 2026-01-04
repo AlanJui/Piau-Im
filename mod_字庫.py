@@ -79,6 +79,11 @@ class JiKhooDict:
 
         try:
             sheet = wb.sheets[sheet_name]
+            sheet.activate()
+            sheet.range('A1').value = '漢字'
+            sheet.range('B1').value = '台語音標'
+            sheet.range('C1').value = '校正音標'
+            sheet.range('D1').value = '座標'
         except Exception as e:
             raise ValueError(f"無法找到工作表 '{sheet_name}'：{e}")
 
@@ -844,11 +849,6 @@ def _process_sheet(sheet, config: ProcessConfig, processor: CellProcessor):
     # active_cell = sheet.range((config.line_start_row, config.start_col))
     active_cell = sheet.range(f'{xw.utils.col_name(config.start_col)}{config.line_start_row}')
     active_cell.select()
-    # 顯示【作用儲存格】位置
-    # active_row = active_cell.row
-    # active_col = active_cell.column
-    # active_col_name = xw.utils.col_name(active_col)
-    # print(f"作用儲存格：{active_col_name}{active_row}（{active_cell.row}, {active_cell.column}）")
 
     # 調整 row 值至【漢字】列（每 4 列為一組，漢字在第 3 列：5, 9, 13, ... ）
     is_eof = False
@@ -1049,7 +1049,7 @@ def process(wb):
 
         def _test_normaal_mode():
             """測試一般模式"""
-            sheet_name = f'漢字注音'
+            sheet_name = '漢字注音'
             sheet = wb.sheets[sheet_name]
             sheet.activate()
 
