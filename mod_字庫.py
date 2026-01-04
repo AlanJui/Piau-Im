@@ -825,7 +825,7 @@ def process(wb):
         config = ProcessConfig(wb, hanji_piau_im_sheet='漢字注音')
 
         # 建立字庫工作表
-        jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo = _initialize_ji_khoo(
+        jin_kang_piau_im_ji_khoo_dict, piau_im_ji_khoo_dict, khuat_ji_piau_ji_khoo_dict = _initialize_ji_khoo(
             wb=wb,
             new_jin_kang_piau_im_ji_khoo_sheet=False,
             new_piau_im_ji_khoo_sheet=False,
@@ -835,47 +835,66 @@ def process(wb):
         # 建立儲存格處理器
         processor = CellProcessor(
             config=config,
-            jin_kang_piau_im_ji_khoo=jin_kang_piau_im_ji_khoo,
-            piau_im_ji_khoo=piau_im_ji_khoo,
-            khuat_ji_piau_ji_khoo=khuat_ji_piau_ji_khoo,
+            jin_kang_piau_im_ji_khoo=jin_kang_piau_im_ji_khoo_dict,
+            piau_im_ji_khoo=piau_im_ji_khoo_dict,
+            khuat_ji_piau_ji_khoo=khuat_ji_piau_ji_khoo_dict,
         )
 
         # --------------------------------------------------------------------------
-        # 處理工作表
+        # 測試
         # --------------------------------------------------------------------------
-        piau_im_name_list  = [
-            # '台語音標',
-            # '方音符號',
-            # '十五音',
-            '雅俗通',
-            '台羅拼音',
-            '白話字',
-            '閩拼調號',
-            '閩拼調符',
-        ]
+        def _test100(row: int = 5, col: int = 6):
+            # 設定作用儲存格
+            sheet = wb.sheets['漢字注音'].activate()
+            # active_cell = sheet.range('F5')
+            # active_cell = wb.sheets['漢字注音'].range('F5')
+            active_cell = wb.sheets['漢字注音'].range((row, col))
+            active_cell.select()
+            han_ji = active_cell.value
+            tai_gi_im_piau = active_cell.offset(-1, 0).value
+            print(f"開始測試：作用儲存格：{active_cell.address}，漢字：{han_ji}，台語音標：{tai_gi_im_piau}")
 
-        # 處理工作表
-        for piau_im_name in piau_im_name_list:
-            print('=' * 80)
-            print(f"處理【標音方法】：{piau_im_name} ...")
-            # 設定目前使用的標音方法
-            processor.piau_im_huat = piau_im_name
+            # print(f"作用儲存格：{active_cell.address}，漢字：{han_ji}")
+            # tai_gi_im_piau = piau_im_ji_khoo_dict.get_tai_gi_im_piau_by_han_ji(han_ji=han_ji)
+            # print(f"標音字庫查到的台語音標：{tai_gi_im_piau}")
 
-            # 切換工作表
-            sheet_name = f'漢字注音【{piau_im_name}】'
-            # 使用【漢字注音】工作表複製新工作表
-            try:
-                if sheet_name not in [sheet.name for sheet in wb.sheets]:
-                    # 複製工作表
-                    source_sheet = wb.sheets['漢字注音']
-                    new_sheet = source_sheet.copy(name=sheet_name, after=source_sheet)
-                    print(f"✅ 已複製【漢字注音】工作表為 '{sheet_name}'")
-                else:
-                    print(f"⚠️ 工作表 '{sheet_name}' 已存在")
+            row_no = piau_im_ji_khoo_dict.get_row_by_han_ji_and_tai_gi_im_piau(
+                han_ji=han_ji,
+                tai_gi_im_piau=tai_gi_im_piau
+            )
+            print(f"{han_ji}（{tai_gi_im_piau}）落在【標音字庫】的 Row 號：{row_no}")
 
-            except Exception as e:
-                raise ValueError(f"無法找到或建立工作表 '{sheet_name}'：{e}")
+            # 依【漢字】與【台語音標】取得在【標音字庫】工作表中的【座標】清單
+            coord_list = piau_im_ji_khoo_dict.get_coordinates_by_han_ji_and_tai_gi_im_piau(
+                han_ji=han_ji,
+                tai_gi_im_piau=tai_gi_im_piau
+            )
+            print(f"在【標音字庫】工作表，{han_ji}（{tai_gi_im_piau}）的座標清單：{coord_list}")
 
+            # 檢驗(row, col)座標，是否在座標清單中
+            coord_to_remove = (row, col)
+            if coord_to_remove in coord_list:
+                print(f"座標 {coord_to_remove} 有在座標清單之中。")
+                # 刪除座標作業
+                piau_im_ji_khoo_dict.remove_coordinate(
+                    han_ji=han_ji,
+                    tai_gi_im_piau=tai_gi_im_piau,
+                    coordinate=coord_to_remove
+                )
+                print(f"已從【標音字庫】工作表，移除 {han_ji}（{tai_gi_im_piau}）的座標：{coord_to_remove} ...")
+            else:
+                print(f"座標 {coord_to_remove} 不在座標清單之中。")
+
+            # 儲存回 Excel
+            print(f"將更新後的【標音字庫】寫回 Excel 工作表...")
+            piau_im_ji_khoo_dict.write_to_excel_sheet(
+                wb=wb,
+                sheet_name='標音字庫'
+            )
+
+        def _test_normaal_mode():
+            """測試一般模式"""
+            sheet_name = f'漢字注音'
             sheet = wb.sheets[sheet_name]
             sheet.activate()
 
@@ -885,13 +904,22 @@ def process(wb):
                 config=config,
                 processor=processor,
             )
+        # --------------------------------------------------------------------------
+        # 測試作業
+        # --------------------------------------------------------------------------
+        # _test_normaal_mode()
+        _test100()
+
+        print('=' * 40)
+        print("測試結束。")
+        print('=' * 40)
 
         # 寫回字庫到 Excel
         _save_ji_khoo_to_excel(
             wb=wb,
-            jin_kang_piau_im_ji_khoo=jin_kang_piau_im_ji_khoo,
-            piau_im_ji_khoo=piau_im_ji_khoo,
-            khuat_ji_piau_ji_khoo=khuat_ji_piau_ji_khoo,
+            jin_kang_piau_im_ji_khoo=jin_kang_piau_im_ji_khoo_dict,
+            piau_im_ji_khoo=piau_im_ji_khoo_dict,
+            khuat_ji_piau_ji_khoo=khuat_ji_piau_ji_khoo_dict,
         )
 
         return EXIT_CODE_SUCCESS
@@ -936,91 +964,8 @@ def main():
         logging_exception(msg="處理過程中發生未知錯誤！", error=e)
         return EXIT_CODE_UNKNOWN_ERROR
 
-def test1():
-    wb = None
-    # 取得【作用中活頁簿】
-    try:
-        wb = xw.apps.active.books.active    # 取得 Excel 作用中的活頁簿檔案
-    except Exception as e:
-        print(f"發生錯誤: {e}")
-        logging.error(f"無法找到作用中的 Excel 工作簿: {e}", exc_info=True)
-        return EXIT_CODE_NO_FILE
-
-    # 若無法取得【作用中活頁簿】，則因無法繼續作業，故返回【作業異常終止代碼】結束。
-    if not wb:
-        return EXIT_CODE_NO_FILE
-
-    try:
-        piau_im_ji_khoo_sheet = wb.sheets['標音字庫']
-        piau_im_ji_khoo_dict = JiKhooDict.create_ji_khoo_dict_from_sheet(
-            wb=wb,
-            sheet_name='標音字庫')
-        khuat_ji_piau_sheet = wb.sheets['缺字表']
-        khuat_ji_piau_dict = JiKhooDict.create_ji_khoo_dict_from_sheet(
-            wb=wb,
-            sheet_name='缺字表')
-        jin_kang_piau_im_sheet = wb.sheets['人工標音字庫']
-        jin_kang_piau_im_dict = JiKhooDict.create_ji_khoo_dict_from_sheet(
-            wb=wb,
-            sheet_name='人工標音字庫')
-
-        # 設定作用儲存格
-        sheet = wb.sheets['漢字注音'].activate()
-        # active_cell = sheet.range('F5')
-        active_cell = wb.sheets['漢字注音'].range('F5')
-        active_cell.select()
-        han_ji = active_cell.value
-        tai_gi_im_piau = active_cell.offset(-1, 0).value
-        print(f"開始測試：作用儲存格：{active_cell.address}，漢字：{han_ji}，台語音標：{tai_gi_im_piau}")
-
-        # print(f"作用儲存格：{active_cell.address}，漢字：{han_ji}")
-        # tai_gi_im_piau = piau_im_ji_khoo_dict.get_tai_gi_im_piau_by_han_ji(han_ji=han_ji)
-        # print(f"標音字庫查到的台語音標：{tai_gi_im_piau}")
-
-        row_no = piau_im_ji_khoo_dict.get_row_by_han_ji_and_tai_gi_im_piau(
-            han_ji=han_ji,
-            tai_gi_im_piau=tai_gi_im_piau
-        )
-        print(f"{han_ji}（{tai_gi_im_piau}）落在【標音字庫】的 Row 號：{row_no}")
-
-        coord_list = piau_im_ji_khoo_dict.get_coordinates_by_han_ji_and_tai_gi_im_piau(
-            han_ji=han_ji,
-            tai_gi_im_piau=tai_gi_im_piau
-        )
-        print(f"在【標音字庫】工作表，{han_ji}（{tai_gi_im_piau}）的座標清單：{coord_list}")
-
-        # 刪除座標測試
-        coord = coord_list[0]
-        print(f"從【標音字庫】工作表，移除 {han_ji}（{tai_gi_im_piau}）的座標：{coord} ...")
-        piau_im_ji_khoo_dict.remove_coordinate(
-            han_ji=han_ji,
-            tai_gi_im_piau=tai_gi_im_piau,
-            coordinate=coord
-        )
-
-        # for coord in coord_list:
-        #     print(f"從【標音字庫】工作表，移除 {han_ji}（{tai_gi_im_piau}）的座標：{coord} ...")
-        #     piau_im_ji_khoo_dict.remove_coordinate(
-        #         han_ji=han_ji,
-        #         tai_gi_im_piau=tai_gi_im_piau,
-        #         coordinate=coord
-        #     )
-
-        # 儲存回 Excel
-        print(f"將更新後的【標音字庫】寫回 Excel 工作表...")
-        piau_im_ji_khoo_dict.write_to_excel_sheet(
-            wb=wb,
-            sheet_name='標音字庫'
-        )
-
-        print("測試結束。")
-    except Exception as e:
-        msg = f"程式異常終止：test1"
-        print(msg)
-        return EXIT_CODE_UNKNOWN_ERROR
 
 if __name__ == "__main__":
     import sys
 
-    # sys.exit(main())
-    sys.exit(test1())
+    sys.exit(main())
