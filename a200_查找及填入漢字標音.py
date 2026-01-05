@@ -59,8 +59,9 @@ init_logging()
 class ProcessConfig:
     """處理配置資料類別"""
 
-    def __init__(self, wb, hanji_piau_im_sheet: str):
+    def __init__(self, wb, new_piau_im_sheets: bool = False, hanji_piau_im_sheet: str = '漢字注音'):
         self.wb = wb
+        self.new_piau_im_sheets = new_piau_im_sheets
         # 【漢字注音】工作表描述
         self.hanji_piau_im_sheet = hanji_piau_im_sheet
         self.TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
@@ -375,6 +376,31 @@ class CellProcessor:
         row: int,
         col: int,
     ) -> Tuple[str, bool]:
+        #-------------------------------------------
+        # 顯示漢字庫查找結果的單一讀音選項
+        #-------------------------------------------
+        def _process_one_entry(cell, entry):
+            # 轉換音標
+            tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im(entry)
+
+            # 寫入儲存格
+            cell.offset(-1, 0).value = tai_gi_im_piau  # 上方儲存格：台語音標
+            cell.offset(1, 0).value = han_ji_piau_im    # 下方儲存格：漢字標音
+
+            # 在【標音字庫】新增一筆紀錄
+            self.piau_im_ji_khoo.add_entry(
+                han_ji=han_ji,
+                tai_gi_im_piau=tai_gi_im_piau,
+                kenn_ziann_im_piau='N/A',
+                coordinates=(row, col)
+            )
+
+            # 顯示處理進度
+            han_ji_thok_im = f" [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
+
+            # 結束處理
+            return han_ji_thok_im
+
         """處理漢字"""
         if han_ji == '':
             return "【空白】", False
@@ -395,28 +421,19 @@ class CellProcessor:
             )
             return f"【{han_ji}】查無此字！", False
 
-        # 有多個讀音 len(result) > 1
-        print(f"漢字儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）：【{han_ji}】有 {len(result)} 個讀音...")
-        for idx, entry in enumerate(result):
-            # 轉換音標
-            tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im(entry)
+        # 顯示所有讀音選項
+        # excel_address = f"{xw.utils.col_name(col)}{row}"
+        # print(f"漢字儲存格：{excel_address}（{row}, {col}）：【{han_ji}】有 {len(result)} 個讀音...")
+        # for idx, entry in enumerate(cell, result):
+        #     han_ji_thok_im = _process_one_entry(cell, entry)
+        #     print(f"{idx + 1}. 【{han_ji}】：{han_ji_thok_im}")
 
-            # 寫入儲存格
-            cell.offset(-1, 0).value = tai_gi_im_piau  # 上方儲存格：台語音標
-            cell.offset(1, 0).value = han_ji_piau_im    # 下方儲存格：漢字標音
+        # 預設只處理第一個讀音選項
+        excel_address = f"{xw.utils.col_name(col)}{row}"
+        print(f"漢字儲存格：{excel_address}（{row}, {col}）的讀音為...")
+        han_ji_thok_im = _process_one_entry(cell, result[0])
+        print(f"【{han_ji}】：{han_ji_thok_im}")
 
-            # 在【標音字庫】新增一筆紀錄
-            self.piau_im_ji_khoo.add_entry(
-                han_ji=han_ji,
-                tai_gi_im_piau=tai_gi_im_piau,
-                kenn_ziann_im_piau='N/A',
-                coordinates=(row, col)
-            )
-
-            # 顯示處理進度
-            msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
-            col_name = xw.utils.col_name(col)
-            print(f"{idx + 1}. {msg}")
 
     def process_cell(
         self,
@@ -510,7 +527,7 @@ def _process_sheet(sheet, config: ProcessConfig, processor: CellProcessor):
     active_cell = sheet.range(f'{xw.utils.col_name(config.start_col)}{config.line_start_row}')
     active_cell.select()
 
-    # 調整 row 值至【漢字】列（每 4 列為一組，漢字在第 3 列：5, 9, 13, ... ）
+    # 調整 row 值至【漢字】列（每 4 列為一組【列群】，漢字在第 3 列：5, 9, 13, ... ）
     is_eof = False
     for r in range(1, config.TOTAL_LINES + 1):
         if is_eof: break
@@ -547,7 +564,7 @@ def _save_ji_khoo_to_excel(
 # =========================================================================
 # 主要處理函數
 # =========================================================================
-def process(wb) -> int:
+def process(wb, new_piau_im_sheets: bool = False) -> int:
     """
     查詢漢字讀音並標注
 
@@ -566,10 +583,10 @@ def process(wb) -> int:
         #--------------------------------------------------------------------------
         # 初始化 process config
         #--------------------------------------------------------------------------
-        config = ProcessConfig(wb, hanji_piau_im_sheet='漢字注音')
+        config = ProcessConfig(wb, new_piau_im_sheets=new_piau_im_sheets, hanji_piau_im_sheet='漢字注音')
 
         # 建立字庫工作表
-        create = True
+        create = new_piau_im_sheets
         if create:
             jin_kang_piau_im_ji_khoo_dict, piau_im_ji_khoo_dict, khuat_ji_piau_ji_khoo_dict = _initialize_ji_khoo(
                 wb=wb,
@@ -702,7 +719,7 @@ def _save_ji_khoo_to_excel(
 # =========================================================================
 # 主程式
 # =========================================================================
-def main():
+def main(new_piau_im_sheets: bool = False) -> int:
     """主程式 - 從 Excel 呼叫或直接執行"""
     try:
         # 取得 Excel 活頁簿
@@ -723,7 +740,7 @@ def main():
             return EXIT_CODE_NO_FILE
 
         # 執行處理
-        exit_code = process(wb=wb)
+        exit_code = process(wb=wb, new_piau_im_sheets=new_piau_im_sheets)
 
         return exit_code
 
@@ -732,7 +749,7 @@ def main():
         return EXIT_CODE_UNKNOWN_ERROR
 
 
-def test_han_ji_tian():
+def test_01():
     """測試 HanJiTian 類別"""
     print("=" * 70)
     print("測試 HanJiTian 查詢功能")
@@ -766,12 +783,37 @@ def test_han_ji_tian():
 
 
 if __name__ == "__main__":
+    import argparse
     import sys
 
-    # 檢查是否有命令列參數
-    if len(sys.argv) > 1 and sys.argv[1] == "test":
+    # 解析命令行參數
+    parser = argparse.ArgumentParser(
+        description='依【漢字】查找【台語音標】並轉換成【漢字標音】',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog='''
+使用範例：
+  python a200_查找及填入漢字標音.py          # 執行一般模式
+  python a200_查找及填入漢字標音.py -new     # 建立新的字庫工作表
+  python a200_查找及填入漢字標音.py -test    # 執行測試模式
+'''
+        )
+    parser.add_argument(
+        '-new',
+        action='store_true',
+        help='建立新的字庫工作表',
+    )
+    parser.add_argument(
+        '-test',
+        action='store_true',
+        help='執行測試模式',
+    )
+    args = parser.parse_args()
+    new_piau_im_sheets = args.new
+    test_mode = args.test
+
+    if test_mode:
         # 執行測試
-        sys.exit(test_han_ji_tian())
+        sys.exit(test_01())
     else:
         # 從 Excel 呼叫
-        sys.exit(main())
+        sys.exit(main(new_piau_im_sheets))

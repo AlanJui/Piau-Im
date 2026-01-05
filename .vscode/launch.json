@@ -188,6 +188,16 @@
             "console": "integratedTerminal",
         },
         {
+            "name": "a200_查找及填入漢字標音 -new",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a200_查找及填入漢字標音.py",
+            "console": "integratedTerminal",
+            "args": [
+                "-new"
+            ]
+        },
+        {
             "name": "a200_查找及填入漢字標音",
             "type": "debugpy",
             "request": "launch",
