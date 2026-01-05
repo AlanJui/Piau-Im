@@ -341,11 +341,14 @@ class CellProcessor:
         str_value = str(cell_value).strip()
 
         if is_punctuation(str_value):
-            return f"{cell_value}【標點符號】", False
+            msg = f"【標點符號】"
         elif isinstance(cell_value, float) and cell_value.is_integer():
-            return f"{int(cell_value)}【英/數半形字元】", False
+            msg = f"【英/數半形字元】（{int(cell_value)}）"
         else:
-            return f"{cell_value}【其他字元】", False
+            msg = f"【非漢字之其餘字元】"
+
+        print(f"【{cell_value}】：{msg}。")
+        return
 
     def _convert_piau_im(self, entry) -> Tuple[str, str]:
         """
@@ -429,8 +432,6 @@ class CellProcessor:
         #     print(f"{idx + 1}. 【{han_ji}】：{han_ji_thok_im}")
 
         # 預設只處理第一個讀音選項
-        excel_address = f"{xw.utils.col_name(col)}{row}"
-        print(f"漢字儲存格：{excel_address}（{row}, {col}）的讀音為...")
         han_ji_thok_im = _process_one_entry(cell, result[0])
         print(f"【{han_ji}】：{han_ji_thok_im}")
 
@@ -472,7 +473,6 @@ class CellProcessor:
         elif not is_han_ji(cell_value):
             # 處理【標點符號】、【英數字元】、【其他字元】
             self._process_non_han_ji(cell_value)
-            print(f"{cell_value} 非漢字，跳過處理。")
             return False, False
         else:
             self._process_han_ji(cell_value, cell, row, col)
@@ -561,9 +561,6 @@ def _save_ji_khoo_to_excel(
     piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name='標音字庫')
     khuat_ji_piau_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name='缺字表')
 
-# =========================================================================
-# 主要處理函數
-# =========================================================================
 def process(wb, new_piau_im_sheets: bool = False) -> int:
     """
     查詢漢字讀音並標注
@@ -636,85 +633,6 @@ def process(wb, new_piau_im_sheets: bool = False) -> int:
     except Exception as e:
         logging.exception("自動為【漢字】查找【台語音標】作業，發生例外！")
         raise
-
-
-def _initialize_ji_khoo(
-    wb,
-    new_jin_kang_piau_im_ji_khoo_sheet: bool,
-    new_piau_im_ji_khoo_sheet: bool,
-    new_khuat_ji_piau_sheet: bool,
-) -> Tuple[JiKhooDict, JiKhooDict]:
-    """初始化字庫工作表"""
-
-    # 缺字表
-    khuat_ji_piau_name = '缺字表'
-    if new_khuat_ji_piau_sheet:
-        delete_sheet_by_name(wb=wb, sheet_name=khuat_ji_piau_name)
-    khuat_ji_piau_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
-        wb=wb,
-        sheet_name=khuat_ji_piau_name
-    )
-
-    # 人工標音字庫
-    jin_kang_piau_im_sheet_name = '人工標音字庫'
-    if new_jin_kang_piau_im_ji_khoo_sheet:
-        delete_sheet_by_name(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
-    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
-        wb=wb,
-        sheet_name=jin_kang_piau_im_sheet_name
-    )
-
-    # 標音字庫
-    piau_im_sheet_name = '標音字庫'
-    if new_piau_im_ji_khoo_sheet:
-        delete_sheet_by_name(wb=wb, sheet_name=piau_im_sheet_name)
-    piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
-        wb=wb,
-        sheet_name=piau_im_sheet_name
-    )
-
-    return jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo
-
-
-def _process_sheet(sheet, config: ProcessConfig, processor: CellProcessor):
-    """處理整個工作表"""
-    # 處理所有的儲存格
-    active_cell = sheet.range(f'{xw.utils.col_name(config.start_col)}{config.line_start_row}')
-    active_cell.select()
-
-    # 調整 row 值至【漢字】列（每 4 列為一組，漢字在第 3 列：5, 9, 13, ... ）
-    is_eof = False
-    for r in range(1, config.TOTAL_LINES + 1):
-        if is_eof: break
-        line_no = r
-        print('-' * 60)
-        print(f"處理第 {line_no} 行...")
-        row = config.line_start_row + (r - 1) * config.ROWS_PER_LINE + config.han_ji_row_offset
-        new_line = False
-        for c in range(config.start_col, config.end_col + 1):
-            if is_eof: break
-            row = row
-            col = c
-            active_cell = sheet.range((row, col))
-            active_cell.select()
-            # 處理儲存格
-            print(f"儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）")
-            is_eof, new_line = processor.process_cell(active_cell, row, col)
-            if new_line: break
-            if is_eof: break
-
-
-def _save_ji_khoo_to_excel(
-    wb,
-    jin_kang_piau_im_ji_khoo: JiKhooDict,
-    piau_im_ji_khoo: JiKhooDict,
-    khuat_ji_piau_ji_khoo: JiKhooDict,
-):
-    """儲存字庫到 Excel"""
-    jin_kang_piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name='人工標音字庫')
-    piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name='標音字庫')
-    khuat_ji_piau_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name='缺字表')
-
 
 # =========================================================================
 # 主程式
