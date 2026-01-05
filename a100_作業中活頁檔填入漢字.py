@@ -730,7 +730,7 @@ def process(wb, args) -> int:
                                  han_ji_orgin_cell=config.han_ji_orgin_cell)
         logging.info("儲存格內容清除完畢")
 
-        if args.reset_wb:
+        if args.reset_cell_format:
             print("重設儲存格之格式...")
             reset_cells_format_in_sheet(wb,
                                         sheet_name='漢字注音',
@@ -839,7 +839,6 @@ if __name__ == "__main__":
         action='store_true',
         help='執行測試模式',
     )
-
     parser.add_argument(
         '--new',
         action='store_true',
@@ -847,7 +846,7 @@ if __name__ == "__main__":
     )
     parser.add_argument("han_ji_file", nargs="?", default="_tmp_p1_han_ji.txt", help="漢字純文字檔路徑")
     parser.add_argument("ping_im_file", nargs="?", default="", help="標音檔（可選）")
-    parser.add_argument("--reset_wb", action="store_true", help="重置工作表初始狀態")
+    parser.add_argument("--reset_cell_format", action="store_true", help="重置工作表初始狀態")
     parser.add_argument("--peh_ue", action="store_true", help="將語音類型設定為白話音")
     parser.add_argument("--tiau_hu", action="store_false", dest="tiau_ho", help="TLPA音標改【聲調符號】（不帶調號數值）")
     args = parser.parse_args()
