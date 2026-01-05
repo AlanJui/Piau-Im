@@ -732,7 +732,13 @@ def process(wb, args) -> int:
 
         if args.reset_wb:
             print("重設儲存格之格式...")
-            reset_cells_format_in_sheet(wb)
+            reset_cells_format_in_sheet(wb,
+                                        sheet_name='漢字注音',
+                                        total_lines=config.TOTAL_LINES,
+                                        rows_per_line=config.ROWS_PER_LINE,
+                                        start_row=config.line_start_row,
+                                        start_col=config.start_col,
+                                        end_col=config.end_col)
             logging.info("儲存格格式重設完畢")
 
         #======================================================================

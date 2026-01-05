@@ -142,25 +142,61 @@ def set_range_format(range_obj, font_name, font_size, font_color, fill_color=Non
         # range_obj.api.Interior.Pattern = xw.constants.Pattern.xlPatternNone  # 無填滿
         range_obj.color = None
 
+#--------------------------------------------------------------------------
+# 清除儲存格內容
+#--------------------------------------------------------------------------
+def clear_han_ji_kap_piau_im(
+    wb,
+    sheet_name='漢字注音',
+    total_lines: Optional[int]=120,
+    rows_per_line: Optional[int]=4,
+    start_row: Optional[int]=3,
+    start_col: Optional[int]=4,
+    end_col: Optional[int]=18,
+    han_ji_orgin_cell: Optional[str]='V3'
+):
+    """清除【工作表】之儲存格內存信
+
+    Args:
+        wb (_type_): _description_
+        sheet_name (str, optional): _description_. Defaults to '漢字注音'.
+    """
+    sheet = wb.sheets[sheet_name]   # 選擇工作表
+    sheet.activate()               # 將「漢字注音」工作表設為作用中工作表
+
+    # 每頁最多處理的列數
+    total_lines = int(total_lines)  # 從名稱【每頁總列數】取得值
+    rows_per_line = int(rows_per_line)  # 每行佔用的列數
+
+    rows_per_line = 4
+    end_of_rows = start_row + (total_lines * rows_per_line ) - 1
+    start_col_name = xw.utils.col_name(start_col)  # D
+    end_col_name = xw.utils.col_name(end_col)  # R
+    cells_range = f'{start_col_name}{start_row}:{end_col_name}{end_of_rows}'
+
+    sheet.range(cells_range).clear_contents()     # 清除 C3:R{end_of_row} 範圍的內容
+
+    sheet.range(han_ji_orgin_cell).value = ""  # 清空 V3 儲存格內容
+
 
 # 重置【漢字注音】工作表
-def reset_cells_format_in_sheet(wb, sheet_name="漢字注音"):
+def reset_cells_format_in_sheet(
+    wb,
+    sheet_name: Optional[str]="漢字注音",
+    total_lines: Optional[int]=120,
+    rows_per_line: Optional[int]=4,
+    start_row: Optional[int]=3,
+    start_col: Optional[int]=4,
+    end_col: Optional[int]=18,
+):
     try:
         sheet = wb.sheets[sheet_name]  # 選擇【漢字注音】工作表
-
-        # 從 env 工作表中獲取每頁總列數和每列總字數
-        env_sheet = wb.sheets['env']
-        total_lines = int(env_sheet.range('每頁總列數').value) if env_sheet.range('每頁總列數').value else 120
-        chars_per_row = int(env_sheet.range('每列總字數').value) if env_sheet.range('每列總字數').value else 15
-
-        # 設定起始及結束的【列】位址
-        ROWS_PER_LINE = 4
-        start_row = 5
-        end_row = start_row + (total_lines * ROWS_PER_LINE)
+        rows_per_line = 4
+        end_row = start_row + (total_lines * rows_per_line ) - 1
 
         # 設定起始及結束的【欄】位址
-        start_col = 4  # D 欄
-        end_col = start_col + chars_per_row - 1  # 因為欄位是從 1 開始計數
+        # start_col = 4  # D 欄
+        # end_col = start_col + chars_per_row - 1  # 因為欄位是從 1 開始計數
 
         # 以【區塊】（range）方式設置儲存格格式
         row = start_row
@@ -204,7 +240,7 @@ def reset_cells_format_in_sheet(wb, sheet_name="漢字注音"):
                             font_color=0x009900)  # 綠色
 
             # 準備處理下一【行】
-            row += ROWS_PER_LINE
+            row += rows_per_line
     except Exception as e:
         logging_exc_error("重設【漢字注音】工作表儲存格格式時，發生錯誤：", e)
         return EXIT_CODE_PROCESS_FAILURE
@@ -288,42 +324,6 @@ def convert_to_excel_address(coord_str):
     except ValueError:
         return ""  # 避免解析錯誤
 
-
-#--------------------------------------------------------------------------
-# 清除儲存格內容
-#--------------------------------------------------------------------------
-def clear_han_ji_kap_piau_im(
-    wb,
-    sheet_name='漢字注音',
-    total_lines: Optional[int]=120,
-    rows_per_line: Optional[int]=4,
-    start_row: Optional[int]=3,
-    start_col: Optional[int]=4,
-    end_col: Optional[int]=18,
-    han_ji_orgin_cell: Optional[str]='V3'
-):
-    """清除【工作表】之儲存格內存信
-
-    Args:
-        wb (_type_): _description_
-        sheet_name (str, optional): _description_. Defaults to '漢字注音'.
-    """
-    sheet = wb.sheets[sheet_name]   # 選擇工作表
-    sheet.activate()               # 將「漢字注音」工作表設為作用中工作表
-
-    # 每頁最多處理的列數
-    total_lines = int(total_lines)  # 從名稱【每頁總列數】取得值
-    rows_per_line = int(rows_per_line)  # 每行佔用的列數
-
-    rows_per_line = 4
-    end_of_rows = start_row + (total_lines * rows_per_line ) - 1
-    start_col_name = xw.utils.col_name(start_col)  # D
-    end_col_name = xw.utils.col_name(end_col)  # R
-    cells_range = f'{start_col_name}{start_row}:{end_col_name}{end_of_rows}'
-
-    sheet.range(cells_range).clear_contents()     # 清除 C3:R{end_of_row} 範圍的內容
-
-    sheet.range(han_ji_orgin_cell).value = ""  # 清空 V3 儲存格內容
 
 # 可以正確區分空白字符和換行符，從而避免將 \n 誤判為空白
 def strip_cell(x):
