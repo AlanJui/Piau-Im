@@ -70,6 +70,7 @@
             "console": "integratedTerminal",
             "args": [
                 "_tmp_p1_han_ji.txt",
+                "--new"
                 // "--tiau_hu",
             ]
         },
