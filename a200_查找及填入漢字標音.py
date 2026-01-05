@@ -318,7 +318,7 @@ class CellProcessor:
                     han_ji=han_ji,
                     tai_gi_im_piau=tai_gi_im_piau)
                 # 顯示處理訊息
-                target = f"（{row}, {col}）：{han_ji}【{tai_gi_im_piau}】，【人工標音】：{jin_kang_piau_im}"
+                target = f"（【{han_ji}】[{tai_gi_im_piau}]／【{han_ji_piau_im}】，【人工標音】：{jin_kang_piau_im}"
                 print(f"{target}，已記錄到【人工標音字庫】工作表的 row：{row_no}）。")
                 sing_kong = True
 
@@ -464,11 +464,11 @@ class CellProcessor:
         # 檢查特殊字元
         if cell_value == 'φ':
             # 【文字終結】
-            print(f"【文章結束】，結束行處理作業。")
+            print(f"【{cell_value}】：【文章結束】結束行處理作業。")
             return True, True
         elif cell_value == '\n':
             #【換行】
-            print(f"【換行】，結束行中各欄處理作業。")
+            print(f"【換行】：結束行中各欄處理作業。")
             return False, True
         elif not is_han_ji(cell_value):
             # 處理【標點符號】、【英數字元】、【其他字元】
@@ -627,6 +627,7 @@ def process(wb, new_piau_im_sheets: bool = False) -> int:
             khuat_ji_piau_ji_khoo=khuat_ji_piau_ji_khoo_dict,
         )
 
+        print('=' * 80)
         logging_process_step("已完成【台語音標】和【漢字標音】標注工作。")
         return EXIT_CODE_SUCCESS
 
