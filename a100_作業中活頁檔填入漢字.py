@@ -672,10 +672,9 @@ def _fill_han_ji_into_sheet(
 
 def process(wb, args) -> int:
     """
-    查詢漢字讀音並標注
-
     Args:
         wb: Excel Workbook 物件
+        args: 命令列參數
 
     Returns:
         處理結果代碼
@@ -850,7 +849,6 @@ if __name__ == "__main__":
     parser.add_argument("--peh_ue", action="store_true", help="將語音類型設定為白話音")
     parser.add_argument("--tiau_hu", action="store_false", dest="tiau_ho", help="TLPA音標改【聲調符號】（不帶調號數值）")
     args = parser.parse_args()
-    new_piau_im_sheets = args.new
 
     if args.test:
         # 執行測試
