@@ -55,6 +55,147 @@ from mod_logging import (
 init_logging()
 
 # =========================================================================
+# 資料類別：儲存處理配置
+# =========================================================================
+class ProcessConfig:
+    """處理配置資料類別"""
+
+    def __init__(self, wb, args, hanji_piau_im_sheet: str = '漢字注音'):
+        self.wb = wb
+        self.args = args
+        # 【漢字注音】工作表描述
+        self.hanji_piau_im_sheet = hanji_piau_im_sheet
+        self.TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
+        self.ROWS_PER_LINE = 4
+        self.line_start_row = 3  # 第一行【標音儲存格】所在 Excel 列號: 3
+        self.line_end_row = self.line_start_row + (self.TOTAL_LINES * self.ROWS_PER_LINE)
+        self.CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
+        self.start_col = 4
+        self.end_col = self.start_col + self.CHARS_PER_ROW
+        self.han_ji_orgin_cell = 'V3'  # 原始漢字儲存格位置
+        # 每一行【漢字標音行】組成結構
+        self.jin_kang_piau_im_row_offset = 0    # 人工標音儲存格
+        self.tai_gi_im_piau_row_offset = 1      # 台語音標儲存格
+        self.han_ji_row_offset = 2              # 漢字儲存格
+        self.han_ji_piau_im_row_offset = 3      # 漢字標音儲存格
+        # 漢字起始列號
+        self.han_ji_start_row = self.line_start_row + self.han_ji_row_offset
+        # 初始化字典物件
+        self.han_ji_khoo_name = wb.names['漢字庫'].refers_to_range.value
+        self.db_name = DB_HO_LOK_UE if self.han_ji_khoo_name == '河洛話' else DB_KONG_UN
+        self.ji_tian = HanJiTian(self.db_name)
+        self.piau_im = PiauIm(han_ji_khoo=self.han_ji_khoo_name)
+        # 標音相關
+        self.piau_im_huat = wb.names['標音方法'].refers_to_range.value
+        self.ue_im_lui_piat = wb.names['語音類型'].refers_to_range.value    # 文讀音或白話音
+
+
+class CellProcessor:
+    """儲存格處理器"""
+
+    def __init__(
+        self,
+        config: ProcessConfig,
+        jin_kang_piau_im_ji_khoo: JiKhooDict,
+        piau_im_ji_khoo: JiKhooDict,
+        khuat_ji_piau_ji_khoo: JiKhooDict,
+    ):
+        self.config = config
+        self.ji_tian = config.ji_tian
+        self.piau_im = config.piau_im
+        self.piau_im_huat = config.piau_im_huat
+        self.ue_im_lui_piat = config.ue_im_lui_piat
+        self.han_ji_khoo = config.han_ji_khoo_name
+        self.jin_kang_piau_im_ji_khoo = jin_kang_piau_im_ji_khoo
+        self.piau_im_ji_khoo = piau_im_ji_khoo
+        self.khuat_ji_piau_ji_khoo = khuat_ji_piau_ji_khoo
+
+
+# =========================================================================
+# 作業處理函數
+# =========================================================================
+
+def _initialize_ji_khoo(
+    wb,
+    new_jin_kang_piau_im_ji_khoo_sheet: bool,
+    new_piau_im_ji_khoo_sheet: bool,
+    new_khuat_ji_piau_sheet: bool,
+) -> tuple[JiKhooDict, JiKhooDict, JiKhooDict]:
+    """初始化字庫工作表"""
+
+    # 人工標音字庫
+    jin_kang_piau_im_sheet_name = '人工標音字庫'
+    if new_jin_kang_piau_im_ji_khoo_sheet:
+        delete_sheet_by_name(wb=wb, sheet_name=jin_kang_piau_im_sheet_name)
+    jin_kang_piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=jin_kang_piau_im_sheet_name
+    )
+
+    # 標音字庫
+    piau_im_sheet_name = '標音字庫'
+    if new_piau_im_ji_khoo_sheet:
+        delete_sheet_by_name(wb=wb, sheet_name=piau_im_sheet_name)
+    piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=piau_im_sheet_name
+    )
+
+    # 缺字表
+    khuat_ji_piau_name = '缺字表'
+    if new_khuat_ji_piau_sheet:
+        delete_sheet_by_name(wb=wb, sheet_name=khuat_ji_piau_name)
+    khuat_ji_piau_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb,
+        sheet_name=khuat_ji_piau_name
+    )
+
+    return jin_kang_piau_im_ji_khoo, piau_im_ji_khoo, khuat_ji_piau_ji_khoo
+
+
+def _save_ji_khoo_to_excel(
+    wb,
+    jin_kang_piau_im_ji_khoo: JiKhooDict,
+    piau_im_ji_khoo: JiKhooDict,
+    khuat_ji_piau_ji_khoo: JiKhooDict,
+):
+    """儲存字庫到 Excel"""
+    jin_kang_piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name='人工標音字庫')
+    piau_im_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name='標音字庫')
+    khuat_ji_piau_ji_khoo.write_to_excel_sheet(wb=wb, sheet_name='缺字表')
+
+
+def _process_sheet(sheet, config: ProcessConfig, processor: CellProcessor):
+    """處理整個工作表"""
+
+    # 處理所有的儲存格
+    active_cell = sheet.range(f'{xw.utils.col_name(config.start_col)}{config.line_start_row}')
+    active_cell.select()
+
+    # 調整 row 值至【漢字】列（每 4 列為一組【列群】，漢字在第 3 列：5, 9, 13, ... ）
+    is_eof = False
+    for r in range(1, config.TOTAL_LINES + 1):
+        if is_eof: break
+        line_no = r
+        print('=' * 80)
+        print(f"處理第 {line_no} 行...")
+        row = config.line_start_row + (r - 1) * config.ROWS_PER_LINE + config.han_ji_row_offset
+        new_line = False
+        for c in range(config.start_col, config.end_col + 1):
+            if is_eof: break
+            row = row
+            col = c
+            active_cell = sheet.range((row, col))
+            active_cell.select()
+            # 處理儲存格
+            print('-' * 60)
+            print(f"儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）")
+            is_eof, new_line = processor.process_cell(active_cell, row, col)
+            if new_line: break
+            if is_eof: break
+
+
+# =========================================================================
 # 程式區域函式
 # =========================================================================
 def insert_or_update_to_db(db_path, table_name: str, han_ji: str, tai_gi_im_piau: str, piau_im_huat: str):
@@ -327,11 +468,57 @@ def update_khuat_ji_piau(wb):
 # =========================================================================
 # 本程式主要處理作業程序
 # =========================================================================
-def process(wb, sheet_name: str):
+def process(wb, args) -> int:
     """
     更新【漢字注音】表中【台語音標】儲存格的內容，依據【標音字庫】中的【校正音標】欄位進行更新，並將【校正音標】覆蓋至原【台語音標】。
+    Args:
+        wb: Excel Workbook 物件
+        args: 命令列參數
+
+    Returns:
+        處理結果代碼
     """
-    logging_process_step("<----------- 作業開始！---------->")
+    #--------------------------------------------------------------------------
+    # 作業初始化
+    #--------------------------------------------------------------------------
+    logging_process_step("<=========== 作業開始！==========>")
+
+    try:
+        #--------------------------------------------------------------------------
+        # 初始化 process config
+        #--------------------------------------------------------------------------
+        config = ProcessConfig(wb, args, hanji_piau_im_sheet='漢字注音')
+
+        # 建立字庫工作表
+        if args.new:
+            jin_kang_piau_im_ji_khoo_dict, piau_im_ji_khoo_dict, khuat_ji_piau_ji_khoo_dict = _initialize_ji_khoo(
+                wb=wb,
+                new_jin_kang_piau_im_ji_khoo_sheet=True,
+                new_piau_im_ji_khoo_sheet=True,
+                new_khuat_ji_piau_sheet=True,
+            )
+        else:
+            jin_kang_piau_im_ji_khoo_dict, piau_im_ji_khoo_dict, khuat_ji_piau_ji_khoo_dict = _initialize_ji_khoo(
+                wb=wb,
+                new_jin_kang_piau_im_ji_khoo_sheet=False,
+                new_piau_im_ji_khoo_sheet=False,
+                new_khuat_ji_piau_sheet=False,
+            )
+
+        # 建立儲存格處理器
+        processor = CellProcessor(
+            config=config,
+            jin_kang_piau_im_ji_khoo=jin_kang_piau_im_ji_khoo_dict,
+            piau_im_ji_khoo=piau_im_ji_khoo_dict,
+            khuat_ji_piau_ji_khoo=khuat_ji_piau_ji_khoo_dict,
+        )
+    except Exception as e:
+        logging.exception("處理作業，發生例外！")
+        raise
+
+    #-------------------------------------------------------------------------
+    # 檢驗【漢字注音】工作表是否存在
+    #-------------------------------------------------------------------------
     try:
         # 取得工作表
         han_ji_piau_im_sheet = wb.sheets['漢字注音']
@@ -345,6 +532,7 @@ def process(wb, sheet_name: str):
     # 【缺字表】工作表，原先找不到【音標】之漢字，已補填【台語音標】之後續處理作業
     #-------------------------------------------------------------------------
     try:
+        sheet_name = '缺字表'
         wb.sheets[sheet_name].activate()
         update_khuat_ji_piau(wb)
     except Exception as e:
@@ -363,19 +551,26 @@ def process(wb, sheet_name: str):
             msg=f"將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業，發生執行異常！",
             error=e)
         return EXIT_CODE_PROCESS_FAILURE
-    # logging_process_step(f"完成：將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業")
+    logging_process_step(f"完成：將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業")
 
     #--------------------------------------------------------------------------
     # 結束作業
     #--------------------------------------------------------------------------
-    logging_process_step("<----------- 作業結束！---------->")
+    # 寫回字庫到 Excel
+    _save_ji_khoo_to_excel(
+        wb=wb,
+        jin_kang_piau_im_ji_khoo=jin_kang_piau_im_ji_khoo_dict,
+        piau_im_ji_khoo=piau_im_ji_khoo_dict,
+        khuat_ji_piau_ji_khoo=khuat_ji_piau_ji_khoo_dict,
+    )
+    logging_process_step("<=========== 作業結束！==========>")
 
     return EXIT_CODE_SUCCESS
 
 # =========================================================================
 # 程式主要作業流程
 # =========================================================================
-def main():
+def main(args) -> int:
     # =========================================================================
     # (0) 程式初始化
     # =========================================================================
@@ -383,8 +578,10 @@ def main():
     current_file_path = Path(__file__).resolve()
     project_root = current_file_path.parent
     # 取得程式名稱
-    # program_file_name = current_file_path.name
     program_name = current_file_path.stem
+    # 顯示程式開始訊息
+    logging_process_step(f"《========== 程式開始執行：{program_name} ==========》")
+    logging_process_step(f"專案根目錄為: {project_root}")
 
     # =========================================================================
     # (1) 開始執行程式
@@ -412,21 +609,20 @@ def main():
     # (3) 執行【處理作業】
     # =========================================================================
     try:
-        sheet_name = '缺字表'
-        result_code = process(wb, sheet_name=sheet_name)
+        exit_code = process(wb, args)
     except Exception as e:
         msg = f"程式異常終止：{program_name}"
         logging_exc_error(msg=msg, error=e)
         return EXIT_CODE_UNKNOWN_ERROR
 
-    if result_code != EXIT_CODE_SUCCESS:
+    if exit_code != EXIT_CODE_SUCCESS:
         msg = f"程式異常終止：{program_name}（非例外，而是返回失敗碼）"
         logging.error(msg)
         return EXIT_CODE_PROCESS_FAILURE
 
-    #--------------------------------------------------------------------------
-    # 儲存檔案
-    #--------------------------------------------------------------------------
+    # =========================================================================
+    # (4) 儲存檔案
+    # =========================================================================
     try:
         # 要求畫面回到【漢字注音】工作表
         wb.sheets['漢字注音'].activate()
@@ -448,7 +644,54 @@ def main():
     return EXIT_CODE_SUCCESS    # 作業正常結束
 
 
-if __name__ == "__main__":
-    exit_code = main()
-    sys.exit(exit_code)
+# =============================================================================
+# 測試程式
+# =============================================================================
+def test_01():
+    """
+    測試程式主要作業流程
+    """
+    print("\n\n")
+    print("=" * 100)
+    print("執行測試：test_01()")
+    print("=" * 100)
+    # 執行主要作業流程
+    return EXIT_CODE_SUCCESS
 
+
+# =============================================================================
+# 程式作業模式切換
+# =============================================================================
+if __name__ == "__main__":
+    import argparse
+    import sys
+
+    # 解析命令行參數
+    parser = argparse.ArgumentParser(
+        description='缺字表修正後續作業程式',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog='''
+使用範例：
+  python a300.py          # 執行一般模式
+  python a300.py -new     # 建立新的字庫工作表
+  python a300.py -test    # 執行測試模式
+'''
+        )
+    parser.add_argument(
+        '--test',
+        action='store_true',
+        help='執行測試模式',
+    )
+    parser.add_argument(
+        '--new',
+        action='store_true',
+        help='建立新的標音字庫工作表',
+    )
+    args = parser.parse_args()
+
+    if args.test:
+        # 執行測試
+        sys.exit(test_01())
+    else:
+        # 從 Excel 呼叫
+        sys.exit(main(args))
