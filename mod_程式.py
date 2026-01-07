@@ -156,7 +156,7 @@ class ExcelCell:
 
         return ji_khoo_dict
 
-    def initialize_all_piau_im_ji_khoo(
+    def initialize_all_piau_im_ji_khoo_dict(
         self,
         new_jin_kang_piau_im_ji_khoo_sheet: bool,
         new_piau_im_ji_khoo_sheet: bool,
@@ -184,7 +184,7 @@ class ExcelCell:
         self.khuat_ji_piau_ji_khoo_dict = khuat_ji_piau_ji_khoo_dict
         return jin_kang_piau_im_ji_khoo_dict, piau_im_ji_khoo_dict, khuat_ji_piau_ji_khoo_dict
 
-    def save_all_ji_khoo_dict_to_sheet(self):
+    def save_all_piau_im_ji_khoo_dict(self):
         """將【字庫 Dict】存到 Excel 工作表中"""
         wb = self.program.wb
         self.jin_kang_piau_im_ji_khoo_dict.write_to_excel_sheet(wb=wb, sheet_name='人工標音字庫')
@@ -732,8 +732,8 @@ def process_sheet(sheet, program: Program, xls_cell: ExcelCell):
             print('-' * 80)
             print(f"儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）")
             is_eof, new_line = xls_cell.process_cell(active_cell, row, col)
-            if new_line: break
-            if is_eof: break
+            if new_line: break  # noqa: E701
+            if is_eof: break  # noqa: E701
 
 # =========================================================================
 # 本程式主要處理作業程序
@@ -755,7 +755,7 @@ def _process_sheet(sheet, program: Program, xls_cell: ExcelCell):
         row = program.line_start_row + (r - 1) * program.ROWS_PER_LINE + program.han_ji_row_offset
         new_line = False
         for c in range(program.start_col, program.end_col + 1):
-            if is_eof: break
+            if is_eof: break  # noqa: E701
             row = row
             col = c
             active_cell = sheet.range((row, col))
@@ -764,8 +764,8 @@ def _process_sheet(sheet, program: Program, xls_cell: ExcelCell):
             print('-' * 60)
             print(f"儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）")
             is_eof, new_line = xls_cell.process_cell(active_cell, row, col)
-            if new_line: break
-            if is_eof: break
+            if new_line: break  # noqa: E701
+            if is_eof: break  # noqa: E701
 
 
 def process(wb, args) -> int:
@@ -790,13 +790,13 @@ def process(wb, args) -> int:
         program = Program(wb, args, hanji_piau_im_sheet='漢字注音')
 
         # 建立儲存格處理器
-        # xls_cell = ExcelCell(
-        #     program=program,
-        #     new_jin_kang_piau_im_ji_khoo_sheet=True,
-        #     new_piau_im_ji_khoo_sheet=True,
-        #     new_khuat_ji_piau_sheet=True,
-        # )
-        xls_cell = ExcelCell(program=program)
+        # xls_cell = ExcelCell(program=program)
+        xls_cell = ExcelCell(
+            program=program,
+            new_jin_kang_piau_im_ji_khoo_sheet=False,
+            new_piau_im_ji_khoo_sheet=False,
+            new_khuat_ji_piau_sheet=False,
+        )
 
         #--------------------------------------------------------------------------
         # 處理作業開始
@@ -814,7 +814,7 @@ def process(wb, args) -> int:
         )
 
         # 寫回字庫到 Excel
-        xls_cell.save_all_ji_khoo_dict_to_sheet()
+        xls_cell.save_all_piau_im_ji_khoo_dict()
 
         #--------------------------------------------------------------------------
         # 處理作業結束
@@ -856,8 +856,8 @@ def main(args) -> int:
     try:
         wb = xw.apps.active.books.active    # 取得 Excel 作用中的活頁簿檔案
     except Exception as e:
-        print(f"發生錯誤: {e}")
-        logging.error(f"無法找到作用中的 Excel 工作簿: {e}", exc_info=True)
+        msg = "無法找到作用中的 Excel 工作簿！"
+        logging_exception(msg=msg, error=e)
         return EXIT_CODE_NO_FILE
 
     # 若無法取得【作用中活頁簿】，則因無法繼續作業，故返回【作業異常終止代碼】結束。
@@ -871,7 +871,7 @@ def main(args) -> int:
         exit_code = process(wb, args)
     except Exception as e:
         msg = f"程式異常終止：{program_name}"
-        logging_exc_error(msg=msg, error=e)
+        logging_exception(msg=msg, error=e)
         return EXIT_CODE_UNKNOWN_ERROR
 
     if exit_code != EXIT_CODE_SUCCESS:
@@ -888,12 +888,12 @@ def main(args) -> int:
         # 儲存檔案
         file_path = save_as_new_file(wb=wb)
         if not file_path:
-            logging_exc_error(msg="儲存檔案失敗！", error=e)
+            logging_exc_error(msg="儲存檔案失敗！", error=None)
             return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
         else:
             logging_process_step(f"儲存檔案至路徑：{file_path}")
     except Exception as e:
-        logging_exc_error(msg="儲存檔案失敗！", error=e)
+        logging_exception(msg="儲存檔案失敗！", error=e)
         return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
 
     # =========================================================================
@@ -913,7 +913,6 @@ def test_01():
     print("\n\n")
     print("=" * 100)
     print("執行測試：test_01()")
-    print("=" * 100)
     # 執行主要作業流程
     return EXIT_CODE_SUCCESS
 
