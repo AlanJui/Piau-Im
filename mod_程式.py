@@ -94,7 +94,33 @@ class Program:
         # 標音相關
         self.piau_im_huat = wb.names['標音方法'].refers_to_range.value
         self.ue_im_lui_piat = wb.names['語音類型'].refers_to_range.value    # 文讀音或白話音
+        # =========================================================================
+        # 程式初始化
+        # =========================================================================
+        # 取得專案根目錄。
+        self.current_file_path = Path(__file__).resolve()
+        self.project_root = self.current_file_path.parent
+        # 取得程式名稱
+        self.program_name = self.current_file_path.stem
 
+    def msg_program_start(self) -> str:
+        """顯取示得程式開始訊息"""
+        logging_process_step(f"《========== 程式開始執行：{self.program_name} ==========》")
+        logging_process_step(f"專案根目錄為: {self.project_root}")
+
+    def msg_program_end(self) -> str:
+        """顯示程式結束訊息"""
+        logging_process_step(f"《========== 程式終止執行：{self.program_name} ==========》")
+
+    def save_workbook_as_new_file(self, new_file_path: str) -> bool:
+        """將活頁簿另存新檔"""
+        try:
+            save_as_new_file(self.wb, new_file_path)
+            logging_process_step(f"已將活頁簿另存為新檔：{new_file_path}")
+            return True
+        except Exception as e:
+            logging_exception("儲存活頁簿為新檔時發生錯誤", e)
+            return False
 
 
 # =========================================================================
@@ -285,7 +311,7 @@ class ExcelCell:
             )
             print(f"{target}已自座標清單中移除。")
             # 儲存回 Excel
-            print(f"將更新後的【標音字庫】寫回 Excel 工作表...")
+            print("將更新後的【標音字庫】寫回 Excel 工作表...")
             piau_im_ji_khoo_dict.write_to_excel_sheet(
                 wb=wb,
                 sheet_name='標音字庫'
@@ -422,11 +448,11 @@ class ExcelCell:
         str_value = str(cell_value).strip()
 
         if is_punctuation(str_value):
-            msg = f"【標點符號】"
+            msg = "【標點符號】"
         elif isinstance(cell_value, float) and cell_value.is_integer():
             msg = f"【英/數半形字元】（{int(cell_value)}）"
         else:
-            msg = f"【非漢字之其餘字元】"
+            msg = "【非漢字之其餘字元】"
 
         print(f"【{cell_value}】：{msg}。")
         return
@@ -549,7 +575,7 @@ class ExcelCell:
             return True, True
         elif cell_value == '\n':
             #【換行】
-            print(f"【換行】：結束行中各欄處理作業。")
+            print("【換行】：結束行中各欄處理作業。")
             return False, True
         elif not is_han_ji(cell_value):
             # 處理【標點符號】、【英數字元】、【其他字元】
@@ -559,7 +585,8 @@ class ExcelCell:
             self._process_han_ji(cell_value, cell, row, col)
             return False, False
 
-    def insert_or_update_to_db(self, table_name: str, han_ji: str, tai_gi_im_piau: str, piau_im_huat: str) -> None:
+    # def insert_or_update_to_db(self, table_name: str, han_ji: str, tai_gi_im_piau: str, piau_im_huat: str) -> None:
+    def insert_or_update_to_db(self, table_name: str, han_ji: str, tai_gi_im_piau: str, piau_im_huat: str, siong_iong_too: float) -> None:
         """
         將【漢字】與【台語音標】插入或更新至資料庫。
         使用 DatabaseManager 來管理資料庫連線和交易。
@@ -589,8 +616,13 @@ class ExcelCell:
             (han_ji, tai_gi_im_piau)
         )
 
-        siong_iong_too = 0.8 if piau_im_huat == "文讀音" else 0.6
+        # Determine 常用度 based on 標音方法 if not provided
+        if siong_iong_too is None:
+            siong_iong_too_to_use = 0.8 if piau_im_huat == "文讀音" else 0.6
+        else:
+            siong_iong_too_to_use = siong_iong_too
 
+        # 插入或更新資料
         try:
             with self.db_manager.transaction():
                 if row:
@@ -600,18 +632,66 @@ class ExcelCell:
                     UPDATE {table_name}
                     SET 常用度 = ?, 更新時間 = ?
                     WHERE 識別號 = ?;
-                    """, (siong_iong_too, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), row[0]))
+                    """, (siong_iong_too_to_use, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), row[0]))
                     print(f"  ✅ 已更新：{han_ji} - {tai_gi_im_piau}")
                 else:
                     # 新增資料
                     self.db_manager.execute(f"""
                     INSERT INTO {table_name} (漢字, 台羅音標, 常用度, 摘要說明)
                     VALUES (?, ?, ?, NULL);
-                    """, (han_ji, tai_gi_im_piau, siong_iong_too))
+                    """, (han_ji, tai_gi_im_piau, siong_iong_too_to_use))
                     print(f"  ✅ 已新增：{han_ji} - {tai_gi_im_piau}")
         except Exception as e:
             print(f"  ❌ 資料庫操作失敗：{han_ji} - {tai_gi_im_piau}，錯誤：{e}")
             raise
+
+    def update_han_ji_khoo_db_by_sheet(self, sheet_name:str) -> int:
+        """
+        依據工作表中的【漢字】、【校正音標】欄位，更新資料庫中的【漢字庫】資料表。
+
+        :param excel_path: Excel 檔案路徑。
+        :param sheet_name: Excel 工作表名稱。
+        :param db_path: 資料庫檔案路徑。
+        :param table_name: 資料表名稱。
+        """
+        wb = self.program.wb
+        sheet = wb.sheets[sheet_name]
+        piau_im_huat = self.program.piau_im_huat
+        hue_im = self.program.ue_im_lui_piat
+        db_path = self.program.db_path
+        table_name = "漢字庫"
+        siong_iong_too = 0.8 if hue_im == "文讀音" else 0.6  # 根據語音類型設定常用度
+
+        # 讀取資料表範圍
+        data = sheet.range("A2").expand("table").value
+
+        # 若完全無資料或只有空列，視為異常處理
+        if not data or data == [[]]:
+            raise ValueError("【缺字表】工作表內，無任何資料，略過後續處理作業。")
+
+        # 若只有一列資料（如一筆記錄），資料可能不是 2D list，要包成 list
+        if not isinstance(data[0], list):
+            data = [data]
+
+        idx = 0
+        for row in data:
+            han_ji = row[0] # 漢字
+            tai_gi_im_piau = row[1] # 台語音標
+            hau_ziann_im_piau = row[2] # 校正音標
+            zo_piau = row[3] # (儲存格位置)座標
+
+            if han_ji and tai_gi_im_piau != 'N/A' and hau_ziann_im_piau != 'N/A':
+                # 將 Excel 工作表存放的【台語音標（TLPA）】，改成資料庫保存的【台羅拼音（TL）】
+                tlpa_im_piau = tng_im_piau(hau_ziann_im_piau)   # 將【音標】使用之【拼音字母】轉換成【TLPA拼音字母】；【音標調符】仍保持
+                tlpa_im_piau_cleanned = tng_tiau_ho(tlpa_im_piau).lower()  # 將【音標調符】轉換成【數值調號】
+                tl_im_piau = convert_tlpa_to_tl(tlpa_im_piau_cleanned)
+
+                self.insert_or_update_to_db(table_name, han_ji, tl_im_piau, piau_im_huat, siong_iong_too)
+                print(f"\n📌 {idx+1}. 【{han_ji}】==> {zo_piau}：台羅音標：【{tl_im_piau}】、校正音標：【{hau_ziann_im_piau}】、台語音標=【{tai_gi_im_piau}】、座標：{zo_piau}")
+                idx += 1
+
+        logging_process_step(f"\n【缺字表】中的資料已成功回填至資料庫： {db_path} 的【{table_name}】資料表中。")
+        return EXIT_CODE_SUCCESS
 
     def khuat_ji_piau_poo_im_piau(self) -> int:
         """
@@ -621,6 +701,7 @@ class ExcelCell:
         sheet = self.program.wb.sheets[sheet_name]
         piau_im_huat = self.program.piau_im_huat
         hue_im = self.program.ue_im_lui_piat
+        db_path = self.program.db_path
         table_name = "漢字庫"
         siong_iong_too = 0.8 if hue_im == "文讀音" else 0.6  # 根據語音類型設定常用度
 
@@ -656,11 +737,12 @@ class ExcelCell:
                     table_name,
                     han_ji,
                     tai_gi_im_piau,
-                    piau_im_huat
+                    piau_im_huat,
+                    siong_iong_too,
                 )
                 idx += 1
 
-        logging_process_step(f"\n【缺字表】中的資料已成功回填至資料庫： {self.program.db_name} 的【{table_name}】資料表中。")
+        logging_process_step(f"\n【缺字表】中的資料已成功回填至資料庫： {db_path} 的【{table_name}】資料表中。")
         return EXIT_CODE_SUCCESS
 
     def tiau_zing_piau_im_ji_khoo_dict(self, han_ji:str, tai_gi_im_piau:str, row:int, col:int) -> bool:
@@ -813,12 +895,12 @@ def process(wb, args) -> int:
             xls_cell=xls_cell,
         )
 
-        # 寫回字庫到 Excel
-        xls_cell.save_all_piau_im_ji_khoo_dict()
-
         #--------------------------------------------------------------------------
         # 處理作業結束
         #--------------------------------------------------------------------------
+        # 寫回字庫到 Excel
+        xls_cell.save_all_piau_im_ji_khoo_dict()
+
         print('\n')
         logging_process_step("<=========== 作業結束！==========>")
         return EXIT_CODE_SUCCESS
@@ -884,7 +966,7 @@ def main(args) -> int:
     # =========================================================================
     try:
         # 要求畫面回到【漢字注音】工作表
-        wb.sheets['漢字注音'].activate()
+        # wb.sheets['漢字注音'].activate()
         # 儲存檔案
         file_path = save_as_new_file(wb=wb)
         if not file_path:

@@ -316,15 +316,6 @@ def apply_tone(im_piau, tone):
     # fallback
     return unicodedata.normalize('NFC', im_piau[0] + tone + im_piau[1:])
 
-
-# def apply_tone(im_piau, tone):
-#     """聲調符號重新加回第一個母音字母上"""
-#     vowels = 'aeioumnAEIOUMN'
-#     for i, c in enumerate(im_piau):
-#         if c in vowels:
-#             return unicodedata.normalize('NFC', im_piau[:i+1] + tone + im_piau[i+1:])
-#     return unicodedata.normalize('NFC', im_piau[0] + tone + im_piau[1:])
-
 # 處理 o͘ 韻母特殊情況的函數
 def handle_o_dot(im_piau):
     # 依 Unicode 解構標準（NFD）分解傳入之【音標】，取得解構後之【拼音字母與調符】
@@ -369,7 +360,7 @@ def tng_un_bu(im_piau: str) -> str:
 
 def tng_im_piau(im_piau: str, po_ci: bool = True) -> str:
     """
-    將【帶調符音標】轉換成【帶調號TLPA音標】
+    將【帶調符音標】（台羅拼音/台語音標）轉換成【帶調號TLPA音標】
     :param im_piau: str - 帶調符音標
     :param po_ci: bool - 是否保留【音標】之首字母大寫
     :param kan_hua: bool - 簡化：若是【簡化】，聲調值為 1 或 4 ，去除調號值
@@ -463,14 +454,14 @@ def tng_tiau_ho(im_piau: str, kan_hua: bool = False) -> str:
     :param kan_hua: bool - 簡化：若是【簡化】，聲調值為 1 或 4 ，去除調號值
     :return: str - 帶調號音標
     """
-    if im_piau == '': return ''
+    if im_piau == '': return ''  # noqa: E701
     # 遇標點符號，不做轉換處理，直接回傳
     if im_piau[-1] in PUNCTUATIONS:
         return im_piau
 
     # 若【音標】末端為數值，表音標已是【帶調號拼音】，直接回傳
     u_tiau_ho = True if im_piau[-1] in "123456789" else False
-    if u_tiau_ho: return im_piau
+    if u_tiau_ho: return im_piau  # noqa: E701
 
     # 將傳入【音標】字串，以標準化之 NFC 組合格式，調整【帶調符拼音字母】；
     # 令以下之處理作業，不會發生【看似相同】的【帶調符拼音字母】，其實使用
@@ -590,12 +581,11 @@ def kam_si_u_tiau_hu(im_piau: str) -> bool:
     #--------------------------------------------------------------------------------
     # 以【元音及韻化輔音清單】，比對傳入之【音標】，找出對應之【基本拼音字母】與【調號】
     #--------------------------------------------------------------------------------
-    tone_number = "1"  # 初始化調號為 1
     number = "1"  # 明確初始化 number 變數，以免未設定而發生錯誤
     for tone_mark, (base_char, number) in tiau_hu_mapping.items():
         if tone_mark in im_piau:
             # 轉換成【無調符音標】
-            bo_tiau_hu_im_piau = im_piau.replace(tone_mark, base_char)
+            bo_tiau_hu_im_piau = im_piau.replace(tone_mark, base_char)  # noqa: F841
             break
     else:
         number = "1"  # 若沒有任何調符，number強制為1

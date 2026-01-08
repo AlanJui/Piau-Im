@@ -4,9 +4,7 @@
 import logging
 import os
 import re
-import sqlite3
 import sys
-from datetime import datetime
 from pathlib import Path
 
 # 載入第三方套件
@@ -16,12 +14,14 @@ from dotenv import load_dotenv
 # 載入自訂模組/函式
 from mod_ca_ji_tian import HanJiTian
 from mod_database import DatabaseManager
-from mod_excel_access import delete_sheet_by_name, get_value_by_name, save_as_new_file
+from mod_excel_access import delete_sheet_by_name, save_as_new_file
 from mod_字庫 import JiKhooDict
 from mod_帶調符音標 import tng_im_piau, tng_tiau_ho
-from mod_標音 import PiauIm  # 漢字標音物件
-from mod_標音 import tlpa_tng_han_ji_piau_im  # 台語音標轉台語音標
-from mod_標音 import convert_tlpa_to_tl
+from mod_標音 import (
+    PiauIm,  # 漢字標音物件
+    convert_tlpa_to_tl,
+    tlpa_tng_han_ji_piau_im,  # 台語音標轉台語音標
+)
 
 # =========================================================================
 # 常數定義

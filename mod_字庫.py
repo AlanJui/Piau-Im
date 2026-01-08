@@ -14,7 +14,6 @@ from mod_標音 import (
     PiauIm,
     ca_ji_tng_piau_im,
     convert_tl_with_tiau_hu_to_tlpa,
-    is_han_ji,
     is_punctuation,
     kam_si_u_tiau_hu,
     split_hong_im_hu_ho,
@@ -173,7 +172,6 @@ class JiKhooDict:
         else:
             raise ValueError(f"漢字 '{han_ji}' 不存在於字典中。")
 
-
     def update_value_by_key(self, han_ji: str, tai_gi_im_piau: str, key: str, value):
         if han_ji in self.ji_khoo_dict:
             for entry in self.ji_khoo_dict[han_ji]:
@@ -328,13 +326,13 @@ class JiKhooDict:
                         print(f"({row}, {col}) = {msg}")
 
         except Exception as e:
-            logging_exception(msg=f"使用【標音字庫】之【校正音標】，改正【漢字注音】之【台語音標】作業異常！", error=e)
+            logging_exception(msg="使用【標音字庫】之【校正音標】，改正【漢字注音】之【台語音標】作業異常！", error=e)
             raise
 
         try:
             piau_im_ji_khoo_dict.write_to_excel_sheet(wb=wb, sheet_name=piau_im_sheet_name)
         except Exception as e:
-            logging_exception(msg=f"將【字典】存放之資料，更新工作表作業異常！", error=e)
+            logging_exception(msg="將【字典】存放之資料，更新工作表作業異常！", error=e)
             raise
 
         han_ji_piau_im_sheet.range('A1').select()
@@ -342,11 +340,11 @@ class JiKhooDict:
 
 
     def write_to_excel_sheet(self, wb, sheet_name: str) -> int:
+        sheet_name_to_use = self.name if sheet_name == "" else sheet_name
         try:
-            sheet = wb.sheets[sheet_name]
+            sheet = wb.sheets[sheet_name_to_use]
         except Exception:
-            sheet = wb.sheets.add(sheet_name)
-
+            sheet = wb.sheets.add(sheet_name_to_use)
         sheet.clear()
         headers = ["漢字", "台語音標", "校正音標", "座標"]
         sheet.range("A1").value = headers
