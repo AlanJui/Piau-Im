@@ -32,11 +32,13 @@ from mod_帶調符音標 import (
     tng_im_piau,
     tng_tiau_ho,
 )
-from mod_標音 import PiauIm  # 漢字標音物件
-from mod_標音 import convert_tl_with_tiau_hu_to_tlpa  # 去除台語音標的聲調符號
-from mod_標音 import is_punctuation  # 是否為標點符號
-from mod_標音 import split_hong_im_hu_ho  # 分解漢字標音
-from mod_標音 import tlpa_tng_han_ji_piau_im  # 台語音標轉台語音標
+from mod_標音 import (
+    PiauIm,  # 漢字標音物件
+    convert_tl_with_tiau_hu_to_tlpa,  # 去除台語音標的聲調符號
+    is_punctuation,  # 是否為標點符號
+    split_hong_im_hu_ho,  # 分解漢字標音
+    tlpa_tng_han_ji_piau_im,  # 台語音標轉台語音標
+)
 
 # =========================================================================
 # 常數定義
@@ -148,7 +150,7 @@ def check_and_update_pronunciation(wb, han_ji, position, jin_kang_piau_im):
                     jin_kang_piau_im_ji_khoo.add_entry(
                         han_ji=han_ji,
                         tai_gi_im_piau=tai_gi_im_piau,
-                        kenn_ziann_im_piau=jin_kang_piau_im,
+                        hau_ziann_im_piau=jin_kang_piau_im,
                         coordinates=(row, col)
                     )
                     # ----- 新增程式邏輯：更新【標音字庫】 -----
@@ -169,7 +171,7 @@ def check_and_update_pronunciation(wb, han_ji, position, jin_kang_piau_im):
                     piau_im_ji_khoo.add_entry(
                         han_ji=han_ji,
                         tai_gi_im_piau=tai_gi_im_piau,
-                        kenn_ziann_im_piau="N/A",  # 預設值
+                        hau_ziann_im_piau="N/A",  # 預設值
                         coordinates=(row, col)
                     )
 

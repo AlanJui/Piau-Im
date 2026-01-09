@@ -194,14 +194,14 @@ class CellProcessor:
             self.jin_kang_piau_im_ji_khoo.add_entry(
                 han_ji=han_ji,
                 tai_gi_im_piau=tai_gi_im_piau,
-                kenn_ziann_im_piau='N/A',
+                hau_ziann_im_piau='N/A',
                 coordinates=(row, col)
             )
             # 記錄到標音字庫
             self.piau_im_ji_khoo.add_entry(
                 han_ji=han_ji,
                 tai_gi_im_piau=tai_gi_im_piau,
-                kenn_ziann_im_piau=tai_gi_im_piau,
+                hau_ziann_im_piau=tai_gi_im_piau,
                 coordinates=(row, col)
             )
             # TODO: 理論上【標音字庫】若已有相同之【漢字】與【台語音標】，則【漢字注音】工作表相同【漢字】的【台語音標】
@@ -239,7 +239,7 @@ class CellProcessor:
                     self.khuat_ji_piau_ji_khoo.add_entry(
                         han_ji=cell.value,
                         tai_gi_im_piau='N/A',
-                        kenn_ziann_im_piau='N/A',
+                        hau_ziann_im_piau='N/A',
                         coordinates=(row, col)
                     )
 
@@ -314,7 +314,7 @@ class CellProcessor:
             self.khuat_ji_piau_ji_khoo.add_entry(
                 han_ji=han_ji,
                 tai_gi_im_piau='',
-                kenn_ziann_im_piau='N/A',
+                hau_ziann_im_piau='N/A',
                 coordinates=(row, col)
             )
             return f"【{han_ji}】查無此字！", False

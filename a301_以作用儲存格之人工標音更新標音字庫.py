@@ -190,7 +190,7 @@ def process(wb, source_sheet_name='漢字注音', target_sheet_name='人工標�
         jin_kang_piau_im_ji_khoo.add_entry(
             han_ji=han_ji,
             tai_gi_im_piau=tai_gi_im_piau,
-            kenn_ziann_im_piau=jin_kang_piau_im,
+            hau_ziann_im_piau=jin_kang_piau_im,
             coordinates=(row, col)
         )
 

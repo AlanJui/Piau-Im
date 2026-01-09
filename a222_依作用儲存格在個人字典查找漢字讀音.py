@@ -226,14 +226,14 @@ class CellProcessor:
             self.jin_kang_piau_im_ji_khoo.add_entry(
                 han_ji=cell.value,
                 tai_gi_im_piau=tai_gi_im_piau,
-                kenn_ziann_im_piau='N/A',
+                hau_ziann_im_piau='N/A',
                 coordinates=(row, col)
             )
             # 記錄到標音字庫
             self.piau_im_ji_khoo.add_entry(
                 han_ji=cell.value,
                 tai_gi_im_piau=tai_gi_im_piau,
-                kenn_ziann_im_piau='N/A',
+                hau_ziann_im_piau='N/A',
                 coordinates=(row, col)
             )
         elif  tai_gi_im_piau == '' and cell.offset(-2, 0).value == '=':
@@ -252,7 +252,7 @@ class CellProcessor:
                 self.khuat_ji_piau_ji_khoo.add_entry(
                     han_ji=cell.value,
                     tai_gi_im_piau='N/A',
-                    kenn_ziann_im_piau='N/A',
+                    hau_ziann_im_piau='N/A',
                     coordinates=(row, col)
                 )
 

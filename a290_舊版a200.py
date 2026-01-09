@@ -15,12 +15,14 @@ from dotenv import load_dotenv
 from mod_excel_access import delete_sheet_by_name, get_value_by_name
 from mod_file_access import load_module_function, save_as_new_file
 from mod_字庫 import JiKhooDict  # 漢字字庫物件
-from mod_標音 import ca_ji_kiat_ko_tng_piau_im  # 查字典得台語音標及漢字標音
-from mod_標音 import convert_tl_with_tiau_hu_to_tlpa  # 去除台語音標的聲調符號
-from mod_標音 import is_punctuation  # 是否為標點符號
-from mod_標音 import split_hong_im_hu_ho  # 分解漢字標音
-from mod_標音 import tlpa_tng_han_ji_piau_im  # 漢字標音物件
-from mod_標音 import PiauIm
+from mod_標音 import (
+    PiauIm,
+    ca_ji_kiat_ko_tng_piau_im,  # 查字典得台語音標及漢字標音
+    convert_tl_with_tiau_hu_to_tlpa,  # 去除台語音標的聲調符號
+    is_punctuation,  # 是否為標點符號
+    split_hong_im_hu_ho,  # 分解漢字標音
+    tlpa_tng_han_ji_piau_im,  # 漢字標音物件
+)
 
 # =========================================================================
 # 常數定義
@@ -198,7 +200,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                         jin_kang_piau_im_ji_khoo.add_entry(
                             han_ji=han_ji,
                             tai_gi_im_piau=tai_gi_im_piau,
-                            kenn_ziann_im_piau=jin_kang_piau_im,
+                            hau_ziann_im_piau=jin_kang_piau_im,
                             coordinates=(row, col)
                         )
                     else:
@@ -212,7 +214,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                             khuat_ji_piau_ji_khoo.add_entry(
                                 han_ji=han_ji,
                                 tai_gi_im_piau='',
-                                kenn_ziann_im_piau='N/A',
+                                hau_ziann_im_piau='N/A',
                                 coordinates=(row, col)
                             )
                             msg = f"【{han_ji}】查無此字！"
@@ -233,7 +235,7 @@ def ca_han_ji_thak_im(wb, sheet_name='漢字注音', cell='V3', ue_im_lui_piat="
                             piau_im_ji_khoo.add_entry(
                                 han_ji=han_ji,
                                 tai_gi_im_piau=tai_gi_im_piau,
-                                kenn_ziann_im_piau='N/A',
+                                hau_ziann_im_piau='N/A',
                                 coordinates=(row, col)
                             )
                 # 顯示處理進度
