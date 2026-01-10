@@ -86,9 +86,11 @@ def process(wb, args) -> int:
             new_khuat_ji_piau_sheet=False,
         )
     except Exception as e:
-        msg=f"處理作業，發生異常！ ==> error = {e}"
-        logging.exception(msg)
-        raise
+        # msg=f"處理作業，發生異常！ ==> error = {e}"
+        # logging.exception(msg)
+        # raise
+        logging_exc_error(msg="處理作業異常！", error=e)
+        return EXIT_CODE_PROCESS_FAILURE
 
     # ------------------------------------------------------------------------------
     # 以【人工標音字庫】工作表中各【校正音標】欄之注音，更新【漢字注音】工作表
@@ -111,33 +113,35 @@ def process(wb, args) -> int:
         logging_exc_error(msg=f"處理【{source_sheet_name}】作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
 
+    if exit_code != EXIT_CODE_SUCCESS:
+        return exit_code
+
     #-------------------------------------------------------------------------
     # 將【人工標音字庫】之【漢字】與【台語音標】存入【漢字庫】作業
     #-------------------------------------------------------------------------
-    if exit_code == EXIT_CODE_SUCCESS:
-        sheet_name = source_sheet_name
-        msg = f'使用【{sheet_name}】工作表，更新資料庫中之【漢字庫】資料表......'
-        print('\n')
-        print("=" * 80)
-        logging_process_step(msg)
+    sheet_name = source_sheet_name
+    msg = f'使用【{sheet_name}】工作表，更新資料庫中之【漢字庫】資料表......'
+    print('\n')
+    print("=" * 80)
+    logging_process_step(msg)
 
-        try:
-            wb.sheets[sheet_name].activate()
-            xls_cell.update_han_ji_khoo_db_by_sheet(sheet_name=sheet_name)
-        except Exception as e:
-            logging_exc_error(
-                msg=f"將【{sheet_name}】之【漢字】與【台語音標】存入【漢字庫】作業，發生執行異常！",
-                error=e)
-            return EXIT_CODE_PROCESS_FAILURE
-        finally:
-            # 關閉資料庫連線
-            if xls_cell.program.db_manager:
-                xls_cell.program.db_manager.disconnect()
-                logging_process_step("已關閉資料庫連線")
-        print('\n')
-        print('-' * 100)
-        logging_process_step("完成：將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業")
-        print('=' * 100)
+    try:
+        wb.sheets[sheet_name].activate()
+        xls_cell.update_han_ji_khoo_db_by_sheet(sheet_name=sheet_name)
+    except Exception as e:
+        logging_exc_error(
+            msg=f"將【{sheet_name}】之【漢字】與【台語音標】存入【漢字庫】作業，發生執行異常！",
+            error=e)
+        return EXIT_CODE_PROCESS_FAILURE
+    finally:
+        # 關閉資料庫連線
+        if xls_cell.program.db_manager:
+            xls_cell.program.db_manager.disconnect()
+            logging_process_step("已關閉資料庫連線")
+    print('\n')
+    print('-' * 80)
+    logging_process_step(f"完成：將【{sheet_name}】之【漢字】與【台語音標】存入【漢字庫】作業")
+    print('=' * 80)
 
     #--------------------------------------------------------------------------
     # 作業結束
@@ -188,37 +192,32 @@ def main(args) -> int:
     try:
         exit_code = process(wb, args)
     except Exception as e:
-        msg = f"程式異常終止：{program_name}"
-        logging_exception(msg=msg, error=e)
-        return EXIT_CODE_UNKNOWN_ERROR
-
-    if exit_code != EXIT_CODE_SUCCESS:
-        msg = f"程式異常終止：{program_name}（非例外，而是返回失敗碼）"
-        logging.error(msg)
+        logging_exception(msg="作業異常終止！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
 
     # =========================================================================
     # (4) 儲存檔案
     # =========================================================================
-    try:
-        # 要求畫面回到【漢字注音】工作表
-        # wb.sheets['漢字注音'].activate()
-        # 儲存檔案
+    if exit_code == EXIT_CODE_SUCCESS:
         file_path = save_as_new_file(wb=wb)
         if not file_path:
             logging_exc_error(msg="儲存檔案失敗！", error=None)
-            return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
+            exit_code = EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
         else:
             logging_process_step(f"儲存檔案至路徑：{file_path}")
-    except Exception as e:
-        logging_exception(msg="儲存檔案失敗！", error=e)
-        return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
 
     # =========================================================================
     # 結束程式
     # =========================================================================
+    print('\n')
+    print('=' * 80)
     logging_process_step(f"《========== 程式終止執行：{program_name} ==========》")
-    return EXIT_CODE_SUCCESS    # 作業正常結束
+    if exit_code == EXIT_CODE_SUCCESS:
+        return EXIT_CODE_SUCCESS    # 作業正常結束
+    else:
+        msg = f"程式異常終止，返回失敗碼：{exit_code}"
+        logging_exc_error(msg=msg, error=None)
+        return EXIT_CODE_PROCESS_FAILURE
 
 
 # =============================================================================
@@ -264,7 +263,12 @@ if __name__ == "__main__":
 
     if args.test:
         # 執行測試
-        sys.exit(test_01())
+        exit_code = test_01()
     else:
         # 從 Excel 呼叫
-        sys.exit(main(args))
+        exit_code = main(args)
+
+    # 只在命令列執行時使用 sys.exit()，避免在調試環境中引發 SystemExit 例外
+    if exit_code != EXIT_CODE_SUCCESS:
+        sys.exit(exit_code)
+

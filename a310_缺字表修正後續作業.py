@@ -103,12 +103,12 @@ def process(wb, args) -> int:
     #--------------------------------------------------------------------------
     source_sheet_name="缺字表"
     target_sheet_name="漢字注音"
-    try:
-        msg = f'使用【{source_sheet_name}】工作表，更新【{target_sheet_name}】工作表......'
-        print('\n')
-        print("=" * 80)
-        logging_process_step(msg)
+    msg = f'使用【{source_sheet_name}】工作表，更新【{target_sheet_name}】工作表......'
+    print('\n')
+    print("=" * 80)
+    logging_process_step(msg)
 
+    try:
         sheet_name = source_sheet_name
         wb.sheets[sheet_name].activate()
         exit_code = xls_cell.update_hanji_zu_im_sheet_by_khuat_ji_piau(
@@ -116,7 +116,7 @@ def process(wb, args) -> int:
             target_sheet_name=target_sheet_name,
         )
     except Exception as e:
-        logging_exc_error(msg="處理【缺字表】作業異常！", error=e)
+        logging_exc_error(msg=f"處理【{source_sheet_name}】作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
 
     if exit_code != EXIT_CODE_SUCCESS:
@@ -145,9 +145,9 @@ def process(wb, args) -> int:
             xls_cell.program.db_manager.disconnect()
             logging_process_step("已關閉資料庫連線")
     print('\n')
-    print('-' * 100)
-    logging_process_step("完成：將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業")
-    print('=' * 100)
+    print('-' * 80)
+    logging_process_step(f"完成：將【{sheet_name}】之【漢字】與【台語音標】存入【漢字庫】作業")
+    print('=' * 80)
 
     #--------------------------------------------------------------------------
     # 作業結束

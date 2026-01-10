@@ -658,17 +658,14 @@ class ExcelCell:
         """
         依據工作表中的【漢字】、【校正音標】欄位，更新資料庫中的【漢字庫】資料表。
 
-        :param excel_path: Excel 檔案路徑。
         :param sheet_name: Excel 工作表名稱。
-        :param db_path: 資料庫檔案路徑。
-        :param table_name: 資料表名稱。
         """
         wb = self.program.wb
         sheet = wb.sheets[sheet_name]
         piau_im_huat = self.program.piau_im_huat
         hue_im = self.program.ue_im_lui_piat
-        db_path = self.program.db_path
-        table_name = "漢字庫"
+        db_path = self.program.db_path   # 資料庫檔案路徑。
+        table_name = "漢字庫"            # 資料表名稱。
         siong_iong_too = 0.8 if hue_im == "文讀音" else 0.6  # 根據語音類型設定常用度
 
         # 讀取資料表範圍
@@ -676,7 +673,7 @@ class ExcelCell:
 
         # 若完全無資料或只有空列，視為異常處理
         if not data or data == [[]]:
-            raise ValueError("【缺字表】工作表內，無任何資料，略過後續處理作業。")
+            raise ValueError(f"【{sheet_name}】工作表內無任何資料，略過後續處理作業。")
 
         # 若只有一列資料（如一筆記錄），資料可能不是 2D list，要包成 list
         if not isinstance(data[0], list):
@@ -685,11 +682,11 @@ class ExcelCell:
         idx = 0
         for row in data:
             han_ji = row[0] # 漢字
-            tai_gi_im_piau = row[1] # 台語音標
+            org_tai_gi_im_piau = row[1] # 台語音標
             hau_ziann_im_piau = row[2] # 校正音標
             zo_piau = row[3] # (儲存格位置)座標
 
-            if han_ji and tai_gi_im_piau != 'N/A' and hau_ziann_im_piau != 'N/A':
+            if han_ji and org_tai_gi_im_piau != 'N/A' and hau_ziann_im_piau != 'N/A':
                 # 將 Excel 工作表存放的【台語音標（TLPA）】，改成資料庫保存的【台羅拼音（TL）】
                 tlpa_im_piau = tng_im_piau(hau_ziann_im_piau)   # 將【音標】使用之【拼音字母】轉換成【TLPA拼音字母】；【音標調符】仍保持
                 tlpa_im_piau_cleanned = tng_tiau_ho(tlpa_im_piau).lower()  # 將【音標調符】轉換成【數值調號】
