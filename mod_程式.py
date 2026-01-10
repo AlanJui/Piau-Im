@@ -15,7 +15,7 @@ from dotenv import load_dotenv
 # 載入自訂模組/函式
 from mod_ca_ji_tian import HanJiTian
 from mod_database import DatabaseManager
-from mod_excel_access import delete_sheet_by_name, save_as_new_file
+from mod_excel_access import convert_coord_str_to_excel_address, delete_sheet_by_name, save_as_new_file
 from mod_字庫 import JiKhooDict
 from mod_帶調符音標 import is_han_ji, kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
 from mod_標音 import (  # 台語音標轉台語音標; 漢字標音物件
@@ -756,42 +756,32 @@ class ExcelCell:
 
     def tiau_zing_piau_im_ji_khoo_dict(
             self,
-            source_dict: JiKhooDict,
             han_ji:str,
             tai_gi_im_piau:str,
             hau_ziann_im_piau:str,
-            row:int, col:int
+            coordinates:tuple[int, int]
         ) -> bool:
         """
         重整【標音字庫】字典物件：重整【標音字庫】工作表使用之 Dict
         依據【缺字表】工作表之【漢字】+【台語音標】資料，在【標音字庫】工作表【添增】此筆資料紀錄
 
         Args:
-            source_dict (JiKhooDict): 來源字典物件（如：缺字表字典物件）
             han_ji (str): 漢字
             tai_gi_im_piau (str): 台語音標
-            kenn_ziann_im_piau (str): 校正音標
-            row (int): 儲存格列號
-            col (int): 儲存格欄號
+            hau_ziann_im_piau (str): 校正音標
+            coordinates (tuple[int, int]): 儲存格座標 (row, col)
         Returns:
             bool: 是否在【標音字庫】找到該筆資料並移除
         """
         try:
-            # 將【座標】自【來源工作表】工作表（缺字表、人工標音字庫）的【座標】欄移除
-            source_dict.remove_coordinate(
-                han_ji=han_ji,
-                tai_gi_im_piau=tai_gi_im_piau,
-                coordinate=(row, col)
-            )
-
             # 將此筆資料於【標音字庫】底端新增
-            piau_im_ji_khoo_dict: JiKhooDict = self.program.piau_im_ji_khoo_dict
+            piau_im_ji_khoo_dict: JiKhooDict = self.piau_im_ji_khoo_dict
             hau_ziann_im_piau_to_be = 'N/A' if hau_ziann_im_piau == '' else hau_ziann_im_piau
             piau_im_ji_khoo_dict.add_entry(
                 han_ji=han_ji,
                 tai_gi_im_piau=tai_gi_im_piau,
                 hau_ziann_im_piau=hau_ziann_im_piau_to_be,
-                coordinates=(row, col)
+                coordinates=coordinates
             )
         except Exception as e:
             msg = f"重整【標音字庫】字典物件時發生錯誤：{e}"
@@ -930,6 +920,7 @@ class ExcelCell:
             target_sheet = wb.sheets[target_sheet_name]
             # 取得【來源工作表】：【標音字庫】查詢表（dict）
             source_dict = self.get_piau_im_dict_by_name(sheet_name=source_sheet_name)
+            target_dict = self.get_piau_im_dict_by_name(sheet_name='標音字庫')
         except Exception as e:
             logging_exc_error(msg="找不到工作表 ！", error=e)
             return EXIT_CODE_PROCESS_FAILURE
@@ -956,15 +947,16 @@ class ExcelCell:
                 tlpa_im_piau = tng_tiau_ho(tlpa_im_piau).lower()  # 將【音標調符】轉換成【數值調號】
             else:
                 tlpa_im_piau = org_tai_gi_im_piau  # 若非帶調符音標，則直接使用原音標
+            hau_ziann_im_piau = tlpa_im_piau  # 預設【校正音標】為 TLPA+ 格式
 
             # 讀取【缺字表】中【座標】欄（D 欄）的內容
             # 欄中內容可能含有多組座標，如 "(5, 17); (33, 8); (77, 5)"，表【漢字注音】工作表中有多處需要更新
-            hau_ziann_im_piau = tlpa_im_piau  # 預設【校正音標】為 TLPA+ 格式
             coordinates_str = source_sheet.range(f"D{row}").value
-            print(f"{row-1}. (A{row}) 【{han_ji}】==> {coordinates_str} ： 台語音標：{org_tai_gi_im_piau}, 校正音標：{hau_ziann_im_piau}\n")
+            excel_address_str = convert_coord_str_to_excel_address(coord_str=coordinates_str)  # B欄（台語音標）儲存格位置
+            print('\n')
+            print(f"{row-1}. (A{row}) 【{han_ji}】：台語音標：{org_tai_gi_im_piau}, 校正音標：{hau_ziann_im_piau} ==> 【{target_sheet_name}】工作表，儲存格：{excel_address_str} {coordinates_str}")
 
             # 將【座標】欄位內容解析成 (row, col) 座標：此座標指向【漢字注音】工作表中之【漢字】儲存格位置
-            tai_gi_im_piau = hau_ziann_im_piau  # 使用【校正音標】填入【漢字注音】工作表之【台語音標】欄位
             if coordinates_str:
                 # 利用正規表達式解析所有形如 (row, col) 的座標
                 coordinate_tuples = re.findall(r"\((\d+)\s*,\s*(\d+)\)", coordinates_str)
@@ -975,17 +967,19 @@ class ExcelCell:
                     except ValueError:
                         continue  # 若轉換失敗，跳過該組座標
 
-                    han_ji_cell = (r_coord, c_coord)  # 漢字儲存格座標
+                    # 指向【漢字注音】工作表，【漢字儲存格】座標
+                    han_ji_cell = (r_coord, c_coord)
 
                     # 根據說明，【台語音標】應填入漢字儲存格上方一列 (row - 1)，相同欄位
                     target_row = r_coord - 1
                     tai_gi_im_piau_cell = (target_row, c_coord)
 
-                    # 將【校正音標】填入【漢字注音】工作表漢字之【台語音標】儲存格
+                    # 對指向【漢字注音】工作表之【漢字儲存格】，填入漢字之【台語音標】
+                    tai_gi_im_piau = hau_ziann_im_piau  # 以【校正音標】作為【台語音標】，【漢字注音】工作表之【台語音標】欄位
                     target_sheet.range(tai_gi_im_piau_cell).value = tai_gi_im_piau
-                    excel_address = target_sheet.range(tai_gi_im_piau_cell).address
-                    excel_address = excel_address.replace("$", "")  # 去除 "$" 符號
-                    print(f"   台語音標：【{tai_gi_im_piau}】，填入【漢字注音】工作表之 {excel_address} 儲存格 = {tai_gi_im_piau_cell}")
+                    excel_address_str = target_sheet.range(tai_gi_im_piau_cell).address
+                    excel_address_str = excel_address_str.replace("$", "")  # 去除 "$" 符號
+                    print(f"   台語音標：【{tai_gi_im_piau}】，填入【{target_sheet_name}】工作表之儲存格： {excel_address_str} {tai_gi_im_piau_cell}")
 
                     # 轉換【台語音標】，取得【漢字標音】
                     han_ji_piau_im = tlpa_tng_han_ji_piau_im(
@@ -998,23 +992,29 @@ class ExcelCell:
 
                     # 將【校正音標】填入【漢字注音】工作表漢字之【台語音標】儲存格
                     target_sheet.range(han_ji_piau_im_cell).value = han_ji_piau_im
-                    excel_address = target_sheet.range(han_ji_piau_im_cell).address
-                    excel_address = excel_address.replace("$", "")  # 去除 "$" 符號
-                    print(f"   漢字標音：【{han_ji_piau_im}】，填入【漢字注音】工作表之 {excel_address} 儲存格 = {han_ji_piau_im_cell}\n")
+                    excel_address_str = target_sheet.range(han_ji_piau_im_cell).address
+                    excel_address_str = excel_address_str.replace("$", "")  # 去除 "$" 符號
+                    print(f"   漢字標音：【{han_ji_piau_im}】，填入【{target_sheet_name}】工作表之儲存格： {excel_address_str} {han_ji_piau_im_cell}\n")
 
                     # 將【漢字注音】工作表之【漢字】儲存格之底色，重置為【無底色】
                     target_sheet.range(han_ji_cell).color = None
 
+                    #------------------------------------------------------------------------
                     # 以【缺字表】工作表之【漢字】+【台語音標】作為【資料紀錄索引】，
-                    # 將【座標】自【來源工作表】工作表（缺字表、人工標音字庫）的【座標】欄移除，
+                    #------------------------------------------------------------------------
+                    # 將【座標】自【來源工作表】工作表（缺字表）的【座標】欄移除
+                    source_dict.remove_coordinate_by_hau_ziann_im_piau(
+                        han_ji=han_ji,
+                        hau_ziann_im_piau=hau_ziann_im_piau,
+                        coordinate=(r_coord, c_coord)
+                    )
+
                     # 在【標音字庫】工作表【添增】此筆資料紀錄
                     self.tiau_zing_piau_im_ji_khoo_dict(
-                        source_dict=source_dict,
                         han_ji=han_ji,
                         tai_gi_im_piau=tai_gi_im_piau,
                         hau_ziann_im_piau=hau_ziann_im_piau,
-                        row=r_coord,
-                        col=c_coord,
+                        coordinates=(r_coord, c_coord)
                     )
 
             row += 1  # 讀取下一列
@@ -1022,7 +1022,9 @@ class ExcelCell:
         # 依據 Dict 內容，更新【標音字庫】、【缺字表】工作表之資料紀錄
         if row > 2:
             # 更新【來源工作表】
-            source_dict.write_to_excel_sheet(wb=wb, sheet_name=source_dict.name)
+            source_dict.write_to_excel_sheet(wb=wb, sheet_name=source_sheet_name)
+            # 更新【目標工作表】
+            target_dict.write_to_excel_sheet(wb=wb, sheet_name='標音字庫')
             return EXIT_CODE_SUCCESS
         else:
             logging_warning(msg=f"【{source_sheet_name}】工作表內，無任何資料，略過後續處理作業。")

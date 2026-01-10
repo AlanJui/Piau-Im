@@ -118,7 +118,7 @@ class JiKhooDict:
             for entry in entries:
                 yield (han_ji, entry)
 
-    def add_entry(self, han_ji: str, tai_gi_im_piau: str, hau_ziann_im_piau: str, coordinates: tuple):
+    def add_entry(self, han_ji: str, tai_gi_im_piau: str, hau_ziann_im_piau: str, coordinates: tuple[int, int]):
         if not tai_gi_im_piau:
             tai_gi_im_piau = "N/A"
         if not hau_ziann_im_piau:
@@ -126,7 +126,7 @@ class JiKhooDict:
 
         entry = {
             "tai_gi_im_piau": tai_gi_im_piau,
-            "kenn_ziann_im_piau": hau_ziann_im_piau,
+            "hau_ziann_im_piau": hau_ziann_im_piau,
             "coordinates": [coordinates]
         }
 
@@ -388,6 +388,26 @@ class JiKhooDict:
         to_delete = None
         for entry in entries:
             if entry["tai_gi_im_piau"] == tai_gi_im_piau:
+                if coordinate in entry["coordinates"]:
+                    entry["coordinates"].remove(coordinate)
+                if len(entry["coordinates"]) == 0:
+                    to_delete = entry
+                break
+
+        if to_delete:
+            entries.remove(to_delete)
+
+    def remove_coordinate_by_hau_ziann_im_piau(self, han_ji: str, hau_ziann_im_piau: str, coordinate: tuple):
+        """
+        移除指定漢字與音標下的某個座標；若座標清空則移除整筆項目。
+        """
+        if han_ji not in self.ji_khoo_dict:
+            return
+
+        entries = self.ji_khoo_dict[han_ji]
+        to_delete = None
+        for entry in entries:
+            if entry["hau_ziann_im_piau"] == hau_ziann_im_piau:
                 if coordinate in entry["coordinates"]:
                     entry["coordinates"].remove(coordinate)
                 if len(entry["coordinates"]) == 0:

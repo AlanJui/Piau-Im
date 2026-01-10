@@ -289,7 +289,7 @@ def reset_cells_format_in_sheet(
 #     return int(row_number), col_number
 
 
-def excel_address_to_row_col(cell_address):
+def excel_address_to_row_col(cell_address: str) -> tuple[int, int]:
     """
     將 Excel 儲存格地址 (如 'D9') 轉換為 (row, col) 格式。
 
@@ -310,7 +310,7 @@ def excel_address_to_row_col(cell_address):
 
     return int(row_number), col_number
 
-def convert_to_excel_address(coord_str):
+def convert_coord_str_to_excel_address(coord_str: str) -> str:
     """
     轉換 `(row, col)` 格式為 Excel 座標 (如 `(9, 4)` 轉換為 "D9")
 
