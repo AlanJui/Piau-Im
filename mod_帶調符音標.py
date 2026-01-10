@@ -357,6 +357,96 @@ def tng_un_bu(im_piau: str) -> str:
 # =========================================================================
 # 【帶調符拼音】轉【帶調號拼音】
 # =========================================================================
+def tua_tiau_hu_im_piau_tng_tiau_ho(im_piau: str, po_ci: bool = False) -> str:
+    """
+    將【帶調符音標】（台羅拼音/台語音標）轉換成【帶調號TLPA音標】
+    :param im_piau: str - 帶調符音標
+    :param po_ci: bool - 保持【音標】之首字大寫
+    :param kan_hua: bool - 簡化：若是【簡化】，聲調值為 1 或 4 ，去除調號值
+    :return: str - 轉換後的【帶調號TLPA音標】
+    """
+    # 遇標點符號，不做轉換處理，直接回傳
+    if im_piau[-1] in PUNCTUATIONS:
+        return im_piau
+
+    org_im_piau = im_piau
+    siu_ji = org_im_piau[0]      # 保存【音標】之拼音首字母
+    #---------------------------------------------------------
+    # 更換【音標】之【聲母】
+    #---------------------------------------------------------
+    # 將傳入【音標】字串，以標準化之 NFC 組合格式，調整【帶調符拼音字母】；
+    # 令以下之處理作業，不會發生【看似相同】的【帶調符拼音字母】，其實使用
+    # 不同之 Unicode 編碼
+    im_piau = unicodedata.normalize("NFC", im_piau)
+
+    if im_piau.startswith("tsh"):
+        im_piau = im_piau.replace("tsh", "c", 1)
+    elif im_piau.startswith("Tsh"):
+        im_piau = im_piau.replace("Tsh", "C", 1)
+    elif im_piau.startswith("ts"):
+        im_piau = im_piau.replace("ts", "z", 1)
+    elif im_piau.startswith("Ts"):
+        im_piau = im_piau.replace("Ts", "Z", 1)
+    elif im_piau.startswith("chh"):
+        im_piau = im_piau.replace("chh", "c", 1)
+    elif im_piau.startswith("Chh"):
+        im_piau = im_piau.replace("Chh", "C", 1)
+    elif im_piau.startswith("ch"):
+        im_piau = im_piau.replace("ch", "z", 1)
+    elif im_piau.startswith("Ch"):
+        im_piau = im_piau.replace("Ch", "Z", 1)
+
+    im_piau = im_piau.lower()
+
+    #---------------------------------------------------------
+    # 更換【音標】之【韻母】
+    #---------------------------------------------------------
+    # 轉換【鼻音韻母】
+    im_piau = im_piau.replace("ⁿ", "nn", 1)
+
+    # 轉換音標中【韻母】為【o͘】（oo長音）的特殊處理
+    im_piau = handle_o_dot(im_piau)
+
+    # # 聲調符號對映調號數值的轉換字典
+    # tiau_fu_mapping = {
+    #     "\u0300": "3",   # 3 陰去: ò
+    #     "\u0301": "2",   # 2 陰上: ó
+    #     "\u0302": "5",   # 5 陽平: ô
+    #     "\u0304": "7",   # 7 陽去: ō
+    #     "\u0306": "9",   # 9 輕声: ő
+    #     "\u030C": "6",   # 6 陽上: ǒ
+    #     "\u030D": "8",   # 8 陽入: o̍
+    # }
+    # 轉換音標中【韻母】部份，不含【o͘】（oo長音）的特殊處理
+    letters, tone = separate_tone(im_piau)   # 無調符音標：im_piau
+    if tone:
+        tiau_ho = tiau_fu_mapping[tone]
+    else:
+        tiau_ho = ""
+
+    # 以【無調符音標】，轉換【韻母】
+    sorted_keys = sorted(un_bu_mapping, key=len, reverse=True)
+    for key in sorted_keys:
+        if key in letters:
+            letters = letters.replace(key, un_bu_mapping[key])
+            break
+
+    # 如若傳入之【音標】首字母為大寫，則將已轉成 "z" 或 "c" 之拼音字母改為大寫
+    if po_ci:
+        if siu_ji == letters[0].isupper():
+            if letters[0] == "c":
+                letters = "C" + letters[1:]
+            elif letters[0] == "z":
+                letters = "Z" + letters[1:]
+        else:
+            letters = siu_ji + letters[1:]
+
+    # 調符
+    # if tone:
+    #     letters = apply_tone(letters, tone)
+
+    return letters + tiau_ho
+
 
 def tng_im_piau(im_piau: str, po_ci: bool = True) -> str:
     """
@@ -434,10 +524,10 @@ def tng_im_piau(im_piau: str, po_ci: bool = True) -> str:
 
     # 如若傳入之【音標】首字母為大寫，則將已轉成 "z" 或 "c" 之拼音字母改為大寫
     if su_ji.isupper():
-        if letters[0] == "u":
-            letters = "U" + letters[1:]
-        elif letters[0] == "i":
-            letters = "I" + letters[1:]
+        if letters[0] == "z":
+            letters = "Z" + letters[1:]
+        elif letters[0] == "c":
+            letters = "C" + letters[1:]
         else:
             letters = su_ji + letters[1:]
 
@@ -610,6 +700,12 @@ def kam_si_u_tiau_hu(im_piau: str) -> bool:
 # 測試程式
 #=========================================================================
 
+def test_result(expected, actual):
+    if expected == actual:
+        print(f"✅ 測試成功！預期結果 = {expected}，實際結果 = {actual}")
+    else:
+        print(f"❌ 測試失敗！預期結果 = {expected}，實際結果 = {actual}")
+
 def ut01():
     im_piau = "Ín"
     print(f"im_piau = {im_piau}")
@@ -776,6 +872,81 @@ def ut12():
             # print(split_tlpa_im_piau(tng_uann_hau))
             print(f"im_piau = {tng_uann_hau} <-- {im_piau}")
 
+def ut_im_piau_tiau_hu_tng_tiau_ho():
+    im_piau = "Ióng"
+    im_piau_expected = "iong2"
+    print(f"im_piau = {im_piau}")
+    print(f"im_piau_expected = {im_piau_expected}")
+    im_piau_iong_tiau_ho = tua_tiau_hu_im_piau_tng_tiau_ho(im_piau)
+    print(f"im_piau_iong_tiau_ho = {im_piau_iong_tiau_ho}")
+    # test_result = "Pass" if im_piau_iong_tiau_ho == im_piau_expected else "Fail"
+    # print(f"==> Test Result: {test_result}")
+    test_result(im_piau_expected, im_piau_iong_tiau_ho)
+
+def ut_im_piau_tiau_hu_tng_tiau_ho2():
+    im_piau = "Ióng"
+    im_piau_expected = "iong2"
+    print(f"im_piau = {im_piau}")
+    print(f"im_piau_expected = {im_piau_expected}")
+    im_piau_iong_tiau_ho = tua_tiau_hu_im_piau_tng_tiau_ho(im_piau=im_piau, po_ci=True)
+    print(f"im_piau_iong_tiau_ho = {im_piau_iong_tiau_ho}")
+    test_result(im_piau_expected, im_piau_iong_tiau_ho)
+
+def ut_im_piau_tiau_hu_tng_tiau_ho3():
+    im_piau = "Ióng"
+    im_piau_expected = "Iong2"
+    print(f"im_piau = {im_piau}")
+    print(f"im_piau_expected = {im_piau_expected}")
+    im_piau_iong_tiau_ho = tua_tiau_hu_im_piau_tng_tiau_ho(im_piau=im_piau, po_ci=True)
+    print(f"im_piau_iong_tiau_ho = {im_piau_iong_tiau_ho}")
+    test_result(im_piau_expected, im_piau_iong_tiau_ho)
+
+def ut_tng_im_piau():
+    im_piau = "Ióng"
+    im_piau_expected = "Ióng"
+    print(f"im_piau = {im_piau}")
+    print(f"im_piau_expected = {im_piau_expected}")
+    im_piau_iong_tiau_ho = tng_im_piau(im_piau)
+    print(f"im_piau_iong_tiau_ho = {im_piau_iong_tiau_ho}")
+    test_result(im_piau_expected, im_piau_iong_tiau_ho)
+    print('-' * 60)
+
+    im_piau = "Tshióng"
+    im_piau_expected = "Cióng"
+    print(f"im_piau = {im_piau}")
+    print(f"im_piau_expected = {im_piau_expected}")
+    im_piau_iong_tiau_ho = tng_im_piau(im_piau)
+    print(f"im_piau_iong_tiau_ho = {im_piau_iong_tiau_ho}")
+    test_result(im_piau_expected, im_piau_iong_tiau_ho)
+    print('-' * 60)
+
+    im_piau = "Tsióng"
+    im_piau_expected = "Zióng"
+    print(f"im_piau = {im_piau}")
+    print(f"im_piau_expected = {im_piau_expected}")
+    im_piau_iong_tiau_ho = tng_im_piau(im_piau)
+    print(f"im_piau_iong_tiau_ho = {im_piau_iong_tiau_ho}")
+    test_result(im_piau_expected, im_piau_iong_tiau_ho)
+    print('-' * 60)
+
+    im_piau = "Tshióng"
+    im_piau_expected = "cióng"
+    print(f"im_piau = {im_piau}")
+    print(f"im_piau_expected = {im_piau_expected}")
+    im_piau_iong_tiau_ho = tng_im_piau(im_piau=im_piau, po_ci=False)
+    print(f"im_piau_iong_tiau_ho = {im_piau_iong_tiau_ho}")
+    test_result(im_piau_expected, im_piau_iong_tiau_ho)
+    print('-' * 60)
+
+    im_piau = "Tsióng"
+    im_piau_expected = "zióng"
+    print(f"im_piau = {im_piau}")
+    print(f"im_piau_expected = {im_piau_expected}")
+    im_piau_iong_tiau_ho = tng_im_piau(im_piau=im_piau, po_ci=False)
+    print(f"im_piau_iong_tiau_ho = {im_piau_iong_tiau_ho}")
+    test_result(im_piau_expected, im_piau_iong_tiau_ho)
+    print('-' * 60)
+
 # =========================================================
 # 主程式
 # =========================================================
@@ -793,7 +964,14 @@ if __name__ == "__main__":
     # for im_piau in im_piau_list:
     #     print(im_piau, end=" ")
     # print("\n-----------------------------------------------------------")
-    print("-----------------------------------------------------------")
     # ut08()
     # ut09()
-    ut12()
+    # ut12()
+    # print("-----------------------------------------------------------")
+    # ut_im_piau_tiau_hu_tng_tiau_ho()
+    # print("-----------------------------------------------------------")
+    # ut_im_piau_tiau_hu_tng_tiau_ho2()
+    # print("-----------------------------------------------------------")
+    # ut_im_piau_tiau_hu_tng_tiau_ho3()
+    print("-" * 60)
+    ut_tng_im_piau()
