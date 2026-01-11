@@ -37,23 +37,13 @@ EXIT_CODE_PROCESS_FAILURE = 10  # 過程失敗
 EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 
 # =========================================================================
-# 載入環境變數
-# =========================================================================
-load_dotenv()
-
-# 預設檔案名稱從環境變數讀取
-DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
-DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
-
-# =========================================================================
 # 設定日誌
 # =========================================================================
-from mod_logging import (
+from mod_logging import (  # noqa: E402
     init_logging,
     logging_exc_error,
     logging_exception,
     logging_process_step,
-    logging_warning,
 )
 
 init_logging()
@@ -84,7 +74,6 @@ def process(wb, args) -> int:
         program = Program(wb, args, hanji_piau_im_sheet='漢字注音')
 
         # 建立儲存格處理器
-        # xls_cell = ExcelCell(program=program)
         xls_cell = ExcelCell(
             program=program,
             new_jin_kang_piau_im_ji_khoo_sheet=False,
@@ -92,9 +81,6 @@ def process(wb, args) -> int:
             new_khuat_ji_piau_sheet=False,
         )
     except Exception as e:
-        # msg=f"處理作業，發生異常！ ==> error = {e}"
-        # logging.exception(msg)
-        # raise
         logging_exc_error(msg="處理作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
 
@@ -116,7 +102,7 @@ def process(wb, args) -> int:
             target_sheet_name=target_sheet_name,
         )
     except Exception as e:
-        logging_exc_error(msg=f"處理【{source_sheet_name}】作業異常！", error=e)
+        logging_exc_error(msg=f"處理【{sheet_name}】作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
 
     if exit_code != EXIT_CODE_SUCCESS:
@@ -134,7 +120,6 @@ def process(wb, args) -> int:
     try:
         sheet_name = source_sheet_name
         wb.sheets[sheet_name].activate()
-        # xls_cell.khuat_ji_piau_poo_im_piau()
         xls_cell.update_han_ji_khoo_db_by_sheet(sheet_name=sheet_name)
     except Exception as e:
         logging_exc_error(

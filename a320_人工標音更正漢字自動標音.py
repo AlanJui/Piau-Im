@@ -2,9 +2,7 @@
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
 import argparse
-import logging
 import os
-import re
 import sys
 from pathlib import Path
 
@@ -21,22 +19,12 @@ from mod_logging import (
     logging_process_step,
     logging_warning,
 )
-from mod_帶調符音標 import kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
-from mod_標音 import (
-    tlpa_tng_han_ji_piau_im,  # 台語音標轉台語音標
-)
 from mod_程式 import ExcelCell, Program
 
 # =========================================================================
-# 常數定義
+# 設定日誌
 # =========================================================================
-# 定義 Exit Code
-EXIT_CODE_SUCCESS = 0  # 成功
-EXIT_CODE_NO_FILE = 1  # 無法找到檔案
-EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
-EXIT_CODE_SAVE_FAILURE = 3  # 儲存失敗
-EXIT_CODE_PROCESS_FAILURE = 10  # 過程失敗
-EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
+init_logging()
 
 # =========================================================================
 # 載入環境變數
@@ -48,9 +36,15 @@ DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
 DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
 
 # =========================================================================
-# 設定日誌
+# 常數定義
 # =========================================================================
-init_logging()
+# 定義 Exit Code
+EXIT_CODE_SUCCESS = 0  # 成功
+EXIT_CODE_NO_FILE = 1  # 無法找到檔案
+EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
+EXIT_CODE_SAVE_FAILURE = 3  # 儲存失敗
+EXIT_CODE_PROCESS_FAILURE = 10  # 過程失敗
+EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 
 # =========================================================================
 # 本程式主要處理作業程序
@@ -78,7 +72,6 @@ def process(wb, args) -> int:
         program = Program(wb, args, hanji_piau_im_sheet='漢字注音')
 
         # 建立儲存格處理器
-        # xls_cell = ExcelCell(program=program)
         xls_cell = ExcelCell(
             program=program,
             new_jin_kang_piau_im_ji_khoo_sheet=False,
@@ -86,9 +79,6 @@ def process(wb, args) -> int:
             new_khuat_ji_piau_sheet=False,
         )
     except Exception as e:
-        # msg=f"處理作業，發生異常！ ==> error = {e}"
-        # logging.exception(msg)
-        # raise
         logging_exc_error(msg="處理作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
 
@@ -135,8 +125,8 @@ def process(wb, args) -> int:
         return EXIT_CODE_PROCESS_FAILURE
     finally:
         # 關閉資料庫連線
-        if xls_cell.program.db_manager:
-            xls_cell.program.db_manager.disconnect()
+        if xls_cell.db_manager:
+            xls_cell.db_manager.disconnect()
             logging_process_step("已關閉資料庫連線")
     print('\n')
     print('-' * 80)
