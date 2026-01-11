@@ -89,7 +89,9 @@ class Program:
         self.han_ji_start_row = self.line_start_row + self.han_ji_row_offset
         # 初始化字典物件
         self.han_ji_khoo_name = wb.names['漢字庫'].refers_to_range.value
-        self.db_name = DB_HO_LOK_UE if self.han_ji_khoo_name == '河洛話' else DB_KONG_UN
+        # self.db_path = DB_HO_LOK_UE if self.han_ji_khoo_name == '河洛話' else DB_KONG_UN
+        self.db_path = 'Ho_Lok_Ue.db' if self.han_ji_khoo_name == '河洛話' else 'Khong_Un.db'
+        self.db_name = Path(self.db_path).name
         self.ji_tian = HanJiTian(self.db_name)
         self.piau_im = PiauIm(han_ji_khoo=self.han_ji_khoo_name)
         # 標音相關
@@ -686,14 +688,14 @@ class ExcelCell:
             hau_ziann_im_piau = row[2] # 校正音標
             zo_piau = row[3] # (儲存格位置)座標
 
-            if han_ji and org_tai_gi_im_piau != 'N/A' and hau_ziann_im_piau != 'N/A':
+            if han_ji and org_tai_gi_im_piau != 'N/A':
                 # 將 Excel 工作表存放的【台語音標（TLPA）】，改成資料庫保存的【台羅拼音（TL）】
-                tlpa_im_piau = tng_im_piau(hau_ziann_im_piau)   # 將【音標】使用之【拼音字母】轉換成【TLPA拼音字母】；【音標調符】仍保持
+                tlpa_im_piau = tng_im_piau(im_piau=org_tai_gi_im_piau, po_ci=False)   # 將【音標】使用之【拼音字母】轉換成【TLPA拼音字母】；【音標調符】仍保持
                 tlpa_im_piau_cleanned = tng_tiau_ho(tlpa_im_piau).lower()  # 將【音標調符】轉換成【數值調號】
                 tl_im_piau = convert_tlpa_to_tl(tlpa_im_piau_cleanned)
 
                 self.insert_or_update_to_db(table_name, han_ji, tl_im_piau, piau_im_huat, siong_iong_too)
-                print(f"\n📌 {idx+1}. 【{han_ji}】==> {zo_piau}：台羅音標：【{tl_im_piau}】、校正音標：【{hau_ziann_im_piau}】、台語音標=【{tai_gi_im_piau}】、座標：{zo_piau}")
+                print(f"\n📌 {idx+1}. 【{han_ji}】：台語音標=【{org_tai_gi_im_piau}】，台羅音標：【{tl_im_piau}】，校正音標：【{hau_ziann_im_piau}】，座標：{zo_piau}")
                 idx += 1
 
         logging_process_step(f"\n【缺字表】中的資料已成功回填至資料庫： {db_path} 的【{table_name}】資料表中。")
@@ -999,32 +1001,41 @@ class ExcelCell:
                     #------------------------------------------------------------------------
                     # 以【缺字表】工作表之【漢字】+【台語音標】作為【資料紀錄索引】，
                     #------------------------------------------------------------------------
-                    # 將【座標】自【來源工作表】工作表（缺字表）的【座標】欄移除
-                    source_dict.remove_coordinate_by_hau_ziann_im_piau(
-                        han_ji=han_ji,
-                        hau_ziann_im_piau=hau_ziann_im_piau,
-                        coordinate=(r_coord, c_coord)
-                    )
-
                     # 在【標音字庫】工作表【添增】此筆資料紀錄
+                    # hau_ziann_im_piau_to_be = 'N/A' if hau_ziann_im_piau == '' else hau_ziann_im_piau
+                    hau_ziann_im_piau_to_be = 'N/A'
                     self.tiau_zing_piau_im_ji_khoo_dict(
                         han_ji=han_ji,
-                        tai_gi_im_piau=tai_gi_im_piau,
-                        hau_ziann_im_piau=hau_ziann_im_piau,
+                        tai_gi_im_piau=org_tai_gi_im_piau,
+                        hau_ziann_im_piau=hau_ziann_im_piau_to_be,
                         coordinates=(r_coord, c_coord)
                     )
+
+                    # 將【座標】自【來源工作表】工作表（缺字表）的【座標】欄移除
+                    # source_dict.remove_coordinate_by_hau_ziann_im_piau(
+                    #     han_ji=han_ji,
+                    #     hau_ziann_im_piau=hau_ziann_im_piau,
+                    #     coordinate=(r_coord, c_coord)
+                    # )
+                    # source_dict.remove_coordinate(
+                    #     han_ji=han_ji,
+                    #     tai_gi_im_piau=org_tai_gi_im_piau,
+                    #     coordinate=(r_coord, c_coord)
+                    # )
 
             row += 1  # 讀取下一列
 
         # 依據 Dict 內容，更新【標音字庫】、【缺字表】工作表之資料紀錄
         if row > 2:
-            # 更新【來源工作表】
-            source_dict.write_to_excel_sheet(wb=wb, sheet_name=source_sheet_name)
             # 更新【目標工作表】
-            target_dict.write_to_excel_sheet(wb=wb, sheet_name='標音字庫')
+            sheet_name = '標音字庫'
+            target_dict.write_to_excel_sheet(wb=wb, sheet_name=sheet_name)
+            # 更新【來源工作表】
+            sheet_name = source_sheet_name
+            source_dict.write_to_excel_sheet(wb=wb, sheet_name=sheet_name)
             return EXIT_CODE_SUCCESS
         else:
-            logging_warning(msg=f"【{source_sheet_name}】工作表內，無任何資料，略過後續處理作業。")
+            logging_warning(msg=f"【{sheet_name}】工作表內，無任何資料，略過後續處理作業。")
             return EXIT_CODE_INVALID_INPUT
 
     def update_hanji_zu_im_sheet_by_jin_kang_piau_im_ji_khoo(

@@ -132,8 +132,10 @@ def process(wb, args) -> int:
     logging_process_step(msg)
 
     try:
-        wb.sheets[source_sheet_name].activate()
-        xls_cell.khuat_ji_piau_poo_im_piau()
+        sheet_name = source_sheet_name
+        wb.sheets[sheet_name].activate()
+        # xls_cell.khuat_ji_piau_poo_im_piau()
+        xls_cell.update_han_ji_khoo_db_by_sheet(sheet_name=sheet_name)
     except Exception as e:
         logging_exc_error(
             msg=f"將【{sheet_name}】之【漢字】與【台語音標】存入【漢字庫】作業，發生執行異常！",
@@ -141,8 +143,8 @@ def process(wb, args) -> int:
         return EXIT_CODE_PROCESS_FAILURE
     finally:
         # 關閉資料庫連線
-        if xls_cell.program.db_manager:
-            xls_cell.program.db_manager.disconnect()
+        if xls_cell.db_manager:
+            xls_cell.db_manager.disconnect()
             logging_process_step("已關閉資料庫連線")
     print('\n')
     print('-' * 80)

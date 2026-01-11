@@ -355,7 +355,7 @@ class JiKhooDict:
                 if not entry["coordinates"]:  # 若座標為空，跳過不寫入
                     continue
                 coord_str = "; ".join(f"({r}, {c})" for r, c in entry["coordinates"])
-                data.append([han_ji, entry["tai_gi_im_piau"], entry["kenn_ziann_im_piau"], coord_str])
+                data.append([han_ji, entry["tai_gi_im_piau"], entry["hau_ziann_im_piau"], coord_str])
 
         sheet.range("A2").value = data
         return 0
@@ -377,7 +377,13 @@ class JiKhooDict:
         self.write_to_excel_sheet(wb, "缺字表")
         print(f"已成功將字典資料寫入工作表 '{sheet_name}'。")
 
-    def remove_coordinate(self, han_ji: str, tai_gi_im_piau: str, coordinate: tuple):
+    def remove_coordinate(
+            self,
+            han_ji: str,
+            tai_gi_im_piau: str,
+            coordinate: tuple,
+            entry_to_delete_if_empty: bool = False
+        ):
         """
         移除指定漢字與音標下的某個座標；若座標清空則移除整筆項目。
         """
@@ -394,7 +400,7 @@ class JiKhooDict:
                     to_delete = entry
                 break
 
-        if to_delete:
+        if to_delete and entry_to_delete_if_empty:
             entries.remove(to_delete)
 
     def remove_coordinate_by_hau_ziann_im_piau(self, han_ji: str, hau_ziann_im_piau: str, coordinate: tuple):
