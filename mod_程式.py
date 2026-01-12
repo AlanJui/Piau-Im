@@ -5,6 +5,7 @@ import logging
 import os
 import re
 import sys
+from datetime import datetime
 from pathlib import Path
 from typing import Tuple
 
@@ -642,6 +643,9 @@ class ExcelCell:
             (han_ji, tai_gi_im_piau)
         )
 
+        #---------------------------------------------------------------------------------------------------------
+        # 插入或更新資料
+        #---------------------------------------------------------------------------------------------------------
         # Determine 常用度 based on 標音方法 if not provided
         if siong_iong_too is None:
             siong_iong_too_to_use = 0.8 if piau_im_huat == "文讀音" else 0.6
@@ -651,12 +655,10 @@ class ExcelCell:
         # 將【台語音標】轉換成【台羅拼音（TL）】（TLPA 調號）
         tai_gi_im_piau_cleanned = tng_tiau_ho(tai_gi_im_piau).lower()  # 將【音標調符號】轉換成【數值調號】
         tl_im_piau = convert_tlpa_to_tl(tai_gi_im_piau_cleanned)    # 使用轉換後的【台羅拼音】作為資料庫存放的音標
-        # 插入或更新資料
         try:
             with self.db_manager.transaction():
                 if row:
                     # 更新資料
-                    from datetime import datetime
                     self.db_manager.execute(f"""
                     UPDATE {table_name}
                     SET 常用度 = ?, 更新時間 = ?
@@ -754,55 +756,6 @@ class ExcelCell:
             return False
 
         return True
-
-    # def tiau_zing_piau_im_ji_khoo_dict_old(
-    #         self,
-    #         source_dict: JiKhooDict,
-    #         han_ji:str,
-    #         tai_gi_im_piau:str,
-    #         hau_ziann_im_piau:str,
-    #         row:int, col:int
-    #     ) -> bool:
-    #     """
-    #     重整【標音字庫】字典物件：重整【標音字庫】工作表使用之 Dict
-    #     依據【缺字表】工作表之【漢字】+【台語音標】資料，在【標音字庫】工作表【添增】此筆資料紀錄
-
-    #     Args:
-    #         source_dict (JiKhooDict): 來源字典物件（如：缺字表字典物件）
-    #         han_ji (str): 漢字
-    #         tai_gi_im_piau (str): 台語音標
-    #         kenn_ziann_im_piau (str): 校正音標
-    #         row (int): 儲存格列號
-    #         col (int): 儲存格欄號
-    #     Returns:
-    #         bool: 是否在【標音字庫】找到該筆資料並移除
-    #     """
-    #     piau_im_ji_khoo_dict: JiKhooDict = self.program.piau_im_ji_khoo_dict
-
-    #     # Step 1: 在【標音字庫】搜尋該筆【漢字】+【台語音標】
-    #     # existing_entries = source_dict.get_entry(han_ji)
-    #     existing_entries = source_dict.get(han_ji, [])
-
-    #     # 標記是否找到
-    #     entry_found = False
-
-    #     for existing_entry in existing_entries:
-    #         # Step 2: 若找到，移除該筆資料內的座標
-    #         if (row, col) in existing_entry["coordinates"]:
-    #             existing_entry["coordinates"].remove((row, col))
-    #         entry_found = True
-    #         break  # 找到即可離開迴圈
-
-    #     # Step 3: 將此筆資料（校正音標為 'N/A'）於【標音字庫】底端新增
-    #     hau_ziann_im_piau_to_be = 'N/A' if hau_ziann_im_piau == '' else hau_ziann_im_piau
-    #     piau_im_ji_khoo_dict.add_entry(
-    #         han_ji=han_ji,
-    #         tai_gi_im_piau=tai_gi_im_piau,
-    #         hau_ziann_im_piau=hau_ziann_im_piau_to_be,
-    #         coordinates=(row, col)
-    #     )
-
-    #     return entry_found
 
     def remove_coordinate_from_piau_im_ji_khoo_dict(
             self,
@@ -1236,11 +1189,12 @@ class ExcelCell:
                     target_sheet.range(han_ji_cell).color = None
 
                     # 更新【標音字庫】工作表之資料紀錄
+                    hau_ziann_im_piau_to_be = 'N/A' if hau_ziann_im_piau == '' else hau_ziann_im_piau
                     self.tiau_zing_piau_im_ji_khoo_dict(
                         han_ji=han_ji,
-                        tai_gi_im_piau=tai_gi_im_piau,
-                        row=r_coord,
-                        col=c_coord,
+                        tai_gi_im_piau=org_tai_gi_im_piau,
+                        hau_ziann_im_piau=hau_ziann_im_piau_to_be,
+                        coordinates=(r_coord, c_coord)
                     )
 
                     # 在【標音字庫】工作表中，更新該筆資料之座標清單，移除目前處理的座標
@@ -1262,6 +1216,45 @@ class ExcelCell:
         else:
             logging_warning(msg=f"【{source_sheet_name}】工作表內，無任何資料，略過後續處理作業。")
             return EXIT_CODE_INVALID_INPUT
+
+    def jin_kang_piau_im_cu_han_ji_piau_im( self, jin_kang_piau_im: str) -> Tuple[str, str]:
+        """
+        自【人工標音】儲存格，取出：【台語音標】/【方音符號】，並轉換成【漢字標音】。
+        """
+        piau_im = self.program.piau_im
+        piau_im_huat = self.program.piau_im_huat
+
+        if '〔' in jin_kang_piau_im and '〕' in jin_kang_piau_im:
+            # 將人工輸入的〔台語音標〕轉換成【方音符號】
+            im_piau = jin_kang_piau_im.split('〔')[1].split('〕')[0]
+            tai_gi_im_piau = convert_tl_with_tiau_hu_to_tlpa(im_piau)
+            # 依使用者指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
+            han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+                piau_im=piau_im,
+                piau_im_huat=piau_im_huat,
+                tai_gi_im_piau=tai_gi_im_piau
+            )
+        elif '【' in jin_kang_piau_im and '】' in jin_kang_piau_im:
+            # 將人工輸入的【方音符號】轉換成【台語音標】
+            han_ji_piau_im = jin_kang_piau_im.split('【')[1].split('】')[0]
+            siann, un, tiau = split_hong_im_hu_ho(han_ji_piau_im)
+            # 依使用者指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
+            tai_gi_im_piau = piau_im.hong_im_tng_tai_gi_im_piau(
+                siann=siann,
+                un=un,
+                tiau=tiau)['台語音標']
+        else:
+            # 將人工輸入的【台語音標】，解構為【聲母】、【韻母】、【聲調】
+            tai_gi_im_piau = convert_tl_with_tiau_hu_to_tlpa(jin_kang_piau_im)
+            # 依指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
+            han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+                piau_im=piau_im,
+                piau_im_huat=piau_im_huat,
+                tai_gi_im_piau=tai_gi_im_piau
+            )
+
+        return tai_gi_im_piau, han_ji_piau_im
+
 
 # =========================================================================
 # 作業處理函數
