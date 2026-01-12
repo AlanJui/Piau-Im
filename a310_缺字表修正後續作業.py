@@ -245,7 +245,7 @@ if __name__ == "__main__":
   python a000.py -new     # 建立新的字庫工作表
   python a000.py -test    # 執行測試模式
 '''
-        )
+    )
     parser.add_argument(
         '--test',
         action='store_true',

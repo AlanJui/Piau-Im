@@ -97,7 +97,7 @@ class JiKhooDict:
         for row in data:
             han_ji = row[0] or ""
             tai_gi_im_piau = row[1] or "N/A"
-            kenn_ziann_im_piau = row[2] or "N/A"
+            hau_ziann_im_piau = row[2] or "N/A"
             coords_str = row[3] or ""
 
             coordinates = []
@@ -109,7 +109,7 @@ class JiKhooDict:
                     coordinates.append(row_col)
 
             for coord in coordinates:
-                ji_khoo.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coord)
+                ji_khoo.add_entry(han_ji, tai_gi_im_piau, hau_ziann_im_piau, coord)
 
         return ji_khoo
 
@@ -140,22 +140,22 @@ class JiKhooDict:
                     return
             self.ji_khoo_dict[han_ji].append(entry)
 
-    def update_entry(self, han_ji: str, tai_gi_im_piau: str, kenn_ziann_im_piau: str, coordinates: tuple):
+    def update_entry(self, han_ji: str, tai_gi_im_piau: str, hau_ziann_im_piau: str, coordinates: tuple[int, int]):
         if han_ji not in self.ji_khoo_dict:
             raise ValueError(f"漢字 '{han_ji}' 不存在，請先使用 add_entry 方法新增資料。")
 
         for existing in self.ji_khoo_dict[han_ji]:
             if existing["tai_gi_im_piau"] == tai_gi_im_piau:
-                if kenn_ziann_im_piau:
-                    existing["kenn_ziann_im_piau"] = kenn_ziann_im_piau
+                if hau_ziann_im_piau:
+                    existing["hau_ziann_im_piau"] = hau_ziann_im_piau
                 if coordinates not in existing["coordinates"]:
                     existing["coordinates"].append(coordinates)
                 return
 
-        self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
+        self.add_entry(han_ji, tai_gi_im_piau, hau_ziann_im_piau, coordinates)
 
-    def add_or_update_entry(self, han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates):
-        self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
+    def add_or_update_entry(self, han_ji, tai_gi_im_piau, hau_ziann_im_piau, coordinates):
+        self.add_entry(han_ji, tai_gi_im_piau, hau_ziann_im_piau, coordinates)
 
     def get_entry(self, han_ji: str):
         if han_ji in self.ji_khoo_dict:
@@ -258,8 +258,8 @@ class JiKhooDict:
                 return tai_gi_im_piau
         return ""
 
-    # def update_kau_ziang_im_piau(self, han_ji: str, tai_gi_im_piau: str, kenn_ziann_im_piau: str, coordinates: tuple):
-    def update_kenn_ziann_im_piau(self, han_ji: str, tai_gi_im_piau: str, kenn_ziann_im_piau: str, coordinates: tuple):
+    # def update_kau_ziang_im_piau(self, han_ji: str, tai_gi_im_piau: str, hau_ziann_im_piau: str, coordinates: tuple):
+    def update_hau_ziann_im_piau(self, han_ji: str, tai_gi_im_piau: str, hau_ziann_im_piau: str, coordinates: tuple):
         """
         將人工標音或校正音標更新至字典。
         如果該漢字、音標已存在則更新校正音標與座標。
@@ -268,12 +268,12 @@ class JiKhooDict:
         if han_ji in self.ji_khoo_dict:
             for entry in self.ji_khoo_dict[han_ji]:
                 if entry["tai_gi_im_piau"] == tai_gi_im_piau:
-                    entry["kenn_ziann_im_piau"] = kenn_ziann_im_piau
+                    entry["hau_ziann_im_piau"] = hau_ziann_im_piau
                     if coordinates not in entry["coordinates"]:
                         entry["coordinates"].append(coordinates)
                     return
         # 若找不到，則新增新項目
-        self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
+        self.add_entry(han_ji, tai_gi_im_piau, hau_ziann_im_piau, coordinates)
 
     def update_by_piau_im_ji_khoo(self, wb, sheet_name: str, piau_im, piau_im_huat: str):
         """
@@ -297,7 +297,7 @@ class JiKhooDict:
                     if not isinstance(entry, dict):
                         continue
                     tai_gi_im_piau = entry.get("tai_gi_im_piau", "")
-                    kau_ziann_im_piau = entry.get("kenn_ziann_im_piau", "")
+                    kau_ziann_im_piau = entry.get("hau_ziann_im_piau", "")
                     coordinates = entry.get("coordinates", [])
 
                     if not kau_ziann_im_piau or kau_ziann_im_piau == 'N/A':
@@ -532,14 +532,14 @@ class CellProcessor:
             self,
             han_ji: str,
             tai_gi_im_piau: str,
-            kenn_ziann_im_piau: str,
+            hau_ziann_im_piau: str,
             row: int, col: int
         ):
         """在【標音字庫】字典中新增一筆資料"""
         self.piau_im_ji_khoo.add_or_update_entry(
             han_ji=han_ji,
             tai_gi_im_piau=tai_gi_im_piau,
-            kenn_ziann_im_piau=kenn_ziann_im_piau,
+            hau_ziann_im_piau=hau_ziann_im_piau,
             coordinates=(row, col)
         )
 
@@ -628,7 +628,7 @@ class CellProcessor:
                     target_dict=self.piau_im_ji_khoo,
                     han_ji=han_ji,
                     tai_gi_im_piau=tai_gi_im_piau,
-                    kenn_ziann_im_piau='N/A',
+                    hau_ziann_im_piau='N/A',
                     row=row,
                     col=col
                 )
@@ -687,7 +687,7 @@ class CellProcessor:
                     target_dict=self.piau_im_ji_khoo,
                     han_ji=han_ji,
                     tai_gi_im_piau=original_tai_gi_im_piau,
-                    kenn_ziann_im_piau='N/A',
+                    hau_ziann_im_piau='N/A',
                     row=row,
                     col=col
                 )
@@ -1029,7 +1029,7 @@ def process(wb):
                 wb=wb, target_dict=piau_im_ji_khoo_dict,
                 han_ji=han_ji,
                 tai_gi_im_piau=tai_gi_im_piau,
-                kenn_ziann_im_piau='N/A',
+                hau_ziann_im_piau='N/A',
                 row=row,  col=col
             )
 

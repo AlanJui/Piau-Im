@@ -189,13 +189,13 @@
             "console": "integratedTerminal",
         },
         {
-            "name": "a200_查找及填入漢字標音 -new",
+            "name": "a200_查找及填入漢字標音 --new",
             "type": "debugpy",
             "request": "launch",
             "program": "a200_查找及填入漢字標音.py",
             "console": "integratedTerminal",
             "args": [
-                "-new"
+                "--new"
             ]
         },
         {
@@ -279,6 +279,9 @@
             "request": "launch",
             "program": "a300_手動更正漢字標音.py",
             "console": "integratedTerminal",
+            "args": [
+                // "--new"
+            ]
         },
         {
             "name": "a301_以作用儲存格之人工標音更新標音字庫",
