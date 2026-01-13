@@ -12,10 +12,6 @@ from dotenv import load_dotenv
 # 載入自訂模組/函式
 from mod_ca_ji_tian import HanJiTian
 from mod_excel_access import save_as_new_file
-
-# =========================================================================
-# 設定日誌
-# =========================================================================
 from mod_logging import (
     init_logging,
     logging_exc_error,
@@ -24,8 +20,6 @@ from mod_logging import (
     logging_warning,  # noqa: F401
 )
 from mod_程式 import ExcelCell, Program
-
-init_logging()
 
 # =========================================================================
 # 載入環境變數
@@ -47,6 +41,10 @@ EXIT_CODE_SAVE_FAILURE = 3  # 儲存失敗
 EXIT_CODE_PROCESS_FAILURE = 10  # 過程失敗
 EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 
+# =========================================================================
+# 設定日誌
+# =========================================================================
+init_logging()
 
 # =========================================================================
 # 作業處理函數
@@ -112,13 +110,21 @@ def process(wb, args) -> int:
         program = Program(wb, args, hanji_piau_im_sheet='漢字注音')
 
         # 建立儲存格處理器
-        # xls_cell = ExcelCell(program=program)
-        xls_cell = ExcelCell(
-            program=program,
-            new_jin_kang_piau_im_ji_khoo_sheet=False,
-            new_piau_im_ji_khoo_sheet=False,
-            new_khuat_ji_piau_sheet=False,
-        )
+        if args.new:
+            # 建立新的字庫工作表
+            xls_cell = ExcelCell(
+                program=program,
+                new_jin_kang_piau_im_ji_khoo_sheet=True,
+                new_piau_im_ji_khoo_sheet=True,
+                new_khuat_ji_piau_sheet=True,
+            )
+        else:
+            xls_cell = ExcelCell(
+                program=program,
+                new_jin_kang_piau_im_ji_khoo_sheet=False,
+                new_piau_im_ji_khoo_sheet=False,
+                new_khuat_ji_piau_sheet=False,
+            )
 
         #--------------------------------------------------------------------------
         # 處理作業開始
@@ -136,7 +142,7 @@ def process(wb, args) -> int:
         )
 
         # 寫回字庫到 Excel
-        xls_cell.save_all_piau_im_ji_khoo_dict()
+        xls_cell.save_all_piau_im_ji_khoo_dicts()
 
         #--------------------------------------------------------------------------
         # 處理作業結束

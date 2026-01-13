@@ -546,7 +546,7 @@ class ExcelCell:
         self.khuat_ji_piau_ji_khoo_dict = khuat_ji_piau_ji_khoo_dict
         return jin_kang_piau_im_ji_khoo_dict, piau_im_ji_khoo_dict, khuat_ji_piau_ji_khoo_dict
 
-    def save_all_piau_im_ji_khoo_dict(self):
+    def save_all_piau_im_ji_khoo_dicts(self):
         """將【字庫 Dict】存到 Excel 工作表中"""
         wb = self.program.wb
         self.jin_kang_piau_im_ji_khoo_dict.write_to_excel_sheet(wb=wb, sheet_name='人工標音字庫')
