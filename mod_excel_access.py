@@ -147,7 +147,7 @@ def set_range_format(range_obj, font_name, font_size, font_color, fill_color=Non
 #--------------------------------------------------------------------------
 def clear_han_ji_kap_piau_im(
     wb,
-    sheet_name='漢字注音',
+    sheet_name: str='漢字注音',
     total_lines: Optional[int]=120,
     rows_per_line: Optional[int]=4,
     start_row: Optional[int]=3,
@@ -174,9 +174,16 @@ def clear_han_ji_kap_piau_im(
     end_col_name = xw.utils.col_name(end_col)  # R
     cells_range = f'{start_col_name}{start_row}:{end_col_name}{end_of_rows}'
 
-    sheet.range(cells_range).clear_contents()     # 清除 C3:R{end_of_row} 範圍的內容
+    # 清除範圍的內容（xlwings 使用 value = None 或 clear() 方法）
+    sheet.range(cells_range).value = None
+    # sheet.range(cells_range).clear_formats()  # 清除填滿顏色
 
-    sheet.range(han_ji_orgin_cell).value = ""  # 清空 V3 儲存格內容
+    # 清空原始漢字儲存格內容（如果有指定的話）
+    if han_ji_orgin_cell:
+        try:
+            sheet.range(han_ji_orgin_cell).value = ""
+        except Exception as ex:
+            logging.warning(f"無法清空儲存格 {han_ji_orgin_cell}: {ex}")
 
 
 # 重置【漢字注音】工作表

@@ -309,14 +309,14 @@ def main(args) -> int:
                 logging.error(f"無法找到作用中的 Excel 工作簿: {e}")
                 return EXIT_CODE_NO_FILE
 
-        if not wb:
-            logging.error("無法取得 Excel 活頁簿")
-            return EXIT_CODE_NO_FILE
+            if not wb:
+                logging.error("無法取得 Excel 活頁簿")
+                return EXIT_CODE_NO_FILE
 
-        # 執行處理
-        exit_code = process(wb, args)
+            # 執行處理
+            exit_code = process(wb, args)
 
-        return exit_code
+            return exit_code
 
     except Exception as e:
         logging.exception("程式執行失敗")
