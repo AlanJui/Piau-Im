@@ -10,7 +10,7 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 # 載入自訂模組/函式
-from mod_excel_access import excel_address_to_row_col, get_active_cell, get_active_cell_address, get_line_no_by_row, get_row_by_line_no, save_as_new_file
+from mod_excel_access import excel_address_to_row_col, get_active_cell, save_as_new_file
 
 # =========================================================================
 # 設定日誌

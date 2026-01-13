@@ -107,7 +107,13 @@ class JiKhooDict:
             for entry in entries:
                 yield (han_ji, entry)
 
-    def add_entry(self, han_ji: str, tai_gi_im_piau: str, hau_ziann_im_piau: str, coordinates: tuple[int, int]):
+    def add_entry(
+        self,
+        han_ji: str,
+        tai_gi_im_piau: str,
+        hau_ziann_im_piau: str,
+        coordinates: tuple[int, int]
+    ):
         if not tai_gi_im_piau:
             tai_gi_im_piau = "N/A"
         if not hau_ziann_im_piau:
@@ -129,7 +135,13 @@ class JiKhooDict:
                     return
             self.ji_khoo_dict[han_ji].append(entry)
 
-    def update_entry(self, han_ji: str, tai_gi_im_piau: str, hau_ziann_im_piau: str, coordinates: tuple[int, int]):
+    def update_entry(
+        self,
+        han_ji: str,
+        tai_gi_im_piau: str,
+        hau_ziann_im_piau: str,
+        coordinates: tuple[int, int]
+    ):
         if han_ji not in self.ji_khoo_dict:
             raise ValueError(f"漢字 '{han_ji}' 不存在，請先使用 add_entry 方法新增資料。")
 
@@ -143,7 +155,13 @@ class JiKhooDict:
 
         self.add_entry(han_ji, tai_gi_im_piau, hau_ziann_im_piau, coordinates)
 
-    def add_or_update_entry(self, han_ji, tai_gi_im_piau, hau_ziann_im_piau, coordinates):
+    def add_or_update_entry(
+        self,
+        han_ji: str,
+        tai_gi_im_piau: str,
+        hau_ziann_im_piau: str,
+        coordinates: tuple[int, int]
+    ):
         self.add_entry(han_ji, tai_gi_im_piau, hau_ziann_im_piau, coordinates)
 
     def get_entry(self, han_ji: str):

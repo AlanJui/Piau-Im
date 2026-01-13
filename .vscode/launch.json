@@ -788,5 +788,19 @@
                 // "ho"
             ]
         },
+        {
+            "name": "test_mod_字庫",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "test_mod_字庫.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "test_mod_字庫_R2",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "test_mod_字庫_R2.py",
+            "console": "integratedTerminal",
+        },
     ]
 }
