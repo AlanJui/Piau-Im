@@ -1,9 +1,7 @@
 # =========================================================================
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
-import logging
 import os
-import re
 import sys
 from pathlib import Path
 
@@ -11,19 +9,25 @@ from pathlib import Path
 import xlwings as xw
 from dotenv import load_dotenv
 
-from mod_ca_ji_tian import HanJiTian
-from mod_database import DatabaseManager
-from mod_excel_access import delete_sheet_by_name, save_as_new_file
-from mod_字庫 import JiKhooDict
-from mod_帶調符音標 import kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
-from mod_標音 import (
-    PiauIm,  # 漢字標音物件
-    convert_tlpa_to_tl,
-    tlpa_tng_han_ji_piau_im,  # 台語音標轉台語音標
-)
+from mod_excel_access import save_as_new_file
 
+# from mod_帶調符音標 import kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
+# from mod_標音 import (
+#     PiauIm,  # 漢字標音物件
+#     convert_tlpa_to_tl,
+#     tlpa_tng_han_ji_piau_im,  # 台語音標轉台語音標
+# )
 # 載入自訂模組/函式
 from mod_程式 import ExcelCell, Program
+
+# =========================================================================
+# 載入環境變數
+# =========================================================================
+load_dotenv()
+
+# 預設檔案名稱從環境變數讀取
+DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
+DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
 
 # =========================================================================
 # 常數定義

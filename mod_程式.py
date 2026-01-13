@@ -1343,14 +1343,14 @@ def process_sheet(sheet, program: Program, xls_cell: ExcelCell):
     # 調整 row 值至【漢字】列（每 4 列為一組【列群】，漢字在第 3 列：5, 9, 13, ... ）
     is_eof = False
     for r in range(1, program.TOTAL_LINES + 1):
-        if is_eof: break
+        if is_eof: break  # noqa: E701
         line_no = r
         print('=' * 80)
         print(f"處理第 {line_no} 行...")
         row = program.line_start_row + (r - 1) * program.ROWS_PER_LINE + program.han_ji_row_offset
         new_line = False
         for c in range(program.start_col, program.end_col + 1):
-            if is_eof: break
+            if is_eof: break  # noqa: E701
             row = row
             col = c
             active_cell = sheet.range((row, col))
@@ -1375,7 +1375,7 @@ def _process_sheet(sheet, program: Program, xls_cell: ExcelCell):
     # 調整 row 值至【漢字】列（每 4 列為一組【列群】，漢字在第 3 列：5, 9, 13, ... ）
     is_eof = False
     for r in range(1, program.TOTAL_LINES + 1):
-        if is_eof: break
+        if is_eof: break  # noqa: E701
         line_no = r
         print('=' * 80)
         print(f"處理第 {line_no} 行...")

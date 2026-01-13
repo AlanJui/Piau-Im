@@ -8,8 +8,12 @@ import time
 from pathlib import Path
 
 import xlwings as xw
-
-# from openpyxl import load_workbook
+from openpyxl import load_workbook
+try:
+    from pythoncom import com_error as pywintypes_com_error
+except ImportError:
+    # Fallback for systems without pywin32
+    pywintypes_com_error = Exception
 
 # 指定虛擬環境的 Python 路徑
 # venv_python = os.path.join(".venv", "Scripts", "python.exe") if sys.platform == "win32" else os.path.join(".venv", "bin", "python")
@@ -246,7 +250,7 @@ def get_named_value(wb, name, default_value=None):
         else:
             # 如果名稱不存在，回傳預設值
             return default_value
-    except (AttributeError, com_error) as e:
+    except (AttributeError, pywintypes_com_error):
         # 捕捉 refers_to_range 相關的錯誤，回傳預設值
         return default_value
 
@@ -439,7 +443,7 @@ def write_to_excel_file(excel_workbook):
     dir_path = os.path.dirname(full_path)
     file_name = os.path.basename(full_path)
 
-    print(f"\n將已變更之 Excel 檔案存檔...")
+    print("\n將已變更之 Excel 檔案存檔...")
     print(f"檔案路徑：{dir_path}")
     print(f"檔案名稱：{file_name}")
 

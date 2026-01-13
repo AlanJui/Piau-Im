@@ -17,7 +17,7 @@ from mod_logging import (
     logging_exc_error,
     logging_exception,
     logging_process_step,
-    logging_warning,
+    logging_warning,  # noqa: F401
 )
 from mod_程式 import ExcelCell, Program
 
