@@ -324,10 +324,19 @@ def convert_coord_str_to_excel_address(coord_str: str) -> str:
     except ValueError:
         return ""  # 避免解析錯誤
 
+def convert_row_col_to_excel_address(row: int, col: int) -> str:
+    """
+    將 (row, col) 格式轉換為 Excel 座標 (如 (9, 4) 轉換為 "D9")
 
-# 可以正確區分空白字符和換行符，從而避免將 \n 誤判為空白
+    :param row: 行號
+    :param col: 列號
+    :return: Excel 座標字串，例如 "D9"
+    """
+    return f"{chr(64 + col)}{row}"  # 轉換成 Excel 座標
+
 def strip_cell(x):
     """轉成字串並去除頭尾空白，若空則回傳 None，但保留換行符 \n"""
+    # 可以正確區分空白字符和換行符，從而避免將 \n 誤判為空白
     if x is None:
         return None
     x_str = str(x)

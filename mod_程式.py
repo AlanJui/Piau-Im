@@ -15,7 +15,7 @@ from dotenv import load_dotenv
 
 from mod_ca_ji_tian import HanJiTian
 from mod_database import DatabaseManager
-from mod_excel_access import convert_coord_str_to_excel_address, delete_sheet_by_name, save_as_new_file
+from mod_excel_access import convert_coord_str_to_excel_address, convert_row_col_to_excel_address, delete_sheet_by_name, save_as_new_file
 
 # =========================================================================
 # 設定日誌
@@ -241,17 +241,18 @@ class ExcelCell:
                     tai_gi_im_piau=tai_gi_im_piau
                 )
                 # 顯示處理訊息
-                target = f"（{row}, {col}）：{han_ji}【{tai_gi_im_piau}】，【人工標音】：{jin_kang_piau_im}"
-                print(f"{target}，在【人工標音字庫】工作表 row：{row_no}。")
-                # 因【人工標音】欄為【=】，故而在【標音字庫】工作表中的紀錄，需自原有的【座標】欄位移除目前處理的座標除
-                self.jin_kang_piau_im_ji_khoo_dict.update_entry_in_ji_khoo_dict(
+                excel_addr = convert_row_col_to_excel_address(row, col)
+                source_msg = f"【漢字注音】工作表的 {excel_addr}（{row} ,{col}）儲存格，漢字為：{han_ji}，人工標音為：【{jin_kang_piau_im}】"
+                target_msg = f"【人工標音字庫】工作表的 {row_no}A（{row_no}, 1）儲存格，套用【台語音標】：{tai_gi_im_piau}；【漢字標音】：{han_ji_piau_im}。"
+                print(f"{source_msg} ==> {target_msg}")
+                # 因【人工標音】欄填【=】，故【標音字庫】工作表的【座標】紀錄，需將原【座標】資料移除
+                self.update_entry_in_ji_khoo_dict(
                     wb=self.program.wb,
-                    ji_khoo=self.program.han_ji_khoo_name,
+                    ji_khoo_dict=self.piau_im_ji_khoo_dict,
                     han_ji=han_ji,
                     tai_gi_im_piau=tai_gi_im_piau,
                     hau_ziann_im_piau='N/A',
-                    row=row,
-                    col=col
+                    row=row, col=col
                 )
                 # 記錄到人工標音字庫
                 self.jin_kang_piau_im_ji_khoo_dict.add_entry(
@@ -1239,7 +1240,7 @@ class ExcelCell:
 
     def jin_kang_piau_im_cu_han_ji_piau_im( self, jin_kang_piau_im: str) -> Tuple[str, str]:
         """
-        自【人工標音】儲存格，取出：【台語音標】/【方音符號】，並轉換成【漢字標音】。
+        自【人工標音】儲存格，取：【台語音標】/【方音符號】，並轉換成【漢字標音】。
         """
         piau_im = self.program.piau_im
         piau_im_huat = self.program.piau_im_huat
