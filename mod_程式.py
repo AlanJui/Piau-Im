@@ -13,7 +13,6 @@ from typing import Tuple
 import xlwings as xw
 from dotenv import load_dotenv
 
-# 載入自訂模組/函式
 from mod_ca_ji_tian import HanJiTian
 from mod_database import DatabaseManager
 from mod_excel_access import convert_coord_str_to_excel_address, delete_sheet_by_name, save_as_new_file
@@ -30,6 +29,8 @@ from mod_logging import (
 )
 from mod_字庫 import JiKhooDict
 from mod_帶調符音標 import is_han_ji, kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
+
+# 載入自訂模組/函式
 from mod_標音 import (  # 台語音標轉台語音標; 漢字標音物件
     PiauIm,
     ca_ji_tng_piau_im,
