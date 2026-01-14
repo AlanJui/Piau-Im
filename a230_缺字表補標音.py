@@ -13,15 +13,29 @@ import requests
 import xlwings as xw
 from dotenv import load_dotenv
 
-# 載入自訂模組/函式
 from mod_excel_access import (
     convert_to_excel_address,
     ensure_sheet_exists,
     excel_address_to_row_col,
     get_value_by_name,
 )
+
+# 載入自訂模組/函式
+from mod_logging import init_logging, logging_exc_error, logging_process_step
 from mod_帶調符音標 import is_han_ji, is_im_piau, kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
 from mod_標音 import PiauIm, tlpa_tng_han_ji_piau_im
+
+# 載入自訂模組
+from mod_程式 import ExcelCell, Program
+
+# =========================================================================
+# 載入環境變數
+# =========================================================================
+load_dotenv()
+
+# 預設檔案名稱從環境變數讀取
+DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
+DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
 
 # =========================================================================
 # 常數定義
@@ -35,19 +49,8 @@ EXIT_CODE_PROCESS_FAILURE = 10  # 過程失敗
 EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 
 # =========================================================================
-# 載入環境變數
-# =========================================================================
-load_dotenv()
-
-# 預設檔案名稱從環境變數讀取
-DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
-DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
-
-# =========================================================================
 # 設定日誌
 # =========================================================================
-from mod_logging import init_logging, logging_exc_error, logging_process_step
-
 init_logging()
 
 # =========================================================================
@@ -146,9 +149,71 @@ def update_khuat_ji_piau(wb):
 # =========================================================================
 # 主程式執行
 # =========================================================================
-def main():
+
+
+def process(wb, args) -> int:
+    """
+    查詢漢字讀音並標注
+
+    Args:
+        wb: Excel Workbook 物件
+        args: 命令列參數
+
+    Returns:
+        處理結果代碼
+    """
+    #--------------------------------------------------------------------------
+    # 作業初始化
+    #--------------------------------------------------------------------------
+    logging_process_step("<=========== 作業開始！==========>")
+
+    try:
+        #--------------------------------------------------------------------------
+        # 初始化 process config
+        #--------------------------------------------------------------------------
+        program = Program(wb=wb, args=args, hanji_piau_im_sheet='漢字注音')
+
+        # 建立儲存格處理器
+        xls_cell = ExcelCell(
+            program=program,
+            new_jin_kang_piau_im_ji_khoo_sheet=False,
+            new_piau_im_ji_khoo_sheet=False,
+            new_khuat_ji_piau_sheet=False,
+        )
+    except Exception as e:
+        logging_exc_error(msg="處理作業異常！", error=e)
+        return EXIT_CODE_PROCESS_FAILURE
+
+    #--------------------------------------------------------------------------
+    # 作業處理中
+    #--------------------------------------------------------------------------
+    try:
+        # 處理工作表
+        sheet_name = program.hanji_piau_im_sheet
+        sheet = wb.sheets[sheet_name]
+        sheet.activate()
+
+        # 更新【缺字表】中的【台語音標】至【漢字注音】工作表
+        update_khuat_ji_piau(wb)
+
+        # 寫回字庫到 Excel
+        xls_cell.save_all_piau_im_ji_khoo_dicts()
+
+    except Exception as e:
+        logging_exc_error(msg="處理作業異常！", error=e)
+        return EXIT_CODE_PROCESS_FAILURE
+
+    #--------------------------------------------------------------------------
+    # 處理作業結束
+    #--------------------------------------------------------------------------
+    print('\n')
+    logging_process_step("<=========== 作業結束！==========>")
+    return EXIT_CODE_SUCCESS
+
+
+def main(args):
     # =========================================================================
-    # (0) 程式初始化
+    # 程式初始化
     # =========================================================================
     # 取得專案根目錄。
     current_file_path = Path(__file__).resolve()
@@ -158,27 +223,50 @@ def main():
     program_name = current_file_path.stem
 
     # =========================================================================
-    # 程式初始化
+    # 開始執行程式
     # =========================================================================
     logging_process_step(f"《========== 程式開始執行：{program_name} ==========》")
     logging_process_step(f"專案根目錄為: {project_root}")
 
-    # =========================================================================
-    # 開始執行程式
-    # =========================================================================
     try:
+        # 取得 Excel 活頁簿
+        wb = None
         wb = xw.apps.active.books.active
     except Exception as e:
-        logging_exc_error(f"找不到作用中活頁簿檔", e)
-        return EXIT_CODE_INVALID_INPUT
+        logging.error(f"無法找到作用中的 Excel 工作簿: {e}")
+        return EXIT_CODE_NO_FILE
 
-    status_code = update_khuat_ji_piau(wb)
-    if status_code != EXIT_CODE_SUCCESS:
-        logging_process_step(f"程式執行失敗，錯誤代碼：{status_code}")
-        return status_code
+    #===========================================================================
+    # 執行處理作業
+    #===========================================================================
+    try:
+        exit_code = process(wb=wb, args=args)
 
+        # 儲存檔案
+        if exit_code == EXIT_CODE_SUCCESS:
+            try:
+                wb.save()
+                file_path = wb.fullname
+                logging_process_step(f"儲存檔案至路徑：{file_path}")
+            except Exception as e:
+                logging_exc_error(msg="儲存檔案異常！", error=e)
+                return EXIT_CODE_SAVE_FAILURE
+    except Exception:
+        logging.exception("處理作業失敗！")
+        return EXIT_CODE_PROCESS_FAILURE
+
+
+    #===========================================================================
+    # 終止程式
+    #===========================================================================
+    # 顯示程式結束訊息
+    logging_process_step(f"《========== 程式終止執行：{program_name}: {exit_code} ==========》")
     return EXIT_CODE_SUCCESS
 
+
 if __name__ == "__main__":
-    exit_code = main()
-    sys.exit(exit_code)
+    args = sys.argv[1:]  # 獲取命令列參數
+    exit_code = main(args)
+    if exit_code != EXIT_CODE_SUCCESS:
+        print(f"程式異常終止，返回代碼：{exit_code}")
+        sys.exit(exit_code)
