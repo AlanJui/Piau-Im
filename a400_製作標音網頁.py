@@ -1,9 +1,12 @@
 # =========================================================================
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
+import argparse
 import logging
 import os
+import re
 from pathlib import Path
+from typing import Tuple
 
 # 載入第三方套件
 import xlwings as xw
@@ -12,20 +15,46 @@ from dotenv import load_dotenv
 # 載入自訂模組
 from mod_BP_tng_huan import convert_bp_im_piau_to_zu_im
 from mod_BP_tng_huan_ping_im import convert_TLPA_to_BP
-from mod_ca_ji_tian import HanJiTian
-from mod_excel_access import delete_sheet_by_name, get_value_by_name
+from mod_ca_ji_tian import HanJiTian  # 新的查字典模組
+from mod_excel_access import (
+    clear_han_ji_kap_piau_im,
+    delete_sheet_by_name,
+    get_value_by_name,
+    reset_cells_format_in_sheet,
+)
 from mod_file_access import save_as_new_file
-from mod_帶調符音標 import is_han_ji, kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
+from mod_logging import (
+    init_logging,
+    logging_exc_error,
+    logging_exception,
+    logging_process_step,
+    logging_warning,  # noqa: F401
+)
+from mod_字庫 import JiKhooDict
+from mod_帶調符音標 import is_han_ji, kam_si_u_tiau_hu, read_text_with_han_ji, tng_im_piau, tng_tiau_ho
 from mod_標音 import (
     PiauIm,
-    ca_ji_kiat_ko_tng_piau_im,
+    ca_ji_tng_piau_im,
+    convert_tl_with_tiau_hu_to_tlpa,
     is_punctuation,
+    split_hong_im_hu_ho,
     split_tai_gi_im_piau,
+    tlpa_tng_han_ji_piau_im,
 )
+from mod_程式 import ExcelCell, Program
+
+# =========================================================================
+# 載入環境變數
+# =========================================================================
+load_dotenv()
+
+DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
+DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
 
 # =========================================================================
 # 常數定義
 # =========================================================================
+# 定義 Exit Code
 EXIT_CODE_SUCCESS = 0
 EXIT_CODE_NO_FILE = 1
 EXIT_CODE_INVALID_INPUT = 2
@@ -37,23 +66,12 @@ EXIT_CODE_UNKNOWN_ERROR = 99
 PIAU_IM_ROW = -1
 
 # =========================================================================
-# 載入環境變數
-# =========================================================================
-load_dotenv()
-
-DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
-DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
-
-# =========================================================================
 # 設定日誌
 # =========================================================================
-from mod_logging import init_logging, logging_exc_error, logging_process_step
-
 init_logging()
 
-
 # =========================================================================
-# 資料類別：儲存網頁製作配置
+# 主要處理函數
 # =========================================================================
 class WebPageConfig:
     """網頁製作配置資料類別"""
@@ -599,5 +617,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    import sys
+
     exit_code = main()
-    exit(exit_code)
+    sys.exit(exit_code)

@@ -451,7 +451,10 @@ class ExcelCell:
     def _reset_cell_style(self, cell):
         """重置儲存格樣式"""
         cell.font.color = (0, 0, 0)  # 黑色
-        cell.color = None  # 無填滿
+        cell.color = None                           # 【漢字】儲存格，無填滿
+        cell.offset(-2, 0).color = (255, 239, 213)  # 【人工標音】儲存格：鵝黃色
+        cell.offset(-1, 0).color = None             # 【台語音標】儲存格：黑色
+        cell.offset(1, 0).color = None              # 【漢字標音】儲存格：黑色
 
     def process_cell(
         self,
@@ -1276,6 +1279,37 @@ class ExcelCell:
 
         return tai_gi_im_piau, han_ji_piau_im
 
+    def _process_sheet(self, sheet):
+        """處理整個工作表"""
+        xls_cell = self.excel_cell
+        program = self.program
+
+        # 處理所有的儲存格
+        active_cell = sheet.range(f'{xw.utils.col_name(program.start_col)}{program.line_start_row}')
+        active_cell.select()
+
+        # 調整 row 值至【漢字】列（每 4 列為一組【列群】，漢字在第 3 列：5, 9, 13, ... ）
+        is_eof = False
+        for r in range(1, program.TOTAL_LINES + 1):
+            if is_eof: break  # noqa: E701
+            line_no = r
+            print('=' * 80)
+            print(f"處理第 {line_no} 行...")
+            row = program.line_start_row + (r - 1) * program.ROWS_PER_LINE + program.han_ji_row_offset
+            new_line = False
+            for c in range(program.start_col, program.end_col + 1):
+                if is_eof: break  # noqa: E701
+                row = row
+                col = c
+                active_cell = sheet.range((row, col))
+                active_cell.select()
+                # 處理儲存格
+                print('-' * 60)
+                print(f"儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）")
+                is_eof, new_line = xls_cell.process_cell(active_cell, row, col)
+                if new_line: break  # noqa: E701
+                if is_eof: break  # noqa: E701
+
 
 # =========================================================================
 # 作業處理函數
@@ -1367,36 +1401,6 @@ def process_sheet(sheet, program: Program, xls_cell: ExcelCell):
 # =========================================================================
 # 本程式主要處理作業程序
 # =========================================================================
-def _process_sheet(sheet, program: Program, xls_cell: ExcelCell):
-    """處理整個工作表"""
-
-    # 處理所有的儲存格
-    active_cell = sheet.range(f'{xw.utils.col_name(program.start_col)}{program.line_start_row}')
-    active_cell.select()
-
-    # 調整 row 值至【漢字】列（每 4 列為一組【列群】，漢字在第 3 列：5, 9, 13, ... ）
-    is_eof = False
-    for r in range(1, program.TOTAL_LINES + 1):
-        if is_eof: break  # noqa: E701
-        line_no = r
-        print('=' * 80)
-        print(f"處理第 {line_no} 行...")
-        row = program.line_start_row + (r - 1) * program.ROWS_PER_LINE + program.han_ji_row_offset
-        new_line = False
-        for c in range(program.start_col, program.end_col + 1):
-            if is_eof: break  # noqa: E701
-            row = row
-            col = c
-            active_cell = sheet.range((row, col))
-            active_cell.select()
-            # 處理儲存格
-            print('-' * 60)
-            print(f"儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）")
-            is_eof, new_line = xls_cell.process_cell(active_cell, row, col)
-            if new_line: break  # noqa: E701
-            if is_eof: break  # noqa: E701
-
-
 def process(wb, args) -> int:
     """
     更新【漢字注音】表中【台語音標】儲存格的內容，依據【標音字庫】中的【校正音標】欄位進行更新，並將【校正音標】覆蓋至原【台語音標】。
@@ -1426,36 +1430,34 @@ def process(wb, args) -> int:
             new_piau_im_ji_khoo_sheet=False,
             new_khuat_ji_piau_sheet=False,
         )
+    except Exception as e:
+        logging_exc_error(msg="處理作業異常！", error=e)
+        return EXIT_CODE_PROCESS_FAILURE
 
-        #--------------------------------------------------------------------------
-        # 處理作業開始
-        #--------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
+    # 作業處理中
+    #--------------------------------------------------------------------------
+    try:
         # 處理工作表
         sheet_name = '漢字注音'
         sheet = wb.sheets[sheet_name]
         sheet.activate()
 
         # 逐列處理
-        _process_sheet(
-            sheet=sheet,
-            program=program,
-            xls_cell=xls_cell,
-        )
+        xls_cell._process_sheet(sheet=sheet)
 
-        #--------------------------------------------------------------------------
-        # 處理作業結束
-        #--------------------------------------------------------------------------
         # 寫回字庫到 Excel
-        xls_cell.save_all_piau_im_ji_khoo_dict()
-
-        print('\n')
-        logging_process_step("<=========== 作業結束！==========>")
-        return EXIT_CODE_SUCCESS
-
+        xls_cell.save_all_piau_im_ji_khoo_dicts()
     except Exception as e:
-        msg=f"處理作業，發生異常！ ==> error = {e}"
-        logging.exception(msg)
-        raise
+        logging_exc_error(msg="處理作業異常！", error=e)
+        return EXIT_CODE_PROCESS_FAILURE
+
+    #--------------------------------------------------------------------------
+    # 處理作業結束
+    #--------------------------------------------------------------------------
+    print('\n')
+    logging_process_step("<=========== 作業結束！==========>")
+    return EXIT_CODE_SUCCESS
 
 
 # =========================================================================
@@ -1578,7 +1580,10 @@ if __name__ == "__main__":
 
     if args.test:
         # 執行測試
-        sys.exit(test_01())
+        test_01()
     else:
         # 從 Excel 呼叫
-        sys.exit(main(args))
+        exit_code = main(args)
+        if exit_code != EXIT_CODE_SUCCESS:
+            print(f"程式異常終止，返回代碼：{exit_code}")
+            sys.exit(exit_code)
