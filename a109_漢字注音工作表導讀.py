@@ -56,7 +56,7 @@ except ImportError as e:
 
 # 載入 a220 的核心查詢功能（萌典）
 try:
-    from a220_作用儲存格查找萌典漢字讀音 import ca_han_ji_thak_im as ca_han_ji_thak_im_a220
+    from a220_作用儲存格查找萌典漢字讀音 import process as ca_han_ji_thak_im_a220
     HAS_A220 = True
 except ImportError as e:
     HAS_A220 = False

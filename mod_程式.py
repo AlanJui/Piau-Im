@@ -452,9 +452,33 @@ class ExcelCell:
         """重置儲存格樣式"""
         cell.font.color = (0, 0, 0)  # 黑色
         cell.color = None                           # 【漢字】儲存格，無填滿
-        cell.offset(-2, 0).color = (255, 239, 213)  # 【人工標音】儲存格：鵝黃色
+        cell.offset(-2, 0).color = (255, 255, 204)  # 【人工標音】儲存格：鵝黃色
         cell.offset(-1, 0).color = None             # 【台語音標】儲存格：黑色
         cell.offset(1, 0).color = None              # 【漢字標音】儲存格：黑色
+
+    def get_active_cell_from_sheet(self, sheet) -> Tuple[xw.main.Range, int, int]:
+        """自工作表取得作用儲存格"""
+        program = self.program
+
+        # 自【作用儲存格】取得【Excel 儲存格座標】(列,欄) 座標
+        active_cell = sheet.api.Application.ActiveCell
+        if active_cell:
+            # 顯示【作用儲存格】位置
+            active_row = active_cell.Row
+            active_col = active_cell.Column
+            active_col_name = xw.utils.col_name(active_col)
+            print(f"作用儲存格：{active_col_name}{active_row}（{active_cell.Row}, {active_cell.Column}）")
+
+            # 調整 row 值至【漢字】列（每 4 列為一組，漢字在第 3 列：5, 9, 13, ... ）
+            line_start_row = 3  # 第一行【標音儲存格】所在 Excel 列號: 3
+            line_no = ((active_row - line_start_row + 1) // program.ROWS_PER_LINE) + 1
+            row = (line_no * program.ROWS_PER_LINE) + self.program.han_ji_row_offset - 1
+            col = active_cell.Column
+            cell = sheet.range((row, col))
+            return cell, row, col
+        else:
+            print("無作用儲存格，請先選取一個儲存格後再執行本程式！")
+            return None, None, None
 
     def process_cell(
         self,

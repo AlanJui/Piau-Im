@@ -242,6 +242,32 @@ class JiKhooDict:
         # 找不到匹配項目
         return -1
 
+    def get_entry_by_row_no(self, row_no: int) -> tuple[str, dict]:
+        """
+        根據工作表列號查詢對應的漢字及其音標項目
+        若查無結果，返回 None
+
+        Args:
+            row_no: 要查詢的工作表列號
+
+        Returns:
+            tuple: (漢字, 音標項目字典)，若無則返回 None
+        """
+        current_row = 2  # 列號從 2 開始（第1列是標題）
+
+        for han_ji, entries in self.ji_khoo_dict.items():
+            for entry in entries:
+                # 跳過沒有座標的項目（這些不會寫入 Excel）
+                if not entry.get("coordinates"):
+                    continue
+
+                if current_row == row_no:
+                    return han_ji, entry
+
+                current_row += 1
+
+        return None
+
     def get_tai_gi_im_piau_by_han_ji(self, han_ji: str) -> str:
         """
         根據漢字查詢台語音標
@@ -346,6 +372,14 @@ class JiKhooDict:
         han_ji_piau_im_sheet.range('A1').select()
         return EXIT_CODE_SUCCESS
 
+    def save_to_sheet(self, wb, sheet_name: str) -> int:
+        try:
+            self.write_to_excel_sheet(wb, sheet_name)
+            return EXIT_CODE_SUCCESS
+        except Exception as e:
+            logging_exception(msg="將【字典】存放之資料，更新工作表作業異常！", error=e)
+            return EXIT_CODE_PROCESS_FAILURE
+
     def write_to_excel_sheet(self, wb, sheet_name: str) -> int:
         sheet_name_to_use = self.name if sheet_name == "" else sheet_name
         try:
@@ -388,7 +422,7 @@ class JiKhooDict:
             self,
             han_ji: str,
             tai_gi_im_piau: str,
-            coordinate: tuple,
+            coordinate: tuple[int, int],
             entry_to_delete_if_empty: bool = False
         ):
         """
@@ -426,6 +460,33 @@ class JiKhooDict:
                 if len(entry["coordinates"]) == 0:
                     to_delete = entry
                 break
+
+        if to_delete:
+            entries.remove(to_delete)
+
+    def remove_entry(
+            self,
+            han_ji: str,
+            tai_gi_im_piau: str,
+            hau_ziann_im_piau: str,
+            coordinates: tuple[int, int]
+        ):
+        """
+        移除指定漢字與音標下的某個座標；若座標清空則移除整筆項目。
+        """
+        if han_ji not in self.ji_khoo_dict:
+            return
+
+        entries = self.ji_khoo_dict[han_ji]
+        to_delete = None
+        for entry in entries:
+            if entry["tai_gi_im_piau"] == tai_gi_im_piau:
+                if entry["hau_ziann_im_piau"] == hau_ziann_im_piau:
+                    if coordinates in entry["coordinates"]:
+                        entry["coordinates"].remove(coordinates)
+                    if len(entry["coordinates"]) == 0:
+                        to_delete = entry
+                    break
 
         if to_delete:
             entries.remove(to_delete)

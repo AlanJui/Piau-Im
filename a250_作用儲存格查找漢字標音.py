@@ -58,10 +58,10 @@ def _get_active_cell_from_sheet(sheet, xls_cell: ExcelCell):
         # 調整 row 值至【漢字】列（每 4 列為一組，漢字在第 3 列：5, 9, 13, ... ）
         line_start_row = 3  # 第一行【標音儲存格】所在 Excel 列號: 3
         line_no = (active_row - line_start_row + 1) // program.ROWS_PER_LINE
-        row = line_start_row + (line_no * program.ROWS_PER_LINE)
+        row = (line_no * program.ROWS_PER_LINE) + xls_cell.program.han_ji_row_offset - 1
         col = active_cell.Column
         cell = sheet.range((row, col))
-        cell.select()
+        # cell.select()
 
         # 處理儲存格
         xls_cell.process_cell(cell, row, col)
