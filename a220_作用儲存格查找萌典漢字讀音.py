@@ -255,7 +255,7 @@ class CellProcessor(BingTianExcelCell):
             print(f"無效的輸入：{user_input}")
             return f"【{han_ji}】輸入無效", False
 
-    def process_cell(
+    def _process_cell(
         self,
         cell,
         row: int,
@@ -312,7 +312,7 @@ class CellProcessor(BingTianExcelCell):
         col = active_col
         cell = sheet.range((row, col))
         # 處理儲存格
-        self.process_cell(cell, row, col)
+        self._process_cell(cell, row, col)
 
 
 # =========================================================================

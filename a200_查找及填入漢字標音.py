@@ -83,7 +83,7 @@ def process_sheet(sheet, program: Program, xls_cell: ExcelCell):
             # 處理儲存格
             print('-' * 80)
             print(f"儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）")
-            is_eof, new_line = xls_cell.process_cell(active_cell, row, col)
+            is_eof, new_line = xls_cell._process_cell(active_cell, row, col)
             if new_line: break  # noqa: E701
             if is_eof: break  # noqa: E701
 

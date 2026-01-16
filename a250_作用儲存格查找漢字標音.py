@@ -64,7 +64,7 @@ def _get_active_cell_from_sheet(sheet, xls_cell: ExcelCell):
         # cell.select()
 
         # 處理儲存格
-        xls_cell.process_cell(cell, row, col)
+        xls_cell._process_cell(cell, row, col)
 
 
 def process(wb, args) -> int:

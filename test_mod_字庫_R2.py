@@ -81,7 +81,7 @@ def _process_sheet(sheet, program: Program, xls_cell: ExcelCell):
             active_cell.select()
             # 處理儲存格
             print(f"儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）")
-            is_eof, new_line = xls_cell.process_cell(active_cell, row, col)
+            is_eof, new_line = xls_cell._process_cell(active_cell, row, col)
             if new_line: break  # noqa: E701
             if is_eof: break  # noqa: E701
 
@@ -210,7 +210,7 @@ def process(wb, args) -> int:
                 new_line = False
                 # 處理儲存格
                 print(f"儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）")
-                is_eof, new_line = xls_cell.process_cell(active_cell, row, col)
+                is_eof, new_line = xls_cell._process_cell(active_cell, row, col)
 
             # 處理工作表整列
             print("開始測試 _test_copy_entry_from_jin_kang_piau_im_ji_khoo_dict() 方法...")
@@ -238,7 +238,7 @@ def process(wb, args) -> int:
                 new_line = False
                 # 處理儲存格
                 print(f"儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）")
-                is_eof, new_line = xls_cell.process_cell(active_cell, row, col)
+                is_eof, new_line = xls_cell._process_cell(active_cell, row, col)
 
             # 處理工作表整列
             print("開始測試 _test_new_entry_into_jin_kang_piau_im_ji_khoo_dict() 方法...")

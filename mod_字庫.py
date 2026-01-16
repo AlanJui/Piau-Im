@@ -323,6 +323,30 @@ class JiKhooDict:
 
         return None
 
+    def get_tai_gi_im_piau_by_han_ji_and_coordinate(self, han_ji: str, coordinate: tuple[int, int]) -> str:
+        """
+        根據漢字與座標查詢台語音標
+        若該漢字有多個音標，返回第一個符合座標的音標
+        若查無結果，返回空字串
+
+        Args:
+            han_ji: 要查詢的漢字
+            coordinate: 要查詢的座標
+
+        Returns:
+            str: 台語音標，若無則返回空字串
+        """
+        if han_ji in self.ji_khoo_dict:
+            entries = self.ji_khoo_dict[han_ji]
+            for entry in entries:
+                if coordinate in entry.get("coordinates", []):
+                    tai_gi_im_piau = entry.get("tai_gi_im_piau", "")
+                    # 若該音標為 N/A 則返回空字串
+                    if tai_gi_im_piau == "N/A":
+                        return ""
+                    return tai_gi_im_piau
+        return ""
+
     def get_tai_gi_im_piau_by_han_ji(self, han_ji: str) -> str:
         """
         根據漢字查詢台語音標
@@ -429,7 +453,9 @@ class JiKhooDict:
 
     def save_to_sheet(self, wb, sheet_name: str) -> int:
         try:
-            self.write_to_excel_sheet(wb, sheet_name)
+            sheet_name_to_use = self.name if sheet_name == "" else sheet_name
+            ensure_sheet_exists(wb, sheet_name_to_use)
+            self.write_to_excel_sheet(wb, sheet_name_to_use)
             return EXIT_CODE_SUCCESS
         except Exception as e:
             logging_exception(msg="將【字典】存放之資料，更新工作表作業異常！", error=e)
@@ -497,6 +523,26 @@ class JiKhooDict:
                 break
 
         if to_delete and entry_to_delete_if_empty:
+            entries.remove(to_delete)
+
+    def remove_coordinate_by_han_ji_and_coordinate(self, han_ji: str, coordinate: tuple[int, int]):
+        """
+        移除指定漢字與音標下的某個座標；若座標清空則移除整筆項目。
+        """
+        if han_ji not in self.ji_khoo_dict:
+            return
+
+        entries = self.ji_khoo_dict[han_ji]
+        to_delete = None
+        for entry in entries:
+            for coord in entry["coordinates"]:
+                if coord == coordinate:
+                    entry["coordinates"].remove(coord)
+                    if len(entry["coordinates"]) == 0:
+                        to_delete = entry
+                    break
+
+        if to_delete:
             entries.remove(to_delete)
 
     def remove_coordinate_by_hau_ziann_im_piau(self, han_ji: str, hau_ziann_im_piau: str, coordinate: tuple):

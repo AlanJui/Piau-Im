@@ -2,7 +2,6 @@
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
 import logging
-import re
 from pathlib import Path
 from typing import Tuple
 
@@ -13,9 +12,9 @@ import xlwings as xw
 from mod_logging import (
     init_logging,
     logging_exc_error,  # noqa: F401
-    logging_exception,
+    logging_exception,  # noqa: F401
     logging_process_step,  # noqa: F401
-    logging_warning,
+    logging_warning,  # noqa: F401
 )
 from mod_帶調符音標 import is_han_ji
 from mod_標音 import (
@@ -206,7 +205,7 @@ class CellProcessor(ExcelCell):
             print(f"無效的輸入：{user_input}")
             return f"【{han_ji}】輸入無效", False
 
-    def process_cell(
+    def _process_cell(
         self,
         cell,
         row: int,
@@ -263,7 +262,7 @@ class CellProcessor(ExcelCell):
         col = active_col
         cell = sheet.range((row, col))
         # 處理儲存格
-        self.process_cell(cell, row, col)
+        self._process_cell(cell, row, col)
 
 
 # =========================================================================
