@@ -155,14 +155,69 @@ class JiKhooDict:
 
         self.add_entry(han_ji, tai_gi_im_piau, hau_ziann_im_piau, coordinates)
 
-    def add_or_update_entry(
+    def get_row_by_han_ji_and_coordinate(self, han_ji: str, coordinate: tuple[int, int]) -> int:
+        """
+        根據【漢字】欄和【座標】欄，查詢【工作表】所在【列號】
+        若查無結果，返回 -1
+
+        Args:
+            han_ji: 要查詢的漢字
+            coordinate: 要查詢的座標
+
+        Returns:
+            int: 工作表的列號，若無則返回 -1
+        """
+        #  列號從 2 開始（第1列是標題）
+        row_no = 2
+
+        # 遍歷所有漢字及其對應的音標項目
+        for current_han_ji, entries in self.ji_khoo_dict.items():
+            for entry in entries:
+                # 跳過沒有座標的項目（這些不會寫入 Excel）
+                if not entry.get("coordinates"):
+                    continue
+
+                # 檢查是否匹配目標漢字和音標
+                if current_han_ji == han_ji and coordinate in entry.get("coordinates", []):
+                    return row_no
+
+                # 每個有效項目佔一行
+                row_no += 1
+
+        # 找不到匹配項目
+        return -1
+
+    def add_or_update_entry_by_coordinate(
         self,
         han_ji: str,
         tai_gi_im_piau: str,
         hau_ziann_im_piau: str,
         coordinates: tuple[int, int]
     ):
-        self.add_entry(han_ji, tai_gi_im_piau, hau_ziann_im_piau, coordinates)
+        """新增或更新【字典】中的【漢字】項目
+        若【漢字】與【台語音標】已存在，則更新【校正音標】與【座標】
+        否則新增一筆新項目
+        Args:
+            han_ji: 要新增或更新的漢字
+            tai_gi_im_piau: 要新增或更新的台語音標
+            hau_ziann_im_piau: 要新增或更新的校正音標
+            coordinates: 要新增或更新的座標
+        """
+        row_no = self.get_row_by_han_ji_and_coordinate(han_ji=han_ji, coordinate=coordinates)
+        if row_no != -1:
+            self.update_entry(
+                han_ji=han_ji,
+                tai_gi_im_piau=tai_gi_im_piau,
+                hau_ziann_im_piau=hau_ziann_im_piau,
+                coordinates=coordinates
+            )
+        else:
+            self.add_entry(
+                han_ji=han_ji,
+                tai_gi_im_piau=tai_gi_im_piau,
+                hau_ziann_im_piau=hau_ziann_im_piau,
+                coordinates=coordinates
+            )
 
     def get_entry(self, han_ji: str):
         if han_ji in self.ji_khoo_dict:

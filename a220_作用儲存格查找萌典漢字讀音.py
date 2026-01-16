@@ -91,7 +91,7 @@ class CellProcessor(BingTianExcelCell):
     # 覆蓋父類別的方法
     # =================================================================
 
-    def _convert_piau_im(self, tai_lo_ping_im: str) -> Tuple[str, str]:
+    def _convert_piau_im_by_entry(self, tai_lo_ping_im: str) -> Tuple[str, str]:
         """
         將萌典查詢結果（台羅拼音）轉換為音標
         ⚠️ 覆蓋父類別的方法 - 針對萌典 API 返回的格式
@@ -141,72 +141,6 @@ class CellProcessor(BingTianExcelCell):
 
         return tai_gi_im_piau, han_ji_piau_im
 
-    def check_coordinate_exists(
-            self,
-            row: int,
-            col: int,
-            coord_list,
-        ) -> bool:
-        """
-        檢查指定座標是否存在於座標列表中。
-        Args:
-            row (int): 要檢查的列號
-            col (int): 要檢查的欄號
-            coord_list: 座標列表（可以是 list 或 str）
-        Returns:
-            bool: 如果座標存在則返回 True，否則返回 False
-        """
-        # 如果是字串格式，先解析成 list
-        if isinstance(coord_list, str):
-            # coord_str = '(61, 13); (69, 8); (89, 13); (125, 11); (125, 16)'
-            coordinate_tuples = re.findall(r"\((\d+)\s*,\s*(\d+)\)", coord_list)
-            coordinate_list = [(int(r), int(c)) for r, c in coordinate_tuples]
-        else:
-            # 已經是 list 格式：[(61, 13), (69, 8), (89, 13), (125, 11), (125, 16)]
-            coordinate_list = coord_list
-
-        # 判斷是否存在
-        coordinate = (row, col)
-        exists = coordinate in coordinate_list
-
-        print(f"座標 {coordinate} 存在: {exists}")  # True
-        print(f"所有座標: {coordinate_list}")
-        return exists
-
-    def convert_string_to_coordinates_list(self, coord_str: str) -> list[tuple[int, int]]:
-        """
-        將座標字串轉換為座標列表。
-        Args:
-            coord_str (str): 座標字串，格式如 "(1, 2); (3, 4)"
-        Returns:
-            list[tuple[int, int]]: 座標列表
-        """
-        coordinates = []
-        if coord_str:
-            coords_list = coord_str.split("; ")
-            for coord in coords_list:
-                coord = coord.strip("()")
-                row_col = tuple(map(int, coord.split(", ")))
-                coordinates.append(row_col)
-        return coordinates
-
-    def convert_string_coordinates_to_tuples(self, coord_str: str) -> list[tuple[int, int]]:
-        """
-        將座標字串轉換為座標元組列表。
-        Args:
-            coord_str (str): 座標字串，格式如 "(1, 2); (3, 4)"
-        Returns:
-            list[tuple[int, int]]: 座標元組列表
-        """
-        coordinates = []
-        if coord_str:
-            coords_list = coord_str.split("; ")
-            for coord in coords_list:
-                coord = coord.strip("()")
-                row_col = tuple(map(int, coord.split(", ")))
-                coordinates.append(row_col)
-        return coordinates
-
     def _process_han_ji(
         self,
         han_ji: str,
@@ -250,7 +184,7 @@ class CellProcessor(BingTianExcelCell):
         piau_im_options = []
         for idx, tai_lo_ping_im in enumerate(result):
             # 轉換音標
-            tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im(tai_lo_ping_im)
+            tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im_by_entry(tai_lo_ping_im)
             piau_im_options.append((tai_gi_im_piau, han_ji_piau_im))
             msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
             print(f"{idx + 1}. {msg}")
@@ -273,7 +207,7 @@ class CellProcessor(BingTianExcelCell):
                 cell.offset(1, 0).value = han_ji_piau_im    # 漢字標音儲存格
 
                 # 在【人工標音字庫】增添【該字】指向【漢字注音】之【座標】紀錄
-                self.jin_kang_piau_im_ji_khoo_dict.add_entry(
+                self.jin_kang_piau_im_ji_khoo_dict.add_or_update_entry_by_coordinate(
                     han_ji=han_ji,
                     tai_gi_im_piau=tai_gi_im_piau,
                     hau_ziann_im_piau='N/A',
@@ -286,11 +220,11 @@ class CellProcessor(BingTianExcelCell):
                 )
 
                 # 自【標音字庫】移除【該字】指向【漢字注音】之【座標】紀錄
-                row_no = self.piau_im_ji_khoo_dict.get_row_by_han_ji_and_tai_gi_im_piau(
+                row_no = self.piau_im_ji_khoo_dict.get_row_by_han_ji_and_coordinate(
                     han_ji=han_ji,
-                    tai_gi_im_piau=tai_gi_im_piau
+                    coordinate=(row, col)
                 )
-                if row_no is not None:
+                if row_no != -1:
                     _, entry = self.piau_im_ji_khoo_dict.get_entry_by_row_no(row_no)
                     exist = self.check_coordinate_exists(
                         row=row,
@@ -356,21 +290,6 @@ class CellProcessor(BingTianExcelCell):
             self._process_han_ji(cell_value, cell, row, col)
             return False, False
 
-    def _get_active_cell_from_sheet(self, sheet) -> Tuple[xw.main.Range, int, int]:
-        """取得工作表之【作用儲存格】並回傳 (cell, row, col)"""
-
-        # 自【作用儲存格】取得【Excel 儲存格座標】(列,欄) 座標
-        active_cell = sheet.api.Application.ActiveCell
-        if active_cell:
-            # 顯示【作用儲存格】位置
-            active_row = active_cell.Row
-            active_col = active_cell.Column
-            active_col_name = xw.utils.col_name(active_col)
-            print(f"作用儲存格：{active_col_name}{active_row}（{active_cell.Row}, {active_cell.Column}）")
-            return sheet.range((active_row, active_col)), active_row, active_col
-        else:
-            raise ValueError("無法取得作用儲存格")
-
     def _process_sheet(self, sheet):
         """處理整個工作表"""
         program = self.program
@@ -389,7 +308,7 @@ class CellProcessor(BingTianExcelCell):
         # 調整 row 值至【漢字】列（每 4 列為一組，漢字在第 3 列：5, 9, 13, ... ）
         line_start_row = self.program.line_start_row  # 第一行【標音儲存格】所在 Excel 列號: 3
         line_no = ((active_row - line_start_row + 1) // self.program.ROWS_PER_LINE) + 1
-        row = (line_no * self.program.ROWS_PER_LINE) + self.program.han_ji_row_offset - 1
+        row = (line_no * program.ROWS_PER_LINE) + program.han_ji_row_offset - 1
         col = active_col
         cell = sheet.range((row, col))
         # 處理儲存格
@@ -442,10 +361,6 @@ def process(wb, args) -> int:
         sheet.activate()
 
         xls_cell._process_sheet(sheet=sheet)
-
-        # 寫回字庫到 Excel
-        # xls_cell.save_all_piau_im_ji_khoo_dicts()
-
     except Exception as e:
         logging_exc_error(msg="處理作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
@@ -453,7 +368,6 @@ def process(wb, args) -> int:
     #--------------------------------------------------------------------------
     # 處理作業結束
     #--------------------------------------------------------------------------
-    # print('\n')
     logging_process_step("<=========== 作業結束！==========>")
     return EXIT_CODE_SUCCESS
 
@@ -498,10 +412,17 @@ def main(args):
         print("無限循環模式：請在 Excel 中選擇任一儲存格後按 Enter 查詢")
         print("按 Ctrl+C 終止程式")
         print("=" * 80)
+        sheet_name = '漢字注音'
+
+        # 無限循環
         while True:
             try:
                 # 等待使用者按 Enter
                 input("\n請在 Excel 選擇【作用儲存格】後按 Enter 繼續（Ctrl+C 終止）...")
+
+                # 確保工作表為作用中
+                wb.sheets[sheet_name].activate()
+
                 exit_code = process(wb=wb, args=args)
                 if exit_code != EXIT_CODE_SUCCESS:
                     print(f"⚠️  處理結果：exit_code = {exit_code}")
@@ -552,9 +473,9 @@ def test_han_ji_tian():
     load_dotenv()
     DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
 
-    print("=" * 70)
+    print("=" * 80)
     print("測試 HanJiTian 查詢功能")
-    print("=" * 70)
+    print("=" * 80)
 
     try:
         # 初始化字典
@@ -571,11 +492,11 @@ def test_han_ji_tian():
                 for item in result:
                     print(f"  台語音標：{item['台語音標']}, 常用度：{item.get('常用度', 'N/A')}, 說明：{item.get('摘要說明', 'N/A')}")
             else:
-                print(f"  查無資料")
+                print("  查無資料")
 
-        print("\n" + "=" * 70)
+        print("\n" + "=" * 80)
         print("測試完成")
-        print("=" * 70)
+        print("=" * 80)
 
     except Exception as e:
         print(f"測試失敗：{e}")
