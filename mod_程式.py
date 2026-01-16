@@ -1305,7 +1305,6 @@ class ExcelCell:
 
     def _process_sheet(self, sheet):
         """處理整個工作表"""
-        xls_cell = self.excel_cell
         program = self.program
 
         # 處理所有的儲存格

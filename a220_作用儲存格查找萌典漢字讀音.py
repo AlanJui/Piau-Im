@@ -2,35 +2,27 @@
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
 import logging
-import os
 import re
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Tuple
 
 # 載入第三方套件
 import xlwings as xw
-from dotenv import load_dotenv
-
-from mod_ca_ji_tian import HanJiTian  # 新的查字典模組
 
 # 載入自訂模組
 from mod_ChhoeTaigi import chhoe_taigi
-from mod_excel_access import delete_sheet_by_name, get_value_by_name
-from mod_字庫 import JiKhooDict
+from mod_logging import (
+    init_logging,
+    logging_exc_error,
+    logging_exception,
+    logging_process_step,
+    logging_warning,
+)
 from mod_帶調符音標 import is_han_ji
 from mod_標音 import (
-    PiauIm,
-    convert_tl_to_tlpa,
     convert_tl_with_tiau_hu_to_tlpa,
-    format_han_ji_piau_im,
-    is_punctuation,
-    split_hong_im_hu_ho,
     split_tai_gi_im_piau,
-    tai_gi_im_piau_tng_un_bu,
-    tlpa_tng_han_ji_piau_im,
 )
-
-# 載入自訂模組
 from mod_程式 import ExcelCell, Program
 
 # =========================================================================
@@ -44,31 +36,15 @@ EXIT_CODE_PROCESS_FAILURE = 10
 EXIT_CODE_UNKNOWN_ERROR = 99
 
 # =========================================================================
-# 載入環境變數
-# =========================================================================
-load_dotenv()
-
-DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
-DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
-
-# =========================================================================
 # 設定日誌
 # =========================================================================
-from mod_logging import (
-    init_logging,
-    logging_exc_error,
-    logging_exception,
-    logging_process_step,
-    logging_warning,
-)
-
 init_logging()
 
 
 # =========================================================================
 # 自訂 ExcelCell 子類別：覆蓋特定方法以實現萌典查詢功能
 # =========================================================================
-class MengDianExcelCell(ExcelCell):
+class BingTianExcelCell(ExcelCell):
     """萌典查詢專用的 ExcelCell 子類別"""
 
     def __init__(
@@ -87,7 +63,7 @@ class MengDianExcelCell(ExcelCell):
         )
 
 
-class CellProcessor(MengDianExcelCell):
+class CellProcessor(BingTianExcelCell):
     """
     萌典查詢專用的儲存格處理器
     繼承自 MengDianExcelCell (ExcelCell 的子類別)
@@ -365,7 +341,7 @@ class CellProcessor(MengDianExcelCell):
 
         # 確保 cell_value 務必是【漢字】，故需篩飾【特殊字元】
         if cell_value == 'φ':
-            # 【文字終結】
+           # 【文字終結】
             print(f"【{cell_value}】：【文章結束】結束行處理作業。")
             return True, True
         elif cell_value == '\n':
@@ -380,32 +356,49 @@ class CellProcessor(MengDianExcelCell):
             self._process_han_ji(cell_value, cell, row, col)
             return False, False
 
+    def _get_active_cell_from_sheet(self, sheet) -> Tuple[xw.main.Range, int, int]:
+        """取得工作表之【作用儲存格】並回傳 (cell, row, col)"""
+
+        # 自【作用儲存格】取得【Excel 儲存格座標】(列,欄) 座標
+        active_cell = sheet.api.Application.ActiveCell
+        if active_cell:
+            # 顯示【作用儲存格】位置
+            active_row = active_cell.Row
+            active_col = active_cell.Column
+            active_col_name = xw.utils.col_name(active_col)
+            print(f"作用儲存格：{active_col_name}{active_row}（{active_cell.Row}, {active_cell.Column}）")
+            return sheet.range((active_row, active_col)), active_row, active_col
+        else:
+            raise ValueError("無法取得作用儲存格")
+
+    def _process_sheet(self, sheet):
+        """處理整個工作表"""
+        program = self.program
+
+        # 自【作用儲存格】取得【Excel 儲存格座標】(列,欄) 座標
+        try:
+            active_cell = sheet.api.Application.ActiveCell
+            # 顯示【作用儲存格】位置
+            active_row = active_cell.Row
+            active_col = active_cell.Column
+            active_col_name = xw.utils.col_name(active_col)
+            print(f"作用儲存格：{active_col_name}{active_row}（{active_cell.Row}, {active_cell.Column}）")
+        except Exception:
+            raise ValueError("無法取得作用儲存格")
+
+        # 調整 row 值至【漢字】列（每 4 列為一組，漢字在第 3 列：5, 9, 13, ... ）
+        line_start_row = self.program.line_start_row  # 第一行【標音儲存格】所在 Excel 列號: 3
+        line_no = ((active_row - line_start_row + 1) // self.program.ROWS_PER_LINE) + 1
+        row = (line_no * self.program.ROWS_PER_LINE) + self.program.han_ji_row_offset - 1
+        col = active_col
+        cell = sheet.range((row, col))
+        # 處理儲存格
+        self.process_cell(cell, row, col)
+
+
 # =========================================================================
 # 主要處理函數
 # =========================================================================
-def _get_active_cell_from_sheet(sheet, xls_cell: ExcelCell):
-    """處理整個工作表"""
-    program = xls_cell.program
-
-    # 自【作用儲存格】取得【Excel 儲存格座標】(列,欄) 座標
-    active_cell = sheet.api.Application.ActiveCell
-    if active_cell:
-        # 顯示【作用儲存格】位置
-        active_row = active_cell.Row
-        active_col = active_cell.Column
-        active_col_name = xw.utils.col_name(active_col)
-        print(f"作用儲存格：{active_col_name}{active_row}（{active_cell.Row}, {active_cell.Column}）")
-
-        # 調整 row 值至【漢字】列（每 4 列為一組，漢字在第 3 列：5, 9, 13, ... ）
-        line_start_row = 3  # 第一行【標音儲存格】所在 Excel 列號: 3
-        line_no = ((active_row - line_start_row + 1) // program.ROWS_PER_LINE) + 1
-        row = (line_no * program.ROWS_PER_LINE) + xls_cell.program.han_ji_row_offset - 1
-        col = active_cell.Column
-        cell = sheet.range((row, col))
-        # cell.select()
-
-
-
 def process(wb, args) -> int:
     """
     查詢漢字讀音並標注 - 使用萌典 API
@@ -448,10 +441,7 @@ def process(wb, args) -> int:
         sheet = wb.sheets[sheet_name]
         sheet.activate()
 
-        # 取得【作用儲存格】並處理
-        cell, row, col = xls_cell.get_active_cell_from_sheet(sheet=sheet)
-        # 處理儲存格
-        xls_cell.process_cell(cell, row, col)
+        xls_cell._process_sheet(sheet=sheet)
 
         # 寫回字庫到 Excel
         # xls_cell.save_all_piau_im_ji_khoo_dicts()
@@ -549,6 +539,19 @@ def main(args):
 
 def test_han_ji_tian():
     """測試 HanJiTian 類別"""
+    # =========================================================================
+    # 載入環境變數
+    # =========================================================================
+    import os
+
+    from dotenv import load_dotenv
+
+    from mod_ca_ji_tian import HanJiTian  # 新的查字典模組
+
+    # 預設檔案名稱從環境變數讀取
+    load_dotenv()
+    DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
+
     print("=" * 70)
     print("測試 HanJiTian 查詢功能")
     print("=" * 70)
