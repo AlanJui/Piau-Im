@@ -311,6 +311,47 @@ class JiKhooDict:
         # 找不到匹配項目
         return -1
 
+    def get_entry_by_han_ji_and_coordinate(self, han_ji: str, coordinate: tuple[int, int]) -> dict:
+        """
+        根據漢字與座標查詢對應的音標項目
+        若查無結果，返回 None
+
+        Args:
+            han_ji: 要查詢的漢字
+            coordinate: 要查詢的座標
+
+        Returns:
+            dict: 音標項目字典，若無則返回 None
+        """
+        if han_ji in self.ji_khoo_dict:
+            entries = self.ji_khoo_dict[han_ji]
+            for entry in entries:
+                if coordinate in entry.get("coordinates", []):
+                    return entry
+        return None
+
+    def get_entry_by_coordinate(self, coordinate: tuple[int, int]) -> tuple[str, dict]:
+        """
+        根據工作表座標查詢對應的漢字及其音標項目
+        若查無結果，返回 None
+
+        Args:
+            coordinate: 要查詢的工作表座標
+
+        Returns:
+            tuple: (漢字, 音標項目字典)，若無則返回 None
+        """
+        for han_ji, entries in self.ji_khoo_dict.items():
+            for entry in entries:
+                # 跳過沒有座標的項目（這些不會寫入 Excel）
+                if not entry.get("coordinates"):
+                    continue
+
+                if coordinate in entry.get("coordinates", []):
+                    return han_ji, entry
+
+        return None
+
     def get_entry_by_row_no(self, row_no: int) -> tuple[str, dict]:
         """
         根據工作表列號查詢對應的漢字及其音標項目
@@ -521,7 +562,34 @@ class JiKhooDict:
             entry_to_delete_if_empty: bool = False
         ):
         """
-        移除指定漢字與音標下的某個座標；若座標清空則移除整筆項目。
+        根據【漢字】與【座標】移除紀錄中，在【座標】欄清單的某【座標】；
+        若【座標】欄清空，則移除整筆紀錄。
+        """
+        if han_ji not in self.ji_khoo_dict:
+            return
+
+        entries = self.ji_khoo_dict[han_ji]
+        to_delete = None
+        for entry in entries:
+            if coordinate in entry["coordinates"]:
+                entry["coordinates"].remove(coordinate)
+            if len(entry["coordinates"]) == 0:
+                to_delete = entry
+            break
+
+        if to_delete and entry_to_delete_if_empty:
+            entries.remove(to_delete)
+
+    def remove_coordinate_by_han_ji_and_tai_gi_im_piau(
+            self,
+            han_ji: str,
+            tai_gi_im_piau: str,
+            coordinate: tuple[int, int],
+            entry_to_delete_if_empty: bool = False
+        ):
+        """
+        根據【漢字】與【台語音標】移除紀錄中，在【座標】欄清單的某【座標】；
+        若【座標】欄清空，則移除整筆紀錄。
         """
         if han_ji not in self.ji_khoo_dict:
             return
@@ -538,6 +606,7 @@ class JiKhooDict:
 
         if to_delete and entry_to_delete_if_empty:
             entries.remove(to_delete)
+
 
     def remove_coordinate_by_han_ji_and_coordinate(self, han_ji: str, coordinate: tuple[int, int]):
         """

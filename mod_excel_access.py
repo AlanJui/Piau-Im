@@ -78,6 +78,26 @@ DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
 # 程式用函式
 # =========================================================================
 
+# 方法 1: 檢查是否為 list 且內容是 tuple
+def is_coordinate_list(obj):
+    return (
+        isinstance(obj, list) and
+        len(obj) > 0 and
+        all(isinstance(item, tuple) and len(item) == 2 for item in obj)
+    )
+
+# 方法 2: 更嚴格的檢查（包含型別）
+def is_coordinate_list_type(obj):
+    return (
+        isinstance(obj, list) and
+        all(
+            isinstance(item, tuple) and
+            len(item) == 2 and
+            all(isinstance(coord, int) for coord in item)
+            for item in obj
+        )
+    )
+
 # -------------------------------------------------------------------------
 # 計算工作表中有效列數
 # -------------------------------------------------------------------------
