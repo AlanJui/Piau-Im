@@ -17,11 +17,6 @@ from mod_logging import (
     logging_warning,  # noqa: F401
 )
 from mod_帶調符音標 import is_han_ji
-from mod_標音 import (
-    convert_tl_with_tiau_hu_to_tlpa,
-    format_han_ji_piau_im,
-    split_tai_gi_im_piau,
-)
 from mod_程式 import ExcelCell, Program
 
 # =========================================================================
@@ -404,7 +399,7 @@ def main(args):
         print("=" * 70)
         return EXIT_CODE_SUCCESS
     except Exception as e:
-        logging.exception("程式執行失敗")
+        logging.exception(f"程式執行失敗: {e}")
         return EXIT_CODE_UNKNOWN_ERROR
 
 

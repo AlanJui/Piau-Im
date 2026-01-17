@@ -2,7 +2,6 @@
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
 import logging
-import re
 from pathlib import Path
 from typing import Tuple
 
@@ -114,7 +113,7 @@ class CellProcessor(BingTianExcelCell):
         # 標音法為：【十五音】或【雅俗通】，且【聲母】為空值，則將【聲母】設為【ø】
         piau_im_huat = self.program.piau_im_huat
         piau_im = self.program.piau_im
-        if (piau_im_huat == "十五音" or piau_im_huat == "雅俗通") and (siann_bu == "" or siann_bu == None):
+        if (piau_im_huat == "十五音" or piau_im_huat == "雅俗通") and (siann_bu == "" or siann_bu is None):
             siann_bu = "ø"
 
         ok = False
@@ -207,7 +206,7 @@ class CellProcessor(BingTianExcelCell):
                 cell.offset(1, 0).value = han_ji_piau_im    # 漢字標音儲存格
 
                 # 在【人工標音字庫】增添【該字】指向【漢字注音】之【座標】紀錄
-                self.jin_kang_piau_im_ji_khoo_dict.add_or_update_entry_by_coordinate(
+                self.jin_kang_piau_im_ji_khoo_dict.add_or_update_entry(
                     han_ji=han_ji,
                     tai_gi_im_piau=tai_gi_im_piau,
                     hau_ziann_im_piau='N/A',
@@ -454,7 +453,7 @@ def main(args):
         print("=" * 70)
         return EXIT_CODE_SUCCESS
     except Exception as e:
-        logging.exception("程式執行失敗")
+        logging.exception(f"程式執行失敗: {e}")
         return EXIT_CODE_UNKNOWN_ERROR
 
 

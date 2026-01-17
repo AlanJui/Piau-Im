@@ -10,7 +10,6 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 from mod_ca_ji_tian import HanJiTian  # 新的查字典模組
-from mod_excel_access import get_value_by_name
 from mod_logging import init_logging, logging_exc_error, logging_process_step
 
 # 載入自訂模組
@@ -211,7 +210,7 @@ def test_han_ji_tian():
                 for item in result:
                     print(f"  台語音標：{item['台語音標']}, 常用度：{item.get('常用度', 'N/A')}, 說明：{item.get('摘要說明', 'N/A')}")
             else:
-                print(f"  查無資料")
+                print("  查無資料")
 
         print("\n" + "=" * 70)
         print("測試完成")

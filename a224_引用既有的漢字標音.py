@@ -18,15 +18,10 @@
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
 import logging
-import os
 from pathlib import Path
-from typing import Tuple
 
 # 載入第三方套件
 import xlwings as xw
-from dotenv import load_dotenv
-
-from mod_excel_access import delete_sheet_by_name, get_value_by_name
 
 # 載入自訂模組
 from mod_logging import (
@@ -37,15 +32,6 @@ from mod_logging import (
     logging_warning,  # noqa: F401
 )
 from mod_帶調符音標 import is_han_ji
-from mod_標音 import (
-    PiauIm,
-    ca_ji_tng_piau_im,
-    convert_tl_with_tiau_hu_to_tlpa,
-    is_punctuation,
-    kam_si_u_tiau_hu,
-    split_hong_im_hu_ho,
-    tlpa_tng_han_ji_piau_im,
-)
 from mod_程式 import ExcelCell, Program
 
 # =========================================================================
@@ -141,18 +127,20 @@ class CellProcessor(ExcelCell):
             active_row = active_cell.Row
             active_col = active_cell.Column
             active_col_name = xw.utils.col_name(active_col)
-            print(f"作用儲存格：{active_col_name}{active_row}（{active_cell.Row}, {active_cell.Column}）")
         except Exception:
             raise ValueError("無法取得作用儲存格")
 
         # 調整 row 值至【漢字】列（每 4 列為一組，漢字在第 3 列：5, 9, 13, ... ）
         line_start_row = self.program.line_start_row  # 第一行【標音儲存格】所在 Excel 列號: 3
         line_no = ((active_row - line_start_row + 1) // self.program.ROWS_PER_LINE) + 1
-        row = (line_no * program.ROWS_PER_LINE) + program.han_ji_row_offset - 1
+        han_ji_row = (line_no * program.ROWS_PER_LINE) + program.han_ji_row_offset - 1
         col = active_col
-        cell = sheet.range((row, col))
+        cell = sheet.range((han_ji_row, col))
         # 處理儲存格
-        self._process_cell(cell, row, col)
+        act_cell_addr = f"作用儲存格：{active_col_name}{active_row}（{active_cell.Row}, {active_cell.Column}）"
+        han_ji_cell_addr = f"漢字儲存格：{active_col_name}{han_ji_row}（{han_ji_row}, {col}）"
+        print(f"{act_cell_addr} ==> {han_ji_cell_addr}")
+        self._process_cell(cell, han_ji_row, col)
 
 # =========================================================================
 # 主要處理函數
@@ -202,7 +190,7 @@ def process(wb, args) -> int:
         xls_cell._process_sheet(sheet=sheet)
 
         # 寫回字庫到 Excel
-        xls_cell.save_all_piau_im_ji_khoo_dicts()
+        # xls_cell.save_all_piau_im_ji_khoo_dicts()
 
     except Exception as e:
         logging_exc_error(msg="處理作業異常！", error=e)
@@ -297,7 +285,7 @@ def main(args):
         print("=" * 70)
         return EXIT_CODE_SUCCESS
     except Exception as e:
-        logging.exception("程式執行失敗")
+        logging.exception(f"程式執行失敗: {e}")
         return EXIT_CODE_UNKNOWN_ERROR
 
 

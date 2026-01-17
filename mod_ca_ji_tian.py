@@ -5,7 +5,6 @@
 
 import sqlite3
 from contextlib import contextmanager
-from pathlib import Path
 from typing import Dict, List, Optional, Union
 
 from mod_標音 import split_tai_gi_im_piau
@@ -254,7 +253,7 @@ def test():
             for item in result:
                 print(f"  台語音標: {item['台語音標']}, 常用度: {item['常用度']}, 說明: {item['摘要說明']}")
         else:
-            print(f"  查無資料")
+            print("  查無資料")
 
     # 測試 2: 查詢白話音
     print("\n" + "=" * 70)
@@ -268,7 +267,7 @@ def test():
             for item in result:
                 print(f"  台語音標: {item['台語音標']}, 聲母: {item['聲母']}, 韻母: {item['韻母']}, 聲調: {item['聲調']}")
         else:
-            print(f"  查無資料")
+            print("  查無資料")
 
     # 測試 3: 使用獨立函數
     print("\n" + "=" * 70)
@@ -276,7 +275,7 @@ def test():
     print("=" * 70)
 
     result = han_ji_ca_piau_im("東", ue_im_lui_piat="全部")
-    print(f"\n查詢「東」的所有讀音:")
+    print("\n查詢「東」的所有讀音:")
     if result:
         for item in result:
             print(f"  {item['台語音標']} (常用度: {item['常用度']})")

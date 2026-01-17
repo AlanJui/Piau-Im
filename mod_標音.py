@@ -2,12 +2,11 @@ import os
 import re
 import sqlite3
 import unicodedata
-from typing import Optional, Tuple
+from typing import Optional
 
 from dotenv import load_dotenv
 
 from mod_BP_tng_huan import (
-    convert_bp_im_piau_to_zu_im,
     convert_bp_siann_un_tiau_to_zu_im,
 )
 
@@ -19,6 +18,12 @@ from mod_BP_tng_huan_ping_im import (
 
 # 將 TLPA+ 【台語音標】轉換成 MPS2 【台語注音二式】
 from mod_convert_TLPA_to_MPS2 import convert_TLPA_to_MPS2
+from mod_logging import (
+    init_logging,
+    logging_exc_error,
+    logging_exception,
+    logging_warning,
+)
 
 # from mod_excel_access import ensure_sheet_exists
 from mod_帶調符音標 import kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
@@ -47,14 +52,6 @@ DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
 # =========================================================================
 # 設定日誌
 # =========================================================================
-from mod_logging import (
-    init_logging,
-    logging_exc_error,
-    logging_exception,
-    logging_process_step,
-    logging_warning,
-)
-
 init_logging()
 
 
@@ -91,9 +88,6 @@ un_bu_tng_huan_map_dict = {
     'uei': 'ue',        # 雅俗通十五音：檜
     'ueinn': 'uenn',    # 雅俗通十五音：檜
     'ur': 'u',          # 雅俗通十五音：艍
-    'oa': 'ua',         # 白話字：oa ==> 台語音標：ua
-    'oe': 'ue',         # 白話字：oe ==> 台語音標：ue
-    'eng': 'ing',       # 白話字：eng ==> 台語音標：ing
     'ek': 'ik',         # 白話字：ek ==> 台語音標：ik
     'o͘': 'oo',          # 白話字：o͘ (o + U+0358) ==> 台語音標：oo
     'ⁿ': 'nn',          # 白話字：ⁿ ==> 台語音標：nn
@@ -136,7 +130,7 @@ def ca_ji_tng_piau_im(entry, han_ji_khoo: str, piau_im, piau_im_huat: str):
         # 【文讀音】：依《廣韻字庫》標注【台語音標】和【方音符號】
         #-----------------------------------------------------------------
         siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(entry[0]['標音'])
-        if siann_bu == "" or siann_bu == None:
+        if siann_bu == "" or siann_bu is None:
             siann_bu = "ø"
 
     # 將【聲母】、【韻母】、【聲調】，合併成【台語音標】
@@ -144,7 +138,7 @@ def ca_ji_tng_piau_im(entry, han_ji_khoo: str, piau_im, piau_im_huat: str):
     tai_gi_im_piau = ''.join([siann_bu, un_bu, tiau_ho])
 
     # 標音法為：【十五音】或【雅俗通】，且【聲母】為空值，則將【聲母】設為【ø】
-    if (piau_im_huat == "十五音" or piau_im_huat == "雅俗通") and (siann_bu == "" or siann_bu == None):
+    if (piau_im_huat == "十五音" or piau_im_huat == "雅俗通") and (siann_bu == "" or siann_bu is None):
         siann_bu = "ø"
 
     ok = False
@@ -192,7 +186,7 @@ def ca_ji_kiat_ko_tng_piau_im(result, han_ji_khoo: str, piau_im, piau_im_huat: s
         # 【文讀音】：依《廣韻字庫》標注【台語音標】和【方音符號】
         #-----------------------------------------------------------------
         siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(result[0]['標音'])
-        if siann_bu == "" or siann_bu == None:
+        if siann_bu == "" or siann_bu is None:
             siann_bu = "ø"
 
     # 將【聲母】、【韻母】、【聲調】，合併成【台語音標】
@@ -200,7 +194,7 @@ def ca_ji_kiat_ko_tng_piau_im(result, han_ji_khoo: str, piau_im, piau_im_huat: s
     tai_gi_im_piau = ''.join([siann_bu, un_bu, tiau_ho])
 
     # 標音法為：【十五音】或【雅俗通】，且【聲母】為空值，則將【聲母】設為【ø】
-    if (piau_im_huat == "十五音" or piau_im_huat == "雅俗通") and (siann_bu == "" or siann_bu == None):
+    if (piau_im_huat == "十五音" or piau_im_huat == "雅俗通") and (siann_bu == "" or siann_bu is None):
         siann_bu = "ø"
 
     ok = False
@@ -470,7 +464,6 @@ def un_bu_tng_huan(un_bu: str) -> str:
         'uei': 'ue',        # 雅俗通十五音：檜
         'ueinn': 'uenn',    # 雅俗通十五音：檜
         'ur': 'u',          # 雅俗通十五音：艍
-        'eng': 'ing',       # 白話字：eng ==> 台語音標：ing
         'ek': 'ik',         # 白話字：ek ==> 台語音標：ik
         'o͘': 'oo',          # 白話字：o͘ (o + U+0358) ==> 台語音標：oo
         'ⁿ': 'nn',          # 白話字：ⁿ ==> 台語音標：nn
@@ -677,11 +670,10 @@ def tlpa_tng_han_ji_piau_im(piau_im, piau_im_huat, tai_gi_im_piau):
         tai_gi_im_piau_iong_tiau_ho = tai_gi_im_piau
     siann_bu, un_bu, tiau_ho = split_tai_gi_im_piau(tai_gi_im_piau_iong_tiau_ho)
 
-    if siann_bu == "" or siann_bu == None:
+    if siann_bu == "" or siann_bu is None:
         # siann_bu = "Ø"
         siann_bu = 'ø'
 
-    ok = False
     han_ji_piau_im = ""
     try:
         han_ji_piau_im = piau_im.han_ji_piau_im_tng_huan(
@@ -690,15 +682,12 @@ def tlpa_tng_han_ji_piau_im(piau_im, piau_im_huat, tai_gi_im_piau):
             un_bu=un_bu,
             tiau_ho=tiau_ho,
         )
-        if han_ji_piau_im: # 傳回非空字串，表示【漢字標音】之轉換成功
-            ok = True
-        else:
-            logging_warning(f"【台語音標】：[{tai_gi_im_piau}]，轉換成【{piau_im_huat}漢字標音】拚音/注音系統失敗！")
+        if not han_ji_piau_im: # 傳回：空字串、""、False、0，表示【漢字標音】轉換失敗
+            logging_exc_error(msg=f"【台語音標】：[{tai_gi_im_piau}]，無法以【{piau_im_huat}】漢字標音法轉換！", error=None)
+            han_ji_piau_im = ""
     except Exception as e:
         logging_exception(f"piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：{tai_gi_im_piau}", e)
-        han_ji_piau_im = ""
 
-    # 若 ok 為 False，表示轉換失敗，則將【台語音標】直接傳回
     return han_ji_piau_im
 
 # =========================================================
@@ -1011,7 +1000,7 @@ class PiauIm:
         tiau_ho = replace_superscript_digits(str(tiau_ho))
         tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
 
-        if siann_bu == "" or siann_bu == None or siann_bu == "Ø" or siann_bu == "ø":
+        if siann_bu == "" or siann_bu is None or siann_bu == "Ø" or siann_bu == "ø":
             siann = ""
         else:
             siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
@@ -1059,7 +1048,7 @@ class PiauIm:
         tiau_ho = replace_superscript_digits(str(tiau_ho))
         tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
 
-        if siann_bu == "" or siann_bu == None or siann_bu == "Ø" or siann_bu == "ø":
+        if siann_bu == "" or siann_bu is None or siann_bu == "Ø" or siann_bu == "ø":
             siann = ""
         else:
             siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
@@ -1407,7 +1396,7 @@ class PiauIm:
         tiau_ho = replace_superscript_digits(str(tiau_ho))
         tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
 
-        if siann_bu == "" or siann_bu == None or siann_bu == "Ø" or siann_bu == 'ø':
+        if siann_bu == "" or siann_bu is None or siann_bu == "Ø" or siann_bu == 'ø':
             siann = "英"
         else:
             siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
@@ -1436,7 +1425,7 @@ class PiauIm:
         tiau_ho = replace_superscript_digits(str(tiau_ho))
         tiau_ho = 7 if int(tiau_ho) == 6 else int(tiau_ho)
 
-        if siann_bu == "" or siann_bu == None or siann_bu == "Ø" or siann_bu == "ø":
+        if siann_bu == "" or siann_bu is None or siann_bu == "Ø" or siann_bu == "ø":
             siann = "英"
         else:
             siann = self.Siann_Bu_Dict[siann_bu][piau_im_huat]
@@ -1449,7 +1438,7 @@ class PiauIm:
     #================================================================
     # 轉換【漢字標音】
     #================================================================
-    def han_ji_piau_im_tng_huan(self, piau_im_huat, siann_bu, un_bu, tiau_ho):
+    def han_ji_piau_im_tng_huan(self, piau_im_huat: str, siann_bu: str, un_bu: str, tiau_ho: str) -> str:
         """選擇並執行對應的注音方法"""
         if piau_im_huat == "十五音":
             return self.SNI_piau_im(siann_bu, un_bu, tiau_ho)

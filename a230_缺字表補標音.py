@@ -5,24 +5,14 @@ import logging
 import os
 import re
 import sys
-import time
-from datetime import datetime
 from pathlib import Path
 
-import requests
 import xlwings as xw
 from dotenv import load_dotenv
 
-from mod_excel_access import (
-    convert_to_excel_address,
-    ensure_sheet_exists,
-    excel_address_to_row_col,
-    get_value_by_name,
-)
-
 # 載入自訂模組/函式
 from mod_logging import init_logging, logging_exc_error, logging_process_step
-from mod_帶調符音標 import is_han_ji, is_im_piau, kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
+from mod_帶調符音標 import tng_im_piau, tng_tiau_ho
 from mod_標音 import PiauIm, tlpa_tng_han_ji_piau_im
 
 # 載入自訂模組

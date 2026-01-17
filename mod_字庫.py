@@ -187,7 +187,7 @@ class JiKhooDict:
         # 找不到匹配項目
         return -1
 
-    def add_or_update_entry_by_coordinate(
+    def add_or_update_entry(
         self,
         han_ji: str,
         tai_gi_im_piau: str,
@@ -218,6 +218,20 @@ class JiKhooDict:
                 hau_ziann_im_piau=hau_ziann_im_piau,
                 coordinates=coordinates
             )
+
+    def add_or_update_entry_by_coordinate(
+        self,
+        han_ji: str,
+        tai_gi_im_piau: str,
+        hau_ziann_im_piau: str,
+        coordinates: tuple[int, int]
+    ):
+        return self.add_or_update_entry(
+            han_ji=han_ji,
+            tai_gi_im_piau=tai_gi_im_piau,
+            hau_ziann_im_piau=hau_ziann_im_piau,
+            coordinates=coordinates
+        )
 
     def get_entry(self, han_ji: str):
         if han_ji in self.ji_khoo_dict:
