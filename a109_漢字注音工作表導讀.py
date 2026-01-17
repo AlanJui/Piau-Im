@@ -48,7 +48,8 @@ except ImportError:
 
 # 載入 a222 的核心查詢功能（個人字典）
 try:
-    from a222_依作用儲存格在個人字典查找漢字讀音 import ca_han_ji_thak_im as ca_han_ji_thak_im_a222
+    # from a222_依作用儲存格在個人字典查找漢字讀音 import ca_han_ji_thak_im as ca_han_ji_thak_im_a222
+    from a222_依作用儲存格在個人字典查找漢字讀音 import process as ca_han_ji_thak_im_a222
     HAS_A222 = True
 except ImportError as e:
     HAS_A222 = False
@@ -64,7 +65,8 @@ except ImportError as e:
 
 # 載入 a224 的核心查詢功能（引用既有標音）
 try:
-    from a224_引用既有的漢字標音 import jin_kang_piau_im_ca_taigi_im_piau
+    # from a224_引用既有的漢字標音 import jin_kang_piau_im_ca_taigi_im_piau
+    from a224_引用既有的漢字標音 import process as jin_kang_piau_im_ca_taigi_im_piau
     HAS_A224 = True
 except ImportError as e:
     HAS_A224 = False
@@ -325,7 +327,7 @@ def get_total_lines(wb) -> int:
     try:
         total_lines = int(wb.names['每頁總列數'].refers_to_range.value)
         return total_lines
-    except:
+    except:  # noqa: E722
         # 預設值
         return 10
 
@@ -796,14 +798,18 @@ class NavigationController:
                 print(f"當前儲存格：{current_cell}")
 
                 # 調用查詢函數
+                # exit_code = ca_han_ji_thak_im_a220(
+                #     wb=self.wb,
+                #     sheet_name='漢字注音',
+                #     cell=current_cell,
+                #     ue_im_lui_piat=ue_im_lui_piat,
+                #     han_ji_khoo=han_ji_khoo,
+                #     new_khuat_ji_piau_sheet=False,
+                #     new_piau_im_ji_khoo_sheet=False,
+                # )
                 exit_code = ca_han_ji_thak_im_a220(
                     wb=self.wb,
-                    sheet_name='漢字注音',
-                    cell=current_cell,
-                    ue_im_lui_piat=ue_im_lui_piat,
-                    han_ji_khoo=han_ji_khoo,
-                    new_khuat_ji_piau_sheet=False,
-                    new_piau_im_ji_khoo_sheet=False,
+                    args=None,
                 )
 
                 if exit_code == 0:
@@ -877,14 +883,18 @@ class NavigationController:
                 print(f"當前儲存格：{current_cell}")
 
                 # 調用查詢函數
+                # exit_code = ca_han_ji_thak_im_a222(
+                #     wb=self.wb,
+                #     sheet_name='漢字注音',
+                #     cell=current_cell,
+                #     ue_im_lui_piat=ue_im_lui_piat,
+                #     han_ji_khoo=han_ji_khoo,
+                #     new_khuat_ji_piau_sheet=False,
+                #     new_piau_im_ji_khoo_sheet=False,
+                # )
                 exit_code = ca_han_ji_thak_im_a222(
                     wb=self.wb,
-                    sheet_name='漢字注音',
-                    cell=current_cell,
-                    ue_im_lui_piat=ue_im_lui_piat,
-                    han_ji_khoo=han_ji_khoo,
-                    new_khuat_ji_piau_sheet=False,
-                    new_piau_im_ji_khoo_sheet=False,
+                    args=None,
                 )
 
                 if exit_code == 0:
@@ -981,7 +991,10 @@ class NavigationController:
                     print(f"當前儲存格：{current_cell}")
 
                     # 調用查詢函數
-                    exit_code = jin_kang_piau_im_ca_taigi_im_piau(wb=self.wb)
+                    exit_code = jin_kang_piau_im_ca_taigi_im_piau(
+                        wb=self.wb,
+                        args=None,
+                    )
 
                     if exit_code == 0:
                         print("\n✓ 查詢完成")
@@ -1083,7 +1096,10 @@ class NavigationController:
                     print("\n正在更新台語音標與漢字標音...")
                     try:
                         if HAS_A224:
-                            exit_code = jin_kang_piau_im_ca_taigi_im_piau(wb=self.wb)
+                            # 創建簡單的 args 物件（模擬命令列參數）
+                            import argparse
+                            args = argparse.Namespace(new=False)
+                            exit_code = jin_kang_piau_im_ca_taigi_im_piau(wb=self.wb, args=args)
                             if exit_code == 0:
                                 print("✓ 已完成台語音標與漢字標音更新")
                             else:
@@ -1164,7 +1180,10 @@ class NavigationController:
             print("\n正在更新台語音標與漢字標音...")
             try:
                 if HAS_A224:
-                    exit_code = jin_kang_piau_im_ca_taigi_im_piau(wb=self.wb)
+                    # 創建簡單的 args 物件（模擬命令列參數）
+                    import argparse
+                    args = argparse.Namespace(new=False)
+                    exit_code = jin_kang_piau_im_ca_taigi_im_piau(wb=self.wb, args=args)
                     if exit_code == 0:
                         print("✓ 已完成台語音標與漢字標音更新\n")
                     else:
@@ -1421,9 +1440,11 @@ def main():
         if HAS_PYNPUT:
             mode_text = "校稿模式" if edit_mode else "導讀模式"
             print(f"使用鍵盤監聽模式 - {mode_text}")
+            # return read_han_ji_with_keyboard(wb, edit_mode=edit_mode)
             return read_han_ji_with_keyboard(wb, edit_mode=edit_mode)
         else:
             print("使用輸入模式")
+            # return read_han_ji_zu_im_sheet(wb)
             return read_han_ji_zu_im_sheet(wb)
 
     except KeyboardInterrupt:
