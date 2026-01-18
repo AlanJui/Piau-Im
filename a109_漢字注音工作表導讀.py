@@ -688,7 +688,7 @@ class NavigationController:
                     # E 鍵：手動輸入人工標音
                     self.pending_action = 'manual_input'
                 elif key.char == '=':
-                    # = 鍵：填入人工標音標記
+                    # = 鍵：引用既有的人工標音
                     self.pending_action = 'fill_manual_mark'
             elif key == keyboard.Key.delete:
                 # Del 鍵：清除人工標音
@@ -978,13 +978,13 @@ class NavigationController:
                     activate_console_window(self.console_hwnd)
 
                     # 取得設定值
-                    try:
-                        from mod_excel_access import get_value_by_name
-                        ue_im_lui_piat = get_value_by_name(wb=self.wb, name='語音類型')
-                        han_ji_khoo = get_value_by_name(wb=self.wb, name='漢字庫')
-                    except:
-                        ue_im_lui_piat = "白話音"
-                        han_ji_khoo = "河洛話"
+                    # try:
+                    #     from mod_excel_access import get_value_by_name
+                    #     ue_im_lui_piat = get_value_by_name(wb=self.wb, name='語音類型')
+                    #     han_ji_khoo = get_value_by_name(wb=self.wb, name='漢字庫')
+                    # except:
+                    #     ue_im_lui_piat = "白話音"
+                    #     han_ji_khoo = "河洛話"
 
                     # 取得當前作用儲存格位置
                     current_cell = f"{xw.utils.col_name(self.current_col)}{self.current_row}"
@@ -1173,7 +1173,8 @@ class NavigationController:
             print(f"\n清除人工標音：{target_cell_address}【{current_value}】")
 
             # 清除儲存格內容
-            target_cell.value = ""
+            # target_cell.value = ""
+            target_cell.value = "#"
             print(f"✓ 已清除 {target_cell_address} 的人工標音")
 
             # 呼叫 a224 程式以更新台語音標與漢字標音
