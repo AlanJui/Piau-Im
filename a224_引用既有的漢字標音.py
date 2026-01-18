@@ -142,6 +142,7 @@ class CellProcessor(ExcelCell):
         print(f"{act_cell_addr} ==> {han_ji_cell_addr}")
         self._process_cell(cell, han_ji_row, col)
 
+
 # =========================================================================
 # 主要處理函數
 # =========================================================================
@@ -165,7 +166,7 @@ def process(wb, args) -> int:
         #--------------------------------------------------------------------------
         # 初始化 Program 配置
         #--------------------------------------------------------------------------
-        program = Program(wb=wb, args=args, hanji_piau_im_sheet='漢字注音')
+        program = Program(wb=wb, args=args, hanji_piau_im_sheet_name='漢字注音')
 
         # 建立萌典專用的儲存格處理器（繼承自 ExcelCell）
         xls_cell = CellProcessor(

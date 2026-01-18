@@ -71,7 +71,7 @@ EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 class Program:
     """處理配置資料類別"""
 
-    def __init__(self, wb, args, hanji_piau_im_sheet: str = '漢字注音'):
+    def __init__(self, wb, args, hanji_piau_im_sheet_name: str = '漢字注音'):
         self.wb = wb
         self.args = args
         # =========================================================================
@@ -90,7 +90,7 @@ class Program:
         self.ji_tian = HanJiTian(self.db_name)
         self.piau_im = PiauIm(han_ji_khoo=self.han_ji_khoo_name)
         # 【漢字注音】工作表描述
-        self.hanji_piau_im_sheet = hanji_piau_im_sheet
+        self.hanji_piau_im_sheet = hanji_piau_im_sheet_name
         self.TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
         self.ROWS_PER_LINE = 4
         self.line_start_row = 3  # 第一行【標音儲存格】所在 Excel 列號: 3
@@ -1790,7 +1790,7 @@ def process(wb, args) -> int:
         #--------------------------------------------------------------------------
         # 初始化 process config
         #--------------------------------------------------------------------------
-        program = Program(wb, args, hanji_piau_im_sheet='漢字注音')
+        program = Program(wb, args, hanji_piau_im_sheet_name='漢字注音')
 
         # 建立儲存格處理器
         # xls_cell = ExcelCell(program=program)
@@ -1901,7 +1901,7 @@ def main(args) -> int:
     # 結束程式
     # =========================================================================
     logging_process_step(f"《========== 程式終止執行：{program_name} ==========》")
-    return EXIT_CODE_SUCCESS    # 作業正常結束
+    return EXIT_CODE_SUCCESS
 
 
 # =============================================================================

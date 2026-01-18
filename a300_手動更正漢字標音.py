@@ -62,7 +62,7 @@ def process(wb, args) -> int:
     logging_process_step("<=========== 作業開始！==========>")
 
     try:
-        program = Program(wb, args, hanji_piau_im_sheet='漢字注音')
+        program = Program(wb, args, hanji_piau_im_sheet_name='漢字注音')
 
         # 建立儲存格處理器
         xls_cell = None
