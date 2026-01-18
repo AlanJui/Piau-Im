@@ -235,12 +235,13 @@ class ExcelCell:
     ) -> tuple[str, str]:
         """檢查標音字庫中是否已有指定漢字的台語音標和漢字標音"""
         # 【人工標音】欄輸入為【=】，但【人工標音字庫】工作表查無結果，再自【標音字庫】工作表，嚐試查找【台語音標】
+        org_tai_gi_im_piau = cell.offset(-1, 0).value  # 【作用儲存格】對映之【漢字】的【原台語音標】
         tai_gi_im_piau = self.jin_kang_piau_im_ji_khoo_dict.get_tai_gi_im_piau_by_han_ji(han_ji=han_ji)
-        if not tai_gi_im_piau:
+        if not tai_gi_im_piau:  # 在【人工標音字庫】找不到對映的【台語音標】
             # 無法依【漢字】在【人工標音字庫】找到對映的【台語音標】，則自【標音字庫】工作表查找
             cell.offset(-2, 0).value = ''  # 清空【人工標音】欄【=】
             tai_gi_im_piau = self.piau_im_ji_khoo_dict.get_tai_gi_im_piau_by_han_ji(han_ji=han_ji)
-            if not tai_gi_im_piau:
+            if not tai_gi_im_piau:  # 在【標音字庫】亦找不到對映的【台語音標】
                 # 找不到對映的【台語音標】，在【缺字表】記錄此【漢字】
                 self.program.khuat_ji_piau_ji_khoo_dict.add_entry(
                     han_ji=han_ji,
@@ -252,7 +253,7 @@ class ExcelCell:
                 print(f"⚠️ 【標音字庫】亦找不到：漢字：【{han_ji}】，座標：（{row}, {col}）")
                 print(f"⚠️ 【缺字表】新增紀錄：漢字：【{han_ji}】，座標：（{row}, {col}）")
                 return '', ''
-            else:   # 找到對映的【台語音標】
+            else:   # 在【標音字庫】找到對映的【台語音標】
                 # 將【台語音標】依指定之【標音方法】，轉換成【漢字標音】
                 han_ji_piau_im = tlpa_tng_han_ji_piau_im(
                     piau_im=self.program.piau_im,
@@ -288,18 +289,18 @@ class ExcelCell:
                 piau_im_huat=self.program.piau_im_huat,
                 tai_gi_im_piau=tai_gi_im_piau
             )
-            # 更新【漢字注音】工作表的【台語音標】與【漢字標音】
+            # 依據【人工標音字庫】的資料紀錄，更新【漢字注音】工作表的【台語音標】與【漢字標音】
             if tai_gi_im_piau and han_ji_piau_im:
                 cell.offset(-2, 0).value = "="  # 設定【人工標音】儲存格為【=】：表取自【人工標音字庫】
                 cell.offset(-1, 0).value = tai_gi_im_piau  # 更新【台語音標】儲存格
                 cell.offset(1, 0).value = han_ji_piau_im  # 更新【漢字標音】儲存格
-            # 因【漢字注音】工作表中的【人工標音】儲存格填【=】，表【漢字】之【台語音標】來自【人工標音字庫】；
-            # 故【標音字庫】工作表的【座標】紀錄，需將原【座標】資料移除
+            # 因【漢字注音】工作表，【作用儲存格】的【人工標音】為：【=】，表【漢字】之【台語音標】取自【人工標音字庫】；
+            # 故【標音字庫】工作表對映【漢字】的紀錄，需將原【座標】資料移除
             self.piau_im_ji_khoo_dict.remove_coordinate_by_han_ji_and_coordinate(
                 han_ji=han_ji,
                 coordinate=(row, col)
             )
-            # 在【人工標音字庫】工作表，記錄此【漢字】及其【漢字儲存格】座標
+            # 在【人工標音字庫】工作表，記錄【漢字注音】工作表對映之【漢字】及【座標】
             self.jin_kang_piau_im_ji_khoo_dict.add_or_update_entry(
                 han_ji=han_ji,
                 tai_gi_im_piau=tai_gi_im_piau,
@@ -307,55 +308,15 @@ class ExcelCell:
                 coordinates=(row, col)
             )
 
-            # 顯示處理訊息
-            coordinate_str = None
-            excel_addr = convert_row_col_to_excel_address(row, col)
-            source_msg = f"【漢字注音】工作表 {excel_addr}（{row} ,{col}）==》漢字：【{han_ji}】，人工標音：【{jin_kang_piau_im}】"
-            print(f"{source_msg} ...")
-
-            # 顯示【人工標音字庫】工作表新增之紀錄
-            row_no_jin_kang_piau_im = self.jin_kang_piau_im_ji_khoo_dict.get_row_by_han_ji_and_coordinate(
+            # 顯示【人工標音字庫】及【標音字庫】變更後之處理訊息
+            self.show_msg_in_iong_jin_kang_piau_im(
                 han_ji=han_ji,
-                coordinate=(row, col)
+                jin_kang_piau_im=jin_kang_piau_im,
+                tai_gi_im_piau=tai_gi_im_piau,
+                org_tai_gi_im_piau=org_tai_gi_im_piau,
+                row=row,
+                col=col,
             )
-            if row_no_jin_kang_piau_im:
-                result = self.jin_kang_piau_im_ji_khoo_dict.get_entry_by_row_no(row_no=row_no_jin_kang_piau_im)
-                if result:
-                    _, entry = result
-                    # tai_gi_im_piau = entry.get('tai_gi_im_piau', '')
-                    coordinate_list = entry.get('coordinates', [])
-                    # 使用 join 轉換（推薦，格式化後的字串）
-                    coordinate_str = "; ".join([f"({r}, {c})" for r, c in coordinate_list]) if coordinate_list else "無"
-                else:
-                    coordinate_str = "無"
-            else:
-                coordinate_str = "無"
-            target_msg = f"在【人工標音字庫】工作表 A{row_no_jin_kang_piau_im} 新增一筆紀錄......"
-            target_msg2 = f"==> 漢字：【{han_ji}】，台語音標：【{tai_gi_im_piau}】，座標：（{row}, {col}）-->【{coordinate_str}】"
-            print(f"{target_msg}")
-            print(f"{target_msg2}")
-
-            # 顯示【標音字庫】工作表移除的紀錄
-            row_no_piau_im_ji_khoo = self.piau_im_ji_khoo_dict.get_row_by_han_ji_and_coordinate(
-                han_ji=han_ji,
-                coordinate=(row, col)
-            )
-            if row_no_piau_im_ji_khoo:
-                result = self.piau_im_ji_khoo_dict.get_entry_by_row_no(row_no=row_no_piau_im_ji_khoo)
-                if result:
-                    _, entry = result
-                    coordinate_list = entry.get('coordinates', [])
-                    # 使用 join 轉換（推薦，格式化後的字串）
-                    coordinate_str = "; ".join([f"({r}, {c})" for r, c in coordinate_list]) if coordinate_list else "無"
-                else:
-                    coordinate_str = "無"
-            else:
-                coordinate_str = "無"
-            if row_no_piau_im_ji_khoo == -1:
-                target_msg2 = f"【標音字庫】工作表，已無漢字：【{han_ji}】之【台語音標】紀錄。"
-            else:
-                target_msg2 = f"【標音字庫】工作表 A{row_no_piau_im_ji_khoo} 之紀錄，移除 ==> 漢字：【{han_ji}】，座標：（{row}, {col}）"
-            print(f"{target_msg2}")
 
         return tai_gi_im_piau, han_ji_piau_im
 
@@ -456,12 +417,73 @@ class ExcelCell:
         print(f"{source_msg} ==> {target_msg}")
         return tai_gi_im_piau, han_ji_piau_im
 
+    def show_msg_in_iong_jin_kang_piau_im(
+        self,
+        han_ji: str,
+        jin_kang_piau_im: str,
+        tai_gi_im_piau: str,
+        org_tai_gi_im_piau: str,
+        row: int,
+        col: int,
+    ):
+        """顯示人工標音處理訊息"""
+        excel_addr = convert_row_col_to_excel_address(row, col)
+        print(f"處理【漢字注音】工作表 {excel_addr}（{row} ,{col}）之漢字：【{han_ji}】的人工標音...")
+        # 顯示處理訊息
+        coordinate_str = None
+        excel_addr = convert_row_col_to_excel_address(row, col)
+        source_msg = f"【漢字注音】工作表作用儲存格： {excel_addr}（{row} ,{col}）漢字：{han_ji}【{org_tai_gi_im_piau}】，人工標音：【{jin_kang_piau_im}】"
+        print(f"{source_msg} ...")
+
+        # 顯示【人工標音字庫】工作表新增之紀錄
+        row_no_jin_kang_piau_im = self.jin_kang_piau_im_ji_khoo_dict.get_row_by_han_ji_and_coordinate(
+            han_ji=han_ji,
+            coordinate=(row, col)
+        )
+        if row_no_jin_kang_piau_im:
+            result = self.jin_kang_piau_im_ji_khoo_dict.get_entry_by_row_no(row_no=row_no_jin_kang_piau_im)
+            if result:
+                _, entry = result
+                # tai_gi_im_piau = entry.get('tai_gi_im_piau', '')
+                coordinate_list = entry.get('coordinates', [])
+                # 使用 join 轉換（推薦，格式化後的字串）
+                coordinate_str = "; ".join([f"({r}, {c})" for r, c in coordinate_list]) if coordinate_list else "無"
+            else:
+                coordinate_str = "無"
+        else:
+            coordinate_str = "無"
+        target_msg = f"在【人工標音字庫】工作表 A{row_no_jin_kang_piau_im} 新增一筆紀錄......"
+        target_msg2 = f"==> 漢字：【{han_ji}】，台語音標：【{tai_gi_im_piau}】，座標：（{row}, {col}）-->【{coordinate_str}】"
+        print(f"{target_msg}")
+        print(f"{target_msg2}")
+
+        # 顯示【標音字庫】工作表移除的紀錄
+        row_no_piau_im_ji_khoo = self.piau_im_ji_khoo_dict.get_row_by_han_ji_and_coordinate(
+            han_ji=han_ji,
+            coordinate=(row, col)
+        )
+        if row_no_piau_im_ji_khoo:
+            result = self.piau_im_ji_khoo_dict.get_entry_by_row_no(row_no=row_no_piau_im_ji_khoo)
+            if result:
+                _, entry = result
+                coordinate_list = entry.get('coordinates', [])
+                # 使用 join 轉換（推薦，格式化後的字串）
+                coordinate_str = "; ".join([f"({r}, {c})" for r, c in coordinate_list]) if coordinate_list else "無"
+            else:
+                coordinate_str = "無"
+        else:
+            coordinate_str = "無"
+        if row_no_piau_im_ji_khoo == -1:
+            target_msg2 = f"【標音字庫】工作表，已無漢字：【{han_ji}】之【台語音標】紀錄。"
+        else:
+            target_msg2 = f"【標音字庫】工作表 A{row_no_piau_im_ji_khoo} 之紀錄，移除 ==> 漢字：【{han_ji}】，座標：（{row}, {col}）"
+        print(f"{target_msg2}")
+
     def _process_jin_kang_piau_im(self, han_ji: str, jin_kang_piau_im: str, cell, row: int, col: int):
         """處理人工標音內容"""
         # 預設未能依【人工標音】欄，找到對應的【台語音標】和【漢字標音】
         original_tai_gi_im_piau = cell.offset(-1, 0).value
         han_ji=cell.value
-        sing_kong = False
 
         # 取得【漢字】儲存格之【座標】位址（row, col）
         han_ji_row, han_ji_col = self.get_han_ji_coordinate_by_row_and_col(row=row, col=col)
