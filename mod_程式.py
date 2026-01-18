@@ -90,7 +90,7 @@ class Program:
         self.ji_tian = HanJiTian(self.db_name)
         self.piau_im = PiauIm(han_ji_khoo=self.han_ji_khoo_name)
         # 【漢字注音】工作表描述
-        self.hanji_piau_im_sheet = hanji_piau_im_sheet_name
+        self.hanji_piau_im_sheet_name = hanji_piau_im_sheet_name
         self.TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
         self.ROWS_PER_LINE = 4
         self.line_start_row = 3  # 第一行【標音儲存格】所在 Excel 列號: 3

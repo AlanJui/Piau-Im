@@ -47,8 +47,6 @@ class CellProcessor(ExcelCell):
     個人字典查詢專用的儲存格處理器
     繼承自 ExcelCell
     覆蓋以下方法以實現個人字典查詢功能：
-    - _process_han_ji(): 使用個人字典查詢漢字讀音
-    - process_cell(): 處理單一儲存格
     - _process_sheet(): 處理整個工作表
     """
 
@@ -149,8 +147,20 @@ class CellProcessor(ExcelCell):
         Returns:
             (ruby_tag, siong_piau_im, zian_piau_im)
         """
+        # 檢查台語音標是否為空或 None
+        if not tai_gi_im_piau or (isinstance(tai_gi_im_piau, str) and tai_gi_im_piau.strip() == ""):
+            # 如果沒有音標，返回不帶標音的 span
+            ruby_tag = f"  <span>{han_ji}</span>\n"
+            return ruby_tag, "", ""
+
         # 解構【台語音標】=【聲母】+【韻母】+【調號】
-        zu_im_list = split_tai_gi_im_piau(tai_gi_im_piau)
+        try:
+            zu_im_list = split_tai_gi_im_piau(tai_gi_im_piau)
+        except (IndexError, AttributeError) as e:
+            # 如果解構失敗，返回不帶標音的 span
+            print(f"警告：無法解構音標 '{tai_gi_im_piau}' for 漢字 '{han_ji}': {e}")
+            ruby_tag = f"  <span>{han_ji}</span>\n"
+            return ruby_tag, "", ""
 
         # 零聲母處理
         if zu_im_list[0] == "" or zu_im_list[0] is None:
@@ -162,31 +172,31 @@ class CellProcessor(ExcelCell):
         zian_piau_im = ""
 
         # 根據【網頁格式】，決定【漢字】之上方或右方，是否該顯示【標音】
-        if self.program.piau_im_format == "無預設":
+        if self.piau_im_format == "無預設":
             # 根據【標音方式】決定漢字之上方及右方，是否需要放置標音
             if self.piau_im_hong_sik == "上及右":
                 siong_piau_im = self.program.piau_im.han_ji_piau_im_tng_huan(
-                    piau_im_huat=self.program.siong_pinn_piau_im,
+                    piau_im_huat=self.siong_pinn_piau_im,
                     siann_bu=siann_bu,
                     un_bu=zu_im_list[1],
                     tiau_ho=zu_im_list[2],
                 )
                 zian_piau_im = self.program.piau_im.han_ji_piau_im_tng_huan(
-                    piau_im_huat=self.program.zian_pinn_piau_im,
+                    piau_im_huat=self.zian_pinn_piau_im,
                     siann_bu=siann_bu,
                     un_bu=zu_im_list[1],
                     tiau_ho=zu_im_list[2],
                 )
             elif self.piau_im_hong_sik == "上":
                 siong_piau_im = self.program.piau_im.han_ji_piau_im_tng_huan(
-                    piau_im_huat=self.program.siong_pinn_piau_im,
+                    piau_im_huat=self.siong_pinn_piau_im,
                     siann_bu=siann_bu,
                     un_bu=zu_im_list[1],
                     tiau_ho=zu_im_list[2],
                 )
             elif self.piau_im_hong_sik == "右":
                 zian_piau_im = self.program.piau_im.han_ji_piau_im_tng_huan(
-                    piau_im_huat=self.program.zian_pinn_piau_im,
+                    piau_im_huat=self.zian_pinn_piau_im,
                     siann_bu=siann_bu,
                     un_bu=zu_im_list[1],
                     tiau_ho=zu_im_list[2],
@@ -195,27 +205,27 @@ class CellProcessor(ExcelCell):
             # 按指定網頁格式設定標音位置
             if self.piau_im_format in ["POJ", "TL", "BP", "TLPA_Plus", "SNI"]:
                 siong_piau_im = self.program.piau_im.han_ji_piau_im_tng_huan(
-                    piau_im_huat=self.program.siong_pinn_piau_im,
+                    piau_im_huat=self.siong_pinn_piau_im,
                     siann_bu=siann_bu,
                     un_bu=zu_im_list[1],
                     tiau_ho=zu_im_list[2],
                 )
             elif self.piau_im_format == "TPS":
                 zian_piau_im = self.program.piau_im.han_ji_piau_im_tng_huan(
-                    piau_im_huat=self.program.zian_pinn_piau_im,
+                    piau_im_huat=self.zian_pinn_piau_im,
                     siann_bu=siann_bu,
                     un_bu=zu_im_list[1],
                     tiau_ho=zu_im_list[2],
                 )
             elif self.piau_im_format == "DBL":
                 siong_piau_im = self.program.piau_im.han_ji_piau_im_tng_huan(
-                    piau_im_huat=self.program.siong_pinn_piau_im,
+                    piau_im_huat=self.siong_pinn_piau_im,
                     siann_bu=siann_bu,
                     un_bu=zu_im_list[1],
                     tiau_ho=zu_im_list[2],
                 )
                 zian_piau_im = self.program.piau_im.han_ji_piau_im_tng_huan(
-                    piau_im_huat=self.program.zian_pinn_piau_im,
+                    piau_im_huat=self.zian_pinn_piau_im,
                     siann_bu=siann_bu,
                     un_bu=zu_im_list[1],
                     tiau_ho=zu_im_list[2],
@@ -304,7 +314,6 @@ class CellProcessor(ExcelCell):
         Returns:
             HTML 網頁內容字串
         """
-        wb = self.program.wb
         write_buffer = ""
 
         # 輸出放置圖片的 HTML Tag
@@ -342,20 +351,21 @@ class CellProcessor(ExcelCell):
         write_buffer += div_tag % (pai_ban_iong_huat, title_with_ruby)
 
         # 逐列處理工作表內容
+        program = self.program
         End_Of_File = False
         char_count = 0
-        total_chars_per_line = int(wb.names['網頁每列字數'].refers_to_range.value)
+        total_chars_per_line = self.total_chars_per_line    # 網頁每列字數
         if total_chars_per_line == 0:
             total_chars_per_line = 0
 
-        for row in range(self.program.start_row, self.program.end_row, self.program.ROWS_PER_LINE):
-            if title_with_ruby and row == self.program.start_row:
+        for row in range(program.line_start_row, program.line_end_row, program.ROWS_PER_LINE):
+            if title_with_ruby and row == program.line_start_row + 2:
                 # 已經處理過標題列，跳過
                 continue
-            sheet.range((row, 1)).select()
+            sheet.range((row+2, 1)).select()      # 漢字儲存格列號 = 工作表列號 + 2
 
-            for col in range(self.program.start_col, self.program.end_col):
-                cell_value = sheet.range((row, col)).value
+            for col in range(program.start_col, program.end_col):
+                cell_value = sheet.range((row+2, col)).value  # 漢字儲存格列號 = 工作表列號 + 2
 
                 if cell_value == 'φ':  # 讀到【結尾標示】
                     End_Of_File = True
@@ -370,45 +380,59 @@ class CellProcessor(ExcelCell):
                     print(f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}")
                     break
 
-                elif not is_han_ji(cell_value):
-                    # 處理非漢字內容
+                else:
+                    # 處理儲存格內容（先檢查標點符號，再檢查漢字）
                     str_value = str(cell_value).strip() if cell_value else ""
 
+                    # 先檢查是否為標點符號或其他非漢字字元
                     if is_punctuation(str_value):
                         msg = f"{str_value}【標點符號】"
                         ruby_tag = f"  <span>{str_value}</span>\n"
+                        write_buffer += ruby_tag
+                        char_count += 1
+                        print(f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}")
                     elif str_value == "":
                         msg = "【空白】"
                         ruby_tag = "  <span>　</span>\n"
-                    else:
+                        write_buffer += ruby_tag
+                        char_count += 1
+                        print(f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}")
+                    elif not is_han_ji(cell_value):
                         msg = f"{str_value}【其他字元】"
                         ruby_tag = f"  <span>{str_value}</span>\n"
-
-                    write_buffer += ruby_tag
-                    char_count += 1
-                    print(f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}")
-
-                else:
-                    # 處理漢字
-                    han_ji = cell_value.strip()
-                    tai_gi_im_piau = sheet.range((row - 1, col)).value
-                    tai_gi_im_piau = tai_gi_im_piau if tai_gi_im_piau is not None else ""
-
-                    # 【去調符】轉換為【帶調號之台語音標】
-                    if kam_si_u_tiau_hu(tai_gi_im_piau):
-                        tai_gi_im_piau = tng_im_piau(tai_gi_im_piau)
-                        tlpa_im_piau = tng_tiau_ho(tai_gi_im_piau)
+                        write_buffer += ruby_tag
+                        char_count += 1
+                        print(f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}")
                     else:
-                        tlpa_im_piau = tai_gi_im_piau
+                        # 處理漢字
+                        han_ji = cell_value.strip()
+                        tai_gi_im_piau = sheet.range((row - 1, col)).value
+                        tai_gi_im_piau = str(tai_gi_im_piau).strip() if tai_gi_im_piau is not None else ""
 
-                    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
-                        han_ji=han_ji,
-                        tai_gi_im_piau=tlpa_im_piau,
-                    )
-                    write_buffer += ruby_tag
-                    msg = f"{han_ji} [{tlpa_im_piau}] ==》 上方標音：{siong_piau_im} / 右方標音：{zian_piau_im}"
-                    char_count += 1
-                    print(f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}")
+                        # 檢查音標是否為空
+                        if not tai_gi_im_piau or tai_gi_im_piau == "":
+                            print(f"警告：漢字 '{han_ji}' 在 ({row}, {col}) 沒有台語音標")
+                            ruby_tag = f"  <span>{han_ji}</span>\n"
+                            write_buffer += ruby_tag
+                            char_count += 1
+                            print(f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {han_ji}【無音標】")
+                            continue
+
+                        # 【去調符】轉換為【帶調號之台語音標】
+                        if kam_si_u_tiau_hu(tai_gi_im_piau):
+                            tai_gi_im_piau = tng_im_piau(tai_gi_im_piau)
+                            tlpa_im_piau = tng_tiau_ho(tai_gi_im_piau)
+                        else:
+                            tlpa_im_piau = tai_gi_im_piau
+
+                        ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
+                            han_ji=han_ji,
+                            tai_gi_im_piau=tlpa_im_piau,
+                        )
+                        write_buffer += ruby_tag
+                        msg = f"{han_ji} [{tlpa_im_piau}] ==》 上方標音：{siong_piau_im} / 右方標音：{zian_piau_im}"
+                        char_count += 1
+                        print(f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}")
 
                 # 檢查是否需要插入換行標籤
                 if total_chars_per_line != 0 and char_count >= total_chars_per_line:
@@ -487,8 +511,9 @@ def process(wb, args) -> int:
     #--------------------------------------------------------------------------
     try:
         # 處理工作表
-        sheet_name = program.hanji_piau_im_sheet
-        sheet = wb.sheets[sheet_name]
+        # sheet_name = program.hanji_piau_im_sheet_name
+        # sheet = wb.sheets[sheet_name]
+        sheet = wb.sheets['漢字注音']
         sheet.activate()
 
         # 產生 HTML 網頁內容
