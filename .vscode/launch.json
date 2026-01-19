@@ -337,10 +337,6 @@
             // "console": "integratedTerminal",
             "console": "externalTerminal",
             "cwd": "${workspaceFolder}",
-            // Windows Terminal 設定範例: "C:\\Users\\user\\AppData\\Local\\Microsoft\\WindowsApps\\wt.exe"
-            "windowsConfiguration": {
-                "command": "C:\\Users\\user\\AppData\\Local\\Microsoft\\WindowsApps\\wt.exe"
-            },
             "args": []
         },
         {

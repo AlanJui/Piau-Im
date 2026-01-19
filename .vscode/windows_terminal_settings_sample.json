@@ -1,0 +1,93 @@
+{
+    "$help": "https://aka.ms/terminal-documentation",
+    "$schema": "https://aka.ms/terminal-profiles-schema",
+    
+    "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+    
+    // ========================================
+    // 顯示器位置設定（針對你的環境）
+    // ========================================
+    // 你的顯示器配置：
+    // - 顯示器 2（左）：1920 x 1080
+    // - 顯示器 3（中）：2560 x 1080
+    // - 顯示器 1（右）：1080 x 1920 ← 直立顯示器
+    // 
+    // 右側顯示器起始位置 = 1920 + 2560 = 4480
+    
+    "initialPosition": "4480,50",         // X=4480（左1920+中2560），Y=50（離頂部50px）
+    "launchMode": "default",              // 預設啟動模式（非最大化）
+    "centerOnLaunch": false,              // 不要自動置中（否則會跑到主顯示器）
+    "windowingBehavior": "useNew",        // 每次開新視窗（或改用 "useExisting" 重用視窗）
+    
+    // ========================================
+    // 視窗大小設定（適合直立顯示器）
+    // ========================================
+    "initialRows": 50,                    // 初始列數（直立顯示器可設更多）
+    "initialCols": 100,                   // 初始欄數（直立顯示器寬度較窄）
+    
+    // ========================================
+    // 其他建議設定
+    // ========================================
+    "copyOnSelect": true,                 // 選取時自動複製
+    "copyFormatting": "none",             // 複製時不包含格式
+    
+    "profiles": {
+        "defaults": {
+            // 所有 profile 的預設設定
+            "fontFace": "Cascadia Code",
+            "fontSize": 11,
+            "colorScheme": "One Half Dark"
+        },
+        "list": [
+            {
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                "name": "Windows PowerShell",
+                "commandline": "powershell.exe",
+                "hidden": false
+            },
+            {
+                "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
+                "name": "PowerShell",
+                "source": "Windows.Terminal.PowershellCore",
+                "hidden": false
+            },
+            {
+                "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+                "name": "命令提示字元",
+                "commandline": "cmd.exe",
+                "hidden": false
+            }
+        ]
+    },
+    
+    "schemes": [
+        {
+            "name": "One Half Dark",
+            "black": "#282c34",
+            "red": "#e06c75",
+            "green": "#98c379",
+            "yellow": "#e5c07b",
+            "blue": "#61afef",
+            "purple": "#c678dd",
+            "cyan": "#56b6c2",
+            "white": "#dcdfe4",
+            "brightBlack": "#5c6370",
+            "brightRed": "#e06c75",
+            "brightGreen": "#98c379",
+            "brightYellow": "#e5c07b",
+            "brightBlue": "#61afef",
+            "brightPurple": "#c678dd",
+            "brightCyan": "#56b6c2",
+            "brightWhite": "#dcdfe4",
+            "background": "#282c34",
+            "foreground": "#dcdfe4"
+        }
+    ],
+    
+    "actions": [
+        { "command": "paste", "keys": "ctrl+v" },
+        { "command": "copy", "keys": "ctrl+c" },
+        { "command": "find", "keys": "ctrl+shift+f" },
+        { "command": { "action": "splitPane", "split": "auto", "splitMode": "duplicate" }, "keys": "alt+shift+d" }
+    ]
+}
