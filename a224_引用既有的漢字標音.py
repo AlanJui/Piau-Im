@@ -184,14 +184,11 @@ def process(wb, args) -> int:
     #--------------------------------------------------------------------------
     try:
         # 處理工作表
-        sheet_name = program.hanji_piau_im_sheet
+        sheet_name = program.hanji_piau_im_sheet_name
         sheet = wb.sheets[sheet_name]
         sheet.activate()
 
         xls_cell._process_sheet(sheet=sheet)
-
-        # 寫回字庫到 Excel
-        # xls_cell.save_all_piau_im_ji_khoo_dicts()
 
     except Exception as e:
         logging_exc_error(msg="處理作業異常！", error=e)

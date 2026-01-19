@@ -144,7 +144,7 @@ def process(wb, args) -> int:
             table_name=program.table_name,
             han_ji=han_ji,
             tai_gi_im_piau=tai_gi_im_piau,
-            piau_im_huat=program.piau_im_huat,
+            ue_im_lui_piat=program.piau_im_huat,
             siong_iong_too=siong_iong_too_to_use,
         )
 

@@ -301,11 +301,12 @@ def process(wb, args) -> int:
     #--------------------------------------------------------------------------
     try:
         # 處理工作表
-        sheet_name = program.hanji_piau_im_sheet
+        sheet_name = program.hanji_piau_im_sheet_name
         sheet = wb.sheets[sheet_name]
         sheet.activate()
 
         xls_cell._process_sheet(sheet=sheet)
+
     except Exception as e:
         logging_exc_error(msg="處理作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE

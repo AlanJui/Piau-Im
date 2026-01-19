@@ -986,7 +986,7 @@ class ExcelCell:
         table_name: str,
         han_ji: str,
         tai_gi_im_piau: str,
-        piau_im_huat: str,
+        ue_im_lui_piat: str,
         siong_iong_too: float
     ) -> None:
         """
@@ -997,7 +997,7 @@ class ExcelCell:
         :param table_name: 資料表名稱。
         :param han_ji: 漢字。
         :param tai_gi_im_piau: 台語音標。
-        :param piau_im_huat: 標音方法（用於設定常用度）。
+        :param ue_im_lui_piat: 標音方法（用於設定常用度）。
         """
         # 確保資料表存在
         self.db_manager.execute(f"""
@@ -1023,7 +1023,7 @@ class ExcelCell:
         #---------------------------------------------------------------------------------------------------------
         # Determine 常用度 based on 標音方法 if not provided
         if siong_iong_too is None:
-            siong_iong_too_to_use = 0.8 if piau_im_huat == "文讀音" else 0.6
+            siong_iong_too_to_use = 0.8 if ue_im_lui_piat == "文讀音" else 0.6
         else:
             siong_iong_too_to_use = siong_iong_too
 
@@ -1039,14 +1039,14 @@ class ExcelCell:
                     SET 常用度 = ?, 更新時間 = ?
                     WHERE 識別號 = ?;
                     """, (siong_iong_too_to_use, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), row[0]))
-                    print(f"  ✅ 已更新：{han_ji} - {tl_im_piau}（原【台語音標】：{tai_gi_im_piau}）")
+                    print(f"  ✅ 已更新：{han_ji} - {tl_im_piau}（原【台語音標】：{tai_gi_im_piau}），常用度：{siong_iong_too_to_use}")
                 else:
                     # 新增資料
                     self.db_manager.execute(f"""
                     INSERT INTO {table_name} (漢字, 台羅音標, 常用度, 摘要說明)
                     VALUES (?, ?, ?, NULL);
                     """, (han_ji, tl_im_piau, siong_iong_too_to_use))
-                    print(f"  ✅ 已新增：{han_ji} -  {tl_im_piau}（原【台語音標】：{tai_gi_im_piau}）")
+                    print(f"  ✅ 已新增：{han_ji} -  {tl_im_piau}（原【台語音標】：{tai_gi_im_piau}），常用度：{siong_iong_too_to_use}")
         except Exception as e:
             print(f"  ❌ 資料庫操作失敗：{han_ji} - {tl_im_piau}（原【台語音標】：{tai_gi_im_piau}），錯誤：{e}")
             raise
@@ -1059,7 +1059,7 @@ class ExcelCell:
         """
         wb = self.program.wb
         sheet = wb.sheets[sheet_name]
-        piau_im_huat = self.program.piau_im_huat
+        ue_im_lui_piat = self.program.piau_im_huat
         hue_im = self.program.ue_im_lui_piat
         db_path = self.program.db_path   # 資料庫檔案路徑。
         table_name = "漢字庫"            # 資料表名稱。
@@ -1089,7 +1089,13 @@ class ExcelCell:
                 tlpa_im_piau_cleanned = tng_tiau_ho(tlpa_im_piau).lower()  # 將【音標調符】轉換成【數值調號】
                 tl_im_piau = convert_tlpa_to_tl(tlpa_im_piau_cleanned)
 
-                self.insert_or_update_to_db(table_name, han_ji, tl_im_piau, piau_im_huat, siong_iong_too)
+                self.insert_or_update_to_db(
+                    table_name=table_name,
+                    han_ji=han_ji,
+                    tai_gi_im_piau=tl_im_piau,
+                    ue_im_lui_piat=ue_im_lui_piat,
+                    siong_iong_too=siong_iong_too
+                )
                 print(f"\n📌 {idx+1}. 【{han_ji}】：台語音標=【{org_tai_gi_im_piau}】，台羅音標：【{tl_im_piau}】，校正音標：【{hau_ziann_im_piau}】，座標：{zo_piau}")
                 idx += 1
 
@@ -1304,12 +1310,12 @@ class ExcelCell:
             #-------------------------------------------------------------------------
             # 更新資料庫中【漢字庫】資料表
             #-------------------------------------------------------------------------
-            siong_iong_too_to_use = 0.8 if piau_im_huat == "文讀音" else 0.6  # 根據語音類型設定常用度
+            siong_iong_too_to_use = 0.8 if self.program.ue_im_lui_piat == "文讀音" else 0.6  # 根據語音類型設定常用度
             self.insert_or_update_to_db(
                 table_name=self.program.table_name,
                 han_ji=han_ji,
                 tai_gi_im_piau=tai_gi_im_piau,
-                piau_im_huat=piau_im_huat,
+                ue_im_lui_piat=self.program.ue_im_lui_piat,
                 siong_iong_too=siong_iong_too_to_use,
             )
 
