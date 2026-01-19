@@ -24,7 +24,6 @@ from mod_logging import (
     logging_exception,
     logging_warning,
 )
-from mod_帶調符音標 import kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
 
 # =========================================================================
 # 常數定義
@@ -90,6 +89,195 @@ un_bu_tng_huan_map_dict = {
     'o͘': 'oo',          # 白話字：o͘ (o + U+0358) ==> 台語音標：oo
     'ⁿ': 'nn',          # 白話字：ⁿ ==> 台語音標：nn
 }
+
+# =========================================================================
+# helper functions:  與 mod_帶調號母音轉換.py 重複，可考慮整合
+# =========================================================================
+def kam_si_u_tiau_hu(im_piau: str) -> bool:
+    """是否有調符：判斷傳入之音標是否為【帶調符音標】
+
+    Args:
+        im_piau (str): 音標
+
+    Returns:
+        bool: [True] 帶調符音標；[False] 無調符音標
+    """
+
+    # 若【音標】末端為數值，表音標已是【帶調號音標】，直接回傳【無調符音標】
+    # u_tiau_hu = False
+    if im_piau[-1] in "123456789":
+        return False
+
+    # 將傳入【音標】字串，以標準化組合格式：NFC，將【帶調符拼音字母】標準化；
+    # 令以下之處理作業，不會發生【看似相同】的【帶調符拼音字母】，其實使用
+    # 不同之 Unicode 編碼
+    im_piau = unicodedata.normalize("NFC", im_piau)
+
+    #--------------------------------------------------------------------------------
+    # 以【元音及韻化輔音清單】，比對傳入之【音標】，找出對應之【基本拼音字母】與【調號】
+    #--------------------------------------------------------------------------------
+    number = "1"  # 明確初始化 number 變數，以免未設定而發生錯誤
+    for tone_mark, (base_char, number) in tiau_hu_mapping.items():
+        if tone_mark in im_piau:
+            # 轉換成【無調符音標】
+            bo_tiau_hu_im_piau = im_piau.replace(tone_mark, base_char)  # noqa: F841
+            break
+    else:
+        number = "1"  # 若沒有任何調符，number強制為1
+
+    # 若 number 有值，且在 ["2", "3", "5", "6", "7", "8", "9"] 之中，則為【帶調符音標】
+    if number in ["2", "3", "5", "6", "7", "8", "9"]:
+        return True
+
+    # 若【無調符音標】末端【拼音字母】為【hptk】之一，則為【陰入調】，則為【帶調符音標】
+    if number == '1':
+        if im_piau[-1] in "hptk":
+            # 【無調符音標】末端為【hptk】之一，則為【陰入調】，聲調值為 4
+            return True
+        elif im_piau[-1] in "aeioumngAEIOUMN":
+            # 【無調符音標】末端非【hptk】之一，則為【陰平調】，聲調值為 1
+            return True
+
+    return False
+
+def tng_im_piau(im_piau: str, po_ci: bool = True) -> str:
+    """
+    將【帶調符音標】（台羅拼音/台語音標）轉換成【帶調號TLPA音標】
+    :param im_piau: str - 帶調符音標
+    :param po_ci: bool - 是否保留【音標】之首字母大寫
+    :param kan_hua: bool - 簡化：若是【簡化】，聲調值為 1 或 4 ，去除調號值
+    :return: str - 轉換後的【帶調號TLPA音標】
+    """
+    # 遇標點符號，不做轉換處理，直接回傳
+    if im_piau[-1] in PUNCTUATIONS:
+        return im_piau
+
+    #---------------------------------------------------------
+    # 更換【音標】之【聲母】
+    #---------------------------------------------------------
+    # 將傳入【音標】字串，以標準化之 NFC 組合格式，調整【帶調符拼音字母】；
+    # 令以下之處理作業，不會發生【看似相同】的【帶調符拼音字母】，其實使用
+    # 不同之 Unicode 編碼
+    im_piau = unicodedata.normalize("NFC", im_piau)
+
+    if im_piau.startswith("tsh"):
+        im_piau = im_piau.replace("tsh", "c", 1)
+    elif im_piau.startswith("Tsh"):
+        im_piau = im_piau.replace("Tsh", "C", 1)
+    elif im_piau.startswith("ts"):
+        im_piau = im_piau.replace("ts", "z", 1)
+    elif im_piau.startswith("Ts"):
+        im_piau = im_piau.replace("Ts", "Z", 1)
+    elif im_piau.startswith("chh"):
+        im_piau = im_piau.replace("chh", "c", 1)
+    elif im_piau.startswith("Chh"):
+        im_piau = im_piau.replace("Chh", "C", 1)
+    elif im_piau.startswith("ch"):
+        im_piau = im_piau.replace("ch", "z", 1)
+    elif im_piau.startswith("Ch"):
+        im_piau = im_piau.replace("Ch", "Z", 1)
+
+    #---------------------------------------------------------
+    # 更換【音標】之【韻母】
+    #---------------------------------------------------------
+    su_ji = im_piau[0]      # 保存【音標】之拼音首字母
+    org_im_piau = im_piau
+    im_piau = org_im_piau.lower()
+
+    # 轉換【鼻音韻母】
+    im_piau = im_piau.replace("ⁿ", "nn", 1)
+
+    # 轉換音標中【韻母】為【o͘】（oo長音）的特殊處理
+    im_piau = handle_o_dot(im_piau)
+
+    # # 聲調符號對映調號數值的轉換字典
+    # tiau_fu_mapping = {
+    #     "\u0300": "3",   # 3 陰去: ò
+    #     "\u0301": "2",   # 2 陰上: ó
+    #     "\u0302": "5",   # 5 陽平: ô
+    #     "\u0304": "7",   # 7 陽去: ō
+    #     "\u0306": "9",   # 9 輕声: ő
+    #     "\u030C": "6",   # 6 陽上: ǒ
+    #     "\u030D": "8",   # 8 陽入: o̍
+    # }
+    # 轉換音標中【韻母】部份，不含【o͘】（oo長音）的特殊處理
+    letters, tone = separate_tone(im_piau)   # 無調符音標：im_piau
+    if tone:
+        tiau_ho = tiau_fu_mapping[tone]
+    else:
+        tiau_ho = ""
+
+    # 以【無調符音標】，轉換【韻母】
+    sorted_keys = sorted(un_bu_mapping, key=len, reverse=True)
+    for key in sorted_keys:
+        if key in letters:
+            letters = letters.replace(key, un_bu_mapping[key])
+            break
+
+    # 如若傳入之【音標】首字母為大寫，則將已轉成 "z" 或 "c" 之拼音字母改為大寫
+    if su_ji.isupper():
+        if letters[0] == "z":
+            letters = "Z" + letters[1:]
+        elif letters[0] == "c":
+            letters = "C" + letters[1:]
+        else:
+            letters = su_ji + letters[1:]
+
+    # 調符
+    if tone:
+        letters = apply_tone(letters, tone)
+
+    return letters
+
+def tng_tiau_ho(im_piau: str, kan_hua: bool = False) -> str:
+    """
+    將【帶調符音標】轉換為【帶調號音標】
+    :param im_piau: str - 帶調符音標
+    :param kan_hua: bool - 簡化：若是【簡化】，聲調值為 1 或 4 ，去除調號值
+    :return: str - 帶調號音標
+    """
+    if im_piau == '': return ''  # noqa: E701
+    # 遇標點符號，不做轉換處理，直接回傳
+    if im_piau[-1] in PUNCTUATIONS:
+        return im_piau
+
+    # 若【音標】末端為數值，表音標已是【帶調號拼音】，直接回傳
+    u_tiau_ho = True if im_piau[-1] in "123456789" else False
+    if u_tiau_ho: return im_piau  # noqa: E701
+
+    # 將傳入【音標】字串，以標準化之 NFC 組合格式，調整【帶調符拼音字母】；
+    # 令以下之處理作業，不會發生【看似相同】的【帶調符拼音字母】，其實使用
+    # 不同之 Unicode 編碼
+    im_piau = unicodedata.normalize("NFC", im_piau)
+
+    #--------------------------------------------------------------------------------
+    # 以【元音及韻化輔音清單】，比對傳入之【音標】，找出對應之【基本拼音字母】與【調號】
+    #--------------------------------------------------------------------------------
+    tone_number = "1"  # 初始化調號為 1
+    number = "1"  # 明確初始化 number 變數，以免未設定而發生錯誤
+    for tone_mark, (base_char, number) in tiau_hu_mapping.items():
+        if tone_mark in im_piau:
+            im_piau = im_piau.replace(tone_mark, base_char)
+            break
+    else:
+        number = "1"  # 若沒有任何調符，number強制為1
+
+    # 依是否要【簡化】之設定，處理【調號】1 或 4 是否要略去
+    if kan_hua and number in ["1", "4"]:
+        # 若是【簡化】，且聲調值為 1 或 4 ，去除調號值
+        tone_number = ""
+    else:
+        # 若未要求【簡化】，聲調值置於【音標】末端
+        if number not in ["1", "4"]:
+            tone_number = number
+        else:
+            if im_piau[-1] in "hptk":
+                # 【音標】末端為【hptk】之一，則為【陰入調】，聲調值為 4
+                tone_number = "4"
+            else:
+                tone_number = "1"
+
+    return im_piau + tone_number
 
 
 # =========================================================================
