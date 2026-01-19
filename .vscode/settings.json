@@ -2,6 +2,11 @@
     "[python]": {
         "editor.defaultFormatter": "ms-python.black-formatter"
     },
+    "python.terminal.launchArgs": [
+        "-NoExit"
+    ],
+    "debug.console.closeOnEnd": false,
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
     "python.formatting.provider": "none",
     "sqltools.connections": [
         {

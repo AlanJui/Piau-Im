@@ -24,8 +24,6 @@ from mod_logging import (
     logging_exception,
     logging_warning,
 )
-
-# from mod_excel_access import ensure_sheet_exists
 from mod_帶調符音標 import kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
 
 # =========================================================================
@@ -400,8 +398,18 @@ def is_punctuation(char):
     return unicodedata.category(char)[0] in {'P', 'S'}
 
 # =========================================================
-# 判斷是否為標點符號的輔助函數
+# 想要僅針對漢字進行檢查，而不包括其他語言的字母，可用 Unicode 範圍來判斷。
+# 漢字的 Unicode 範圍： [\u4e00-\u9fff] (包括中日韓越所有漢字)
 # =========================================================
+def char_is_han_ji(char):
+    return '\u4e00' <= char <= '\u9fff'
+
+def is_han_ji(char):
+    """檢查字元是否為漢字"""
+    if not isinstance(char, str) or len(char) != 1:
+        return False
+    return 'CJK UNIFIED IDEOGRAPH' in unicodedata.name(char, '')
+
 def is_valid_han_ji(char):
     if char is None:
         return False
@@ -410,19 +418,6 @@ def is_valid_han_ji(char):
 
     punctuation_marks = "，。！？；：、（）「」『』《》……"
     return char not in punctuation_marks
-
-# =========================================================
-# 想要僅針對漢字進行檢查，而不包括其他語言的字母，可用 Unicode 範圍來判斷。
-# 漢字的 Unicode 範圍： [\u4e00-\u9fff] (包括中日韓越所有漢字)
-# =========================================================
-def char_is_han_ji(char):
-    return '\u4e00' <= char <= '\u9fff'
-
-# 用途：檢查是否為漢字
-def is_han_ji(char):
-    if not isinstance(char, str) or len(char) != 1:
-        return False
-    return 'CJK UNIFIED IDEOGRAPH' in unicodedata.name(char, '')
 
 def extract_han_ji(text):
     if not isinstance(text, str):

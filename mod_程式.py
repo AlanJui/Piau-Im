@@ -510,7 +510,7 @@ class ExcelCell:
     def _process_jin_kang_piau_im(self, han_ji: str, jin_kang_piau_im: str, cell, row: int, col: int):
         """處理人工標音內容"""
         # 預設未能依【人工標音】欄，找到對應的【台語音標】和【漢字標音】
-        original_tai_gi_im_piau = cell.offset(-1, 0).value
+        # org_tai_gi_im_piau = cell.offset(-1, 0).value
         han_ji=cell.value
 
         # 取得【漢字】儲存格之【座標】位址（row, col）

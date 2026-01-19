@@ -1,12 +1,10 @@
 # =========================================================================
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
-import os
 import re
-import sys
 import unicodedata
 
-import xlwings as xw
+from mod_標音 import is_han_ji
 
 # =========================================================================
 # 常數定義
@@ -124,10 +122,10 @@ def is_im_piau(im_piau: str) -> bool:
     return im_piau in PUNCTUATIONS
 
 # 用途：檢查是否為漢字
-def is_han_ji(char):
-    if not isinstance(char, str) or len(char) != 1:
-        return False
-    return 'CJK UNIFIED IDEOGRAPH' in unicodedata.name(char, '')
+# def is_han_ji(char):
+#     if not isinstance(char, str) or len(char) != 1:
+#         return False
+#     return 'CJK UNIFIED IDEOGRAPH' in unicodedata.name(char, '')
 
 # 清除控制字元：將 Unicode 中所有類別為 Control (C) 的字元移除
 def cing_tu_khong_ze_ji_guan(text: str) -> str:

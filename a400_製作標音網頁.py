@@ -4,7 +4,6 @@
 import logging
 import os
 from pathlib import Path
-from typing import Tuple
 
 # 載入第三方套件
 import xlwings as xw
@@ -358,14 +357,18 @@ class CellProcessor(ExcelCell):
         if total_chars_per_line == 0:
             total_chars_per_line = 0
 
-        for row in range(program.line_start_row, program.line_end_row, program.ROWS_PER_LINE):
-            if title_with_ruby and row == program.line_start_row + 2:
+        # 工作表起始列號 = 範圍起始列號 + 漢字列偏移量 = 3 + 2 = 5
+        start_row = program.line_start_row + program.han_ji_row_offset
+        end_row = program.line_end_row + program.han_ji_row_offset
+
+        for row in range(start_row, end_row, program.ROWS_PER_LINE):
+            if title_with_ruby and row == start_row:
                 # 已經處理過標題列，跳過
                 continue
-            sheet.range((row+2, 1)).select()      # 漢字儲存格列號 = 工作表列號 + 2
+            sheet.range((row, program.start_col)).select()
 
             for col in range(program.start_col, program.end_col):
-                cell_value = sheet.range((row+2, col)).value  # 漢字儲存格列號 = 工作表列號 + 2
+                cell_value = sheet.range((row, col)).value
 
                 if cell_value == 'φ':  # 讀到【結尾標示】
                     End_Of_File = True
