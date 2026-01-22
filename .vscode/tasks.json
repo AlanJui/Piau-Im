@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Fix Git SSH",
+            "type": "shell",
+            "command": "Get-Process ssh -ErrorAction SilentlyContinue | Stop-Process -Force; Write-Host 'SSH connections cleared' -ForegroundColor Green",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        }
+    ]
+}

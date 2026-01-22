@@ -499,7 +499,11 @@ def _create_html_file(output_path: str, content: str, title: str = '您的標題
     <link rel="stylesheet" href="assets/styles/styles.css">
 </head>
 <body>
-    {content}
+    <main class="page">
+        <article class="article_content">
+        {content}
+        </article>
+    </main>
 </body>
 </html>
     """
