@@ -139,12 +139,12 @@ def process(wb, args) -> int:
         #-------------------------------------------------------------------------
         # 更新資料庫中【漢字庫】資料表
         #-------------------------------------------------------------------------
-        siong_iong_too_to_use = 0.8 if program.piau_im_huat == "文讀音" else 0.6  # 根據語音類型設定常用度
+        siong_iong_too_to_use = 0.8 if program.ue_im_lui_piat == "文讀音" else 0.6  # 根據語音類型設定常用度
         xls_cell.insert_or_update_to_db(
             table_name=program.table_name,
             han_ji=han_ji,
             tai_gi_im_piau=tai_gi_im_piau,
-            ue_im_lui_piat=program.piau_im_huat,
+            ue_im_lui_piat=program.ue_im_lui_piat,
             siong_iong_too=siong_iong_too_to_use,
         )
 

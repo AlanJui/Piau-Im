@@ -1413,7 +1413,12 @@ def main():
             '''
         )
         parser.add_argument(
-            '-edit',
+            '--test',
+            action='store_true',
+            help='執行測試模式',
+        )
+        parser.add_argument(
+            '--edit',
             action='store_true',
             help='啟用校稿模式（不隱藏人工標音文字顏色）'
         )

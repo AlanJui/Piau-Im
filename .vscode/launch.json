@@ -288,7 +288,7 @@
             "program": "a250_作用儲存格查找漢字標音.py",
             "console": "externalTerminal",
             "args": [
-                "--test"
+                // "--test"
             ]
         },
         {

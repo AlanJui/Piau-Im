@@ -1,87 +1,136 @@
-@charset "UTF-8";
+/* Version 0.2.1 */
 
-@import url("https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap");
-@import url(https://fonts.googleapis.com/css?family=Noto+Serif+TC&amp;display=swap);
+/* =========================
+   基本設定
+   ========================= */
+:root {
+  --page-bg: #f7f7f7;
+  --article-bg: #ffffff;
+  --text: #1b1b1b;
+  --muted: #666;
+  --link: #0b57d0;
 
-@font-face {
-  font-family: 'BopomofoRuby';
-  src:
-    local('BopomofoRuby1909-v1-Regular'),
-    url('../fonts/BopomofoRuby1909-v1-Regular.ttf');
+  --article-max: 760px;
+  --pad: 18px;
+
+  --line-height: 1.9;
+  --radius: 14px;
+  --shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
 }
 
 body {
-  /* width: 100%; */
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
-  width: 95%;
-  color: #333;
-  line-height: 2.0;
-  font-size: 28pt;
-  font-family: 'Noto Sans TC', sans-serif !important;
+  background: var(--page-bg);
+  color: var(--text);
+  font-family:
+    system-ui,
+    -apple-system,
+    "Noto Sans TC",
+    "Noto Serif TC",
+    "Microsoft JhengHei",
+    Arial,
+    sans-serif;
+  line-height: var(--line-height);
 }
 
-main {
-  display: block;
-  padding: 40px 20px 20px;
-  color: #333;
-  line-height: 1.8;
-  width: 95%;
+/* =========================
+   版面容器
+   ========================= */
+.page {
+  padding: 28px 14px;
+}
+
+.article_content {
+  max-width: var(--article-max);
   margin: 0 auto;
+  background: var(--article-bg);
+  padding: 22px var(--pad);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  font-family: "Noto Serif TC", Arial, sans-serif;
+  font-size: 24px;
+  letter-spacing: 0.0em;
+  line-height: 2;
 }
 
-p {
-  margin-bottom: 50px;
-  line-height: 2em;
+@media (max-width: 480px) {
+  .article_content {
+    padding: 18px 14px;
+    border-radius: 12px;
+    font-size: 20px;
+  }
 }
 
-header {
-  /* display: block; */
-  border-top: #00c4ab 5px solid;
-  text-align: center;
-  background: url(../picts/bg_header.png) #e6e6e6;
+/* =========================
+   文字排版
+   ========================= */
+.article_content p {
+  margin: 0 0 14px;
+  word-break: break-word;
 }
 
-header h1 {
-  padding: 0 10px 25px;
-  font-family: 'Noto Serif TC', serif;
-  font-size: 32pt;
+.article_content h2 {
+  margin: 50px -5px 10px;
+  font-family: "Noto Sans TC", serif;
+  font-size: 2em;
   font-weight: bold;
+  color: #0066cc;
 }
 
-h1 {
-  color: #333;
-}
-
-#articles {
-  font-weight: bold;
-  width: 95%;
-  margin: 0 auto;
-}
-
-p {
-  margin-bottom: 50px;
-  line-height: 2em;
-}
-
-header {
-  /* display: block; */
-  border-top: #00c4ab 5px solid;
-  text-align: center;
-  background: url(../picts/bg_header.png) #e6e6e6;
-}
-
-header h1 {
-  padding: 0 10px 25px;
-  font-family: 'Noto Serif TC', serif;
-  font-size: 32pt;
-  font-weight: bold;
+.article_content .QA {
+  margin-top: 2.4em;
+  margin-bottom: 0.4em;
 }
 
 .title {
-  font-family: 'Noto Sans TC', serif;
+  font-size: 1.2em;
+  letter-spacing: 0px;
+  text-align: center;
+}
+
+.title_line {
+  font-family: "Noto Sans TC", serif;
   color: #0066cc;
-  font-size: 1.0em;
-  letter-spacing: 2px;
+  font-size: 1.2em;
+  text-align: center;
+  font-weight: 700;
+  margin: 0 0 16px;
+  padding: 0;
+}
+
+.line {
+  font-size: 0.5em;
+  text-align: center;
+  margin: 0 auto 20px;
+  padding: 0;
+}
+
+.line.deco {
+  text-align: center;
+  font-size: 0.5em;
+  color: var(--muted);
+  margin: 14px 0 18px;
+}
+
+.sub_title {
+  font-size: 0.7em;
+  letter-spacing: 0px;
   text-align: center;
 }
 
@@ -91,210 +140,406 @@ header h1 {
   text-align: right;
 }
 
-ul {
-  display: none;
-  list-style-type: none;
-}
-
-li a {
-  text-decoration: none;
-  display: block;
-  padding: 17px 25px;
-  color: #FFF;
-  background: #B94B6A;
-  border-bottom: 1px solid #A24861;
-  font-size: 100%;
-  line-height: 1.0em;
-}
-
-li:last-child a {
-  border-bottom: none;
-}
-
-a {
-  color: #0066cc;
+/* 連結 */
+.article_content a {
+  color: var(--link);
   text-decoration: none;
 }
 
-a:hover {
+.article_content a:hover {
   text-decoration: underline;
 }
 
-button {
-  position: absolute;
-  top: 25px;
-  right: 15px;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
+/* =========================
+   separator（媒體區塊：影片/圖片）
+   ========================= */
+.separator {
+  clear: both;
+  text-align: center;
+  margin: 18px 0 22px;
 }
 
-button:focus {
-  outline: none;
+/* ---- 影片（YouTube iframe）RWD 核心 ----
+   用 .embed 包一層，靠 padding-top 做 16:9
+*/
+.separator .embed {
+  position: relative;
+  margin: 0 auto;
+  width: 100%;
+  /* 預設給個合理上限，避免桌機太大 */
+  max-width: 560px;
+}
+
+/* 16:9 比例容器 */
+.separator .embed::before {
+  content: "";
+  display: block;
+  padding-top: 56.25%;
+}
+
+/* iframe 貼滿容器 */
+.separator iframe {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  border: 0;
+  display: block;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12);
+}
+
+/* ---- 影片寬度控制：三種模式 ---- */
+
+/* (1) 固定最大 400px：手機自動縮到 100% */
+.separator.media-400 .embed {
+  max-width: 400px;
+}
+
+/* (2) 百分比：例如 60%（桌機 60%，手機自動滿版） */
+.separator.media-pct-60 .embed {
+  max-width: 900px;
+  /* 防止螢幕超大時過寬 */
+  width: 60%;
+}
+
+@media (max-width: 640px) {
+  .separator.media-pct-60 .embed {
+    width: 100%;
+  }
+}
+
+/* (3) RWD clamp：在 240px～560px 間自動變化 */
+.separator.media-rwd .embed {
+  max-width: none;
+  width: clamp(240px, 70vw, 560px);
+}
+
+/* =========================
+   圖片
+   ========================= */
+.separator img,
+.article_content img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12);
+}
+
+/* 圖片寬度控制：對應影片的三種模式 */
+.separator.img-400 img {
+  width: 100% !important;
+  max-width: 400px;
+}
+
+.separator.img-pct-60 img {
+  width: 60% !important;
+}
+
+@media (max-width: 640px) {
+  .separator.img-pct-60 img {
+    width: 100% !important;
+  }
+}
+
+.separator.img-rwd img {
+  width: clamp(240px, 70vw, 560px) !important;
+  max-width: none;
+}
+
+.image-caption {
+  font-family: Noto Sans TC, sans-serif;
+  font-size: 1.1em;
+  color: brown;
+  font-style: bold;
+  margin-top: 5px;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.custom-border {
+  border: 1pt solid #000;
+  border-radius: 5px;
+}
+
+/* =========================
+   影片標題
+   ========================= */
+.video_title {
+  font-size: 0.8em;
+  font-weight: bold;
+  color: purple;
+  text-align: center;
+  margin-top: 0em;
+  margin-bottom: 1em;
+  line-height: 1.2;
+  font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+}
+
+/* =========================
+   清單樣式
+   ========================= */
+.article_content ul li {
+  font-size: 1em;
+  line-height: 1.4;
+  list-style-type: none;
+  position: relative;
+  padding-left: 1.2em;
+}
+
+.article_content ul li::before {
+  font-size: 0.8em;
+  line-height: 1.4;
+  content: "🌎";
+  position: absolute;
+  left: 0;
+  top: 0px;
+}
+
+/* =========================
+   注音符號相關（方音符號專用）
+   ========================= */
+/* @font-face {
+    font-family: BopomofoRuby;
+    src: local("BopomofoRuby1909-v1 Regular"), url(BopomofoRuby1909-v1-Regular.ttf);
+} */
+@font-face {
+  font-family: "BopomofoRuby";
+  src:
+    local("BopomofoRuby1909-v1-Regular"),
+    url("https://raw.githubusercontent.com/AlanJui/Blogger/main/assets/fonts/BopomofoRuby1909-v1-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 防止 ruby 元素在換行時被拆分 */
+ruby {
+  white-space: nowrap;
+  text-align: justify;
+  font-family: "Noto Serif TC Black", serif;
+  font-size: 2.4rem;
+  line-height: 2.4;
+  letter-spacing: 0;
+  font-weight: normal;
 }
 
 rt {
-  /* font-family: Arial; */
-  font-family: BopomofoRuby;
+  font-family: 'Noto Sans TC', Arial, sans-serif;
   color: darkcyan;
-  font-size: 45%;
+  font-size: 40%;
+  font-weight: bold;
   letter-spacing: 0;
+  font-feature-settings: "salt";
 }
 
 rtc {
   font-family: BopomofoRuby;
   color: #B94B6A;
-  font-size: 30%;
-  line-height: normal;
-  ruby-merge: merge;
-
+  font-size: 40%;
+  font-weight: bold;
   -webkit-ruby-position: inter-character;
   ruby-position: inter-character;
   text-orientation: upright;
-  letter-spacing: 3px;
-
-  -webkitg_writing-mode: vertical-lr;
+  -webkit-text-orientation: upright;
+  letter-spacing: 0px;
+  -webkit-writing-mode: vertical-lr;
+  -ms-writing-mode: vertical-lr;
   writing-mode: vertical-lr;
   vertical-align: middle;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -0.5em;
+  margin-left: -0.8em;
+  margin-right: 0.0em;
+  text-combine-upright: none;
+  -webkit-text-combine: none;
+  word-break: break-all;
+  white-space: normal;
+  height: auto;
+  width: 1em;
+}
+
+/* 無 rtc 支援時的替代標記（改用 span） */
+.rtc-fallback {
+  color: #B94B6A;
+  font-family: "BopomofoRuby" !important;
+  font-size: 35% !important;
+  line-height: 1.2;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  vertical-align: middle;
+  display: inline-block;
+  margin-left: -1.5em;
+}
+
+/* 雙排注音符號 */
+.Siang_Pai {
+  font-family: "Noto Serif TC Black", serif;
+  font-size: 2.4rem;
+  line-height: 2.4;
+  text-align: justify;
+}
+
+.Siang_Pai ruby {
+  margin-right: 0.3rem;
+}
+
+.Siang_Pai rt {
+  margin-left: -0.4em;
+  font-family: Arial;
+  color: #00c4ab;
+  font-size: 50%;
+  font-variant-east-asian: salt;
+  -moz-font-feature-settings: "salt";
+  -webkit-font-feature-settings: "salt";
+  font-feature-settings: "salt";
+  text-orientation: upright;
+}
+
+.Siang_Pai rtc {
+  color: #B94B6A;
+  font-size: 35%;
+  -webkit-ruby-position: inter-character;
+  ruby-position: inter-character;
+  text-orientation: upright;
+  -moz-writing-mode: vertical-rl;
+  -webkit-writing-mode: vertical-rl;
+  writing-mode: vertical-rl;
+  vertical-align: middle;
   display: inline;
+  text-orientation: upright;
 }
 
 /* 方音符號 */
-.zhu_yin {
-  font-family: "Noto Serif TC";
-  letter-spacing: 0.2em;
-  /* 控制漢字之間的間距 */
-  display: inline-flex;
-  /* 保證所有標注都在同一行 */
-  white-space: nowrap;
-  /* 防止元素換行 */
-}
-
-.zhu_yin ruby {
-  writing-mode: vertical-lr;
-  /* 垂直排列方音符號 */
-  text-orientation: upright;
-  /* 直立顯示符號 */
-  display: inline-flex;
-  /* 保持元素內部的靈活布局 */
-  white-space: nowrap;
-  /* 防止 Ruby 標籤換行 */
-  vertical-align: middle;
-  /* 保持漢字與符號的垂直對齊 */
-}
-
-.zhu_yin rt {
-  font-family: BopomofoRuby;
-  color: #B94B6A;
-  font-size: 35%;
-  /* 適當調整符號字體大小，避免過大導致布局錯亂 */
-  letter-spacing: 0.1em;
-  /* 調整符號之間的間距，讓排列更清晰 */
-  vertical-align: middle;
-  /* 保證符號與漢字的對齊 */
-  display: inline-block;
-  /* 防止行內元素換行 */
-}
-
-/* .zhu_yin {
-  font-family: "Noto Serif TC";
-  letter-spacing: 0.2em;
-}
-
-.zhu_yin ruby {
-  writing-mode: vertical-lr;
-  text-orientation: upright;
-}
-
-.zhu_yin rt {
-  font-family: BopomofoRuby;
-  color: #B94B6A;
-  font-size: 40%;
-  letter-spacing: 0;
-} */
-
-/* 標音 */
 .Piau_Im {
-  font-family: "Noto Serif TC";
+  /* font-family: "Noto Serif TC Black"; */
+  font-size: 2.8rem;
+  letter-spacing: 0.1rem;
 }
 
 .Piau_Im rt {
   font-family: BopomofoRuby;
   color: #B94B6A;
-  font-size: 30%;
-
+  font-size: 35%;
   -webkit-ruby-position: inter-character;
   ruby-position: inter-character;
   text-orientation: upright;
-
   -webkit-writing-mode: vertical-rl;
   writing-mode: vertical-rl;
   vertical-align: middle;
   display: inline;
 }
 
-/* 雙排注音符號 */
-.Siang_Pai {
-  font-family: "Noto Serif TC";
-}
-
-.Siang_Pai ruby {
-  ruby-merge: separate;
-  ruby-position: over;
-  /* margin-left: 0em; */
-  margin-right: 0.3em;
-}
-
-.Siang_Pai rt {
-  font-family: Arial;
-  color: #00c4ab;
-  font-size: 40%;
-}
-
-.Siang_Pai rtc {
-  margin-left: -0.2em;
-  /* 根据需要调整数值 */
-  font-family: BopomofoRuby;
-  color: #B94B6A;
-  font-size: 30%;
-
-  -webkit-ruby-position: inter-character;
-  ruby-position: inter-character;
-  text-orientation: upright;
-
-  -webkit-writing-mode: vertical-lr;
-  writing-mode: vertical-lr;
-  vertical-align: middle;
-  display: inline;
+/* 注音 */
+.zhu_yin {
+  /* font-family: "Noto Serif TC"; */
+  font-size: 2.8rem;
+  letter-spacing: 0.0em;
+  line-height: 2;
 }
 
 /* 台羅、閩拼、白話字 */
 .pin_yin {
   /* font-family: "Noto Serif TC"; */
-  font-family: BopomofoRuby;
+  font-size: 28pt;
+  letter-spacing: 0.2em;
+  line-height: 2;
 }
 
-.pin_yin rt {
-  font-family: Arial;
-  color: darkcyan;
-  font-size: 45%;
-  letter-spacing: 0;
-}
-
-/* 白話字 */
 .poj {
   /* font-family: "Noto Serif TC"; */
-  font-family: BopomofoRuby;
+  font-size: 28pt;
   letter-spacing: 0.2em;
+  line-height: 2;
 }
 
 /* 十五音 */
 .fifteen_yin {
-  font-family: "Noto Serif TC";
+  /* font-family: "Noto Serif TC"; */
+  font-size: 28pt;
   letter-spacing: 0.2em;
+  line-height: 2;
+}
+
+/* 十五音 */
+.fifteen_yin {
+  /* font-family: "Noto Serif TC"; */
+  font-size: 28pt;
+  letter-spacing: 0.2em;
+  line-height: 2;
 }
 
 .fifteen_yin rt {
   letter-spacing: 0;
   font-size: 40%;
+}
+
+/* =========================
+   Markdown 樣式
+   ========================= */
+.md {
+  font-family: "Noto Serif TC", Arial, sans-serif;
+  font-size: 1.4em;
+  letter-spacing: 0.0em;
+  line-height: 1.6;
+}
+
+.md h1,
+.md h2,
+.md h3 {
+  margin-top: 2.4em;
+  margin-bottom: 0.4em;
+}
+
+.md p {
+  margin-bottom: 1em;
+}
+
+.md pre {
+  background: #f4f4f4;
+  padding: 10px;
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+/* 將 markdown 區塊中的清單縮排調小 */
+.md ul,
+.md ol {
+  margin-left: 1em;
+  padding-left: 1em;
+}
+
+.md li {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+/* =========================
+   移動端調整
+   ========================= */
+@media screen and (max-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+
+  body {
+    max-width: 640px;
+    margin: 0 auto;
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  .article_content {
+    font-size: 20px;
+  }
+
+  .image-caption {
+    font-size: 0.9em;
+  }
+
 }

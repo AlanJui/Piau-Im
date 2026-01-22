@@ -174,6 +174,36 @@ class ExcelCell:
             new_sheet=new_khuat_ji_piau_sheet,
         )
 
+    def _get_title_from_sheet(self, sheet) -> str:
+        """
+        從工作表中取得文章標題
+
+        Args:
+            sheet: Excel 工作表物件
+
+        Returns:
+            文章標題字串
+        """
+        wb =  self.program.wb
+        sheet = wb.sheets[self.program.han_ji_piau_im_sheet_name] if sheet is None else sheet
+        title_chars = ""
+        row, col = 5, 4
+
+        if sheet.range((row, col)).value == "《":
+            while True:
+                cell_val = sheet.range((row, col)).value
+                if cell_val is None:
+                    break
+                title_chars += cell_val
+                if cell_val == "》":
+                    break
+                col += 1
+                if col > 18:  # 超出一列最大值（R欄=18），換行至下一列
+                    row += 1
+                    col = 4
+
+        return title_chars
+
     def _cu_jin_kang_piau_im(
         self,
         jin_kang_piau_im: str,

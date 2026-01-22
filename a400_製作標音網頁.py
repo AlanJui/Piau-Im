@@ -95,7 +95,7 @@ class CellProcessor(ExcelCell):
     # =================================================================
     # 輔助方法
     # =================================================================
-    def _build_ruby_tag(
+    def _build_full_ruby_tag(
         self, han_ji: str, siong_piau_im: str, zian_piau_im: str
     ) -> str:
         """構建 Ruby 標籤"""
@@ -129,6 +129,41 @@ class CellProcessor(ExcelCell):
                 "  <rp>(</rp>\n"    # 括號左
                 "  <rtc>%s</rtc>\n" # 右方標音
                 "  <rp>)</rp>\n"    # 括號右
+                "</ruby>\n"
+            )
+            return html_str % (han_ji, siong_piau_im, zian_piau_im)
+        else:
+            return f"<span>{han_ji}</span>\n"
+
+    def _build_ruby_tag(
+        self, han_ji: str, siong_piau_im: str, zian_piau_im: str
+    ) -> str:
+        """構建 Ruby 標籤"""
+        if siong_piau_im != "" and zian_piau_im == "":
+            # 只有上方標音：羅馬拼音、白話字、台羅、閩拼等
+            html_str = (
+                "<ruby>\n"
+                "  %s\n"   # 漢字
+                "  <rt>%s</rt>\n"   # 上方標音
+                "</ruby>\n"
+            )
+            return html_str % (han_ji, siong_piau_im)
+        elif siong_piau_im == "" and zian_piau_im != "":
+            # 只有右方標音：方音符號（TPS）
+            html_str = (
+                "<ruby>\n"
+                "  %s\n"   # 漢字
+                "  <rtc>%s</rtc>\n" # 右方標音
+                "</ruby>\n"
+            )
+            return html_str % (han_ji, zian_piau_im)
+        elif siong_piau_im != "" and zian_piau_im != "":
+            # 同時有上方及右方標音：雙排注音（DBL）
+            html_str = (
+                "<ruby>\n"
+                "  %s\n"   # 漢字
+                "  <rt>%s</rt>\n"   # 上方標音
+                "  <rtc>%s</rtc>\n" # 右方標音
                 "</ruby>\n"
             )
             return html_str % (han_ji, siong_piau_im, zian_piau_im)
@@ -461,7 +496,7 @@ def _create_html_file(output_path: str, content: str, title: str = '您的標題
     <title>{title}</title>
     <meta charset="UTF-8">
     {head_extra}
-    <link rel="stylesheet" href="assets/styles/styles2.css">
+    <link rel="stylesheet" href="assets/styles/styles.css">
 </head>
 <body>
     {content}
@@ -535,7 +570,9 @@ def process(wb, args) -> int:
         else:
             im_piau = f"{xls_cell.siong_pinn_piau_im}＋{xls_cell.zian_pinn_piau_im}"
 
-        output_file = f"《{xls_cell.title}》【{hue_im}】{im_piau}.html"
+        # output_file = f"《{xls_cell.title}》【{hue_im}】{im_piau}.html"
+        title = xls_cell._get_title_from_sheet(sheet=sheet)
+        output_file = f"{title}【{hue_im}】{im_piau}.html"
         output_path = os.path.join(xls_cell.output_dir, output_file)
 
         # 確保輸出目錄存在
