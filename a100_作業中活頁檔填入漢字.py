@@ -1,3 +1,4 @@
+# V0.2.1
 # =========================================================================
 # 程式功能摘要
 # =========================================================================
@@ -79,6 +80,7 @@ init_logging()
 # 主要處理函數
 # =========================================================================
 def extract_and_set_title(wb, file_path):
+    """從漢字純文字檔中提取標題，並寫入 env 表 TITLE 名稱格"""
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             first_line = f.readline().strip()
@@ -194,6 +196,9 @@ def _fill_han_ji_into_sheet(
     # 將漢字檔已讀取之內容，填入【漢字注音】工作表之【V3】儲存格
     wb.sheets[sheet_name].range(target).value = ''.join(han_ji_list)
 
+    # 將文件標題提取並寫入 env 表 TITLE 名稱格
+    extract_and_set_title(wb, text_file_name)
+
 
 def process(wb, args) -> int:
     """
@@ -219,9 +224,9 @@ def process(wb, args) -> int:
         # xls_cell = ExcelCell(program=program)
         xls_cell = ExcelCell(
             program=program,
-            new_jin_kang_piau_im_ji_khoo_sheet=False,
-            new_piau_im_ji_khoo_sheet=False,
-            new_khuat_ji_piau_sheet=False,
+            new_jin_kang_piau_im_ji_khoo_sheet=True if args.new else False,
+            new_piau_im_ji_khoo_sheet=True if args.new else False,
+            new_khuat_ji_piau_sheet=True if args.new else False,
         )
 
         #======================================================================
