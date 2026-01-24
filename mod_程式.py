@@ -1521,8 +1521,10 @@ class ExcelCell:
             # # 建立【標音字庫】查詢表（dict）
             # piau_im_ji_khoo_dict  = self.piau_im_ji_khoo_dict
             # 取得【來源工作表】：【標音字庫】查詢表（dict）
+            source_dict_sheet_name = source_sheet_name
             source_dict = self.get_piau_im_dict_by_name(sheet_name=source_sheet_name)
-            target_dict = self.get_piau_im_dict_by_name(sheet_name='標音字庫')
+            target_dict_sheet_name = '標音字庫'
+            target_dict = self.get_piau_im_dict_by_name(sheet_name=target_dict_sheet_name)
         except Exception as e:
             logging_exc_error("找不到工作表！", e)
             return EXIT_CODE_INVALID_INPUT
@@ -1620,8 +1622,8 @@ class ExcelCell:
 
         # 依據 Dict 內容，更新來源：【人工標音字庫】工作表；目標：【標音字庫】工作表
         if row > 2:
-            source_dict.write_to_excel_sheet(wb)
-            target_dict.write_to_excel_sheet(wb)
+            source_dict.write_to_excel_sheet(wb, sheet_name=source_dict_sheet_name)
+            target_dict.write_to_excel_sheet(wb, sheet_name=target_dict_sheet_name)
             return EXIT_CODE_SUCCESS
         else:
             logging_warning(msg=f"【{source_sheet_name}】工作表內，無任何資料，略過後續處理作業。")

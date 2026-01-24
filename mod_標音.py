@@ -546,6 +546,10 @@ def convert_tl_without_tiau_hu(tai_lo: str) -> str:
     # 3. 若無聲調符號，需判斷是陰平調（調號 1）或陰入調（調號 4）
     # 入聲調的羅馬字必須以 p, t, k, h 結尾
     if tai_lo:
+        # 若最後一個字元已經是數字，則不需再加調號
+        if tai_lo[-1].isdigit():
+            return tai_lo
+
         last_char = tai_lo[-1].lower()
         if last_char in ['p', 't', 'k', 'h']:
             # 以 p/t/k/h 結尾的是陰入調（調號 4）
