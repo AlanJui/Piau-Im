@@ -2,6 +2,12 @@ class JiKhooDict:
     def __init__(self):
         self.ji_khoo_dict = {}
 
+    def __contains__(self, key):
+        return key in self.ji_khoo_dict
+
+    def __getitem__(self, key):
+        return self.ji_khoo_dict[key]
+
     def items(self):
         for han_ji, entries in self.ji_khoo_dict.items():
             for entry in entries:

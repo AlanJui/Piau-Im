@@ -33,13 +33,12 @@ class TestCellProcessorRepro(unittest.TestCase):
         self.mock_program.piau_im = Mock()
         self.mock_program.piau_im_huat = "閩拼"
 
-        # Mock the dictionary with the actual structure used in JiKhooDict (List of Dicts)
-        self.mock_program.jin_kang_piau_im_ji_khoo_dict = {
-            # "而": [{"tai_gi_im_piau": "ji5", "kenn_ziann_im_piau": "N/A", "coordinates": ["(1,1)"]}]
+        self.cell_processor = CellProcessor(program=self.mock_program)
+
+        # Inject data directly into the cell_processor instance since the code uses self.jin_kang_piau_im_ji_khoo_dict
+        self.cell_processor.jin_kang_piau_im_ji_khoo_dict = {
             "於": [{"tai_gi_im_piau": "u5", "hau_ziann_im_piau": "N/A", "coordinates": ["(1,1)"]}]
         }
-
-        self.cell_processor = CellProcessor(program=self.mock_program)
 
     def tearDown(self):
         self.init_ji_khoo_patcher.stop()

@@ -1,5 +1,7 @@
 """
-    a210_漢字以人工標音處理作業.py V0.2.1
+    a210_漢字以人工標音處理作業.py V0.2.2
+    test_a210_repro.py V0.1.0  ==> py -m unittest .\test_a210_repro.py
+
     簡單說明作業流程如下：
     遇【作用儲存格】填入【引用既有的漢字標音】符號（【=】）時，漢字的【台語音標】
     自【人工標音字庫】工作表查找，並轉換成【漢字標音】。
@@ -33,6 +35,7 @@ from mod_logging import (
     logging_process_step,  # noqa: F401
     logging_warning,  # noqa: F401
 )
+from mod_字庫 import JiKhooDict
 from mod_帶調符音標 import is_han_ji
 from mod_標音 import ca_ji_kiat_ko_tng_piau_im, kam_si_u_tiau_hu, split_tai_gi_im_piau, tng_im_piau
 from mod_程式 import ExcelCell, Program
@@ -107,51 +110,7 @@ class CellProcessor(ExcelCell):
         )
         return tai_gi_im_piau, han_ji_piau_im
 
-    # def _process_han_ji(
-    #     self,
-    #     han_ji: str,
-    #     cell,
-    #     row: int,
-    #     col: int,
-    # ) -> Tuple[str, bool]:
-    #     """處理漢字"""
-    #     if han_ji == '':
-    #         return "【空白】", False
-
-    #     # 使用 HanJiTian 查詢漢字讀音
-    #     result = self.program.ji_tian.han_ji_ca_piau_im(
-    #         han_ji=han_ji,
-    #         ue_im_lui_piat=self.program.ue_im_lui_piat
-    #     )
-
-    #     # 查無此字
-    #     if not result:
-    #         self.program.khuat_ji_piau_ji_khoo_dict.add_or_update_entry(
-    #             han_ji=han_ji,
-    #             tai_gi_im_piau='',
-    #             hau_ziann_im_piau='N/A',
-    #             coordinates=(row, col)
-    #         )
-    #         return f"【{han_ji}】查無此字！", False
-
-    #     # 轉換音標
-    #     tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im(result)
-
-    #     # 寫入儲存格
-    #     cell.offset(-1, 0).value = tai_gi_im_piau  # 上方儲存格：台語音標
-    #     cell.offset(1, 0).value = han_ji_piau_im    # 下方儲存格：漢字標音
-
-    #     # 記錄到標音字庫
-    #     self.program.piau_im_ji_khoo_dict.add_or_update_entry(
-    #         han_ji=han_ji,
-    #         tai_gi_im_piau=tai_gi_im_piau,
-    #         hau_ziann_im_piau='N/A',
-    #         coordinates=(row, col)
-    #     )
-
-    #     return f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】", False
-
-    def _resolve_manual_annotation(self,cell, han_ji: str, jin_kang_val: any) -> str | None:
+    def _resolve_manual_annotation(self, cell, han_ji: str, jin_kang_val: any) -> str | None:
         """
         解析人工標音內容，處理特殊符號 (=, #) 與一般標音。
 
@@ -192,10 +151,10 @@ class CellProcessor(ExcelCell):
         if jin_kang_str == '=':
             # 檢查字庫中是否有此漢字
             # jin_kang_ji_khoo 預期是 JiKhooDict 物件，或 dict 結構
-            if han_ji in self.program.jin_kang_piau_im_ji_khoo_dict:
+            if han_ji in self.jin_kang_piau_im_ji_khoo_dict:
                 # 取得該漢字的所有標音紀錄
                 # 結構預期為: {漢字: {音標: [次數, 座標列表], ...}}
-                piau_im_variants = self.program.jin_kang_piau_im_ji_khoo_dict[han_ji]
+                piau_im_variants = self.jin_kang_piau_im_ji_khoo_dict[han_ji]
 
                 if piau_im_variants:
                     # 策略：取用第一個找到的音標 (或可依需求改為取用頻率最高的)
@@ -274,10 +233,6 @@ class CellProcessor(ExcelCell):
                 col=col,
             )
 
-    def _process_han_ji_from_db(self, cell, han_ji):
-        # 實作原本的資料庫查找邏輯...
-        pass
-
     def _show_msg(self, row: int, col: int, msg: str):
         """顯示處理訊息"""
         # 顯示處理進度
@@ -327,10 +282,10 @@ class CellProcessor(ExcelCell):
                 self._show_msg(row, col, cell_value)
                 self._process_non_han_ji(cell_value)
             return 3    # 空白或標點符號
-        else:
-            self._show_msg(row, col, cell_value)
-            self._process_han_ji(cell_value, cell, row, col)
-            return  0  # 漢字
+        # else:
+        #     self._show_msg(row, col, cell_value)
+        #     self._process_han_ji(cell_value, cell, row, col)
+        #     return  0  # 漢字
 
     def _process_sheet(self, sheet):
         """處理整個工作表"""

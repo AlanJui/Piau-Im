@@ -45,6 +45,18 @@ class JiKhooDict:
         self.name = name
         self.ji_khoo_dict = {}
 
+    # 新增這兩個方法
+    def __contains__(self, key):
+        return key in self.ji_khoo_dict
+
+    def __getitem__(self, key):
+        return self.ji_khoo_dict[key]
+
+    def items(self):
+        for han_ji, entries in self.ji_khoo_dict.items():
+            for entry in entries:
+                yield (han_ji, entry)
+
     @classmethod
     def create_ji_khoo_dict_from_sheet(cls, wb, sheet_name: str):
         """_summary_
@@ -101,11 +113,6 @@ class JiKhooDict:
                 ji_khoo.add_entry(han_ji, tai_gi_im_piau, hau_ziann_im_piau, coord)
 
         return ji_khoo
-
-    def items(self):
-        for han_ji, entries in self.ji_khoo_dict.items():
-            for entry in entries:
-                yield (han_ji, entry)
 
     def add_entry(
         self,

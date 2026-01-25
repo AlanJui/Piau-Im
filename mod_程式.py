@@ -159,17 +159,17 @@ class ExcelCell:
         # 初始化標音字庫
         #---------------------------------------------------------------------------
         # 人工標音字庫
-        self.jin_kang_piau_im_ji_khoo_dict = self._initialize_ji_khoo(
+        self.jin_kang_piau_im_ji_khoo_dict: JiKhooDict = self._initialize_ji_khoo(
             sheet_name='人工標音字庫',
             new_sheet=new_jin_kang_piau_im_ji_khoo_sheet,
         )
         # 標音字庫
-        self.piau_im_ji_khoo_dict = self._initialize_ji_khoo(
+        self.piau_im_ji_khoo_dict: JiKhooDict = self._initialize_ji_khoo(
             sheet_name='標音字庫',
             new_sheet=new_piau_im_ji_khoo_sheet,
         )
         # 缺字表
-        self.khuat_ji_piau_ji_khoo_dict = self._initialize_ji_khoo(
+        self.khuat_ji_piau_ji_khoo_dict: JiKhooDict = self._initialize_ji_khoo(
             sheet_name='缺字表',
             new_sheet=new_khuat_ji_piau_sheet,
         )
