@@ -228,6 +228,16 @@
             "console": "externalTerminal",
         },
         {
+            "name": "Test: a210_repro (Unit Test)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "unittest",
+            "args": [
+                "test_a210_repro.py"
+            ],
+            "console": "externalTerminal",
+        },
+        {
             "name": "a220_作用儲存格查找萌典漢字讀音",
             "type": "debugpy",
             "request": "launch",

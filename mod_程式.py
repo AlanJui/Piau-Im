@@ -636,10 +636,11 @@ class ExcelCell:
         # 將結果儲存回標音字庫工作表
         self.save_all_piau_im_ji_khoo_dicts()
 
-    def _process_non_han_ji(self, cell_value: str) -> Tuple[str, bool]:
+    def _process_non_han_ji(self, cell_value: str) -> None:
         """處理非漢字內容"""
         if cell_value is None or str(cell_value).strip() == "":
-            return "【空白】", False
+            msg = "【空白字元】"
+            return
 
         str_value = str(cell_value).strip()
 
