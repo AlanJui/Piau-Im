@@ -221,10 +221,10 @@
             "console": "externalTerminal",
         },
         {
-            "name": "a210_無人工標音漢字查找",
+            "name": "a210_漢字以人工標音處理作業",
             "type": "debugpy",
             "request": "launch",
-            "program": "a210_無人工標音漢字查找.py",
+            "program": "a210_漢字以人工標音處理作業.py",
             "console": "externalTerminal",
         },
         {

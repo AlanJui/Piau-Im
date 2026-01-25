@@ -1,6 +1,12 @@
 # 程式說明文件 a210_無人工標音漢字查找
 
-為【漢字】自【漢字庫】查找【台語音標】，並以此轉換成【漢字標音】；但在遇有【人工標音】時，則不用在漢字庫查找【台語音標】，而是改以【人工標音】，轉換成【漢字標音】。
+為【漢字】自【漢字庫】查找【台語音標】，並以此轉換成【漢字標音】。
+
+若遇有【人工標音】（且內容不為 `#`）時，則優先採用：
+1. 若內容為 `=`：自【人工標音】工作表查找。
+2. 若為其他內容：直接以該內容作為【台語音標】。
+
+若【人工標音】為 `#` 或空白，則依據【漢字庫】進行查找。
 
 ```mermaid
 sequenceDiagram
@@ -48,8 +54,13 @@ sequenceDiagram
 
             Process->>Processor: process_cell(cell, row, col)
 
-            alt 有人工標音
-                Processor->>Processor: _process_jin_kang_piau_im()
+            alt 有人工標音 (且非 '#')
+                alt 內容為 '='
+                    Processor->>Excel: 讀取【人工標音】工作表
+                    Excel-->>Processor: 回傳對應音標
+                else 一般內容
+                    Processor->>Processor: 使用儲存格內容
+                end
                 Processor->>PiauIm: 轉換人工標音
                 PiauIm-->>Processor: 回傳音標
                 Processor->>Excel: 寫入台語音標與漢字標音
@@ -64,7 +75,7 @@ sequenceDiagram
                 Processor->>Processor: _process_non_han_ji()
                 Processor-->>Process: 回傳處理訊息
 
-            else 是漢字
+            else 是漢字 (無人工標音 或 為 '#')
                 Processor->>Processor: _process_han_ji()
                 Processor->>JiTian: han_ji_ca_piau_im(漢字, 語音類別)
                 JiTian->>DB: 查詢漢字讀音
