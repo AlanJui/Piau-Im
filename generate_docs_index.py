@@ -71,7 +71,7 @@ def generate_index():
 
     content_html = ""
     for article in sorted_article_names:
-        content_html += f'<div class="article-group">\n'
+        content_html += '<div class="article-group">\n'
         content_html += f'  <h2>{article}</h2>\n'
         content_html += '  <ul class="article-links">\n'
         for text, fname in sorted(articles[article]):

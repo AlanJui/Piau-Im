@@ -75,7 +75,7 @@ def process_sheet(sheet, program: Program, xls_cell: ExcelCell):
         row = program.line_start_row + (r - 1) * program.ROWS_PER_LINE + program.han_ji_row_offset
         new_line = False
         for c in range(program.start_col, program.end_col + 1):
-            if is_eof: break
+            if is_eof: break  # noqa: E701
             row = row
             col = c
             active_cell = sheet.range((row, col))
@@ -192,7 +192,7 @@ def main(args) -> int:
             return EXIT_CODE_NO_FILE
 
     if not wb:
-        logging_exc_error(msg="無法取得 Excel 活頁簿！")
+        logging_exc_error(msg="無法取得 Excel 活頁簿！", error=None)
         return EXIT_CODE_NO_FILE
 
     # =========================================================================

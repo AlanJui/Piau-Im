@@ -20,37 +20,23 @@ import argparse
 import logging
 import os
 import re
-from typing import Tuple
 
 # 載入第三方套件
 import xlwings as xw
 from dotenv import load_dotenv
 
 # 載入自訂模組
-from mod_ca_ji_tian import HanJiTian  # 新的查字典模組
 from mod_excel_access import (
     clear_han_ji_kap_piau_im,
-    delete_sheet_by_name,
     reset_cells_format_in_sheet,
 )
-from mod_file_access import save_as_new_file
 from mod_logging import (
     init_logging,
     logging_exc_error,
-    logging_exception,
     logging_process_step,
     logging_warning,  # noqa: F401
 )
-from mod_字庫 import JiKhooDict
-from mod_帶調符音標 import is_han_ji, kam_si_u_tiau_hu, read_text_with_han_ji
-from mod_標音 import (
-    PiauIm,
-    ca_ji_tng_piau_im,
-    convert_tl_with_tiau_hu_to_tlpa,
-    is_punctuation,
-    split_hong_im_hu_ho,
-    tlpa_tng_han_ji_piau_im,
-)
+from mod_帶調符音標 import read_text_with_han_ji
 from mod_程式 import ExcelCell, Program
 
 # =========================================================================
@@ -324,7 +310,7 @@ def main(args) -> int:
             return exit_code
 
     except Exception as e:
-        logging.exception("程式執行失敗")
+        logging.exception(f"程式執行失敗: {e}")
         return EXIT_CODE_UNKNOWN_ERROR
 
 

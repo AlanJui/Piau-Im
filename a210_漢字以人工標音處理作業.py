@@ -35,7 +35,6 @@ from mod_logging import (
     logging_process_step,  # noqa: F401
     logging_warning,  # noqa: F401
 )
-from mod_字庫 import JiKhooDict
 from mod_帶調符音標 import is_han_ji
 from mod_標音 import ca_ji_kiat_ko_tng_piau_im, kam_si_u_tiau_hu, split_tai_gi_im_piau, tng_im_piau
 from mod_程式 import ExcelCell, Program

@@ -13,9 +13,11 @@
       "default",
       {
         "ignore": [
-          "ruby-align"
+          "ruby-align",
+          "-webkit-text-combine"
         ]
       }
-    ]
+    ],
+    "no-inline-styles": "off"
   }
 }

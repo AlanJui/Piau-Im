@@ -343,8 +343,8 @@ rtc {
     font-weight: bold;
     -webkit-ruby-position: inter-character;
     ruby-position: inter-character;
-    text-orientation: upright;
     -webkit-text-orientation: upright;
+    text-orientation: upright;
     letter-spacing: 0px;
     -webkit-writing-mode: vertical-lr;
     -ms-writing-mode: vertical-lr;
