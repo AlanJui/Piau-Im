@@ -1,4 +1,17 @@
-/* Version 0.2.1 */
+/* Version 0.2.2 */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&display=swap');
+
+@font-face {
+  font-family: "BopomofoRuby";
+  src: url("https://alanjui.github.io/Blogger/assets/fonts/BopomofoRuby1909-v1-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* User's CSS
+----------------------------------------------- */
 
 /* =========================
    基本設定
@@ -302,49 +315,37 @@ body {
 /* =========================
    注音符號相關（方音符號專用）
    ========================= */
-/* @font-face {
-    font-family: BopomofoRuby;
-    src: local("BopomofoRuby1909-v1 Regular"), url(BopomofoRuby1909-v1-Regular.ttf);
-} */
-@font-face {
-  font-family: "BopomofoRuby";
-  src:
-    local("BopomofoRuby1909-v1-Regular"),
-    url("https://raw.githubusercontent.com/AlanJui/Blogger/main/assets/fonts/BopomofoRuby1909-v1-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
 
 /* 防止 ruby 元素在換行時被拆分 */
 ruby {
   white-space: nowrap;
   text-align: justify;
-  font-family: "Noto Serif TC Black", serif;
+  font-family: "Noto Serif TC", serif;
+  font-weight: 700;
   font-size: 2.4rem;
-  line-height: 2.4;
   letter-spacing: 0;
-  font-weight: normal;
+  line-height: 2.4;
 }
 
 rt {
-  font-family: 'Noto Sans TC', Arial, sans-serif;
+  font-family: 'Noto Sans TC', Arial, sans-serif !important;
+  font-weight: 400;
   color: darkcyan;
   font-size: 40%;
-  font-weight: bold;
   letter-spacing: 0;
   font-feature-settings: "salt";
+  margin-left: -0.4em;
 }
 
 rtc {
-  font-family: BopomofoRuby;
+  font-family: BopomofoRuby !important;
+  font-weight: bold;
   color: #B94B6A;
   font-size: 40%;
-  font-weight: bold;
   -webkit-ruby-position: inter-character;
   ruby-position: inter-character;
-  text-orientation: upright;
   -webkit-text-orientation: upright;
+  text-orientation: upright;
   letter-spacing: 0px;
   -webkit-writing-mode: vertical-lr;
   -ms-writing-mode: vertical-lr;
@@ -362,35 +363,22 @@ rtc {
   white-space: normal;
   height: auto;
   width: 1em;
-}
-
-/* 無 rtc 支援時的替代標記（改用 span） */
-.rtc-fallback {
-  color: #B94B6A;
-  font-family: "BopomofoRuby" !important;
-  font-size: 35% !important;
-  line-height: 1.2;
-  writing-mode: vertical-rl;
-  text-orientation: upright;
-  vertical-align: middle;
-  display: inline-block;
-  margin-left: -1.5em;
+  margin-left: -0.4em;
 }
 
 /* 雙排注音符號 */
 .Siang_Pai {
-  font-family: "Noto Serif TC Black", serif;
-  font-size: 2.4rem;
-  line-height: 2.4;
+  font-family: "Noto Serif TC", serif;
+  font-size: 2.8rem;
+  letter-spacing: 0.0em;
   text-align: justify;
 }
 
-.Siang_Pai ruby {
-  margin-right: 0.3rem;
-}
-
 .Siang_Pai rt {
-  margin-left: -0.4em;
+  /* font-family: "Noto Serif TC", serif; */
+  /* font-family: "LXGW WenKai Mono TC";   */
+  font-family: "Noto Sans TC", system-ui, -apple-system, sans-serif;
+  margin-left: 0.1em;
   font-family: Arial;
   color: #00c4ab;
   font-size: 50%;
@@ -399,21 +387,42 @@ rtc {
   -webkit-font-feature-settings: "salt";
   font-feature-settings: "salt";
   text-orientation: upright;
+  margin-left: -0.4em;
 }
 
 .Siang_Pai rtc {
+  font-family: BopomofoRuby;
+  color: #B94B6A;
+  font-size: 40%;
+  font-weight: bold;
+  line-height: normal;
+  -webkit-ruby-position: inter-character;
+  ruby-position: inter-character;
+  -webkit-writing-mode: vertical-lr;
+  text-orientation: upright;
+  writing-mode: vertical-lr;
+  vertical-align: middle;
+  display: inline;
+  /* letter-spacing: 0.2em; */
+  /* margin-right: 0.4em; */
+  margin-left: -0.8em;
+  /* margin-top: -0.5em; */
+}
+
+/* .Siang_Pai rtc,
+.title rtc {
   color: #B94B6A;
   font-size: 35%;
   -webkit-ruby-position: inter-character;
   ruby-position: inter-character;
   text-orientation: upright;
-  -moz-writing-mode: vertical-rl;
-  -webkit-writing-mode: vertical-rl;
-  writing-mode: vertical-rl;
-  vertical-align: middle;
-  display: inline;
-  text-orientation: upright;
-}
+
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+
+  transform: translateX(0%);
+} */
 
 /* 方音符號 */
 .Piau_Im {
@@ -433,6 +442,10 @@ rtc {
   writing-mode: vertical-rl;
   vertical-align: middle;
   display: inline;
+}
+
+.Piau_Im rtc {
+  font-family: BopomofoRuby !important;
 }
 
 /* 注音 */
