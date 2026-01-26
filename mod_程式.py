@@ -747,7 +747,7 @@ class ExcelCell:
         # 在【標音字庫】新增一筆紀錄
         row, col = cell.row, cell.column
         han_ji = cell.value
-        self.piau_im_ji_khoo_dict.add_entry(
+        self.piau_im_ji_khoo_dict.add_or_update_entry(
             han_ji=han_ji,
             tai_gi_im_piau=tai_gi_im_piau,
             hau_ziann_im_piau='N/A',

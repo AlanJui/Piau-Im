@@ -1,3 +1,4 @@
+# a200_查找及填入漢字標音.py v0.2.2
 # =========================================================================
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
@@ -75,7 +76,7 @@ def process_sheet(sheet, program: Program, xls_cell: ExcelCell):
         row = program.line_start_row + (r - 1) * program.ROWS_PER_LINE + program.han_ji_row_offset
         new_line = False
         for c in range(program.start_col, program.end_col + 1):
-            if is_eof: break  # noqa: E701
+            if is_eof: break
             row = row
             col = c
             active_cell = sheet.range((row, col))
@@ -84,8 +85,11 @@ def process_sheet(sheet, program: Program, xls_cell: ExcelCell):
             print('-' * 80)
             print(f"儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）")
             is_eof, new_line = xls_cell._process_cell(active_cell, row, col)
-            if new_line: break  # noqa: E701
-            if is_eof: break  # noqa: E701
+            if new_line: break
+            if is_eof: break
+
+    # 將字庫 dict 回存 Excel 工作表
+    xls_cell.save_all_piau_im_ji_khoo_dicts()
 
 
 def process(wb, args) -> int:
@@ -142,7 +146,7 @@ def process(wb, args) -> int:
         )
 
         # 寫回字庫到 Excel
-        xls_cell.save_all_piau_im_ji_khoo_dicts()
+        # xls_cell.save_all_piau_im_ji_khoo_dicts()
 
         #--------------------------------------------------------------------------
         # 處理作業結束
@@ -209,12 +213,20 @@ def main(args) -> int:
     # (4) 儲存檔案
     # =========================================================================
     if exit_code == EXIT_CODE_SUCCESS:
-        file_path = save_as_new_file(wb=wb)
-        if not file_path:
-            logging_exc_error(msg="儲存檔案失敗！", error=None)
-            exit_code = EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
-        else:
+        try:
+            wb.save()
+            file_path = wb.fullname
             logging_process_step(f"儲存檔案至路徑：{file_path}")
+        except Exception as e:
+            logging_exc_error(msg="儲存檔案異常！", error=e)
+            return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
+        return EXIT_CODE_SUCCESS
+        # file_path = save_as_new_file(wb=wb)
+        # if not file_path:
+        #     logging_exc_error(msg="儲存檔案失敗！", error=None)
+        #     exit_code = EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
+        # else:
+        #     logging_process_step(f"儲存檔案至路徑：{file_path}")
 
     # =========================================================================
     # 結束程式
