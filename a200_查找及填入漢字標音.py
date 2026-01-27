@@ -1,18 +1,15 @@
-# a200_查找及填入漢字標音.py v0.2.2
+# a200_查找及填入漢字標音.py v0.2.3
 # =========================================================================
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
-import os
 import sys
 from pathlib import Path
 
 # 載入第三方套件
 import xlwings as xw
-from dotenv import load_dotenv
 
 # 載入自訂模組/函式
 from mod_ca_ji_tian import HanJiTian
-from mod_excel_access import save_as_new_file
 from mod_logging import (
     init_logging,
     logging_exc_error,
@@ -21,15 +18,6 @@ from mod_logging import (
     logging_warning,  # noqa: F401
 )
 from mod_程式 import ExcelCell, Program
-
-# =========================================================================
-# 載入環境變數
-# =========================================================================
-load_dotenv()
-
-# 預設檔案名稱從環境變數讀取
-DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
-DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
 
 # =========================================================================
 # 常數定義
@@ -81,10 +69,13 @@ def process_sheet(sheet, program: Program, xls_cell: ExcelCell):
             col = c
             active_cell = sheet.range((row, col))
             active_cell.select()
+
             # 處理儲存格
             print('-' * 80)
             print(f"儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）")
             is_eof, new_line = xls_cell._process_cell(active_cell, row, col)
+
+            # 檢查是否需因：換行、文章終結，而跳出內層迴圈
             if new_line: break
             if is_eof: break
 
@@ -221,15 +212,9 @@ def main(args) -> int:
             logging_exc_error(msg="儲存檔案異常！", error=e)
             return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
         return EXIT_CODE_SUCCESS
-        # file_path = save_as_new_file(wb=wb)
-        # if not file_path:
-        #     logging_exc_error(msg="儲存檔案失敗！", error=None)
-        #     exit_code = EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
-        # else:
-        #     logging_process_step(f"儲存檔案至路徑：{file_path}")
 
     # =========================================================================
-    # 結束程式
+    # (5) 結束程式
     # =========================================================================
     print('\n')
     print('=' * 80)
@@ -244,6 +229,12 @@ def main(args) -> int:
 
 def test_01():
     """測試 HanJiTian 類別"""
+    import os
+
+    from dotenv import load_dotenv
+    load_dotenv()
+    DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
+    #============================================================================
     print("=" * 70)
     print("測試 HanJiTian 查詢功能")
     print("=" * 70)

@@ -1787,24 +1787,30 @@ class ExcelCell:
         # 調整 row 值至【漢字】列（每 4 列為一組【列群】，漢字在第 3 列：5, 9, 13, ... ）
         is_eof = False
         for r in range(1, program.TOTAL_LINES + 1):
-            if is_eof: break  # noqa: E701
+            if is_eof: break
             line_no = r
             print('=' * 80)
             print(f"處理第 {line_no} 行...")
             row = program.line_start_row + (r - 1) * program.ROWS_PER_LINE + program.han_ji_row_offset
             new_line = False
             for c in range(program.start_col, program.end_col + 1):
-                if is_eof: break  # noqa: E701
+                if is_eof: break
                 row = row
                 col = c
                 active_cell = sheet.range((row, col))
                 active_cell.select()
+
                 # 處理儲存格
-                print('-' * 60)
+                print('-' * 80)
                 print(f"儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）")
                 is_eof, new_line = self._process_cell(active_cell, row, col)
-                if new_line: break  # noqa: E701
-                if is_eof: break  # noqa: E701
+
+                # 檢查是否需因：換行、文章終結，而跳出內層迴圈
+                if new_line: break
+                if is_eof: break
+
+        # 將字庫 dict 回存 Excel 工作表
+        self.save_all_piau_im_ji_khoo_dicts()
 
 
 # =========================================================================
@@ -1855,8 +1861,6 @@ def process(wb, args) -> int:
         # 逐列處理
         xls_cell._process_sheet(sheet=sheet)
 
-        # 寫回字庫到 Excel
-        xls_cell.save_all_piau_im_ji_khoo_dicts()
     except Exception as e:
         logging_exc_error(msg="處理作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
@@ -1926,6 +1930,14 @@ def main(args) -> int:
         # 要求畫面回到【漢字注音】工作表
         # wb.sheets['漢字注音'].activate()
         # 儲存檔案
+        # ---------------------------------------------------------------------
+        # file_path = save_as_new_file(wb=wb)
+        # if not file_path:
+        #     logging_exc_error(msg="儲存檔案失敗！", error=None)
+        #     exit_code = EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
+        # else:
+        #     logging_process_step(f"儲存檔案至路徑：{file_path}")
+        # ---------------------------------------------------------------------
         file_path = save_as_new_file(wb=wb)
         if not file_path:
             logging_exc_error(msg="儲存檔案失敗！", error=None)
@@ -1937,7 +1949,7 @@ def main(args) -> int:
         return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
 
     # =========================================================================
-    # 結束程式
+    # (5) 結束程式
     # =========================================================================
     logging_process_step(f"《========== 程式終止執行：{program_name} ==========》")
     return EXIT_CODE_SUCCESS
