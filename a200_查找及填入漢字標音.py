@@ -1,4 +1,4 @@
-# a200_查找及填入漢字標音.py v0.2.2.3
+# a200_查找及填入漢字標音.py v0.2.3 <== v0.2.2.4
 # =========================================================================
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
@@ -17,7 +17,6 @@ from mod_logging import (
     logging_process_step,
     logging_warning,  # noqa: F401
 )
-from mod_標音 import is_han_ji
 from mod_程式 import ExcelCell, Program
 
 # =========================================================================
@@ -77,63 +76,6 @@ class CellProcessor(ExcelCell):
             new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
         )
 
-    #------------------------------------------------------------------
-    # 覆蓋父類別之【方法】（method）
-    #------------------------------------------------------------------
-    def _process_cell(
-        self,
-        cell,
-        row: int,
-        col: int,
-    ) -> int:
-        """
-        處理單一儲存格
-
-        Returns:
-            status_code: 儲存格內容代碼
-                0 = 漢字
-                1 = 文字終結符號
-                2 = 換行符號
-                3 = 空白、標點符號等非漢字字元
-        """
-        # 初始化樣式
-        self._reset_cell_style(cell)
-
-        # 取得【漢字】儲存格內容
-        cell_value = cell.value
-        print("-" * 40)
-
-        # 檢查是否有【人工標音】
-        jin_kang_piau_im = cell.offset(-2, 0).value  # 人工標音
-        if jin_kang_piau_im and str(jin_kang_piau_im).strip() != "":
-            self._process_jin_kang_piau_im(
-                han_ji=cell_value,
-                jin_kang_piau_im=jin_kang_piau_im,
-                cell=cell,
-                row=row,
-                col=col,
-            )
-            return 0  # 漢字
-
-        # 依據【漢字】儲存格內容進行處理
-        if cell_value == 'φ':
-            self._show_msg(row, col, "【文字終結】")
-            return  1   # 文章終結符號
-        elif cell_value == '\n':
-            self._show_msg(row, col, "【換行】")
-            return  2   #【換行】
-        elif not is_han_ji(cell_value):
-            if cell_value is None or str(cell_value).strip() == "":
-                self._show_msg(row, col, "【空白】")
-            else:
-                self._show_msg(row, col, cell_value)
-                self._process_non_han_ji(cell_value)
-            return 3    # 空白或標點符號
-        else:
-            self._show_msg(row, col, cell_value)
-            self._process_han_ji(cell_value, cell, row, col)
-            return  0  # 漢字
-
     def _process_sheet(self, sheet):
         """處理整個工作表"""
         # 初始化變數
@@ -158,9 +100,6 @@ class CellProcessor(ExcelCell):
             # 檢查是否到達結尾
             if is_eof or line_no > total_lines:
                 break
-
-            # 初始化每行所需使用變數
-            is_eol = False
 
             # 顯示目前處理【第 n 行】
             self._show_separtor_line(f"處理第 {line_no} 行...")
@@ -201,79 +140,10 @@ class CellProcessor(ExcelCell):
                     is_eof = True
                     break
                 elif status_code == 2:
-                    is_eol = True
                     break
-
-                # 檢查處理作業【是否已達行尾】或【讀到換行符號】
-                if is_eol or col == end_col - 1:
-                    print('\n')
-                    print('=' * 60)
-                    print('\n')
 
         # 將字庫 dict 回存 Excel 工作表
         self.save_all_piau_im_ji_khoo_dicts()
-
-# =============================================================================
-# 作業主流程
-# =============================================================================
-def process_sheet(sheet, program: Program, xls_cell: ExcelCell):
-    """處理整個工作表"""
-    config = program
-    line_start_row = config.line_start_row
-    start_row = line_start_row + 2  # 調整為實際起始列
-    end_row = start_row + (config.TOTAL_LINES * config.ROWS_PER_LINE)
-    rows_per_line = config.ROWS_PER_LINE
-    total_lines = config.TOTAL_LINES
-    start_col = config.start_col
-    end_col = config.end_col
-    han_ji_row_offset = config.han_ji_row_offset
-
-    #--------------------------------------------------------------------------
-    # 處理所有的儲存格
-    active_cell = sheet.range(f'{xw.utils.col_name(start_col)}{line_start_row}')
-    active_cell.select()
-
-    # 調整 row 值至【漢字】列（每 4 列為一組【列群】，漢字在第 3 列：5, 9, 13, ... ）
-    is_eof = False
-    #--------------------------------------------------------------------------
-    # 處理作用中列(row)的所有儲存格
-    #--------------------------------------------------------------------------
-    for r in range(1, total_lines + 1):
-        if is_eof: break
-        line_no = r
-        print('=' * 80)
-        print(f"處理第 {line_no} 行...")
-        row = line_start_row + (r - 1) * rows_per_line + han_ji_row_offset
-        new_line = False
-        #----------------------------------------------------------------------
-        # 處理列中所有欄(col)儲存格
-        #----------------------------------------------------------------------
-        for c in range(start_col, end_col + 1):
-            if is_eof: break
-            row = row
-            col = c
-            active_cell = sheet.range((row, col))
-            active_cell.select()
-
-            #------------------------------------------------------------------
-            # 處理儲存格
-            #------------------------------------------------------------------
-            # status_code:
-            # 0 = 儲存格內容為：漢字
-            # 1 = 儲存格內容為：文字終結符號
-            # 2 = 儲存格內容為：換行符號
-            # 3 = 儲存格內容為：空白、標點符號等非漢字字元
-            print('-' * 80)
-            print(f"儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）")
-            # is_eof, new_line = xls_cell._process_cell(active_cell, row, col)
-            status_code = xls_cell._process_cell(active_cell, row, col)
-
-            # 檢查是否需因：換行、文章終結，而跳出內層迴圈
-            if new_line: break
-            if is_eof: break
-
-    # 將字庫 dict 回存 Excel 工作表
-    xls_cell.save_all_piau_im_ji_khoo_dicts()
 
 
 def process(wb, args) -> int:
@@ -300,14 +170,14 @@ def process(wb, args) -> int:
         # 建立儲存格處理器
         if args.new:
             # 建立新的字庫工作表
-            xls_cell = ExcelCell(
+            xls_cell = CellProcessor(
                 program=program,
                 new_jin_kang_piau_im_ji_khoo_sheet=True,
                 new_piau_im_ji_khoo_sheet=True,
                 new_khuat_ji_piau_sheet=True,
             )
         else:
-            xls_cell = ExcelCell(
+            xls_cell = CellProcessor(
                 program=program,
                 new_jin_kang_piau_im_ji_khoo_sheet=False,
                 new_piau_im_ji_khoo_sheet=False,
@@ -322,12 +192,7 @@ def process(wb, args) -> int:
         sheet = wb.sheets[sheet_name]
         sheet.activate()
 
-        # 逐列處理
-        # process_sheet(
-        #     sheet=sheet,
-        #     program=program,
-        #     xls_cell=xls_cell,
-        # )
+        # 處理整張工作表的各個儲存格
         xls_cell._process_sheet(
             sheet=sheet,
         )

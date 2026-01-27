@@ -182,6 +182,7 @@ class ExcelCell:
     def _show_msg(self, row: int, col: int, msg: str):
         """顯示處理訊息"""
         # 顯示處理進度
+        print('-' * 80)
         col_name = xw.utils.col_name(col)
         print(f"【{col_name}{row}】({row}, {col}) = {msg}")
 
@@ -848,48 +849,53 @@ class ExcelCell:
         cell,
         row: int,
         col: int,
-    ) -> Tuple[bool, bool]:
+    ) -> int:
         """
         處理單一儲存格
 
         Returns:
-            is_eof: 是否已達文件結尾
-            new_line: 是否需換行
+            status_code: 儲存格內容代碼
+                0 = 漢字
+                1 = 文字終結符號
+                2 = 換行符號
+                3 = 空白、標點符號等非漢字字元
         """
         # 初始化樣式
         self._reset_cell_style(cell)
 
+        # 取得【漢字】儲存格內容
         cell_value = cell.value
 
-        # 若【人工標音】欄位有值，且【漢字】欄位有【漢字】，則以【人工標音】求取【台語音標】及【漢字標音】
+        # 檢查是否有【人工標音】
         jin_kang_piau_im = cell.offset(-2, 0).value  # 人工標音
-        if jin_kang_piau_im and is_han_ji(cell_value):
-            # 處理人工標音內容
+        if jin_kang_piau_im and str(jin_kang_piau_im).strip() != "":
             self._process_jin_kang_piau_im(
                 han_ji=cell_value,
                 jin_kang_piau_im=jin_kang_piau_im,
                 cell=cell,
                 row=row,
-                col=col
+                col=col,
             )
-            return False, False
+            return 0  # 漢字
 
-        # 檢查特殊字元
+        # 依據【漢字】儲存格內容進行處理
         if cell_value == 'φ':
-            # 【文字終結】
-            print(f"【{cell_value}】：【文章結束】結束行處理作業。")
-            return True, True
+            self._show_msg(row, col, "【文字終結】")
+            return  1   # 文章終結符號
         elif cell_value == '\n':
-            #【換行】
-            print("【換行】：結束行中各欄處理作業。")
-            return False, True
+            self._show_msg(row, col, "【換行】")
+            return  2   #【換行】
         elif not is_han_ji(cell_value):
-            # 處理【標點符號】、【英數字元】、【其他字元】
-            self._process_non_han_ji(cell_value)
-            return False, False
+            if cell_value is None or str(cell_value).strip() == "":
+                self._show_msg(row, col, "【空白】")
+            else:
+                self._show_msg(row, col, cell_value)
+                self._process_non_han_ji(cell_value)
+            return 3    # 空白或標點符號
         else:
+            self._show_msg(row, col, cell_value)
             self._process_han_ji(cell_value, cell, row, col)
-            return False, False
+            return  0  # 漢字
 
     def _initialize_ji_khoo(
         self,
@@ -1787,38 +1793,70 @@ class ExcelCell:
                 coordinates.append(row_col)
         return coordinates
 
-    def _process_sheet(self, sheet):
+    def _process_sheet(self, sheet, show_cell_address: bool=False):
         """處理整個工作表"""
-        program = self.program
+        # 初始化變數
+        config = self.program
+        total_lines = config.TOTAL_LINES
+        rows_per_line = config.ROWS_PER_LINE
+        line_start_row = config.line_start_row
+        # start_row = line_start_row + 2  # 調整為實際起始列
+        # end_row = start_row + (config.TOTAL_LINES * config.ROWS_PER_LINE)
+        start_col = config.start_col
+        end_col = config.end_col
+        han_ji_row_offset = config.han_ji_row_offset
 
-        # 處理所有的儲存格
-        active_cell = sheet.range(f'{xw.utils.col_name(program.start_col)}{program.line_start_row}')
+        #--------------------------------------------------------------------------
+        # 處理作用中列(row)的所有儲存格
+        #--------------------------------------------------------------------------
+        active_cell = sheet.range(f'{xw.utils.col_name(start_col)}{line_start_row}')
         active_cell.select()
 
-        # 調整 row 值至【漢字】列（每 4 列為一組【列群】，漢字在第 3 列：5, 9, 13, ... ）
         is_eof = False
-        for r in range(1, program.TOTAL_LINES + 1):
-            if is_eof: break
-            line_no = r
-            print('=' * 80)
-            print(f"處理第 {line_no} 行...")
-            row = program.line_start_row + (r - 1) * program.ROWS_PER_LINE + program.han_ji_row_offset
-            new_line = False
-            for c in range(program.start_col, program.end_col + 1):
-                if is_eof: break
+        for line_no in range(1, total_lines + 1):
+            # 檢查是否到達結尾
+            if is_eof or line_no > total_lines:
+                break
+
+            # 顯示目前處理【第 n 行】
+            self._show_separtor_line(f"處理第 {line_no} 行...")
+
+            # 調整 row 值至【漢字】儲存格所在列
+            # （每【行（line）】由 4【列（row）】所構成，漢字在第 3 列：5, 9, 13, ... ）
+            row = line_start_row + (line_no - 1) * rows_per_line + han_ji_row_offset
+
+            #----------------------------------------------------------------------
+            # 處理列中所有欄(col)儲存格
+            #----------------------------------------------------------------------
+            for c in range(start_col, end_col + 1):
+                # 將目前處理之儲存格，設為作用中儲存格
                 row = row
                 col = c
                 active_cell = sheet.range((row, col))
                 active_cell.select()
 
+                # 顯示正要處理的儲存格座標位置
+                if show_cell_address:
+                    print('-' * 80)
+                    print(f"儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）")
+
+                #------------------------------------------------------------------
                 # 處理儲存格
-                print('-' * 80)
-                print(f"儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）")
-                is_eof, new_line = self._process_cell(active_cell, row, col)
+                #------------------------------------------------------------------
+                # status_code:
+                # 0 = 儲存格內容為：漢字
+                # 1 = 儲存格內容為：文字終結符號
+                # 2 = 儲存格內容為：換行符號
+                # 3 = 儲存格內容為：空白、標點符號等非漢字字元
+                status_code = 0
+                status_code = self._process_cell(active_cell, row, col)
 
                 # 檢查是否需因：換行、文章終結，而跳出內層迴圈
-                if new_line: break
-                if is_eof: break
+                if status_code == 1:
+                    is_eof = True
+                    break
+                elif status_code == 2:
+                    break
 
         # 將字庫 dict 回存 Excel 工作表
         self.save_all_piau_im_ji_khoo_dicts()
