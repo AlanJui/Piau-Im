@@ -535,7 +535,6 @@ def _create_html_file(program: Program, output_path: str, content: str, title: s
     <meta content='{full_image_url}' property='og:image' />
     <meta content='https://alanjui.github.io/Piau-Im/{web_page_main_file_name}.html' property='og:url' />
     <meta content='漢字。雅言' property='og:description' />
-    <meta content='' property='og:url' />
     {head_extra}
     <link rel="stylesheet" href="assets/styles/styles.css">
 </head>
