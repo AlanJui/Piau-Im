@@ -1,5 +1,5 @@
 """
-    mod_excel_access.py v0.2.3
+    mod_excel_access.py v0.2.2.2
     提供 Excel 檔案存取相關的輔助函式
 """
 
@@ -19,6 +19,8 @@ import win32com.client  # 用於獲取作用中的 Excel 檔案
 # 載入第三方套件
 import xlwings as xw
 from dotenv import load_dotenv
+
+from mod_logging import init_logging, logging_exc_error, logging_process_step
 
 # 載入自訂模組
 from mod_piau_im_tng_huan import _has_meaningful_data
@@ -65,8 +67,6 @@ DEFAULT_SHEET_LIST = [
 # =========================================================================
 # 設定日誌
 # =========================================================================
-from mod_logging import init_logging, logging_exc_error, logging_process_step
-
 init_logging()
 
 # =========================================================================
@@ -316,44 +316,44 @@ def reset_cells_format_in_sheet(
 #--------------------------------------------------------------------------
 # 座標位址轉換函式
 #--------------------------------------------------------------------------
-# def convert_to_excel_address(coord_str):
-#     """
-#     轉換 `(row, col)` 格式為 Excel 座標 (如 `(9, 4)` 轉換為 "D9")
+def convert_to_excel_address(coord_str: tuple[int, int]) -> str:
+    """
+    轉換 `(row, col)` 格式為 Excel 座標 (如 `(9, 4)` 轉換為 "D9")
 
-#     :param coord_str: 例如 "(9, 4)"
-#     :return: Excel 座標字串，例如 "D9"
-#     """
-#     coord_str = coord_str.strip("()")  # 去除括號
-#     try:
-#         row, col = map(int, coord_str.split(", "))
-#         return f"{chr(64 + col)}{row}"  # 轉換成 Excel 座標
-#     except ValueError:
-#         return ""  # 避免解析錯誤
-
-
-# def excel_address_to_row_col(cell_address):
-#     """
-#     將 Excel 儲存格地址 (如 'D9') 轉換為 (row, col) 格式。
-
-#     :param cell_address: Excel 儲存格地址 (如 'D9', 'AA15')
-#     :return: (row, col) 元組，例如 (9, 4)
-#     """
-#     match = re.match(r"([A-Z]+)(\d+)", cell_address)  # 用 regex 拆分字母(列) 和 數字(行)
-
-#     if not match:
-#         raise ValueError(f"無效的 Excel 儲存格地址: {cell_address}")
-
-#     col_letters, row_number = match.groups()
-
-#     # 將 Excel 字母列轉換成數字，例如 A -> 1, B -> 2, ..., Z -> 26, AA -> 27
-#     col_number = 0
-#     for letter in col_letters:
-#         col_number = col_number * 26 + (ord(letter) - ord("A") + 1)
-
-#     return int(row_number), col_number
+    :param coord_str: 例如 "(9, 4)"
+    :return: Excel 座標字串，例如 "D9"
+    """
+    coord_str = coord_str.strip("()")  # 去除括號
+    try:
+        row, col = map(int, coord_str.split(", "))
+        return f"{chr(64 + col)}{row}"  # 轉換成 Excel 座標
+    except ValueError:
+        return ""  # 避免解析錯誤
 
 
 def excel_address_to_row_col(cell_address: str) -> tuple[int, int]:
+    """
+    將 Excel 儲存格地址 (如 'D9') 轉換為 (row, col) 格式。
+
+    :param cell_address: Excel 儲存格地址 (如 'D9', 'AA15')
+    :return: (row, col) 元組，例如 (9, 4)
+    """
+    match = re.match(r"([A-Z]+)(\d+)", cell_address)  # 用 regex 拆分字母(列) 和 數字(行)
+
+    if not match:
+        raise ValueError(f"無效的 Excel 儲存格地址: {cell_address}")
+
+    col_letters, row_number = match.groups()
+
+    # 將 Excel 字母列轉換成數字，例如 A -> 1, B -> 2, ..., Z -> 26, AA -> 27
+    col_number = 0
+    for letter in col_letters:
+        col_number = col_number * 26 + (ord(letter) - ord("A") + 1)
+
+    return int(row_number), col_number
+
+
+def excel_address_to_coordinate(cell_address: str) -> tuple[int, int]:
     """
     將 Excel 儲存格地址 (如 'D9') 轉換為 (row, col) 格式。
 
@@ -984,8 +984,8 @@ def ut01_取得當前作用儲存格(wb):
     print(f"📌 作用儲存格{cell_address}的值為：{cell_value}")
 
     # 將 (row, col) 格式轉換為 Excel 儲存格地址
-    # new_cell_address = convert_to_excel_address(f"({row}, {col})")
-    new_cell_address = convert_to_excel_address(cell_value)
+    # new_cell_address = convert_to_excel_address(cell_value)
+    new_cell_address = convert_to_excel_address(f"({row}, {col})")
     print(f"📌 {cell_value} 座標，其 Excel 位址為：{new_cell_address}")
 
     # 利用 Excel 儲存格地址，將【標音字庫】工作表的 Excel 儲存格位置設為作用儲存格
@@ -1007,8 +1007,8 @@ def ut02_利用列欄座標值定位漢字注音儲存格(wb):
     cell_value = active_cell.value
     print(f"📌 作用儲存格{cell_address}的值為：{cell_value}")
 
-    # 將 (row, col) 格式轉換為 Excel 儲存格地址
-    new_cell_address = convert_to_excel_address(cell_value)
+    # 將 Excel 儲存格地址 "C2" (2, 3) ，轉換成 (row, col) 座標格式
+    new_cell_address = convert_to_excel_address(cell_address=cell_value)
     print(f"📌 {cell_value} 座標，其 Excel 位址為：{new_cell_address}")
 
     # 利用 Excel 儲存格地址，將【標音字庫】工作表的 Excel 儲存格位置設為作用儲存格
