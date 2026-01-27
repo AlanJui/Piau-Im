@@ -174,6 +174,17 @@ class ExcelCell:
             new_sheet=new_khuat_ji_piau_sheet,
         )
 
+    def _show_separtor_line(self, msg: str):
+        print('\n')
+        print("=" * 80)
+        print(msg)
+
+    def _show_msg(self, row: int, col: int, msg: str):
+        """顯示處理訊息"""
+        # 顯示處理進度
+        col_name = xw.utils.col_name(col)
+        print(f"【{col_name}{row}】({row}, {col}) = {msg}")
+
     def _get_title_from_sheet(self, sheet) -> str:
         """
         從工作表中取得文章標題

@@ -179,18 +179,13 @@ class CellProcessor(ExcelCell):
         return jin_kang_str
 
 
-    def _process_jin_kang_piau_im(self, cell, row, col):
+    # def _process_jin_kang_piau_im(self, cell, row, col):
+    def _process_jin_kang_piau_im(self, han_ji: str, jin_kang_piau_im: str, cell, row: int, col: int):
         """
         處理單一漢字儲存格的主邏輯
         """
-        # 1. 取得漢字與人工標音儲存格內容
-        han_ji = cell.value
-        # 人工標音位於漢字上方兩列 (Row - 2)
-        jin_kang_cell = cell.offset(-2, 0)
-        jin_kang_val = jin_kang_cell.value
-
-        # 2. 解析人工標音 (處理 =, # 邏輯)
-        manual_tai_gi_im = self._resolve_manual_annotation(cell, han_ji, jin_kang_val)
+        # 解析人工標音 (處理 =, # 邏輯)
+        manual_tai_gi_im = self._resolve_manual_annotation(cell, han_ji, jin_kang_piau_im)
 
         if manual_tai_gi_im:
             # === A. 使用人工標音 ===
@@ -264,7 +259,13 @@ class CellProcessor(ExcelCell):
         # 檢查是否有【人工標音】
         jin_kang_piau_im = cell.offset(-2, 0).value  # 人工標音
         if jin_kang_piau_im and str(jin_kang_piau_im).strip() != "":
-            self._process_jin_kang_piau_im(cell, row, col)
+            self._process_jin_kang_piau_im(
+                han_ji=cell_value,
+                jin_kang_piau_im=jin_kang_piau_im,
+                cell=cell,
+                row=row,
+                col=col,
+            )
             return 0  # 漢字
 
         # 依據【漢字】儲存格內容進行處理
