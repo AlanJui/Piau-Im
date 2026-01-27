@@ -31,6 +31,10 @@
         "/^python generate_docs_index\\.py$/": {
             "approve": true,
             "matchCommandLine": true
+        },
+        "/^\\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"import logging; print\\(logging\\.__file__\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
         }
     }
 }

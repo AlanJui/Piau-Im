@@ -50,6 +50,44 @@ def load_module_function(module_name, function_name):
     return getattr(module, function_name)
 
 #----------------------------------------------------------------
+# 檔案名稱操作
+#----------------------------------------------------------------
+def get_file_name_without_extension(file_path: str) -> str:
+    base_name = os.path.basename(file_path)
+    file_name, _ = os.path.splitext(base_name)
+    return file_name
+
+def get_file_extension(file_path: str) -> str:
+    _, file_extension = os.path.splitext(file_path)
+    return file_extension
+
+def get_directory_path(file_path: str) -> str:
+    return os.path.dirname(file_path)
+
+def get_full_file_path(directory: str, file_name: str) -> str:
+    return os.path.join(directory, file_name)
+
+def get_current_working_directory() -> str:
+    return os.getcwd()
+
+def get_absolute_path(relative_path: str) -> str:
+    return os.path.abspath(relative_path)
+
+def get_parent_directory(file_path: str) -> str:
+    return os.path.dirname(os.path.abspath(file_path))
+
+def get_file_name_from_path(file_path: str) -> str:
+    return os.path.basename(file_path)
+
+def get_file_path_components(file_path: str):
+    parent_directory = Path(r"{file_path}").parent
+    file_name = Path(r"{file_path}").name
+    main_file_name = Path(r"{file_path}").stem
+    file_extension = Path(r"{file_path}").suffix
+
+    return parent_directory, file_name, main_file_name, file_extension
+
+#----------------------------------------------------------------
 # 依 env 工作表的設定，另存新檔到指定目錄。
 #----------------------------------------------------------------
 def save_as_new_file(wb, input_file_name=None):

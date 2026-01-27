@@ -1,5 +1,5 @@
 """
-    mod_程式.py V0.2.4
+    mod_程式.py V0.2.4 <== v0.2.3.6
 
     本系統各功能之程式架構模版。
     模版中包含程式配置類別 Program 及儲存格處理器類別 ExcelCell。
@@ -121,6 +121,15 @@ class Program:
         self.piau_im_huat = wb.names['標音方法'].refers_to_range.value
         self.ue_im_lui_piat = wb.names['語音類型'].refers_to_range.value    # 文讀音或白話音
         # =========================================================================
+        # 網頁相關設定
+        # =========================================================================
+        self.title = wb.names['TITLE'].refers_to_range.value
+        self.image_url = wb.names['IMAGE_URL'].refers_to_range.value
+        self.web_page_format = wb.names['網頁格式'].refers_to_range.value
+        self.piau_im_format = wb.names['標音方式'].refers_to_range.value
+        self.siong_pinn_piau_im = wb.names['上邊標音'].refers_to_range.value
+        self.zian_pinn_piau_im = wb.names['右邊標音'].refers_to_range.value
+        # =========================================================================
         # 程式初始化
         # =========================================================================
         # 取得專案根目錄。
@@ -128,6 +137,9 @@ class Program:
         self.project_root = self.current_file_path.parent
         # 取得程式名稱
         self.program_name = self.current_file_path.stem
+        # 取得 Excel 檔案名稱（不含路徑及副檔名）
+        self.excel_workbook_file_name = Path(wb.fullname).name
+        self.excel_file_stem = Path(wb.fullname).stem
 
     @staticmethod
     def msg_program_start(program_name: str, project_root: str) -> None:
@@ -215,6 +227,15 @@ class Program:
         except Exception as e:
             logging_exception("儲存活頁簿為新檔時發生錯誤", e)
             return False
+
+    def get_image_url(self) -> str:
+        """取得完整圖片 URL"""
+        image_url = self.image_url.strip()
+        if image_url.lower().startswith(("http://", "https://")):
+            full_image_url = image_url
+        else:
+            full_image_url = f"https://alanjui.github.io/Piau-Im/assets/images/{image_url}"
+        return full_image_url
 
 # =========================================================================
 # 作業層類別：處理儲存格存放內容

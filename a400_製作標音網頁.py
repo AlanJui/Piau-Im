@@ -1,3 +1,7 @@
+"""
+    a400_製作標音網頁.py V0.2.2.5
+"""
+
 # =========================================================================
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
@@ -359,8 +363,14 @@ class CellProcessor(ExcelCell):
             "  </a>\n"
             "</div>\n"
         )
-        if self.image_url:
-            write_buffer += div_image % (self.web_title, self.image_url)
+        # if self.image_url:
+        #     write_buffer += div_image % (self.web_title, self.image_url)
+        image_url = self.program.image_url.strip()
+        if image_url.lower().startswith(("http://", "https://")):
+            full_image_url = image_url
+        else:
+            full_image_url = f"./assets/images/{image_url}"
+        write_buffer += div_image % (self.web_title, full_image_url)
 
         # 輸出【文章】Div tag 及【文章標題】Ruby Tag
         title_with_ruby = self.generate_title_with_ruby()
@@ -488,13 +498,44 @@ class CellProcessor(ExcelCell):
 # =========================================================================
 # 主要處理函數
 # =========================================================================
-def _create_html_file(output_path: str, content: str, title: str = '您的標題', head_extra: str = ""):
-    """創建 HTML 檔案"""
+def _create_html_file(program: Program, output_path: str, content: str, title: str = '您的標題', head_extra: str = ""):
+    """
+        創建 HTML 檔案
+    <meta content='https://alanjui.github.io/Piau-Im//《深慮論》【文讀音】閩拼調符.html' property='og:url' />
+    <meta content='《深慮論》【文讀音：閩拼+方音符號】' property='og:title' />
+    <meta content='《深慮論》明朝：方孝孺' property='og:description' />
+
+    file_path = output_path
+    parent_directory = Path(r"{file_path}").parent
+    file_name = Path(r"{file_path}").name
+    main_file_name = Path(r"{file_path}").stem
+    file_extension = Path(r"{file_path}").suffix
+    """
+
+    # 取得網頁主檔案名稱（不含路徑及副檔名）
+    web_page_main_file_name = Path(output_path).stem
+    # 取得 Excel 檔案名稱（不含路徑及副檔名）
+    excel_file_stem = program.excel_file_stem
+
+    # 取得圖片 URL
+    # 判斷 image_url 是否為完整 URL (http/https 開頭)
+    image_url = str(program.image_url or "").strip()
+    if image_url.lower().startswith(("http://", "https://")):
+        full_image_url = image_url
+    else:
+        full_image_url = f"https://alanjui.github.io/Piau-Im/assets/images/{image_url}"
+
     template = f"""<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <title>{title}</title>
     <meta charset="UTF-8">
+    <meta content='{excel_file_stem}' property='og:title' />
+    <meta content='{title}' property='og:description' />
+    <meta content='{full_image_url}' property='og:image' />
+    <meta content='https://alanjui.github.io/Piau-Im/{web_page_main_file_name}.html' property='og:url' />
+    <meta content='漢字。雅言' property='og:description' />
+    <meta content='' property='og:url' />
     {head_extra}
     <link rel="stylesheet" href="assets/styles/styles.css">
 </head>
@@ -594,7 +635,7 @@ def process(wb, args) -> int:
             head_extra += f'    <meta name="{key}" content="{value}" />\n'
 
         # 輸出到網頁檔案
-        _create_html_file(output_path, html_content, xls_cell.web_title, head_extra)
+        _create_html_file(program, output_path, html_content, xls_cell.web_title, head_extra)
 
         logging_process_step("【漢字注音】工作表轉製網頁作業完畢！")
         xls_cell._process_sheet(sheet=sheet)
