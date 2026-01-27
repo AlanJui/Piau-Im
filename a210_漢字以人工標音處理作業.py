@@ -1,5 +1,5 @@
 """
-    a210_漢字以人工標音處理作業.py V0.2.2
+    a210_漢字以人工標音處理作業.py V0.2.3 <== v0.2.2.5
     test_a210_repro.py V0.1.0  ==> py -m unittest .\test_a210_repro.py
 
     簡單說明作業流程如下：
@@ -21,13 +21,11 @@
 import logging
 import traceback
 from pathlib import Path
-from typing import Tuple
 
 # 載入第三方套件
 import xlwings as xw
 
 # 載入自訂模組
-from mod_file_access import save_as_new_file
 from mod_logging import (
     init_logging,
     logging_exc_error,  # noqa: F401
@@ -36,7 +34,7 @@ from mod_logging import (
     logging_warning,  # noqa: F401
 )
 from mod_帶調符音標 import is_han_ji
-from mod_標音 import ca_ji_kiat_ko_tng_piau_im, kam_si_u_tiau_hu, split_tai_gi_im_piau, tng_im_piau
+from mod_標音 import kam_si_u_tiau_hu, split_tai_gi_im_piau, tng_im_piau
 from mod_程式 import ExcelCell, Program
 
 # =========================================================================
@@ -62,9 +60,9 @@ class CellProcessor(ExcelCell):
     個人字典查詢專用的儲存格處理器
     繼承自 ExcelCell
     覆蓋以下方法以實現個人字典查詢功能：
-    - _process_han_ji(): 使用個人字典查詢漢字讀音
-    - process_cell(): 處理單一儲存格
-    - _process_sheet(): 處理整個工作表
+    - _process_cell(): 處理單一儲存格
+    - _process_jin_kang_piau_im(): 處理人工標音邏輯
+    其他方法繼承自父類別 ExcelCell
     """
     def __init__(
         self,
@@ -88,26 +86,26 @@ class CellProcessor(ExcelCell):
             new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
         )
 
-    def _convert_piau_im(self, result: list) -> Tuple[str, str]:
-        """
-        將查詢結果轉換為音標
+    # def _convert_piau_im(self, result: list) -> Tuple[str, str]:
+    #     """
+    #     將查詢結果轉換為音標
 
-        Args:
-            result: 查詢結果列表
+    #     Args:
+    #         result: 查詢結果列表
 
-        Returns:
-            (tai_gi_im_piau, han_ji_piau_im)
-        """
-        # 使用原有的轉換邏輯
-        # 這裡需要適配 result 的格式
-        # 假設 result 是從 HanJiSuTian 回傳的格式
-        tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
-            result=result,
-            han_ji_khoo=self.program.han_ji_khoo,
-            piau_im=self.program.piau_im,
-            piau_im_huat=self.program.piau_im_huat
-        )
-        return tai_gi_im_piau, han_ji_piau_im
+    #     Returns:
+    #         (tai_gi_im_piau, han_ji_piau_im)
+    #     """
+    #     # 使用原有的轉換邏輯
+    #     # 這裡需要適配 result 的格式
+    #     # 假設 result 是從 HanJiSuTian 回傳的格式
+    #     tai_gi_im_piau, han_ji_piau_im = ca_ji_kiat_ko_tng_piau_im(
+    #         result=result,
+    #         han_ji_khoo=self.program.han_ji_khoo,
+    #         piau_im=self.program.piau_im,
+    #         piau_im_huat=self.program.piau_im_huat
+    #     )
+    #     return tai_gi_im_piau, han_ji_piau_im
 
     def _resolve_manual_annotation(self, cell, han_ji: str, jin_kang_val: any) -> str | None:
         """
@@ -227,12 +225,6 @@ class CellProcessor(ExcelCell):
                 col=col,
             )
 
-    def _show_msg(self, row: int, col: int, msg: str):
-        """顯示處理訊息"""
-        # 顯示處理進度
-        col_name = xw.utils.col_name(col)
-        print(f"【{col_name}{row}】({row}, {col}) = {msg}")
-
     def _process_cell(
         self,
         cell,
@@ -254,11 +246,11 @@ class CellProcessor(ExcelCell):
 
         # 取得【漢字】儲存格內容
         cell_value = cell.value
-        print("-" * 40)
 
         # 檢查是否有【人工標音】
         jin_kang_piau_im = cell.offset(-2, 0).value  # 人工標音
         if jin_kang_piau_im and str(jin_kang_piau_im).strip() != "":
+            self._show_msg(row, col, cell_value)
             self._process_jin_kang_piau_im(
                 han_ji=cell_value,
                 jin_kang_piau_im=jin_kang_piau_im,
@@ -271,73 +263,19 @@ class CellProcessor(ExcelCell):
         # 依據【漢字】儲存格內容進行處理
         if cell_value == 'φ':
             self._show_msg(row, col, "【文字終結】")
-            return  1   # 文章終結符號
+            return 1   # 文章終結符號
         elif cell_value == '\n':
             self._show_msg(row, col, "【換行】")
-            return  2   #【換行】
+            return 2   #【換行】
         elif not is_han_ji(cell_value):
             if cell_value is None or str(cell_value).strip() == "":
                 self._show_msg(row, col, "【空白】")
             else:
                 self._show_msg(row, col, cell_value)
-                self._process_non_han_ji(cell_value)
             return 3    # 空白或標點符號
-        # else:
-        #     self._show_msg(row, col, cell_value)
-        #     self._process_han_ji(cell_value, cell, row, col)
-        #     return  0  # 漢字
-
-    def _process_sheet(self, sheet):
-        """處理整個工作表"""
-        start_row = self.program.line_start_row + 2  # 調整為實際起始列
-        end_row = start_row + (self.program.TOTAL_LINES * self.program.ROWS_PER_LINE)
-        rows_per_line = self.program.ROWS_PER_LINE
-        total_lines = self.program.TOTAL_LINES
-        start_col = self.program.start_col
-        end_col = self.program.end_col
-
-        EOF = False # 是否到達文件結尾
-        line = 1
-
-        for row in range(start_row, end_row, rows_per_line):
-            status_code = 0
-            EOL = False # 是否到達行尾
-            # 設定作用儲存格為列首
-            sheet.range((row, 1)).select()
-
-            # 逐欄處理
-            for col in range(start_col, end_col):
-                # 檢查是否到達結尾
-                if EOF or line > total_lines:
-                    break
-
-                cell = sheet.range((row, col))
-                # 設定作用儲存格為目前儲存格
-                cell.select()
-
-                # 處理儲存格
-                # status_code:
-                # 0 = 儲存格內容為：漢字
-                # 1 = 儲存格內容為：文字終結符號
-                # 2 = 儲存格內容為：換行符號
-                # 3 = 儲存格內容為：空白、標點符號等非漢字字元
-                status_code = self._process_cell(cell, row, col)
-
-                # 檢查是否終結、跳出列處理迴圈
-                if status_code == 1:
-                    EOF = True
-                    break
-                elif status_code == 2:
-                    EOL = True
-                    break
-
-                # 檢查是否到達行尾或讀到換行符號
-                if EOL or col == end_col - 1:
-                    print('\n')
-                    print('=' * 60)
-                    print('\n')
-
-            line += 1
+        else:
+            self._show_msg(row, col, cell_value)
+            return  0  # 漢字
 
 
 # =========================================================================
@@ -455,12 +393,14 @@ def main(args) -> int:
     # (4) 儲存檔案
     # =========================================================================
     if exit_code == EXIT_CODE_SUCCESS:
-        file_path = save_as_new_file(wb=wb)
-        if not file_path:
-            logging_exc_error(msg="儲存檔案失敗！", error=None)
-            exit_code = EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
-        else:
+        try:
+            wb.save()
+            file_path = wb.fullname
             logging_process_step(f"儲存檔案至路徑：{file_path}")
+        except Exception as e:
+            logging_exc_error(msg="儲存檔案異常！", error=e)
+            return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
+        return EXIT_CODE_SUCCESS
 
     # =========================================================================
     # 結束程式

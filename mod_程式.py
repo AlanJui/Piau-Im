@@ -1,3 +1,9 @@
+"""
+    mod_程式.py V0.2.4
+
+    本系統各功能之程式架構模版。
+    模版中包含程式配置類別 Program 及儲存格處理器類別 ExcelCell。
+"""
 # =========================================================================
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
@@ -869,6 +875,7 @@ class ExcelCell:
         # 檢查是否有【人工標音】
         jin_kang_piau_im = cell.offset(-2, 0).value  # 人工標音
         if jin_kang_piau_im and str(jin_kang_piau_im).strip() != "":
+            self._show_msg(row, col, cell_value)
             self._process_jin_kang_piau_im(
                 han_ji=cell_value,
                 jin_kang_piau_im=jin_kang_piau_im,
