@@ -21,7 +21,12 @@ from dotenv import load_dotenv
 
 from mod_ca_ji_tian import HanJiTian
 from mod_database import DatabaseManager
-from mod_excel_access import convert_coord_str_to_excel_address, convert_row_col_to_excel_address, delete_sheet_by_name, save_as_new_file
+from mod_excel_access import (
+    convert_coord_str_to_excel_address,
+    convert_row_col_to_excel_address,
+    delete_sheet_by_name,
+    get_current_directory_from_workbook,
+)
 
 # =========================================================================
 # 設定日誌
@@ -124,25 +129,92 @@ class Program:
         # 取得程式名稱
         self.program_name = self.current_file_path.stem
 
-    def msg_program_start(self) -> str:
+    @staticmethod
+    def msg_program_start(program_name: str, project_root: str) -> None:
         """顯取示得程式開始訊息"""
-        logging_process_step(f"《========== 程式開始執行：{self.program_name} ==========》")
-        logging_process_step(f"專案根目錄為: {self.project_root}")
+        logging_process_step(f"《========== 程式開始執行：{program_name} ==========》")
+        logging_process_step(f"專案根目錄為: {project_root}")
 
-    def msg_program_end(self) -> str:
+    @staticmethod
+    def msg_program_end(program_name: str) -> None:
         """顯示程式結束訊息"""
-        logging_process_step(f"《========== 程式終止執行：{self.program_name} ==========》")
+        logging_process_step(f"《========== 程式終止執行：{program_name} ==========》")
 
-    def save_workbook_as_new_file(self, new_file_path: str) -> bool:
+    @staticmethod
+    def save_workbook(wb) -> bool:
+        """儲存活頁簿"""
+        try:
+            wb.save()
+            file_path = wb.fullname
+            logging_process_step(f"儲存檔案至路徑：{file_path}")
+        except Exception as e:
+            logging_exc_error(msg="儲存檔案異常！", error=e)
+            return False
+        return True
+
+    @staticmethod
+    def get_current_dir_from_wb(wb) -> str:
+        """取得活頁簿所在目錄"""
+        try:
+            current_dir = get_current_directory_from_workbook(wb)
+            return current_dir
+        except Exception as e:
+            logging_exception("取得活頁簿所在目錄時發生錯誤", e)
+            return None
+
+    @staticmethod
+    def _ensure_xlsx_extension(file_name):
+        """""
+        自動補上 Excel 檔案的副檔名 .xlsx (單個檔案處理)
+        """
+        return file_name if file_name.lower().endswith('.xlsx') else file_name + '.xlsx'
+
+    @staticmethod
+    def generate_new_excel_file_name(wb) -> str:
+        """產生新的 Excel 檔案名稱"""
+        # 自 env 工作表取得檔案名稱
+        try:
+            title = str(wb.names['TITLE'].refers_to_range.value).strip()
+            hue_im = wb.names['語音類型'].refers_to_range.value
+            piau_im_huat = wb.names['標音方法'].refers_to_range.value
+        except KeyError:
+            setting_sheet = wb.sheets["env"]
+            file_name = str(setting_sheet.range("C4").value).strip()
+
+        # 設定檔案輸出路徑，存於專案根目錄下的 output<n> 資料夾
+        im_piat = hue_im[:2]  # 取 hue_im 前兩個字元
+        file_name = f"【河洛{im_piat}注音-{piau_im_huat}】《{title}》"
+        # 檢查檔案名稱是否已包含副檔名
+        new_file_name = Program._ensure_xlsx_extension(file_name)
+
+        return new_file_name
+
+    @staticmethod
+    def save_workbook_as_new_file(wb, new_file_path: str = None) -> bool:
         """將活頁簿另存新檔"""
         try:
-            save_as_new_file(self.wb, new_file_path)
+            # 檢查與設定儲存時，使用之【路徑】（目錄與檔名）
+            if not new_file_path:
+                new_excel_file_name = Program.generate_new_excel_file_name(wb)
+
+                current_dir = Program.get_current_dir_from_wb(wb)
+                parent_dir = str(Path(current_dir).parent)
+                output_dir = wb.names['OUTPUT_PATH'].refers_to_range.value
+                new_dir_path = f'{parent_dir}\\{output_dir}'
+
+                # new_file_path = os.path.join(
+                #     ".\\{0}".format(new_dir_path),
+                #     f"{new_excel_file_name}",
+                # )
+                # new_file_path = current_dir / f"{new_excel_file_name}"
+                new_file_path = r'{0}\{1}'.format(new_dir_path, new_excel_file_name)
+
+            wb.save(new_file_path)
             logging_process_step(f"已將活頁簿另存為新檔：{new_file_path}")
             return True
         except Exception as e:
             logging_exception("儲存活頁簿為新檔時發生錯誤", e)
             return False
-
 
 # =========================================================================
 # 作業層類別：處理儲存格存放內容
@@ -1983,23 +2055,8 @@ def main(args) -> int:
     # (4) 儲存檔案
     # =========================================================================
     try:
-        # 要求畫面回到【漢字注音】工作表
-        # wb.sheets['漢字注音'].activate()
-        # 儲存檔案
-        # ---------------------------------------------------------------------
-        # file_path = save_as_new_file(wb=wb)
-        # if not file_path:
-        #     logging_exc_error(msg="儲存檔案失敗！", error=None)
-        #     exit_code = EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
-        # else:
-        #     logging_process_step(f"儲存檔案至路徑：{file_path}")
-        # ---------------------------------------------------------------------
-        file_path = save_as_new_file(wb=wb)
-        if not file_path:
-            logging_exc_error(msg="儲存檔案失敗！", error=None)
+        if not Program.save_workbook_as_new_file(wb):
             return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
-        else:
-            logging_process_step(f"儲存檔案至路徑：{file_path}")
     except Exception as e:
         logging_exception(msg="儲存檔案失敗！", error=e)
         return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案

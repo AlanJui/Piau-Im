@@ -1,3 +1,8 @@
+"""
+    mod_excel_access.py v0.2.3
+    提供 Excel 檔案存取相關的輔助函式
+"""
+
 # =========================================================================
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
@@ -16,7 +21,6 @@ import xlwings as xw
 from dotenv import load_dotenv
 
 # 載入自訂模組
-from mod_file_access import save_as_new_file
 from mod_piau_im_tng_huan import _has_meaningful_data
 
 # =========================================================================
@@ -75,8 +79,41 @@ DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
 DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
 
 # =========================================================================
-# 程式用函式
+# 輔助函式
 # =========================================================================
+
+def get_full_path_from_workbook(wb) -> str:
+    """
+    獲取 Excel 活頁簿的完整路徑及所在目錄
+    # wb = xw.Book('您的檔案.xlsx')
+
+    :param wb: Excel 活頁簿物件 (xlwings.Book)
+    :return: (完整路徑, 所在目錄)
+    """
+
+    # 取得完整路徑 (例如: C:\work\Piau-Im\test.xlsx)
+    full_path = wb.fullname
+
+    # print(f"Excel 活頁簿檔完整路徑: {full_path}")
+    return full_path
+
+def get_current_directory_from_workbook(wb) -> str:
+    """
+    獲取 Excel 活頁簿的所在目錄
+    # wb = xw.Book('您的檔案.xlsx')
+
+    :param wb: Excel 活頁簿物件 (xlwings.Book)
+    :return: 所在目錄
+    """
+
+    # 取得完整路徑 (例如: C:\work\Piau-Im\test.xlsx)
+    full_path = wb.fullname
+
+    # 使用 pathlib 取得所在目錄
+    current_dir = Path(full_path).parent
+
+    # print(f"Excel 活頁簿檔所在目錄: {current_dir}")
+    return str(current_dir)
 
 # 方法 1: 檢查是否為 list 且內容是 tuple
 def is_coordinate_list(obj):

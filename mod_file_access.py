@@ -9,6 +9,7 @@ from pathlib import Path
 
 import xlwings as xw
 from openpyxl import load_workbook
+
 try:
     from pythoncom import com_error as pywintypes_com_error
 except ImportError:
@@ -255,10 +256,10 @@ def get_named_value(wb, name, default_value=None):
         return default_value
 
 
-# ==========================================================
-# 自動補上 Excel 檔案的副檔名 .xlsx (單個檔案處理)
-# ==========================================================
 def ensure_xlsx_extension(file_name):
+    """""
+    自動補上 Excel 檔案的副檔名 .xlsx (單個檔案處理)
+    """
     return file_name if file_name.lower().endswith('.xlsx') else file_name + '.xlsx'
 
 

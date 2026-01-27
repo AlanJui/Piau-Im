@@ -1,5 +1,5 @@
 """
-    a200_查找及填入漢字標音.py v0.2.3 <== v0.2.2.4
+    a200_查找及填入漢字標音.py v0.2.3 <== v0.2.2.5
 
     將【漢字注音】工作表中的【漢字】欄位，依據【人工標音】或【台語音標】查找
     【台語音標】，並填入【台語音標】儲存格及【漢字標音】儲存格。
@@ -43,11 +43,11 @@ init_logging()
 # =========================================================================
 # 作業協助函數
 # =========================================================================
-def _show_separtor_line(source_sheet_name: str, target_sheet_name: str):
-    print('\n\n')
-    print("=" * 100)
-    print(f"使用【{source_sheet_name}】工作表的【校正音標】欄位，更新【{target_sheet_name}】工作表之【台語音標】、【漢字標音】：")
-    print("=" * 100)
+# def _show_separtor_line(source_sheet_name: str, target_sheet_name: str):
+#     print('\n\n')
+#     print("=" * 100)
+#     print(f"使用【{source_sheet_name}】工作表的【校正音標】欄位，更新【{target_sheet_name}】工作表之【台語音標】、【漢字標音】：")
+#     print("=" * 100)
 
 # =========================================================================
 # 資料類別：儲存處理配置
@@ -266,15 +266,12 @@ def main(args) -> int:
     # =========================================================================
     # (4) 儲存檔案
     # =========================================================================
-    if exit_code == EXIT_CODE_SUCCESS:
-        try:
-            wb.save()
-            file_path = wb.fullname
-            logging_process_step(f"儲存檔案至路徑：{file_path}")
-        except Exception as e:
-            logging_exc_error(msg="儲存檔案異常！", error=e)
+    try:
+        if not Program.save_workbook_as_new_file(wb):
             return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
-        return EXIT_CODE_SUCCESS
+    except Exception as e:
+        logging_exception(msg="儲存檔案失敗！", error=e)
+        return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
 
     # =========================================================================
     # (5) 結束程式
@@ -282,14 +279,12 @@ def main(args) -> int:
     print('\n')
     print('=' * 80)
     logging_process_step(f"《========== 程式終止執行：{program_name} ==========》")
-    if exit_code == EXIT_CODE_SUCCESS:
-        return EXIT_CODE_SUCCESS    # 作業正常結束
-    else:
-        msg = f"程式異常終止，返回失敗碼：{exit_code}"
-        logging_exc_error(msg=msg, error=None)
-        return EXIT_CODE_PROCESS_FAILURE
+    return EXIT_CODE_SUCCESS
 
 
+# =============================================================================
+# 測試程式
+# =============================================================================
 def test_01():
     """測試 HanJiTian 類別"""
     import os
