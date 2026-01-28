@@ -126,7 +126,7 @@ class Program:
         self.title = wb.names['TITLE'].refers_to_range.value
         self.image_url = wb.names['IMAGE_URL'].refers_to_range.value
         self.web_page_format = wb.names['網頁格式'].refers_to_range.value
-        self.piau_im_format = wb.names['標音方式'].refers_to_range.value
+        self.han_ji_piau_im_format = wb.names['標音方式'].refers_to_range.value
         self.siong_pinn_piau_im = wb.names['上邊標音'].refers_to_range.value
         self.zian_pinn_piau_im = wb.names['右邊標音'].refers_to_range.value
         # =========================================================================
@@ -140,6 +140,8 @@ class Program:
         # 取得 Excel 檔案名稱（不含路徑及副檔名）
         self.excel_workbook_file_name = Path(wb.fullname).name
         self.excel_file_stem = Path(wb.fullname).stem
+        # Excel 檔案儲存路徑
+        self.output_path = wb.names['OUTPUT_PATH'].refers_to_range.value
 
     @staticmethod
     def msg_program_start(program_name: str, project_root: str) -> None:

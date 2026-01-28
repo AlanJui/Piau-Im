@@ -1,5 +1,5 @@
 """
-    a400_製作標音網頁.py V0.2.2.6
+    a400_製作標音網頁.py V0.2.2.7
 """
 
 # =========================================================================
@@ -78,7 +78,7 @@ class CellProcessor(ExcelCell):
         self.total_chars_per_line = 0 if self.total_chars_per_line is None else int(self.total_chars_per_line)
 
         # 標音相關
-        self.piau_im_format = get_value_by_name(wb=wb, name='網頁格式')
+        self.han_ji_piau_im_format = get_value_by_name(wb=wb, name='網頁格式')
         self.piau_im_hong_sik = get_value_by_name(wb=wb, name='標音方式')
         self.siong_pinn_piau_im = get_value_by_name(wb=wb, name='上邊標音')
         self.zian_pinn_piau_im = get_value_by_name(wb=wb, name='右邊標音')
@@ -210,7 +210,7 @@ class CellProcessor(ExcelCell):
         zian_piau_im = ""
 
         # 根據【網頁格式】，決定【漢字】之上方或右方，是否該顯示【標音】
-        if self.piau_im_format == "無預設":
+        if self.han_ji_piau_im_format == "無預設":
             # 根據【標音方式】決定漢字之上方及右方，是否需要放置標音
             if self.piau_im_hong_sik == "上及右":
                 siong_piau_im = self.program.piau_im.han_ji_piau_im_tng_huan(
@@ -241,21 +241,21 @@ class CellProcessor(ExcelCell):
                 )
         else:
             # 按指定網頁格式設定標音位置
-            if self.piau_im_format in ["POJ", "TL", "BP", "TLPA_Plus", "SNI"]:
+            if self.han_ji_piau_im_format in ["POJ", "TL", "BP", "TLPA_Plus", "SNI"]:
                 siong_piau_im = self.program.piau_im.han_ji_piau_im_tng_huan(
                     piau_im_huat=self.siong_pinn_piau_im,
                     siann_bu=siann_bu,
                     un_bu=zu_im_list[1],
                     tiau_ho=zu_im_list[2],
                 )
-            elif self.piau_im_format == "TPS":
+            elif self.han_ji_piau_im_format == "TPS":
                 zian_piau_im = self.program.piau_im.han_ji_piau_im_tng_huan(
                     piau_im_huat=self.zian_pinn_piau_im,
                     siann_bu=siann_bu,
                     un_bu=zu_im_list[1],
                     tiau_ho=zu_im_list[2],
                 )
-            elif self.piau_im_format == "DBL":
+            elif self.han_ji_piau_im_format == "DBL":
                 siong_piau_im = self.program.piau_im.han_ji_piau_im_tng_huan(
                     piau_im_huat=self.siong_pinn_piau_im,
                     siann_bu=siann_bu,
@@ -374,7 +374,7 @@ class CellProcessor(ExcelCell):
 
         # 輸出【文章】Div tag 及【文章標題】Ruby Tag
         title_with_ruby = self.generate_title_with_ruby()
-        pai_ban_iong_huat = self.zu_im_huat_list[self.piau_im_format][0]
+        pai_ban_iong_huat = self.zu_im_huat_list[self.han_ji_piau_im_format][0]
 
         if title_with_ruby:
             div_tag = (
@@ -604,20 +604,20 @@ def process(wb, args) -> int:
         html_content = xls_cell._process_sheet(sheet=sheet)
 
         # 生成輸出檔案名稱
-        hue_im = program.ue_im_lui_piat
-        piau_im_huat = xls_cell.program.piau_im_huat
-        if xls_cell.piau_im_format == "無預設":
+        piau_im_huat = program.piau_im_huat
+        ue_im_lui_piat = program.ue_im_lui_piat
+        han_ji_piau_im_format = program.han_ji_piau_im_format
+        if han_ji_piau_im_format == "無預設":
             im_piau = piau_im_huat
-        elif xls_cell.piau_im_format == "上":
-            im_piau = xls_cell.siong_pinn_piau_im
-        elif xls_cell.piau_im_format == "右":
-            im_piau = xls_cell.zian_pinn_piau_im
+        elif han_ji_piau_im_format == "上":
+            im_piau = program.siong_pinn_piau_im
+        elif han_ji_piau_im_format == "右":
+            im_piau = program.zian_pinn_piau_im
         else:
-            im_piau = f"{xls_cell.siong_pinn_piau_im}＋{xls_cell.zian_pinn_piau_im}"
+            im_piau = f"{program.siong_pinn_piau_im}＋{program.zian_pinn_piau_im}"
 
-        # output_file = f"《{xls_cell.title}》【{hue_im}】{im_piau}.html"
-        title = xls_cell._get_title_from_sheet(sheet=sheet)
-        output_file = f"{title}【{hue_im}】{im_piau}.html"
+        title = program.title
+        output_file = f"《{title}》【{ue_im_lui_piat}】{im_piau}.html"
         output_path = os.path.join(xls_cell.output_dir, output_file)
 
         # 生成標準 Excel 檔案名稱
@@ -646,7 +646,6 @@ def process(wb, args) -> int:
         _create_html_file(program, output_path, html_content, xls_cell.web_title, head_extra)
 
         logging_process_step("【漢字注音】工作表轉製網頁作業完畢！")
-        xls_cell._process_sheet(sheet=sheet)
 
     except Exception as e:
         logging_exc_error(msg="處理作業異常！", error=e)
