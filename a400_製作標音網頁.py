@@ -1,5 +1,5 @@
 """
-    a400_製作標音網頁.py V0.2.2.5
+    a400_製作標音網頁.py V0.2.2.6
 """
 
 # =========================================================================
@@ -393,6 +393,7 @@ class CellProcessor(ExcelCell):
                 "  </p>\n"
             )
         write_buffer += div_tag % (pai_ban_iong_huat, title_with_ruby)
+        write_buffer += "<p>\n"
 
         # 逐列處理工作表內容
         program = self.program
@@ -528,13 +529,13 @@ def _create_html_file(program: Program, output_path: str, content: str, title: s
     template = f"""<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <title>{title}</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title}</title>
+    <meta content='https://alanjui.github.io/Piau-Im/{web_page_main_file_name}.html' property='og:url' />
     <meta content='{excel_file_stem}' property='og:title' />
     <meta content='{title}' property='og:description' />
     <meta content='{full_image_url}' property='og:image' />
-    <meta content='https://alanjui.github.io/Piau-Im/{web_page_main_file_name}.html' property='og:url' />
-    <meta content='漢字。雅言' property='og:description' />
     {head_extra}
     <link rel="stylesheet" href="assets/styles/styles.css">
 </head>
@@ -619,6 +620,14 @@ def process(wb, args) -> int:
         output_file = f"{title}【{hue_im}】{im_piau}.html"
         output_path = os.path.join(xls_cell.output_dir, output_file)
 
+        # 生成標準 Excel 檔案名稱
+        new_excel_file_name = Program.generate_new_excel_file_name(wb=wb)
+        if not new_excel_file_name:
+            logging_exc_error(msg="無法依【檔案命名標準】生成另存新檔之 Excel 檔案名稱!")
+            return EXIT_CODE_PROCESS_FAILURE
+        else:
+            print(f"作業結束時，將以 Excel 檔案名稱：【{new_excel_file_name}】另存新檔。")
+
         # 確保輸出目錄存在
         os.makedirs(xls_cell.output_dir, exist_ok=True)
 
@@ -628,7 +637,7 @@ def process(wb, args) -> int:
             "顯示注音輸入", "每頁總列數", "每列總字數", "語音類型",
             "漢字庫", "標音方法", "網頁格式", "標音方式", "上邊標音", "右邊標音", "網頁每列字數"
         ]
-        head_extra = ""
+        head_extra = "\n"
         for key in env_keys:
             value = get_value_by_name(wb, key)
             head_extra += f'    <meta name="{key}" content="{value}" />\n'
@@ -707,12 +716,8 @@ def main(args) -> int:
         # 要求畫面回到【漢字注音】工作表
         # wb.sheets['漢字注音'].activate()
         # 儲存檔案
-        file_path = save_as_new_file(wb=wb)
-        if not file_path:
-            logging_exc_error(msg="儲存檔案失敗！", error=None)
+        if not Program.save_workbook_as_new_file(wb=wb):
             return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
-        else:
-            logging_process_step(f"儲存檔案至路徑：{file_path}")
     except Exception as e:
         logging_exception(msg="儲存檔案失敗！", error=e)
         return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案

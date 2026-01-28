@@ -175,31 +175,42 @@ class Program:
             return None
 
     @staticmethod
-    def _ensure_xlsx_extension(file_name):
+    def ensure_xlsx_extension(file_name):
         """""
         自動補上 Excel 檔案的副檔名 .xlsx (單個檔案處理)
         """
         return file_name if file_name.lower().endswith('.xlsx') else file_name + '.xlsx'
 
     @staticmethod
+    def get_file_stem_from_env_wb(wb) -> str:
+        """從 env 工作表取得【Excel檔案名稱】（不含路徑及副檔名）"""
+        try:
+            title = wb.names['TITLE'].refers_to_range.value
+            piau_im_huat = wb.names['標音方法'].refers_to_range.value
+            ue_im_lui_piat = wb.names['語音類型'].refers_to_range.value
+            im_piat = ue_im_lui_piat[:2]  # 取 hue_im_lui_piat 前兩個字元
+
+            # 主檔名格式
+            file_stem = f"【河洛{im_piat}注音-{piau_im_huat}】《{title}》"
+            return file_stem
+
+        except Exception as e:
+            logging_exception("欲從 env 工作表，建構 Excel 檔案新名稱時發生錯誤", e)
+            return None
+
+    @staticmethod
     def generate_new_excel_file_name(wb) -> str:
         """產生新的 Excel 檔案名稱"""
         # 自 env 工作表取得檔案名稱
         try:
-            title = str(wb.names['TITLE'].refers_to_range.value).strip()
-            hue_im = wb.names['語音類型'].refers_to_range.value
-            piau_im_huat = wb.names['標音方法'].refers_to_range.value
-        except KeyError:
-            setting_sheet = wb.sheets["env"]
-            file_name = str(setting_sheet.range("C4").value).strip()
-
-        # 設定檔案輸出路徑，存於專案根目錄下的 output<n> 資料夾
-        im_piat = hue_im[:2]  # 取 hue_im 前兩個字元
-        file_name = f"【河洛{im_piat}注音-{piau_im_huat}】《{title}》"
-        # 檢查檔案名稱是否已包含副檔名
-        new_file_name = Program._ensure_xlsx_extension(file_name)
-
-        return new_file_name
+            new_file_stem = Program.get_file_stem_from_env_wb(wb)
+            new_file_name = f"{new_file_stem}.xlsx"
+            # 將 Excel 檔案名稱寫回 env 工作表
+            wb.names['FILE_NAME'].refers_to_range.value = f"{new_file_name}"
+            return new_file_name
+        except Exception as error:
+            logging_exception("生成【新活頁簿檔名】，發生錯誤", error=error)
+            return None
 
     @staticmethod
     def save_workbook_as_new_file(wb, new_file_path: str = None) -> bool:
@@ -227,6 +238,42 @@ class Program:
         except Exception as e:
             logging_exception("儲存活頁簿為新檔時發生錯誤", e)
             return False
+
+    @staticmethod
+    def generate_new_html_file_stem(wb) -> str:
+        """從 env 工作表取得【網頁檔案名稱】（不含路徑及副檔名）"""
+        try:
+            # 生成輸出檔案名稱
+            # 語音類型：ue_im_lui_piat
+            # 標音方法：piau_im_huat
+            # 網頁格式：web_page_format
+            # 檟音方式：piau_im_format
+            # 上邊標音：siong_pinn_piau_im
+            # 右邊標音：zian_pinn_piau_im
+            # 漢字標音格式：han_ji_piau_im_format
+
+            title = wb.names['TITLE'].refers_to_range.value
+            ue_im_lui_piat = wb.names['語音類型'].refers_to_range.value
+            siong_pinn_piau_im = wb.names['上邊標音'].refers_to_range.value
+            zian_pinn_piau_im = wb.names['右邊標音'].refers_to_range.value
+
+            piau_im_huat = wb.names['標音方法'].refers_to_range.value
+            piau_im_format = wb.names['標音方式'].refers_to_range.value
+            if piau_im_format == "無預設":
+                han_ji_piau_im_format = piau_im_huat
+            elif piau_im_format == "上":
+                han_ji_piau_im_format = siong_pinn_piau_im
+            elif piau_im_format == "右":
+                han_ji_piau_im_format = zian_pinn_piau_im
+            else:
+                han_ji_piau_im_format = f"{siong_pinn_piau_im}＋{zian_pinn_piau_im}"
+
+            file_stem = f"《{title}》【{ue_im_lui_piat}】{han_ji_piau_im_format}"
+            return file_stem
+
+        except Exception as e:
+            logging_exception("欲從 env 工作表，建構 Excel 檔案新名稱時發生錯誤", e)
+            return None
 
     def get_image_url(self) -> str:
         """取得完整圖片 URL"""
