@@ -1,3 +1,8 @@
+"""
+程式名稱：a330_以標音字庫更新漢字注音工作表.py v0.2.4
+以【標音字庫】工作表更新【漢字注音】工作表中【台語音標】欄位內容的程式。
+"""
+
 # =========================================================================
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
@@ -6,9 +11,6 @@ from pathlib import Path
 
 # 載入第三方套件
 import xlwings as xw
-
-# 載入自訂模組/函式
-from mod_excel_access import save_as_new_file
 
 # 載入自訂模組/函式
 from mod_程式 import ExcelCell, Program
@@ -154,19 +156,25 @@ def main(args) -> int:
     try:
         exit_code = process(wb, args)
     except Exception as e:
-        logging_exception(msg="作業異常終止！", error=e)
+        msg = f"作業程序發生異常，終止執行：{program_name}"
+        logging_exception(msg=msg, error=e)
+        return EXIT_CODE_PROCESS_FAILURE
+
+    if exit_code != EXIT_CODE_SUCCESS:
+        msg = f"處理作業發生異常，終止程式執行：{program_name}（處理作業程序，返回失敗碼）"
+        logging_exc_error(msg)
         return EXIT_CODE_PROCESS_FAILURE
 
     # =========================================================================
     # (4) 儲存檔案
     # =========================================================================
-    if exit_code == EXIT_CODE_SUCCESS:
-        file_path = save_as_new_file(wb=wb)
-        if not file_path:
-            logging_exc_error(msg="儲存檔案失敗！", error=None)
-            exit_code = EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
-        else:
-            logging_process_step(f"儲存檔案至路徑：{file_path}")
+    try:
+        # 儲存檔案
+        if not Program.save_workbook_as_new_file(wb=wb):
+            return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
+    except Exception as e:
+        logging_exception(msg="儲存檔案失敗！", error=e)
+        return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
 
     # =========================================================================
     # 結束程式

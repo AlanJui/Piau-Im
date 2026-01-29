@@ -2,13 +2,11 @@
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
 import argparse
-import os
 import sys
 from pathlib import Path
 
 # 載入第三方套件
 import xlwings as xw
-from dotenv import load_dotenv
 
 # 載入自訂模組/函式
 from mod_excel_access import save_as_new_file
@@ -25,15 +23,6 @@ from mod_程式 import ExcelCell, Program
 # 設定日誌
 # =========================================================================
 init_logging()
-
-# =========================================================================
-# 載入環境變數
-# =========================================================================
-load_dotenv()
-
-# 預設檔案名稱從環境變數讀取
-DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
-DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
 
 # =========================================================================
 # 常數定義

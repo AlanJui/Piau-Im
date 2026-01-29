@@ -14,7 +14,6 @@ import xlwings as xw
 
 # 載入自訂模組
 from mod_excel_access import get_value_by_name
-from mod_file_access import save_as_new_file
 from mod_logging import (
     init_logging,
     logging_exc_error,  # noqa: F401
@@ -699,21 +698,19 @@ def main(args) -> int:
     try:
         exit_code = process(wb, args)
     except Exception as e:
-        msg = f"程式異常終止：{program_name}"
+        msg = f"作業程序發生異常，終止執行：{program_name}"
         logging_exception(msg=msg, error=e)
-        return EXIT_CODE_UNKNOWN_ERROR
+        return EXIT_CODE_PROCESS_FAILURE
 
     if exit_code != EXIT_CODE_SUCCESS:
-        msg = f"程式異常終止：{program_name}（非例外，而是返回失敗碼）"
-        logging.error(msg)
+        msg = f"處理作業發生異常，終止程式執行：{program_name}（處理作業程序，返回失敗碼）"
+        logging_exc_error(msg)
         return EXIT_CODE_PROCESS_FAILURE
 
     # =========================================================================
     # (4) 儲存檔案
     # =========================================================================
     try:
-        # 要求畫面回到【漢字注音】工作表
-        # wb.sheets['漢字注音'].activate()
         # 儲存檔案
         if not Program.save_workbook_as_new_file(wb=wb):
             return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
@@ -722,7 +719,7 @@ def main(args) -> int:
         return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
 
     # =========================================================================
-    # 結束程式
+    # (5) 結束程式
     # =========================================================================
     logging_process_step(f"《========== 程式終止執行：{program_name} ==========》")
     return EXIT_CODE_SUCCESS

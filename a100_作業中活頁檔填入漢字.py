@@ -1,5 +1,5 @@
 """
-    a100_作業中活頁檔填入漢字.py V0.2.4
+    a100_作業中活頁檔填入漢字.py V0.2.5
     功能：將漢字純文字檔中的漢字，填入 Excel 活頁簿中的【漢字注音】工作表，並自動查找台語音標與漢字標音。
 """
 # =========================================================================
@@ -23,6 +23,7 @@ import argparse
 import logging
 import os
 import re
+from pathlib import Path
 
 # 載入第三方套件
 import xlwings as xw
@@ -36,6 +37,7 @@ from mod_excel_access import (
 from mod_logging import (
     init_logging,
     logging_exc_error,
+    logging_exception,
     logging_process_step,
     logging_warning,  # noqa: F401
 )
@@ -289,6 +291,24 @@ def process(wb, args) -> int:
 # =========================================================================
 def main(args) -> int:
     """主程式 - 從 Excel 呼叫或直接執行"""
+    # =========================================================================
+    # (0) 程式初始化
+    # =========================================================================
+    # 取得專案根目錄。
+    current_file_path = Path(__file__).resolve()
+    project_root = current_file_path.parent
+    # 取得程式名稱
+    program_name = current_file_path.stem
+
+    # =========================================================================
+    # (1) 開始執行程式
+    # =========================================================================
+    logging_process_step(f"《========== 程式開始執行：{program_name} ==========》")
+    logging_process_step(f"專案根目錄為: {project_root}")
+
+    # =========================================================================
+    # (2) 設定【作用中活頁簿】：偵測及獲取 Excel 已開啟之活頁簿檔案。
+    # =========================================================================
     try:
         # 取得 Excel 活頁簿
         wb = None
@@ -303,19 +323,49 @@ def main(args) -> int:
                 logging.error(f"無法找到作用中的 Excel 工作簿: {e}")
                 return EXIT_CODE_NO_FILE
 
-            if not wb:
-                logging.error("無法取得 Excel 活頁簿")
-                return EXIT_CODE_NO_FILE
-
-            # 執行處理
-            exit_code = process(wb, args)
-
-            return exit_code
-
     except Exception as e:
-        logging.exception(f"程式執行失敗: {e}")
+        logging.exception(f"取得作用中活頁簿作業失敗： {e} ！")
         return EXIT_CODE_UNKNOWN_ERROR
 
+
+    # 若無法取得【作用中活頁簿】，則因無法繼續作業，故返回【作業異常終止代碼】結束。
+    if not wb:
+        logging.error("無法取得 Excel 活頁簿")
+        return EXIT_CODE_NO_FILE
+
+    # =========================================================================
+    # (3) 執行【處理作業】
+    # =========================================================================
+    try:
+        exit_code = process(wb, args)
+    except Exception as e:
+        msg = f"作業程序發生異常，終止執行：{program_name}"
+        logging_exception(msg=msg, error=e)
+        return EXIT_CODE_PROCESS_FAILURE
+
+    if exit_code != EXIT_CODE_SUCCESS:
+        msg = f"處理作業發生異常，終止程式執行：{program_name}（處理作業程序，返回失敗碼）"
+        logging.error(msg)
+        return EXIT_CODE_PROCESS_FAILURE
+
+    # =========================================================================
+    # (4) 儲存檔案
+    # =========================================================================
+    try:
+        # 要求畫面回到【漢字注音】工作表
+        # wb.sheets['漢字注音'].activate()
+        # 儲存檔案
+        if not Program.save_workbook_as_new_file(wb=wb):
+            return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
+    except Exception as e:
+        logging_exception(msg="儲存檔案失敗！", error=e)
+        return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
+
+    # =========================================================================
+    # (5) 結束程式
+    # =========================================================================
+    logging_process_step(f"《========== 程式終止執行：{program_name} ==========》")
+    return EXIT_CODE_SUCCESS
 
 def test_01():
     pass

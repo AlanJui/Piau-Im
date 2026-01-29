@@ -1424,8 +1424,11 @@ class ExcelCell:
         # 並依據【座標】欄（D）內容，將【校正音標】填入【漢字注音】工作表中相對應之【台語音標】儲存格，
         # 以及使用【校正音標】轉換後之【漢字標音】填入【漢字注音】工作表中相對應之【漢字標音】儲存格。
         #-------------------------------------------------------------------------
+        # source_sheet.activate()
+        source_sheet.select()
         row = 2  # 從第 2 列開始（跳過標題列）
         while True:
+            source_sheet.range(f"A{row}").api.Select()  # 選取目前處理的列
             han_ji = source_sheet.range(f"A{row}").value  # 讀取 A 欄（漢字）
             if not han_ji:  # 若 A 欄為空，則結束迴圈
                 break
