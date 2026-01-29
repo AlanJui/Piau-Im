@@ -1,5 +1,5 @@
 """
-mod_程式.py V0.2.6
+mod_程式.py V0.2.7
 
 本系統各功能之程式架構模版。
 模版中包含程式配置類別 Program 及儲存格處理器類別 ExcelCell。
@@ -377,6 +377,41 @@ class ExcelCell:
                     col = 4
 
         return title_chars
+
+    def get_active_cell_from_sheet(self, sheet) -> Tuple[xw.main.Range, int, int]:
+        """自工作表取得作用儲存格"""
+        program = self.program
+
+        # 自【作用儲存格】取得【Excel 儲存格座標】(列,欄) 座標
+        active_cell = sheet.api.Application.ActiveCell
+        if active_cell:
+            # 顯示【作用儲存格】位置
+            active_row = active_cell.Row
+            active_col = active_cell.Column
+            active_col_name = xw.utils.col_name(active_col)
+            print(
+                f"作用儲存格：{active_col_name}{active_row}（{active_cell.Row}, {active_cell.Column}）"
+            )
+
+            # 調整 row 值至【漢字】列（每 4 列為一組，漢字在第 3 列：5, 9, 13, ... ）
+            line_start_row = 3  # 第一行【標音儲存格】所在 Excel 列號: 3
+            line_no = ((active_row - line_start_row + 1) // program.ROWS_PER_LINE) + 1
+            row = (line_no * program.ROWS_PER_LINE) + self.program.han_ji_row_offset - 1
+            col = active_cell.Column
+            cell = sheet.range((row, col))
+            return cell, row, col
+        else:
+            print("無作用儲存格，請先選取一個儲存格後再執行本程式！")
+            return None, None, None
+
+    def convert_tai_gi_im_piau_to_han_ji_piau_im(self, tai_gi_im_piau: str) -> str:
+        """依指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】"""
+        han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+            piau_im=self.program.piau_im,
+            piau_im_huat=self.program.piau_im_huat,
+            tai_gi_im_piau=tai_gi_im_piau,
+        )
+        return han_ji_piau_im
 
     def _cu_jin_kang_piau_im(
         self,
@@ -767,15 +802,6 @@ class ExcelCell:
             target_msg2 = f"【標音字庫】工作表 A{row_no_piau_im_ji_khoo} 之紀錄，移除 ==> 漢字：【{han_ji}】，座標：（{row}, {col}）"
         print(f"{target_msg2}")
 
-    def convert_tai_gi_im_piau_to_han_ji_piau_im(self, tai_gi_im_piau: str) -> str:
-        """依指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】"""
-        han_ji_piau_im = tlpa_tng_han_ji_piau_im(
-            piau_im=self.program.piau_im,
-            piau_im_huat=self.program.piau_im_huat,
-            tai_gi_im_piau=tai_gi_im_piau,
-        )
-        return han_ji_piau_im
-
     def _process_jin_kang_piau_im(
         self, han_ji: str, jin_kang_piau_im: str, cell, row: int, col: int
     ):
@@ -892,24 +918,6 @@ class ExcelCell:
         # 將結果儲存回標音字庫工作表
         self.save_all_piau_im_ji_khoo_dicts()
 
-    def _process_non_han_ji(self, cell_value: str) -> None:
-        """處理非漢字內容"""
-        if cell_value is None or str(cell_value).strip() == "":
-            msg = "【空白字元】"
-            return
-
-        str_value = str(cell_value).strip()
-
-        if is_punctuation(str_value):
-            msg = "【標點符號】"
-        elif isinstance(cell_value, float) and cell_value.is_integer():
-            msg = f"【英/數半形字元】（{int(cell_value)}）"
-        else:
-            msg = "【非漢字之其餘字元】"
-
-        print(f"【{cell_value}】：{msg}。")
-        return
-
     def _convert_piau_im(self, tai_lo_ping_im: str) -> Tuple[str, str]:
         """
         將查詢結果轉換為音標
@@ -1023,6 +1031,32 @@ class ExcelCell:
         # 結束處理
         return han_ji_thok_im
 
+    def _reset_cell_style(self, cell):
+        """重置儲存格樣式"""
+        cell.font.color = (0, 0, 0)  # 黑色
+        cell.color = None  # 【漢字】儲存格，無填滿
+        cell.offset(-2, 0).color = (255, 255, 204)  # 【人工標音】儲存格：鵝黃色
+        cell.offset(-1, 0).color = None  # 【台語音標】儲存格：黑色
+        cell.offset(1, 0).color = None  # 【漢字標音】儲存格：黑色
+
+    def _process_non_han_ji(self, cell_value: str) -> str:
+        """處理非漢字內容"""
+        if cell_value is None or str(cell_value).strip() == "":
+            msg = "【空白字元】"
+            return msg
+
+        str_value = str(cell_value).strip()
+
+        if is_punctuation(str_value):
+            msg = "【標點符號】"
+        elif isinstance(cell_value, float) and cell_value.is_integer():
+            msg = f"【英/數半形字元】（{int(cell_value)}）"
+        else:
+            msg = "【非漢字之其餘字元】"
+
+        msg = f"【{cell_value}】：{msg}。"
+        return msg
+
     def _process_han_ji(
         self,
         han_ji: str,
@@ -1030,10 +1064,10 @@ class ExcelCell:
         row: int,
         col: int,
         show_all_options: bool = False,
-    ) -> Tuple[str, bool]:
+    ) -> str:
         """處理漢字"""
         if han_ji == "":
-            return "【空白】", False
+            return "【空白】"
 
         # 使用 HanJiTian 查詢漢字讀音
         result = self.program.ji_tian.han_ji_ca_piau_im(
@@ -1048,55 +1082,19 @@ class ExcelCell:
                 hau_ziann_im_piau="N/A",
                 coordinates=(row, col),
             )
-            return f"【{han_ji}】查無此字！", False
+            return f"【{han_ji}】查無此字！"
 
         # 顯示所有讀音選項
         if show_all_options:
-            excel_address = f"{xw.utils.col_name(col)}{row}"
-            print(
-                f"漢字儲存格：{excel_address}（{row}, {col}）：【{han_ji}】有 {len(result)} 個讀音..."
-            )
+            msg = f"【{han_ji}】有 {len(result)} 個讀音...\n"
             for idx, entry in enumerate(cell, result):
-                han_ji_thok_im = self._process_one_entry(cell, entry)
-                print(f"{idx + 1}. 【{han_ji}】：{han_ji_thok_im}")
+                han_ji_piau_im = self._process_one_entry(cell, entry)
+                msg += f"{idx + 1}. 【{han_ji}】：{han_ji_piau_im}\n"
         else:
             # 預設只處理第一個讀音選項
-            han_ji_thok_im = self._process_one_entry(cell, result[0])
-            print(f"【{han_ji}】：{han_ji_thok_im}")
-
-    def _reset_cell_style(self, cell):
-        """重置儲存格樣式"""
-        cell.font.color = (0, 0, 0)  # 黑色
-        cell.color = None  # 【漢字】儲存格，無填滿
-        cell.offset(-2, 0).color = (255, 255, 204)  # 【人工標音】儲存格：鵝黃色
-        cell.offset(-1, 0).color = None  # 【台語音標】儲存格：黑色
-        cell.offset(1, 0).color = None  # 【漢字標音】儲存格：黑色
-
-    def get_active_cell_from_sheet(self, sheet) -> Tuple[xw.main.Range, int, int]:
-        """自工作表取得作用儲存格"""
-        program = self.program
-
-        # 自【作用儲存格】取得【Excel 儲存格座標】(列,欄) 座標
-        active_cell = sheet.api.Application.ActiveCell
-        if active_cell:
-            # 顯示【作用儲存格】位置
-            active_row = active_cell.Row
-            active_col = active_cell.Column
-            active_col_name = xw.utils.col_name(active_col)
-            print(
-                f"作用儲存格：{active_col_name}{active_row}（{active_cell.Row}, {active_cell.Column}）"
-            )
-
-            # 調整 row 值至【漢字】列（每 4 列為一組，漢字在第 3 列：5, 9, 13, ... ）
-            line_start_row = 3  # 第一行【標音儲存格】所在 Excel 列號: 3
-            line_no = ((active_row - line_start_row + 1) // program.ROWS_PER_LINE) + 1
-            row = (line_no * program.ROWS_PER_LINE) + self.program.han_ji_row_offset - 1
-            col = active_cell.Column
-            cell = sheet.range((row, col))
-            return cell, row, col
-        else:
-            print("無作用儲存格，請先選取一個儲存格後再執行本程式！")
-            return None, None, None
+            han_ji_piau_im = self._process_one_entry(cell, result[0])
+            msg = f"【{han_ji}】：{han_ji_piau_im}"
+        return msg
 
     def _process_cell(
         self,
@@ -1135,21 +1133,21 @@ class ExcelCell:
 
         # 依據【漢字】儲存格內容進行處理
         if cell_value == "φ":
-            self._show_msg(row, col, "【文字終結】")
+            print("【文字終結】")
             return 1  # 文章終結符號
         elif cell_value == "\n":
-            self._show_msg(row, col, "【換行】")
+            print("【換行】")
             return 2  # 【換行】
-        elif not is_han_ji(cell_value):
-            if cell_value is None or str(cell_value).strip() == "":
-                self._show_msg(row, col, "【空白】")
-            else:
-                self._show_msg(row, col, cell_value)
-                self._process_non_han_ji(cell_value)
+        elif cell_value is None or str(cell_value).strip() == "":
+            print("【空白】")
+            return 3  # 空白或標點符號
+        elif is_punctuation(cell_value):
+            msg = self._process_non_han_ji(cell_value)
+            print(msg)
             return 3  # 空白或標點符號
         else:
-            self._show_msg(row, col, cell_value)
-            self._process_han_ji(cell_value, cell, row, col)
+            msg = self._process_han_ji(cell_value, cell, row, col)
+            print(msg)
             return 0  # 漢字
 
     def _initialize_ji_khoo(

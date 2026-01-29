@@ -1,5 +1,5 @@
 """
-a201_更換漢字標音.py V0.0.1
+a201_更換漢字標音.py V0.0.2
 
 功能：
 
@@ -10,7 +10,6 @@ a201_更換漢字標音.py V0.0.1
 # =========================================================================
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
-import logging
 import sys
 from pathlib import Path
 
@@ -26,7 +25,7 @@ from mod_logging import (
     logging_process_step,
     logging_warning,  # noqa: F401
 )
-from mod_標音 import is_han_ji
+from mod_標音 import is_punctuation
 from mod_程式 import ExcelCell, Program
 
 # =========================================================================
@@ -88,6 +87,24 @@ class CellProcessor(ExcelCell):
             new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
         )
 
+    def _process_non_han_ji(self, cell_value: str) -> str:
+        """處理非漢字內容"""
+        if cell_value is None or str(cell_value).strip() == "":
+            msg = "【空白字元】"
+            return msg
+
+        str_value = str(cell_value).strip()
+
+        if is_punctuation(str_value):
+            msg = "【標點符號】"
+        elif isinstance(cell_value, float) and cell_value.is_integer():
+            msg = f"【英/數半形字元】（{int(cell_value)}）"
+        else:
+            msg = "【非漢字之其餘字元】"
+
+        msg = f"【{cell_value}】：{msg}。"
+        return msg
+
     def _process_han_ji(
         self,
         han_ji: str,
@@ -95,32 +112,31 @@ class CellProcessor(ExcelCell):
         row: int,
         col: int,
         show_all_options: bool = False,
-    ) -> None:
+    ) -> str:
         """處理漢字"""
 
         han_ji = cell.value  # 漢字儲存格
         tai_gi_im_piau_cell = cell.offset(-1, 0)  # 台語音標儲存格
-        han_ji_piau_im_cell = cell.offset(0, 0)  # 漢字標音儲存格
+        han_ji_piau_im_cell = cell.offset(1, 0)  # 漢字標音儲存格
 
         # 取得【台語音標】儲存格內容
         tai_gi_im_piau = tai_gi_im_piau_cell.value
         if not tai_gi_im_piau or str(tai_gi_im_piau).strip() == "":
-            self._show_msg(row, col, f"【台語音標】儲存格為空，無法轉換【漢字標音】！")
-            return None, False
+            msg = f"【台語音標】儲存格為空，無法轉換【漢字標音】！"
+            return msg
 
         # 依據【台語音標】轉換成【漢字標音】
         han_ji_piau_im = self.convert_tai_gi_im_piau_to_han_ji_piau_im(tai_gi_im_piau)
         if not han_ji_piau_im:
-            self._show_msg(row, col, f"無法由【台語音標】轉換出【漢字標音】！")
-            return
+            msg = f"無法由【台語音標】轉換出【漢字標音】！"
+            return msg
 
         # 更新【漢字標音】儲存格內容
         han_ji_piau_im_cell.value = han_ji_piau_im
 
         # 顯示【漢字標音】轉換結果
-        print(
-            f"【{han_ji}】：{han_ji_piau_im} 《== 由【台語音標】{tai_gi_im_piau} 轉換而來。"
-        )
+        msg = f"【{han_ji}】：{han_ji_piau_im} 《== 【台語音標】{tai_gi_im_piau} "
+        return msg
 
     def _process_cell(self, cell, row: int, col: int) -> int:
         """
@@ -144,21 +160,21 @@ class CellProcessor(ExcelCell):
 
         # 依據【漢字】儲存格內容進行處理
         if cell_value == "φ":
-            self._show_msg(row, col, "【文字終結】")
+            print("【文字終結】")
             return 1  # 文章終結符號
         elif cell_value == "\n":
-            self._show_msg(row, col, "【換行】")
+            print("【換行】")
             return 2  # 【換行】
-        elif not is_han_ji(cell_value):
-            if cell_value is None or str(cell_value).strip() == "":
-                self._show_msg(row, col, "【空白】")
-            else:
-                self._show_msg(row, col, cell_value)
-                self._process_non_han_ji(cell_value)
+        elif cell_value is None or str(cell_value).strip() == "":
+            print("【空白】")
+            return 3  # 空白或標點符號
+        elif is_punctuation(cell_value):
+            msg = self._process_non_han_ji(cell_value)
+            print(msg)
             return 3  # 空白或標點符號
         else:
-            # self._show_msg(row, col, cell_value)
-            self._process_han_ji(cell_value, cell, row, col)
+            msg = self._process_han_ji(cell_value, cell, row, col)
+            print(msg)
             return 0  # 漢字
 
     def _process_sheet(self, sheet):

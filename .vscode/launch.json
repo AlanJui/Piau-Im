@@ -221,6 +221,13 @@
             "console": "externalTerminal",
         },
         {
+            "name": "a201_更換漢字標音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a201_更換漢字標音.py",
+            "console": "externalTerminal",
+        },
+        {
             "name": "a210_漢字以人工標音處理作業",
             "type": "debugpy",
             "request": "launch",
@@ -248,7 +255,6 @@
             "name": "a222_依作用儲存格在個人字典查找漢字讀音",
             "type": "debugpy",
             "request": "launch",
-            // "program": "${fileBasename}",
             "program": "a222_依作用儲存格在個人字典查找漢字讀音.py",
             "console": "externalTerminal",
         },
