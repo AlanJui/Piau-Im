@@ -1,5 +1,5 @@
 """
-    mod_程式.py V0.2.4 <== v0.2.3.6
+    mod_程式.py V0.2.5
 
     本系統各功能之程式架構模版。
     模版中包含程式配置類別 Program 及儲存格處理器類別 ExcelCell。
@@ -7,7 +7,6 @@
 # =========================================================================
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
-import logging
 import os
 import re
 import sys
@@ -2115,20 +2114,21 @@ def main(args) -> int:
     try:
         exit_code = process(wb, args)
     except Exception as e:
-        msg = f"程式異常終止：{program_name}"
+        msg = f"作業程序發生異常，終止執行：{program_name}"
         logging_exception(msg=msg, error=e)
-        return EXIT_CODE_UNKNOWN_ERROR
+        return EXIT_CODE_PROCESS_FAILURE
 
     if exit_code != EXIT_CODE_SUCCESS:
-        msg = f"程式異常終止：{program_name}（非例外，而是返回失敗碼）"
-        logging.error(msg)
+        msg = f"處理作業發生異常，終止程式執行：{program_name}（處理作業程序，返回失敗碼）"
+        logging_exc_error(msg)
         return EXIT_CODE_PROCESS_FAILURE
 
     # =========================================================================
     # (4) 儲存檔案
     # =========================================================================
     try:
-        if not Program.save_workbook_as_new_file(wb):
+        # 儲存檔案
+        if not Program.save_workbook_as_new_file(wb=wb):
             return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
     except Exception as e:
         logging_exception(msg="儲存檔案失敗！", error=e)
