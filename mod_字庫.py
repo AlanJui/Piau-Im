@@ -1,3 +1,11 @@
+"""
+mod_字庫.py v0.2.4
+
+令 Excel 工作表資料，轉換成 dict 資料結構之【字庫】，
+以利程式將 Excel 工作表視同一資料庫內含之【資料表】（Table）
+進行存取與操作。
+"""
+
 import logging
 import os
 
@@ -13,22 +21,24 @@ from mod_標音 import (
 # 設定日誌
 # =========================================================================
 logging.basicConfig(
-    filename='process_log.txt',
+    filename="process_log.txt",
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    format="%(asctime)s - %(levelname)s - %(message)s",
 )
+
 
 def logging_process_step(msg):
     print(msg)
     logging.info(msg)
+
 
 # =========================================================================
 # 載入環境變數
 # =========================================================================
 load_dotenv()
 
-DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
-DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
+DB_HO_LOK_UE = os.getenv("DB_HO_LOK_UE", "Ho_Lok_Ue.db")
+DB_KONG_UN = os.getenv("DB_KONG_UN", "Kong_Un.db")
 
 # =========================================================================
 # 常數定義
@@ -40,8 +50,9 @@ EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
 EXIT_CODE_PROCESS_FAILURE = 3  # 過程失敗
 EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 
+
 class JiKhooDict:
-    def __init__(self, name: str = ''):
+    def __init__(self, name: str = ""):
         self.name = name
         self.ji_khoo_dict = {}
 
@@ -80,10 +91,10 @@ class JiKhooDict:
         try:
             sheet = wb.sheets[sheet_name]
             sheet.activate()
-            sheet.range('A1').value = '漢字'
-            sheet.range('B1').value = '台語音標'
-            sheet.range('C1').value = '校正音標'
-            sheet.range('D1').value = '座標'
+            sheet.range("A1").value = "漢字"
+            sheet.range("B1").value = "台語音標"
+            sheet.range("C1").value = "校正音標"
+            sheet.range("D1").value = "座標"
         except Exception as e:
             raise ValueError(f"無法找到工作表 '{sheet_name}'：{e}")
 
@@ -119,7 +130,7 @@ class JiKhooDict:
         han_ji: str,
         tai_gi_im_piau: str,
         hau_ziann_im_piau: str,
-        coordinates: tuple[int, int]
+        coordinates: tuple[int, int],
     ):
         if not tai_gi_im_piau:
             tai_gi_im_piau = "N/A"
@@ -129,7 +140,7 @@ class JiKhooDict:
         entry = {
             "tai_gi_im_piau": tai_gi_im_piau,
             "hau_ziann_im_piau": hau_ziann_im_piau,
-            "coordinates": [coordinates]
+            "coordinates": [coordinates],
         }
 
         if han_ji not in self.ji_khoo_dict:
@@ -147,10 +158,12 @@ class JiKhooDict:
         han_ji: str,
         tai_gi_im_piau: str,
         hau_ziann_im_piau: str,
-        coordinates: tuple[int, int]
+        coordinates: tuple[int, int],
     ):
         if han_ji not in self.ji_khoo_dict:
-            raise ValueError(f"漢字 '{han_ji}' 不存在，請先使用 add_entry 方法新增資料。")
+            raise ValueError(
+                f"漢字 '{han_ji}' 不存在，請先使用 add_entry 方法新增資料。"
+            )
 
         for existing in self.ji_khoo_dict[han_ji]:
             if existing["tai_gi_im_piau"] == tai_gi_im_piau:
@@ -162,7 +175,9 @@ class JiKhooDict:
 
         self.add_entry(han_ji, tai_gi_im_piau, hau_ziann_im_piau, coordinates)
 
-    def get_row_by_han_ji_and_coordinate(self, han_ji: str, coordinate: tuple[int, int]) -> int:
+    def get_row_by_han_ji_and_coordinate(
+        self, han_ji: str, coordinate: tuple[int, int]
+    ) -> int:
         """
         根據【漢字】欄和【座標】欄，查詢【工作表】所在【列號】
         若查無結果，返回 -1
@@ -185,7 +200,9 @@ class JiKhooDict:
                     continue
 
                 # 檢查是否匹配目標漢字和音標
-                if current_han_ji == han_ji and coordinate in entry.get("coordinates", []):
+                if current_han_ji == han_ji and coordinate in entry.get(
+                    "coordinates", []
+                ):
                     return row_no
 
                 # 每個有效項目佔一行
@@ -199,7 +216,7 @@ class JiKhooDict:
         han_ji: str,
         tai_gi_im_piau: str,
         hau_ziann_im_piau: str,
-        coordinates: tuple[int, int]
+        coordinates: tuple[int, int],
     ):
         """新增或更新【字典】中的【漢字】項目
         若【漢字】與【台語音標】已存在，則更新【校正音標】與【座標】
@@ -210,20 +227,22 @@ class JiKhooDict:
             hau_ziann_im_piau: 要新增或更新的校正音標
             coordinates: 要新增或更新的座標
         """
-        row_no = self.get_row_by_han_ji_and_coordinate(han_ji=han_ji, coordinate=coordinates)
+        row_no = self.get_row_by_han_ji_and_coordinate(
+            han_ji=han_ji, coordinate=coordinates
+        )
         if row_no != -1:
             self.update_entry(
                 han_ji=han_ji,
                 tai_gi_im_piau=tai_gi_im_piau,
                 hau_ziann_im_piau=hau_ziann_im_piau,
-                coordinates=coordinates
+                coordinates=coordinates,
             )
         else:
             self.add_entry(
                 han_ji=han_ji,
                 tai_gi_im_piau=tai_gi_im_piau,
                 hau_ziann_im_piau=hau_ziann_im_piau,
-                coordinates=coordinates
+                coordinates=coordinates,
             )
 
     def add_or_update_entry_by_coordinate(
@@ -231,13 +250,13 @@ class JiKhooDict:
         han_ji: str,
         tai_gi_im_piau: str,
         hau_ziann_im_piau: str,
-        coordinates: tuple[int, int]
+        coordinates: tuple[int, int],
     ):
         return self.add_or_update_entry(
             han_ji=han_ji,
             tai_gi_im_piau=tai_gi_im_piau,
             hau_ziann_im_piau=hau_ziann_im_piau,
-            coordinates=coordinates
+            coordinates=coordinates,
         )
 
     def get_entry(self, han_ji: str):
@@ -251,7 +270,9 @@ class JiKhooDict:
             for entry in self.ji_khoo_dict[han_ji]:
                 if entry["tai_gi_im_piau"] == tai_gi_im_piau:
                     return entry.get(key)
-            raise ValueError(f"漢字 '{han_ji}' 中找不到音標 '{tai_gi_im_piau}' 對應的欄位 '{key}'。")
+            raise ValueError(
+                f"漢字 '{han_ji}' 中找不到音標 '{tai_gi_im_piau}' 對應的欄位 '{key}'。"
+            )
         else:
             raise ValueError(f"漢字 '{han_ji}' 不存在於字典中。")
 
@@ -268,7 +289,9 @@ class JiKhooDict:
         else:
             raise ValueError(f"漢字 '{han_ji}' 不存在於字典中。")
 
-    def get_coordinates_by_han_ji_and_tai_gi_im_piau(self, han_ji: str, tai_gi_im_piau: str) -> list:
+    def get_coordinates_by_han_ji_and_tai_gi_im_piau(
+        self, han_ji: str, tai_gi_im_piau: str
+    ) -> list:
         """
         根據漢字與台語音標查詢工作表中的所有座標列表
         若查無結果，返回空列表
@@ -286,7 +309,9 @@ class JiKhooDict:
                     return entry.get("coordinates", [])
         return []
 
-    def get_row_by_han_ji_and_tai_gi_im_piau(self, han_ji: str, tai_gi_im_piau: str) -> int:
+    def get_row_by_han_ji_and_tai_gi_im_piau(
+        self, han_ji: str, tai_gi_im_piau: str
+    ) -> int:
         """
         根據漢字與台語音標查詢工作表所在列號
         若查無結果，返回 -1
@@ -309,7 +334,10 @@ class JiKhooDict:
                     continue
 
                 # 檢查是否匹配目標漢字和音標
-                if current_han_ji == han_ji and entry.get("tai_gi_im_piau", "") == tai_gi_im_piau:
+                if (
+                    current_han_ji == han_ji
+                    and entry.get("tai_gi_im_piau", "") == tai_gi_im_piau
+                ):
                     return row_no
 
                 # 每個有效項目佔一行
@@ -318,7 +346,9 @@ class JiKhooDict:
         # 找不到匹配項目
         return -1
 
-    def get_entry_by_han_ji_and_coordinate(self, han_ji: str, coordinate: tuple[int, int]) -> dict:
+    def get_entry_by_han_ji_and_coordinate(
+        self, han_ji: str, coordinate: tuple[int, int]
+    ) -> dict:
         """
         根據漢字與座標查詢對應的音標項目
         若查無結果，返回 None
@@ -385,7 +415,9 @@ class JiKhooDict:
 
         return None
 
-    def get_tai_gi_im_piau_by_han_ji_and_coordinate(self, han_ji: str, coordinate: tuple[int, int]) -> str:
+    def get_tai_gi_im_piau_by_han_ji_and_coordinate(
+        self, han_ji: str, coordinate: tuple[int, int]
+    ) -> str:
         """
         根據漢字與座標查詢台語音標
         若該漢字有多個音標，返回第一個符合座標的音標
@@ -433,7 +465,13 @@ class JiKhooDict:
         return ""
 
     # def update_kau_ziang_im_piau(self, han_ji: str, tai_gi_im_piau: str, hau_ziann_im_piau: str, coordinates: tuple):
-    def update_hau_ziann_im_piau(self, han_ji: str, tai_gi_im_piau: str, hau_ziann_im_piau: str, coordinates: tuple):
+    def update_hau_ziann_im_piau(
+        self,
+        han_ji: str,
+        tai_gi_im_piau: str,
+        hau_ziann_im_piau: str,
+        coordinates: tuple,
+    ):
         """
         將人工標音或校正音標更新至字典。
         如果該漢字、音標已存在則更新校正音標與座標。
@@ -449,17 +487,21 @@ class JiKhooDict:
         # 若找不到，則新增新項目
         self.add_entry(han_ji, tai_gi_im_piau, hau_ziann_im_piau, coordinates)
 
-    def update_by_piau_im_ji_khoo(self, wb, sheet_name: str, piau_im, piau_im_huat: str):
+    def update_by_piau_im_ji_khoo(
+        self, wb, sheet_name: str, piau_im, piau_im_huat: str
+    ):
         """
         依【標音字庫】中的【校正音標】欄位進行更新，並將【校正音標】覆蓋至原【台語音標】。
         """
         try:
-            han_ji_piau_im_sheet_name = '漢字注音'
+            han_ji_piau_im_sheet_name = "漢字注音"
             ensure_sheet_exists(wb, han_ji_piau_im_sheet_name)
             han_ji_piau_im_sheet = wb.sheets[han_ji_piau_im_sheet_name]
 
-            piau_im_sheet_name = '標音字庫'
-            piau_im_ji_khoo_dict = self.create_ji_khoo_dict_from_sheet(wb, piau_im_sheet_name)
+            piau_im_sheet_name = "標音字庫"
+            piau_im_ji_khoo_dict = self.create_ji_khoo_dict_from_sheet(
+                wb, piau_im_sheet_name
+            )
         except Exception as e:
             raise ValueError(f"無法找到或建立工作表 '{sheet_name}'：{e}")
 
@@ -474,7 +516,7 @@ class JiKhooDict:
                     kau_ziann_im_piau = entry.get("hau_ziann_im_piau", "")
                     coordinates = entry.get("coordinates", [])
 
-                    if not kau_ziann_im_piau or kau_ziann_im_piau == 'N/A':
+                    if not kau_ziann_im_piau or kau_ziann_im_piau == "N/A":
                         if coordinates:
                             row_no, col_no = coordinates[0]
                             msg = f"{han_ji} [{tai_gi_im_piau}] / [{kau_ziann_im_piau}]"
@@ -492,7 +534,7 @@ class JiKhooDict:
                         han_ji_piau_im_cell.value = tlpa_tng_han_ji_piau_im(
                             piau_im=piau_im,
                             piau_im_huat=piau_im_huat,
-                            tai_gi_im_piau=kau_ziann_im_piau
+                            tai_gi_im_piau=kau_ziann_im_piau,
                         )
                         han_ji_cell.color = (0, 255, 255)
                         han_ji_cell.font.color = (255, 0, 0)
@@ -501,16 +543,21 @@ class JiKhooDict:
                         print(f"({row}, {col}) = {msg}")
 
         except Exception as e:
-            logging_exception(msg="使用【標音字庫】之【校正音標】，改正【漢字注音】之【台語音標】作業異常！", error=e)
+            logging_exception(
+                msg="使用【標音字庫】之【校正音標】，改正【漢字注音】之【台語音標】作業異常！",
+                error=e,
+            )
             raise
 
         try:
-            piau_im_ji_khoo_dict.write_to_excel_sheet(wb=wb, sheet_name=piau_im_sheet_name)
+            piau_im_ji_khoo_dict.write_to_excel_sheet(
+                wb=wb, sheet_name=piau_im_sheet_name
+            )
         except Exception as e:
             logging_exception(msg="將【字典】存放之資料，更新工作表作業異常！", error=e)
             raise
 
-        han_ji_piau_im_sheet.range('A1').select()
+        han_ji_piau_im_sheet.range("A1").select()
         return EXIT_CODE_SUCCESS
 
     def save_to_sheet(self, wb, sheet_name: str) -> int:
@@ -539,7 +586,14 @@ class JiKhooDict:
                 if not entry["coordinates"]:  # 若座標為空，跳過不寫入
                     continue
                 coord_str = "; ".join(f"({r}, {c})" for r, c in entry["coordinates"])
-                data.append([han_ji, entry["tai_gi_im_piau"], entry["hau_ziann_im_piau"], coord_str])
+                data.append(
+                    [
+                        han_ji,
+                        entry["tai_gi_im_piau"],
+                        entry["hau_ziann_im_piau"],
+                        coord_str,
+                    ]
+                )
 
         sheet.range("A2").value = data
         return 0
@@ -562,12 +616,11 @@ class JiKhooDict:
         print(f"已成功將字典資料寫入工作表 '{sheet_name}'。")
 
     def remove_coordinate(
-            self,
-            han_ji: str,
-            tai_gi_im_piau: str,
-            coordinate: tuple[int, int],
-            entry_to_delete_if_empty: bool = False
-        ):
+        self,
+        han_ji: str,
+        coordinate: tuple[int, int],
+        entry_to_delete_if_empty: bool = True,
+    ):
         """
         根據【漢字】與【座標】移除紀錄中，在【座標】欄清單的某【座標】；
         若【座標】欄清空，則移除整筆紀錄。
@@ -588,12 +641,12 @@ class JiKhooDict:
             entries.remove(to_delete)
 
     def remove_coordinate_by_han_ji_and_tai_gi_im_piau(
-            self,
-            han_ji: str,
-            tai_gi_im_piau: str,
-            coordinate: tuple[int, int],
-            entry_to_delete_if_empty: bool = False
-        ):
+        self,
+        han_ji: str,
+        tai_gi_im_piau: str,
+        coordinate: tuple[int, int],
+        entry_to_delete_if_empty: bool = False,
+    ):
         """
         根據【漢字】與【台語音標】移除紀錄中，在【座標】欄清單的某【座標】；
         若【座標】欄清空，則移除整筆紀錄。
@@ -614,8 +667,9 @@ class JiKhooDict:
         if to_delete and entry_to_delete_if_empty:
             entries.remove(to_delete)
 
-
-    def remove_coordinate_by_han_ji_and_coordinate(self, han_ji: str, coordinate: tuple[int, int]):
+    def remove_coordinate_by_han_ji_and_coordinate(
+        self, han_ji: str, coordinate: tuple[int, int]
+    ):
         """
         移除指定漢字與音標下的某個座標；若座標清空則移除整筆項目。
         """
@@ -635,7 +689,9 @@ class JiKhooDict:
         if to_delete:
             entries.remove(to_delete)
 
-    def remove_coordinate_by_hau_ziann_im_piau(self, han_ji: str, hau_ziann_im_piau: str, coordinate: tuple):
+    def remove_coordinate_by_hau_ziann_im_piau(
+        self, han_ji: str, hau_ziann_im_piau: str, coordinate: tuple
+    ):
         """
         移除指定漢字與音標下的某個座標；若座標清空則移除整筆項目。
         """
@@ -656,12 +712,12 @@ class JiKhooDict:
             entries.remove(to_delete)
 
     def remove_entry(
-            self,
-            han_ji: str,
-            tai_gi_im_piau: str,
-            hau_ziann_im_piau: str,
-            coordinates: tuple[int, int]
-        ):
+        self,
+        han_ji: str,
+        tai_gi_im_piau: str,
+        hau_ziann_im_piau: str,
+        coordinates: tuple[int, int],
+    ):
         """
         移除指定漢字與音標下的某個座標；若座標清空則移除整筆項目。
         """

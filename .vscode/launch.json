@@ -259,6 +259,13 @@
             "console": "externalTerminal",
         },
         {
+            "name": "a223_以作用儲存格之人工標音更新標音字庫",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a223_以作用儲存格之人工標音更新標音字庫.py",
+            "console": "externalTerminal",
+        },
+        {
             "name": "a224_引用既有的漢字標音",
             "type": "debugpy",
             "request": "launch",
@@ -316,13 +323,6 @@
             "args": [
                 // "--new"
             ]
-        },
-        {
-            "name": "a301_以作用儲存格之人工標音更新標音字庫",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a301_以作用儲存格之人工標音更新標音字庫.py",
-            "console": "externalTerminal",
         },
         {
             "name": "a310_缺字表修正後續作業",
