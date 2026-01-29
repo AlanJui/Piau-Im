@@ -350,7 +350,7 @@ def main(args) -> int:
 
     if exit_code != EXIT_CODE_SUCCESS:
         msg = f"處理作業發生異常，終止程式執行：{program_name}（處理作業程序，返回失敗碼）"
-        logging.error(msg)
+        logging_exc_error(msg=msg, error=None)
         return EXIT_CODE_PROCESS_FAILURE
 
     # =========================================================================

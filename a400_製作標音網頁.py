@@ -1,5 +1,5 @@
 """
-    a400_製作標音網頁.py V0.2.2.7
+a400_製作標音網頁.py V0.2.2.8
 """
 
 # =========================================================================
@@ -69,20 +69,22 @@ class CellProcessor(ExcelCell):
 
         # 網頁相關
         wb = self.program.wb
-        self.title = get_value_by_name(wb=wb, name='TITLE')
-        self.image_url = get_value_by_name(wb=wb, name='IMAGE_URL')
-        self.output_dir = 'docs'
-        self.web_title = str(self.title) if self.title else '網頁標題'
-        self.total_chars_per_line = get_value_by_name(wb=wb, name='網頁每列字數')
-        self.total_chars_per_line = 0 if self.total_chars_per_line is None else int(self.total_chars_per_line)
+        self.title = get_value_by_name(wb=wb, name="TITLE")
+        self.image_url = get_value_by_name(wb=wb, name="IMAGE_URL")
+        self.output_dir = "docs"
+        self.web_title = str(self.title) if self.title else "網頁標題"
+        self.total_chars_per_line = get_value_by_name(wb=wb, name="網頁每列字數")
+        self.total_chars_per_line = (
+            0 if self.total_chars_per_line is None else int(self.total_chars_per_line)
+        )
 
         # 標音相關
-        self.han_ji_piau_im_format = get_value_by_name(wb=wb, name='網頁格式')
-        self.piau_im_hong_sik = get_value_by_name(wb=wb, name='標音方式')
-        self.siong_pinn_piau_im = get_value_by_name(wb=wb, name='上邊標音')
-        self.zian_pinn_piau_im = get_value_by_name(wb=wb, name='右邊標音')
+        self.han_ji_piau_im_format = get_value_by_name(wb=wb, name="網頁格式")
+        self.piau_im_hong_sik = get_value_by_name(wb=wb, name="標音方式")
+        self.siong_pinn_piau_im = get_value_by_name(wb=wb, name="上邊標音")
+        self.zian_pinn_piau_im = get_value_by_name(wb=wb, name="右邊標音")
 
-       # 聲調符號對映表
+        # 聲調符號對映表
         self.zu_im_huat_list = {
             "SNI": ["fifteen_yin", "rt", "十五音切語"],
             "TPS": ["Piau_Im", "rt", "方音符號注音"],
@@ -105,33 +107,33 @@ class CellProcessor(ExcelCell):
         if siong_piau_im != "" and zian_piau_im == "":
             html_str = (
                 "<ruby>\n"
-                "  <rb>%s</rb>\n"   # 漢字
-                "  <rp>(</rp>\n"    # 括號左
-                "  <rt>%s</rt>\n"   # 上方標音
-                "  <rp>)</rp>\n"    # 括號右
+                "  <rb>%s</rb>\n"  # 漢字
+                "  <rp>(</rp>\n"  # 括號左
+                "  <rt>%s</rt>\n"  # 上方標音
+                "  <rp>)</rp>\n"  # 括號右
                 "</ruby>\n"
             )
             return html_str % (han_ji, siong_piau_im)
         elif siong_piau_im == "" and zian_piau_im != "":
             html_str = (
                 "<ruby>\n"
-                "  <rb>%s</rb>\n"   # 漢字
-                "  <rp>(</rp>\n"    # 括號左
-                "  <rtc>%s</rtc>\n" # 右方標音
-                "  <rp>)</rp>\n"    # 括號右
+                "  <rb>%s</rb>\n"  # 漢字
+                "  <rp>(</rp>\n"  # 括號左
+                "  <rtc>%s</rtc>\n"  # 右方標音
+                "  <rp>)</rp>\n"  # 括號右
                 "</ruby>\n"
             )
             return html_str % (han_ji, zian_piau_im)
         elif siong_piau_im != "" and zian_piau_im != "":
             html_str = (
                 "<ruby>\n"
-                "  <rb>%s</rb>\n"   # 漢字
-                "  <rp>(</rp>\n"    # 括號左
-                "  <rt>%s</rt>\n"   # 上方標音
-                "  <rp>)</rp>\n"    # 括號右
-                "  <rp>(</rp>\n"    # 括號左
-                "  <rtc>%s</rtc>\n" # 右方標音
-                "  <rp>)</rp>\n"    # 括號右
+                "  <rb>%s</rb>\n"  # 漢字
+                "  <rp>(</rp>\n"  # 括號左
+                "  <rt>%s</rt>\n"  # 上方標音
+                "  <rp>)</rp>\n"  # 括號右
+                "  <rp>(</rp>\n"  # 括號左
+                "  <rtc>%s</rtc>\n"  # 右方標音
+                "  <rp>)</rp>\n"  # 括號右
                 "</ruby>\n"
             )
             return html_str % (han_ji, siong_piau_im, zian_piau_im)
@@ -146,8 +148,8 @@ class CellProcessor(ExcelCell):
             # 只有上方標音：羅馬拼音、白話字、台羅、閩拼等
             html_str = (
                 "<ruby>\n"
-                "  %s\n"   # 漢字
-                "  <rt>%s</rt>\n"   # 上方標音
+                "  %s\n"  # 漢字
+                "  <rt>%s</rt>\n"  # 上方標音
                 "</ruby>\n"
             )
             return html_str % (han_ji, siong_piau_im)
@@ -155,8 +157,8 @@ class CellProcessor(ExcelCell):
             # 只有右方標音：方音符號（TPS）
             html_str = (
                 "<ruby>\n"
-                "  %s\n"   # 漢字
-                "  <rtc>%s</rtc>\n" # 右方標音
+                "  %s\n"  # 漢字
+                "  <rtc>%s</rtc>\n"  # 右方標音
                 "</ruby>\n"
             )
             return html_str % (han_ji, zian_piau_im)
@@ -164,9 +166,9 @@ class CellProcessor(ExcelCell):
             # 同時有上方及右方標音：雙排注音（DBL）
             html_str = (
                 "<ruby>\n"
-                "  %s\n"   # 漢字
-                "  <rt>%s</rt>\n"   # 上方標音
-                "  <rtc>%s</rtc>\n" # 右方標音
+                "  %s\n"  # 漢字
+                "  <rt>%s</rt>\n"  # 上方標音
+                "  <rtc>%s</rtc>\n"  # 右方標音
                 "</ruby>\n"
             )
             return html_str % (han_ji, siong_piau_im, zian_piau_im)
@@ -185,7 +187,9 @@ class CellProcessor(ExcelCell):
             (ruby_tag, siong_piau_im, zian_piau_im)
         """
         # 檢查台語音標是否為空或 None
-        if not tai_gi_im_piau or (isinstance(tai_gi_im_piau, str) and tai_gi_im_piau.strip() == ""):
+        if not tai_gi_im_piau or (
+            isinstance(tai_gi_im_piau, str) and tai_gi_im_piau.strip() == ""
+        ):
             # 如果沒有音標，返回不帶標音的 span
             ruby_tag = f"  <span>{han_ji}</span>\n"
             return ruby_tag, "", ""
@@ -281,7 +285,7 @@ class CellProcessor(ExcelCell):
             含有 Ruby 標籤的標題 HTML
         """
         wb = self.program.wb
-        sheet = wb.sheets['漢字注音']
+        sheet = wb.sheets["漢字注音"]
 
         title_chars = ""
         tlpa_im_piau_list = []
@@ -295,7 +299,7 @@ class CellProcessor(ExcelCell):
                     break
                 title_chars += cell_val
                 if cell_val != "《" and cell_val != "》":
-                    tlpa_im_piau_list.append(sheet.range((row-1, col)).value)
+                    tlpa_im_piau_list.append(sheet.range((row - 1, col)).value)
                 if cell_val == "》":
                     break
                 col += 1
@@ -316,7 +320,7 @@ class CellProcessor(ExcelCell):
                 if han_ji.strip() == "":
                     i += 1
                     continue
-                elif han_ji == '\n':
+                elif han_ji == "\n":
                     # 若讀到換行字元，則直接輸出換行標籤
                     tag = "<br/>\n"
                     title_with_ruby += tag
@@ -325,7 +329,9 @@ class CellProcessor(ExcelCell):
                     title_with_ruby += tag
                 else:
                     # 取得對應的台語音標
-                    tai_gi_im_piau = tlpa_im_piau_list[i] if i < len(tlpa_im_piau_list) else ""
+                    tai_gi_im_piau = (
+                        tlpa_im_piau_list[i] if i < len(tlpa_im_piau_list) else ""
+                    )
                     # 將【漢字】及【上方】/【右方】標音合併成一個 Ruby Tag
                     ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
                         han_ji=han_ji, tai_gi_im_piau=tai_gi_im_piau
@@ -336,7 +342,6 @@ class CellProcessor(ExcelCell):
                 i += 1
 
         return title_with_ruby
-
 
     # =================================================================
     # 覆蓋父類別的方法
@@ -385,12 +390,7 @@ class CellProcessor(ExcelCell):
                 "  </p>\n"
             )
         else:
-            div_tag = (
-                "<div class='%s'>\n"
-                "  <p class='title'>\n"
-                "    %s\n"
-                "  </p>\n"
-            )
+            div_tag = "<div class='%s'>\n" "  <p class='title'>\n" "    %s\n" "  </p>\n"
         write_buffer += div_tag % (pai_ban_iong_huat, title_with_ruby)
         write_buffer += "<p>\n"
 
@@ -398,7 +398,7 @@ class CellProcessor(ExcelCell):
         program = self.program
         End_Of_File = False
         char_count = 0
-        total_chars_per_line = self.total_chars_per_line    # 網頁每列字數
+        total_chars_per_line = self.total_chars_per_line  # 網頁每列字數
         if total_chars_per_line == 0:
             total_chars_per_line = 0
 
@@ -415,17 +415,21 @@ class CellProcessor(ExcelCell):
             for col in range(program.start_col, program.end_col):
                 cell_value = sheet.range((row, col)).value
 
-                if cell_value == 'φ':  # 讀到【結尾標示】
+                if cell_value == "φ":  # 讀到【結尾標示】
                     End_Of_File = True
                     msg = "《文章終止》"
-                    print(f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}")
+                    print(
+                        f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}"
+                    )
                     break
 
-                elif cell_value == '\n':  # 讀到【換行標示】
+                elif cell_value == "\n":  # 讀到【換行標示】
                     write_buffer += "</p><p>\n"
                     msg = "《換行》"
                     char_count = 0
-                    print(f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}")
+                    print(
+                        f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}"
+                    )
                     break
 
                 else:
@@ -438,32 +442,46 @@ class CellProcessor(ExcelCell):
                         ruby_tag = f"  <span>{str_value}</span>\n"
                         write_buffer += ruby_tag
                         char_count += 1
-                        print(f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}")
+                        print(
+                            f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}"
+                        )
                     elif str_value == "":
                         msg = "【空白】"
                         ruby_tag = "  <span>　</span>\n"
                         write_buffer += ruby_tag
                         char_count += 1
-                        print(f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}")
+                        print(
+                            f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}"
+                        )
                     elif not is_han_ji(cell_value):
                         msg = f"{str_value}【其他字元】"
                         ruby_tag = f"  <span>{str_value}</span>\n"
                         write_buffer += ruby_tag
                         char_count += 1
-                        print(f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}")
+                        print(
+                            f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}"
+                        )
                     else:
                         # 處理漢字
                         han_ji = cell_value.strip()
                         tai_gi_im_piau = sheet.range((row - 1, col)).value
-                        tai_gi_im_piau = str(tai_gi_im_piau).strip() if tai_gi_im_piau is not None else ""
+                        tai_gi_im_piau = (
+                            str(tai_gi_im_piau).strip()
+                            if tai_gi_im_piau is not None
+                            else ""
+                        )
 
                         # 檢查音標是否為空
                         if not tai_gi_im_piau or tai_gi_im_piau == "":
-                            print(f"警告：漢字 '{han_ji}' 在 ({row}, {col}) 沒有台語音標")
+                            print(
+                                f"警告：漢字 '{han_ji}' 在 ({row}, {col}) 沒有台語音標"
+                            )
                             ruby_tag = f"  <span>{han_ji}</span>\n"
                             write_buffer += ruby_tag
                             char_count += 1
-                            print(f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {han_ji}【無音標】")
+                            print(
+                                f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {han_ji}【無音標】"
+                            )
                             continue
 
                         # 【去調符】轉換為【帶調號之台語音標】
@@ -480,13 +498,15 @@ class CellProcessor(ExcelCell):
                         write_buffer += ruby_tag
                         msg = f"{han_ji} [{tlpa_im_piau}] ==》 上方標音：{siong_piau_im} / 右方標音：{zian_piau_im}"
                         char_count += 1
-                        print(f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}")
+                        print(
+                            f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}"
+                        )
 
                 # 檢查是否需要插入換行標籤
                 if total_chars_per_line != 0 and char_count >= total_chars_per_line:
                     write_buffer += "<br/>\n"
                     char_count = 0
-                    print('《人工斷行》')
+                    print("《人工斷行》")
 
             if End_Of_File:
                 break
@@ -498,7 +518,13 @@ class CellProcessor(ExcelCell):
 # =========================================================================
 # 主要處理函數
 # =========================================================================
-def _create_html_file(program: Program, output_path: str, content: str, title: str = '您的標題', head_extra: str = ""):
+def _create_html_file(
+    program: Program,
+    output_path: str,
+    content: str,
+    title: str = "您的標題",
+    head_extra: str = "",
+):
     """
         創建 HTML 檔案
     <meta content='https://alanjui.github.io/Piau-Im//《深慮論》【文讀音】閩拼調符.html' property='og:url' />
@@ -547,7 +573,7 @@ def _create_html_file(program: Program, output_path: str, content: str, title: s
 </body>
 </html>
     """
-    with open(output_path, 'w', encoding='utf-8') as file:
+    with open(output_path, "w", encoding="utf-8") as file:
         file.write(template)
     print(f"\n輸出網頁檔案：{output_path}")
 
@@ -566,36 +592,38 @@ def process(wb, args) -> int:
     Returns:
         處理結果代碼
     """
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # 作業初始化
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     logging_process_step("<=========== 作業開始！==========>")
 
     try:
-        #--------------------------------------------------------------------------
+        # --------------------------------------------------------------------------
         # 初始化 Program 配置
-        #--------------------------------------------------------------------------
-        program = Program(wb=wb, args=args, hanji_piau_im_sheet_name='漢字注音')
+        # --------------------------------------------------------------------------
+        program = Program(wb=wb, args=args, hanji_piau_im_sheet_name="漢字注音")
 
         # 建立萌典專用的儲存格處理器（繼承自 ExcelCell）
         xls_cell = CellProcessor(
             program=program,
-            new_jin_kang_piau_im_ji_khoo_sheet=args.new if hasattr(args, 'new') else False,
-            new_piau_im_ji_khoo_sheet=args.new if hasattr(args, 'new') else False,
-            new_khuat_ji_piau_sheet=args.new if hasattr(args, 'new') else False,
+            new_jin_kang_piau_im_ji_khoo_sheet=(
+                args.new if hasattr(args, "new") else False
+            ),
+            new_piau_im_ji_khoo_sheet=args.new if hasattr(args, "new") else False,
+            new_khuat_ji_piau_sheet=args.new if hasattr(args, "new") else False,
         )
     except Exception as e:
         logging_exc_error(msg="處理作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
 
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # 作業處理中
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     try:
         # 處理工作表
         # sheet_name = program.hanji_piau_im_sheet_name
         # sheet = wb.sheets[sheet_name]
-        sheet = wb.sheets['漢字注音']
+        sheet = wb.sheets["漢字注音"]
         sheet.activate()
 
         # 產生 HTML 網頁內容
@@ -622,19 +650,36 @@ def process(wb, args) -> int:
         # 生成標準 Excel 檔案名稱
         new_excel_file_name = Program.generate_new_excel_file_name(wb=wb)
         if not new_excel_file_name:
-            logging_exc_error(msg="無法依【檔案命名標準】生成另存新檔之 Excel 檔案名稱!")
+            logging_exc_error(
+                msg="無法依【檔案命名標準】生成另存新檔之 Excel 檔案名稱!"
+            )
             return EXIT_CODE_PROCESS_FAILURE
         else:
-            print(f"作業結束時，將以 Excel 檔案名稱：【{new_excel_file_name}】另存新檔。")
+            print(
+                f"作業結束時，將以 Excel 檔案名稱：【{new_excel_file_name}】另存新檔。"
+            )
 
         # 確保輸出目錄存在
         os.makedirs(xls_cell.output_dir, exist_ok=True)
 
         # 取得 env 工作表的設定值並組合 meta 標籤字串
         env_keys = [
-            "FILE_NAME", "TITLE", "IMAGE_URL", "OUTPUT_PATH", "章節序號",
-            "顯示注音輸入", "每頁總列數", "每列總字數", "語音類型",
-            "漢字庫", "標音方法", "網頁格式", "標音方式", "上邊標音", "右邊標音", "網頁每列字數"
+            "FILE_NAME",
+            "TITLE",
+            "IMAGE_URL",
+            "OUTPUT_PATH",
+            "章節序號",
+            "顯示注音輸入",
+            "每頁總列數",
+            "每列總字數",
+            "語音類型",
+            "漢字庫",
+            "標音方法",
+            "網頁格式",
+            "標音方式",
+            "上邊標音",
+            "右邊標音",
+            "網頁每列字數",
         ]
         head_extra = "\n"
         for key in env_keys:
@@ -642,7 +687,9 @@ def process(wb, args) -> int:
             head_extra += f'    <meta name="{key}" content="{value}" />\n'
 
         # 輸出到網頁檔案
-        _create_html_file(program, output_path, html_content, xls_cell.web_title, head_extra)
+        _create_html_file(
+            program, output_path, html_content, xls_cell.web_title, head_extra
+        )
 
         logging_process_step("【漢字注音】工作表轉製網頁作業完畢！")
 
@@ -650,9 +697,9 @@ def process(wb, args) -> int:
         logging_exc_error(msg="處理作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
 
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # 處理作業結束
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     logging_process_step("<=========== 作業結束！==========>")
     return EXIT_CODE_SUCCESS
 
@@ -682,7 +729,7 @@ def main(args) -> int:
     # 取得【作用中活頁簿】
     wb = None
     try:
-        wb = xw.apps.active.books.active    # 取得 Excel 作用中的活頁簿檔案
+        wb = xw.apps.active.books.active  # 取得 Excel 作用中的活頁簿檔案
     except Exception as e:
         msg = "無法找到作用中的 Excel 工作簿！"
         logging_exception(msg=msg, error=e)
@@ -704,7 +751,7 @@ def main(args) -> int:
 
     if exit_code != EXIT_CODE_SUCCESS:
         msg = f"處理作業發生異常，終止程式執行：{program_name}（處理作業程序，返回失敗碼）"
-        logging_exc_error(msg)
+        logging_exc_error(msg=msg, error=None)
         return EXIT_CODE_PROCESS_FAILURE
 
     # =========================================================================
@@ -713,10 +760,10 @@ def main(args) -> int:
     try:
         # 儲存檔案
         if not Program.save_workbook_as_new_file(wb=wb):
-            return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
+            return EXIT_CODE_SAVE_FAILURE  # 作業異當終止：無法儲存檔案
     except Exception as e:
         logging_exception(msg="儲存檔案失敗！", error=e)
-        return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
+        return EXIT_CODE_SAVE_FAILURE  # 作業異當終止：無法儲存檔案
 
     # =========================================================================
     # (5) 結束程式
@@ -748,24 +795,24 @@ if __name__ == "__main__":
 
     # 解析命令行參數
     parser = argparse.ArgumentParser(
-        description='缺字表修正後續作業程式',
+        description="缺字表修正後續作業程式",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog='''
+        epilog="""
 使用範例：
   python a000.py          # 執行一般模式
   python a000.py -new     # 建立新的字庫工作表
   python a000.py -test    # 執行測試模式
-'''
-        )
-    parser.add_argument(
-        '--test',
-        action='store_true',
-        help='執行測試模式',
+""",
     )
     parser.add_argument(
-        '--new',
-        action='store_true',
-        help='建立新的標音字庫工作表',
+        "--test",
+        action="store_true",
+        help="執行測試模式",
+    )
+    parser.add_argument(
+        "--new",
+        action="store_true",
+        help="建立新的標音字庫工作表",
     )
     args = parser.parse_args()
 
