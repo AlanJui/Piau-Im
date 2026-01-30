@@ -415,6 +415,32 @@ class JiKhooDict:
 
         return None
 
+    def update_whole_entry(
+        self,
+        row_no: int,
+        tai_gi_im_piau: str,
+        hau_ziann_im_piau: str,
+        coordinates: list,
+    ):
+        """
+        根據工作表列號更新整筆資料Entry
+        """
+        current_row = 2
+        for han_ji, entries in self.ji_khoo_dict.items():
+            for entry in entries:
+                if not entry.get("coordinates"):
+                    continue
+
+                if current_row == row_no:
+                    entry["tai_gi_im_piau"] = tai_gi_im_piau
+                    entry["hau_ziann_im_piau"] = hau_ziann_im_piau
+                    entry["coordinates"] = coordinates
+                    return
+
+                current_row += 1
+
+        raise ValueError(f"找不到對應列號 {row_no} 的資料")
+
     def get_tai_gi_im_piau_by_han_ji_and_coordinate(
         self, han_ji: str, coordinate: tuple[int, int]
     ) -> str:

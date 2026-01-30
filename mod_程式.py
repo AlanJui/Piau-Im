@@ -855,8 +855,9 @@ class ExcelCell:
                 # 顯示處理訊息
                 # ---------------------------------------------------------------------------------
                 coordinate_str = None
-                excel_addr = convert_row_col_to_excel_address(row, col)
-                source_msg = f"【漢字注音】工作表 {excel_addr}（{row} ,{col}）==》漢字：【{han_ji}】，人工標音：【{jin_kang_piau_im}】"
+                # excel_addr = convert_row_col_to_excel_address(row, col)
+                # source_msg = f"【漢字注音】工作表 {excel_addr}（{row} ,{col}）==》漢字：【{han_ji}】，人工標音：【{jin_kang_piau_im}】"
+                source_msg = f"==》漢字：【{han_ji}】，人工標音：【{jin_kang_piau_im}】"
                 print(f"{source_msg} ...")
 
                 # 顯示【人工標音字庫】工作表新增之紀錄

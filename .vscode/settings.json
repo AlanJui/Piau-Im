@@ -39,6 +39,14 @@
         "/^\\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"import logging; print\\(logging\\.__file__\\)\"$/": {
             "approve": true,
             "matchCommandLine": true
+        },
+        "/^python c:\\\\work\\\\Piau-Im\\\\test_jkd_update\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^c:\\\\work\\\\Piau-Im\\\\\\.venv\\\\Scripts\\\\python c:\\\\work\\\\Piau-Im\\\\test_jkd_update\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
         }
     }
 }
