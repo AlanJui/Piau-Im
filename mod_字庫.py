@@ -1,5 +1,5 @@
 """
-mod_字庫.py v0.2.4
+mod_字庫.py v0.2.5
 
 令 Excel 工作表資料，轉換成 dict 資料結構之【字庫】，
 以利程式將 Excel 工作表視同一資料庫內含之【資料表】（Table）
@@ -763,3 +763,48 @@ class JiKhooDict:
 
         if to_delete:
             entries.remove(to_delete)
+
+    def display_all_values_in_ji_khoo_dict(self):
+        """顯示【字庫】中所有的資料內容"""
+        print("=== 字庫內容 ===")
+
+        row_no = 1
+        for han_ji, entry in self.items():
+            tai_gi_im_piau = entry.get("tai_gi_im_piau", "")
+            hau_ziann_im_piau = entry.get("hau_ziann_im_piau", "")
+            coordinates = entry.get("coordinates", [])
+            print(
+                f"{row_no}. 漢字：【{han_ji}】，台語音標：【{tai_gi_im_piau}】，校正音標：【{hau_ziann_im_piau}】，座標：【{coordinates}】"
+            )
+            row_no += 1
+
+        print("=== 字庫內容結束 ===")
+
+
+# =========================================================================
+# 測試程式
+# =========================================================================
+
+
+def ut01(wb):
+    sheet_name = "標音字庫"
+    piau_im_ji_khoo_dict = JiKhooDict.create_ji_khoo_dict_from_sheet(
+        wb=wb, sheet_name=sheet_name
+    )
+    piau_im_ji_khoo_dict.display_all_values_in_ji_khoo_dict()
+
+
+if __name__ == "__main__":
+    import sys
+
+    import xlwings as xw
+
+    # 取得【作用中活頁簿】
+    wb = None
+    try:
+        wb = xw.apps.active.books.active  # 取得 Excel 作用中的活頁簿檔案
+    except Exception as e:
+        print("無法找到作用中的 Excel 工作簿！")
+        sys.exit(EXIT_CODE_NO_FILE)
+
+    ut01(wb)
