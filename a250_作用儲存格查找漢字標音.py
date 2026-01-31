@@ -1,5 +1,5 @@
 """
-a250_作用儲存格查找漢字標音.py V0.2.4
+a250_作用儲存格查找漢字標音.py V0.2.5
 
 透過在【漢字注音】工作表點選【作用儲存格】，便能查詢儲存格所對映之漢字的
 【台語音標】，及生成使用者慣用之【漢字標音】。
@@ -45,31 +45,31 @@ init_logging()
 # =========================================================================
 # 輔助函數
 # =========================================================================
-def _get_active_cell_from_sheet(sheet, xls_cell: ExcelCell):
-    """處理整個工作表"""
-    program = xls_cell.program
+# def _get_active_cell_from_sheet(sheet, xls_cell: ExcelCell):
+#     """處理整個工作表"""
+#     program = xls_cell.program
 
-    # 自【作用儲存格】取得【Excel 儲存格座標】(列,欄) 座標
-    active_cell = sheet.api.Application.ActiveCell
-    if active_cell:
-        # 顯示【作用儲存格】位置
-        active_row = active_cell.Row
-        active_col = active_cell.Column
-        active_col_name = xw.utils.col_name(active_col)
-        print(
-            f"作用儲存格：{active_col_name}{active_row}（{active_cell.Row}, {active_cell.Column}）"
-        )
+#     # 自【作用儲存格】取得【Excel 儲存格座標】(列,欄) 座標
+#     active_cell = sheet.api.Application.ActiveCell
+#     if active_cell:
+#         # 顯示【作用儲存格】位置
+#         active_row = active_cell.Row
+#         active_col = active_cell.Column
+#         active_col_name = xw.utils.col_name(active_col)
+#         print(
+#             f"作用儲存格：{active_col_name}{active_row}（{active_cell.Row}, {active_cell.Column}）"
+#         )
 
-        # 調整 row 值至【漢字】列（每 4 列為一組，漢字在第 3 列：5, 9, 13, ... ）
-        line_start_row = 3  # 第一行【標音儲存格】所在 Excel 列號: 3
-        line_no = (active_row - line_start_row + 1) // program.ROWS_PER_LINE
-        row = (line_no * program.ROWS_PER_LINE) + xls_cell.program.han_ji_row_offset - 1
-        col = active_cell.Column
-        cell = sheet.range((row, col))
-        # cell.select()
+#         # 調整 row 值至【漢字】列（每 4 列為一組，漢字在第 3 列：5, 9, 13, ... ）
+#         line_start_row = 3  # 第一行【標音儲存格】所在 Excel 列號: 3
+#         line_no = (active_row - line_start_row + 1) // program.ROWS_PER_LINE
+#         row = (line_no * program.ROWS_PER_LINE) + xls_cell.program.han_ji_row_offset - 1
+#         col = active_cell.Column
+#         cell = sheet.range((row, col))
+#         # cell.select()
 
-        # 處理儲存格
-        xls_cell._process_cell(cell, row, col)
+#         # 處理儲存格
+#         xls_cell._process_cell(cell, row, col)
 
 
 # =========================================================================
@@ -80,6 +80,7 @@ class CellProcessor(ExcelCell):
     本程式專用的儲存格處理器
     繼承自 ExcelCell 的類別
     覆蓋以下方法以實現萌典查詢功能：
+    - _process_jin_kang_piau_im(): 處理人工標音內容
     - _process_han_ji(): 使用【個人字典】查詢漢字讀音
     - _process_cell(): 處理單一儲存格
     - _process_sheet(): 處理整個工作表
@@ -253,6 +254,28 @@ class CellProcessor(ExcelCell):
         # print(f"所有座標: {coordinate_list}")
         return exists
 
+    def show_all_thok_im(self, han_ji: str, result) -> None:
+        """顯示【漢字典】資料庫查得之所有標音
+        Args:
+            han_ji: 要查詢的漢字
+            result: 自資料庫查詢所得之結果
+        """
+
+        # 顯示字典查找所得結果，共：N 個讀音
+        print(f"【{han_ji}】有 {len(result)} 個讀音：{result}")
+
+        print("=== 所有標音字庫內容 ===")
+        for row_no in range(1, self.piau_im_ji_khoo_dict.get_total_rows() + 1):
+            _, entry = self.piau_im_ji_khoo_dict.get_entry_by_row_no(row_no)
+            han_ji = entry.get("han_ji", "")
+            tai_gi_im_piau = entry.get("tai_gi_im_piau", "")
+            hau_ziann_im_piau = entry.get("hau_ziann_im_piau", "")
+            coordinates = entry.get("coordinates", [])
+            print(
+                f"Row {row_no}: 漢字：【{han_ji}】，台語音標：【{tai_gi_im_piau}】，漢字標音：【{hau_ziann_im_piau}】，座標：【{coordinates}】"
+            )
+        print("=== 結束 ===")
+
     def _process_han_ji(
         self,
         han_ji: str,
@@ -294,10 +317,7 @@ class CellProcessor(ExcelCell):
             return f"【{han_ji}】查無此字！"
 
         # 有多個讀音
-        print(
-            # f"漢字儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）：【{han_ji}】有 {len(result)} 個讀音：{result}"
-            f"【{han_ji}】有 {len(result)} 個讀音：{result}"
-        )
+        print(f"【{han_ji}】有 {len(result)} 個讀音：{result}")
 
         # 顯示所有讀音選項
         piau_im_options = []
@@ -307,9 +327,8 @@ class CellProcessor(ExcelCell):
                 tai_lo_ping_im
             )
             piau_im_options.append((tai_gi_im_piau, han_ji_piau_im))
-            msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
             print("-" * 80)
-            print(f"{idx + 1}. {msg}")
+            print(f"{idx + 1}. {han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】")
 
         # 讓使用者選擇讀音
         user_input = input(
