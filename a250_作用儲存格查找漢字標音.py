@@ -1,5 +1,5 @@
 """
-a250_作用儲存格查找漢字標音.py V0.2.5
+a250_作用儲存格查找漢字標音.py V0.2.6
 
 透過在【漢字注音】工作表點選【作用儲存格】，便能查詢儲存格所對映之漢字的
 【台語音標】，及生成使用者慣用之【漢字標音】。
@@ -255,13 +255,16 @@ class CellProcessor(ExcelCell):
         # print(f"所有座標: {coordinate_list}")
         return exists
 
-    def get_all_piau_im_for_a_han_ji(self, han_ji: str, result):
-        """取得【漢字典】資料庫查得之所有標音
+    def get_all_piau_im_for_a_han_ji(
+        self, han_ji: str, result: list[dict]
+    ) -> list[tuple[str, str]]:
+        """顯示【漢字典】資料庫查得之所有標音
         Args:
             han_ji: 要查詢的漢字
-            result: 自資料庫查詢所得之結果
+            result: 自資料庫查詢所得之結果 (由多組 dictionary 所構成的 list)
         Returns:
-            piau_im_options: 所有標音選項清單
+            piau_im_options: 所有標音選項清單 (list[tuple[str, str]])
+            【用例】：[('jint', 'zzin2'), ('lin5', 'lin2')]
         """
         # 顯示【漢字】的所有讀音選項：【台羅音標】
         piau_im_options = []
@@ -274,11 +277,11 @@ class CellProcessor(ExcelCell):
             print(f"{idx + 1}. {han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】")
         return piau_im_options
 
-    def display_all_piau_im_for_a_han_ji(self, han_ji: str, result):
+    def display_all_piau_im_for_a_han_ji(self, han_ji: str, result: list[dict]):
         """顯示【漢字典】資料庫查得之所有標音
         Args:
             han_ji: 要查詢的漢字
-            result: 自資料庫查詢所得之結果
+            result: 自資料庫查詢所得之結果 (由多組 dictionary 所構成的 list)
         Returns:
             piau_im_options: 所有標音選項清單
         """
@@ -315,6 +318,14 @@ class CellProcessor(ExcelCell):
         # 依【列號】，自【標音字庫】工作表，取得【字庫資料表】中的單筆【資料紀錄】(entry)
         # 即：取得【漢字】所在列的【各欄】資料
         _, entry = piau_im_ji_khoo_dict.get_entry_by_row_no(row_no)
+
+        # 檢查尋得之【漢字】，其【台語音標】是否與欲更新之【台語音標】不同
+        existing_tai_gi_im_piau = entry.get("tai_gi_im_piau", "")
+        if existing_tai_gi_im_piau == tai_gi_im_piau:
+            print(
+                f"\n【{han_ji}】在【標音字庫】工作表之【台語音標】：【{tai_gi_im_piau}】，同字典選用之標音，無需更新！\n"
+            )
+            return False  # 無需更新
 
         # 查驗【漢字】是否存在於【標音字庫】；且已記錄指向【漢字注音】工作表之【座標】
         row, col = coordinate
