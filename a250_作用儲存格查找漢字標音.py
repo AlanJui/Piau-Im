@@ -23,6 +23,7 @@ from mod_logging import (
 )
 
 # 載入自訂模組
+from mod_字庫 import JiKhooDict
 from mod_標音 import is_punctuation
 from mod_程式 import ExcelCell, Program
 
@@ -254,27 +255,109 @@ class CellProcessor(ExcelCell):
         # print(f"所有座標: {coordinate_list}")
         return exists
 
-    def show_all_thok_im(self, han_ji: str, result) -> None:
+    def get_all_piau_im_for_a_han_ji(self, han_ji: str, result):
+        """取得【漢字典】資料庫查得之所有標音
+        Args:
+            han_ji: 要查詢的漢字
+            result: 自資料庫查詢所得之結果
+        Returns:
+            piau_im_options: 所有標音選項清單
+        """
+        # 顯示【漢字】的所有讀音選項：【台羅音標】
+        piau_im_options = []
+        for idx, tai_lo_ping_im in enumerate(result):
+            # 依據【台羅音標】轉換，生成：【台語音標】及【漢字標音】
+            tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im_by_entry(
+                tai_lo_ping_im
+            )
+            piau_im_options.append((tai_gi_im_piau, han_ji_piau_im))
+            print(f"{idx + 1}. {han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】")
+        return piau_im_options
+
+    def display_all_piau_im_for_a_han_ji(self, han_ji: str, result):
         """顯示【漢字典】資料庫查得之所有標音
         Args:
             han_ji: 要查詢的漢字
             result: 自資料庫查詢所得之結果
+        Returns:
+            piau_im_options: 所有標音選項清單
         """
 
         # 顯示字典查找所得結果，共：N 個讀音
         print(f"【{han_ji}】有 {len(result)} 個讀音：{result}")
 
-        print("=== 所有標音字庫內容 ===")
-        for row_no in range(1, self.piau_im_ji_khoo_dict.get_total_rows() + 1):
-            _, entry = self.piau_im_ji_khoo_dict.get_entry_by_row_no(row_no)
-            han_ji = entry.get("han_ji", "")
-            tai_gi_im_piau = entry.get("tai_gi_im_piau", "")
-            hau_ziann_im_piau = entry.get("hau_ziann_im_piau", "")
-            coordinates = entry.get("coordinates", [])
+        # 顯示【漢字】的所有讀音選項：【台羅音標】
+        piau_im_options = self.get_all_piau_im_for_a_han_ji(han_ji, result)
+        return piau_im_options
+
+    def update_piau_im_worksheet_entry(
+        self,
+        coordinate: tuple[int, int],
+        han_ji: str,
+        tai_gi_im_piau: str,
+        han_ji_piau_im: str,
+        piau_im_ji_khoo_dict: JiKhooDict,
+        row_no: int,
+    ) -> bool:
+        """當使用者選用某【漢字】在【漢字典】之【讀音選項】後，在【漢字注音】工作表，除需完成【台語音標】、【漢字標音】之更新
+        ；亦需更新【標音字庫】工作表（【標音字庫】或【人工標音字庫】）中，【座標】欄所指向之所有【漢字】對映之【台語音標】與
+        【漢字標音】。
+        Args:
+            piau_im_options: 使用者所選用之【讀音選項】清單
+            piau_im_ji_khoo_dict: 標音字庫【資料表物件】
+            han_ji: 要查詢的漢字
+            row_no: 標音字庫工作表中，該漢字所在列號
+            tai_gi_im_piau: 更新時使用之新【台語音標】
+            hau_ziann_im_piau: 更新時使用之新【漢字標音】
+        Returns:
+            bool: 是否更新成功
+        """
+        # 依【列號】，自【標音字庫】工作表，取得【字庫資料表】中的單筆【資料紀錄】(entry)
+        # 即：取得【漢字】所在列的【各欄】資料
+        _, entry = piau_im_ji_khoo_dict.get_entry_by_row_no(row_no)
+
+        # 查驗【漢字】是否存在於【標音字庫】；且已記錄指向【漢字注音】工作表之【座標】
+        row, col = coordinate
+        exist = self.check_coordinate_exists(
+            row=row,
+            col=col,
+            coord_list=entry["coordinates"],
+        )
+        if not exist:
+            return False  # 在【標音字庫】工作表無此【漢字】之紀錄
+        else:
             print(
-                f"Row {row_no}: 漢字：【{han_ji}】，台語音標：【{tai_gi_im_piau}】，漢字標音：【{hau_ziann_im_piau}】，座標：【{coordinates}】"
+                f"\n【{han_ji}】在【標音字庫】工作表已有 {len(entry['coordinates'])} 筆紀錄，指向【漢字注音】工作表！"
             )
-        print("=== 結束 ===")
+            print(f"({row}, {col}) ==> {entry['coordinates']}\n")
+
+            # 依據【座標】儲存格取得之【座標清單】，逐一變更各組座標所指向【漢字注音】工作表
+            # 之漢字所對映之讀音為【台語音標】、【漢字標音】
+            sheet = self.program.wb.sheets["漢字注音"]
+            i = 1
+            for coordinate in entry["coordinates"]:
+                row, col = coordinate
+                target_cell = sheet.range((row, col))
+                target_cell.select()
+                target_cell.offset(-1, 0).value = tai_gi_im_piau  # 台語音標
+                target_cell.offset(1, 0).value = han_ji_piau_im  # 漢字標音
+                excel_addr = xw.utils.col_name(col) + str(row)
+                print("-" * 80)
+                print(
+                    f"已更新 ==> 第 {i} 個： {excel_addr}  ({row}, {col}) 【{han_ji}】：【{tai_gi_im_piau}] /【{han_ji_piau_im}】"
+                )
+                i += 1
+
+            # 更新【標音字庫】工作表之【台語音標】
+            self.piau_im_ji_khoo_dict.update_whole_entry(
+                row_no=row_no,
+                tai_gi_im_piau=tai_gi_im_piau,
+                hau_ziann_im_piau="N/A",
+                coordinates=entry["coordinates"],
+            )
+            # 儲存回標音字庫工作表
+            self.save_all_piau_im_ji_khoo_dicts()
+            return True  # 已完成【標音字庫】資料表物件之更新，並回存工作表
 
     def _process_han_ji(
         self,
@@ -320,15 +403,7 @@ class CellProcessor(ExcelCell):
         print(f"【{han_ji}】有 {len(result)} 個讀音：{result}")
 
         # 顯示所有讀音選項
-        piau_im_options = []
-        for idx, tai_lo_ping_im in enumerate(result):
-            # 轉換音標
-            tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im_by_entry(
-                tai_lo_ping_im
-            )
-            piau_im_options.append((tai_gi_im_piau, han_ji_piau_im))
-            print("-" * 80)
-            print(f"{idx + 1}. {han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】")
+        piau_im_options = self.display_all_piau_im_for_a_han_ji(han_ji, result)
 
         # 讓使用者選擇讀音
         user_input = input(
@@ -343,58 +418,27 @@ class CellProcessor(ExcelCell):
         try:
             choice = int(user_input)
             if 1 <= choice <= len(result):
-                # 填入選擇的讀音
+                # 顯示使用者輸入之讀音選項
+                print(f"【{han_ji}】讀音，選用：第 {choice} 個選項。")
+                # 依據輸入之【數值】，自讀音選項清單(piau_im_options)，取得對映之【台語音標】及【漢字標音】
                 tai_gi_im_piau, han_ji_piau_im = piau_im_options[choice - 1]
-                # cell.offset(-2, 0).value = tai_gi_im_piau  # 人工標音儲存格
-                # cell.offset(-1, 0).value = tai_gi_im_piau  # 台語音標儲存格
-                # cell.offset(1, 0).value = han_ji_piau_im  # 漢字標音儲存格
 
                 # 在【標音字庫】查找是否此【漢字】，已有指向【漢字注音】工作表之【座標】紀錄
                 row_no = self.piau_im_ji_khoo_dict.get_row_by_han_ji_and_coordinate(
                     han_ji=han_ji, coordinate=(row, col)
                 )
                 if row_no != -1:
-                    # 已有紀錄，無需新增
-                    _, entry = self.piau_im_ji_khoo_dict.get_entry_by_row_no(row_no)
-                    exist = self.check_coordinate_exists(
-                        row=row,
-                        col=col,
-                        coord_list=entry["coordinates"],
+                    # 因漢字已存在於【標音字庫】，且已有指向【漢字注音】工作表之【座標】紀錄，
+                    # 故而依據【標音字庫】中之【座標】欄資料，更新【漢字注音】工作表中，所有相對映【漢字】
+                    # 之【台語音標】及【漢字標音】。
+                    self.update_piau_im_worksheet_entry(
+                        coordinate=(row, col),
+                        han_ji=han_ji,
+                        tai_gi_im_piau=tai_gi_im_piau,
+                        han_ji_piau_im=han_ji_piau_im,
+                        piau_im_ji_khoo_dict=self.piau_im_ji_khoo_dict,
+                        row_no=row_no,
                     )
-                    if exist:
-                        print(
-                            f"\n【{han_ji}】在【標音字庫】工作表已有 {len(entry['coordinates'])} 筆紀錄，指向【漢字注音】工作表！"
-                        )
-                        print(f"({row}, {col}) ==> {entry['coordinates']}\n")
-
-                        # 依據【座標】儲存格取得之【座標清單】，逐一變更各組座標所指向【漢字注音】工作表
-                        # 之漢字所對映之讀音為【台語音標】、【漢字標音】
-                        sheet = self.program.wb.sheets["漢字注音"]
-                        i = 1
-                        for coordinate in entry["coordinates"]:
-                            row, col = coordinate
-                            target_cell = sheet.range((row, col))
-                            target_cell.select()
-                            target_cell.offset(-1, 0).value = tai_gi_im_piau  # 台語音標
-                            target_cell.offset(1, 0).value = han_ji_piau_im  # 漢字標音
-                            excel_addr = xw.utils.col_name(col) + str(row)
-                            print("-" * 80)
-                            print(
-                                f"已更新 ==> 第 {i} 個： {excel_addr}  ({row}, {col}) 【{han_ji}】：【{tai_gi_im_piau}] /【{han_ji_piau_im}】"
-                            )
-                            i += 1
-                        print(f"【{han_ji}】已填入第 {choice} 個讀音！")
-
-                        # 更新【標音字庫】工作表之【台語音標】
-                        self.piau_im_ji_khoo_dict.update_whole_entry(
-                            row_no=row_no,
-                            tai_gi_im_piau=tai_gi_im_piau,
-                            hau_ziann_im_piau="N/A",
-                            coordinates=entry["coordinates"],
-                        )
-                        # 儲存回標音字庫工作表
-                        self.save_all_piau_im_ji_khoo_dicts()
-                        return None
             else:
                 print(f"輸入錯誤：{choice}（超出範圍）")
                 return None
