@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>諺文標音--可折疊</title>
+  </head>
+  <body>
+    <style>
+      /* ===== Accordion 樣式 ===== */
+      .accordion {
+        margin: 1em 0;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        overflow: hidden;
+        font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      }
+      .accordion summary {
+        background: #f3f3f3;
+        padding: 10px 12px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 16px;
+      }
+      .accordion summary:hover {
+        background: #e8e8e8;
+      }
+      .accordion div {
+        padding: 10px 12px;
+        background: #fff;
+      }
+
+      /* ===== 表格樣式 ===== */
+      table.taigi-hangul {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 15px;
+        margin: 10px 0;
+      }
+      table.taigi-hangul th,
+      table.taigi-hangul td {
+        border: 1px solid #ccc;
+        padding: 6px 8px;
+        text-align: left;
+      }
+      table.taigi-hangul th {
+        background: #f7f7f7;
+      }
+
+      /* ===== Hover 提示 ===== */
+      .hover-tip {
+        border-bottom: 1px dotted #888;
+        cursor: help;
+      }
+    </style>
+
+    <!-- ====== Accordion 1：聲母 ====== -->
+    <details class="accordion">
+      <summary>台語聲母 → 韓文標音（可折疊）</summary>
+      <div>
+        <table class="taigi-hangul">
+          <tr>
+            <th>台語</th>
+            <th>韓文</th>
+            <th>備註</th>
+          </tr>
+          <tr>
+            <td>p</td>
+            <td>ㅂ</td>
+            <td>清塞音</td>
+          </tr>
+          <tr>
+            <td>ph</td>
+            <td>ㅍ</td>
+            <td>送氣音</td>
+          </tr>
+          <tr>
+            <td>b</td>
+            <td>ㅂ</td>
+            <td>濁化</td>
+          </tr>
+          <tr>
+            <td>m</td>
+            <td>ㅁ</td>
+            <td>完全對應</td>
+          </tr>
+          <tr>
+            <td>t</td>
+            <td>ㄷ</td>
+            <td>清塞音</td>
+          </tr>
+          <tr>
+            <td>th</td>
+            <td>ㅌ</td>
+            <td>送氣音</td>
+          </tr>
+          <tr>
+            <td>l</td>
+            <td>ㄹ</td>
+            <td>完全對應</td>
+          </tr>
+          <tr>
+            <td>k</td>
+            <td>ㄱ</td>
+            <td>清塞音</td>
+          </tr>
+          <tr>
+            <td>kh</td>
+            <td>ㅋ</td>
+            <td>送氣音</td>
+          </tr>
+          <tr>
+            <td>g</td>
+            <td>ㄱ</td>
+            <td>濁化</td>
+          </tr>
+          <tr>
+            <td>ts</td>
+            <td>ㅈ</td>
+            <td>類似 ts</td>
+          </tr>
+          <tr>
+            <td>tsh</td>
+            <td>ㅊ</td>
+            <td>類似 tsh</td>
+          </tr>
+          <tr>
+            <td>s</td>
+            <td>ㅅ</td>
+            <td>完全對應</td>
+          </tr>
+          <tr>
+            <td>h</td>
+            <td>ㅎ</td>
+            <td>完全對應</td>
+          </tr>
+          <tr>
+            <td>Ø</td>
+            <td>ㅇ</td>
+            <td>零聲母</td>
+          </tr>
+        </table>
+      </div>
+    </details>
+
+    <!-- ====== Accordion 2：韻母 ====== -->
+    <details class="accordion">
+      <summary>台語韻母 → 韓文標音（可折疊）</summary>
+      <div>
+        <table class="taigi-hangul">
+          <tr>
+            <th>台語</th>
+            <th>韓文</th>
+            <th>例子</th>
+          </tr>
+          <tr>
+            <td>a</td>
+            <td>아</td>
+            <td>ka → 카</td>
+          </tr>
+          <tr>
+            <td>i</td>
+            <td>이</td>
+            <td>si → 시</td>
+          </tr>
+          <tr>
+            <td>u</td>
+            <td>우</td>
+            <td>ku → 쿠</td>
+          </tr>
+          <tr>
+            <td>e</td>
+            <td>에</td>
+            <td>pe → 페</td>
+          </tr>
+          <tr>
+            <td>o</td>
+            <td>오</td>
+            <td>ho → 호</td>
+          </tr>
+          <tr>
+            <td>ai</td>
+            <td>아이</td>
+            <td>pai → 파이</td>
+          </tr>
+          <tr>
+            <td>au</td>
+            <td>아우</td>
+            <td>kau → 카우</td>
+          </tr>
+          <tr>
+            <td>ia</td>
+            <td>야/이야</td>
+            <td>kia → 갸</td>
+          </tr>
+          <tr>
+            <td>io</td>
+            <td>요</td>
+            <td>kio → 교</td>
+          </tr>
+          <tr>
+            <td>iu</td>
+            <td>유</td>
+            <td>liu → 류</td>
+          </tr>
+          <tr>
+            <td>ui</td>
+            <td>의</td>
+            <td>kui → 귀</td>
+          </tr>
+        </table>
+      </div>
+    </details>
+
+    <!-- ====== Accordion 3：韻尾 ====== -->
+    <details class="accordion">
+      <summary>台語韻尾 → 韓文終聲（可折疊）</summary>
+      <div>
+        <table class="taigi-hangul">
+          <tr>
+            <th>台語</th>
+            <th>韓文</th>
+            <th>備註</th>
+          </tr>
+          <tr>
+            <td>-p</td>
+            <td>ㅂ</td>
+            <td>入聲</td>
+          </tr>
+          <tr>
+            <td>-t</td>
+            <td>ㄷ</td>
+            <td>入聲</td>
+          </tr>
+          <tr>
+            <td>-k</td>
+            <td>ㄱ</td>
+            <td>入聲</td>
+          </tr>
+          <tr>
+            <td>-m</td>
+            <td>ㅁ</td>
+            <td>鼻音</td>
+          </tr>
+          <tr>
+            <td>-n</td>
+            <td>ㄴ</td>
+            <td>鼻音</td>
+          </tr>
+          <tr>
+            <td>-ng</td>
+            <td>ㅇ</td>
+            <td>鼻音</td>
+          </tr>
+          <tr>
+            <td>-h</td>
+            <td>ㅎ/ㄱ</td>
+            <td>視習慣</td>
+          </tr>
+        </table>
+      </div>
+    </details>
+
+    <!-- ====== Accordion 4：常用詞（含 Hover 提示） ====== -->
+    <details class="accordion">
+      <summary>常用台語詞彙 → 韓文標音（可折疊＋滑鼠提示）</summary>
+      <div>
+        <table class="taigi-hangul">
+          <tr>
+            <th>漢字</th>
+            <th>台語</th>
+            <th>韓文</th>
+          </tr>
+          <tr>
+            <td>我</td>
+            <td class="hover-tip" title="guá">guá</td>
+            <td class="hover-tip" title="과">과</td>
+          </tr>
+          <tr>
+            <td>你</td>
+            <td class="hover-tip" title="lí">lí</td>
+            <td class="hover-tip" title="니">니</td>
+          </tr>
+          <tr>
+            <td>欲</td>
+            <td class="hover-tip" title="beh">beh</td>
+            <td class="hover-tip" title="벡/벳">벡/벳</td>
+          </tr>
+          <tr>
+            <td>食</td>
+            <td class="hover-tip" title="tsia̍h">tsia̍h</td>
+            <td class="hover-tip" title="짯">짯</td>
+          </tr>
+          <tr>
+            <td>飯</td>
+            <td class="hover-tip" title="pn̄g">pn̄g</td>
+            <td class="hover-tip" title="빵">빵</td>
+          </tr>
+          <tr>
+            <td>啥</td>
+            <td class="hover-tip" title="siánn">siánn</td>
+            <td class="hover-tip" title="샤/시안">샤/시안</td>
+          </tr>
+        </table>
+      </div>
+    </details>
+  </body>
+</html>
