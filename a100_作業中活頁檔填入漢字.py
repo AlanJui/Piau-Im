@@ -237,35 +237,25 @@ def process(wb, args) -> int:
         # --------------------------------------------------------------------------
         program = Program(wb, args, hanji_piau_im_sheet_name="漢字注音")
 
-        # 建立儲存格處理器
-        # xls_cell = ExcelCell(program=program)
-        xls_cell = ExcelCell(
-            program=program,
-            new_jin_kang_piau_im_ji_khoo_sheet=True if args.new else False,
-            new_piau_im_ji_khoo_sheet=True if args.new else False,
-            new_khuat_ji_piau_sheet=True if args.new else False,
-        )
+        # 建立資料庫連線
+        program.connect_db()
 
-        # ======================================================================
-        # 將【漢字注音】工作表的舊資料清除及格式重設。
-        # ======================================================================
-        # 重置工作表
-        print("清除儲存格內容...")
-        clear_han_ji_kap_piau_im(
-            wb,
-            sheet_name="漢字注音",
-            total_lines=program.TOTAL_LINES,
-            rows_per_line=program.ROWS_PER_LINE,
-            start_row=program.line_start_row,
-            start_col=program.start_col,
-            end_col=program.end_col,
-            han_ji_orgin_cell=program.han_ji_orgin_cell,
-        )
-        logging.info("儲存格內容清除完畢")
+        try:
+            # 建立儲存格處理器
+            # xls_cell = ExcelCell(program=program)
+            xls_cell = ExcelCell(
+                program=program,
+                new_jin_kang_piau_im_ji_khoo_sheet=True if args.new else False,
+                new_piau_im_ji_khoo_sheet=True if args.new else False,
+                new_khuat_ji_piau_sheet=True if args.new else False,
+            )
 
-        if args.reset_cell_format:
-            print("重設儲存格之格式...")
-            reset_cells_format_in_sheet(
+            # ======================================================================
+            # 將【漢字注音】工作表的舊資料清除及格式重設。
+            # ======================================================================
+            # 重置工作表
+            print("清除儲存格內容...")
+            clear_han_ji_kap_piau_im(
                 wb,
                 sheet_name="漢字注音",
                 total_lines=program.TOTAL_LINES,
@@ -273,43 +263,63 @@ def process(wb, args) -> int:
                 start_row=program.line_start_row,
                 start_col=program.start_col,
                 end_col=program.end_col,
+                han_ji_orgin_cell=program.han_ji_orgin_cell,
             )
-            logging.info("儲存格格式重設完畢")
+            logging.info("儲存格內容清除完畢")
 
-        # ======================================================================
-        # 填入【漢字】：讀取整篇文章之【漢字】純文字檔案；並填入【漢字注音】工作表。
-        # ======================================================================
-        text_file_name = args.han_ji_file if args.han_ji_file else "_tmp_p1_han_ji.txt"
-        _fill_han_ji_into_sheet(
-            wb=wb,
-            program=program,
-            text_file_name=text_file_name,
-            sheet_name="漢字注音",
-            target="V3",
-        )
+            if args.reset_cell_format:
+                print("重設儲存格之格式...")
+                reset_cells_format_in_sheet(
+                    wb,
+                    sheet_name="漢字注音",
+                    total_lines=program.TOTAL_LINES,
+                    rows_per_line=program.ROWS_PER_LINE,
+                    start_row=program.line_start_row,
+                    start_col=program.start_col,
+                    end_col=program.end_col,
+                )
+                logging.info("儲存格格式重設完畢")
 
-        # ======================================================================
-        # 將【漢字注音】工作表的【漢字】欄，逐一處理，查找【台語音標】和【漢字標音】
-        # ======================================================================
+            # ======================================================================
+            # 填入【漢字】：讀取整篇文章之【漢字】純文字檔案；並填入【漢字注音】工作表。
+            # ======================================================================
+            text_file_name = (
+                args.han_ji_file if args.han_ji_file else "_tmp_p1_han_ji.txt"
+            )
+            _fill_han_ji_into_sheet(
+                wb=wb,
+                program=program,
+                text_file_name=text_file_name,
+                sheet_name="漢字注音",
+                target="V3",
+            )
 
-        # 處理工作表
-        sheet_name = "漢字注音"
-        sheet = wb.sheets[sheet_name]
-        sheet.activate()
+            # ======================================================================
+            # 將【漢字注音】工作表的【漢字】欄，逐一處理，查找【台語音標】和【漢字標音】
+            # ======================================================================
 
-        # 逐列處理
-        _process_sheet(
-            sheet=sheet,
-            program=program,
-            xls_cell=xls_cell,
-        )
+            # 處理工作表
+            sheet_name = "漢字注音"
+            sheet = wb.sheets[sheet_name]
+            sheet.activate()
 
-        # 寫回字庫到 Excel
-        xls_cell.save_all_piau_im_ji_khoo_dicts()
+            # 逐列處理
+            _process_sheet(
+                sheet=sheet,
+                program=program,
+                xls_cell=xls_cell,
+            )
 
-        print("=" * 80)
-        logging_process_step("已完成【台語音標】和【漢字標音】標注工作。")
-        return EXIT_CODE_SUCCESS
+            # 寫回字庫到 Excel
+            xls_cell.save_all_piau_im_ji_khoo_dicts()
+
+            print("=" * 80)
+            logging_process_step("已完成【台語音標】和【漢字標音】標注工作。")
+            return EXIT_CODE_SUCCESS
+
+        finally:
+            # 關閉資料庫連線
+            program.disconnect_db()
 
     except Exception:
         logging.exception("自動為【漢字】查找【台語音標】作業，發生例外！")

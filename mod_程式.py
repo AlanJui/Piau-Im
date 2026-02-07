@@ -150,6 +150,25 @@ class Program:
         # Excel 檔案儲存路徑
         self.output_path = wb.names["OUTPUT_PATH"].refers_to_range.value
 
+    def connect_db(self):
+        """建立持續性資料庫連線"""
+        if self.ji_tian:
+            self.ji_tian.connect()
+
+    def disconnect_db(self):
+        """關閉持續性資料庫連線"""
+        if self.ji_tian:
+            self.ji_tian.disconnect()
+
+    def __enter__(self):
+        """Context Manager 進入點：建立資料庫連線"""
+        self.connect_db()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Context Manager 離開點：關閉資料庫連線"""
+        self.disconnect_db()
+
     @staticmethod
     def msg_program_start(program_name: str, project_root: str) -> None:
         """顯取示得程式開始訊息"""

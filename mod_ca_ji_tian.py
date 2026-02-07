@@ -13,6 +13,7 @@ from mod_標音 import split_tai_gi_im_piau
 # 資料庫連線管理
 # ============================================================================
 
+
 class HanJiTian:
     """漢字字典類別，管理資料庫連線和查詢"""
 
@@ -24,6 +25,19 @@ class HanJiTian:
             db_path: 資料庫檔案路徑
         """
         self.db_path = db_path
+        self._persistent_conn = None
+
+    def connect(self):
+        """建立持續性資料庫連線"""
+        if self._persistent_conn is None:
+            self._persistent_conn = sqlite3.connect(self.db_path)
+            self._persistent_conn.row_factory = sqlite3.Row
+
+    def disconnect(self):
+        """關閉持續性資料庫連線"""
+        if self._persistent_conn:
+            self._persistent_conn.close()
+            self._persistent_conn = None
 
     @contextmanager
     def get_connection(self):
@@ -34,6 +48,12 @@ class HanJiTian:
                 # 使用 conn 進行查詢
                 pass
         """
+        # 如果已有持續性連線，則直接使用
+        if self._persistent_conn:
+            yield self._persistent_conn
+            return
+
+        # 否則建立臨時連線
         conn = None
         try:
             conn = sqlite3.connect(self.db_path)
@@ -55,9 +75,7 @@ class HanJiTian:
     # 其　它：常用度 > 0.00；使用數值 0.40 ~ 0.01；使用時機為：（1）方言地方腔；(2) 罕見發音；(3) 尚未查證屬文讀音或白話音 。
     # ==========================================================
     def han_ji_ca_piau_im(
-        self,
-        han_ji: str,
-        ue_im_lui_piat: str = "文讀音"
+        self, han_ji: str, ue_im_lui_piat: str = "文讀音"
     ) -> Optional[List[Dict[str, Union[str, float]]]]:
         """
         根據漢字查詢其台羅音標及相關讀音資訊，並將台羅音標轉換為台語音標。
@@ -144,22 +162,24 @@ class HanJiTian:
                 return None
 
             # 將結果轉換為字典列表
-            fields = ['識別號', '漢字', '台語音標', '常用度', '摘要說明']
+            fields = ["識別號", "漢字", "台語音標", "常用度", "摘要說明"]
 
             data = []
             for result in results:
                 row_dict = dict(zip(fields, result))
                 # 取得台羅音標
-                tai_loo_im = row_dict['台語音標']
+                tai_loo_im = row_dict["台語音標"]
 
                 # 將台羅音標轉換為台語音標
                 split_result = split_tai_gi_im_piau(tai_loo_im)
-                row_dict['聲母'] = split_result[0]
-                row_dict['韻母'] = split_result[1]
-                row_dict['聲調'] = split_result[2]
+                row_dict["聲母"] = split_result[0]
+                row_dict["韻母"] = split_result[1]
+                row_dict["聲調"] = split_result[2]
 
                 # 更新 row_dict 中的台語音標
-                row_dict['台語音標'] = f'{row_dict["聲母"]}{row_dict["韻母"]}{row_dict["聲調"]}'
+                row_dict["台語音標"] = (
+                    f'{row_dict["聲母"]}{row_dict["韻母"]}{row_dict["聲調"]}'
+                )
 
                 # 將結果加入列表
                 data.append(row_dict)
@@ -171,10 +191,9 @@ class HanJiTian:
 # 獨立函數介面（方便直接呼叫）
 # ============================================================================
 
+
 def han_ji_ca_piau_im(
-    han_ji: str,
-    ue_im_lui_piat: str = "文讀音",
-    db_path: str = "Ho_Lok_Ue.db"
+    han_ji: str, ue_im_lui_piat: str = "文讀音", db_path: str = "Ho_Lok_Ue.db"
 ) -> Optional[List[Dict[str, Union[str, float]]]]:
     """
     查詢漢字的讀音（獨立函數版本）
@@ -200,10 +219,11 @@ def han_ji_ca_piau_im(
 # 批次查詢函數
 # ============================================================================
 
+
 def han_ji_ca_piau_im_list(
     han_ji_list: List[str],
     ue_im_lui_piat: str = "文讀音",
-    db_path: str = "Ho_Lok_Ue.db"
+    db_path: str = "Ho_Lok_Ue.db",
 ) -> Dict[str, Optional[List[Dict[str, Union[str, float]]]]]:
     """
     批次查詢多個漢字的讀音
@@ -234,6 +254,7 @@ def han_ji_ca_piau_im_list(
 # 測試程式
 # ============================================================================
 
+
 def test():
     """測試函數"""
 
@@ -251,7 +272,9 @@ def test():
         print(f"\n漢字: {han_ji} (文讀音)")
         if result:
             for item in result:
-                print(f"  台語音標: {item['台語音標']}, 常用度: {item['常用度']}, 說明: {item['摘要說明']}")
+                print(
+                    f"  台語音標: {item['台語音標']}, 常用度: {item['常用度']}, 說明: {item['摘要說明']}"
+                )
         else:
             print("  查無資料")
 
@@ -265,7 +288,9 @@ def test():
         print(f"\n漢字: {han_ji} (白話音)")
         if result:
             for item in result:
-                print(f"  台語音標: {item['台語音標']}, 聲母: {item['聲母']}, 韻母: {item['韻母']}, 聲調: {item['聲調']}")
+                print(
+                    f"  台語音標: {item['台語音標']}, 聲母: {item['聲母']}, 韻母: {item['韻母']}, 聲調: {item['聲調']}"
+                )
         else:
             print("  查無資料")
 

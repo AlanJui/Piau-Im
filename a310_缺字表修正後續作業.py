@@ -9,8 +9,7 @@ from pathlib import Path
 import xlwings as xw
 from dotenv import load_dotenv
 
-from mod_excel_access import save_as_new_file
-
+# from mod_excel_access import save_as_new_file
 # from mod_帶調符音標 import kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
 # from mod_標音 import (
 #     PiauIm,  # 漢字標音物件
@@ -26,8 +25,8 @@ from mod_程式 import ExcelCell, Program
 load_dotenv()
 
 # 預設檔案名稱從環境變數讀取
-DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
-DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
+DB_HO_LOK_UE = os.getenv("DB_HO_LOK_UE", "Ho_Lok_Ue.db")
+DB_KONG_UN = os.getenv("DB_KONG_UN", "Kong_Un.db")
 
 # =========================================================================
 # 常數定義
@@ -52,6 +51,7 @@ from mod_logging import (  # noqa: E402
 
 init_logging()
 
+
 # =========================================================================
 # 本程式主要處理作業程序
 # =========================================================================
@@ -66,16 +66,16 @@ def process(wb, args) -> int:
     Returns:
         處理結果代碼
     """
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # 作業開始
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     logging_process_step("<=========== 作業開始！==========>")
 
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # 作業初始化
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     try:
-        program = Program(wb, args, hanji_piau_im_sheet_name='漢字注音')
+        program = Program(wb, args, hanji_piau_im_sheet_name="漢字注音")
 
         # 建立儲存格處理器
         xls_cell = ExcelCell(
@@ -88,13 +88,13 @@ def process(wb, args) -> int:
         logging_exc_error(msg="處理作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
 
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # 處理作業開始
-    #--------------------------------------------------------------------------
-    source_sheet_name="缺字表"
-    target_sheet_name="漢字注音"
-    msg = f'使用【{source_sheet_name}】工作表，更新【{target_sheet_name}】工作表......'
-    print('\n')
+    # --------------------------------------------------------------------------
+    source_sheet_name = "缺字表"
+    target_sheet_name = "漢字注音"
+    msg = f"使用【{source_sheet_name}】工作表，更新【{target_sheet_name}】工作表......"
+    print("\n")
     print("=" * 80)
     logging_process_step(msg)
 
@@ -112,12 +112,12 @@ def process(wb, args) -> int:
     if exit_code != EXIT_CODE_SUCCESS:
         return exit_code
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # 將【缺字表】之【漢字】與【台語音標】存入【漢字庫】作業
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     sheet_name = source_sheet_name
-    msg = f'使用【{sheet_name}】工作表，更新資料庫中之【漢字庫】資料表......'
-    print('\n')
+    msg = f"使用【{sheet_name}】工作表，更新資料庫中之【漢字庫】資料表......"
+    print("\n")
     print("=" * 80)
     logging_process_step(msg)
 
@@ -128,22 +128,25 @@ def process(wb, args) -> int:
     except Exception as e:
         logging_exc_error(
             msg=f"將【{sheet_name}】之【漢字】與【台語音標】存入【漢字庫】作業，發生執行異常！",
-            error=e)
+            error=e,
+        )
         return EXIT_CODE_PROCESS_FAILURE
     finally:
         # 關閉資料庫連線
         if xls_cell.db_manager:
             xls_cell.db_manager.disconnect()
             logging_process_step("已關閉資料庫連線")
-    print('\n')
-    print('-' * 80)
-    logging_process_step(f"完成：將【{sheet_name}】之【漢字】與【台語音標】存入【漢字庫】作業")
-    print('=' * 80)
+    print("\n")
+    print("-" * 80)
+    logging_process_step(
+        f"完成：將【{sheet_name}】之【漢字】與【台語音標】存入【漢字庫】作業"
+    )
+    print("=" * 80)
 
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # 作業結束
-    #--------------------------------------------------------------------------
-    print('\n')
+    # --------------------------------------------------------------------------
+    print("\n")
     logging_process_step("<=========== 作業結束！==========>")
     return EXIT_CODE_SUCCESS
 
@@ -173,7 +176,7 @@ def main(args) -> int:
     wb = None
     # 取得【作用中活頁簿】
     try:
-        wb = xw.apps.active.books.active    # 取得 Excel 作用中的活頁簿檔案
+        wb = xw.apps.active.books.active  # 取得 Excel 作用中的活頁簿檔案
     except Exception as e:
         msg = "無法找到作用中的 Excel 工作簿！"
         logging_exception(msg=msg, error=e)
@@ -196,21 +199,22 @@ def main(args) -> int:
     # (4) 儲存檔案
     # =========================================================================
     if exit_code == EXIT_CODE_SUCCESS:
-        file_path = save_as_new_file(wb=wb)
-        if not file_path:
-            logging_exc_error(msg="儲存檔案失敗！", error=None)
-            exit_code = EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
-        else:
+        try:
+            wb.save()
+            file_path = wb.fullname
             logging_process_step(f"儲存檔案至路徑：{file_path}")
+        except Exception as e:
+            logging_exc_error(msg="儲存檔案異常！", error=e)
+            return EXIT_CODE_SAVE_FAILURE
 
     # =========================================================================
     # 結束程式
     # =========================================================================
-    print('\n')
-    print('=' * 80)
+    print("\n")
+    print("=" * 80)
     logging_process_step(f"《========== 程式終止執行：{program_name} ==========》")
     if exit_code == EXIT_CODE_SUCCESS:
-        return EXIT_CODE_SUCCESS    # 作業正常結束
+        return EXIT_CODE_SUCCESS  # 作業正常結束
     else:
         msg = f"程式異常終止，返回失敗碼：{exit_code}"
         logging_exc_error(msg=msg, error=None)
@@ -241,24 +245,24 @@ if __name__ == "__main__":
 
     # 解析命令行參數
     parser = argparse.ArgumentParser(
-        description='缺字表修正後續作業程式',
+        description="缺字表修正後續作業程式",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog='''
+        epilog="""
 使用範例：
   python a000.py          # 執行一般模式
   python a000.py -new     # 建立新的字庫工作表
   python a000.py -test    # 執行測試模式
-'''
+""",
     )
     parser.add_argument(
-        '--test',
-        action='store_true',
-        help='執行測試模式',
+        "--test",
+        action="store_true",
+        help="執行測試模式",
     )
     parser.add_argument(
-        '--new',
-        action='store_true',
-        help='建立新的標音字庫工作表',
+        "--new",
+        action="store_true",
+        help="建立新的標音字庫工作表",
     )
     args = parser.parse_args()
 
