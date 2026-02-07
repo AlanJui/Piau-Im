@@ -105,7 +105,7 @@ class CellProcessor(ExcelCell):
         Returns:
             (message, success): 處理訊息和是否成功
         """
-        if han_ji == '':
+        if han_ji == "":
             return "【空白】", False
 
         result = self.program.ji_tian.han_ji_ca_piau_im(
@@ -118,26 +118,32 @@ class CellProcessor(ExcelCell):
             # 記錄到缺字表
             self.khuat_ji_piau_ji_khoo_dict.add_entry(
                 han_ji=han_ji,
-                tai_gi_im_piau='',
-                hau_ziann_im_piau='N/A',
-                coordinates=(row, col)
+                tai_gi_im_piau="",
+                hau_ziann_im_piau="N/A",
+                coordinates=(row, col),
             )
             return f"【{han_ji}】查無此字！", False
 
         # 有多個讀音
-        print(f"漢字儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）：【{han_ji}】有 {len(result)} 個讀音：{result}")
+        print(
+            f"漢字儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）：【{han_ji}】有 {len(result)} 個讀音：{result}"
+        )
 
         # 顯示所有讀音選項
         piau_im_options = []
         for idx, tai_lo_ping_im in enumerate(result):
             # 轉換音標
-            tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im_by_entry(tai_lo_ping_im)
+            tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im_by_entry(
+                tai_lo_ping_im
+            )
             piau_im_options.append((tai_gi_im_piau, han_ji_piau_im))
             msg = f"{han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
             print(f"{idx + 1}. {msg}")
 
         # 讓使用者選擇讀音
-        user_input = input("\n請選擇讀音編號（直接按 Enter 略過，輸入編號後按 Enter 填入）：").strip()
+        user_input = input(
+            "\n請選擇讀音編號（直接按 Enter 略過，輸入編號後按 Enter 填入）："
+        ).strip()
 
         if user_input == "":
             # 只瀏覽，不填入
@@ -151,14 +157,14 @@ class CellProcessor(ExcelCell):
                 tai_gi_im_piau, han_ji_piau_im = piau_im_options[choice - 1]
                 cell.offset(-2, 0).value = tai_gi_im_piau  # 人工標音儲存格
                 cell.offset(-1, 0).value = tai_gi_im_piau  # 台語音標儲存格
-                cell.offset(1, 0).value = han_ji_piau_im    # 漢字標音儲存格
+                cell.offset(1, 0).value = han_ji_piau_im  # 漢字標音儲存格
 
                 # 在【人工標音字庫】增添【該字】指向【漢字注音】之【座標】紀錄
                 self.jin_kang_piau_im_ji_khoo_dict.add_or_update_entry_by_coordinate(
                     han_ji=han_ji,
                     tai_gi_im_piau=tai_gi_im_piau,
-                    hau_ziann_im_piau='N/A',
-                    coordinates=(row, col)
+                    hau_ziann_im_piau="N/A",
+                    coordinates=(row, col),
                 )
                 # 儲存更新後的【人工標音字庫】至工作表
                 self.jin_kang_piau_im_ji_khoo_dict.save_to_sheet(
@@ -168,20 +174,18 @@ class CellProcessor(ExcelCell):
 
                 # 自【標音字庫】移除【該字】指向【漢字注音】之【座標】紀錄
                 row_no = self.piau_im_ji_khoo_dict.get_row_by_han_ji_and_coordinate(
-                    han_ji=han_ji,
-                    coordinate=(row, col)
+                    han_ji=han_ji, coordinate=(row, col)
                 )
                 if row_no != -1:
                     _, entry = self.piau_im_ji_khoo_dict.get_entry_by_row_no(row_no)
                     exist = self.check_coordinate_exists(
                         row=row,
                         col=col,
-                        coord_list=entry['coordinates'],
+                        coord_list=entry["coordinates"],
                     )
                     if exist:
                         self.piau_im_ji_khoo_dict.remove_coordinate(
                             han_ji=han_ji,
-                            tai_gi_im_piau=tai_gi_im_piau,
                             coordinate=(row, col),
                             entry_to_delete_if_empty=False,
                         )
@@ -191,7 +195,9 @@ class CellProcessor(ExcelCell):
                             sheet_name=self.piau_im_ji_khoo_dict.name,
                         )
 
-                print(f"已填入第 {choice} 個讀音：[{tai_gi_im_piau}] /【{han_ji_piau_im}】")
+                print(
+                    f"已填入第 {choice} 個讀音：[{tai_gi_im_piau}] /【{han_ji_piau_im}】"
+                )
                 return f"【{han_ji}】已填入第 {choice} 個讀音", True
             else:
                 print(f"無效的選擇：{choice}（超出範圍）")
@@ -219,12 +225,12 @@ class CellProcessor(ExcelCell):
         cell_value = cell.value
 
         # 確保 cell_value 務必是【漢字】，故需篩飾【特殊字元】
-        if cell_value == 'φ':
-           # 【文字終結】
+        if cell_value == "φ":
+            # 【文字終結】
             print(f"【{cell_value}】：【文章結束】結束行處理作業。")
             return True, True
-        elif cell_value == '\n':
-            #【換行】
+        elif cell_value == "\n":
+            # 【換行】
             print("【換行】：結束行中各欄處理作業。")
             return False, True
         elif not is_han_ji(cell_value):
@@ -246,12 +252,16 @@ class CellProcessor(ExcelCell):
             active_row = active_cell.Row
             active_col = active_cell.Column
             active_col_name = xw.utils.col_name(active_col)
-            print(f"作用儲存格：{active_col_name}{active_row}（{active_cell.Row}, {active_cell.Column}）")
+            print(
+                f"作用儲存格：{active_col_name}{active_row}（{active_cell.Row}, {active_cell.Column}）"
+            )
         except Exception:
             raise ValueError("無法取得作用儲存格")
 
         # 調整 row 值至【漢字】列（每 4 列為一組，漢字在第 3 列：5, 9, 13, ... ）
-        line_start_row = self.program.line_start_row  # 第一行【標音儲存格】所在 Excel 列號: 3
+        line_start_row = (
+            self.program.line_start_row
+        )  # 第一行【標音儲存格】所在 Excel 列號: 3
         line_no = ((active_row - line_start_row + 1) // self.program.ROWS_PER_LINE) + 1
         row = (line_no * program.ROWS_PER_LINE) + program.han_ji_row_offset - 1
         col = active_col
@@ -274,31 +284,33 @@ def process(wb, args) -> int:
     Returns:
         處理結果代碼
     """
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # 作業初始化
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     logging_process_step("<=========== 作業開始！==========>")
 
     try:
-        #--------------------------------------------------------------------------
+        # --------------------------------------------------------------------------
         # 初始化 Program 配置
-        #--------------------------------------------------------------------------
-        program = Program(wb=wb, args=args, hanji_piau_im_sheet_name='漢字注音')
+        # --------------------------------------------------------------------------
+        program = Program(wb=wb, args=args, hanji_piau_im_sheet_name="漢字注音")
 
         # 建立萌典專用的儲存格處理器（繼承自 ExcelCell）
         xls_cell = CellProcessor(
             program=program,
-            new_jin_kang_piau_im_ji_khoo_sheet=args.new if hasattr(args, 'new') else False,
-            new_piau_im_ji_khoo_sheet=args.new if hasattr(args, 'new') else False,
-            new_khuat_ji_piau_sheet=args.new if hasattr(args, 'new') else False,
+            new_jin_kang_piau_im_ji_khoo_sheet=(
+                args.new if hasattr(args, "new") else False
+            ),
+            new_piau_im_ji_khoo_sheet=args.new if hasattr(args, "new") else False,
+            new_khuat_ji_piau_sheet=args.new if hasattr(args, "new") else False,
         )
     except Exception as e:
         logging_exc_error(msg="處理作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
 
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # 作業處理中
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     try:
         # 處理工作表
         sheet_name = program.hanji_piau_im_sheet_name
@@ -311,9 +323,9 @@ def process(wb, args) -> int:
         logging_exc_error(msg="處理作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
 
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # 處理作業結束
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     logging_process_step("<=========== 作業結束！==========>")
     return EXIT_CODE_SUCCESS
 
@@ -351,20 +363,22 @@ def main(args):
             logging.error("無法取得 Excel 活頁簿")
             return EXIT_CODE_NO_FILE
 
-        #==================================================================
+        # ==================================================================
         # 執行處理作業
-        #==================================================================
+        # ==================================================================
         print("=" * 80)
         print("無限循環模式：請在 Excel 中選擇任一儲存格後按 Enter 查詢")
         print("按 Ctrl+C 終止程式")
         print("=" * 80)
-        sheet_name = '漢字注音'
+        sheet_name = "漢字注音"
 
         # 無限循環
         while True:
             try:
                 # 等待使用者按 Enter
-                input("\n請在 Excel 選擇【作用儲存格】後按 Enter 繼續（Ctrl+C 終止）...")
+                input(
+                    "\n請在 Excel 選擇【作用儲存格】後按 Enter 繼續（Ctrl+C 終止）..."
+                )
 
                 # 確保工作表為作用中
                 wb.sheets[sheet_name].activate()
@@ -376,9 +390,9 @@ def main(args):
             except KeyboardInterrupt:
                 print("\n\n使用者中斷程式（Ctrl+C）")
                 print("=" * 70)
-                #==================================================================
+                # ==================================================================
                 # 儲存檔案
-                #==================================================================
+                # ==================================================================
                 if exit_code == EXIT_CODE_SUCCESS:
                     try:
                         wb.save()
@@ -386,7 +400,7 @@ def main(args):
                         logging_process_step(f"儲存檔案至路徑：{file_path}")
                     except Exception as e:
                         logging_exc_error(msg="儲存檔案異常！", error=e)
-                        return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
+                        return EXIT_CODE_SAVE_FAILURE  # 作業異當終止：無法儲存檔案
                     return EXIT_CODE_SUCCESS
 
             except Exception as e:
@@ -417,7 +431,7 @@ def test_han_ji_tian():
 
     # 預設檔案名稱從環境變數讀取
     load_dotenv()
-    DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
+    DB_HO_LOK_UE = os.getenv("DB_HO_LOK_UE", "Ho_Lok_Ue.db")
 
     print("=" * 80)
     print("測試 HanJiTian 查詢功能")
@@ -436,7 +450,9 @@ def test_han_ji_tian():
 
             if result:
                 for item in result:
-                    print(f"  台語音標：{item['台語音標']}, 常用度：{item.get('常用度', 'N/A')}, 說明：{item.get('摘要說明', 'N/A')}")
+                    print(
+                        f"  台語音標：{item['台語音標']}, 常用度：{item.get('常用度', 'N/A')}, 說明：{item.get('摘要說明', 'N/A')}"
+                    )
             else:
                 print("  查無資料")
 
@@ -447,6 +463,7 @@ def test_han_ji_tian():
     except Exception as e:
         print(f"測試失敗：{e}")
         import traceback
+
         traceback.print_exc()
 
 
@@ -456,24 +473,24 @@ if __name__ == "__main__":
 
     # 解析命令行參數
     parser = argparse.ArgumentParser(
-        description='缺字表修正後續作業程式',
+        description="缺字表修正後續作業程式",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog='''
+        epilog="""
 使用範例：
   python a000.py          # 執行一般模式
   python a000.py -new     # 建立新的字庫工作表
   python a000.py -test    # 執行測試模式
-'''
-        )
-    parser.add_argument(
-        '--test',
-        action='store_true',
-        help='執行測試模式',
+""",
     )
     parser.add_argument(
-        '--new',
-        action='store_true',
-        help='建立新的標音字庫工作表',
+        "--test",
+        action="store_true",
+        help="執行測試模式",
+    )
+    parser.add_argument(
+        "--new",
+        action="store_true",
+        help="建立新的標音字庫工作表",
     )
     args = parser.parse_args()
 
