@@ -268,13 +268,20 @@ class CellProcessor(ExcelCell):
         """
         # 顯示【漢字】的所有讀音選項：【台羅音標】
         piau_im_options = []
-        for idx, tai_lo_ping_im in enumerate(result):
+        # for idx, tai_lo_ping_im in enumerate(result):
+        for idx, entry in enumerate(result):
+            siong_iong_to = entry.get("常用度", "N/A")
             # 依據【台羅音標】轉換，生成：【台語音標】及【漢字標音】
-            tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im_by_entry(
-                tai_lo_ping_im
-            )
+            # tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im_by_entry(
+            #     tai_lo_ping_im
+            # )
+            tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im_by_entry(entry)
             piau_im_options.append((tai_gi_im_piau, han_ji_piau_im))
-            print(f"{idx + 1}. {han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】")
+            # 列出選項
+            # print(f"{idx + 1}. {han_ji}： [{tai_gi_im_piau}] /【{han_ji_piau_im}】")
+            print(
+                f"  {idx + 1}. 台語音標：{tai_gi_im_piau:<8} 漢字標音：[{han_ji_piau_im}] (常用度: {siong_iong_to})"
+            )
         return piau_im_options
 
     def display_all_piau_im_for_a_han_ji(self, han_ji: str, result: list[dict]):
@@ -287,7 +294,8 @@ class CellProcessor(ExcelCell):
         """
 
         # 顯示字典查找所得結果，共：N 個讀音
-        print(f"【{han_ji}】有 {len(result)} 個讀音：{result}")
+        # print(f"【{han_ji}】有 {len(result)} 個讀音：{result}")
+        print(f"【{han_ji}】有 {len(result)} 個讀音：")
 
         # 顯示【漢字】的所有讀音選項：【台羅音標】
         piau_im_options = self.get_all_piau_im_for_a_han_ji(han_ji, result)
@@ -411,7 +419,8 @@ class CellProcessor(ExcelCell):
             return f"【{han_ji}】查無此字！"
 
         # 有多個讀音
-        print(f"【{han_ji}】有 {len(result)} 個讀音：{result}")
+        # print(f"【{han_ji}】有 {len(result)} 個讀音：{result}")
+        # print(f"【{han_ji}】有 {len(result)} 個讀音：")
 
         # 顯示所有讀音選項
         piau_im_options = self.display_all_piau_im_for_a_han_ji(han_ji, result)
