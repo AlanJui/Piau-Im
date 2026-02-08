@@ -1,6 +1,6 @@
 """
-    mod_excel_access.py v0.2.2.2
-    提供 Excel 檔案存取相關的輔助函式
+mod_excel_access.py v0.2.2.2
+提供 Excel 檔案存取相關的輔助函式
 """
 
 # =========================================================================
@@ -29,7 +29,7 @@ from mod_piau_im_tng_huan import _has_meaningful_data
 # 常數定義
 # =========================================================================
 
-#--------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 # 儲存格位置常數
 #  - 每 1 【行】，內含 4 row ；第 1 行之 row no 為：3
 #  - row 1: 人工標音儲存格 ===> row_no= 3,  7, 11, ...
@@ -40,11 +40,11 @@ from mod_piau_im_tng_huan import _has_meaningful_data
 # 依【作用儲存格】的 row no 求得：line_no = ((row_no - start_row_no) // rows_per_line) + 1
 #
 # 依【line_no】求得【基準列 row no】：base_row_no = start_row_no + ((line_no - 1) * rows_per_line)
-#--------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 ROWS_PER_LINE = 4
 START_ROW_NO = 3  # 第 1 行的起始列號
 START_COL = 4  # D 欄
-END_COL = 18   # R 欄
+END_COL = 18  # R 欄
 
 TAI_GI_IM_PIAU_OFFSET = 1
 HAN_JI_OFFSET = 2
@@ -75,12 +75,13 @@ init_logging()
 load_dotenv()
 
 # 預設檔案名稱從環境變數讀取
-DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
-DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
+DB_HO_LOK_UE = os.getenv("DB_HO_LOK_UE", "Ho_Lok_Ue.db")
+DB_KONG_UN = os.getenv("DB_KONG_UN", "Kong_Un.db")
 
 # =========================================================================
 # 輔助函式
 # =========================================================================
+
 
 def get_full_path_from_workbook(wb) -> str:
     """
@@ -96,6 +97,7 @@ def get_full_path_from_workbook(wb) -> str:
 
     # print(f"Excel 活頁簿檔完整路徑: {full_path}")
     return full_path
+
 
 def get_current_directory_from_workbook(wb) -> str:
     """
@@ -115,30 +117,128 @@ def get_current_directory_from_workbook(wb) -> str:
     # print(f"Excel 活頁簿檔所在目錄: {current_dir}")
     return str(current_dir)
 
+
 # 方法 1: 檢查是否為 list 且內容是 tuple
 def is_coordinate_list(obj):
     return (
-        isinstance(obj, list) and
-        len(obj) > 0 and
-        all(isinstance(item, tuple) and len(item) == 2 for item in obj)
+        isinstance(obj, list)
+        and len(obj) > 0
+        and all(isinstance(item, tuple) and len(item) == 2 for item in obj)
     )
+
 
 # 方法 2: 更嚴格的檢查（包含型別）
 def is_coordinate_list_type(obj):
-    return (
-        isinstance(obj, list) and
-        all(
-            isinstance(item, tuple) and
-            len(item) == 2 and
-            all(isinstance(coord, int) for coord in item)
-            for item in obj
-        )
+    return isinstance(obj, list) and all(
+        isinstance(item, tuple)
+        and len(item) == 2
+        and all(isinstance(coord, int) for coord in item)
+        for item in obj
     )
+
 
 # -------------------------------------------------------------------------
 # 計算工作表中有效列數
 # -------------------------------------------------------------------------
-def calculate_total_rows(sheet, start_col=START_COL, end_col=END_COL, base_row=START_ROW_NO, rows_per_group=ROWS_PER_LINE):
+def calculate_total_lines(
+    sheet,
+    rows_per_line=ROWS_PER_LINE,
+    start_row_no=START_ROW_NO,
+    han_ji_offset=HAN_JI_OFFSET,
+    start_col=START_COL,
+    end_col=END_COL,
+) -> int:
+    """
+    計算工作表中【總漢字注音行】數
+    說明：
+    1. 掃描範圍依據 sheet.used_range 決定。
+    2. 採一次性讀取資料至記憶體，提升效能。
+    3. 若遇「φ」符號則視為結束，回傳該行；否則回傳最後一個有資料的行號。
+    4. 可容許中間有空行，不會因此提早中止。
+
+    Args:
+        sheet: 工作表物件
+        rows_per_line: 每一行包含的列數 (預設 4)
+        start_row_no: 起始行的列號 (預設 3)
+        han_ji_offset: 漢字列的偏移量 (預設 2)
+        start_col: 起始欄 (預設 4, 即 D欄)
+        end_col: 結束欄 (預設 18, 即 R欄)
+
+    Returns:
+        int: 最後一個有效行的行號（從 1 開始）
+    """
+    try:
+        # 1. 找出工作表有使用的最後一列
+        last_cell = sheet.used_range.last_cell
+        max_row = last_cell.row
+
+        if max_row < start_row_no:
+            return 0
+
+        # 2. 一次讀取範圍內的資料，提升效能
+        #    使用 ndim=2 確保回傳二維列表
+        #    讀取範圍： (start_row_no, start_col) 到 (max_row, end_col)
+        data = (
+            sheet.range((start_row_no, start_col), (max_row, end_col))
+            .options(ndim=2)
+            .value
+        )
+
+        last_valid_line = 0
+        total_data_rows = len(data)
+
+        # 3. 遍歷資料檢查
+        #    row_idx 為相對於 start_row_no 的位移 (0-based)
+        #    以 rows_per_line 為步進值檢查每一「行」
+        for row_idx in range(0, total_data_rows, rows_per_line):
+            # 計算當前行號 (1-based)
+            line_no = (row_idx // rows_per_line) + 1
+
+            # 定位到該行的漢字列索引
+            han_ji_idx = row_idx + han_ji_offset
+
+            # 確保索引不超出範圍
+            if han_ji_idx >= total_data_rows:
+                break
+
+            row_values = data[han_ji_idx]
+
+            # 檢查這一列是否有內容
+            has_content = False
+            is_end_mark = False
+
+            for val in row_values:
+                if val is not None:
+                    s_val = str(val).strip()
+                    if s_val:
+                        has_content = True
+                        if s_val == "φ":
+                            is_end_mark = True
+                        # 只要發現有內容，即可停止檢查此列其餘欄位
+                        # 但若要找 φ，需確認是否就是 φ，或是有其他內容
+                        # 此處邏輯：找到內容標記為有效；若該內容是 φ 標記為結束
+                        break
+
+            if has_content:
+                last_valid_line = line_no
+                if is_end_mark:
+                    # 遇到結束符號，直接回傳當前行號
+                    return last_valid_line
+
+        return last_valid_line
+
+    except Exception as e:
+        print(f"計算總行數時發生錯誤: {e}")
+        return 0
+
+
+def calculate_total_rows(
+    sheet,
+    start_col=START_COL,
+    end_col=END_COL,
+    base_row=START_ROW_NO,
+    rows_per_group=ROWS_PER_LINE,
+):
     """Compute how many row groups exist based on the described worksheet layout."""
     total_rows = 0
     current_base = base_row
@@ -146,7 +246,7 @@ def calculate_total_rows(sheet, start_col=START_COL, end_col=END_COL, base_row=S
     while True:
         han_row = current_base + 2
         pronunciation_row = current_base + 3
-        target_range = sheet.range(f'{start_col}{han_row}:{end_col}{pronunciation_row}')
+        target_range = sheet.range(f"{start_col}{han_row}:{end_col}{pronunciation_row}")
         values = target_range.value
 
         if not _has_meaningful_data(values):
@@ -171,6 +271,7 @@ def get_row_col_from_coordinate(coord_str):
         return int(row), int(col)  # 轉換成整數
     except ValueError:
         return ""  # 避免解析錯誤
+
 
 # def get_active_cell(wb):
 #     """
@@ -199,18 +300,19 @@ def set_range_format(range_obj, font_name, font_size, font_color, fill_color=Non
         # range_obj.api.Interior.Pattern = xw.constants.Pattern.xlPatternNone  # 無填滿
         range_obj.color = None
 
-#--------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------
 # 清除儲存格內容
-#--------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 def clear_han_ji_kap_piau_im(
     wb,
-    sheet_name: str='漢字注音',
-    total_lines: Optional[int]=120,
-    rows_per_line: Optional[int]=4,
-    start_row: Optional[int]=3,
-    start_col: Optional[int]=4,
-    end_col: Optional[int]=18,
-    han_ji_orgin_cell: Optional[str]='V3'
+    sheet_name: str = "漢字注音",
+    total_lines: Optional[int] = 120,
+    rows_per_line: Optional[int] = 4,
+    start_row: Optional[int] = 3,
+    start_col: Optional[int] = 4,
+    end_col: Optional[int] = 18,
+    han_ji_orgin_cell: Optional[str] = "V3",
 ):
     """清除【工作表】之儲存格內存信
 
@@ -218,18 +320,22 @@ def clear_han_ji_kap_piau_im(
         wb (_type_): _description_
         sheet_name (str, optional): _description_. Defaults to '漢字注音'.
     """
-    sheet = wb.sheets[sheet_name]   # 選擇工作表
-    sheet.activate()               # 將「漢字注音」工作表設為作用中工作表
+    sheet = wb.sheets[sheet_name]  # 選擇工作表
+    # sheet.activate()               # 將「漢字注音」工作表設為作用中工作表
+    sheet.select()  # 將「漢字注音」工作表設為作用中工作表
 
     # 每頁最多處理的列數
     total_lines = int(total_lines)  # 從名稱【每頁總列數】取得值
     rows_per_line = int(rows_per_line)  # 每行佔用的列數
 
     rows_per_line = 4
-    end_of_rows = start_row + (total_lines * rows_per_line ) - 1
+    end_of_rows = start_row + (total_lines * rows_per_line) - 1
     start_col_name = xw.utils.col_name(start_col)  # D
     end_col_name = xw.utils.col_name(end_col)  # R
-    cells_range = f'{start_col_name}{start_row}:{end_col_name}{end_of_rows}'
+    cells_range = f"{start_col_name}{start_row}:{end_col_name}{end_of_rows}"
+
+    # 顯示目前處理【狀態】
+    print(f"清除【{sheet_name}】工作表之儲存格內容，範圍為：{cells_range}。")
 
     # 清除範圍的內容（xlwings 使用 value = None 或 clear() 方法）
     sheet.range(cells_range).value = None
@@ -246,62 +352,76 @@ def clear_han_ji_kap_piau_im(
 # 重置【漢字注音】工作表
 def reset_cells_format_in_sheet(
     wb,
-    sheet_name: Optional[str]="漢字注音",
-    total_lines: Optional[int]=120,
-    rows_per_line: Optional[int]=4,
-    start_row: Optional[int]=3,
-    start_col: Optional[int]=4,
-    end_col: Optional[int]=18,
+    sheet_name: Optional[str] = "漢字注音",
+    total_lines: Optional[int] = 120,
+    rows_per_line: Optional[int] = 4,
+    start_row: Optional[int] = 3,
+    start_col: Optional[int] = 4,
+    end_col: Optional[int] = 18,
 ):
     try:
         sheet = wb.sheets[sheet_name]  # 選擇【漢字注音】工作表
         rows_per_line = 4
-        end_row = start_row + (total_lines * rows_per_line ) - 1
+        end_row = start_row + (total_lines * rows_per_line) - 1
 
         # 設定起始及結束的【欄】位址
         # start_col = 4  # D 欄
         # end_col = start_col + chars_per_row - 1  # 因為欄位是從 1 開始計數
 
+        # 顯示目前處理【狀態】
+        start_col_name = xw.utils.col_name(start_col)  # D
+        end_col_name = xw.utils.col_name(end_col)  # R
+        print(
+            f"重置【{sheet_name}】工作表之儲存格格式，範圍為：{start_col_name}{start_row}:{end_col_name}{end_row}。"
+        )
+
         # 以【區塊】（range）方式設置儲存格格式
         row = start_row
         for line in range(1, total_lines + 1):
             # 判斷是否已經超過結束列位址，若是則跳出迴圈
-            if row > end_row: break
+            if row > end_row:
+                break
             # 顯示目前處理【狀態】
-            print(f'重置 {line} 行：【漢字】儲存格位於【 {row} 列 】。')
+            # print(f"重置 {line} 行：【漢字】儲存格位於【 {row} 列 】。")
+            print(f"重置【漢字注音】第 {line} 行 】。")
 
             # 人工標音
             range_人工標音 = sheet.range((row - 2, start_col), (row - 2, end_col))
             range_人工標音.value = None
-            set_range_format(range_人工標音,
-                            font_name='Arial',
-                            font_size=24,
-                            font_color=0xFF0000,   # 紅色
-                            fill_color=(255, 255, 204))  # 淡黃色
+            set_range_format(
+                range_人工標音,
+                font_name="Arial",
+                font_size=24,
+                font_color=0xFF0000,  # 紅色
+                fill_color=(255, 255, 204),
+            )  # 淡黃色
 
             # 台語音標
             range_台語音標 = sheet.range((row - 1, start_col), (row - 1, end_col))
             range_台語音標.value = None
-            set_range_format(range_台語音標,
-                            font_name='Sitka Text Semibold',
-                            font_size=24,
-                            font_color=0xFF9933)  # 橙色
+            set_range_format(
+                range_台語音標,
+                font_name="Sitka Text Semibold",
+                font_size=24,
+                font_color=0xFF9933,
+            )  # 橙色
 
             # 漢字
             range_漢字 = sheet.range((row, start_col), (row, end_col))
             range_漢字.value = None
-            set_range_format(range_漢字,
-                            font_name='吳守禮細明台語注音',
-                            font_size=48,
-                            font_color=0x000000)  # 黑色
+            set_range_format(
+                range_漢字,
+                font_name="吳守禮細明台語注音",
+                font_size=48,
+                font_color=0x000000,
+            )  # 黑色
 
             # 漢字標音
             range_漢字標音 = sheet.range((row + 1, start_col), (row + 1, end_col))
             range_漢字標音.value = None
-            set_range_format(range_漢字標音,
-                            font_name='芫荽 0.94',
-                            font_size=26,
-                            font_color=0x009900)  # 綠色
+            set_range_format(
+                range_漢字標音, font_name="芫荽 0.94", font_size=26, font_color=0x009900
+            )  # 綠色
 
             # 準備處理下一【行】
             row += rows_per_line
@@ -313,9 +433,9 @@ def reset_cells_format_in_sheet(
     return EXIT_CODE_SUCCESS
 
 
-#--------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 # 座標位址轉換函式
-#--------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 def convert_to_excel_address(coord_str: tuple[int, int]) -> str:
     """
     轉換 `(row, col)` 格式為 Excel 座標 (如 `(9, 4)` 轉換為 "D9")
@@ -338,7 +458,9 @@ def excel_address_to_row_col(cell_address: str) -> tuple[int, int]:
     :param cell_address: Excel 儲存格地址 (如 'D9', 'AA15')
     :return: (row, col) 元組，例如 (9, 4)
     """
-    match = re.match(r"([A-Z]+)(\d+)", cell_address)  # 用 regex 拆分字母(列) 和 數字(行)
+    match = re.match(
+        r"([A-Z]+)(\d+)", cell_address
+    )  # 用 regex 拆分字母(列) 和 數字(行)
 
     if not match:
         raise ValueError(f"無效的 Excel 儲存格地址: {cell_address}")
@@ -360,7 +482,9 @@ def excel_address_to_coordinate(cell_address: str) -> tuple[int, int]:
     :param cell_address: Excel 儲存格地址 (如 'D9', 'AA15')
     :return: (row, col) 元組，例如 (9, 4)
     """
-    match = re.match(r"([A-Z]+)(\d+)", cell_address)  # 用 regex 拆分字母(列) 和 數字(行)
+    match = re.match(
+        r"([A-Z]+)(\d+)", cell_address
+    )  # 用 regex 拆分字母(列) 和 數字(行)
 
     if not match:
         raise ValueError(f"無效的 Excel 儲存格地址: {cell_address}")
@@ -373,6 +497,7 @@ def excel_address_to_coordinate(cell_address: str) -> tuple[int, int]:
         col_number = col_number * 26 + (ord(letter) - ord("A") + 1)
 
     return int(row_number), col_number
+
 
 def convert_coord_str_to_excel_address(coord_str: str) -> str:
     """
@@ -388,6 +513,7 @@ def convert_coord_str_to_excel_address(coord_str: str) -> str:
     except ValueError:
         return ""  # 避免解析錯誤
 
+
 def convert_row_col_to_excel_address(row: int, col: int) -> str:
     """
     將 (row, col) 格式轉換為 Excel 座標 (如 (9, 4) 轉換為 "D9")
@@ -398,6 +524,7 @@ def convert_row_col_to_excel_address(row: int, col: int) -> str:
     """
     return f"{chr(64 + col)}{row}"  # 轉換成 Excel 座標
 
+
 def strip_cell(x):
     """轉成字串並去除頭尾空白，若空則回傳 None，但保留換行符 \n"""
     # 可以正確區分空白字符和換行符，從而避免將 \n 誤判為空白
@@ -407,6 +534,7 @@ def strip_cell(x):
     if x_str.strip() == "" and x_str != "\n":  # 空白但不是換行符
         return None
     return x_str.strip() if x_str != "\n" else "\n"  # 保留換行符
+
 
 def get_active_excel_file():
     """
@@ -436,7 +564,9 @@ def get_active_excel_file():
         return None
 
 
-def get_line_no_by_row(current_row_no, start_row_no=START_ROW_NO, rows_per_line=ROWS_PER_LINE):
+def get_line_no_by_row(
+    current_row_no, start_row_no=START_ROW_NO, rows_per_line=ROWS_PER_LINE
+):
     """
     根據儲存格的 row 座標，計算其所屬的行號 (line no)。
 
@@ -446,7 +576,9 @@ def get_line_no_by_row(current_row_no, start_row_no=START_ROW_NO, rows_per_line=
     :return: 行號 (line no)，從 1 開始計數
     """
     if current_row_no < start_row_no:
-        raise ValueError(f"儲存格的 row 列號（{current_row_no}）必須大於等於基準列（{START_ROW_NO}）。")
+        raise ValueError(
+            f"儲存格的 row 列號（{current_row_no}）必須大於等於基準列（{START_ROW_NO}）。"
+        )
     line_no = ((current_row_no - start_row_no) // rows_per_line) + 1
     return line_no
 
@@ -510,7 +642,9 @@ def get_active_cell_info(wb):
     """
     active_cell = wb.app.selection  # 取得目前作用中的儲存格
     sheet_name = active_cell.sheet.name  # 取得所在的工作表名稱
-    cell_address = active_cell.address.replace("$", "")  # 取得 Excel 格式地址 (去掉 "$")
+    cell_address = active_cell.address.replace(
+        "$", ""
+    )  # 取得 Excel 格式地址 (去掉 "$")
 
     row, col = excel_address_to_row_col(cell_address)  # 轉換為 (row, col)
 
@@ -534,7 +668,9 @@ def get_active_cell(wb):
     """
     active_cell = wb.app.selection  # 獲取目前作用中的儲存格
     sheet_name = active_cell.sheet.name  # 獲取所在的工作表名稱
-    cell_address = active_cell.address.replace("$", "")  # 取得 Excel 格式地址 (去掉 "$")
+    cell_address = active_cell.address.replace(
+        "$", ""
+    )  # 取得 Excel 格式地址 (去掉 "$")
 
     return sheet_name, cell_address
 
@@ -569,11 +705,11 @@ def get_sheet_data(sheet, start_cell):
     return data if isinstance(data[0], list) else [data]
 
 
-#--------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 # 工作表操作函式
-#--------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 # 依工作表名稱，刪除工作表
-def delete_sheet_by_name(wb, sheet_name: str, show_msg: bool=False):
+def delete_sheet_by_name(wb, sheet_name: str, show_msg: bool = False):
     """
     刪除指定名稱的工作表
     wb: Excel 活頁簿物件
@@ -584,14 +720,18 @@ def delete_sheet_by_name(wb, sheet_name: str, show_msg: bool=False):
         if sheet_name in [sheet.name for sheet in wb.sheets]:
             sheet = wb.sheets[sheet_name]
             sheet.delete()  # 刪除工作表
-            if show_msg: print(f"已成功刪除工作表：{sheet_name}")
+            if show_msg:
+                print(f"已成功刪除工作表：{sheet_name}")
         else:
-            if show_msg: print(f"無法刪除，工作表 {sheet_name} 不存在")
+            if show_msg:
+                print(f"無法刪除，工作表 {sheet_name} 不存在")
     except Exception as e:
-        if show_msg: print(f"刪除工作表時發生錯誤：{e}")
+        if show_msg:
+            print(f"刪除工作表時發生錯誤：{e}")
+
 
 # 使用 List 刪除工作表
-def delete_sheets_by_list(wb, sheet_list: list, show_msg: bool=False):
+def delete_sheets_by_list(wb, sheet_list: list, show_msg: bool = False):
     """
     刪除指定名稱的工作表
     wb: Excel 活頁簿物件
@@ -599,6 +739,7 @@ def delete_sheets_by_list(wb, sheet_list: list, show_msg: bool=False):
     """
     for sheet_name in sheet_list:
         delete_sheet_by_name(wb, sheet_name, show_msg)
+
 
 def ensure_sheet_exists(wb, sheet_name):
     """
@@ -647,7 +788,7 @@ def get_ji_khoo(wb, sheet_name="標音字庫"):
     """
     # 取得或新增工作表
     if sheet_name not in [s.name for s in wb.sheets]:
-        sheet = wb.sheets.add(sheet_name, after=wb.sheets['漢字注音'])
+        sheet = wb.sheets.add(sheet_name, after=wb.sheets["漢字注音"])
         print(f"已新增工作表：{sheet_name}")
         # 新增標題列
         sheet.range("A1").value = ["漢字", "台語音標", "總數", "校正音標"]
@@ -685,16 +826,19 @@ def maintain_ji_khoo(sheet, han_ji, tai_gi, show_msg=False):
     found = False
     for i, row in enumerate(records):
         if row[0] == han_ji and row[1] == tai_gi:
-            row[2] = (row[2] if isinstance(row[2], (int, float)) else 0) + 1  # 確保存在總數是數字
+            row[2] = (
+                row[2] if isinstance(row[2], (int, float)) else 0
+            ) + 1  # 確保存在總數是數字
             found = True
-            if show_msg: print(f"漢字：【{han_ji}（{tai_gi}）】紀錄己有，總數為： {int(row[2])}")
+            if show_msg:
+                print(f"漢字：【{han_ji}（{tai_gi}）】紀錄己有，總數為： {int(row[2])}")
             break
 
     # 若未找到則新增一筆資料
     if not found:
         records.append([han_ji, tai_gi, 1])
-        if show_msg: print(f"新增漢字：【{han_ji}】（{tai_gi}）")
-
+        if show_msg:
+            print(f"新增漢字：【{han_ji}】（{tai_gi}）")
 
     # 更新工作表的內容
     sheet.range("A2").expand("table").clear_contents()  # 清空舊資料
@@ -714,7 +858,8 @@ def get_tai_gi_by_han_ji(sheet, han_ji, show_msg=False):
     data = sheet.range("A2").expand("table").value
 
     if data is None:  # 如果工作表中沒有資料
-        if show_msg: print("【漢字庫】工作表中沒有任何資料")
+        if show_msg:
+            print("【漢字庫】工作表中沒有任何資料")
         return None
 
     # 確保資料為 2D 列表
@@ -726,14 +871,18 @@ def get_tai_gi_by_han_ji(sheet, han_ji, show_msg=False):
         han_ji_cell = row[0] if row[0] is not None else ""
         tai_gi_cell = row[1] if row[1] is not None else ""
         if han_ji_cell == han_ji:
-            if show_msg: print(f"找到台語音標：【{tai_gi_cell}】")
+            if show_msg:
+                print(f"找到台語音標：【{tai_gi_cell}】")
             return tai_gi_cell
 
-    if show_msg: print(f"漢字：【{han_ji}】不存在於【漢字庫】")
+    if show_msg:
+        print(f"漢字：【{han_ji}】不存在於【漢字庫】")
     return None
 
 
-def create_dict_by_sheet(wb, sheet_name: str, allow_empty_correction: bool = False) -> Optional[dict]:
+def create_dict_by_sheet(
+    wb, sheet_name: str, allow_empty_correction: bool = False
+) -> Optional[dict]:
     """
     更新【標音字庫】表中的【台語音標】欄位內容，依據【漢字注音】表中的【人工標音】欄位進行更新，並將【人工標音】覆蓋至原【台語音標】。
     """
@@ -757,12 +906,21 @@ def create_dict_by_sheet(wb, sheet_name: str, allow_empty_correction: bool = Fal
     for i, row in enumerate(data, start=2):
         han_ji = row[0] or ""
         tai_gi_im_piau = row[1] or ""
-        total_count = int(row[2]) if len(row) > 2 and isinstance(row[2], (int, float)) else 0
+        total_count = (
+            int(row[2]) if len(row) > 2 and isinstance(row[2], (int, float)) else 0
+        )
         corrected_tai_gi = row[3] if len(row) > 3 else ""  # 若無 D 欄資料則設為空字串
 
         # 在 dict 新增一筆紀錄：（1）已填入校正音標，且校正音標不同於現有之台語音標；（2）允許校正音標為空時也加入字典
-        if allow_empty_correction or (corrected_tai_gi and corrected_tai_gi != tai_gi_im_piau):
-            han_ji_dict[han_ji] = (tai_gi_im_piau, corrected_tai_gi, total_count, i)  # i 為資料列索引
+        if allow_empty_correction or (
+            corrected_tai_gi and corrected_tai_gi != tai_gi_im_piau
+        ):
+            han_ji_dict[han_ji] = (
+                tai_gi_im_piau,
+                corrected_tai_gi,
+                total_count,
+                i,
+            )  # i 為資料列索引
 
     # 若 han_ji_dict 為空，表查找不到【漢字】對應的【台語音標】
     if not han_ji_dict:
@@ -790,7 +948,7 @@ def get_sheet_by_name(wb, sheet_name="工作表1"):
 def prepare_working_sheets(wb, sheet_list=DEFAULT_SHEET_LIST):
     # 確認作業用工作表已存在；若無，則建置
     for sheet_name in sheet_list:
-        sheets =  [sheet.name for sheet in wb.sheets]  # 獲取所有工作表的名稱
+        sheets = [sheet.name for sheet in wb.sheets]  # 獲取所有工作表的名稱
         if sheet_name in sheets:
             sheet = wb.sheets[sheet_name]
             try:
@@ -832,16 +990,17 @@ def get_total_rows_in_sheet(wb, sheet_name):
 # =========================================================================
 def ut_get_sheet_data(wb=None):
     if not wb:
-        wb = xw.Book('Test_Case_Sample.xlsx')
-    sheet = wb.sheets['漢字注音']
-    data = get_sheet_data(sheet, 'D5')
+        wb = xw.Book("Test_Case_Sample.xlsx")
+    sheet = wb.sheets["漢字注音"]
+    data = get_sheet_data(sheet, "D5")
     for row in data:
         print(row)
     return EXIT_CODE_SUCCESS
 
+
 def ut_khuat_ji_piau(wb=None):
     """缺字表登錄單元測試"""
-    wb = xw.Book('Test_Case_Sample.xlsx')
+    wb = xw.Book("Test_Case_Sample.xlsx")
     wb.activate()
     delete_sheet_by_name(wb, "缺字表", show_msg=True)
     sheet = get_ji_khoo(wb, "缺字表")
@@ -865,7 +1024,7 @@ def ut_khuat_ji_piau(wb=None):
 
 
 def ut_maintain_han_ji_koo(wb=None):
-    wb = xw.Book('Test_Case_Sample.xlsx')
+    wb = xw.Book("Test_Case_Sample.xlsx")
     sheet = get_ji_khoo(wb, "漢字庫")
 
     # 漢字庫工作表不存在：工作表將新增，且新增一筆紀錄，加入【說】字，【總數】為 1
@@ -896,6 +1055,7 @@ def ut_maintain_han_ji_koo(wb=None):
 
     return EXIT_CODE_SUCCESS
 
+
 def ut_prepare_working_sheets(wb=None):
     if not wb:
         wb = xw.Book()
@@ -917,6 +1077,7 @@ def ut_prepare_working_sheets(wb=None):
         return EXIT_CODE_UNKNOWN_ERROR
 
     return EXIT_CODE_SUCCESS
+
 
 def ut_get_sheet_by_name(wb=None):
     if not wb:
@@ -940,7 +1101,8 @@ def ut_get_sheet_by_name(wb=None):
 
     return EXIT_CODE_SUCCESS
 
-def ut_get_total_rows_in_sheet(wb=None, sheet_name="字庫表"):
+
+def ut10_get_total_rows_in_sheet(wb=None, sheet_name="字庫表") -> int:
     #  工作表已存在
     try:
         total_rows = get_total_rows_in_sheet(wb, sheet_name)
@@ -969,6 +1131,19 @@ def ut_get_total_rows_in_sheet(wb=None, sheet_name="字庫表"):
 
     return EXIT_CODE_SUCCESS
 
+
+def ut20_get_total_rows_in_sheet(wb=None, sheet_name="漢字注音") -> int:
+    #  工作表已存在
+    try:
+        total_rows = get_total_rows_in_sheet(wb, sheet_name)
+        print(f"工作表 {sheet_name} 共有 {total_rows} 列")
+    except Exception as e:
+        print(e)
+        return EXIT_CODE_UNKNOWN_ERROR
+
+    return EXIT_CODE_SUCCESS
+
+
 def ut01_取得當前作用儲存格(wb):
     # 作業流程：獲取當前作用中的 Excel 儲存格
     sheet_name, cell_address = get_active_cell(wb)
@@ -993,7 +1168,6 @@ def ut01_取得當前作用儲存格(wb):
     target_cell_address = new_cell_address
     set_active_cell(wb, target_sheet, target_cell_address)
 
-
     return EXIT_CODE_SUCCESS
 
 
@@ -1016,6 +1190,21 @@ def ut02_利用列欄座標值定位漢字注音儲存格(wb):
     target_cell_address = new_cell_address
     set_active_cell(wb, target_sheet, target_cell_address)
 
+    return EXIT_CODE_SUCCESS
+
+
+def ut99_calculate_total_lines(wb) -> int:
+    """計算【漢字注音】工作表的【漢字注音行】總行數單元測試"""
+    # from mod_excel_access import calculate_total_lines
+    # 假設 wb 是您的活頁簿物件
+    sheet = wb.sheets["漢字注音"]
+    total_lines = calculate_total_lines(sheet)
+    if total_lines is not None:
+        # 應回傳 158
+        print(f"總漢字注音行數：{total_lines}")
+    else:
+        print("無法計算總漢字注音行數")
+        return EXIT_CODE_UNKNOWN_ERROR
 
     return EXIT_CODE_SUCCESS
 
@@ -1023,10 +1212,21 @@ def ut02_利用列欄座標值定位漢字注音儲存格(wb):
 # =========================================================================
 # 作業程序
 # =========================================================================
-def process(wb):
-    return_code = ut02_利用列欄座標值定位漢字注音儲存格(wb=wb)
-    if return_code != EXIT_CODE_SUCCESS:
-        return return_code
+def process(wb) -> int:
+    # ---------------------------------------------------------------------
+    total_lines = ut99_calculate_total_lines(wb)
+    if total_lines is not None:
+        # 應回傳 158
+        print(f"總漢字注音行數：{total_lines}")
+    else:
+        print("無法計算總漢字注音行數")
+        return EXIT_CODE_UNKNOWN_ERROR
+
+    return EXIT_CODE_SUCCESS
+    # ---------------------------------------------------------------------
+    # return_code = ut02_利用列欄座標值定位漢字注音儲存格(wb=wb)
+    # if return_code != EXIT_CODE_SUCCESS:
+    #     return return_code
     # ---------------------------------------------------------------------
     # return_code = ut01_取得當前作用儲存格(wb=wb)
     # if return_code != EXIT_CODE_SUCCESS:
@@ -1068,6 +1268,7 @@ def process(wb):
 
     return EXIT_CODE_SUCCESS
 
+
 # =============================================================================
 # 程式主流程
 # =============================================================================
@@ -1088,7 +1289,7 @@ def main():
     wb = None
     # 取得【作用中活頁簿】
     try:
-        wb = xw.apps.active.books.active    # 取得 Excel 作用中的活頁簿檔案
+        wb = xw.apps.active.books.active  # 取得 Excel 作用中的活頁簿檔案
     except Exception as e:
         print(f"發生錯誤: {e}")
         logging.error(f"無法找到作用中的 Excel 工作簿: {e}", exc_info=True)
@@ -1126,4 +1327,4 @@ if __name__ == "__main__":
         print("程式正常完成！")
     else:
         print(f"程式異常終止，錯誤代碼為: {exit_code}")
-    sys.exit(exit_code)
+        sys.exit(exit_code)

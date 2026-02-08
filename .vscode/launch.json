@@ -85,7 +85,7 @@
             "console": "externalTerminal",
             "args": [
                 "_tmp_p1_han_ji.txt",
-                "--new"
+                "--new",
                 // "--tiau_hu",
             ]
         },
@@ -654,7 +654,7 @@
             "console": "externalTerminal",
         },
         {
-            "name": "mod_excel",
+            "name": "mod_excel_access",
             "type": "debugpy",
             "request": "launch",
             "program": "mod_excel_access.py",

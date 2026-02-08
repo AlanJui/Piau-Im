@@ -1,6 +1,10 @@
 """
-a100_作業中活頁檔填入漢字.py V0.2.6
+a100_作業中活頁檔填入漢字.py V0.2.7
 功能：將漢字純文字檔中的漢字，填入 Excel 活頁簿中的【漢字注音】工作表，並自動查找台語音標與漢字標音。
+更新紀錄：
+1. 2026-02-08：
+    - 改善操作介面：在填入漢字的過程中，顯示正在處理的段落文字，讓使用者能更清楚目前進度。
+    - 改善 total_lines 的計算方式：改為從 Excel 工作表中讀取實際的資料行數，而非使用固定值，提升彈性與適應性。
 """
 
 # =========================================================================
@@ -32,6 +36,7 @@ from dotenv import load_dotenv
 
 # 載入自訂模組
 from mod_excel_access import (
+    calculate_total_lines,
     clear_han_ji_kap_piau_im,
     reset_cells_format_in_sheet,
 )
@@ -99,7 +104,15 @@ def _process_sheet(sheet, program: Program, xls_cell: ExcelCell) -> None:
 
     # 調整 row 值至【漢字】列（每 4 列為一組【列群】，漢字在第 3 列：5, 9, 13, ... ）
     is_eof = False
-    for r in range(1, program.TOTAL_LINES + 1):
+    # total_lines = program.TOTAL_LINES
+    # 計算【漢字注音】工作表的【漢字注音行】總行數
+    total_lines = calculate_total_lines(sheet)
+    try:
+        program.wb.names["每頁總列數"].refers_to_range.value = total_lines
+    except Exception:
+        pass  # 若無此名稱定義，則忽略（不影響主流程）
+
+    for r in range(1, total_lines + 1):
         if is_eof:
             break
         line_no = r
@@ -157,8 +170,18 @@ def fill_in_han_ji(
 
     col = start_col
 
+    print(
+        f"正在填入漢字到工作表 {sheet_name}，起始列 {start_row}，起始欄 {start_col}，最大欄 {max_col}"
+    )
     text = ""
+
     for han_ji_ku in text_with_han_ji:
+        # 1. 取得該行文字
+        line_text = "".join(han_ji_ku)
+        # 2. 顯示即將處理的文字
+        # print(f"處理段落：{line_text}")
+        print(f"==> {line_text}")
+
         for han_ji in han_ji_ku:
             if col > max_col:
                 # 超過欄位，換到下一組行
@@ -178,6 +201,7 @@ def fill_in_han_ji(
             col = start_col
         sheet.cells(row_han_ji, col).value = "=CHAR(10)"
         text += "\n"
+
         row_han_ji += 4
         col = start_col
 
@@ -286,6 +310,9 @@ def process(wb, args) -> int:
             text_file_name = (
                 args.han_ji_file if args.han_ji_file else "_tmp_p1_han_ji.txt"
             )
+            # 顯示正在處理的漢字檔案名稱
+            print("=" * 80)
+            print(f"正在處理的漢字檔案：{text_file_name}")
             _fill_han_ji_into_sheet(
                 wb=wb,
                 program=program,
@@ -349,23 +376,17 @@ def main(args) -> int:
     # =========================================================================
     # (2) 設定【作用中活頁簿】：偵測及獲取 Excel 已開啟之活頁簿檔案。
     # =========================================================================
+    wb = None
     try:
-        # 取得 Excel 活頁簿
-        wb = None
+        # 嘗試從 Excel 呼叫取得（RunPython）
+        wb = xw.Book.caller()
+    except Exception:
+        # 若失敗，則取得作用中的活頁簿
         try:
-            # 嘗試從 Excel 呼叫取得（RunPython）
-            wb = xw.Book.caller()
-        except Exception:
-            # 若失敗，則取得作用中的活頁簿
-            try:
-                wb = xw.apps.active.books.active
-            except Exception as e:
-                logging.error(f"無法找到作用中的 Excel 工作簿: {e}")
-                return EXIT_CODE_NO_FILE
-
-    except Exception as e:
-        logging.exception(f"取得作用中活頁簿作業失敗： {e} ！")
-        return EXIT_CODE_UNKNOWN_ERROR
+            wb = xw.apps.active.books.active
+        except Exception as e:
+            logging.error(f"無法找到作用中的 Excel 工作簿: {e}")
+            return EXIT_CODE_NO_FILE
 
     # 若無法取得【作用中活頁簿】，則因無法繼續作業，故返回【作業異常終止代碼】結束。
     if not wb:
@@ -408,7 +429,27 @@ def main(args) -> int:
 
 
 def test_01():
-    pass
+    """測試函數能計算總行數"""
+    from mod_excel_access import calculate_total_lines
+
+    # 取得 wb 物件以供設定 sheet
+    wb = None
+    try:
+        wb = xw.apps.active.books.active
+    except Exception as e:
+        logging.error(f"無法找到作用中的 Excel 工作簿: {e}！")
+        return EXIT_CODE_NO_FILE
+
+    sheet = wb.sheets["漢字注音"]
+    total_lines = calculate_total_lines(sheet)
+    if total_lines is not None:
+        # 應回傳 158
+        print(f"總漢字注音行數：{total_lines}")
+    else:
+        print("無法計算總漢字注音行數")
+        return EXIT_CODE_UNKNOWN_ERROR
+
+    return EXIT_CODE_SUCCESS
 
 
 if __name__ == "__main__":

@@ -23,6 +23,7 @@ from dotenv import load_dotenv
 
 try:
     from pynput import keyboard
+
     HAS_PYNPUT = True
 except ImportError:
     HAS_PYNPUT = False
@@ -33,6 +34,7 @@ except ImportError:
 try:
     import win32con
     import win32gui
+
     HAS_WIN32 = True
 except ImportError:
     HAS_WIN32 = False
@@ -41,7 +43,8 @@ except ImportError:
 
 # COM 執行緒初始化（用於多執行緒環境）
 try:
-    import pythoncom
+    # import pythoncom
+
     HAS_PYTHONCOM = True
 except ImportError:
     HAS_PYTHONCOM = False
@@ -49,7 +52,10 @@ except ImportError:
 # 載入 a222 的核心查詢功能（個人字典）
 try:
     # from a222_依作用儲存格在個人字典查找漢字讀音 import ca_han_ji_thak_im as ca_han_ji_thak_im_a222
-    from a222_依作用儲存格在個人字典查找漢字讀音 import process as ca_han_ji_thak_im_a222
+    from a222_依作用儲存格在個人字典查找漢字讀音 import (
+        process as ca_han_ji_thak_im_a222,
+    )
+
     HAS_A222 = True
 except ImportError as e:
     HAS_A222 = False
@@ -58,6 +64,7 @@ except ImportError as e:
 # 載入 a220 的核心查詢功能（萌典）
 try:
     from a220_作用儲存格查找萌典漢字讀音 import process as ca_han_ji_thak_im_a220
+
     HAS_A220 = True
 except ImportError as e:
     HAS_A220 = False
@@ -67,6 +74,7 @@ except ImportError as e:
 try:
     # from a224_引用既有的漢字標音 import jin_kang_piau_im_ca_taigi_im_piau
     from a224_引用既有的漢字標音 import process as jin_kang_piau_im_ca_taigi_im_piau
+
     HAS_A224 = True
 except ImportError as e:
     HAS_A224 = False
@@ -82,11 +90,11 @@ EXIT_CODE_ERROR = 10
 EXIT_CODE_UNKNOWN_ERROR = 99
 
 # 工作表設定
-SHEET_NAME = '漢字注音'
-START_ROW = 5       # 第一行的起始列號
-START_COL = 4       # D 欄（第 4 欄）
-END_COL = 18        # R 欄（第 18 欄）
-ROWS_PER_LINE = 4   # 每行佔用 4 列
+SHEET_NAME = "漢字注音"
+START_ROW = 5  # 第一行的起始列號
+START_COL = 4  # D 欄（第 4 欄）
+END_COL = 18  # R 欄（第 18 欄）
+ROWS_PER_LINE = 4  # 每行佔用 4 列
 
 # =========================================================================
 # 載入環境變數
@@ -97,8 +105,7 @@ load_dotenv()
 # 設定日誌
 # =========================================================================
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
 
@@ -221,9 +228,9 @@ def move_left(sheet, current_row: int, current_col: int) -> tuple:
                 cell_formula = cell.formula
 
                 # 如果是換行符，跳過
-                if cell_formula and '=CHAR(10)' in cell_formula.upper():
+                if cell_formula and "=CHAR(10)" in cell_formula.upper():
                     continue
-                if cell_value == '\n':
+                if cell_value == "\n":
                     continue
 
                 # 找到有內容的儲存格
@@ -285,13 +292,13 @@ def move_right(sheet, current_row: int, current_col: int, total_lines: int) -> t
     is_newline = False
 
     # 方法1: 檢查公式是否為 =CHAR(10)
-    if next_cell_formula and '=CHAR(10)' in next_cell_formula.upper():
+    if next_cell_formula and "=CHAR(10)" in next_cell_formula.upper():
         is_newline = True
         # print(f"    → 偵測到 CHAR(10) 公式")
 
     # 方法2: 檢查值是否為換行符
     elif next_cell_value is not None:
-        if next_cell_value == '\n' or next_cell_value == chr(10):
+        if next_cell_value == "\n" or next_cell_value == chr(10):
             is_newline = True
             # print(f"    → 偵測到換行符值")
 
@@ -325,7 +332,7 @@ def get_total_lines(wb) -> int:
         總行數
     """
     try:
-        total_lines = int(wb.names['每頁總列數'].refers_to_range.value)
+        total_lines = int(wb.names["每頁總列數"].refers_to_range.value)
         return total_lines
     except:  # noqa: E722
         # 預設值
@@ -342,7 +349,7 @@ def hide_manual_annotation_style(wb):
     """
     try:
         # 取得 Excel API 物件
-        excel_app = wb.app.api
+        # excel_app = wb.app.api
         workbook = wb.api
 
         # 查找【人工標音儲存格】樣式
@@ -353,8 +360,8 @@ def hide_manual_annotation_style(wb):
             # Excel 使用 BGR 格式，所以順序相反
             style.Font.Color = 0xF0FFFF  # BGR: 240, 255, 255 (象牙白)
             print(f"✓ 已隱藏【{style_name}】樣式的文字（字型顏色改為象牙白）")
-        except:
-            print(f"⚠️  找不到【{style_name}】樣式，跳過隱藏操作")
+        except Exception as e:
+            print(f"⚠️  找不到【{style_name}】樣式，跳過隱藏操作：{e}！")
 
     except Exception as e:
         logging.warning(f"隱藏人工標音樣式失敗：{e}")
@@ -371,7 +378,7 @@ def restore_manual_annotation_style(wb):
     """
     try:
         # 取得 Excel API 物件
-        excel_app = wb.app.api
+        # excel_app = wb.app.api
         workbook = wb.api
 
         # 查找【人工標音儲存格】樣式
@@ -382,8 +389,8 @@ def restore_manual_annotation_style(wb):
             # Excel 使用 BGR 格式，所以順序相反
             style.Font.Color = 0x0000FF  # BGR: 0, 0, 255 (紅色)
             print(f"✓ 已恢復【{style_name}】樣式的文字（字型顏色改回紅色）")
-        except:
-            print(f"⚠️  找不到【{style_name}】樣式，跳過恢復操作")
+        except Exception as e:
+            print(f"⚠️  找不到【{style_name}】樣式，跳過恢復操作：{e}！")
 
     except Exception as e:
         logging.warning(f"恢復人工標音樣式失敗：{e}")
@@ -441,7 +448,7 @@ def activate_console_window(console_hwnd):
         return
 
     try:
-        import win32api
+        # import win32api
         import win32process
 
         # 嘗試找到正確的 Console 視窗
@@ -449,10 +456,21 @@ def activate_console_window(console_hwnd):
 
         # 如果提供的句柄無效，嘗試找到 Python 控制台或 PowerShell 視窗
         if not current_hwnd or not win32gui.IsWindow(current_hwnd):
+
             def enum_handler(hwnd, result_list):
                 if win32gui.IsWindowVisible(hwnd):
                     title = win32gui.GetWindowText(hwnd)
-                    if any(keyword in title.lower() for keyword in ['python', 'powershell', 'cmd', 'terminal', 'piau-im', 'vscode']):
+                    if any(
+                        keyword in title.lower()
+                        for keyword in [
+                            "python",
+                            "powershell",
+                            "cmd",
+                            "terminal",
+                            "piau-im",
+                            "vscode",
+                        ]
+                    ):
                         result_list.append(hwnd)
 
             windows = []
@@ -470,15 +488,23 @@ def activate_console_window(console_hwnd):
             try:
                 # 獲取當前前景視窗的線程ID
                 foreground_hwnd = win32gui.GetForegroundWindow()
-                foreground_thread_id, _ = win32process.GetWindowThreadProcessId(foreground_hwnd)
+                foreground_thread_id, _ = win32process.GetWindowThreadProcessId(
+                    foreground_hwnd
+                )
                 # 獲取目標視窗的線程ID
-                target_thread_id, _ = win32process.GetWindowThreadProcessId(current_hwnd)
+                target_thread_id, _ = win32process.GetWindowThreadProcessId(
+                    current_hwnd
+                )
 
                 # 如果線程不同，嘗試附加線程輸入
                 if foreground_thread_id != target_thread_id:
                     try:
-                        win32process.AttachThreadInput(foreground_thread_id, target_thread_id, True)
-                        logging.debug(f"成功附加線程輸入: {foreground_thread_id} -> {target_thread_id}")
+                        win32process.AttachThreadInput(
+                            foreground_thread_id, target_thread_id, True
+                        )
+                        logging.debug(
+                            f"成功附加線程輸入: {foreground_thread_id} -> {target_thread_id}"
+                        )
                     except Exception as e:
                         logging.debug(f"AttachThreadInput 失敗: {e}")
 
@@ -506,13 +532,15 @@ def activate_console_window(console_hwnd):
                 # 方法 4: 再次嘗試激活
                 try:
                     win32gui.SetActiveWindow(current_hwnd)
-                except:
-                    pass
+                except Exception as e:
+                    logging.debug(f"SetActiveWindow 失敗: {e}！")
 
                 # 分離線程輸入
                 if foreground_thread_id != target_thread_id:
                     try:
-                        win32process.AttachThreadInput(foreground_thread_id, target_thread_id, False)
+                        win32process.AttachThreadInput(
+                            foreground_thread_id, target_thread_id, False
+                        )
                     except Exception as e:
                         logging.debug(f"DetachThreadInput 失敗: {e}")
 
@@ -577,7 +605,17 @@ class NavigationController:
                 if current_foreground:
                     title = win32gui.GetWindowText(current_foreground)
                     # 如果標題包含 Python, PowerShell, CMD 等，這就是 Console
-                    if any(keyword in title.lower() for keyword in ['python', 'powershell', 'cmd', 'terminal', 'piau-im', 'vscode']):
+                    if any(
+                        keyword in title.lower()
+                        for keyword in [
+                            "python",
+                            "powershell",
+                            "cmd",
+                            "terminal",
+                            "piau-im",
+                            "vscode",
+                        ]
+                    ):
                         self.console_hwnd = current_foreground
                     else:
                         # 否則嘗試搜尋 Console 視窗
@@ -592,10 +630,21 @@ class NavigationController:
         """搜尋 Console 視窗"""
         try:
             windows = []
+
             def enum_handler(hwnd, result_list):
                 if win32gui.IsWindowVisible(hwnd):
                     title = win32gui.GetWindowText(hwnd)
-                    if any(keyword in title.lower() for keyword in ['python', 'powershell', 'cmd', 'terminal', 'piau-im', 'vscode']):
+                    if any(
+                        keyword in title.lower()
+                        for keyword in [
+                            "python",
+                            "powershell",
+                            "cmd",
+                            "terminal",
+                            "piau-im",
+                            "vscode",
+                        ]
+                    ):
                         result_list.append(hwnd)
 
             win32gui.EnumWindows(enum_handler, windows)
@@ -642,11 +691,11 @@ class NavigationController:
 
         is_newline = False
         # 檢查公式是否為 =CHAR(10)
-        if cell_formula and '=CHAR(10)' in str(cell_formula).upper():
+        if cell_formula and "=CHAR(10)" in str(cell_formula).upper():
             is_newline = True
         # 檢查值是否為換行符
         elif cell_value is not None:
-            if cell_value == '\n' or cell_value == chr(10):
+            if cell_value == "\n" or cell_value == chr(10):
                 is_newline = True
 
         if is_newline:
@@ -666,35 +715,35 @@ class NavigationController:
         """鍵盤按下事件處理 - 只設置動作標記"""
         try:
             if key == keyboard.Key.left:
-                self.pending_action = 'left'
+                self.pending_action = "left"
             elif key == keyboard.Key.right:
-                self.pending_action = 'right'
+                self.pending_action = "right"
             elif key == keyboard.Key.up:
-                self.pending_action = 'up'
+                self.pending_action = "up"
             elif key == keyboard.Key.down:
-                self.pending_action = 'down'
+                self.pending_action = "down"
             elif key == keyboard.Key.space:
                 # 空白鍵：查詢個人字典
-                self.pending_action = 'query_personal'
-            elif hasattr(key, 'char') and key.char:
+                self.pending_action = "query_personal"
+            elif hasattr(key, "char") and key.char:
                 # 處理字元鍵
-                if key.char.lower() == 'q':
+                if key.char.lower() == "q":
                     # Q 鍵：查詢個人字典
-                    self.pending_action = 'query_personal'
-                elif key.char.lower() == 's':
+                    self.pending_action = "query_personal"
+                elif key.char.lower() == "s":
                     # S 鍵：查詢萌典
-                    self.pending_action = 'query_moedict'
-                elif key.char.lower() == 'e':
+                    self.pending_action = "query_moedict"
+                elif key.char.lower() == "e":
                     # E 鍵：手動輸入人工標音
-                    self.pending_action = 'manual_input'
-                elif key.char == '=':
+                    self.pending_action = "manual_input"
+                elif key.char == "=":
                     # = 鍵：引用既有的人工標音
-                    self.pending_action = 'fill_manual_mark'
+                    self.pending_action = "fill_manual_mark"
             elif key == keyboard.Key.delete:
                 # Del 鍵：清除人工標音
-                self.pending_action = 'clear_manual_annotation'
+                self.pending_action = "clear_manual_annotation"
             elif key == keyboard.Key.esc:
-                self.pending_action = 'esc'
+                self.pending_action = "esc"
                 self.running = False
                 return False  # 停止監聽
         except AttributeError:
@@ -711,55 +760,63 @@ class NavigationController:
         self.pending_action = None  # 清除動作
 
         try:
-            if action == 'left':
+            if action == "left":
                 # 向左移動（重置延遲計時器）
                 self.last_move_time = None
-                new_row, new_col = move_left(self.sheet, self.current_row, self.current_col)
+                new_row, new_col = move_left(
+                    self.sheet, self.current_row, self.current_col
+                )
                 if new_row != self.current_row or new_col != self.current_col:
                     self.move_to_cell(new_row, new_col)
 
-            elif action == 'right':
+            elif action == "right":
                 # 向右移動（重置延遲計時器）
                 self.last_move_time = None
-                new_row, new_col = move_right(self.sheet, self.current_row, self.current_col, self.total_lines)
+                new_row, new_col = move_right(
+                    self.sheet, self.current_row, self.current_col, self.total_lines
+                )
                 if new_row != self.current_row or new_col != self.current_col:
                     self.move_to_cell(new_row, new_col)
 
-            elif action == 'up':
+            elif action == "up":
                 # 向上移動（重置延遲計時器）
                 self.last_move_time = None
-                new_row, new_col = move_up(self.sheet, self.current_row, self.current_col)
+                new_row, new_col = move_up(
+                    self.sheet, self.current_row, self.current_col
+                )
                 if new_row != self.current_row or new_col != self.current_col:
                     self.move_to_cell(new_row, new_col)
 
-            elif action == 'down':
+            elif action == "down":
                 # 向下移動（重置延遲計時器）
                 self.last_move_time = None
-                new_row, new_col = move_down(self.sheet, self.current_row, self.current_col, self.total_lines)
+                new_row, new_col = move_down(
+                    self.sheet, self.current_row, self.current_col, self.total_lines
+                )
                 if new_row != self.current_row or new_col != self.current_col:
                     self.move_to_cell(new_row, new_col)
 
-            elif action == 'query_moedict':
+            elif action == "query_moedict":
                 # 查詢萌典
                 self.query_moedict_dictionary()
 
-            elif action == 'query_personal':
+            elif action == "query_personal":
                 # 查詢個人字典
                 self.query_personal_dictionary()
 
-            elif action == 'fill_manual_mark':
+            elif action == "fill_manual_mark":
                 # 填入人工標音標記
                 self.fill_manual_annotation_mark()
 
-            elif action == 'manual_input':
+            elif action == "manual_input":
                 # 手動輸入人工標音
                 self.manual_input_annotation()
 
-            elif action == 'clear_manual_annotation':
+            elif action == "clear_manual_annotation":
                 # 清除人工標音
                 self.clear_manual_annotation()
 
-            elif action == 'esc':
+            elif action == "esc":
                 print("\n按下 ESC 鍵，程式結束")
 
         except Exception as e:
@@ -784,17 +841,20 @@ class NavigationController:
                 # 切換到終端機視窗（確保用戶可以輸入）
                 activate_console_window(self.console_hwnd)
 
-                # 取得設定值
-                try:
-                    from mod_excel_access import get_value_by_name
-                    ue_im_lui_piat = get_value_by_name(wb=self.wb, name='語音類型')
-                    han_ji_khoo = get_value_by_name(wb=self.wb, name='漢字庫')
-                except:
-                    ue_im_lui_piat = "白話音"
-                    han_ji_khoo = "河洛話"
+                # # 取得設定值
+                # try:
+                #     from mod_excel_access import get_value_by_name
+
+                #     ue_im_lui_piat = get_value_by_name(wb=self.wb, name="語音類型")
+                #     han_ji_khoo = get_value_by_name(wb=self.wb, name="漢字庫")
+                # except:
+                #     ue_im_lui_piat = "白話音"
+                #     han_ji_khoo = "河洛話"
 
                 # 取得當前作用儲存格位置
-                current_cell = f"{xw.utils.col_name(self.current_col)}{self.current_row}"
+                current_cell = (
+                    f"{xw.utils.col_name(self.current_col)}{self.current_row}"
+                )
                 print(f"當前儲存格：{current_cell}")
 
                 # 調用查詢函數
@@ -823,7 +883,7 @@ class NavigationController:
                     [sys.executable, "a220_作用儲存格查找萌典漢字讀音.py"],
                     cwd=os.path.dirname(os.path.abspath(__file__)),
                     capture_output=False,
-                    text=True
+                    text=True,
                 )
                 if result.returncode != 0:
                     print(f"⚠️  a220 程式執行失敗，返回碼：{result.returncode}")
@@ -843,8 +903,7 @@ class NavigationController:
             # 重新啟動鍵盤監聽
             if self.listener:
                 self.listener = keyboard.Listener(
-                    on_press=self.on_key_press,
-                    suppress=True
+                    on_press=self.on_key_press, suppress=True
                 )
                 self.listener.start()
                 time.sleep(0.3)
@@ -870,16 +929,19 @@ class NavigationController:
                 activate_console_window(self.console_hwnd)
 
                 # 取得設定值
-                try:
-                    from mod_excel_access import get_value_by_name
-                    ue_im_lui_piat = get_value_by_name(wb=self.wb, name='語音類型')
-                    han_ji_khoo = get_value_by_name(wb=self.wb, name='漢字庫')
-                except:
-                    ue_im_lui_piat = "白話音"
-                    han_ji_khoo = "河洛話"
+                # try:
+                #     from mod_excel_access import get_value_by_name
+
+                #     ue_im_lui_piat = get_value_by_name(wb=self.wb, name="語音類型")
+                #     han_ji_khoo = get_value_by_name(wb=self.wb, name="漢字庫")
+                # except Exception as e:
+                #     ue_im_lui_piat = "白話音"
+                #     han_ji_khoo = "河洛話"
 
                 # 取得當前作用儲存格位置
-                current_cell = f"{xw.utils.col_name(self.current_col)}{self.current_row}"
+                current_cell = (
+                    f"{xw.utils.col_name(self.current_col)}{self.current_row}"
+                )
                 print(f"當前儲存格：{current_cell}")
 
                 # 調用查詢函數
@@ -908,7 +970,7 @@ class NavigationController:
                     [sys.executable, "a222_依作用儲存格在個人字典查找漢字讀音.py"],
                     cwd=os.path.dirname(os.path.abspath(__file__)),
                     capture_output=False,
-                    text=True
+                    text=True,
                 )
                 if result.returncode != 0:
                     print(f"⚠️  a222 程式執行失敗，返回碼：{result.returncode}")
@@ -928,8 +990,7 @@ class NavigationController:
             # 重新啟動鍵盤監聽
             if self.listener:
                 self.listener = keyboard.Listener(
-                    on_press=self.on_key_press,
-                    suppress=True
+                    on_press=self.on_key_press, suppress=True
                 )
                 self.listener.start()
                 time.sleep(0.3)
@@ -948,12 +1009,16 @@ class NavigationController:
                 return
 
             # 填入【=】字元
-            target_cell = self.sheet.range((manual_annotation_row, manual_annotation_col))
+            target_cell = self.sheet.range(
+                (manual_annotation_row, manual_annotation_col)
+            )
             target_cell.value = "="
 
             # 顯示訊息
             col_letter = xw.utils.col_name(manual_annotation_col)
-            current_cell_address = f"{xw.utils.col_name(self.current_col)}{self.current_row}"
+            current_cell_address = (
+                f"{xw.utils.col_name(self.current_col)}{self.current_row}"
+            )
             target_cell_address = f"{col_letter}{manual_annotation_row}"
 
             print(f"\n✓ 已在 {target_cell_address} 填入人工標音標記【=】")
@@ -987,7 +1052,9 @@ class NavigationController:
                     #     han_ji_khoo = "河洛話"
 
                     # 取得當前作用儲存格位置
-                    current_cell = f"{xw.utils.col_name(self.current_col)}{self.current_row}"
+                    current_cell = (
+                        f"{xw.utils.col_name(self.current_col)}{self.current_row}"
+                    )
                     print(f"當前儲存格：{current_cell}")
 
                     # 調用查詢函數
@@ -1007,7 +1074,7 @@ class NavigationController:
                         [sys.executable, "a224_引用既有的漢字標音.py"],
                         cwd=os.path.dirname(os.path.abspath(__file__)),
                         capture_output=False,
-                        text=True
+                        text=True,
                     )
                     if result.returncode != 0:
                         print(f"⚠️  a224 程式執行失敗，返回碼：{result.returncode}")
@@ -1026,8 +1093,7 @@ class NavigationController:
 
                 if self.listener:
                     self.listener = keyboard.Listener(
-                        on_press=self.on_key_press,
-                        suppress=True
+                        on_press=self.on_key_press, suppress=True
                     )
                     self.listener.start()
                     time.sleep(0.3)
@@ -1039,8 +1105,7 @@ class NavigationController:
             # 確保恢復鍵盤監聽
             if self.listener:
                 self.listener = keyboard.Listener(
-                    on_press=self.on_key_press,
-                    suppress=True
+                    on_press=self.on_key_press, suppress=True
                 )
                 self.listener.start()
 
@@ -1058,9 +1123,13 @@ class NavigationController:
 
             # 顯示當前儲存格資訊
             col_letter = xw.utils.col_name(manual_annotation_col)
-            current_cell_address = f"{xw.utils.col_name(self.current_col)}{self.current_row}"
+            current_cell_address = (
+                f"{xw.utils.col_name(self.current_col)}{self.current_row}"
+            )
             target_cell_address = f"{col_letter}{manual_annotation_row}"
-            current_han_ji = self.sheet.range((self.current_row, self.current_col)).value or ""
+            current_han_ji = (
+                self.sheet.range((self.current_row, self.current_col)).value or ""
+            )
 
             print("\n" + "=" * 70)
             print("手動輸入人工標音模式")
@@ -1088,9 +1157,13 @@ class NavigationController:
 
                 if user_input:
                     # 填入人工標音
-                    target_cell = self.sheet.range((manual_annotation_row, manual_annotation_col))
+                    target_cell = self.sheet.range(
+                        (manual_annotation_row, manual_annotation_col)
+                    )
                     target_cell.value = user_input
-                    print(f"\n✓ 已在 {target_cell_address} 填入人工標音：【{user_input}】")
+                    print(
+                        f"\n✓ 已在 {target_cell_address} 填入人工標音：【{user_input}】"
+                    )
 
                     # 呼叫 a224 程式以更新台語音標與漢字標音
                     print("\n正在更新台語音標與漢字標音...")
@@ -1098,8 +1171,11 @@ class NavigationController:
                         if HAS_A224:
                             # 創建簡單的 args 物件（模擬命令列參數）
                             import argparse
+
                             args = argparse.Namespace(new=False)
-                            exit_code = jin_kang_piau_im_ca_taigi_im_piau(wb=self.wb, args=args)
+                            exit_code = jin_kang_piau_im_ca_taigi_im_piau(
+                                wb=self.wb, args=args
+                            )
                             if exit_code == 0:
                                 print("✓ 已完成台語音標與漢字標音更新")
                             else:
@@ -1128,8 +1204,7 @@ class NavigationController:
                 # 重新啟動鍵盤監聽
                 if self.listener:
                     self.listener = keyboard.Listener(
-                        on_press=self.on_key_press,
-                        suppress=True
+                        on_press=self.on_key_press, suppress=True
                     )
                     self.listener.start()
                     time.sleep(0.3)
@@ -1141,11 +1216,9 @@ class NavigationController:
             # 確保恢復鍵盤監聽
             if self.listener:
                 self.listener = keyboard.Listener(
-                    on_press=self.on_key_press,
-                    suppress=True
+                    on_press=self.on_key_press, suppress=True
                 )
                 self.listener.start()
-
 
     def clear_manual_annotation(self):
         """清除當前儲存格上方兩列的人工標音儲存格內容"""
@@ -1162,7 +1235,9 @@ class NavigationController:
             # 取得儲存格資訊
             col_letter = xw.utils.col_name(manual_annotation_col)
             target_cell_address = f"{col_letter}{manual_annotation_row}"
-            target_cell = self.sheet.range((manual_annotation_row, manual_annotation_col))
+            target_cell = self.sheet.range(
+                (manual_annotation_row, manual_annotation_col)
+            )
             current_value = target_cell.value or ""
 
             # 如果儲存格已經是空的
@@ -1183,6 +1258,7 @@ class NavigationController:
                 if HAS_A224:
                     # 創建簡單的 args 物件（模擬命令列參數）
                     import argparse
+
                     args = argparse.Namespace(new=False)
                     exit_code = jin_kang_piau_im_ca_taigi_im_piau(wb=self.wb, args=args)
                     if exit_code == 0:
@@ -1261,8 +1337,7 @@ def read_han_ji_with_keyboard(wb, edit_mode=False) -> int:
 
         # 啟動鍵盤監聽（在背景執行緒，使用 suppress=True 攔截所有按鍵）
         controller.listener = keyboard.Listener(
-            on_press=controller.on_key_press,
-            suppress=True  # 攔截按鍵，不讓 Excel 接收
+            on_press=controller.on_key_press, suppress=True  # 攔截按鍵，不讓 Excel 接收
         )
         controller.listener.start()
 
@@ -1296,8 +1371,8 @@ def read_han_ji_with_keyboard(wb, edit_mode=False) -> int:
         if not edit_mode:
             try:
                 restore_manual_annotation_style(wb)
-            except:
-                pass
+            except Exception as e:
+                logging.error(f"程式執行錯誤：{e}")
         return EXIT_CODE_ERROR
 
 
@@ -1347,33 +1422,45 @@ def read_han_ji_zu_im_sheet(wb) -> int:
                 col_letter = xw.utils.col_name(current_col)
                 cell_value = sheet.range((current_row, current_col)).value or ""
 
-                print(f"\n當前位置：第 {line_no} 行，儲存格 {col_letter}{current_row}【{cell_value}】")
+                print(
+                    f"\n當前位置：第 {line_no} 行，儲存格 {col_letter}{current_row}【{cell_value}】"
+                )
 
                 # 等待使用者輸入
-                user_input = input("請按方向鍵（← / →）後按 Enter（Ctrl+C 結束）：").strip().lower()
+                user_input = (
+                    input("請按方向鍵（← / →）後按 Enter（Ctrl+C 結束）：")
+                    .strip()
+                    .lower()
+                )
 
                 # 處理輸入
-                if user_input in ['<-', '←', 'left', 'l']:
+                if user_input in ["<-", "←", "left", "l"]:
                     # 向左移動
                     new_row, new_col = move_left(sheet, current_row, current_col)
                     if new_row != current_row or new_col != current_col:
                         current_row, current_col = new_row, new_col
                         sheet.range((current_row, current_col)).select()
-                        print(f"→ 移動到：{xw.utils.col_name(current_col)}{current_row}")
+                        print(
+                            f"→ 移動到：{xw.utils.col_name(current_col)}{current_row}"
+                        )
                     else:
                         print("已在第一行行首，無法向左移動")
 
-                elif user_input in ['->', '→', 'right', 'r']:
+                elif user_input in ["->", "→", "right", "r"]:
                     # 向右移動
-                    new_row, new_col = move_right(sheet, current_row, current_col, total_lines)
+                    new_row, new_col = move_right(
+                        sheet, current_row, current_col, total_lines
+                    )
                     if new_row != current_row or new_col != current_col:
                         current_row, current_col = new_row, new_col
                         sheet.range((current_row, current_col)).select()
-                        print(f"→ 移動到：{xw.utils.col_name(current_col)}{current_row}")
+                        print(
+                            f"→ 移動到：{xw.utils.col_name(current_col)}{current_row}"
+                        )
                     else:
                         print("已在最後一行行尾，無法向右移動")
 
-                elif user_input == '':
+                elif user_input == "":
                     # 空白輸入，不移動
                     continue
 
@@ -1395,48 +1482,42 @@ def read_han_ji_zu_im_sheet(wb) -> int:
         return EXIT_CODE_SUCCESS
 
     except Exception as e:
-        logging.exception("程式執行失敗")
+        logging.exception(f"程式執行失敗: {e}！")
         return EXIT_CODE_UNKNOWN_ERROR
 
 
-def main():
+def main(args) -> int:
     """主程式"""
     try:
         # 解析命令行參數
         parser = argparse.ArgumentParser(
-            description='漢字注音工作表導讀程式',
+            description="漢字注音工作表導讀程式",
             formatter_class=argparse.RawDescriptionHelpFormatter,
-            epilog='''
+            epilog="""
 使用範例：
   python a109_漢字注音工作表導讀.py          # 導讀模式（隱藏人工標音）
   python a109_漢字注音工作表導讀.py -edit    # 校稿模式（顯示人工標音）
-            '''
+            """,
         )
         parser.add_argument(
-            '--test',
-            action='store_true',
-            help='執行測試模式',
+            "--test",
+            action="store_true",
+            help="執行測試模式",
         )
         parser.add_argument(
-            '--edit',
-            action='store_true',
-            help='啟用校稿模式（不隱藏人工標音文字顏色）'
+            "--edit", action="store_true", help="啟用校稿模式（不隱藏人工標音文字顏色）"
         )
         args = parser.parse_args()
         edit_mode = args.edit
 
         # 取得 Excel 活頁簿
         wb = None
+        # 若失敗，則取得作用中的活頁簿
         try:
-            # 嘗試從 Excel 呼叫取得（RunPython）
-            wb = xw.Book.caller()
-        except:
-            # 若失敗，則取得作用中的活頁簿
-            try:
-                wb = xw.apps.active.books.active
-            except Exception as e:
-                logging.error(f"無法找到作用中的 Excel 工作簿: {e}")
-                return EXIT_CODE_NO_FILE
+            wb = xw.apps.active.books.active
+        except Exception as e:
+            logging.error(f"無法找到作用中的 Excel 工作簿: {e}")
+            return EXIT_CODE_NO_FILE
 
         if not wb:
             logging.error("無法取得 Excel 活頁簿")
@@ -1457,10 +1538,51 @@ def main():
         print("\n\n使用者中斷程式（Ctrl+C）")
         return EXIT_CODE_SUCCESS
     except Exception as e:
-        logging.exception("程式執行失敗")
+        logging.exception(f"程式執行失敗: {e}！")
         return EXIT_CODE_UNKNOWN_ERROR
 
 
+# ==============================================================================
+def test_01():
+    """測試函數"""
+    print("執行測試函數 test_01()")
+    # 在這裡添加測試程式碼
+    print("測試完成")
+
+
 if __name__ == "__main__":
+    import argparse
     import sys
-    sys.exit(main())
+
+    # 解析命令行參數
+    parser = argparse.ArgumentParser(
+        description="透過【作用儲格】，查詢漢字之【台語音標】，及生成【漢字標音】",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+使用範例：
+  python a000.py          # 執行一般模式
+  python a000.py -new     # 建立新的字庫工作表
+  python a000.py -test    # 執行測試模式
+""",
+    )
+    parser.add_argument(
+        "--test",
+        action="store_true",
+        help="執行測試模式",
+    )
+    parser.add_argument(
+        "--new",
+        action="store_true",
+        help="建立新的標音字庫工作表",
+    )
+    args = parser.parse_args()
+
+    if args.test:
+        # 執行測試
+        test_01()
+    else:
+        # 從 Excel 呼叫
+        exit_code = main(args)
+        if exit_code != EXIT_CODE_SUCCESS:
+            print(f"程式異常終止，返回代碼：{exit_code}")
+            sys.exit(exit_code)

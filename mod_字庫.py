@@ -803,8 +803,8 @@ if __name__ == "__main__":
     wb = None
     try:
         wb = xw.apps.active.books.active  # 取得 Excel 作用中的活頁簿檔案
-    except Exception as e:
-        print("無法找到作用中的 Excel 工作簿！")
+    except Exception as error:
+        print(f"無法找到作用中的 Excel 工作簿！({error})")
         sys.exit(EXIT_CODE_NO_FILE)
 
     ut01(wb)
