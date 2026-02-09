@@ -1,5 +1,3 @@
-"""
-a109_漢字注音工作表導讀.py V0.2.6
 # =========================================================================
 # 程式功能摘要
 # =========================================================================
@@ -8,21 +6,6 @@ a109_漢字注音工作表導讀.py V0.2.6
 # 更顯有趣。另外，操作者無需借助滑鼠指標，僅需使用【←】或【→】按鍵，便能在上/下行
 # 移動。譬如：在【第2行】的行尾（即儲存格：R9）時，按【→】鍵，游標會跳到【第3行】
 # 的行首（即儲存格：D13）。
-======================================================================
-漢字注音工作表導讀（鍵盤監聽模式）
-======================================================================
-操作說明：
-  ← (Left Arrow)  : 向左移動
-  → (Right Arrow) : 向右移動
-  ↑ (Up Arrow)    : 向上移動到上一行
-  ↓ (Down Arrow)  : 向下移動到下一行
-  空白 / Q 鍵     : 查詢萌典字典
-  S 鍵            : 查詢個人字典
-  E 鍵            : 手動輸入人工標音
-  = 鍵            : 填入人工標音標記
-  ESC             : 結束程式
-======================================================================
-"""
 
 # =========================================================================
 # 載入程式所需套件/模組/函式庫
@@ -66,17 +49,29 @@ try:
 except ImportError:
     HAS_PYTHONCOM = False
 
-# 載入 a222 的核心查詢功能（個人字典）
+# # 載入 a222 的核心查詢功能（個人字典）
+# try:
+#     # from a222_依作用儲存格在個人字典查找漢字讀音 import ca_han_ji_thak_im as ca_han_ji_thak_im_a222
+#     from a222_依作用儲存格在個人字典查找漢字讀音 import (
+#         process as ca_han_ji_thak_im_a222,
+#     )
+
+#     HAS_A222 = True
+# except ImportError as e:
+#     HAS_A222 = False
+#     print(f"警告：無法載入 a222 模組：{e}")
+
+# 載入 a250 的核心查詢功能（個人字典）
 try:
-    # from a222_依作用儲存格在個人字典查找漢字讀音 import ca_han_ji_thak_im as ca_han_ji_thak_im_a222
-    from a222_依作用儲存格在個人字典查找漢字讀音 import (
-        process as ca_han_ji_thak_im_a222,
+    # from a250_依作用儲存格在個人字典查找漢字讀音 import ca_han_ji_thak_im as ca_han_ji_thak_im_a250
+    from a250_作用儲存格查找漢字標音 import (
+        process as ca_han_ji_thak_im_a250,
     )
 
-    HAS_A222 = True
+    HAS_A250 = True
 except ImportError as e:
-    HAS_A222 = False
-    print(f"警告：無法載入 a222 模組：{e}")
+    HAS_A250 = False
+    print(f"警告：無法載入 a250 模組：{e}")
 
 # 載入 a220 的核心查詢功能（萌典）
 try:
@@ -818,7 +813,7 @@ class NavigationController:
                 self.query_moedict_dictionary()
 
             elif action == "query_personal":
-                # 查詢個人字典
+                # 查詢個人字典：a250_作用儲存格查找漢字標音.py
                 self.query_personal_dictionary()
 
             elif action == "fill_manual_mark":
@@ -851,22 +846,12 @@ class NavigationController:
             time.sleep(0.3)
 
         try:
-            if HAS_A220:
+            if HAS_A250:
                 # 直接調用 a220 的核心函數，不進入無限循環
                 print("\n查詢萌典字典中...")
 
                 # 切換到終端機視窗（確保用戶可以輸入）
                 activate_console_window(self.console_hwnd)
-
-                # # 取得設定值
-                # try:
-                #     from mod_excel_access import get_value_by_name
-
-                #     ue_im_lui_piat = get_value_by_name(wb=self.wb, name="語音類型")
-                #     han_ji_khoo = get_value_by_name(wb=self.wb, name="漢字庫")
-                # except:
-                #     ue_im_lui_piat = "白話音"
-                #     han_ji_khoo = "河洛話"
 
                 # 取得當前作用儲存格位置
                 current_cell = (
@@ -875,16 +860,7 @@ class NavigationController:
                 print(f"當前儲存格：{current_cell}")
 
                 # 調用查詢函數
-                # exit_code = ca_han_ji_thak_im_a220(
-                #     wb=self.wb,
-                #     sheet_name='漢字注音',
-                #     cell=current_cell,
-                #     ue_im_lui_piat=ue_im_lui_piat,
-                #     han_ji_khoo=han_ji_khoo,
-                #     new_khuat_ji_piau_sheet=False,
-                #     new_piau_im_ji_khoo_sheet=False,
-                # )
-                exit_code = ca_han_ji_thak_im_a220(
+                exit_code = ca_han_ji_thak_im_a250(
                     wb=self.wb,
                     args=None,
                 )
@@ -895,15 +871,15 @@ class NavigationController:
                     print(f"\n⚠️  查詢結果：exit_code = {exit_code}")
             else:
                 # 回退到 subprocess 方式
-                print("\n執行 a220_作用儲存格查找萌典漢字讀音.py...")
+                print("\n執行 a250_作用儲存格查找萌典漢字讀音.py...")
                 result = subprocess.run(
-                    [sys.executable, "a220_作用儲存格查找萌典漢字讀音.py"],
+                    [sys.executable, "a250_作用儲存格查找萌典漢字讀音.py"],
                     cwd=os.path.dirname(os.path.abspath(__file__)),
                     capture_output=False,
                     text=True,
                 )
                 if result.returncode != 0:
-                    print(f"⚠️  a220 程式執行失敗，返回碼：{result.returncode}")
+                    print(f"⚠️  a250 程式執行失敗，返回碼：{result.returncode}")
         except KeyboardInterrupt:
             print("\n\n使用者中斷查詢")
         except Exception as e:
@@ -938,8 +914,8 @@ class NavigationController:
             time.sleep(0.3)
 
         try:
-            if HAS_A222:
-                # 直接調用 a222 的核心函數，不進入無限循環
+            if HAS_A250:
+                # 直接調用 a250 的核心函數，不進入無限循環
                 print("\n查詢個人字典中...")
 
                 # 切換到終端機視窗（確保用戶可以輸入）
@@ -952,7 +928,7 @@ class NavigationController:
                 print(f"當前儲存格：{current_cell}")
 
                 # 調用查詢函數
-                exit_code = ca_han_ji_thak_im_a222(
+                exit_code = ca_han_ji_thak_im_a250(
                     wb=self.wb,
                     args=None,
                 )
@@ -963,15 +939,15 @@ class NavigationController:
                     print(f"\n⚠️  查詢結果：exit_code = {exit_code}")
             else:
                 # 回退到 subprocess 方式
-                print("\n執行 a222_依作用儲存格在個人字典查找漢字讀音.py...")
+                print("\n執行 a250_作用儲存格查找漢字標音.py...")
                 result = subprocess.run(
-                    [sys.executable, "a222_依作用儲存格在個人字典查找漢字讀音.py"],
+                    [sys.executable, "a250_作用儲存格查找漢字標音.py"],
                     cwd=os.path.dirname(os.path.abspath(__file__)),
                     capture_output=False,
                     text=True,
                 )
                 if result.returncode != 0:
-                    print(f"⚠️  a222 程式執行失敗，返回碼：{result.returncode}")
+                    print(f"⚠️  a250 程式執行失敗，返回碼：{result.returncode}")
         except KeyboardInterrupt:
             print("\n\n使用者中斷查詢")
         except Exception as e:
@@ -993,6 +969,93 @@ class NavigationController:
                 self.listener.start()
                 time.sleep(0.3)
             print("✓ 已恢復導航模式\n")
+
+    # def query_personal_dictionary(self):
+    #     """查詢個人字典"""
+    #     print("\n" + "=" * 70)
+    #     print("進入個人字典查詢模式")
+    #     print("=" * 70)
+
+    #     # 暫停鍵盤監聽
+    #     if self.listener:
+    #         self.listener.stop()
+    #         time.sleep(0.3)
+
+    #     try:
+    #         if HAS_A222:
+    #             # 直接調用 a222 的核心函數，不進入無限循環
+    #             print("\n查詢個人字典中...")
+
+    #             # 切換到終端機視窗（確保用戶可以輸入）
+    #             activate_console_window(self.console_hwnd)
+
+    #             # 取得設定值
+    #             # try:
+    #             #     from mod_excel_access import get_value_by_name
+
+    #             #     ue_im_lui_piat = get_value_by_name(wb=self.wb, name="語音類型")
+    #             #     han_ji_khoo = get_value_by_name(wb=self.wb, name="漢字庫")
+    #             # except Exception as e:
+    #             #     ue_im_lui_piat = "白話音"
+    #             #     han_ji_khoo = "河洛話"
+
+    #             # 取得當前作用儲存格位置
+    #             current_cell = (
+    #                 f"{xw.utils.col_name(self.current_col)}{self.current_row}"
+    #             )
+    #             print(f"當前儲存格：{current_cell}")
+
+    #             # 調用查詢函數
+    #             # exit_code = ca_han_ji_thak_im_a222(
+    #             #     wb=self.wb,
+    #             #     sheet_name='漢字注音',
+    #             #     cell=current_cell,
+    #             #     ue_im_lui_piat=ue_im_lui_piat,
+    #             #     han_ji_khoo=han_ji_khoo,
+    #             #     new_khuat_ji_piau_sheet=False,
+    #             #     new_piau_im_ji_khoo_sheet=False,
+    #             # )
+    #             exit_code = ca_han_ji_thak_im_a222(
+    #                 wb=self.wb,
+    #                 args=None,
+    #             )
+
+    #             if exit_code == 0:
+    #                 print("\n✓ 查詢完成")
+    #             else:
+    #                 print(f"\n⚠️  查詢結果：exit_code = {exit_code}")
+    #         else:
+    #             # 回退到 subprocess 方式
+    #             print("\n執行 a222_依作用儲存格在個人字典查找漢字讀音.py...")
+    #             result = subprocess.run(
+    #                 [sys.executable, "a222_依作用儲存格在個人字典查找漢字讀音.py"],
+    #                 cwd=os.path.dirname(os.path.abspath(__file__)),
+    #                 capture_output=False,
+    #                 text=True,
+    #             )
+    #             if result.returncode != 0:
+    #                 print(f"⚠️  a222 程式執行失敗，返回碼：{result.returncode}")
+    #     except KeyboardInterrupt:
+    #         print("\n\n使用者中斷查詢")
+    #     except Exception as e:
+    #         logging.error(f"執行個人字典查詢失敗：{e}")
+    #         print(f"❌ 執行個人字典查詢失敗：{e}")
+    #     finally:
+    #         print("\n" + "=" * 70)
+    #         print("返回導航模式")
+    #         print("=" * 70)
+
+    #         # 切換回 Excel 視窗
+    #         activate_excel_window(self.wb)
+
+    #         # 重新啟動鍵盤監聽
+    #         if self.listener:
+    #             self.listener = keyboard.Listener(
+    #                 on_press=self.on_key_press, suppress=True
+    #             )
+    #             self.listener.start()
+    #             time.sleep(0.3)
+    #         print("✓ 已恢復導航模式\n")
 
     def fill_manual_annotation_mark(self):
         """填入人工標音標記【=】到當前儲存格上方兩列的人工標音儲存格，並執行 a224 查詢更新標音"""
@@ -1488,6 +1551,24 @@ def main(args) -> int:
     """主程式"""
     try:
         # 解析命令行參數
+        parser = argparse.ArgumentParser(
+            description="漢字注音工作表導讀程式",
+            formatter_class=argparse.RawDescriptionHelpFormatter,
+            epilog="""
+使用範例：
+  python a109_漢字注音工作表導讀.py          # 導讀模式（隱藏人工標音）
+  python a109_漢字注音工作表導讀.py -edit    # 校稿模式（顯示人工標音）
+            """,
+        )
+        parser.add_argument(
+            "--test",
+            action="store_true",
+            help="執行測試模式",
+        )
+        parser.add_argument(
+            "--edit", action="store_true", help="啟用校稿模式（不隱藏人工標音文字顏色）"
+        )
+        args = parser.parse_args()
         edit_mode = args.edit
 
         # 取得 Excel 活頁簿
@@ -1536,13 +1617,14 @@ if __name__ == "__main__":
 
     # 解析命令行參數
     parser = argparse.ArgumentParser(
-        description="漢字注音工作表導讀程式",
+        description="透過【作用儲格】，查詢漢字之【台語音標】，及生成【漢字標音】",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 使用範例：
-python a109_漢字注音工作表導讀.py          # 導讀模式（隱藏人工標音）
-python a109_漢字注音工作表導讀.py -edit    # 校稿模式（顯示人工標音）
-        """,
+  python a000.py          # 執行一般模式
+  python a000.py -new     # 建立新的字庫工作表
+  python a000.py -test    # 執行測試模式
+""",
     )
     parser.add_argument(
         "--test",
@@ -1550,7 +1632,9 @@ python a109_漢字注音工作表導讀.py -edit    # 校稿模式（顯示人�
         help="執行測試模式",
     )
     parser.add_argument(
-        "--edit", action="store_true", help="啟用校稿模式（不隱藏人工標音文字顏色）"
+        "--new",
+        action="store_true",
+        help="建立新的標音字庫工作表",
     )
     args = parser.parse_args()
 

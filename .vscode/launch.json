@@ -193,7 +193,7 @@
             "program": "a109_漢字注音工作表導讀.py",
             "console": "externalTerminal",
             "args": [
-                // "--edit"
+                "--edit"
             ]
         },
         {
