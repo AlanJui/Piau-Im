@@ -1889,32 +1889,41 @@ class ExcelCell:
                 break
 
             # 取得原始【台語音標】並轉換為 TLPA+ 格式
-            org_tai_gi_im_piau = source_sheet.range(f"B{row}").value
+            # org_tai_gi_im_piau = source_sheet.range(f"B{row}").value
+            tai_gi_im_piau = source_sheet.range(f"B{row}").value
+
+            # 將【校正音標】欄（C 欄）填入之音標，視作【漢字】之【台語音標】，
+            # 此音標需符合 TLPA+ 格式（無調符，使用數值調號；沒有台羅拼音的聲母：ts/tsh），
+            # 剛取得使用者輸入之【校正音標】，視作【原始台語音標】，需經：（1）轉換成 TLPA 拼音字母；
+            # （2）去調符轉調號，依此作業方式，達成符合 TLPA+ 格式。
+            org_tai_gi_im_piau = source_sheet.range(f"C{row}").value
             if (
                 org_tai_gi_im_piau == "N/A" or not org_tai_gi_im_piau
             ):  # 若【台語音標】欄為空，則結束迴圈
                 row += 1
                 continue
-            if org_tai_gi_im_piau and kam_si_u_tiau_hu(org_tai_gi_im_piau):
-                tlpa_im_piau = tng_im_piau(
-                    org_tai_gi_im_piau
-                )  # 將【音標】使用之【拼音字母】轉換成【TLPA拼音字母】；【音標調符】仍保持
-                tlpa_im_piau = tng_tiau_ho(
-                    tlpa_im_piau
-                ).lower()  # 將【音標調符】轉換成【數值調號】
-            else:
-                tlpa_im_piau = org_tai_gi_im_piau  # 若非帶調符音標，則直接使用原音標
-            hau_ziann_im_piau = tlpa_im_piau  # 預設【校正音標】為 TLPA+ 格式
 
-            # 讀取【缺字表】中【座標】欄（D 欄）的內容
-            # 欄中內容可能含有多組座標，如 "(5, 17); (33, 8); (77, 5)"，表【漢字注音】工作表中有多處需要更新
+            # 確保【原始台語音標】為 TLPA+ 格式（無調符，使用數值調號；沒有台羅拼音的聲母：ts/tsh）
+            if org_tai_gi_im_piau and kam_si_u_tiau_hu(
+                org_tai_gi_im_piau
+            ):  # 有【調符】時轉換成【TLPA+格式拼音字母】
+                tlpa_im_piau = tng_im_piau(org_tai_gi_im_piau)
+                tlpa_im_piau = tng_tiau_ho(tlpa_im_piau).lower()
+            else:  # 若非帶調符音標，則直接使用原音標
+                tlpa_im_piau = org_tai_gi_im_piau
+
+            # 以此符合 TLPA+ 格式之拼音字母，作為真正使用之【校正音標】。
+            hau_ziann_im_piau = tlpa_im_piau
+
+            # 讀取【缺字表】中【座標】欄（D 欄），取得指向【漢字注音】工作表【漢字】之【座標清單】。
+            # 欄中內容【格式】，如： "(5, 17); (33, 8); (77, 5)"
             coordinates_str = source_sheet.range(f"D{row}").value
             excel_address_str = convert_coord_str_to_excel_address(
                 coord_str=coordinates_str
             )  # B欄（台語音標）儲存格位置
             print("\n")
             print(
-                f"{row-1}. (A{row}) 【{han_ji}】：台語音標：{org_tai_gi_im_piau}, 校正音標：{hau_ziann_im_piau} ==> 【{target_sheet_name}】工作表，儲存格：{excel_address_str} {coordinates_str}"
+                f"{row-1}. (A{row}) 【{han_ji}】：台語音標：{tai_gi_im_piau}, 校正音標：{hau_ziann_im_piau} ==> 【{target_sheet_name}】工作表，儲存格：{excel_address_str} {coordinates_str}"
             )
 
             # 將【座標】欄位內容解析成 (row, col) 座標：此座標指向【漢字注音】工作表中之【漢字】儲存格位置
@@ -1977,11 +1986,11 @@ class ExcelCell:
                     # ------------------------------------------------------------------------
                     # 在【標音字庫】工作表【添增】此筆資料紀錄
                     # hau_ziann_im_piau_to_be = 'N/A' if hau_ziann_im_piau == '' else hau_ziann_im_piau
-                    hau_ziann_im_piau_to_be = "N/A"
+                    # hau_ziann_im_piau_to_be = "N/A"
                     self.tiau_zing_piau_im_ji_khoo_dict(
                         han_ji=han_ji,
-                        tai_gi_im_piau=org_tai_gi_im_piau,
-                        hau_ziann_im_piau=hau_ziann_im_piau_to_be,
+                        tai_gi_im_piau=hau_ziann_im_piau,  # 以【校正音標】作為【台語音標】，【漢字注音】工作表之【台語音標】欄位
+                        hau_ziann_im_piau="N/A",  # 更新【校正音標】為 'N/A'
                         coordinates=(r_coord, c_coord),
                     )
 
@@ -1997,14 +2006,22 @@ class ExcelCell:
                     #     coordinate=(r_coord, c_coord)
                     # )
 
-            row += 1  # 讀取下一列
+                    # 更新【缺字表】工作表之【台語音標】欄（B欄）、【校正音標】欄（C欄）、【座標】欄（D欄）
+                    source_dict.update_entry(
+                        han_ji=han_ji,
+                        tai_gi_im_piau="N/A",  # 更新【台語音標】為 'N/A'
+                        hau_ziann_im_piau=hau_ziann_im_piau,
+                        coordinates=(r_coord, c_coord),
+                    )
+            # 讀取下一列
+            row += 1
 
         # 依據 Dict 內容，更新【標音字庫】、【缺字表】工作表之資料紀錄
         if row > 2:
-            # 更新【目標工作表】
+            # 更新【標音字庫】工作表（【目標工作表】）
             sheet_name = "標音字庫"
             target_dict.write_to_excel_sheet(wb=wb, sheet_name=sheet_name)
-            # 更新【來源工作表】
+            # 更新【缺字表】工作表（【來源工作表】）
             sheet_name = source_sheet_name
             source_dict.write_to_excel_sheet(wb=wb, sheet_name=sheet_name)
             return EXIT_CODE_SUCCESS
