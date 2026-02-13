@@ -2308,8 +2308,8 @@ class ExcelCell:
         coordinate = (row, col)
         exists = coordinate in coordinate_list
 
-        print(f"座標 {coordinate} 存在: {exists}")  # True
-        print(f"所有座標: {coordinate_list}")
+        # print(f"座標 {coordinate} 存在: {exists}")  # True
+        # print(f"所有座標: {coordinate_list}")
         return exists
 
     def convert_string_to_coordinates_list(
