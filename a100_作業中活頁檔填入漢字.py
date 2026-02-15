@@ -1,10 +1,13 @@
 """
-a100_作業中活頁檔填入漢字.py V0.2.7
+a100_作業中活頁檔填入漢字.py V0.2.8
 功能：將漢字純文字檔中的漢字，填入 Excel 活頁簿中的【漢字注音】工作表，並自動查找台語音標與漢字標音。
 更新紀錄：
 1. 2026-02-08：
     - 改善操作介面：在填入漢字的過程中，顯示正在處理的段落文字，讓使用者能更清楚目前進度。
     - 改善 total_lines 的計算方式：改為從 Excel 工作表中讀取實際的資料行數，而非使用固定值，提升彈性與適應性。
+2. 2026-02-15:
+    - 與【標音】相關的三張工作表（標音字庫、人工標音字庫、缺字表），在執行 process() 時，務必建立新表
+    （刪除舊表、建立新表），避免舊文章之標音資料與之相混。
 """
 
 # =========================================================================
@@ -77,83 +80,6 @@ init_logging()
 # =========================================================================
 # 主要處理函數
 # =========================================================================
-def extract_and_set_title(wb, file_path):
-    """從漢字純文字檔中提取標題，並寫入 env 表 TITLE 名稱格"""
-    try:
-        with open(file_path, "r", encoding="utf-8") as f:
-            first_line = f.readline().strip()
-            match = re.search(r"《(.*?)》", first_line)
-            if match:
-                title = match.group(1)
-                wb.names["TITLE"].refers_to_range.value = title
-                logging.info(f"✅ 已將文件標題《{title}》寫入 env 表 TITLE 名稱格。")
-            else:
-                logging.info("❕ 無《標題》可提取，未更新 TITLE。")
-    except Exception as e:
-        logging_exc_error("無法讀取或更新 TITLE 名稱。", error=e)
-
-
-def _process_sheet(sheet, program: Program, xls_cell: ExcelCell) -> None:
-    """處理整個工作表"""
-
-    # 處理所有的儲存格
-    active_cell = sheet.range(
-        f"{xw.utils.col_name(program.start_col)}{program.line_start_row}"
-    )
-    active_cell.select()
-
-    # 調整 row 值至【漢字】列（每 4 列為一組【列群】，漢字在第 3 列：5, 9, 13, ... ）
-    is_eof = False
-    # total_lines = program.TOTAL_LINES
-    # 計算【漢字注音】工作表的【漢字注音行】總行數
-    total_lines = calculate_total_lines(sheet)
-    try:
-        program.wb.names["每頁總列數"].refers_to_range.value = total_lines
-    except Exception:
-        pass  # 若無此名稱定義，則忽略（不影響主流程）
-
-    for r in range(1, total_lines + 1):
-        if is_eof:
-            break
-        line_no = r
-        print("=" * 80)
-        print(f"處理第 {line_no} 行...")
-        row = (
-            program.line_start_row
-            + (r - 1) * program.ROWS_PER_LINE
-            + program.han_ji_row_offset
-        )
-        for c in range(program.start_col, program.end_col + 1):
-            if is_eof:
-                break  # noqa: E701
-            row = row
-            col = c
-            active_cell = sheet.range((row, col))
-            active_cell.select()
-
-            # 顯示正要處理的儲存格座標位置
-            print("-" * 60)
-            print(f"儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）")
-
-            # ------------------------------------------------------------------
-            # 處理儲存格
-            # ------------------------------------------------------------------
-            # status_code:
-            # 0 = 儲存格內容為：漢字
-            # 1 = 儲存格內容為：文字終結符號
-            # 2 = 儲存格內容為：換行符號
-            # 3 = 儲存格內容為：空白、標點符號等非漢字字元
-            status_code = 0
-            status_code = xls_cell._process_cell(active_cell, row, col)
-
-            # 檢查是否需因：換行、文章終結，而跳出內層迴圈
-            if status_code == 1:
-                is_eof = True
-                break
-            elif status_code == 2:
-                break
-
-
 def fill_in_han_ji(
     wb, text_with_han_ji: list, sheet_name: str = "漢字注音", start_row: int = 5
 ):
@@ -241,6 +167,83 @@ def _fill_han_ji_into_sheet(
     extract_and_set_title(wb, text_file_name)
 
 
+def extract_and_set_title(wb, file_path):
+    """從漢字純文字檔中提取標題，並寫入 env 表 TITLE 名稱格"""
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            first_line = f.readline().strip()
+            match = re.search(r"《(.*?)》", first_line)
+            if match:
+                title = match.group(1)
+                wb.names["TITLE"].refers_to_range.value = title
+                logging.info(f"✅ 已將文件標題《{title}》寫入 env 表 TITLE 名稱格。")
+            else:
+                logging.info("❕ 無《標題》可提取，未更新 TITLE。")
+    except Exception as e:
+        logging_exc_error("無法讀取或更新 TITLE 名稱。", error=e)
+
+
+def _process_sheet(sheet, program: Program, xls_cell: ExcelCell) -> None:
+    """處理整個工作表"""
+
+    # 處理所有的儲存格
+    active_cell = sheet.range(
+        f"{xw.utils.col_name(program.start_col)}{program.line_start_row}"
+    )
+    active_cell.select()
+
+    # 調整 row 值至【漢字】列（每 4 列為一組【列群】，漢字在第 3 列：5, 9, 13, ... ）
+    is_eof = False
+    # total_lines = program.TOTAL_LINES
+    # 計算【漢字注音】工作表的【漢字注音行】總行數
+    total_lines = calculate_total_lines(sheet)
+    try:
+        program.wb.names["每頁總列數"].refers_to_range.value = total_lines
+    except Exception:
+        pass  # 若無此名稱定義，則忽略（不影響主流程）
+
+    for r in range(1, total_lines + 1):
+        if is_eof:
+            break
+        line_no = r
+        print("=" * 80)
+        print(f"處理第 {line_no} 行...")
+        row = (
+            program.line_start_row
+            + (r - 1) * program.ROWS_PER_LINE
+            + program.han_ji_row_offset
+        )
+        for c in range(program.start_col, program.end_col + 1):
+            if is_eof:
+                break  # noqa: E701
+            row = row
+            col = c
+            active_cell = sheet.range((row, col))
+            active_cell.select()
+
+            # 顯示正要處理的儲存格座標位置
+            print("-" * 60)
+            print(f"儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）")
+
+            # ------------------------------------------------------------------
+            # 處理儲存格
+            # ------------------------------------------------------------------
+            # status_code:
+            # 0 = 儲存格內容為：漢字
+            # 1 = 儲存格內容為：文字終結符號
+            # 2 = 儲存格內容為：換行符號
+            # 3 = 儲存格內容為：空白、標點符號等非漢字字元
+            status_code = 0
+            status_code = xls_cell._process_cell(active_cell, row, col)
+
+            # 檢查是否需因：換行、文章終結，而跳出內層迴圈
+            if status_code == 1:
+                is_eof = True
+                break
+            elif status_code == 2:
+                break
+
+
 def process(wb, args) -> int:
     """
     Args:
@@ -266,12 +269,11 @@ def process(wb, args) -> int:
 
         try:
             # 建立儲存格處理器
-            # xls_cell = ExcelCell(program=program)
             xls_cell = ExcelCell(
                 program=program,
-                new_jin_kang_piau_im_ji_khoo_sheet=True if args.new else False,
-                new_piau_im_ji_khoo_sheet=True if args.new else False,
-                new_khuat_ji_piau_sheet=True if args.new else False,
+                new_jin_kang_piau_im_ji_khoo_sheet=True,
+                new_piau_im_ji_khoo_sheet=True,
+                new_khuat_ji_piau_sheet=True,
             )
 
             # ======================================================================

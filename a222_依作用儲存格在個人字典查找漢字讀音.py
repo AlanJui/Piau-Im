@@ -1,18 +1,18 @@
 """
-a222_依作用儲存格在個人字典查找漢字讀音.py V0.2.10
+a222_依作用儲存格在個人字典查找漢字讀音.py V0.2.11
 功能說明：
     依作用儲存格位置，在個人字典中查找漢字讀音。
 更新紀錄：
-    V0.2.6 2026-02-08: 修正顯示漢字讀音選項時的輸出格式；加入【常用度】欄位，
+ -  V0.2.6 2026-02-08: 修正顯示漢字讀音選項時的輸出格式；加入【常用度】欄位，
     便於使用者選擇適合的讀音。
-    V0.2.7 2026-02-09: 變更【個人字典查找漢字標音作業】，查得之【台語音標】不
+ -  V0.2.7 2026-02-09: 變更【個人字典查找漢字標音作業】，查得之【台語音標】不
     記錄於【人工標音字庫】工作表中；而是用於更換【標音字庫】工作表紀錄；另外，
     自【個人字典】查得之【台語音標】，依【座標】欄已登載之各【座標】，更新
     【漢字注音】工作表中，對應【漢字】之【台語音標】及【漢字標音】。
-    v0.2.8 2026-02-09: 查得漢字之標音並選用後，因更新【標音字庫】工作表中對應
+ -  v0.2.8 2026-02-09: 查得漢字之標音並選用後，因更新【標音字庫】工作表中對應
     【漢字】之【台語音標】及【漢字標音】，導致【作用儲存格】之 Excel Address
     已變更，需將之校正回歸。
-    v0.2.9 2026-02-13: 修正原【無標音漢字】與【缺字表】工作表無法正常運作之問題。
+ -  v0.2.9 2026-02-13: 修正原【無標音漢字】與【缺字表】工作表無法正常運作之問題。
 """
 
 # =========================================================================
@@ -363,9 +363,7 @@ class CellProcessor(ExcelCell):
     def _process_cell(
         self,
         cell,
-        row: int,
-        col: int,
-    ) -> bool:
+    ) -> int:
         """
         處理單一儲存格
 
@@ -376,10 +374,16 @@ class CellProcessor(ExcelCell):
                 2 = 換行符號
                 3 = 空白、標點符號等非漢字字元
         """
-        # 初始化樣式
-        self._reset_cell_style(cell)
+        row = cell.row  # 取得【漢字】儲存格的列號
+        col = cell.column  # 取得【漢字】儲存格的欄號
 
         cell_value = cell.value
+        jin_kang_piau_im = cell.offset(-2, 0).value  # 人工標音
+        tai_gi_im_piau = cell.offset(-1, 0).value  # 台語音標
+        han_ji_piau_im = cell.offset(1, 1).value  # 漢字標音
+
+        # 初始化樣式
+        self._reset_cell_style(cell)
 
         # 確保 cell_value 務必是【漢字】，故需篩飾【特殊字元】
         if cell_value == "φ":
@@ -409,10 +413,6 @@ class CellProcessor(ExcelCell):
         #     。或是【=】（引用【人工標音】）。在【人工標音字庫】有紀錄登錄。
         # ======================================================================
 
-        jin_kang_piau_im = cell.offset(-2, 0).value  # 人工標音
-        tai_gi_im_piau = cell.offset(-1, 0).value  # 台語音標
-        han_ji_piau_im = cell.offset(1, 1).value  # 漢字標音
-
         # 檢查是否為【無標音漢字】
         if (
             not tai_gi_im_piau
@@ -425,13 +425,7 @@ class CellProcessor(ExcelCell):
         # 檢查是否為【人工標音漢字】
         if jin_kang_piau_im and str(jin_kang_piau_im).strip() != "":
             self._show_msg(row, col, cell_value)
-            self._process_jin_kang_piau_im(
-                han_ji=cell_value,
-                jin_kang_piau_im=jin_kang_piau_im,
-                cell=cell,
-                row=row,
-                col=col,
-            )
+            self._process_jin_kang_piau_im(cell)
             return 0  # 漢字
 
         # 處理【自動標音漢字】
@@ -464,7 +458,8 @@ class CellProcessor(ExcelCell):
         col = active_col
         cell = sheet.range((row, col))
         # 處理儲存格
-        self._process_cell(cell, row, col)
+        # self._process_cell(cell, row, col)
+        self._process_cell(cell=cell)
 
 
 # =========================================================================

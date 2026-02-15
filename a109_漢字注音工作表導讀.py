@@ -744,7 +744,10 @@ class NavigationController:
                 self.pending_action = "query_personal"
             elif hasattr(key, "char") and key.char:
                 # 處理字元鍵
-                if key.char.lower() == "q":
+                if key.char.lower() == " ":
+                    # 空白鍵：查詢個人字典
+                    self.pending_action = "query_personal"
+                elif key.char.lower() == "q":
                     # Q 鍵：查詢個人字典
                     self.pending_action = "query_personal"
                 elif key.char.lower() == "s":
