@@ -31,8 +31,7 @@ from mod_logging import (
     logging_process_step,  # noqa: F401
     logging_warning,  # noqa: F401
 )
-from mod_帶調符音標 import is_han_ji
-from mod_標音 import is_punctuation
+from mod_標音 import is_han_ji
 from mod_程式 import ExcelCell, Program
 
 # =========================================================================
