@@ -1,0 +1,8 @@
+-- 先查詢確認（建議操作），看看會刪除哪些資料
+-- SELECT * FROM 漢字庫 WHERE 台羅音標 LIKE '%/%';
+
+-- 確認無誤後，執行刪除
+-- DELETE FROM 漢字庫 WHERE 台羅音標 LIKE '%/%';
+
+-- 先查詢確認（建議操作），看看會刪除哪些資料
+SELECT * FROM 漢字庫 WHERE 台羅音標 LIKE '%/%';

@@ -1,0 +1,20 @@
+BEGIN TRANSACTION;
+
+-- 1. 刪除錯誤的音標資料
+DELETE FROM 漢字庫 WHERE 台羅音標 LIKE '%/%';
+
+-- 2. 補實舊資料的 NULL 為 'N/A'
+UPDATE 漢字庫 SET 摘要說明 = 'N/A' WHERE 摘要說明 IS NULL;
+
+-- 3. (選用) 如果你想確保未來 GUI 輸入 NULL 變成 'N/A'，建議建立這個 Trigger
+DROP TRIGGER IF EXISTS trg_ensure_default_summary;
+CREATE TRIGGER trg_ensure_default_summary
+AFTER INSERT ON 漢字庫
+WHEN NEW.摘要說明 IS NULL
+BEGIN
+    UPDATE 漢字庫 
+    SET 摘要說明 = 'N/A' 
+    WHERE rowid = NEW.rowid;
+END;
+
+COMMIT;

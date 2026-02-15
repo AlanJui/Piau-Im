@@ -1,0 +1,6 @@
+UPDATE 漢字庫 
+SET 摘要說明 = 'N/A' 
+WHERE 摘要說明 IS NULL;
+
+-- 確認（建議操作），看看會刪除哪些資料
+SELECT * FROM 漢字庫 WHERE 摘要說明 IS NULL;
