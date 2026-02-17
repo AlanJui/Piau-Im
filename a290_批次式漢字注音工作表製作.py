@@ -1,27 +1,19 @@
-"""a200_查找及填入漢字標音.py v0.2.7
+"""a290_批次式漢字注音工作表製作.py
 
-將【漢字注音】工作表中的【漢字】欄位，依據【人工標音】或【台語音標】查找
-【台語音標】，並填入【台語音標】儲存格及【漢字標音】儲存格。
+【漢字注音】工作表中，各【漢字】標注之【漢字標音】，以【批次作業方式】變更。
 
 更新紀錄：
- - v0.2.6 2024-06-11:
-    修正程式結構，改成套用 CellProcessor 類別處理儲存格，並將處理過程中使用的字庫資料直接注入到 CellProcessor 實例中，
-    以解決測試過程中無法正確模擬字庫查詢的問題。
- -  v0.2.7 2024-06-12:
-    移除 CellProcessor 類別中【方法函數】不必要的參數，如：_process_cell, _process_han_ji, _process_non_han_ji 等。
+ - v0.2.6 2024-06-17:
+    變更程式架構，改成套用類別 CellProcessor，借助物件導向程式之【繼承】與【覆蓋】方法，
+    以實現【批次式漢字注音工作表製作】功能。
 """
 
-# =========================================================================
-# 載入程式所需套件/模組/函式庫
-# =========================================================================
+import logging
 import sys
 from pathlib import Path
 
-# 載入第三方套件
 import xlwings as xw
 
-# 載入自訂模組/函式
-from mod_ca_ji_tian import HanJiTian
 from mod_logging import (
     init_logging,
     logging_exc_error,
@@ -46,15 +38,6 @@ EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 # 設定日誌
 # =========================================================================
 init_logging()
-
-# =========================================================================
-# 作業協助函數
-# =========================================================================
-# def _show_separtor_line(source_sheet_name: str, target_sheet_name: str):
-#     print('\n\n')
-#     print("=" * 100)
-#     print(f"使用【{source_sheet_name}】工作表的【校正音標】欄位，更新【{target_sheet_name}】工作表之【台語音標】、【漢字標音】：")
-#     print("=" * 100)
 
 
 # =========================================================================
@@ -92,51 +75,43 @@ class CellProcessor(ExcelCell):
 
     def _process_sheet(self, sheet):
         """處理整個工作表"""
-        # 初始化變數
-        config = self.program
-        total_lines = config.TOTAL_LINES
-        rows_per_line = config.ROWS_PER_LINE
-        line_start_row = config.line_start_row
-        # start_row = line_start_row + 2  # 調整為實際起始列
-        # end_row = start_row + (config.TOTAL_LINES * config.ROWS_PER_LINE)
-        start_col = config.start_col
-        end_col = config.end_col
-        han_ji_row_offset = config.han_ji_row_offset
 
-        # --------------------------------------------------------------------------
-        # 處理作用中列(row)的所有儲存格
-        # --------------------------------------------------------------------------
-        active_cell = sheet.range(f"{xw.utils.col_name(start_col)}{line_start_row}")
+        # 處理所有的儲存格
+        # active_cell = sheet.range((config.line_start_row, config.start_col))
+        active_cell = sheet.range(
+            f"{xw.utils.col_name(self.program.start_col)}{self.program.line_start_row}"
+        )
         active_cell.select()
 
+        # 調整 row 值至【漢字】列（每 4 列為一組，漢字在第 3 列：5, 9, 13, ... ）
         is_eof = False
-        for line_no in range(1, total_lines + 1):
-            # 檢查是否到達結尾
-            if is_eof or line_no > total_lines:
+        for r in range(1, self.program.TOTAL_LINES + 1):
+            if is_eof:
                 break
+            line_no = r
 
-            # 顯示目前處理【第 n 行】
-            self._show_separtor_line(f"處理第 {line_no} 行...")
+            # 顯示【作用儲存格】位置
+            print("-" * 60)
+            print(f"處理第 {line_no} 行...")
+            row = (
+                self.program.line_start_row
+                + (r - 1) * self.program.ROWS_PER_LINE
+                + self.program.han_ji_row_offset
+            )
 
-            # 調整 row 值至【漢字】儲存格所在列
-            # （每【行（line）】由 4【列（row）】所構成，漢字在第 3 列：5, 9, 13, ... ）
-            row = line_start_row + (line_no - 1) * rows_per_line + han_ji_row_offset
-
-            # ----------------------------------------------------------------------
-            # 處理列中所有欄(col)儲存格
-            # ----------------------------------------------------------------------
-            for c in range(start_col, end_col + 1):
-                # 初始化每列所需使用變數
-                status_code = 0
-
-                # 將目前處理之儲存格，設為作用中儲存格
+            new_line = False
+            for c in range(self.program.start_col, self.program.end_col + 1):
+                if is_eof:
+                    break
+                if new_line:
+                    break  # 跳出內層迴圈，進入下一行處理
                 row = row
                 col = c
                 active_cell = sheet.range((row, col))
                 active_cell.select()
 
                 # 顯示正要處理的儲存格座標位置
-                print("-" * 80)
+                print("-" * 60)
                 print(f"儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）")
 
                 # ------------------------------------------------------------------
@@ -147,6 +122,7 @@ class CellProcessor(ExcelCell):
                 # 1 = 儲存格內容為：文字終結符號
                 # 2 = 儲存格內容為：換行符號
                 # 3 = 儲存格內容為：空白、標點符號等非漢字字元
+                status_code = 0
                 status_code = self._process_cell(active_cell)
 
                 # 檢查是否需因：換行、文章終結，而跳出內層迴圈
@@ -154,15 +130,16 @@ class CellProcessor(ExcelCell):
                     is_eof = True
                     break
                 elif status_code == 2:
+                    new_line = True
                     break
 
-        # 將字庫 dict 回存 Excel 工作表
-        self.save_all_piau_im_ji_khoo_dicts()
+            # 將字庫 dict 回存 Excel 工作表
+            # self.save_all_piau_im_ji_khoo_dicts()
 
 
 def process(wb, args) -> int:
     """
-    查詢漢字讀音並標注
+    為【漢字】之【漢字標音】，以批次作業方式，完成各種標音方法標注。
 
     Args:
         wb: Excel Workbook 物件
@@ -176,9 +153,7 @@ def process(wb, args) -> int:
     logging_process_step("<=========== 作業開始！==========>")
 
     try:
-        # --------------------------------------------------------------------------
         # 初始化 process config
-        # --------------------------------------------------------------------------
         program = Program(wb, args, hanji_piau_im_sheet_name="漢字注音")
 
         # 建立儲存格處理器
@@ -196,38 +171,82 @@ def process(wb, args) -> int:
                 new_piau_im_ji_khoo_sheet=False,
                 new_khuat_ji_piau_sheet=False,
             )
+    except Exception as e:
+        logging_exc_error(msg="初始化作業，發生執行異常！", error=e)
+        return EXIT_CODE_PROCESS_FAILURE
 
-        # --------------------------------------------------------------------------
-        # 處理作業開始
-        # --------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
+    # 處理作業
+    # ------------------------------------------------------------------------------
+    try:
+        # 待製作之【工作表清單】
+        piau_im_name_list = [
+            # '台語音標',
+            # "雅俗通",
+            "十五音",
+            # "閩拼調號",
+            "閩拼調符",
+            "方音符號",
+            "台羅拼音",
+            "白話字",
+        ]
+
         # 處理工作表
-        sheet_name = "漢字注音"
-        sheet = wb.sheets[sheet_name]
-        sheet.activate()
+        for piau_im_name in piau_im_name_list:
+            print("=" * 80)
+            print(f"處理【標音方法】：{piau_im_name} ...")
+            # 設定目前使用的標音方法
+            program.piau_im_huat = piau_im_name
 
-        # 處理整張工作表的各個儲存格
-        xls_cell._process_sheet(sheet=sheet)
+            # 切換工作表
+            sheet_name = f"漢字注音【{piau_im_name}】"
+            # 使用【漢字注音】工作表複製新工作表
+            try:
+                if sheet_name not in [sheet.name for sheet in wb.sheets]:
+                    # 複製工作表
+                    source_sheet = wb.sheets["漢字注音"]
+                    new_sheet = source_sheet.copy(name=sheet_name, after=source_sheet)
+                    print(f"✅ 已複製【漢字注音】工作表為 '{sheet_name}'")
+                else:
+                    print(f"⚠️ 工作表 '{sheet_name}' 已存在")
 
-        # --------------------------------------------------------------------------
-        # 處理作業結束
-        # --------------------------------------------------------------------------
-        print("=" * 80)
-        logging_process_step(msg="已完成【台語音標】和【漢字標音】標注工作。")
-        return EXIT_CODE_SUCCESS
+            except Exception as e:
+                raise ValueError(f"無法找到或建立工作表 '{sheet_name}'：{e}")
 
+            try:
+                # sheet = wb.sheets[sheet_name]
+                # sheet.activate()
+
+                # 處理整張工作表的各個儲存格
+                # xls_cell._process_sheet(sheet)
+                new_sheet.activate()
+                xls_cell._process_sheet(new_sheet)
+            except Exception as e:
+                logging_exception(
+                    msg=f"在【{sheet_name}】工作表，為【漢字】標注{program.piau_im_huat}【漢字標音】作業，發生例外！",
+                    error=e,
+                )
+                raise
     except Exception as e:
         logging_exception(
-            msg=f"在【{sheet_name}】工作表，自動為【漢字】查找【台語音標】作業，發生例外！",
+            msg=f"程式：{program.program_name} ，執行時發生異常問題！",
             error=e,
         )
         raise
+
+    # ------------------------------------------------------------------------------
+    # 處理作業結束
+    # ------------------------------------------------------------------------------
+    print("=" * 80)
+    logging_process_step("已完成【台語音標】和【漢字標音】標注工作。")
+    return EXIT_CODE_SUCCESS
 
 
 # =========================================================================
 # 主程式
 # =========================================================================
 def main(args) -> int:
-    """主程式 - 從 Excel 呼叫或直接執行"""
+    """主程式"""
     # =========================================================================
     # (0) 程式初始化
     # =========================================================================
@@ -246,18 +265,13 @@ def main(args) -> int:
     # =========================================================================
     # (2) 設定【作用中活頁簿】：偵測及獲取 Excel 已開啟之活頁簿檔案。
     # =========================================================================
-    # 取得【作用中活頁簿】
-    wb = None
     try:
-        # 嘗試從 Excel 呼叫取得（RunPython）
-        wb = xw.Book.caller()
-    except Exception:
-        # 若失敗，則取得作用中的活頁簿
-        try:
-            wb = xw.apps.active.books.active
-        except Exception as e:
-            logging_exc_error(msg=f"無法找到作用中的 Excel 工作簿！", error=e)
-            return EXIT_CODE_NO_FILE
+        # 取得 Excel 活頁簿
+        wb = None
+        wb = xw.apps.active.books.active
+    except Exception as e:
+        logging.error(f"無法找到作用中的 Excel 工作簿: {e}")
+        return EXIT_CODE_NO_FILE
 
     # 若無法取得【作用中活頁簿】，則因無法繼續作業，故返回【作業異常終止代碼】結束。
     if not wb:
@@ -303,46 +317,7 @@ def main(args) -> int:
 # 測試程式
 # =============================================================================
 def test_01():
-    """測試 HanJiTian 類別"""
-    import os
-
-    from dotenv import load_dotenv
-
-    load_dotenv()
-    DB_HO_LOK_UE = os.getenv("DB_HO_LOK_UE", "Ho_Lok_Ue.db")
-    # ============================================================================
-    print("=" * 70)
-    print("測試 HanJiTian 查詢功能")
-    print("=" * 70)
-
-    try:
-        # 初始化字典
-        ji_tian = HanJiTian(DB_HO_LOK_UE)
-
-        # 測試查詢
-        test_chars = ["東", "西", "南", "北", "中"]
-
-        for han_ji in test_chars:
-            print(f"\n查詢漢字：{han_ji}")
-            result = ji_tian.han_ji_ca_piau_im(han_ji, ue_im_lui_piat="白話音")
-
-            if result:
-                for item in result:
-                    print(
-                        f"  台語音標：{item['台語音標']}, 常用度：{item.get('常用度', 'N/A')}, 說明：{item.get('摘要說明', 'N/A')}"
-                    )
-            else:
-                print(f"  查無資料")
-
-        print("\n" + "=" * 70)
-        print("測試完成")
-        print("=" * 70)
-
-    except Exception as e:
-        print(f"測試失敗：{e}")
-        import traceback
-
-        traceback.print_exc()
+    pass
 
 
 if __name__ == "__main__":
@@ -351,13 +326,13 @@ if __name__ == "__main__":
 
     # 解析命令行參數
     parser = argparse.ArgumentParser(
-        description="依【漢字】查找【台語音標】並轉換成【漢字標音】",
+        description="輸入參數說明：\n  - --test: 執行測試模式\n  - --new: 建立新的字庫工作表",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 使用範例：
-  python a200_查找及填入漢字標音.py          # 執行一般模式
-  python a200_查找及填入漢字標音.py -new     # 建立新的字庫工作表
-  python a200_查找及填入漢字標音.py -test    # 執行測試模式
+  python ao00_xyz.py            # 執行一般模式
+  python ao00_xyz.py -new       # 建立新的字庫工作表
+  python ao00_xyz.py -test      # 執行測試模式
 """,
     )
     parser.add_argument(
@@ -373,6 +348,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     new_piau_im_sheets = args.new
     test_mode = args.test
+    # args.program_name = Path(__file__).stem
 
     if test_mode:
         # 執行測試

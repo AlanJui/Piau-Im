@@ -326,9 +326,13 @@ class CellProcessor(ExcelCell):
             print("=" * 80)
             print(f"處理第 {line_no} 行...")
             row = line_start_row + (r - 1) * rows_per_line + han_ji_row_offset
+
+            new_line = False
             for c in range(start_col, end_col + 1):
                 if is_eof:
                     break  # noqa: E701
+                if new_line:
+                    break  # 跳出內層迴圈，進入下一行處理
                 row = row
                 col = c
                 active_cell = sheet.range((row, col))
@@ -354,6 +358,7 @@ class CellProcessor(ExcelCell):
                     is_eof = True
                     break
                 elif status_code == 2:
+                    new_line = True
                     break
 
             # 將字庫 dict 回存 Excel 工作表
@@ -374,10 +379,8 @@ def process(wb, args) -> int:
     # ------------------------------------------------------------------------------
     logging_process_step("<=========== 作業開始！==========>")
 
-    # ------------------------------------------------------------------------------
-    # 初始化 process config
-    # ------------------------------------------------------------------------------
     try:
+        # 初始化 process config
         program = Program(wb, args, hanji_piau_im_sheet_name="漢字注音")
 
         # 建立儲存格處理器
@@ -459,9 +462,7 @@ def process(wb, args) -> int:
         sheet.activate()
 
         # 處理整張工作表的各個儲存格
-        xls_cell._process_sheet(
-            sheet=sheet,
-        )
+        xls_cell._process_sheet(sheet)
     except Exception as e:
         logging_exception(
             msg=f"在【{sheet_name}】工作表，自動為【漢字】查找【台語音標】作業，發生例外！",

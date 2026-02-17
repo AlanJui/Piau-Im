@@ -315,6 +315,22 @@
             ]
         },
         {
+            "name": "a290_批次式漢字注音工作表製作",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a290_批次式漢字注音工作表製作.py",
+            "console": "externalTerminal",
+            "args": []
+        },
+        {
+            "name": "a299_批次式查找漢字標音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a299_批次式查找漢字標音.py",
+            "console": "externalTerminal",
+            "args": []
+        },
+        {
             "name": "a300_手動更正漢字標音",
             "type": "debugpy",
             "request": "launch",
@@ -370,14 +386,6 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a410_批次式漢字標音網頁製作.py",
-            "console": "externalTerminal",
-            "args": []
-        },
-        {
-            "name": "a420_批次式漢字注音工作表製作",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a420_批次式漢字注音工作表製作.py",
             "console": "externalTerminal",
             "args": []
         },
