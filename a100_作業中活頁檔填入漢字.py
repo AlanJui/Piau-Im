@@ -1,13 +1,16 @@
 """
-a100_作業中活頁檔填入漢字.py V0.2.8
+a100_作業中活頁檔填入漢字.py V0.2.9
 功能：將漢字純文字檔中的漢字，填入 Excel 活頁簿中的【漢字注音】工作表，並自動查找台語音標與漢字標音。
 更新紀錄：
-1. 2026-02-08：
-    - 改善操作介面：在填入漢字的過程中，顯示正在處理的段落文字，讓使用者能更清楚目前進度。
-    - 改善 total_lines 的計算方式：改為從 Excel 工作表中讀取實際的資料行數，而非使用固定值，提升彈性與適應性。
-2. 2026-02-15:
-    - 與【標音】相關的三張工作表（標音字庫、人工標音字庫、缺字表），在執行 process() 時，務必建立新表
-    （刪除舊表、建立新表），避免舊文章之標音資料與之相混。
+ v0.2.7 2026-02-08：
+  - 改善操作介面：在填入漢字的過程中，顯示正在處理的段落文字，讓使用者能更清楚目前進度。
+  - 改善 total_lines 的計算方式：改為從 Excel 工作表中讀取實際的資料行數，而非使用固定值，提升彈性與適應性。
+ v0.2.8 2026-02-15:
+  - 與【標音】相關的三張工作表（標音字庫、人工標音字庫、缺字表），在執行 process() 時，務必建立新表
+  （刪除舊表、建立新表），避免舊文章之標音資料與之相混。
+ v0.2.0.9 2026-02-17:
+  - 修正 _process_cell() 呼叫方式，改為傳入 active_cell 物件；
+    原 row, col 值之取得，透過 active_cell 物件即可。
 """
 
 # =========================================================================
@@ -51,6 +54,7 @@ from mod_logging import (
     logging_warning,  # noqa: F401
 )
 from mod_帶調符音標 import read_text_with_han_ji
+from mod_標音 import is_han_ji
 from mod_程式 import ExcelCell, Program
 
 # =========================================================================
@@ -183,65 +187,177 @@ def extract_and_set_title(wb, file_path):
         logging_exc_error("無法讀取或更新 TITLE 名稱。", error=e)
 
 
-def _process_sheet(sheet, program: Program, xls_cell: ExcelCell) -> None:
-    """處理整個工作表"""
+# =========================================================================
+# 資料類別：儲存處理配置
+# =========================================================================
+class CellProcessor(ExcelCell):
+    """
+    個人字典查詢專用的儲存格處理器
+    繼承自 ExcelCell
+    覆蓋以下方法以實現個人字典查詢功能：
+    - _process_sheet(): 處理整個工作表
+    """
 
-    # 處理所有的儲存格
-    active_cell = sheet.range(
-        f"{xw.utils.col_name(program.start_col)}{program.line_start_row}"
-    )
-    active_cell.select()
-
-    # 調整 row 值至【漢字】列（每 4 列為一組【列群】，漢字在第 3 列：5, 9, 13, ... ）
-    is_eof = False
-    # total_lines = program.TOTAL_LINES
-    # 計算【漢字注音】工作表的【漢字注音行】總行數
-    total_lines = calculate_total_lines(sheet)
-    try:
-        program.wb.names["每頁總列數"].refers_to_range.value = total_lines
-    except Exception:
-        pass  # 若無此名稱定義，則忽略（不影響主流程）
-
-    for r in range(1, total_lines + 1):
-        if is_eof:
-            break
-        line_no = r
-        print("=" * 80)
-        print(f"處理第 {line_no} 行...")
-        row = (
-            program.line_start_row
-            + (r - 1) * program.ROWS_PER_LINE
-            + program.han_ji_row_offset
+    def __init__(
+        self,
+        program: Program,
+        new_jin_kang_piau_im_ji_khoo_sheet: bool = False,
+        new_piau_im_ji_khoo_sheet: bool = False,
+        new_khuat_ji_piau_sheet: bool = False,
+    ):
+        """
+        初始化處理器
+        :param config: 設定檔物件 (包含標音方法、資料庫連線等)
+        :param jin_kang_ji_khoo: 人工標音字庫 (JiKhooDict) - 用於 '=' 查找
+        :param piau_im_ji_khoo: 標音字庫
+        :param khuat_ji_piau_ji_khoo: 缺字表
+        """
+        # 調用父類別（MengDianExcelCell）的建構子
+        super().__init__(
+            program=program,
+            new_jin_kang_piau_im_ji_khoo_sheet=new_jin_kang_piau_im_ji_khoo_sheet,
+            new_piau_im_ji_khoo_sheet=new_piau_im_ji_khoo_sheet,
+            new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
         )
-        for c in range(program.start_col, program.end_col + 1):
+
+    def _process_cell(
+        self,
+        cell,
+    ) -> int:
+        """
+        處理單一儲存格
+
+        Returns:
+            status_code: 儲存格內容代碼
+                0 = 漢字
+                1 = 文字終結符號
+                2 = 換行符號
+                3 = 空白、標點符號等非漢字字元
+        """
+        row = cell.row  # 取得【漢字】儲存格的列號
+        col = cell.column  # 取得【漢字】儲存格的欄號
+
+        cell_value = cell.value
+        jin_kang_piau_im = cell.offset(-2, 0).value  # 人工標音
+        # tai_gi_im_piau = cell.offset(-1, 0).value  # 台語音標
+        # han_ji_piau_im = cell.offset(1, 1).value  # 漢字標音
+
+        # 初始化樣式
+        self._reset_cell_style(cell)
+
+        # 確保 cell_value 務必是【漢字】，故需篩飾【特殊字元】
+        if cell_value == "φ":
+            # 【文字終結】
+            print("【文字終結】")
+            return 1  # 文章終結符號
+        elif cell_value == "\n":
+            # 【換行】
+            print("【換行】")
+            return 2  # 【換行】
+        elif cell_value is None or str(cell_value).strip() == "":
+            print("【空白】")
+            return 3  # 空白或標點符號
+        elif not is_han_ji(cell_value):
+            # 處理【標點符號】、【英數字元】、【其他字元】
+            self._process_non_han_ji(cell)
+            return 3  # 空白或標點符號
+
+        # ======================================================================
+        # 自此以下，儲存格存放【漢字】。每個【漢字】儲存格有三種可能：
+        # 1. 【無標音漢字】：在【個人字典】找不到讀音，故【台語音標】、【漢字標音】
+        #     儲存格為空白。在【缺字表】工作表有紀錄登錄；
+        # 2. 【自動標音漢字】：在【個人字典】找到讀音，故【台語音標】、【漢字標音】
+        #     儲存格已有讀音標注。在【標音字庫】有紀錄登錄；
+        # 3. 【人工標音漢字】：在【人工標音】儲存格，有手動輸入之【台羅拼音】、【TLPA音標】
+        #     。或是【=】（引用【人工標音】）。在【人工標音字庫】有紀錄登錄。
+        # ======================================================================
+
+        # 檢查是否為【無標音漢字】
+        # if (
+        #     not tai_gi_im_piau
+        #     or str(tai_gi_im_piau).strip() == ""
+        #     and not han_ji_piau_im
+        # ):
+        #     self._process_bo_thok_im(cell)
+        #     return 0  # 漢字
+
+        # 檢查是否為【人工標音漢字】
+        if jin_kang_piau_im and str(jin_kang_piau_im).strip() != "":
+            self._show_msg(row, col, cell_value)
+            self._process_jin_kang_piau_im(cell=cell)
+            return 0  # 漢字
+
+        # 處理【自動標音漢字】
+        self._process_han_ji(cell)
+        return 0  # 漢字
+
+    def _process_sheet(self, sheet, show_cell_address: bool = False):
+        """處理整個工作表"""
+        # 初始化變數
+        wb = sheet.book
+        config = self.program
+        total_lines = config.TOTAL_LINES
+        line_start_row = config.line_start_row
+        rows_per_line = config.ROWS_PER_LINE
+        # start_row = line_start_row + 2  # 調整為實際起始列
+        # end_row = start_row + (config.TOTAL_LINES * config.ROWS_PER_LINE)
+        start_col = config.start_col
+        end_col = config.end_col
+        han_ji_row_offset = config.han_ji_row_offset
+
+        # 處理所有的儲存格
+        active_cell = sheet.range(f"{xw.utils.col_name(start_col)}{line_start_row}")
+        active_cell.select()
+
+        # 調整 row 值至【漢字】列（每 4 列為一組【列群】，漢字在第 3 列：5, 9, 13, ... ）
+        is_eof = False
+        # total_lines = program.TOTAL_LINES
+        # 計算【漢字注音】工作表的【漢字注音行】總行數
+        total_lines = calculate_total_lines(sheet)
+        try:
+            wb.names["每頁總列數"].refers_to_range.value = total_lines
+        except Exception:
+            pass  # 若無此名稱定義，則忽略（不影響主流程）
+
+        for r in range(1, total_lines + 1):
             if is_eof:
-                break  # noqa: E701
-            row = row
-            col = c
-            active_cell = sheet.range((row, col))
-            active_cell.select()
-
-            # 顯示正要處理的儲存格座標位置
-            print("-" * 60)
-            print(f"儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）")
-
-            # ------------------------------------------------------------------
-            # 處理儲存格
-            # ------------------------------------------------------------------
-            # status_code:
-            # 0 = 儲存格內容為：漢字
-            # 1 = 儲存格內容為：文字終結符號
-            # 2 = 儲存格內容為：換行符號
-            # 3 = 儲存格內容為：空白、標點符號等非漢字字元
-            status_code = 0
-            status_code = xls_cell._process_cell(active_cell, row, col)
-
-            # 檢查是否需因：換行、文章終結，而跳出內層迴圈
-            if status_code == 1:
-                is_eof = True
                 break
-            elif status_code == 2:
-                break
+            line_no = r
+            print("=" * 80)
+            print(f"處理第 {line_no} 行...")
+            row = line_start_row + (r - 1) * rows_per_line + han_ji_row_offset
+            for c in range(start_col, end_col + 1):
+                if is_eof:
+                    break  # noqa: E701
+                row = row
+                col = c
+                active_cell = sheet.range((row, col))
+                active_cell.select()
+
+                # 顯示正要處理的儲存格座標位置
+                print("-" * 60)
+                print(f"儲存格：{xw.utils.col_name(col)}{row}（{row}, {col}）")
+
+                # ------------------------------------------------------------------
+                # 處理儲存格
+                # ------------------------------------------------------------------
+                # status_code:
+                # 0 = 儲存格內容為：漢字
+                # 1 = 儲存格內容為：文字終結符號
+                # 2 = 儲存格內容為：換行符號
+                # 3 = 儲存格內容為：空白、標點符號等非漢字字元
+                status_code = 0
+                status_code = self._process_cell(active_cell)
+
+                # 檢查是否需因：換行、文章終結，而跳出內層迴圈
+                if status_code == 1:
+                    is_eof = True
+                    break
+                elif status_code == 2:
+                    break
+
+            # 將字庫 dict 回存 Excel 工作表
+            self.save_all_piau_im_ji_khoo_dicts()
 
 
 def process(wb, args) -> int:
@@ -253,35 +369,53 @@ def process(wb, args) -> int:
     Returns:
         處理結果代碼
     """
-    # --------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
     # 作業初始化
-    # --------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
     logging_process_step("<=========== 作業開始！==========>")
 
+    # ------------------------------------------------------------------------------
+    # 初始化 process config
+    # ------------------------------------------------------------------------------
     try:
-        # --------------------------------------------------------------------------
-        # 初始化 process config
-        # --------------------------------------------------------------------------
         program = Program(wb, args, hanji_piau_im_sheet_name="漢字注音")
 
-        # 建立資料庫連線
-        program.connect_db()
+        # 建立儲存格處理器
+        xls_cell = CellProcessor(
+            program=program,
+            new_jin_kang_piau_im_ji_khoo_sheet=True,
+            new_piau_im_ji_khoo_sheet=True,
+            new_khuat_ji_piau_sheet=True,
+        )
+    except Exception as e:
+        logging_exc_error(msg="處理作業異常！", error=e)
+        return EXIT_CODE_PROCESS_FAILURE
 
-        try:
-            # 建立儲存格處理器
-            xls_cell = ExcelCell(
-                program=program,
-                new_jin_kang_piau_im_ji_khoo_sheet=True,
-                new_piau_im_ji_khoo_sheet=True,
-                new_khuat_ji_piau_sheet=True,
-            )
+    try:
+        # ======================================================================
+        # 將【漢字注音】工作表的舊資料清除及格式重設。
+        # ======================================================================
+        # 重置工作表
+        print("清除儲存格內容作業...")
+        clear_han_ji_kap_piau_im(
+            wb,
+            sheet_name="漢字注音",
+            total_lines=program.TOTAL_LINES,
+            rows_per_line=program.ROWS_PER_LINE,
+            start_row=program.line_start_row,
+            start_col=program.start_col,
+            end_col=program.end_col,
+            han_ji_orgin_cell=program.han_ji_orgin_cell,
+        )
+        # logging.info("儲存格內容清除完畢")
+    except Exception as e:
+        logging_exc_error(msg="清除儲存格內容作業異常！", error=e)
+        return EXIT_CODE_PROCESS_FAILURE
 
-            # ======================================================================
-            # 將【漢字注音】工作表的舊資料清除及格式重設。
-            # ======================================================================
-            # 重置工作表
-            print("清除儲存格內容...")
-            clear_han_ji_kap_piau_im(
+    try:
+        if args.reset_cell_format:
+            print("重設儲存格格式作業...")
+            reset_cells_format_in_sheet(
                 wb,
                 sheet_name="漢字注音",
                 total_lines=program.TOTAL_LINES,
@@ -289,70 +423,58 @@ def process(wb, args) -> int:
                 start_row=program.line_start_row,
                 start_col=program.start_col,
                 end_col=program.end_col,
-                han_ji_orgin_cell=program.han_ji_orgin_cell,
             )
-            logging.info("儲存格內容清除完畢")
+            # logging.info("儲存格格式重設完畢")
+    except Exception as e:
+        logging_exc_error(msg="重置儲存格格式作業異常！", error=e)
+        return EXIT_CODE_PROCESS_FAILURE
 
-            if args.reset_cell_format:
-                print("重設儲存格之格式...")
-                reset_cells_format_in_sheet(
-                    wb,
-                    sheet_name="漢字注音",
-                    total_lines=program.TOTAL_LINES,
-                    rows_per_line=program.ROWS_PER_LINE,
-                    start_row=program.line_start_row,
-                    start_col=program.start_col,
-                    end_col=program.end_col,
-                )
-                logging.info("儲存格格式重設完畢")
+    try:
+        # ======================================================================
+        # 填入【漢字】：讀取整篇文章之【漢字】純文字檔案；並填入【漢字注音】工作表。
+        # ======================================================================
+        text_file_name = args.han_ji_file if args.han_ji_file else "_tmp_p1_han_ji.txt"
+        # 顯示正在處理的漢字檔案名稱
+        print("=" * 80)
+        print(f"正在處理的漢字檔案：{text_file_name}")
+        _fill_han_ji_into_sheet(
+            wb=wb,
+            program=program,
+            text_file_name=text_file_name,
+            sheet_name="漢字注音",
+            target="V3",
+        )
+    except Exception as e:
+        logging_exc_error(msg="將【漢字】填入【漢字注音】工作表異常！", error=e)
+        return EXIT_CODE_PROCESS_FAILURE
 
-            # ======================================================================
-            # 填入【漢字】：讀取整篇文章之【漢字】純文字檔案；並填入【漢字注音】工作表。
-            # ======================================================================
-            text_file_name = (
-                args.han_ji_file if args.han_ji_file else "_tmp_p1_han_ji.txt"
-            )
-            # 顯示正在處理的漢字檔案名稱
-            print("=" * 80)
-            print(f"正在處理的漢字檔案：{text_file_name}")
-            _fill_han_ji_into_sheet(
-                wb=wb,
-                program=program,
-                text_file_name=text_file_name,
-                sheet_name="漢字注音",
-                target="V3",
-            )
+    try:
+        # ==========================================================================
+        # 將【漢字注音】工作表的【漢字】欄，逐一處理，查找【台語音標】和【漢字標音】
+        # ==========================================================================
 
-            # ======================================================================
-            # 將【漢字注音】工作表的【漢字】欄，逐一處理，查找【台語音標】和【漢字標音】
-            # ======================================================================
+        # 處理工作表
+        sheet_name = "漢字注音"
+        sheet = wb.sheets[sheet_name]
+        sheet.activate()
 
-            # 處理工作表
-            sheet_name = "漢字注音"
-            sheet = wb.sheets[sheet_name]
-            sheet.activate()
-
-            # 逐列處理
-            _process_sheet(
-                sheet=sheet,
-                program=program,
-                xls_cell=xls_cell,
-            )
-
-            # 寫回字庫到 Excel
-            xls_cell.save_all_piau_im_ji_khoo_dicts()
-
-            print("=" * 80)
-            logging_process_step("已完成【台語音標】和【漢字標音】標注工作。")
-            return EXIT_CODE_SUCCESS
-
-        finally:
-            # 關閉資料庫連線
-            program.disconnect_db()
-
-    except Exception:
-        logging.exception("自動為【漢字】查找【台語音標】作業，發生例外！")
+        # 處理整張工作表的各個儲存格
+        xls_cell._process_sheet(
+            sheet=sheet,
+        )
+    except Exception as e:
+        logging_exception(
+            msg=f"在【{sheet_name}】工作表，自動為【漢字】查找【台語音標】作業，發生例外！",
+            error=e,
+        )
         raise
+
+    # ------------------------------------------------------------------------------
+    # 處理作業結束
+    # ------------------------------------------------------------------------------
+    print("=" * 80)
+    logging_process_step("已完成【台語音標】和【漢字標音】標注工作。")
+    return EXIT_CODE_SUCCESS
 
 
 # =========================================================================

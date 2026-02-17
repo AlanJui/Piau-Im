@@ -1,11 +1,12 @@
 """
-mod_程式.py V0.2.8
+mod_程式.py V0.2.9
 
 本系統各功能之程式架構模版。
 模版中包含程式配置類別 Program 及儲存格處理器類別 ExcelCell。
 
 更新紀錄：
 - v0.2.8 2024-02-15: 修正 ExcelCell 類別中 _cu_jin_kang_piau_im 方法，當成功取得【台語音標】與【漢字標音】後，更新【漢字注音】工作表的對應儲存格。
+- v0.2.9 2024-02-17: 修正 _process_han_ji 方法，將 han_ji, row 和 col 參數移除，改為直接從 cell 物件中取得。
 """
 
 # =========================================================================
@@ -1099,13 +1100,14 @@ class ExcelCell:
         cell.offset(-1, 0).color = None  # 【台語音標】儲存格：黑色
         cell.offset(1, 0).color = None  # 【漢字標音】儲存格：黑色
 
-    def _process_non_han_ji(self, cell) -> str:
+    def _process_non_han_ji(self, cell) -> None:
         """處理非漢字內容"""
         cell_value = cell.value
 
         if cell_value is None or str(cell_value).strip() == "":
             msg = "【空白字元】"
-            return msg
+            print(f"【{cell_value}】：{msg}")
+            return
 
         str_value = str(cell_value).strip()
 
@@ -1115,9 +1117,9 @@ class ExcelCell:
             msg = f"【英/數半形字元】（{int(cell_value)}）"
         else:
             msg = "【非漢字之其餘字元】"
+        print(f"【{cell_value}】：{msg}")
 
-        msg = f"【{cell_value}】：{msg}。"
-        return msg
+        return
 
     def get_all_piau_im_for_a_han_ji(
         self, han_ji: str, result: list[dict]
@@ -1244,13 +1246,15 @@ class ExcelCell:
 
     def _process_han_ji(
         self,
-        han_ji: str,
         cell,
-        row: int,
-        col: int,
         show_all_options: bool = False,
     ) -> str:
         """處理漢字"""
+
+        row = cell.row  # 取得【漢字】儲存格的列號
+        col = cell.column  # 取得【漢字】儲存格的欄號
+
+        han_ji = cell.value
         if han_ji == "":
             return "【空白】"
 
@@ -1279,7 +1283,9 @@ class ExcelCell:
             # 預設只處理第一個讀音選項
             han_ji_piau_im = self._process_one_entry(cell, result[0])
             msg = f"【{han_ji}】：{han_ji_piau_im}"
-        return msg
+        print(msg)
+
+        return
 
     def _process_cell(
         self,
@@ -1320,8 +1326,7 @@ class ExcelCell:
             return 3  # 空白或標點符號
         elif not is_han_ji(cell_value):
             # 處理【標點符號】、【英數字元】、【其他字元】
-            msg = self._process_non_han_ji(cell)
-            print(msg)
+            self._process_non_han_ji(cell)
             return 3  # 空白或標點符號
 
         # ======================================================================
@@ -1350,7 +1355,7 @@ class ExcelCell:
             return 0  # 漢字
 
         # 處理【自動標音漢字】
-        self._process_han_ji(cell)
+        self._process_han_ji(cell=cell, show_all_options=True)
         return 0  # 漢字
 
     def _initialize_ji_khoo(
@@ -2436,7 +2441,6 @@ class ExcelCell:
                 # 2 = 儲存格內容為：換行符號
                 # 3 = 儲存格內容為：空白、標點符號等非漢字字元
                 status_code = 0
-                # status_code = self._process_cell(active_cell, row, col)
                 status_code = self._process_cell(active_cell)
 
                 # 檢查是否需因：換行、文章終結，而跳出內層迴圈
@@ -2463,9 +2467,9 @@ def process(wb, args) -> int:
     Returns:
         處理結果代碼
     """
-    # --------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
     # 作業初始化
-    # --------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
     logging_process_step("<=========== 作業開始！==========>")
 
     try:

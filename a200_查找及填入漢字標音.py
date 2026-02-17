@@ -177,7 +177,6 @@ def process(wb, args) -> int:
 
         # 建立儲存格處理器
         if args.new:
-            # 建立新的字庫工作表
             xls_cell = CellProcessor(
                 program=program,
                 new_jin_kang_piau_im_ji_khoo_sheet=True,
