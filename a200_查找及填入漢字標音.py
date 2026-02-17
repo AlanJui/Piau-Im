@@ -1,8 +1,15 @@
 """
-a200_查找及填入漢字標音.py v0.2.2.6
+a200_查找及填入漢字標音.py v0.2.7
 
 將【漢字注音】工作表中的【漢字】欄位，依據【人工標音】或【台語音標】查找
 【台語音標】，並填入【台語音標】儲存格及【漢字標音】儲存格。
+
+更新紀錄：
+ -  v0.2.6 2024-06-11:
+    修正程式結構，改成套用 CellProcessor 類別處理儲存格，並將處理過程中使用的字庫資料直接注入到 CellProcessor 實例中，
+    以解決測試過程中無法正確模擬字庫查詢的問題。
+ -  v0.2.7 2024-06-12:
+    移除 CellProcessor 類別中【方法函數】不必要的參數，如：_process_cell, _process_han_ji, _process_non_han_ji 等。
 """
 
 # =========================================================================
@@ -141,7 +148,7 @@ class CellProcessor(ExcelCell):
                 # 1 = 儲存格內容為：文字終結符號
                 # 2 = 儲存格內容為：換行符號
                 # 3 = 儲存格內容為：空白、標點符號等非漢字字元
-                status_code = self._process_cell(active_cell, row, col)
+                status_code = self._process_cell(active_cell)
 
                 # 檢查是否需因：換行、文章終結，而跳出內層迴圈
                 if status_code == 1:
@@ -200,9 +207,7 @@ def process(wb, args) -> int:
         sheet.activate()
 
         # 處理整張工作表的各個儲存格
-        xls_cell._process_sheet(
-            sheet=sheet,
-        )
+        xls_cell._process_sheet(sheet=sheet)
 
         # --------------------------------------------------------------------------
         # 處理作業結束

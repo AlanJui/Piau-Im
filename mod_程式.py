@@ -1306,8 +1306,8 @@ class ExcelCell:
 
         cell_value = cell.value
         jin_kang_piau_im = cell.offset(-2, 0).value  # 人工標音
-        tai_gi_im_piau = cell.offset(-1, 0).value  # 台語音標
-        han_ji_piau_im = cell.offset(1, 1).value  # 漢字標音
+        # tai_gi_im_piau = cell.offset(-1, 0).value  # 台語音標
+        # han_ji_piau_im = cell.offset(1, 1).value  # 漢字標音
 
         # 初始化樣式
         self._reset_cell_style(cell)
@@ -1340,13 +1340,13 @@ class ExcelCell:
         # ======================================================================
 
         # 檢查是否為【無標音漢字】
-        if (
-            not tai_gi_im_piau
-            or str(tai_gi_im_piau).strip() == ""
-            and not han_ji_piau_im
-        ):
-            self._process_bo_thok_im(cell)
-            return 0  # 漢字
+        # if (
+        #     not tai_gi_im_piau
+        #     or str(tai_gi_im_piau).strip() == ""
+        #     and not han_ji_piau_im
+        # ):
+        #     self._process_bo_thok_im(cell)
+        #     return 0  # 漢字
 
         # 檢查是否為【人工標音漢字】
         if jin_kang_piau_im and str(jin_kang_piau_im).strip() != "":
@@ -1355,7 +1355,8 @@ class ExcelCell:
             return 0  # 漢字
 
         # 處理【自動標音漢字】
-        self._process_han_ji(cell=cell, show_all_options=True)
+        # self._process_han_ji(cell=cell, show_all_options=True)
+        self._process_han_ji(cell)
         return 0  # 漢字
 
     def _initialize_ji_khoo(
