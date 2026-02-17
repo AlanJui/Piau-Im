@@ -91,7 +91,7 @@ class CellProcessor(ExcelCell):
             line_no = r
 
             # 顯示【作用儲存格】位置
-            print("-" * 60)
+            print("=" * 80)
             print(f"處理第 {line_no} 行...")
             row = (
                 self.program.line_start_row
