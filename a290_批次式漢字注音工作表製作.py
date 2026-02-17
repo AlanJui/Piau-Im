@@ -193,14 +193,15 @@ def process(wb, args) -> int:
 
         # 處理工作表
         for piau_im_name in piau_im_name_list:
+            # 顯示目前處理的標音方法
             print("=" * 80)
-            print(f"處理【標音方法】：{piau_im_name} ...")
+            print(f"製作《漢字注音【{piau_im_name}】》工作表 ...")
+
             # 設定目前使用的標音方法
             program.piau_im_huat = piau_im_name
 
-            # 切換工作表
-            sheet_name = f"漢字注音【{piau_im_name}】"
             # 使用【漢字注音】工作表複製新工作表
+            sheet_name = f"漢字注音【{piau_im_name}】"
             try:
                 if sheet_name not in [sheet.name for sheet in wb.sheets]:
                     # 複製工作表
@@ -213,12 +214,8 @@ def process(wb, args) -> int:
             except Exception as e:
                 raise ValueError(f"無法找到或建立工作表 '{sheet_name}'：{e}")
 
+            # 處理整張工作表的各個儲存格
             try:
-                # sheet = wb.sheets[sheet_name]
-                # sheet.activate()
-
-                # 處理整張工作表的各個儲存格
-                # xls_cell._process_sheet(sheet)
                 new_sheet.activate()
                 xls_cell._process_sheet(new_sheet)
             except Exception as e:
