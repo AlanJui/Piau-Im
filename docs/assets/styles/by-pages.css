@@ -1,0 +1,178 @@
+/* 1. 重設基礎樣式 */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    /* 選擇適合古文的字體 */
+    /* font-family: "標楷體", "BiauKai", "DFKai-SB", serif; */
+    font-family: "霞鶩文楷 TC", "BiauKai", "DFKai-SB", serif;
+    background-color: #333; /* 視窗外的背景色，可選 */
+}
+
+/* 2. 實作「一頁一頁」的滾動容器 */
+.book-container {
+    height: 100vh; /* 容器高度為整個螢幕高度 */
+    overflow-y: scroll; /* 允許上下滾動 */
+    scroll-snap-type: y mandatory; /* 開啟垂直方向的強制滾動捕捉 */
+    scroll-behavior: smooth; /* 增加平滑滾動效果 */
+}
+
+/* 3. 單一頁面的版面設定 (左圖右文) */
+.page {
+    display: flex; /* 使用 Flexbox 實現左右並排 */
+    width: 100vw; /* 寬度佔滿螢幕 */
+    height: calc(100vh - 30px); /* 高度扣除 margin-bottom */
+    scroll-snap-align: start; /* 滾動時，對齊每一頁的頂部 */
+    background-color: #ffffff;
+    position: relative; /* 恢復 relative，解決 PgUp/PgDn 鍵盤導覽失效的問題 */
+    margin-bottom: 30px; /* 與下一頁邊界有30像素之空白 */
+}
+
+/* 封面頁樣式 */
+.cover-page {
+    display: block; /* 覆蓋 .page 的 flex 設定 */
+}
+
+/* 針對第二頁 (標題頁) 的背景設定 */
+.title-page-bg {
+    background-color: #000; /* 加上黑色背景，讓圖片淡化時不會變成白色底 */
+}
+
+.cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* 針對第二頁 (標題頁) 的圖片淡化設定 */
+.title-bg-img {
+    opacity: 0.4; /* 降低透明度，產生浮水印/淡化效果 (數值 0.0 ~ 1.0) */
+}
+
+.cover-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white; /* 假設背景圖較暗，使用白色文字 */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* 增加文字陰影以提高辨識度 */
+    width: 80%;
+}
+
+.cover-text h1 {
+    font-size: 5rem;
+    margin-bottom: 0.2em;
+    letter-spacing: 0.1em;
+}
+
+.cover-divider {
+    width: 60%;
+    margin: 0 auto 1em auto;
+    border: 0;
+    border-top: 2px solid white;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.cover-text h2 {
+    font-size: 2rem;
+    font-weight: normal;
+    letter-spacing: 0.2em;
+}
+
+.title-page {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* 加上這行才能真正置中 */
+    text-align: center;
+    /* color: white; 假設背景圖較暗，使用白色文字 */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* 增加文字陰影以提高辨識度 */
+    width: 80%;
+    z-index: 10; /* 確保文字顯示在圖片之上 */
+    color: #d3d3d3; /* 淺灰色 */
+}
+
+/* 針對 title-page 內的 ruby 文字設定顏色與大小 */
+.title-page ruby {
+    /* color: white; */
+    color: #f0e68c; /* 鵝黃色 */
+    font-size: inherit; /* 繼承父元素 (.title 或 .author) 的字體大小 */
+}
+
+/* 如果您希望 title-page 內的拼音 (rt) 也變成白色，可以加上這段 */
+.title-page rt {
+    /* color: white; */
+    color: yellow;
+}
+
+.title {
+    font-family: "Noto Serif TC Black", "BiauKai", "DFKai-SB", serif;
+    font-size: 4.0rem;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+}
+
+.author {
+    font-family: "Noto Serif TC Black", "BiauKai", "DFKai-SB", serif;
+    font-size: 2.5rem;
+    font-weight: normal;
+    letter-spacing: 0.1em;
+    text-align: center;
+}
+
+/* 4. 左半邊：圖片區塊 (佔 4 等份) */
+.page-left img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block; /* <--- 加上這一行，消除下方空白 */
+}
+
+/* 5. 右半邊：文字區塊 (佔 6 等份) */
+.page-right {
+    flex: 6; /* 原本是 1，改為 6 */
+    display: flex;
+    align-items: flex-start; /* 向上對齊 */
+    justify-content: center;
+    padding: 30px 20px 40px 40px; /* 上邊距改為 30px (原本是 40px) */
+    position: relative;
+    /* 建議：因為文字區變寬了，這裡可以視情況調整背景色或邊距 */
+}
+
+/* 文字內容容器 */
+.content-box {
+    width: 90%;
+    max-width: 1000px; /* 增加最大寬度，讓每一行可多放約3個中文字 */
+    margin-top: 30px; /* 向上對齊後，給予上方一些留白 (原本是 40px) */
+}
+
+.content-box p {
+    margin-bottom: 1.5em; /* 縮小段落間距 */
+    line-height: 2.0; /* 縮小行距 (原本是 2.5) */
+    text-align: justify; /* 左右對齊 */
+}
+
+/* 處理標點符號大小與中文字型一致 */
+.content-box p {
+    font-size: 2.5rem; /* 設定段落基礎字體大小與 ruby 漢字一致 */
+}
+
+/* 6. <ruby> 與 <rt> 拼音音韻的樣式設定 */
+ruby {
+    font-size: 2.5rem; /* 漢字的大小 */
+    ruby-align: center; /* 拼音置中對齊漢字 */
+    margin-right: 0.3em; /* 每個字元之間的微小間距 */
+}
+
+rt {
+    font-size: 0.8rem; /* 拼音註記的大小 */
+    color: #006b6b; /* 配合您圖片中使用的深墨綠色 */
+    font-family: "微軟正黑體", sans-serif; /* 註記通常使用無襯線字體較清晰 */
+    letter-spacing: 0.05em;
+    transform: translateY(-0.2em); /* 微調拼音與漢字的距離 */
+}
