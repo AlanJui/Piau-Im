@@ -1,5 +1,5 @@
 """
-a930_自網頁匯入漢字拼音.py v0.0.2
+a930_自網頁匯入漢字拼音.py v0.0.3
 
 功能：
     讀取指定的 HTML 檔案，解析其中的 <ruby> 標籤結構，
@@ -21,7 +21,7 @@ from pathlib import Path
 import xlwings as xw
 from bs4 import BeautifulSoup, Comment, NavigableString, Tag
 
-from mod_十五音 import huan_ciat_ca_piau_im, tiau_ho_tng_siann_tiau
+from mod_十五音 import han_ji_ca_piau_im, huan_ciat_ca_piau_im, tiau_ho_tng_siann_tiau
 
 
 def parse_html_to_data(html_content):
@@ -167,10 +167,11 @@ def parse_html_to_data(html_content):
     return extract_data
 
 
-def process_phonetic(phonetic_str, cursor):
+def process_phonetic(phonetic_str, cursor, han_ji=None):
     """
     將「堅五曾」格式轉換為 (台語音標, 聲, 韻, 調)
     如: '堅五曾' -> ('zian5', 'z', 'ian', '5')
+    若無完全對應的標音，則嘗試以漢字查找最接近的讀音（比對聲調與聲母）。
     """
     if not phonetic_str or len(phonetic_str) != 3:
         return ("", "", "", "")
@@ -180,11 +181,9 @@ def process_phonetic(phonetic_str, cursor):
     initial = phonetic_str[2]  # 曾
 
     siann_tiau = tiau_ho_tng_siann_tiau(tone_code)
-    if not siann_tiau:
-        # 如果調號轉換失敗，回傳空
-        return ("", "", "", "")
+    # 若 tone_code 無法轉換，siann_tiau 為 None，後續查詢會失敗或查無結果
 
-    # 查詢資料庫
+    # 1. 嘗試完全匹配查詢
     # huan_ciat_ca_piau_im(cursor, 字韻, 聲調, 切音)
     results = huan_ciat_ca_piau_im(cursor, yun, siann_tiau, initial)
 
@@ -196,6 +195,45 @@ def process_phonetic(phonetic_str, cursor):
         yun_val = res.get("韻", "")
         tiau = res.get("調", "")
         return (taigi, siann, yun_val, str(tiau))
+
+    # 2. 若完全匹配失敗，嘗試以漢字查找 (Fallback)
+    if han_ji:
+        # 取得該漢字所有可能的讀音
+        candidates = han_ji_ca_piau_im(cursor, han_ji)
+        if candidates:
+            # 評分機制：
+            # 聲調相同 +2
+            # 聲母 (切音) 相同 +2
+            # 字韻相同 +1 (雖然字韻未匹配上，但也許是同音字)
+
+            best_match = None
+            max_score = -1
+
+            for cand in candidates:
+                score = 0
+                # 比對聲調 (siann_tiau 為 '上平', '下去' 等)
+                if cand.get("聲調") == siann_tiau:
+                    score += 2
+
+                # 比對聲母 (initial 為 '曾', '喜' 等)
+                if cand.get("切音") == initial:
+                    score += 2
+
+                # 比對字韻 (yun 為 '堅', '膠' 等)
+                if cand.get("字韻") == yun:
+                    score += 1
+
+                if score > max_score:
+                    max_score = score
+                    best_match = cand
+
+            if best_match:
+                taigi = best_match.get("漢字標音", "")
+                siann = best_match.get("聲", "")
+                yun_val = best_match.get("韻", "")
+                tiau = best_match.get("調", "")
+                # 可以在這裡加個標記，表示是推測的？但使用者可能希望格式乾淨。
+                return (taigi, siann, yun_val, str(tiau))
 
     return ("", "", "", "")
 
@@ -241,8 +279,10 @@ def import_to_excel(data, excel_file=None):
 
         if cursor:
             # 使用 process_phonetic 函式處理
-            # 注意：phonetic 可能為空或不符合格式，process_phonetic 內部有檢查
-            taigi, siann_val, yun_val, tiau_val = process_phonetic(phonetic, cursor)
+            # 改為傳入 han_ji 以支援 fallback 機制
+            result = process_phonetic(phonetic, cursor, han_ji)
+            if result:
+                taigi, siann_val, yun_val, tiau_val = result
 
         extended_data.append((han_ji, phonetic, taigi, siann_val, yun_val, tiau_val))
 
