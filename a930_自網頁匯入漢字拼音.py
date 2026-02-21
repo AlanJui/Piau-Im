@@ -1,5 +1,5 @@
 """
-a930_自網頁匯入漢字拼音.py
+a930_自網頁匯入漢字拼音.py v0.0.2
 
 功能：
     讀取指定的 HTML 檔案，解析其中的 <ruby> 標籤結構，
@@ -14,11 +14,14 @@ a930_自網頁匯入漢字拼音.py
 """
 
 import os
+import sqlite3
 import sys
 from pathlib import Path
 
 import xlwings as xw
 from bs4 import BeautifulSoup, Comment, NavigableString, Tag
+
+from mod_十五音 import huan_ciat_ca_piau_im, tiau_ho_tng_siann_tiau
 
 
 def parse_html_to_data(html_content):
@@ -164,11 +167,45 @@ def parse_html_to_data(html_content):
     return extract_data
 
 
+def process_phonetic(phonetic_str, cursor):
+    """
+    將「堅五曾」格式轉換為 (台語音標, 聲, 韻, 調)
+    如: '堅五曾' -> ('zian5', 'z', 'ian', '5')
+    """
+    if not phonetic_str or len(phonetic_str) != 3:
+        return ("", "", "", "")
+
+    yun = phonetic_str[0]  # 堅
+    tone_code = phonetic_str[1]  # 五
+    initial = phonetic_str[2]  # 曾
+
+    siann_tiau = tiau_ho_tng_siann_tiau(tone_code)
+    if not siann_tiau:
+        # 如果調號轉換失敗，回傳空
+        return ("", "", "", "")
+
+    # 查詢資料庫
+    # huan_ciat_ca_piau_im(cursor, 字韻, 聲調, 切音)
+    results = huan_ciat_ca_piau_im(cursor, yun, siann_tiau, initial)
+
+    if results:
+        res = results[0]
+        # 取得需要的欄位
+        taigi = res.get("漢字標音", "")
+        siann = res.get("聲", "")
+        yun_val = res.get("韻", "")
+        tiau = res.get("調", "")
+        return (taigi, siann, yun_val, str(tiau))
+
+    return ("", "", "", "")
+
+
 def import_to_excel(data, excel_file=None):
     """
     將 data [(漢字, 標音), ...] 寫入 Excel
     """
     wb = None
+
     if excel_file and os.path.exists(excel_file):
         wb = xw.Book(excel_file)
     else:
@@ -177,6 +214,40 @@ def import_to_excel(data, excel_file=None):
             wb = xw.books.active
         except:
             wb = xw.Book()
+
+    # 連接資料庫
+    db_path = "雅俗通十五音字典.db"
+    conn = None
+    cursor = None
+    if os.path.exists(db_path):
+        conn = sqlite3.connect(db_path)
+        # 設定 row_factory 為 sqlite3.Row 或直接在 huan_ciat_ca_piau_im 处理
+        # mod_十五音 的 huan_ciat_ca_piau_im 內部已經將結果轉為 dict
+        cursor = conn.cursor()
+    else:
+        print(f"警告：找不到資料庫 {db_path}，無法進行台語音標轉換。")
+
+    # 擴展資料：加入台語音標欄位
+    extended_data = []
+
+    for row in data:
+        han_ji, phonetic = row
+
+        # 預設空字串
+        taigi = ""
+        siann_val = ""
+        yun_val = ""
+        tiau_val = ""
+
+        if cursor:
+            # 使用 process_phonetic 函式處理
+            # 注意：phonetic 可能為空或不符合格式，process_phonetic 內部有檢查
+            taigi, siann_val, yun_val, tiau_val = process_phonetic(phonetic, cursor)
+
+        extended_data.append((han_ji, phonetic, taigi, siann_val, yun_val, tiau_val))
+
+    if conn:
+        conn.close()
 
     # 建立或選取工作表
     sheet_name = "網頁匯入"
@@ -187,11 +258,18 @@ def import_to_excel(data, excel_file=None):
         sheet = wb.sheets.add(sheet_name)
 
     # 寫入標頭
-    sheet.range("A1").value = ["漢字", "漢字標音"]
+    sheet.range("A1").value = [
+        "漢字",
+        "漢字標音",
+        "台語音標",
+        "台語音標之聲",
+        "台語音標之韻",
+        "台語音標之調",
+    ]
 
     # 寫入資料
-    if data:
-        sheet.range("A2").value = data
+    if extended_data:
+        sheet.range("A2").value = extended_data
 
     # 自動調整欄寬
     sheet.autofit()
