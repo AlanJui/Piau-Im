@@ -769,15 +769,38 @@ def ensure_sheet_exists(wb, sheet_name):
         return None  # 若發生錯誤，返回 None
 
 
-def get_value_by_name(wb, name):
+def get_value_by_name(wb, name: str, sheet_name=None):
+    """
+    從 Excel 活頁簿中取得具名範圍的值
+    wb: Excel 活頁簿物件
+    name: 具名範圍名稱
+    sheet_name: (選用) 指定工作表名稱，若指定則嘗試搜尋該工作表的具名範圍
+    """
     try:
+        # 1. 嘗試直接從活頁簿全域名稱取值
         if name in wb.names:
-            value = wb.names[name].refers_to_range.value
-        else:
-            raise KeyError
-    except KeyError:
-        value = None
-    return value
+            return wb.names[name].refers_to_range.value
+
+        # 2. 若指定工作表，嘗試從工作表取值
+        if sheet_name:
+            try:
+                sheet = wb.sheets[sheet_name]
+                if name in sheet.names:
+                    return sheet.names[name].refers_to_range.value
+            except Exception:
+                pass
+
+        # 3. 嘗試遍歷所有工作表 (若名字是區域性的)
+        # 注意：這可能會因為不同工作表有同名範圍而取到非預期值，
+        # 但通常使用者只會在一個工作表設定這些參數
+        for sheet in wb.sheets:
+            if name in sheet.names:
+                return sheet.names[name].refers_to_range.value
+
+        return None
+
+    except Exception:
+        return None
 
 
 def get_ji_khoo(wb, sheet_name="標音字庫"):

@@ -9,7 +9,10 @@ import sqlite3
 import unicodedata
 from typing import Optional
 
-from dotenv import load_dotenv
+try:
+    from dotenv import load_dotenv
+except ImportError:
+    load_dotenv = None
 
 from mod_BP_tng_huan import (
     convert_bp_siann_un_tiau_to_zu_im,
@@ -150,7 +153,8 @@ tiau_hu_mapping = {
 # =========================================================================
 # 載入環境變數
 # =========================================================================
-load_dotenv()
+if load_dotenv:
+    load_dotenv()
 
 # 預設檔案名稱從環境變數讀取
 DB_HO_LOK_UE = os.getenv("DB_HO_LOK_UE", "Ho_Lok_Ue.db")
