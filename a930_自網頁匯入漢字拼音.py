@@ -1,5 +1,5 @@
 """
-a930_自網頁匯入漢字拼音.py v0.0.3
+a930_自網頁匯入漢字拼音.py v0.0.4
 
 功能：
     讀取指定的 HTML 檔案，解析其中的 <ruby> 標籤結構，
@@ -14,14 +14,11 @@ a930_自網頁匯入漢字拼音.py v0.0.3
 """
 
 import os
-import sqlite3
 import sys
 from pathlib import Path
 
 import xlwings as xw
 from bs4 import BeautifulSoup, Comment, NavigableString, Tag
-
-from mod_十五音 import han_ji_ca_piau_im, huan_ciat_ca_piau_im, tiau_ho_tng_siann_tiau
 
 
 def parse_html_to_data(html_content):
@@ -167,75 +164,153 @@ def parse_html_to_data(html_content):
     return extract_data
 
 
-def process_phonetic(phonetic_str, cursor, han_ji=None):
+def process_phonetic(phonetic_str, cursor=None, han_ji=None):
     """
     將「堅五曾」格式轉換為 (台語音標, 聲, 韻, 調)
-    如: '堅五曾' -> ('zian5', 'z', 'ian', '5')
-    若無完全對應的標音，則嘗試以漢字查找最接近的讀音（比對聲調與聲母）。
+    如: '堅五曾' -> ('zian5', '曾', '堅', '5')
+
+    規則：
+    【台語音標】 = 《聲母》 + 《韻母》 + 《調號》
+    1. 聲母：依 sheng_mu_dict 轉換
+    2. 韻母：依 yun_mu_dict 轉換，根據調號決定舒聲或促聲韻母
+    3. 調號：依 tone_map 轉換漢字數字為阿拉伯數字
     """
     if not phonetic_str or len(phonetic_str) != 3:
         return ("", "", "", "")
 
     yun = phonetic_str[0]  # 堅
-    tone_code = phonetic_str[1]  # 五
+    tone_char = phonetic_str[1]  # 五
     initial = phonetic_str[2]  # 曾
 
-    siann_tiau = tiau_ho_tng_siann_tiau(tone_code)
-    # 若 tone_code 無法轉換，siann_tiau 為 None，後續查詢會失敗或查無結果
+    # 1. 聲母字典
+    sheng_mu_dict = {
+        "邊": "p",
+        "頗": "ph",
+        "門": "b",
+        "毛": "m",
+        "地": "t",
+        "他": "th",
+        "耐": "n",
+        "柳": "l",
+        "曾": "z",
+        "出": "c",
+        "時": "s",
+        "入": "j",
+        "求": "k",
+        "去": "kh",
+        "語": "g",
+        "雅": "ng",
+        "喜": "h",
+        "英": "",
+    }
 
-    # 1. 嘗試完全匹配查詢
-    # huan_ciat_ca_piau_im(cursor, 字韻, 聲調, 切音)
-    results = huan_ciat_ca_piau_im(cursor, yun, siann_tiau, initial)
+    # User provided duplicate "時": "s", handled by dict overwriting (same value)
 
-    if results:
-        res = results[0]
-        # 取得需要的欄位
-        taigi = res.get("漢字標音", "")
-        siann = res.get("聲", "")
-        yun_val = res.get("韻", "")
-        tiau = res.get("調", "")
-        return (taigi, siann, yun_val, str(tiau))
+    # 2. 韻母字典 (舒聲, 促聲)
+    yun_mu_dict = {
+        "君": ["un", "ut"],
+        "堅": ["ian", "iat"],
+        "金": ["im", "ip"],
+        "規": ["ui", ""],
+        "嘉": ["ee", "eeh"],
+        "干": ["an", "at"],
+        "公": ["ong", "ok"],
+        "乖": ["uai", "uaih"],
+        "經": ["ing", "ik"],
+        "觀": ["uan", "uat"],
+        "沽": ["oo", ""],
+        "嬌": ["iau", "iauh"],
+        "稽": ["ei", ""],
+        "恭": ["iong", "iok"],
+        "高": ["o", "oh"],
+        "皆": ["ai", ""],
+        "巾": ["in", "it"],
+        "姜": ["iang", "iak"],
+        "甘": ["am", "ap"],
+        "瓜": ["ua", "uah"],
+        "江": ["ang", "ak"],
+        "兼": ["iam", "iap"],
+        "交": ["au", "auh"],
+        "迦": ["ia", "iah"],
+        "檜": ["ue", "ueh"],
+        "監": ["ann", "ahnn"],
+        "艍": ["u", "uh"],
+        "膠": ["a", "ah"],
+        "居": ["i", "ih"],
+        "丩": ["iu", ""],
+        "更": ["enn", "ehnn"],
+        "褌": ["uinn", ""],
+        "茄": ["io", "ioh"],
+        "梔": ["inn", "ihnn"],
+        "薑": ["ionn", ""],
+        "驚": ["iann", ""],
+        "官": ["uann", ""],
+        "鋼": ["ng", ""],
+        "伽": ["e", "eh"],
+        "閒": ["ainn", ""],
+        "姑": ["oonn", ""],
+        "姆": ["m", ""],
+        "光": ["uang", "uak"],
+        "閂": ["uainn", "uaihnn"],
+        "糜": ["uenn", ""],
+        "嘄": ["iaunn", "iauhnn"],
+        "箴": ["om", "op"],
+        "爻": ["aunn", ""],
+        "扛": ["onn", "ohnn"],
+        "牛": ["iunn", ""],
+    }
 
-    # 2. 若完全匹配失敗，嘗試以漢字查找 (Fallback)
-    if han_ji:
-        # 取得該漢字所有可能的讀音
-        candidates = han_ji_ca_piau_im(cursor, han_ji)
-        if candidates:
-            # 評分機制：
-            # 聲調相同 +2
-            # 聲母 (切音) 相同 +2
-            # 字韻相同 +1 (雖然字韻未匹配上，但也許是同音字)
+    # 3. 調號對照
+    tone_map = {
+        "一": 1,
+        "二": 2,
+        "三": 3,
+        "四": 4,
+        "五": 5,
+        "六": 6,
+        "七": 7,
+        "八": 8,
+    }
 
-            best_match = None
-            max_score = -1
+    # 轉換
+    # 聲母
+    if initial not in sheng_mu_dict:
+        # 若聲母不在字典中，可能需要處理或報錯，目前回傳空
+        # 暫時回傳空，或保留原字? 依需求應轉換
+        return ("", initial, yun, tone_char)
 
-            for cand in candidates:
-                score = 0
-                # 比對聲調 (siann_tiau 為 '上平', '下去' 等)
-                if cand.get("聲調") == siann_tiau:
-                    score += 2
+    sheng_val = sheng_mu_dict[initial]
 
-                # 比對聲母 (initial 為 '曾', '喜' 等)
-                if cand.get("切音") == initial:
-                    score += 2
+    # 調號
+    if tone_char not in tone_map:
+        return ("", initial, yun, tone_char)
 
-                # 比對字韻 (yun 為 '堅', '膠' 等)
-                if cand.get("字韻") == yun:
-                    score += 1
+    tiau_val = tone_map[tone_char]
 
-                if score > max_score:
-                    max_score = score
-                    best_match = cand
+    # 韻母
+    if yun not in yun_mu_dict:
+        return ("", initial, yun, str(tiau_val))
 
-            if best_match:
-                taigi = best_match.get("漢字標音", "")
-                siann = best_match.get("聲", "")
-                yun_val = best_match.get("韻", "")
-                tiau = best_match.get("調", "")
-                # 可以在這裡加個標記，表示是推測的？但使用者可能希望格式乾淨。
-                return (taigi, siann, yun_val, str(tiau))
+    yun_list = yun_mu_dict[yun]
 
-    return ("", "", "", "")
+    # 判斷舒聲或促聲
+    # 舒聲：1, 2, 3, 5, 6, 7 -> index 0
+    # 促聲：4, 8 -> index 1
+    if tiau_val in [4, 8]:
+        # 促聲
+        if len(yun_list) > 1:
+            yun_val = yun_list[1]
+        else:
+            # 只有一個的情況? 應該不會發生在促聲調，除非字典定義不同
+            yun_val = yun_list[0]
+    else:
+        # 舒聲
+        yun_val = yun_list[0]
+
+    # 組合台語音標 = 聲母 + 韻母 + 調號
+    taigi_piau_im = f"{sheng_val}{yun_val}{tiau_val}"
+
+    return (taigi_piau_im, sheng_val, yun_val, str(tiau_val))
 
 
 def import_to_excel(data, excel_file=None):
@@ -250,20 +325,10 @@ def import_to_excel(data, excel_file=None):
         # 如果沒有指定檔案或檔案不存在，嘗試連接當前活動的 Excel，或開新檔
         try:
             wb = xw.books.active
-        except:
+        except Exception:
             wb = xw.Book()
 
-    # 連接資料庫
-    db_path = "雅俗通十五音字典.db"
-    conn = None
-    cursor = None
-    if os.path.exists(db_path):
-        conn = sqlite3.connect(db_path)
-        # 設定 row_factory 為 sqlite3.Row 或直接在 huan_ciat_ca_piau_im 处理
-        # mod_十五音 的 huan_ciat_ca_piau_im 內部已經將結果轉為 dict
-        cursor = conn.cursor()
-    else:
-        print(f"警告：找不到資料庫 {db_path}，無法進行台語音標轉換。")
+    # 不需要連接資料庫，直接進行轉換
 
     # 擴展資料：加入台語音標欄位
     extended_data = []
@@ -277,17 +342,13 @@ def import_to_excel(data, excel_file=None):
         yun_val = ""
         tiau_val = ""
 
-        if cursor:
-            # 使用 process_phonetic 函式處理
-            # 改為傳入 han_ji 以支援 fallback 機制
-            result = process_phonetic(phonetic, cursor, han_ji)
-            if result:
-                taigi, siann_val, yun_val, tiau_val = result
+        # 使用 process_phonetic 函式處理
+        # cursor=None, han_ji=han_ji (雖然 han_ji 目前在 process_phonetic 用不到了，但為了相容性保留)
+        result = process_phonetic(phonetic, cursor=None, han_ji=han_ji)
+        if result:
+            taigi, siann_val, yun_val, tiau_val = result
 
         extended_data.append((han_ji, phonetic, taigi, siann_val, yun_val, tiau_val))
-
-    if conn:
-        conn.close()
 
     # 建立或選取工作表
     sheet_name = "網頁匯入"
