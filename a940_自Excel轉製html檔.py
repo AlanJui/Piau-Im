@@ -1,5 +1,5 @@
 """
-a940_自Excel轉製html檔.py
+a940_自Excel轉製html檔.py v0.0.3
 
 功能：
     參考 a400_製作標音網頁.py 之作法，將 Excel 檔中的【漢字標音】（即：雅俗通十五音）
@@ -13,17 +13,18 @@ a940_自Excel轉製html檔.py
     docs/ [檔名].html
 """
 
-import sqlite3
 import sys
 from pathlib import Path
 
 import xlwings as xw
 
-from mod_excel_access import get_value_by_name
+from mod_logging import logging_exception, logging_warning
+from mod_標音 import format_han_ji_piau_im
+from mod_程式 import Program
 
 # 嘗試載入 mod_標音
 try:
-    from mod_標音 import PiauIm, split_tai_gi_im_piau
+    from mod_標音 import PiauIm
 except ImportError:
     PiauIm = None
     split_tai_gi_im_piau = None
@@ -41,66 +42,74 @@ TONE_MAP = {
     "八": "下入",
 }
 
+# =========================================================================
+# 常數定義
+# =========================================================================
+# 定義 Exit Code
+EXIT_CODE_SUCCESS = 0  # 成功
+EXIT_CODE_NO_FILE = 1  # 無法找到檔案
+EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
+EXIT_CODE_SAVE_FAILURE = 3  # 儲存失敗
+EXIT_CODE_PROCESS_FAILURE = 10  # 過程失敗
+EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 
-def convert_15yin(raw, system, p_im, cursor_15yin):
-    if not p_im or not cursor_15yin or len(raw) != 3:
-        return raw
+
+def tai_gi_im_piau_tng_huan(
+    siann: str, un: str, tiau: str, piau_im_huat: str, piau_im_object
+) -> str:
+    """根據【標音方式】設定，將【台語音標】切分成聲母、韻母、調號後，轉換成對映的【漢字標音】。
+
+    args:
+        siann: 台語音標的聲母部分 (例如 "k")
+        un: 台語音標的韻母部分 (例如 "ian")
+        tiau: 台語音標的調號部分 (例如 "5")
+        piau_im_huat: 標音標準（反切/注音/羅馬拼音）設定 (例如 "台語音標")
+    """
+    # 確保 siann, un, tiau 不為 None，若為 None 則轉為空字串
+    siann = siann if siann is not None else ""
+    un = un if un is not None else ""
+    tiau = tiau if tiau is not None else ""
+
+    # 將【聲母】、【韻母】、【聲調】，合併成【台語音標】
+    tai_gi_im_piau = f"{siann}{un}{tiau}"
+
+    # 標音法為：【十五音】或【雅俗通】，且【聲母】為空值，則將【聲母】設為【ø】
+    if (piau_im_huat == "十五音" or piau_im_huat == "雅俗通") and (
+        siann == "" or siann is None
+    ):
+        siann = "ø"
+
+    ok = False
+    han_ji_piau_im = ""
     try:
-        t = TONE_MAP.get(raw[1])
-        if not t:
-            return raw
-
-        # Query: 堅(韻 Rhyme) + 五(調 Tone) + 曾(聲 Initial)
-        # DB Columns: 字韻, 聲調, 切音, 漢字標音
-        cursor_15yin.execute(
-            "SELECT 漢字標音 FROM 漢字表 WHERE 字韻=? AND 聲調=? AND 切音=? LIMIT 1",
-            (raw[0], t, raw[2]),
+        han_ji_piau_im = piau_im_object.han_ji_piau_im_tng_huan(
+            piau_im_huat=piau_im_huat,
+            siann_bu=siann,
+            un_bu=un,
+            tiau_ho=tiau,
         )
-        row = cursor_15yin.fetchone()
-        if not row:
-            return raw
-
-        tg = row[0]  # zian5
-        if not split_tai_gi_im_piau:
-            return tg
-
-        parts = split_tai_gi_im_piau(tg)
-        s, u, ti = parts[0], parts[1], parts[2]
-
-        # 針對「英」聲母 (q) 進行處理
-        # 如果切分後的韻母 u 以 'q' 開頭 (例如 'qiu', 'qu')，
-        # 表示這是以 q 代表零聲母的情況
-        if not s and u.startswith("q"):
-            s = "Ø"  # 對應 DB 中的零聲母 Key (大寫 Ø)
-            u = u[1:]  # 去掉 q，剩下真正的韻母 (e.g. 'iu')
-
-        # 如果 s 是空字串，也要轉成 'Ø'
-        if not s:
-            s = "Ø"
-
-        # 確保 s 是大寫 Ø (因為 DB 裡是大寫，但 split 可能轉小寫了)
-        if s == "ø":
-            s = "Ø"
-
-        # 使用 Ø 查詢對應表，如果系統是輸出台羅拼音等，通常 Ø 對應的就是空字串
-        # 但如果是直接輸出【台語音標】(即 key 值)，可能會印出 Ø
-        # 所以先檢查轉換系統是否是【台語音標】
-        conv = p_im.han_ji_piau_im_tng_huan(system, s, u, ti)
-
-        # 如果轉換結果包含 Ø，把它換成空字串 (這是使用者的要求)
-        if conv and "Ø" in conv:
-            conv = conv.replace("Ø", "")
-
-        return conv if conv else tg
-
-        conv = p_im.han_ji_piau_im_tng_huan(system, s, u, ti)
-        return conv if conv else tg
+        if han_ji_piau_im:  # 傳回非空字串，表示【漢字標音】之轉換成功
+            ok = True
+        else:
+            logging_warning(
+                f"【台語音標】：[{tai_gi_im_piau}]，轉換成【{piau_im_huat}漢字標音】拚音/注音系統失敗！"
+            )
     except Exception as e:
-        print(f"Error converting {raw}: {e}")
-        return raw
+        logging_exception(
+            f"piau_im.han_ji_piau_im_tng_huan() 發生執行時期錯誤: 【台語音標】：{tai_gi_im_piau}",
+            e,
+        )
+        han_ji_piau_im = ""
+        ok = False
+
+    # 若 ok 為 False，表示轉換失敗，則將【台語音標】直接傳回
+    if not ok:
+        return tai_gi_im_piau
+    else:
+        return format_han_ji_piau_im(han_ji_piau_im)
 
 
-def export_excel_to_html(output_path):
+def export_excel_to_html(args, output_path):
     # 連接 Excel
     try:
         wb = xw.books.active
@@ -112,31 +121,35 @@ def export_excel_to_html(output_path):
             sheet = wb.sheets.active
             print(f"找無【網頁匯入】，使用: {sheet.name}")
 
+        # --------------------------------------------------------------------------
+        # 初始化 process config
+        # --------------------------------------------------------------------------
+        program = Program(wb, args, hanji_piau_im_sheet_name="網頁匯入")
+
         # 嘗試取得網頁標題
         try:
-            title = get_value_by_name(wb, "TITLE")
+            title = program.title
             if title is None:
                 title = sheet.name
         except Exception:
             title = sheet.name
 
         # 取得標音方式設定
-        # 邏輯參考 a400，讀取設定值
-        piau_im_hong_sik = get_value_by_name(wb, "標音方式")
-        siong_pinn_piau_im = get_value_by_name(wb, "上邊標音")
-        zian_pinn_piau_im = get_value_by_name(wb, "右邊標音")
+        han_ji_piau_im_hong_sik = program.han_ji_piau_im_format  # 標音方式
+        siong_pinn_piau_im = program.siong_pinn_piau_im  # 上邊標音
+        zian_pinn_piau_im = program.zian_pinn_piau_im  # 右邊標音
 
         # 去除前後空白
-        if piau_im_hong_sik:
-            piau_im_hong_sik = str(piau_im_hong_sik).strip()
+        if han_ji_piau_im_hong_sik:
+            han_ji_piau_im_hong_sik = str(han_ji_piau_im_hong_sik).strip()
         if siong_pinn_piau_im:
             siong_pinn_piau_im = str(siong_pinn_piau_im).strip()
         if zian_pinn_piau_im:
             zian_pinn_piau_im = str(zian_pinn_piau_im).strip()
 
         # 若未設定，給予預設值
-        if piau_im_hong_sik is None:
-            piau_im_hong_sik = "上邊"
+        if han_ji_piau_im_hong_sik is None:
+            han_ji_piau_im_hong_sik = "上邊"
         if siong_pinn_piau_im is None:
             siong_pinn_piau_im = "台語音標"
         if zian_pinn_piau_im is None:
@@ -147,41 +160,15 @@ def export_excel_to_html(output_path):
         print(f"錯誤訊息: {e}")
         return
 
-    # 連接資料庫與初始化 PiauIm
-    piau_im_proc = None
-    conn_15yin = None
-    conn_piau_im = None
-    cursor_15yin = None
-
-    if PiauIm:
+    if PiauIm:  # 確保 PiauIm 已成功載入
         try:
-            # 1. 連接 Han_Ji_Piau_Im.db 用於 PiauIm 初始化 (轉換邏輯)
-            script_dir = Path(__file__).resolve().parent
-            db_piau_im_path = (script_dir / "Han_Ji_Piau_Im.db").resolve()
-            if not db_piau_im_path.exists():
-                print(
-                    f"警告：找不到漢字標音字典檔 {db_piau_im_path}，無法進行標音轉換。"
-                )
-            else:
-                conn_piau_im = sqlite3.connect(str(db_piau_im_path))
-                # 初始化 PiauIm 並載入轉換字典，指定 "雅俗通"
-                piau_im_proc = PiauIm(
-                    han_ji_khoo="雅俗通", cursor=conn_piau_im.cursor()
-                )
-
-            # 2. 連接 雅俗通十五音字典.db 用於查詢原碼 (堅五曾 -> TLPA)
-            db_15yin_path = (script_dir / "雅俗通十五音字典.db").resolve()
-            if not db_15yin_path.exists():
-                print(f"警告：找不到十五音字典檔 {db_15yin_path}，無法進行標音轉換。")
-            else:
-                conn_15yin = sqlite3.connect(str(db_15yin_path))
-                cursor_15yin = conn_15yin.cursor()
-
+            piau_im_object = program.piau_im
         except Exception as e:
-            print(f"資料庫初始化失敗: {e}")
+            print(f"無法初始化 PiauIm 物件: {e}")
 
+    # --------------------------------------------------------------------------
     # 讀取資料
-    # 從 A2 開始讀取，並嘗試讀取到 C 欄 (以防有雙排標音需求)
+    # 從 A2 開始讀取，並嘗試讀取到 F 欄
     try:
         last_row = sheet.range("A" + str(sheet.cells.last_cell.row)).end("up").row
         if last_row < 2:
@@ -190,10 +177,12 @@ def export_excel_to_html(output_path):
 
         # 讀取 A, B, C 欄
         # A: 漢字
-        # B: 標音1 (通常為上邊)
-        # C: 標音2 (通常為右邊)
-        # 注意：若只用 B 欄，則視設定決定放上邊 (rt) 或右邊 (rtc)
-        data = sheet.range(f"A2:C{last_row}").value
+        # B: 漢字標音
+        # C: 台語音標
+        # D: 台語音標【聲母】
+        # E: 台語音標【韻母】
+        # F: 台語音標【調號】
+        data = sheet.range(f"A2:F{last_row}").value
     except Exception as e:
         print(f"讀取 Excel 資料失敗: {e}")
         return
@@ -202,7 +191,8 @@ def export_excel_to_html(output_path):
     content_lines = []
 
     # 初始區塊
-    content_lines.append('<div class="fifteen_yin">')
+    # content_lines.append('<div class="fifteen_yin">')
+    content_lines.append('<div class="Siang_Pai">')
 
     # 標題
     content_lines.append(f'<p class="title"><span>《</span>{title}<span>》</span></p>')
@@ -231,29 +221,31 @@ def export_excel_to_html(output_path):
 
         # 確保 row 為 list
         if not isinstance(row, list):
-            # 單欄情況(雖然這裡是 A:C)
+            # 單欄情況(雖然這裡是 A:F)
             row = [row]
 
         # 補足長度
-        while len(row) < 3:
+        # while len(row) < 3:
+        while len(row) < 6:
             row.append(None)
 
         han_ji = row[0]
-        piau_im_1 = row[1]
-        piau_im_2 = row[2]
+        sip_goo_im_piau_im = row[1]
+        tai_gi_im_piau = row[2]
 
+        # 過濾無效資料，務必需有：漢字、漢字標音及至台語音標
         if han_ji is None:
             han_ji = ""
-        if piau_im_1 is None:
-            piau_im_1 = ""
-        if piau_im_2 is None:
-            piau_im_2 = ""
+        if sip_goo_im_piau_im is None:
+            sip_goo_im_piau_im = ""
+        if tai_gi_im_piau is None:
+            tai_gi_im_piau = ""
 
         han_ji = str(han_ji)
-        piau_im_1 = str(piau_im_1)
-        piau_im_2 = str(piau_im_2)
+        sip_goo_im_piau_im = str(sip_goo_im_piau_im)
+        tai_gi_im_piau = str(tai_gi_im_piau)
 
-        # 換行符號處理
+        # 若【漢字】儲存格，其內容為：換行控制符
         if han_ji == "\\n" or han_ji == "\\r\\n" or han_ji == "\n" or han_ji == "\r\n":
             end_paragraph_if_needed()
             start_paragraph_if_needed()
@@ -265,42 +257,33 @@ def export_excel_to_html(output_path):
         # - B欄 (piau_im_1) 為主要標音來源 (通常是十五音代碼，如 "堅五曾")
         # - 若有 C欄 (piau_im_2)，則視為第二標音來源 (若未留空)
 
-        # 確保 system 參數在使用前已經過 strip() 清理
+        # 取得【台語音標】的【聲母】、【韻母】、【調號】
+        siann = row[3]
+        un = row[4]
+        tiau = int(row[5]) if row[5] is not None else ""  # 調號可能為空值，需處理
 
         # 準備上邊標音內容
         top_content = ""
-        if "上" in piau_im_hong_sik:
-            # 若為雙排標音且 C 欄有值，通常 B=上, C=右? 或是 B=源, 轉成上/右?
-            # 依據使用者需求 (2)：依照 env 設定進行十五音轉換
-            # 假設 B 欄是原始碼，轉換後填入對應位置
-
-            # 嘗試轉換 B 欄內容
-            converted_1 = convert_15yin(
-                piau_im_1, siong_pinn_piau_im, piau_im_proc, cursor_15yin
+        if "上" in han_ji_piau_im_hong_sik and tai_gi_im_piau:
+            converted_1 = tai_gi_im_piau_tng_huan(
+                siann=siann,
+                un=un,
+                tiau=tiau,
+                piau_im_huat=siong_pinn_piau_im,
+                piau_im_object=piau_im_object,
             )
             top_content = converted_1
 
         # 準備右邊標音內容
         right_content = ""
-        if "右" in piau_im_hong_sik:
-            # 如果是單獨 "右邊"，B 欄是來源
-            if piau_im_hong_sik == "右邊":
-                right_content = convert_15yin(
-                    piau_im_1, zian_pinn_piau_im, piau_im_proc, cursor_15yin
-                )
-            else:
-                # "上及右" 或其他
-                # 若 C 欄有值，優先使用 C 欄轉換
-                if piau_im_2 and piau_im_2.strip():
-                    right_content = convert_15yin(
-                        piau_im_2, zian_pinn_piau_im, piau_im_proc, cursor_15yin
-                    )
-                else:
-                    # 若 C 欄無值，是否重複使用 B 欄轉換？
-                    # 根據慣例，若只要右邊顯示某種拼音 (例如十五音原碼)，可再次轉換 B
-                    right_content = convert_15yin(
-                        piau_im_1, zian_pinn_piau_im, piau_im_proc, cursor_15yin
-                    )
+        if "右" in han_ji_piau_im_hong_sik and tai_gi_im_piau:
+            right_content = tai_gi_im_piau_tng_huan(
+                siann=siann,
+                un=un,
+                tiau=tiau,
+                piau_im_huat=zian_pinn_piau_im,
+                piau_im_object=piau_im_object,
+            )
 
         # 組合 HTML
         # <ruby>
@@ -368,12 +351,50 @@ def export_excel_to_html(output_path):
     except Exception as e:
         print(f"寫入檔案失敗: {e}")
 
+    return EXIT_CODE_SUCCESS
+
+
+def test_01():
+    pass
+
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        output_file = sys.argv[1]
-    else:
-        # 預設輸出到 docs 目錄
-        output_file = str(Path("docs") / "output_from_excel.html")
+    import argparse
+    import sys
 
-    export_excel_to_html(output_file)
+    # 解析命令行參數
+    parser = argparse.ArgumentParser(
+        description="a940_自Excel轉製html檔.py",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+使用範例：
+  python a940.py                                # 執行一般模式
+  python a940.py --output_file <output_file>    # 建立新的字庫工作表
+  python a940.py --test                         # 執行測試模式
+""",
+    )
+    parser.add_argument(
+        "--test",
+        action="store_true",
+        help="執行測試模式",
+    )
+
+    # 預設輸出到 docs 目錄
+    output_file = str(Path("docs") / "output_from_excel.html")
+    parser.add_argument(
+        "output_file",
+        nargs="?",
+        default=output_file,
+        help="輸出 HTML 檔案的路徑 (預設: docs/output_from_excel.html)",
+    )
+    args = parser.parse_args()
+
+    if args.test:
+        # 執行測試
+        test_01()
+    else:
+        # 從 Excel 呼叫
+        exit_code = export_excel_to_html(args, output_file)
+        if exit_code != EXIT_CODE_SUCCESS:
+            print(f"程式異常終止，返回代碼：{exit_code}")
+            sys.exit(exit_code)
