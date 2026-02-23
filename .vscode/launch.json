@@ -516,15 +516,20 @@
             "request": "launch",
             "program": "a800_更新漢字庫之漢字標音.py",
             "console": "externalTerminal",
+            "args": [
+                // 使用【標音字庫】工作表
+                "1"
+            ]
         },
         {
-            "name": "a801_更新漢字庫",
+            "name": "a800_使用【網頁匯入】工作表更新漢字庫",
             "type": "debugpy",
             "request": "launch",
-            "program": "a801_更新漢字庫.py",
+            "program": "a800_更新漢字庫之漢字標音.py",
             "console": "externalTerminal",
             "args": [
-                "1"
+                // 使用【網頁匯入】工作表
+                "4"
             ]
         },
         {
