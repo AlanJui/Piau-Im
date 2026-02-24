@@ -405,7 +405,11 @@ rtc {
   display: inline;
   /* letter-spacing: 0.2em; */
   /* margin-right: 0.4em; */
-  margin-left: -0.8em;
+  /* margin-left: -0.8em; */
+
+  /* [Modified by Copilot] 調整方音符號位置，避免與漢字重疊 */
+  /* 向右移動一點，以避開漢字 */
+  margin-left: 0.1em;
   /* margin-top: -0.5em; */
 }
 

@@ -1,5 +1,5 @@
 """
-a940_自Excel轉製html檔.py v0.0.4
+a940_自Excel轉製html檔.py v0.0.5
 
 功能：
     參考 a400_製作標音網頁.py 之作法，將 Excel 檔中的【漢字標音】（即：雅俗通十五音）
@@ -11,6 +11,9 @@ a940_自Excel轉製html檔.py v0.0.4
 
     輸出：
     docs/ [檔名].html
+變更紀錄：
+ - v0.0.4 (2026/2/24): 改成使用 Program 類別，套用 mod_程式.py 的架構，並嘗試使用 mod_標音.py 的 PiauIm 物件來進行【台語音標】轉換【漢字標音】的功能。
+    v0.0.5 (2024-2-24): 調整 HTML 結構，將圖片放在標題與內容之間，並修正一些細節。
 """
 
 import logging
@@ -202,7 +205,7 @@ def export_excel_to_html(program, output_path):
     content_lines.append('<div class="Siang_Pai">')
 
     # 標題
-    content_lines.append(f'<p class="title"><span>《</span>{title}<span>》</span></p>')
+    # content_lines.append(f'<p class="title"><span>《</span>{title}<span>》</span></p>')
 
     # 內容開始
     in_paragraph = False
@@ -325,7 +328,26 @@ def export_excel_to_html(program, output_path):
     content_html = "\n".join(content_lines)
 
     web_page_main_file_name = Path(output_path).stem
-    full_image_url = "https://alanjui.github.io/Piau-Im/assets/images/king_tian.png"
+
+    # 在《文章標題》與《文章內容》之間，插入圖片
+    title_pict = ""
+
+    # 輸出放置圖片的 HTML Tag
+    # full_image_url = "https://alanjui.github.io/Piau-Im/assets/images/king_tian.png"
+    div_image = (
+        "<div class='separator' style='clear: both'>\n"
+        "  <a href='圖片' style='display: block; padding: 1em 0; text-align: center'>\n"
+        "    <img alt='%s' border='0' width='800' \n"
+        "      src='%s' />\n"
+        "  </a>\n"
+        "</div>\n"
+    )
+    image_url = program.image_url.strip()
+    if image_url.lower().startswith(("http://", "https://")):
+        full_image_url = image_url
+    else:
+        full_image_url = f"./assets/images/{image_url}"
+    title_pict += div_image % (program.title, full_image_url)
 
     html_template = f"""<!DOCTYPE html>
 <html lang="zh-TW">
@@ -342,6 +364,7 @@ def export_excel_to_html(program, output_path):
 <body>
     <main class="page">
         <article class="article_content">
+        {title_pict}
         {content_html}
         </article>
     </main>
