@@ -1,5 +1,5 @@
 """
-a940_自Excel轉製html檔.py v0.0.5
+a940_自Excel轉製html檔.py v0.0.6
 
 功能：
     參考 a400_製作標音網頁.py 之作法，將 Excel 檔中的【漢字標音】（即：雅俗通十五音）
@@ -13,7 +13,8 @@ a940_自Excel轉製html檔.py v0.0.5
     docs/ [檔名].html
 變更紀錄：
  - v0.0.4 (2026/2/24): 改成使用 Program 類別，套用 mod_程式.py 的架構，並嘗試使用 mod_標音.py 的 PiauIm 物件來進行【台語音標】轉換【漢字標音】的功能。
-    v0.0.5 (2024-2-24): 調整 HTML 結構，將圖片放在標題與內容之間，並修正一些細節。
+ - v0.0.5 (2024/2/24): 調整 HTML 結構，將圖片放在標題與內容之間，並修正一些細節。
+ - v0.0.6 (2024/2/24): 自Excel工作表讀出的【第一個段落】，會自動切割成兩個段落：標題、作者。
 """
 
 import logging
@@ -209,18 +210,83 @@ def export_excel_to_html(program, output_path):
 
     # 內容開始
     in_paragraph = False
+    paragraph_count = 0  # [新增] 記錄段落索引
+    current_paragraph_htmls = []  # [新增] 用來暫存當前段落的 HTML 片段
 
     def start_paragraph_if_needed():
-        nonlocal in_paragraph
+        nonlocal in_paragraph, current_paragraph_htmls
         if not in_paragraph:
-            content_lines.append("<p>")
+            # content_lines.append("<p>") # [修改] 暫時不加入 <p>，改由 flush 決定
             in_paragraph = True
+            current_paragraph_htmls = []  # 清空暫存
 
     def end_paragraph_if_needed():
-        nonlocal in_paragraph
+        nonlocal in_paragraph, paragraph_count, current_paragraph_htmls
         if in_paragraph:
-            content_lines.append("</p>")
+            # [新增] 根據 paragraph_count 決定如何輸出
+            full_html = "".join(current_paragraph_htmls)
+
+            if paragraph_count == 0:
+                # 第一段：需拆解成 Title 與 Author
+                # 尋找書名號位置，將 current_paragraph_htmls 中的元素依序取出判斷
+
+                title_html = ""
+                author_html = ""
+
+                # 簡單判斷：若字串中含有 "》"，則以此為界
+                # 注意 full_html 可能已經包含 <ruby>...</ruby> 標籤，單純用 string split 可能會切壞標籤
+                # 但每個 element (current_paragraph_htmls) 應該是一個 ruby block 或 span
+                # 我們只要找到那個 element 包含 "》" 即可
+
+                split_index = -1
+                for i, part in enumerate(current_paragraph_htmls):
+                    if "》" in part:
+                        split_index = i
+                        break
+
+                if split_index != -1:
+                    # 包含 "》" 的那個部分，應該屬於標題
+                    # 標題部分 = 0 ~ split_index (包含該 element)
+                    # 作者部分 = split_index + 1 ~ end
+
+                    title_parts = current_paragraph_htmls[: split_index + 1]
+                    # 為標題中的書名號添加特定 class 以調整大小
+                    title_parts = [
+                        (
+                            p.replace("<span>", '<span class="title_mark">')
+                            if "《" in p or "》" in p
+                            else p
+                        )
+                        for p in title_parts
+                    ]
+                    title_html = "".join(title_parts)
+                    author_html = "".join(current_paragraph_htmls[split_index + 1 :])
+
+                    # 輸出標題 (class="title")
+                    content_lines.append(
+                        f'<p class="title">{title_html}<span style="display:none"></span></p>'
+                    )
+
+                    # 輸出作者 (class="author")，若有內容的話
+                    if author_html.strip():
+                        content_lines.append(f'<p class="author">{author_html}</p>')
+                    else:
+                        # 避免結構空缺，可不輸出或輸出空
+                        pass
+                else:
+                    # 找不到 "》"，將整段視為標題 (或一般段落)
+                    content_lines.append(f'<p class="title">{full_html}</p>')
+            else:
+                # 其他段落 (一般內容，class="Siang_Pai" 樣式由外層 div 控制，這裡用 <p>)
+                if full_html.strip():
+                    content_lines.append(f"<p>{full_html}</p>")
+                else:
+                    # 空行保留
+                    content_lines.append("<p><br/></p>")
+
+            paragraph_count += 1
             in_paragraph = False
+            current_paragraph_htmls = []
 
     # 強制開始第一段
     start_paragraph_if_needed()
@@ -307,9 +373,11 @@ def export_excel_to_html(program, output_path):
 
         if not has_top and not has_right:
             if han_ji.strip() == "":
-                content_lines.append("  <span>　</span>")
+                # content_lines.append("  <span>　</span>")
+                current_paragraph_htmls.append("  <span>　</span>\n")
             else:
-                content_lines.append(f"  <span>{han_ji}</span>")
+                # content_lines.append(f"  <span>{han_ji}</span>")
+                current_paragraph_htmls.append(f"  <span>{han_ji}</span>\n")
         else:
             ruby_parts = [f"<ruby><rb>{han_ji}</rb>"]
 
@@ -320,7 +388,8 @@ def export_excel_to_html(program, output_path):
                 ruby_parts.append(f"<rtc>{right_content}</rtc>")
 
             ruby_parts.append("</ruby>")
-            content_lines.append("".join(ruby_parts))
+            # content_lines.append("".join(ruby_parts))
+            current_paragraph_htmls.append("".join(ruby_parts) + "\n")
 
     end_paragraph_if_needed()
     content_lines.append("</div>")
