@@ -1,5 +1,5 @@
 """
-a940_自Excel轉製html檔.py v0.0.3
+a940_自Excel轉製html檔.py v0.0.4
 
 功能：
     參考 a400_製作標音網頁.py 之作法，將 Excel 檔中的【漢字標音】（即：雅俗通十五音）
@@ -13,12 +13,18 @@ a940_自Excel轉製html檔.py v0.0.3
     docs/ [檔名].html
 """
 
+import logging
 import sys
 from pathlib import Path
 
 import xlwings as xw
 
-from mod_logging import logging_exception, logging_warning
+from mod_logging import (
+    logging_exc_error,
+    logging_exception,
+    logging_process_step,
+    logging_warning,
+)
 from mod_標音 import format_han_ji_piau_im
 from mod_程式 import Program
 
@@ -109,22 +115,23 @@ def tai_gi_im_piau_tng_huan(
         return format_han_ji_piau_im(han_ji_piau_im)
 
 
-def export_excel_to_html(args, output_path):
+def export_excel_to_html(program, output_path):
     # 連接 Excel
     try:
-        wb = xw.books.active
+        wb = program.wb
 
         # (1) 預設使用【網頁匯入】工作表
         try:
-            sheet = wb.sheets["網頁匯入"]
+            source_sheet_name = program.hanji_piau_im_sheet_name
+            sheet = wb.sheets[source_sheet_name]
         except Exception:
             sheet = wb.sheets.active
-            print(f"找無【網頁匯入】，使用: {sheet.name}")
+            print(f"找無【{source_sheet_name}】，使用: {sheet.name}")
 
         # --------------------------------------------------------------------------
         # 初始化 process config
         # --------------------------------------------------------------------------
-        program = Program(wb, args, hanji_piau_im_sheet_name="網頁匯入")
+        # program = Program(wb, args, hanji_piau_im_sheet_name="網頁匯入")
 
         # 嘗試取得網頁標題
         try:
@@ -354,10 +361,146 @@ def export_excel_to_html(args, output_path):
     return EXIT_CODE_SUCCESS
 
 
+def process(wb, args) -> int:
+    """
+    為【漢字】之【漢字標音】，以批次作業方式，完成各種標音方法標注。
+
+    Args:
+        wb: Excel Workbook 物件
+
+    Returns:
+        處理結果代碼
+    """
+    # --------------------------------------------------------------------------
+    # 作業初始化
+    # --------------------------------------------------------------------------
+    logging_process_step("<=========== 作業開始！==========>")
+
+    try:
+        # 初始化 process config
+        program = Program(wb, args, hanji_piau_im_sheet_name="網頁匯入")
+
+        # # 建立儲存格處理器
+        # if args.new:
+        #     xls_cell = CellProcessor(
+        #         program=program,
+        #         new_jin_kang_piau_im_ji_khoo_sheet=True,
+        #         new_piau_im_ji_khoo_sheet=True,
+        #         new_khuat_ji_piau_sheet=True,
+        #     )
+        # else:
+        #     xls_cell = CellProcessor(
+        #         program=program,
+        #         new_jin_kang_piau_im_ji_khoo_sheet=False,
+        #         new_piau_im_ji_khoo_sheet=False,
+        #         new_khuat_ji_piau_sheet=False,
+        #     )
+    except Exception as e:
+        logging_exc_error(msg="初始化作業，發生執行異常！", error=e)
+        return EXIT_CODE_PROCESS_FAILURE
+
+    # ------------------------------------------------------------------------------
+    # 處理作業
+    # ------------------------------------------------------------------------------
+    try:
+        output_file = args.output_file
+        export_excel_to_html(program, output_file)
+    except Exception as e:
+        logging_exception(
+            msg=f"程式：{program.program_name} ，執行時發生異常問題！",
+            error=e,
+        )
+        raise
+
+    # ------------------------------------------------------------------------------
+    # 處理作業結束
+    # ------------------------------------------------------------------------------
+    print("=" * 80)
+    logging_process_step("<=========== 作業結束！==========>")
+    return EXIT_CODE_SUCCESS
+
+
+# =========================================================================
+# 主程式
+# =========================================================================
+def main(args) -> int:
+    """主程式"""
+    # =========================================================================
+    # (0) 程式初始化
+    # =========================================================================
+    # 取得專案根目錄。
+    current_file_path = Path(__file__).resolve()
+    project_root = current_file_path.parent
+    # 取得程式名稱
+    program_name = current_file_path.stem
+
+    # =========================================================================
+    # (1) 開始執行程式
+    # =========================================================================
+    logging_process_step(f"《========== 程式開始執行：{program_name} ==========》")
+    logging_process_step(f"專案根目錄為: {project_root}")
+
+    # =========================================================================
+    # (2) 設定【作用中活頁簿】：偵測及獲取 Excel 已開啟之活頁簿檔案。
+    # =========================================================================
+    try:
+        # 取得 Excel 活頁簿
+        wb = None
+        wb = xw.apps.active.books.active
+    except Exception as e:
+        logging.error(f"無法找到作用中的 Excel 工作簿: {e}")
+        return EXIT_CODE_NO_FILE
+
+    # 若無法取得【作用中活頁簿】，則因無法繼續作業，故返回【作業異常終止代碼】結束。
+    if not wb:
+        logging_exc_error(msg="無法取得 Excel 活頁簿！", error=None)
+        return EXIT_CODE_NO_FILE
+
+    # =========================================================================
+    # (3) 執行【處理作業】
+    # =========================================================================
+    try:
+        exit_code = process(wb, args)
+    except Exception as e:
+        msg = f"作業程序發生異常，終止執行：{program_name}"
+        logging_exception(msg=msg, error=e)
+        return EXIT_CODE_PROCESS_FAILURE
+
+    if exit_code != EXIT_CODE_SUCCESS:
+        msg = f"處理作業發生異常，終止程式執行：{program_name}（處理作業程序，返回失敗碼）"
+        logging_exc_error(msg=msg, error=None)
+        return EXIT_CODE_PROCESS_FAILURE
+
+    # =========================================================================
+    # (4) 儲存檔案
+    # =========================================================================
+    try:
+        # 儲存檔案
+        if not Program.save_workbook_as_new_file(wb=wb):
+            return EXIT_CODE_SAVE_FAILURE  # 作業異當終止：無法儲存檔案
+    except Exception as e:
+        logging_exception(msg="儲存檔案失敗！", error=e)
+        return EXIT_CODE_SAVE_FAILURE  # 作業異當終止：無法儲存檔案
+
+    # =========================================================================
+    # (5) 結束程式
+    # =========================================================================
+    print("\n")
+    print("=" * 80)
+    logging_process_step(f"《========== 程式終止執行：{program_name} ==========》")
+    return EXIT_CODE_SUCCESS
+
+
+# =========================================================================
+# 單元測試
+# =========================================================================
 def test_01():
     pass
 
 
+# =========================================================================
+# 程式入口
+# =========================================================================
 if __name__ == "__main__":
     import argparse
     import sys
@@ -394,7 +537,8 @@ if __name__ == "__main__":
         test_01()
     else:
         # 從 Excel 呼叫
-        exit_code = export_excel_to_html(args, output_file)
+        # exit_code = export_excel_to_html(args, output_file)
+        exit_code = main(args)
         if exit_code != EXIT_CODE_SUCCESS:
             print(f"程式異常終止，返回代碼：{exit_code}")
             sys.exit(exit_code)

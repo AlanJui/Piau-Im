@@ -1,3 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&display=swap');
+
+@font-face {
+  font-family: "BopomofoRuby";
+  src: url("https://alanjui.github.io/Blogger/assets/fonts/BopomofoRuby1909-v1-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* 1. 重設基礎樣式 */
 * {
     box-sizing: border-box;
@@ -175,4 +185,185 @@ rt {
     font-family: "微軟正黑體", sans-serif; /* 註記通常使用無襯線字體較清晰 */
     letter-spacing: 0.05em;
     transform: translateY(-0.2em); /* 微調拼音與漢字的距離 */
+}
+
+
+/* =========================
+   注音符號相關（方音符號專用）
+   ========================= */
+
+/* 防止 ruby 元素在換行時被拆分 */
+ruby {
+  white-space: nowrap;
+  text-align: justify;
+  font-family: "Noto Serif TC", serif;
+  font-weight: 700;
+  font-size: 2.4rem;
+  letter-spacing: 0;
+  line-height: 2.4;
+}
+
+rt {
+  font-family: 'Noto Sans TC', Arial, sans-serif !important;
+  font-weight: 400;
+  color: darkcyan;
+  font-size: 40%;
+  letter-spacing: 0;
+  font-feature-settings: "salt";
+  margin-left: -0.4em;
+}
+
+rtc {
+  font-family: BopomofoRuby !important;
+  font-weight: bold;
+  color: #B94B6A;
+  font-size: 40%;
+  -webkit-ruby-position: inter-character;
+  ruby-position: inter-character;
+  -webkit-text-orientation: upright;
+  text-orientation: upright;
+  letter-spacing: 0px;
+  -webkit-writing-mode: vertical-lr;
+  -ms-writing-mode: vertical-lr;
+  writing-mode: vertical-lr;
+  vertical-align: middle;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -0.5em;
+  margin-left: -0.8em;
+  margin-right: 0.0em;
+  text-combine-upright: none;
+  -webkit-text-combine: none;
+  word-break: break-all;
+  white-space: normal;
+  height: auto;
+  width: 1em;
+  margin-left: -0.4em;
+}
+
+/* 雙排注音符號 */
+.Siang_Pai {
+  font-family: "Noto Serif TC", serif;
+  font-size: 2.8rem;
+  letter-spacing: 0.0em;
+  text-align: justify;
+}
+
+.Siang_Pai rt {
+  /* font-family: "Noto Serif TC", serif; */
+  /* font-family: "LXGW WenKai Mono TC";   */
+  font-family: "Noto Sans TC", system-ui, -apple-system, sans-serif;
+  margin-left: 0.1em;
+  font-family: Arial;
+  color: #00c4ab;
+  font-size: 50%;
+  font-variant-east-asian: salt;
+  -moz-font-feature-settings: "salt";
+  -webkit-font-feature-settings: "salt";
+  font-feature-settings: "salt";
+  text-orientation: upright;
+  margin-left: -0.4em;
+}
+
+.Siang_Pai rtc {
+  font-family: BopomofoRuby;
+  color: #B94B6A;
+  font-size: 40%;
+  font-weight: bold;
+  line-height: normal;
+  -webkit-ruby-position: inter-character;
+  ruby-position: inter-character;
+  -webkit-writing-mode: vertical-lr;
+  text-orientation: upright;
+  writing-mode: vertical-lr;
+  vertical-align: middle;
+  display: inline;
+  /* letter-spacing: 0.2em; */
+  /* margin-right: 0.4em; */
+  margin-left: -0.8em;
+  /* margin-top: -0.5em; */
+}
+
+/* .Siang_Pai rtc,
+.title rtc {
+  color: #B94B6A;
+  font-size: 35%;
+  -webkit-ruby-position: inter-character;
+  ruby-position: inter-character;
+  text-orientation: upright;
+
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+
+  transform: translateX(0%);
+} */
+
+/* 方音符號 */
+.Piau_Im {
+  /* font-family: "Noto Serif TC Black"; */
+  font-size: 2.8rem;
+  letter-spacing: 0.1rem;
+}
+
+.Piau_Im rt {
+  font-family: BopomofoRuby;
+  color: #B94B6A;
+  font-size: 35%;
+  -webkit-ruby-position: inter-character;
+  ruby-position: inter-character;
+  text-orientation: upright;
+  -webkit-writing-mode: vertical-rl;
+  writing-mode: vertical-rl;
+  vertical-align: middle;
+  display: inline;
+}
+
+.Piau_Im rtc {
+  font-family: BopomofoRuby !important;
+}
+
+/* 注音 */
+.zhu_yin {
+  /* font-family: "Noto Serif TC"; */
+  font-size: 2.8rem;
+  letter-spacing: 0.0em;
+  line-height: 2;
+}
+
+/* 台羅、閩拼、白話字 */
+.pin_yin {
+  /* font-family: "Noto Serif TC"; */
+  font-size: 28pt;
+  letter-spacing: 0.2em;
+  line-height: 2;
+}
+
+.poj {
+  /* font-family: "Noto Serif TC"; */
+  font-size: 28pt;
+  letter-spacing: 0.2em;
+  line-height: 2;
+}
+
+/* 十五音 */
+.fifteen_yin {
+  /* font-family: "Noto Serif TC"; */
+  font-size: 28pt;
+  letter-spacing: 0.2em;
+  line-height: 2;
+}
+
+/* 十五音 */
+.fifteen_yin {
+  /* font-family: "Noto Serif TC"; */
+  font-size: 28pt;
+  letter-spacing: 0.2em;
+  line-height: 2;
+}
+
+.fifteen_yin rt {
+  letter-spacing: 0;
+  font-size: 40%;
 }
