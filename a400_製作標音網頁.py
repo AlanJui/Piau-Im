@@ -1,5 +1,8 @@
 """
-a400_製作標音網頁.py V0.2.2.8
+a400_製作標音網頁.py V0.2.2.9
+
+修改紀錄：
+v0.2.2.9 2026-2-25: 自動産生【文章標題】及【作者姓名】的 Ruby Tag。
 """
 
 # =========================================================================
@@ -342,6 +345,154 @@ class CellProcessor(ExcelCell):
 
         return title_with_ruby
 
+    def generate_title_and_author_with_ruby(self) -> tuple:
+        """
+        自【漢字注音】工作表，取得第一個段落的文字內容，並據此段落
+        解析取得【文章標題】及【作者姓名】，並加注【台語音標】
+
+        Returns:
+            (title_with_ruby, author_with_ruby)
+        """
+        program = self.program
+        sheet = program.wb.sheets[program.hanji_piau_im_sheet_name]
+
+        # 工作表起始列號 = 範圍起始列號 + 漢字列偏移量 = 3 + 2 = 5
+        start_row = program.line_start_row + program.han_ji_row_offset
+
+        # -------------------------------------------------------------
+        # 1. 讀取第一段落的【漢字】與【台語音標】
+        # -------------------------------------------------------------
+        han_ji_list = []
+        tlpa_im_piau_list = []
+
+        # 僅讀取第一列 (假設標題在第一列) 或是直到遇到換行
+        # 依據原有邏輯: 讀取直到 \n 或 φ
+        # 注意: 原程式碼的 row 迴圈可能讀取多行，但標題通常在第一段
+
+        found_end = False
+        row = start_row
+        while not found_end:
+            # 檢查列是否超過範圍 (簡單保護)
+            if row > 1000:
+                break
+
+            for col in range(program.start_col, program.end_col):
+                # 讀取漢字 (第 5 列)
+                han_ji = sheet.range((row, col)).value
+
+                # 讀取台語音標 (第 4 列: row - 1)
+                tlpa = sheet.range((row - 1, col)).value
+
+                if han_ji == "φ":  # 讀到【結尾標示】
+                    found_end = True
+                    break
+                elif han_ji == "\\n" or han_ji == "\n":  # 讀到【換行標示】
+                    found_end = True
+                    break
+
+                # 收集資料
+                # 注意：空儲存格也要處理，視為結束或忽略?
+                # 原程式: cell_value = str(cell_value).strip() if cell_value else ""
+                # 如果是 None，視為空字串，繼續讀取? 或是視為段落結束?
+                # 通常 Piau-Im 的格式，空漢字可能代表空格
+
+                if han_ji is None:
+                    han_ji = ""
+                else:
+                    han_ji = str(han_ji)  # 不 strip，保留空白? 原程式有 strip
+
+                if tlpa is None:
+                    tlpa = ""
+                else:
+                    tlpa = str(tlpa).strip()
+
+                if han_ji == "":
+                    # 空漢字，忽略?
+                    # 原程式 logic: if han_ji.strip() == "": continue
+                    # 但如果是空格字元?
+                    pass
+
+                han_ji_list.append(han_ji)
+                tlpa_im_piau_list.append(tlpa)
+
+            # 換下一列 (如果還沒結束)
+            # Piau-Im 的格式是每 5 列為一組 (ROWS_PER_LINE = 5)
+            row += program.ROWS_PER_LINE
+
+        # -------------------------------------------------------------
+        # 2. 構建 HTML Segments
+        # -------------------------------------------------------------
+        html_segments = []
+
+        for i, han_ji in enumerate(han_ji_list):
+            if han_ji.strip() == "":
+                # 這裡是簡單處理，如果需要空格 span 也可以加
+                continue
+
+            tai_gi_im_piau = tlpa_im_piau_list[i]
+
+            # 使用父類別/本類別的 generate_ruby_tag 方法
+            # 注意: generate_ruby_tag 回傳 tuple (ruby_tag, siong, zian)
+            ruby_tag, _, _ = self.generate_ruby_tag(
+                han_ji=han_ji, tai_gi_im_piau=tai_gi_im_piau
+            )
+
+            # 補上換行符號 (依照 user 在 a940 的要求)
+            ruby_tag = ruby_tag.rstrip() + "\n"
+            html_segments.append(ruby_tag)
+
+        # -------------------------------------------------------------
+        # 3. 拆分標題與作者 (參照 a940 邏輯)
+        # -------------------------------------------------------------
+        title_html = ""
+        author_html = ""
+
+        split_index = -1
+        for i, segment in enumerate(html_segments):
+            if "》" in segment:
+                split_index = i
+                break
+
+        if split_index != -1:
+            # 包含 "》" 的部分屬於標題
+            title_parts = html_segments[: split_index + 1]
+            author_parts = html_segments[split_index + 1 :]
+
+            # 處理標題中的書名號 class="title_mark"
+            new_title_parts = []
+            for p in title_parts:
+                if "《" in p or "》" in p:
+                    p = p.replace("<span>", '<span class="title_mark">')
+                new_title_parts.append(p)
+
+            title_html = "".join(new_title_parts)
+            author_html = "".join(author_parts)
+        else:
+            # 沒找到 "》"，全部當作標題
+            title_html = "".join(html_segments)
+            author_html = ""
+
+        # -------------------------------------------------------------
+        # 4. 組合回傳結果
+        # -------------------------------------------------------------
+        title_ruby = f"""
+<p class='title'>
+{title_html}
+<span style="display:none"></span>
+</p>
+"""
+        author_ruby = ""
+        if author_html.strip():
+            author_ruby = f"""
+<p class='author'>
+{author_html}
+</p>
+"""
+        else:
+            author_ruby = "<p class='author'></p>"  # 或是空字串
+
+        return title_ruby, author_ruby
+
     # =================================================================
     # 覆蓋父類別的方法
     # =================================================================
@@ -357,45 +508,43 @@ class CellProcessor(ExcelCell):
         """
         write_buffer = ""
 
-        # 輸出放置圖片的 HTML Tag
-        div_image = (
-            "<div class='separator' style='clear: both'>\n"
-            "  <a href='圖片' style='display: block; padding: 1em 0; text-align: center'>\n"
-            "    <img alt='%s' border='0' width='800' \n"
-            "      src='%s' />\n"
-            "  </a>\n"
-            "</div>\n"
-        )
-        # if self.image_url:
-        #     write_buffer += div_image % (self.web_title, self.image_url)
-        image_url = self.program.image_url.strip()
-        if image_url.lower().startswith(("http://", "https://")):
-            full_image_url = image_url
-        else:
-            full_image_url = f"./assets/images/{image_url}"
-        write_buffer += div_image % (self.web_title, full_image_url)
+        # # 輸出放置圖片的 HTML Tag
+        # div_image = (
+        #     "<div class='separator' style='clear: both'>\n"
+        #     "  <a href='圖片' style='display: block; padding: 1em 0; text-align: center'>\n"
+        #     "    <img alt='%s' border='0' width='800' \n"
+        #     "      src='%s' />\n"
+        #     "  </a>\n"
+        #     "</div>\n"
+        # )
+        # # if self.image_url:
+        # #     write_buffer += div_image % (self.web_title, self.image_url)
+        # image_url = self.program.image_url.strip()
+        # if image_url.lower().startswith(("http://", "https://")):
+        #     full_image_url = image_url
+        # else:
+        #     full_image_url = f"./assets/images/{image_url}"
+        # write_buffer += div_image % (self.web_title, full_image_url)
 
         # 輸出【文章】Div tag 及【文章標題】Ruby Tag
-        title_with_ruby = self.generate_title_with_ruby()
+        title_with_ruby, author_with_ruby = self.generate_title_and_author_with_ruby()
         pai_ban_iong_huat = self.zu_im_huat_list[self.han_ji_piau_im_format][0]
 
+        div_tag = f"<div class='{pai_ban_iong_huat}'>\n"
+
         if title_with_ruby:
-            div_tag = (
-                "<div class='%s'>\n"
-                "  <p class='title'>\n"
-                "    <span>《</span>\n"
-                "    %s\n"
-                "    <span>》</span>\n"
-                "  </p>\n"
-            )
-        else:
-            div_tag = "<div class='%s'>\n" "  <p class='title'>\n" "    %s\n" "  </p>\n"
-        write_buffer += div_tag % (pai_ban_iong_huat, title_with_ruby)
+            div_tag += f"{title_with_ruby}\n"
+
+        if author_with_ruby:
+            div_tag += f"{author_with_ruby}\n"
+
+        write_buffer += div_tag
         write_buffer += "<p>\n"
 
         # 逐列處理工作表內容
         program = self.program
         End_Of_File = False
+        is_first_paragraph = True
         char_count = 0
         total_chars_per_line = self.total_chars_per_line  # 網頁每列字數
         if total_chars_per_line == 0:
@@ -406,9 +555,9 @@ class CellProcessor(ExcelCell):
         end_row = program.line_end_row + program.han_ji_row_offset
 
         for row in range(start_row, end_row, program.ROWS_PER_LINE):
-            if title_with_ruby and row == start_row:
-                # 已經處理過標題列，跳過
-                continue
+            # if title_with_ruby and row == start_row:
+            #     # 已經處理過標題列，跳過
+            #     continue
             sheet.range((row, program.start_col)).select()
 
             for col in range(program.start_col, program.end_col):
@@ -421,6 +570,15 @@ class CellProcessor(ExcelCell):
                         f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}"
                     )
                     break
+
+                elif is_first_paragraph:
+                    if cell_value == "\n":
+                        is_first_paragraph = False
+                        msg = "《略過第一段落（標題/作者）》"
+                        print(
+                            f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}"
+                        )
+                    continue
 
                 elif cell_value == "\n":  # 讀到【換行標示】
                     write_buffer += "</p><p>\n"
@@ -520,9 +678,9 @@ class CellProcessor(ExcelCell):
 def _create_html_file(
     program: Program,
     output_path: str,
-    content: str,
-    title: str = "您的標題",
     head_extra: str = "",
+    title: str = "您的標題",
+    content: str = "",
 ):
     """
         創建 HTML 檔案
@@ -541,6 +699,24 @@ def _create_html_file(
     web_page_main_file_name = Path(output_path).stem
     # 取得 Excel 檔案名稱（不含路徑及副檔名）
     excel_file_stem = program.excel_file_stem
+
+    # 放置文章用圖片
+    # full_image_url = "https://alanjui.github.io/Piau-Im/assets/images/king_tian.png"
+    div_image = (
+        "<div class='separator' style='clear: both'>\n"
+        "  <a href='圖片' style='display: block; padding: 1em 0; text-align: center'>\n"
+        "    <img alt='%s' border='0' width='800' \n"
+        "      src='%s' />\n"
+        "  </a>\n"
+        "</div>\n"
+    )
+    image_url = program.image_url.strip()
+    if image_url.lower().startswith(("http://", "https://")):
+        full_image_url = image_url
+    else:
+        full_image_url = f"./assets/images/{image_url}"
+    pict_for_title = ""
+    pict_for_title += div_image % (program.title, full_image_url)
 
     # 取得圖片 URL
     # 判斷 image_url 是否為完整 URL (http/https 開頭)
@@ -566,12 +742,14 @@ def _create_html_file(
 <body>
     <main class="page">
         <article class="article_content">
+        {pict_for_title}
         {content}
         </article>
     </main>
 </body>
 </html>
     """
+
     with open(output_path, "w", encoding="utf-8") as file:
         file.write(template)
     print(f"\n輸出網頁檔案：{output_path}")
@@ -603,13 +781,19 @@ def process(wb, args) -> int:
         program = Program(wb=wb, args=args, hanji_piau_im_sheet_name="漢字注音")
 
         # 建立萌典專用的儲存格處理器（繼承自 ExcelCell）
+        # xls_cell = CellProcessor(
+        #     program=program,
+        #     new_jin_kang_piau_im_ji_khoo_sheet=(
+        #         args.new if hasattr(args, "new") else False
+        #     ),
+        #     new_piau_im_ji_khoo_sheet=args.new if hasattr(args, "new") else False,
+        #     new_khuat_ji_piau_sheet=args.new if hasattr(args, "new") else False,
+        # )
         xls_cell = CellProcessor(
             program=program,
-            new_jin_kang_piau_im_ji_khoo_sheet=(
-                args.new if hasattr(args, "new") else False
-            ),
-            new_piau_im_ji_khoo_sheet=args.new if hasattr(args, "new") else False,
-            new_khuat_ji_piau_sheet=args.new if hasattr(args, "new") else False,
+            new_jin_kang_piau_im_ji_khoo_sheet=False,
+            new_piau_im_ji_khoo_sheet=False,
+            new_khuat_ji_piau_sheet=False,
         )
     except Exception as e:
         logging_exc_error(msg="處理作業異常！", error=e)
@@ -687,7 +871,11 @@ def process(wb, args) -> int:
 
         # 輸出到網頁檔案
         _create_html_file(
-            program, output_path, html_content, xls_cell.web_title, head_extra
+            program=program,
+            output_path=output_path,
+            head_extra=head_extra,
+            title=title,
+            content=html_content,
         )
 
         logging_process_step("【漢字注音】工作表轉製網頁作業完畢！")

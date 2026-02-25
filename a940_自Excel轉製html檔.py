@@ -133,9 +133,8 @@ def export_excel_to_html(program, output_path):
             print(f"找無【{source_sheet_name}】，使用: {sheet.name}")
 
         # --------------------------------------------------------------------------
-        # 初始化 process config
+        # 製作【網頁標題】
         # --------------------------------------------------------------------------
-        # program = Program(wb, args, hanji_piau_im_sheet_name="網頁匯入")
 
         # 嘗試取得網頁標題
         try:
@@ -144,6 +143,10 @@ def export_excel_to_html(program, output_path):
                 title = sheet.name
         except Exception:
             title = sheet.name
+
+        # --------------------------------------------------------------------------
+        # 製作【網頁內容】
+        # --------------------------------------------------------------------------
 
         # 取得標音方式設定
         han_ji_piau_im_hong_sik = program.han_ji_piau_im_format  # 標音方式
@@ -178,7 +181,14 @@ def export_excel_to_html(program, output_path):
             print(f"無法初始化 PiauIm 物件: {e}")
 
     # --------------------------------------------------------------------------
-    # 讀取資料
+    # 自【網頁匯入】工作表，讀取漢字注音資料
+    #  - A: 漢字
+    #  - B: 漢字標音(十五音反切)
+    #  - C: 台語音標
+    #  - D: 台語音標【聲母】
+    #  - E: 台語音標【韻母】
+    #  - F: 台語音標【調號】
+    # --------------------------------------------------------------------------
     # 從 A2 開始讀取，並嘗試讀取到 F 欄
     try:
         last_row = sheet.range("A" + str(sheet.cells.last_cell.row)).end("up").row
@@ -186,13 +196,7 @@ def export_excel_to_html(program, output_path):
             print("Excel 無資料 (至少需要有一列資料)。")
             return
 
-        # 讀取 A, B, C 欄
-        # A: 漢字
-        # B: 漢字標音
-        # C: 台語音標
-        # D: 台語音標【聲母】
-        # E: 台語音標【韻母】
-        # F: 台語音標【調號】
+        # 讀取所有資料（ A2:F{last_row} ）
         data = sheet.range(f"A2:F{last_row}").value
     except Exception as e:
         print(f"讀取 Excel 資料失敗: {e}")
