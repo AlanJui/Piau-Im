@@ -26,8 +26,10 @@ from mod_帶調符音標 import (
     tng_un_bu,
     zing_li_zuan_ku,
 )
-from mod_標音 import PiauIm  # 漢字標音物件
-from mod_標音 import split_tai_gi_im_piau  # 分解台語音標
+from mod_標音 import (
+    PiauIm,  # 漢字標音物件
+    split_tai_gi_im_piau,  # 分解台語音標
+)
 from mod_河洛話 import han_ji_ca_piau_im
 
 # =========================================================================
@@ -39,7 +41,7 @@ EXIT_CODE_FAILURE = 1  # 失敗
 EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
 EXIT_CODE_SAVE_FAILURE = 3  # 儲存失敗
 EXIT_CODE_PROCESS_FAILURE = 10  # 過程失敗
-EXIT_CODE_NO_FILE = 90 # 無法找到檔案
+EXIT_CODE_NO_FILE = 90  # 無法找到檔案
 EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 
 # =========================================================================
@@ -48,16 +50,16 @@ EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 load_dotenv()
 
 # 預設檔案名稱從環境變數讀取
-DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
-DB_KONG_UN = os.getenv('DB_KONG_UN', 'Kong_Un.db')
+DB_HO_LOK_UE = os.getenv("DB_HO_LOK_UE", "Ho_Lok_Ue.db")
+DB_KONG_UN = os.getenv("DB_KONG_UN", "Kong_Un.db")
 
 # =========================================================================
 # 設定日誌
 # =========================================================================
-from mod_logging import logging_exception  # noqa: E402, F401
 from mod_logging import (  # noqa: E402
     init_logging,
     logging_exc_error,
+    logging_exception,  # noqa: E402, F401
     logging_process_step,
 )
 
@@ -74,7 +76,7 @@ def extract_and_set_title(wb, file_path):
             match = re.search(r"《(.*?)》", first_line)
             if match:
                 title = match.group(1)
-                wb.names['TITLE'].refers_to_range.value = title
+                wb.names["TITLE"].refers_to_range.value = title
                 logging.info(f"✅ 已將文件標題《{title}》寫入 env 表 TITLE 名稱格。")
             else:
                 logging.info("❕ 無《標題》可提取，未更新 TITLE。")
@@ -82,17 +84,19 @@ def extract_and_set_title(wb, file_path):
         logging_exc_error("無法讀取或更新 TITLE 名稱。", error=e)
 
 
-def fill_in_han_ji(wb, text_with_han_ji:list, sheet_name:str='漢字注音', start_row:int=5):
+def fill_in_han_ji(
+    wb, text_with_han_ji: list, sheet_name: str = "漢字注音", start_row: int = 5
+):
     sheet = wb.sheets[sheet_name]
     sheet.activate()
-    sheet.range('A1').select()
+    sheet.range("A1").select()
 
-    #------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
     # 填入【漢字】
-    #------------------------------------------------------------------------------
-    row_han_ji = start_row      # 漢字位置
-    start_col = 4   # 從D欄開始
-    max_col = 18    # 最大可填入的欄位（R欄）
+    # ------------------------------------------------------------------------------
+    row_han_ji = start_row  # 漢字位置
+    start_col = 4  # 從D欄開始
+    max_col = 18  # 最大可填入的欄位（R欄）
 
     col = start_col
 
@@ -128,30 +132,32 @@ def fill_in_han_ji(wb, text_with_han_ji:list, sheet_name:str='漢字注音', sta
     return text_with_han_ji
 
 
-def cue_han_ji_piau_im(wb, han_ji_list:list) -> list:
+def cue_han_ji_piau_im(wb, han_ji_list: list) -> list:
     """查漢字讀音：依【漢字】查找【台語音標】，並依指定之【標音方法】輸出【漢字標音】"""
-    #------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
     # 籌備作業
-    #------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
 
     # 建置 PiauIm 物件，供作漢字拼音轉換作業
     # han_ji_khoo_name = wb.names['漢字庫'].refers_to_range.value
-    ue_im_lui_piat = wb.names['語音類型'].refers_to_range.value    # 指定【台語音標】轉換成【漢字標音】的方法
+    ue_im_lui_piat = wb.names[
+        "語音類型"
+    ].refers_to_range.value  # 指定【台語音標】轉換成【漢字標音】的方法
     # piau_im_huat = wb.names['標音方法'].refers_to_range.value    # 指定【台語音標】轉換成【漢字標音】的方法
     # piau_im = PiauIm(han_ji_khoo=han_ji_khoo_name)            # 指定漢字自動查找使用的【漢字庫】
 
     # 建置自動及人工漢字標音字庫工作表：（1）【標音字庫】；（2）【人工標音字】；（3）【缺字表】
-    khuat_ji_piau_name = '缺字表'
+    khuat_ji_piau_name = "缺字表"
     delete_sheet_by_name(wb=wb, sheet_name=khuat_ji_piau_name)
     khuat_ji_piau_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
-        wb=wb,
-        sheet_name=khuat_ji_piau_name)
+        wb=wb, sheet_name=khuat_ji_piau_name, ignore_empty=True
+    )
 
-    piau_im_sheet_name = '標音字庫'
+    piau_im_sheet_name = "標音字庫"
     delete_sheet_by_name(wb=wb, sheet_name=piau_im_sheet_name)
     piau_im_ji_khoo = JiKhooDict.create_ji_khoo_dict_from_sheet(
-        wb=wb,
-        sheet_name=piau_im_sheet_name)
+        wb=wb, sheet_name=piau_im_sheet_name, ignore_empty=True
+    )
 
     try:
         # 連接指定資料庫
@@ -159,7 +165,7 @@ def cue_han_ji_piau_im(wb, han_ji_list:list) -> list:
         cursor = conn.cursor()
 
         # 指定【漢字注音】工作表為【作用工作表】
-        sheet = wb.sheets['漢字注音']
+        sheet = wb.sheets["漢字注音"]
         sheet.activate()
 
         # 設定起始及結束的【列】位址（【第5列】、【第9列】、【第13列】等列）
@@ -169,7 +175,7 @@ def cue_han_ji_piau_im(wb, han_ji_list:list) -> list:
         # end_row = start_row + (TOTAL_LINES * ROWS_PER_LINE)
 
         # 設定起始及結束的【欄】位址（【D欄=4】到【R欄=18】）
-        CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
+        CHARS_PER_ROW = int(wb.names["每列總字數"].refers_to_range.value)
         start_col = 4
         end_col = start_col + CHARS_PER_ROW
 
@@ -181,12 +187,12 @@ def cue_han_ji_piau_im(wb, han_ji_list:list) -> list:
         EOF = False
         for han_ji in han_ji_list:
             sheet.cells(row, col).select()  # 選取，畫面滾動
-            if han_ji == 'φ':
+            if han_ji == "φ":
                 EOF = True
                 im_piau_list.append(han_ji)
                 msg = "【文章終結】"
-            elif han_ji == '\n':
-                im_piau_list.append('\n')
+            elif han_ji == "\n":
+                im_piau_list.append("\n")
                 msg = "【換行】"
                 # 若不為【漢字】，則以【標點符號】、【空白】或【半形字元】處置
             elif not is_han_ji(han_ji):
@@ -196,17 +202,16 @@ def cue_han_ji_piau_im(wb, han_ji_list:list) -> list:
                 im_piau = ""
                 # 自【漢字庫】查找作業
                 result = han_ji_ca_piau_im(
-                    cursor=cursor,
-                    han_ji=han_ji,
-                    ue_im_lui_piat=ue_im_lui_piat)
+                    cursor=cursor, han_ji=han_ji, ue_im_lui_piat=ue_im_lui_piat
+                )
 
                 # 若【漢字庫】查無此字，登錄至【缺字表】
                 if not result:
                     khuat_ji_piau_ji_khoo.add_or_update_entry(
                         han_ji=han_ji,
-                        tai_gi_im_piau='N/A',
-                        kenn_ziann_im_piau='N/A',
-                        coordinates=(row, col)
+                        tai_gi_im_piau="N/A",
+                        kenn_ziann_im_piau="N/A",
+                        coordinates=(row, col),
                     )
                     im_piau_list.append(im_piau)
                     msg = f"{han_ji}：查無此字！"
@@ -214,22 +219,22 @@ def cue_han_ji_piau_im(wb, han_ji_list:list) -> list:
                     sheet.cells(row, col).color = (255, 0, 0)  # 設定儲存格顏色為紅色
                 else:
                     # 依【漢字庫】查找結果，輸出【台語音標】和【漢字標音】
-                    siann_bu = result[0]['聲母']
-                    un_bu = result[0]['韻母']
+                    siann_bu = result[0]["聲母"]
+                    un_bu = result[0]["韻母"]
                     un_bu = tng_un_bu(un_bu)
-                    tiau_ho = result[0]['聲調']
+                    tiau_ho = result[0]["聲調"]
                     if tiau_ho == "6":
                         # 若【聲調】為【6】，則將【聲調】改為【7】
                         tiau_ho = "7"
                     # 將【聲母】、【韻母】、【聲調】，合併成【台語音標】
-                    im_piau = ''.join([siann_bu, un_bu, tiau_ho])
+                    im_piau = "".join([siann_bu, un_bu, tiau_ho])
 
                     # 【標音字庫】添加或更新【漢字】資料
                     piau_im_ji_khoo.add_or_update_entry(
                         han_ji=han_ji,
                         tai_gi_im_piau=im_piau,
-                        kenn_ziann_im_piau='N/A',
-                        coordinates=(row, col)
+                        kenn_ziann_im_piau="N/A",
+                        coordinates=(row, col),
                     )
                     im_piau_list.append(im_piau)
                     msg = f"{han_ji}： [{im_piau}]"
@@ -238,7 +243,7 @@ def cue_han_ji_piau_im(wb, han_ji_list:list) -> list:
 
             if EOF:
                 break
-            elif han_ji == '\n':
+            elif han_ji == "\n":
                 # 若已處理完一段落，則換行
                 row += ROWS_PER_LINE
                 col = start_col
@@ -251,9 +256,9 @@ def cue_han_ji_piau_im(wb, han_ji_list:list) -> list:
                     col = start_col
             idx += 1
 
-        #----------------------------------------------------------------------
+        # ----------------------------------------------------------------------
         # 作業結束前處理
-        #----------------------------------------------------------------------
+        # ----------------------------------------------------------------------
         # 關閉資料庫連線
         conn.close()
         logging_process_step("已完成【漢字】查找標音作業。")
@@ -271,34 +276,46 @@ def cue_han_ji_piau_im(wb, han_ji_list:list) -> list:
         conn.close()
 
 
-def fill_in_ping_im(wb, han_ji_list:list, im_piau_list:list, use_tiau_ho:bool=True, sheet_name:str='漢字注音', start_row:int=5, piau_im_soo_zai:int=-2):
+def fill_in_ping_im(
+    wb,
+    han_ji_list: list,
+    im_piau_list: list,
+    use_tiau_ho: bool = True,
+    sheet_name: str = "漢字注音",
+    start_row: int = 5,
+    piau_im_soo_zai: int = -2,
+):
     sheet = wb.sheets[sheet_name]
     sheet.activate()
-    sheet.range('A1').select()
+    sheet.range("A1").select()
 
-    han_ji_khoo = wb.names['漢字庫'].refers_to_range.value      # 取得【漢字庫】名稱：河洛話、廣韻
+    han_ji_khoo = wb.names[
+        "漢字庫"
+    ].refers_to_range.value  # 取得【漢字庫】名稱：河洛話、廣韻
     piau_im = PiauIm(han_ji_khoo)
-    han_ji_piau_im_huat = wb.names['標音方法'].refers_to_range.value
+    han_ji_piau_im_huat = wb.names["標音方法"].refers_to_range.value
 
-    #------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
     # 填入【音標】
-    #------------------------------------------------------------------------------
-    row_han_ji = start_row              # 【漢字】儲存格位置
+    # ------------------------------------------------------------------------------
+    row_han_ji = start_row  # 【漢字】儲存格位置
     row_han_ji_piau_im = start_row + 1  # 【漢字標音】儲存格位置
-    row_im_piau = row_han_ji + piau_im_soo_zai   # 標音所在: -1 ==> 自動標音； -2 ==> 人工標音
-    start_col = 4   # 從D欄開始
-    max_col = 18    # 最大可填入的欄位（R欄）
+    row_im_piau = (
+        row_han_ji + piau_im_soo_zai
+    )  # 標音所在: -1 ==> 自動標音； -2 ==> 人工標音
+    start_col = 4  # 從D欄開始
+    max_col = 18  # 最大可填入的欄位（R欄）
     ROWS_PER_LINE = 4
 
-    #------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
     # 填入【音標】
-    #------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
     # EOF = False
     col = start_col
     idx = 0
     # 執行到此，【音標】應已轉換為【帶調號之TLPA音標】
     for idx, han_ji in enumerate(han_ji_list):
-        if col > max_col:   # 若已填滿一行（col = 19），則需換行
+        if col > max_col:  # 若已填滿一行（col = 19），則需換行
             row_han_ji += ROWS_PER_LINE
             row_han_ji_piau_im += ROWS_PER_LINE
             row_im_piau += ROWS_PER_LINE
@@ -307,10 +324,10 @@ def fill_in_ping_im(wb, han_ji_list:list, im_piau_list:list, use_tiau_ho:bool=Tr
         msg = ""
         tlpa_im_piau = ""
         han_ji_piau_im = ""
-        if han_ji == 'φ':
+        if han_ji == "φ":
             # EOF = True
             msg = "【文章終結】"
-        elif han_ji == '\n':
+        elif han_ji == "\n":
             msg = "《換行》"
         elif not is_han_ji(han_ji):
             # 若不為【漢字】，則以【標點符號】、【空白】或【半形字元】處置
@@ -341,7 +358,9 @@ def fill_in_ping_im(wb, han_ji_list:list, im_piau_list:list, use_tiau_ho:bool=Tr
                     sheet.cells(row_im_piau, col).value = tlpa_im_piau
                     sheet.cells(row_han_ji_piau_im, col).value = han_ji_piau_im
 
-        print(f"{idx+1}.【{xw.utils.col_name(col)}{row_han_ji_piau_im}】==> ({row_im_piau}, {col})：{msg}")
+        print(
+            f"{idx+1}.【{xw.utils.col_name(col)}{row_han_ji_piau_im}】==> ({row_im_piau}, {col})：{msg}"
+        )
         idx += 1
         col += 1
         if han_ji == "\n":
@@ -349,29 +368,37 @@ def fill_in_ping_im(wb, han_ji_list:list, im_piau_list:list, use_tiau_ho:bool=Tr
             row_han_ji += ROWS_PER_LINE
             row_han_ji_piau_im += ROWS_PER_LINE
             row_im_piau += ROWS_PER_LINE
-            col = start_col     # 每句開始的欄位
+            col = start_col  # 每句開始的欄位
 
     # 更新下一組漢字及TLPA標音之位置
-    row_han_ji += ROWS_PER_LINE             # 漢字位置
-    row_han_ji_piau_im += ROWS_PER_LINE     # 漢字標音位置
-    row_im_piau += ROWS_PER_LINE            # 音標位置
-    col = start_col                         # 每句開始的欄位
+    row_han_ji += ROWS_PER_LINE  # 漢字位置
+    row_han_ji_piau_im += ROWS_PER_LINE  # 漢字標音位置
+    row_im_piau += ROWS_PER_LINE  # 音標位置
+    col = start_col  # 每句開始的欄位
 
     print(f"已將【漢字】及【漢字標音】填入【{sheet_name}】工作表！")
 
 
-def fill_in_jin_kang_ping_im(wb, han_ji_list:list, ping_im_file:str, use_tiau_ho:bool=True, sheet_name:str='漢字注音', start_row:int=5, piau_im_soo_zai:int=-2):
+def fill_in_jin_kang_ping_im(
+    wb,
+    han_ji_list: list,
+    ping_im_file: str,
+    use_tiau_ho: bool = True,
+    sheet_name: str = "漢字注音",
+    start_row: int = 5,
+    piau_im_soo_zai: int = -2,
+):
     # 讀取整篇文章之【標音文檔】
     text_with_im_piau = read_text_with_im_piau(filename=ping_im_file)
 
-    #------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
     # 填入【音標】
-    #------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
     fixed_im_piau_ku = []
     for im_piau_ku in text_with_im_piau:
-        #------------------------------------------------------------------------------
+        # ------------------------------------------------------------------------------
         # 處理【音標】句子，將【字串】(String)資料轉換成【清單】(List)，使之與【漢字】一一對映
-        #------------------------------------------------------------------------------
+        # ------------------------------------------------------------------------------
         # 整理整個句子，移除多餘的控制字元、將 "-" 轉換成空白、將標點符號前後加上空白、移除多餘空白
         im_piau_ku_cleaned = zing_li_zuan_ku(im_piau_ku)
 
@@ -401,49 +428,51 @@ def fill_in_jin_kang_ping_im(wb, han_ji_list:list, ping_im_file:str, use_tiau_ho
                 if im_piau == "":
                     tlpa_im_piau = ""
                 else:
-                    tlpa_im_piau = tng_im_piau(im_piau)    # 完成轉換之音標 = 音標帶調號
+                    tlpa_im_piau = tng_im_piau(im_piau)  # 完成轉換之音標 = 音標帶調號
             im_piau_list.append(tlpa_im_piau)
             # print(f"已轉換音標：{i}. {im_piau} --> {tlpa_im_piau}")
 
         fixed_im_piau_ku.extend(im_piau_list)
 
-    #------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
     # 填入【音標】
-    #------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
     sheet = wb.sheets[sheet_name]
     sheet.activate()
-    sheet.range('A1').select()
+    sheet.range("A1").select()
 
-    row_han_ji = start_row      # 漢字位置
-    start_col = 4   # 從D欄開始
-    max_col = 18    # 最大可填入的欄位（R欄）
+    row_han_ji = start_row  # 漢字位置
+    start_col = 4  # 從D欄開始
+    max_col = 18  # 最大可填入的欄位（R欄）
 
     col = start_col
 
     row_han_ji = start_row  # 重設【行數】為： 5（第5行）
-    row_im_piau = row_han_ji + piau_im_soo_zai   # 標音所在: -1 ==> 自動標音； -2 ==> 人工標音
+    row_im_piau = (
+        row_han_ji + piau_im_soo_zai
+    )  # 標音所在: -1 ==> 自動標音； -2 ==> 人工標音
     im_piau_list = fixed_im_piau_ku
-    col = start_col     # 重設【欄數】為： 4（D欄）
+    col = start_col  # 重設【欄數】為： 4（D欄）
     im_piau_idx = 0
     # 執行到此，【音標】應已轉換為【帶調號之TLPA音標】
     while im_piau_idx < len(im_piau_list):
-        if col > max_col:   # 若已填滿一行（col = 19），則需換行
+        if col > max_col:  # 若已填滿一行（col = 19），則需換行
             row_han_ji += 4
             row_im_piau += 4
             col = start_col
         han_ji = sheet.cells(row_han_ji, col).value
         if han_ji == "\n":
             # 若遇到換行符號，表示段落結束，換到下一段落
-            row_han_ji += 4     # 漢字位置
-            row_im_piau += 4    # 音標位置
-            col = start_col     # 每句開始的欄位
+            row_han_ji += 4  # 漢字位置
+            row_im_piau += 4  # 音標位置
+            col = start_col  # 每句開始的欄位
             continue
 
         tlpa_im_piau = im_piau_list[im_piau_idx]
         im_piau = ""
         if tlpa_im_piau == "":
             # 若音標為空白，表示遇有漢字未查找到音標
-            im_piau = ""    # 標示為：【沒有音標】
+            im_piau = ""  # 標示為：【沒有音標】
         elif han_ji and is_han_ji(han_ji):
             # 若 cell_char 為漢字，
             if use_tiau_ho:
@@ -454,14 +483,16 @@ def fill_in_jin_kang_ping_im(wb, han_ji_list:list, ping_im_file:str, use_tiau_ho
         # 填入【音標】
         sheet.cells(row_im_piau, col).select()
         sheet.cells(row_im_piau, col).value = im_piau
-        print(f"（{row_im_piau}, {col}）已填入: {han_ji} [ {im_piau} ] <-- {im_piau_list[im_piau_idx]}")
+        print(
+            f"（{row_im_piau}, {col}）已填入: {han_ji} [ {im_piau} ] <-- {im_piau_list[im_piau_idx]}"
+        )
         im_piau_idx += 1
         col += 1
 
     # 更新下一組漢字及TLPA標音之位置
-    row_han_ji += 4     # 漢字位置
-    row_im_piau += 4    # 音標位置
-    col = start_col     # 每句開始的欄位
+    row_han_ji += 4  # 漢字位置
+    row_im_piau += 4  # 音標位置
+    col = start_col  # 每句開始的欄位
 
     print(f"已將漢字及TLPA注音填入【{sheet_name}】工作表！")
 
@@ -472,13 +503,20 @@ def fill_in_jin_kang_ping_im(wb, han_ji_list:list, ping_im_file:str, use_tiau_ho
 def main():
     # 使用 argparse 處理命令列參數
     parser = argparse.ArgumentParser(description="根據漢字檔產生台語音標與漢字標音")
-    parser.add_argument("han_ji_file", nargs="?", default="_tmp_p1_han_ji.txt", help="漢字純文字檔路徑")
+    parser.add_argument(
+        "han_ji_file", nargs="?", default="_tmp_p1_han_ji.txt", help="漢字純文字檔路徑"
+    )
     parser.add_argument("ping_im_file", nargs="?", default="", help="標音檔（可選）")
     parser.add_argument("--peh_ue", action="store_true", help="將語音類型設定為白話音")
     # parser.add_argument("--tiau_hu", action="store_false", help="使用【聲調符號】（不帶調號）的音標（TLPA 拼音）")
     # use_tiau_hu = args.tiau_hu
     # 預設為使用聲調號（tiau_ho = True），若加上 --tiau_hu，則關閉聲調號
-    parser.add_argument("--tiau_hu", action="store_false", dest="tiau_ho", help="TLPA音標改【聲調符號】（不帶調號數值）")
+    parser.add_argument(
+        "--tiau_hu",
+        action="store_false",
+        dest="tiau_ho",
+        help="TLPA音標改【聲調符號】（不帶調號數值）",
+    )
 
     args = parser.parse_args()
 
@@ -489,7 +527,7 @@ def main():
 
     # 以作用中的Excel活頁簿為作業標的
     # wb = xw.apps.active.books.active
-    wb = xw.Book('_working.xlsx')  # 直接指定活頁簿名稱
+    wb = xw.Book("_working.xlsx")  # 直接指定活頁簿名稱
     if wb is None:
         logging.error("無法找到作用中的Excel活頁簿。")
         return
@@ -498,27 +536,31 @@ def main():
     if use_peh_ue:
         try:
             # 設定【語音類型】為【白話音】--peh_ue
-            wb.names['語音類型'].refers_to_range.value = '白話音'
+            wb.names["語音類型"].refers_to_range.value = "白話音"
             print("已將【env】工作表，之【語音類型】欄，設定為：【白話音】。")
         except Exception as e:
-            logging_exc_error("無法設定【env】工作表，之【語音類型】欄，為【白話音】。", error=e)
+            logging_exc_error(
+                "無法設定【env】工作表，之【語音類型】欄，為【白話音】。", error=e
+            )
             return EXIT_CODE_PROCESS_FAILURE
 
     # 若使用者指定 --tiau_hu 參數，則將【標音方法】設定欄之【閩拼調號】，變更成【閩拼調符】
     if not use_tiau_ho:
         try:
-            piau_im_huat = wb.names['標音方法'].refers_to_range.value
+            piau_im_huat = wb.names["標音方法"].refers_to_range.value
             if piau_im_huat == "閩拼調號":
                 # 若原本為【閩拼調號】，則將其變更為【閩拼調符】
-                wb.names['標音方法'].refers_to_range.value = '閩拼調符'
+                wb.names["標音方法"].refers_to_range.value = "閩拼調符"
                 print("已將【env】工作表，之【標音方法】欄，設定為：【閩拼調符】。")
         except Exception as e:
-            logging_exc_error("無法設定【env】工作表，之【標音方法】欄，為【閩拼調符】。", error=e)
+            logging_exc_error(
+                "無法設定【env】工作表，之【標音方法】欄，為【閩拼調符】。", error=e
+            )
             return EXIT_CODE_PROCESS_FAILURE
 
-    #------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
     # 填入【漢字】：讀取整篇文章之【漢字】純文字檔案；並填入【漢字注音】工作表。
-    #------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
     # 讀取漢字檔，並填入 Excel
     text_with_han_ji = read_text_with_han_ji(filename=han_ji_file)
     text_with_han_ji = fill_in_han_ji(wb, text_with_han_ji)
@@ -535,25 +577,29 @@ def main():
     im_piau_list = cue_han_ji_piau_im(wb, han_ji_list)
 
     # 將【漢字】及【漢字標音】填入【漢字注音】工作表
-    fill_in_ping_im(wb,
+    fill_in_ping_im(
+        wb,
         han_ji_list=han_ji_list,
         im_piau_list=im_piau_list,
         use_tiau_ho=use_tiau_ho,
         start_row=5,
-        piau_im_soo_zai=-1) # -1: 自動標音；-2: 人工標音
+        piau_im_soo_zai=-1,
+    )  # -1: 自動標音；-2: 人工標音
 
     # 若提供人工標音檔案，則將【漢字】及【標音文檔】填入【漢字注音】工作表
     if ping_im_file:
-        fill_in_jin_kang_ping_im(wb,
+        fill_in_jin_kang_ping_im(
+            wb,
             han_ji_list=han_ji_list,
             ping_im_file=ping_im_file,
             use_tiau_ho=use_tiau_ho,
             start_row=5,
-            piau_im_soo_zai=-2) # -1: 自動標音；-2: 人工標音
+            piau_im_soo_zai=-2,
+        )  # -1: 自動標音；-2: 人工標音
 
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # 儲存檔案
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
 
     # 試圖以【漢字】純文字檔案，設定【標題】名稱
     try:
@@ -564,19 +610,20 @@ def main():
     # 存檔
     try:
         # 要求畫面回到【漢字注音】工作表
-        wb.sheets['漢字注音'].activate()
+        wb.sheets["漢字注音"].activate()
         # 儲存檔案
         file_path = save_as_new_file(wb=wb)
         if not file_path:
             logging.error("儲存檔案失敗！")
-            return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
+            return EXIT_CODE_SAVE_FAILURE  # 作業異當終止：無法儲存檔案
         else:
             logging_process_step(f"儲存檔案至路徑：{file_path}")
     except Exception as e:
         logging_exc_error(msg="儲存檔案失敗！", error=e)
-        return EXIT_CODE_SAVE_FAILURE    # 作業異當終止：無法儲存檔案
+        return EXIT_CODE_SAVE_FAILURE  # 作業異當終止：無法儲存檔案
 
-    return EXIT_CODE_SUCCESS    # 作業成功結束
+    return EXIT_CODE_SUCCESS  # 作業成功結束
+
 
 if __name__ == "__main__":
     exit_code = main()

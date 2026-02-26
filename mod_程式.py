@@ -1377,7 +1377,7 @@ class ExcelCell:
         if new_sheet:
             delete_sheet_by_name(wb=self.program.wb, sheet_name=sheet_name)
         ji_khoo_dict = JiKhooDict.create_ji_khoo_dict_from_sheet(
-            wb=self.program.wb, sheet_name=sheet_name
+            wb=self.program.wb, sheet_name=sheet_name, ignore_empty=True
         )
 
         return ji_khoo_dict

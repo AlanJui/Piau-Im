@@ -1,5 +1,5 @@
 """
-mod_字庫.py v0.2.6
+mod_字庫.py v0.2.7
 
 令 Excel 工作表資料，轉換成 dict 資料結構之【字庫】，
 以利程式將 Excel 工作表視同一資料庫內含之【資料表】（Table）
@@ -7,6 +7,7 @@ mod_字庫.py v0.2.6
 
 更新紀錄：
 v0.2.6 2026-02-26: 變更 create_ji_khoo_dict_from_sheet 類方法，從 Excel 工作表建立字庫物件。
+v0.2.7 2026-02-26: 新增 create_ji_khoo_dict_from_sheet 類方法的 ignore_empty 參數，允許在工作表無資料時回傳空字典而不拋出例外。
 """
 
 import logging
@@ -72,12 +73,16 @@ class JiKhooDict:
                 yield (han_ji, entry)
 
     @classmethod
-    def create_ji_khoo_dict_from_sheet(cls, wb, sheet_name: str, end_col: str = "D"):
+    def create_ji_khoo_dict_from_sheet(
+        cls, wb, sheet_name: str, end_col: str = "D", ignore_empty: bool = False
+    ):
         """_summary_
         cls: 指 class JiKhooDict 本身
         Args:
             wb (_type_): _description_
             sheet_name (str): _description_
+            end_col (str, optional): _description_. Defaults to "D".
+            ignore_empty (bool, optional): 若為 True，當工作表無資料時回傳空字典而不拋出例外。 Defaults to False.
 
         Raises:
             ValueError: _description_
@@ -108,17 +113,21 @@ class JiKhooDict:
         try:
             last_row = sheet.range("A" + str(sheet.cells.last_cell.row)).end("up").row
             if last_row < 2:
-                print("Excel 無資料 (至少需要有一列資料)。")
-                return ji_khoo
+                if ignore_empty:
+                    return ji_khoo
+                raise ValueError(f"工作表 '{sheet_name}' 無資料 (至少需要有一列資料)。")
 
             # 讀取所有資料（ A2:{end_col}{last_row} ）
             data = sheet.range(f"A2:{end_col}{last_row}").value
         except Exception as e:
-            print(f"讀取 Excel 資料失敗: {e}")
-            return ji_khoo
+            if ignore_empty and "無資料" in str(e):
+                return ji_khoo
+            raise ValueError(f"讀取 Excel 資料失敗: {e}")
 
         if data is None:
-            return ji_khoo
+            if ignore_empty:
+                return ji_khoo
+            raise ValueError(f"工作表 '{sheet_name}' 無資料。")
         if not isinstance(data[0], list):
             data = [data]
 
@@ -542,7 +551,7 @@ class JiKhooDict:
 
             piau_im_sheet_name = "標音字庫"
             piau_im_ji_khoo_dict = self.create_ji_khoo_dict_from_sheet(
-                wb, piau_im_sheet_name
+                wb, piau_im_sheet_name, ignore_empty=True
             )
         except Exception as e:
             raise ValueError(f"無法找到或建立工作表 '{sheet_name}'：{e}")
@@ -805,7 +814,7 @@ class JiKhooDict:
 def ut01(wb):
     sheet_name = "標音字庫"
     piau_im_ji_khoo_dict = JiKhooDict.create_ji_khoo_dict_from_sheet(
-        wb=wb, sheet_name=sheet_name
+        wb=wb, sheet_name=sheet_name, ignore_empty=True
     )
     piau_im_ji_khoo_dict.display_all_values_in_ji_khoo_dict()
 

@@ -13,7 +13,13 @@ class JiKhooDict:
             for entry in entries:
                 yield (han_ji, entry)
 
-    def add_entry(self, han_ji: str, tai_gi_im_piau: str, kenn_ziann_im_piau: str, coordinates: tuple):
+    def add_entry(
+        self,
+        han_ji: str,
+        tai_gi_im_piau: str,
+        kenn_ziann_im_piau: str,
+        coordinates: tuple,
+    ):
         if not tai_gi_im_piau:
             tai_gi_im_piau = "N/A"
         if not kenn_ziann_im_piau:
@@ -22,7 +28,7 @@ class JiKhooDict:
         entry = {
             "tai_gi_im_piau": tai_gi_im_piau,
             "kenn_ziann_im_piau": kenn_ziann_im_piau,
-            "coordinates": [coordinates]
+            "coordinates": [coordinates],
         }
 
         if han_ji not in self.ji_khoo_dict:
@@ -35,9 +41,17 @@ class JiKhooDict:
                     return
             self.ji_khoo_dict[han_ji].append(entry)
 
-    def update_entry(self, han_ji: str, tai_gi_im_piau: str, kenn_ziann_im_piau: str, coordinates: tuple):
+    def update_entry(
+        self,
+        han_ji: str,
+        tai_gi_im_piau: str,
+        kenn_ziann_im_piau: str,
+        coordinates: tuple,
+    ):
         if han_ji not in self.ji_khoo_dict:
-            raise ValueError(f"漢字 '{han_ji}' 不存在，請先使用 add_entry 方法新增資料。")
+            raise ValueError(
+                f"漢字 '{han_ji}' 不存在，請先使用 add_entry 方法新增資料。"
+            )
 
         for existing in self.ji_khoo_dict[han_ji]:
             if existing["tai_gi_im_piau"] == tai_gi_im_piau:
@@ -49,7 +63,9 @@ class JiKhooDict:
 
         self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
 
-    def add_or_update_entry(self, han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates):
+    def add_or_update_entry(
+        self, han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates
+    ):
         self.add_entry(han_ji, tai_gi_im_piau, kenn_ziann_im_piau, coordinates)
 
     def get_entry(self, han_ji: str):
@@ -63,7 +79,9 @@ class JiKhooDict:
             for entry in self.ji_khoo_dict[han_ji]:
                 if entry["tai_gi_im_piau"] == tai_gi_im_piau:
                     return entry.get(key)
-            raise ValueError(f"漢字 '{han_ji}' 中找不到音標 '{tai_gi_im_piau}' 對應的欄位 '{key}'。")
+            raise ValueError(
+                f"漢字 '{han_ji}' 中找不到音標 '{tai_gi_im_piau}' 對應的欄位 '{key}'。"
+            )
         else:
             raise ValueError(f"漢字 '{han_ji}' 不存在於字典中。")
 
@@ -94,7 +112,14 @@ class JiKhooDict:
         for han_ji, entry in self.items():
             for coord in entry["coordinates"]:
                 coord_str = f"({coord[0]}, {coord[1]})"
-                data.append([han_ji, entry["tai_gi_im_piau"], entry["kenn_ziann_im_piau"], coord_str])
+                data.append(
+                    [
+                        han_ji,
+                        entry["tai_gi_im_piau"],
+                        entry["kenn_ziann_im_piau"],
+                        coord_str,
+                    ]
+                )
 
         sheet.range("A2").value = data
         return 0
@@ -117,7 +142,9 @@ class JiKhooDict:
         print(f"已成功將字典資料寫入工作表 '{sheet_name}'。")
 
     @classmethod
-    def create_ji_khoo_dict_from_sheet(cls, wb, sheet_name: str):
+    def create_ji_khoo_dict_from_sheet(
+        cls, wb, sheet_name: str, ignore_empty: bool = False
+    ):
         from mod_excel_access import ensure_sheet_exists
 
         if not ensure_sheet_exists(wb, sheet_name):
@@ -132,7 +159,9 @@ class JiKhooDict:
         ji_khoo = cls()
 
         if data is None:
-            return ji_khoo
+            if ignore_empty:
+                return ji_khoo
+            raise ValueError(f"工作表 '{sheet_name}' 無資料。")
         if not isinstance(data[0], list):
             data = [data]
 
