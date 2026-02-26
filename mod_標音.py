@@ -1237,8 +1237,14 @@ def ca_ji_tng_piau_im(entry, han_ji_khoo: str, piau_im, piau_im_huat: str):
         # un_bu = entry['韻母']
         # tiau_ho = entry['聲調']
         siann_bu = entry.get("聲母", "")
+        if siann_bu in ("none", "None", None):
+            siann_bu = ""
         un_bu = entry.get("韻母", "")
+        # if un_bu in ("none", "None", None):
+        #     un_bu = ""
         tiau_ho = entry.get("聲調", "")
+        # if tiau_ho in ("none", "None", None):
+        #     tiau_ho = ""
         un_bu = tai_gi_im_piau_tng_un_bu(un_bu)
         if tiau_ho == "6":
             # 若【聲調】為【6】，則將【聲調】改為【7】
@@ -1253,7 +1259,7 @@ def ca_ji_tng_piau_im(entry, han_ji_khoo: str, piau_im, piau_im_huat: str):
 
     # 將【聲母】、【韻母】、【聲調】，合併成【台語音標】
     # tai_gi_im_piau = siann_bu + un_bu + tiau_ho
-    tai_gi_im_piau = "".join([siann_bu, un_bu, tiau_ho])
+    tai_gi_im_piau = "".join([str(siann_bu), str(un_bu), str(tiau_ho)])
 
     # 標音法為：【十五音】或【雅俗通】，且【聲母】為空值，則將【聲母】設為【ø】
     if (piau_im_huat == "十五音" or piau_im_huat == "雅俗通") and (
@@ -1299,9 +1305,15 @@ def ca_ji_kiat_ko_tng_piau_im(result, han_ji_khoo: str, piau_im, piau_im_huat: s
         # -----------------------------------------------------------------
         # 將【台語音標】分解為【聲母】、【韻母】、【聲調】
         siann_bu = result[0]["聲母"]
+        if siann_bu in ("none", "None", None):
+            siann_bu = ""
         un_bu = result[0]["韻母"]
+        if un_bu in ("none", "None", None):
+            un_bu = ""
         un_bu = tai_gi_im_piau_tng_un_bu(un_bu)
         tiau_ho = result[0]["聲調"]
+        if tiau_ho in ("none", "None", None):
+            tiau_ho = ""
         if tiau_ho == "6":
             # 若【聲調】為【6】，則將【聲調】改為【7】
             tiau_ho = "7"
@@ -1315,7 +1327,7 @@ def ca_ji_kiat_ko_tng_piau_im(result, han_ji_khoo: str, piau_im, piau_im_huat: s
 
     # 將【聲母】、【韻母】、【聲調】，合併成【台語音標】
     # tai_gi_im_piau = siann_bu + un_bu + tiau_ho
-    tai_gi_im_piau = "".join([siann_bu, un_bu, tiau_ho])
+    tai_gi_im_piau = "".join([str(siann_bu), str(un_bu), str(tiau_ho)])
 
     # 標音法為：【十五音】或【雅俗通】，且【聲母】為空值，則將【聲母】設為【ø】
     if (piau_im_huat == "十五音" or piau_im_huat == "雅俗通") and (

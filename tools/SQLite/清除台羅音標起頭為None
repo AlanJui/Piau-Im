@@ -1,0 +1,8 @@
+-- 先查詢確認
+SELECT * FROM 漢字庫 WHERE 台羅音標 LIKE 'None%';
+
+-- 確認無誤後執行刪除
+DELETE FROM 漢字庫 WHERE 台羅音標 LIKE 'None%';
+
+-- 完成後確認
+SELECT * FROM 漢字庫 WHERE 台羅音標 LIKE 'None%';
