@@ -1311,7 +1311,7 @@ class ExcelCell:
         # han_ji_piau_im = cell.offset(1, 1).value  # 漢字標音
 
         # 初始化樣式
-        self._reset_cell_style(cell)
+        # self._reset_cell_style(cell)
 
         # 確保 cell_value 務必是【漢字】，故需篩飾【特殊字元】
         if cell_value == "φ":
@@ -1351,7 +1351,8 @@ class ExcelCell:
 
         # 檢查是否為【人工標音漢字】
         if jin_kang_piau_im and str(jin_kang_piau_im).strip() != "":
-            self._show_msg(row, col, cell_value)
+            msg = f"【{cell_value}】==> 使用【人工標音】：【{jin_kang_piau_im}】"
+            self._show_msg(row, col, msg)
             self._process_jin_kang_piau_im(cell=cell)
             return 0  # 漢字
 
