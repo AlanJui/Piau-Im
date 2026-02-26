@@ -440,6 +440,16 @@
             ]
         },
         {
+            "name": "a501_標音用工作表回填字典資料庫",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a501_標音用工作表回填字典資料庫.py",
+            "console": "externalTerminal",
+            "args": [
+                // "2"
+            ]
+        },
+        {
             "name": "a611_廣韻_漢字查標音",
             "type": "debugpy",
             "request": "launch",
