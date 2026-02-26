@@ -1,9 +1,12 @@
 """
-mod_字庫.py v0.2.5
+mod_字庫.py v0.2.6
 
 令 Excel 工作表資料，轉換成 dict 資料結構之【字庫】，
 以利程式將 Excel 工作表視同一資料庫內含之【資料表】（Table）
 進行存取與操作。
+
+更新紀錄：
+v0.2.6 2026-02-26: 變更 create_ji_khoo_dict_from_sheet 類方法，從 Excel 工作表建立字庫物件。
 """
 
 import logging
@@ -69,7 +72,7 @@ class JiKhooDict:
                 yield (han_ji, entry)
 
     @classmethod
-    def create_ji_khoo_dict_from_sheet(cls, wb, sheet_name: str):
+    def create_ji_khoo_dict_from_sheet(cls, wb, sheet_name: str, end_col: str = "D"):
         """_summary_
         cls: 指 class JiKhooDict 本身
         Args:
@@ -98,8 +101,21 @@ class JiKhooDict:
         except Exception as e:
             raise ValueError(f"無法找到工作表 '{sheet_name}'：{e}")
 
-        data = sheet.range("A2").expand("table").value
+        # 從 A2 開始讀取，並嘗試讀取到 {end_col} 欄
+        # data = sheet.range("A2").expand("table").value
         ji_khoo = cls(sheet_name)
+
+        try:
+            last_row = sheet.range("A" + str(sheet.cells.last_cell.row)).end("up").row
+            if last_row < 2:
+                print("Excel 無資料 (至少需要有一列資料)。")
+                return ji_khoo
+
+            # 讀取所有資料（ A2:{end_col}{last_row} ）
+            data = sheet.range(f"A2:{end_col}{last_row}").value
+        except Exception as e:
+            print(f"讀取 Excel 資料失敗: {e}")
+            return ji_khoo
 
         if data is None:
             return ji_khoo
