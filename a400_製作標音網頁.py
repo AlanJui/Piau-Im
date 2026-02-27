@@ -1,8 +1,9 @@
 """
-a400_製作標音網頁.py V0.2.2.9
+a400_製作標音網頁.py V0.2.2.10
 
 修改紀錄：
 v0.2.2.9 2026-2-25: 自動産生【文章標題】及【作者姓名】的 Ruby Tag。
+v0.2.2.10 2026-2-27: 變更 _process_sheet() 計算 start_row 的邏輯，確保從【文章標題】及【作者姓名】之後開始讀取內容。
 """
 
 # =========================================================================
@@ -351,7 +352,10 @@ class CellProcessor(ExcelCell):
         解析取得【文章標題】及【作者姓名】，並加注【台語音標】
 
         Returns:
-            (title_with_ruby, author_with_ruby)
+            (title_with_ruby, author_with_ruby, row)
+            title_with_ruby: 含有 Ruby 標籤的標題 HTML
+            author_with_ruby: 含有 Ruby 標籤的作者 HTML
+            row: 結束列號
         """
         program = self.program
         sheet = program.wb.sheets[program.hanji_piau_im_sheet_name]
@@ -491,7 +495,7 @@ class CellProcessor(ExcelCell):
         else:
             author_ruby = "<p class='author'></p>"  # 或是空字串
 
-        return title_ruby, author_ruby
+        return title_ruby, author_ruby, row
 
     # =================================================================
     # 覆蓋父類別的方法
@@ -507,27 +511,12 @@ class CellProcessor(ExcelCell):
             HTML 網頁內容字串
         """
         write_buffer = ""
-
-        # # 輸出放置圖片的 HTML Tag
-        # div_image = (
-        #     "<div class='separator' style='clear: both'>\n"
-        #     "  <a href='圖片' style='display: block; padding: 1em 0; text-align: center'>\n"
-        #     "    <img alt='%s' border='0' width='800' \n"
-        #     "      src='%s' />\n"
-        #     "  </a>\n"
-        #     "</div>\n"
-        # )
-        # # if self.image_url:
-        # #     write_buffer += div_image % (self.web_title, self.image_url)
-        # image_url = self.program.image_url.strip()
-        # if image_url.lower().startswith(("http://", "https://")):
-        #     full_image_url = image_url
-        # else:
-        #     full_image_url = f"./assets/images/{image_url}"
-        # write_buffer += div_image % (self.web_title, full_image_url)
+        is_first_paragraph = True
 
         # 輸出【文章】Div tag 及【文章標題】Ruby Tag
-        title_with_ruby, author_with_ruby = self.generate_title_and_author_with_ruby()
+        title_with_ruby, author_with_ruby, row_of_title_and_author = (
+            self.generate_title_and_author_with_ruby()
+        )
         pai_ban_iong_huat = self.zu_im_huat_list[self.han_ji_piau_im_format][0]
 
         div_tag = f"<div class='{pai_ban_iong_huat}'>\n"
@@ -544,7 +533,6 @@ class CellProcessor(ExcelCell):
         # 逐列處理工作表內容
         program = self.program
         End_Of_File = False
-        is_first_paragraph = True
         char_count = 0
         total_chars_per_line = self.total_chars_per_line  # 網頁每列字數
         if total_chars_per_line == 0:
@@ -552,12 +540,15 @@ class CellProcessor(ExcelCell):
 
         # 工作表起始列號 = 範圍起始列號 + 漢字列偏移量 = 3 + 2 = 5
         start_row = program.line_start_row + program.han_ji_row_offset
+
+        # 調整起始列號，確保從【文章標題】及【作者姓名】之後開始讀取內容
+        if row_of_title_and_author > start_row:
+            start_row = row_of_title_and_author
+            is_first_paragraph = False
+
         end_row = program.line_end_row + program.han_ji_row_offset
 
         for row in range(start_row, end_row, program.ROWS_PER_LINE):
-            # if title_with_ruby and row == start_row:
-            #     # 已經處理過標題列，跳過
-            #     continue
             sheet.range((row, program.start_col)).select()
 
             for col in range(program.start_col, program.end_col):
