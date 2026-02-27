@@ -1,5 +1,5 @@
 """
-mod_程式.py V0.2.10
+mod_程式.py V0.2.11
 
 本系統各功能之程式架構模版。
 模版中包含程式配置類別 Program 及儲存格處理器類別 ExcelCell。
@@ -8,11 +8,13 @@ mod_程式.py V0.2.10
 - v0.2.8 2026-02-15: 修正 ExcelCell 類別中 _cu_jin_kang_piau_im 方法，當成功取得【台語音標】與【漢字標音】後，更新【漢字注音】工作表的對應儲存格。
 - v0.2.9 2026-02-17: 修正 _process_han_ji 方法，將 han_ji, row 和 col 參數移除，改為直接從 cell 物件中取得。
 - v0.2.10 2026-02-26: 改善漢字查注音作業方法，避免當【聲母】資料為 None 時，導致後續由【台語音標】轉【漢字標音】的函式發生錯誤。
+- v0.2.11 2026-02-27: 將原 a223 中的 _resolve_manual_annotation() 方法納入，以便未來參考其作法，令現有的 _process_jin_kang_piau_im() 方法，其程式碼可以更模組結構化，以便未來之維護。
 """
 
 # =========================================================================
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
+import logging
 import os
 import re
 import sys
@@ -856,6 +858,87 @@ class ExcelCell:
         else:
             target_msg2 = f"【標音字庫】工作表 A{row_no_piau_im_ji_khoo} 之紀錄，移除 ==> 漢字：【{han_ji}】，座標：（{row}, {col}）"
         print(f"{target_msg2}")
+
+    def _resolve_manual_annotation(self, cell) -> str | None:
+        """
+        解析人工標音內容，處理特殊符號 (=, #) 與一般標音。
+
+        依據 PRG-a210 規則：
+        1. 若內容為 '#'：取消人工指定，回傳 None (後續將回歸資料庫查找)。
+        2. 若內容為 '='：自【人工標音字庫】查找該漢字的音標。
+        3. 若為其他內容：直接回傳該內容作為音標。
+        4. 若為空：回傳 None。
+
+        Args:
+            cell (ExcelCell): 當前處理的儲存格。
+
+        Returns:
+            str | None: 決定的台語音標。若為 None，表示需進行資料庫查找。
+        """
+        han_ji = cell.value.strip() if cell.value is not None else ""
+        jin_kang_piau_im = cell.offset(-2, 0).value  # 人工標音
+        # 轉為字串並去除前後空白，若為 None 則變為空字串
+        jin_kang_piau_im_str = (
+            str(jin_kang_piau_im).strip() if jin_kang_piau_im is not None else ""
+        )
+
+        # Case 0: 無內容 -> 回歸資料庫查找
+        if not jin_kang_piau_im_str:
+            return None
+
+        # Case 1: 內容為 '#' -> 強制取消人工指定，回歸資料庫查找
+        if jin_kang_piau_im_str == "#":
+            # TODO:
+            # 1. 清空【人工標音】儲存格內容
+            # 2. 查找【漢字】之【台語音標】並寫回【台語音標】儲存格
+            # 3. 依據【台語音標】轉換【漢字標音】並寫回【漢字標音】儲存格
+            # 4. 自【人工標音字庫】dict移除該漢字的記錄（若存在；尤需注意【座標】欄，應移除此漢字之儲存格座標）
+            # 5. 在【標音字庫】dict增添或更新該漢字的記錄（尤需注意【座標】欄，應增添此漢字之儲存格座標）
+            # 6. 將【人工標音字庫】、【標音字庫】及【缺字表】各 dict 回存工作表
+            cell.offset(-2, 0).value = ""  # 清空人工標音儲存格
+            logging.debug(f"漢字 '{han_ji}' 人工標音為 '#'，強制回歸資料庫查找。")
+            return None
+
+        # Case 2: 內容為 '=' -> 引用人工標音工作表 (從已載入的字庫中查找)
+        if jin_kang_piau_im_str == "=":
+            # 檢查字庫中是否有此漢字
+            # jin_kang_ji_khoo 預期是 JiKhooDict 物件
+            if han_ji in self.jin_kang_piau_im_ji_khoo_dict:
+                # 取得該漢字的所有標音紀錄
+                # 結構預期為: {漢字: {音標: [次數, 座標列表], ...}}
+                piau_im_variants = self.jin_kang_piau_im_ji_khoo_dict[han_ji]
+
+                if piau_im_variants:
+                    # 策略：取用第一個找到的音標 (或可依需求改為取用頻率最高的)
+                    # piau_im_variants 為 list of dict, e.g. [{'tai_gi_im_piau': '...', ...}, ...]
+                    first_entry = piau_im_variants[0]
+
+                    if (
+                        isinstance(first_entry, dict)
+                        and "tai_gi_im_piau" in first_entry
+                    ):
+                        target_piau_im = first_entry["tai_gi_im_piau"]
+                    else:
+                        # Fallback for unexpected structure
+                        target_piau_im = str(first_entry)
+
+                    logging.info(
+                        f"漢字 '{han_ji}' 引用人工標音 '='，查得: {target_piau_im}"
+                    )
+                    return target_piau_im
+                else:
+                    logging.warning(
+                        f"漢字 '{han_ji}' 設為 '='，但在人工標音字庫中無音標資料，將回歸資料庫查找。"
+                    )
+                    return None
+            else:
+                logging.warning(
+                    f"漢字：【{han_ji}】之【人工標音儲存格】設為 '='，但在【人工標音字庫】工作表中查無此字，將回歸資料庫查找。"
+                )
+                return None
+
+        # Case 3: 一般內容 -> 直接使用該內容作為音標
+        return jin_kang_piau_im_str
 
     def _process_jin_kang_piau_im(self, cell) -> None:
         """處理人工標音內容"""
