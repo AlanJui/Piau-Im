@@ -1,5 +1,5 @@
 """
-a109_漢字注音工作表導讀.py V0.2.6
+a109_漢字注音工作表導讀.py V0.3
 # =========================================================================
 # 程式功能摘要
 # =========================================================================
@@ -22,6 +22,11 @@ a109_漢字注音工作表導讀.py V0.2.6
   = 鍵            : 填入人工標音標記
   ESC             : 結束程式
 ======================================================================
+
+變更紀錄：
+V0.3 (2026-02-28): 變更【人工標音作業】功能（按鍵：【E】），原先以 a224 程式
+要求使用者手動輸入漢字讀音；現在改用 a260 程式，先在《個人字典》查找漢字讀音；
+故使用者除了自行手動輸入外；亦可直接套用《個人字典》查得的漢字讀音。
 """
 
 # =========================================================================
@@ -87,15 +92,15 @@ except ImportError as e:
     HAS_A220 = False
     print(f"警告：無法載入 a220 模組：{e}")
 
-# 載入 a224 的核心查詢功能（引用既有標音）
-try:
-    # from a224_引用既有的漢字標音 import jin_kang_piau_im_ca_taigi_im_piau
-    from a224_引用既有的漢字標音 import process as jin_kang_piau_im_ca_taigi_im_piau
+# # 載入 a224 的核心查詢功能（引用既有標音）
+# try:
+#     # from a224_引用既有的漢字標音 import jin_kang_piau_im_ca_taigi_im_piau
+#     from a224_引用既有的漢字標音 import process as jin_kang_piau_im_ca_taigi_im_piau
 
-    HAS_A224 = True
-except ImportError as e:
-    HAS_A224 = False
-    print(f"警告：無法載入 a224 模組：{e}")
+#     HAS_A224 = True
+# except ImportError as e:
+#     HAS_A224 = False
+#     print(f"警告：無法載入 a224 模組：{e}")
 
 # 載入 a260 的核心查詢功能：可先在《個人字典》查找漢字讀音；或手動輸入漢字讀音
 try:
@@ -1159,6 +1164,9 @@ class NavigationController:
             if self.listener:
                 self.listener.stop()
                 time.sleep(0.3)
+
+            # 確保切換回終端機，以便使用者輸入文字
+            activate_console_window(self.console_hwnd)
 
             try:
                 if HAS_A260:
