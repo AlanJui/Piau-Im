@@ -73,7 +73,6 @@ except ImportError:
 
 # 載入 a222 的核心查詢功能（個人字典）
 try:
-    # from a222_依作用儲存格在個人字典查找漢字讀音 import ca_han_ji_thak_im as ca_han_ji_thak_im_a222
     from a222_依作用儲存格在個人字典查找漢字讀音 import (
         process as ca_han_ji_thak_im_a222,
     )
@@ -92,15 +91,15 @@ except ImportError as e:
     HAS_A220 = False
     print(f"警告：無法載入 a220 模組：{e}")
 
-# # 載入 a224 的核心查詢功能（引用既有標音）
-# try:
-#     # from a224_引用既有的漢字標音 import jin_kang_piau_im_ca_taigi_im_piau
-#     from a224_引用既有的漢字標音 import process as jin_kang_piau_im_ca_taigi_im_piau
+# 載入 a224 的核心查詢功能（引用既有標音）
+try:
+    # from a224_引用既有的漢字標音 import jin_kang_piau_im_ca_taigi_im_piau
+    from a224_引用既有的漢字標音 import process as jin_kang_piau_im_ca_taigi_im_piau
 
-#     HAS_A224 = True
-# except ImportError as e:
-#     HAS_A224 = False
-#     print(f"警告：無法載入 a224 模組：{e}")
+    HAS_A224 = True
+except ImportError as e:
+    HAS_A224 = False
+    print(f"警告：無法載入 a224 模組：{e}")
 
 # 載入 a260 的核心查詢功能：可先在《個人字典》查找漢字讀音；或手動輸入漢字讀音
 try:
