@@ -97,6 +97,17 @@ except ImportError as e:
     HAS_A224 = False
     print(f"警告：無法載入 a224 模組：{e}")
 
+# 載入 a260 的核心查詢功能：可先在《個人字典》查找漢字讀音；或手動輸入漢字讀音
+try:
+    from a260_依字典查得結果填入人工標音 import (
+        process as za_ji_tian_au_thiam_jin_kang_piau_im,
+    )
+
+    HAS_A260 = True
+except ImportError as e:
+    HAS_A260 = False
+    print(f"警告：無法載入 a260 模組：{e}")
+
 # =========================================================================
 # 常數定義
 # =========================================================================
@@ -1150,44 +1161,20 @@ class NavigationController:
                 time.sleep(0.3)
 
             try:
-                # 切換到終端機視窗以接收輸入
-                activate_console_window(self.console_hwnd)
+                if HAS_A260:
+                    # 創建簡單的 args 物件（模擬命令列參數）
+                    import argparse
 
-                # 取得使用者輸入
-                user_input = input("\n請輸入台語音標：").strip()
-
-                if user_input:
-                    # 填入人工標音
-                    target_cell = self.sheet.range(
-                        (manual_annotation_row, manual_annotation_col)
+                    args = argparse.Namespace(new=False)
+                    exit_code = za_ji_tian_au_thiam_jin_kang_piau_im(
+                        wb=self.wb, args=args
                     )
-                    target_cell.value = user_input
-                    print(
-                        f"\n✓ 已在 {target_cell_address} 填入人工標音：【{user_input}】"
-                    )
-
-                    # 呼叫 a224 程式以更新台語音標與漢字標音
-                    print("\n正在更新台語音標與漢字標音...")
-                    try:
-                        if HAS_A224:
-                            # 創建簡單的 args 物件（模擬命令列參數）
-                            import argparse
-
-                            args = argparse.Namespace(new=False)
-                            exit_code = jin_kang_piau_im_ca_taigi_im_piau(
-                                wb=self.wb, args=args
-                            )
-                            if exit_code == 0:
-                                print("✓ 已完成台語音標與漢字標音更新")
-                            else:
-                                print(f"⚠️  更新結果：exit_code = {exit_code}")
-                        else:
-                            print("⚠️  a224 模組未載入，無法更新")
-                    except Exception as e:
-                        logging.error(f"更新台語音標與漢字標音失敗：{e}")
-                        print(f"❌ 更新失敗：{e}")
+                    if exit_code == 0:
+                        print("✓ 已完成台語音標與漢字標音更新")
+                    else:
+                        print(f"⚠️  更新結果：exit_code = {exit_code}")
                 else:
-                    print("\n取消輸入")
+                    print("⚠️  a260 模組未載入，無法更新")
 
             except KeyboardInterrupt:
                 print("\n\n使用者中斷輸入")
