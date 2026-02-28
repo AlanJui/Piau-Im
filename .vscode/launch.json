@@ -245,6 +245,13 @@
             "console": "externalTerminal",
         },
         {
+            "name": "a215_依作用儲存格處理漢字之人工標音作業",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a215_依作用儲存格處理漢字之人工標音作業.py",
+            "console": "externalTerminal",
+        },
+        {
             "name": "a220_作用儲存格查找萌典漢字讀音",
             "type": "debugpy",
             "request": "launch",

@@ -1,5 +1,5 @@
 """
-mod_程式.py V0.2.11
+mod_程式.py V0.2.12
 
 本系統各功能之程式架構模版。
 模版中包含程式配置類別 Program 及儲存格處理器類別 ExcelCell。
@@ -9,6 +9,8 @@ mod_程式.py V0.2.11
 - v0.2.9 2026-02-17: 修正 _process_han_ji 方法，將 han_ji, row 和 col 參數移除，改為直接從 cell 物件中取得。
 - v0.2.10 2026-02-26: 改善漢字查注音作業方法，避免當【聲母】資料為 None 時，導致後續由【台語音標】轉【漢字標音】的函式發生錯誤。
 - v0.2.11 2026-02-27: 將原 a223 中的 _resolve_manual_annotation() 方法納入，以便未來參考其作法，令現有的 _process_jin_kang_piau_im() 方法，其程式碼可以更模組結構化，以便未來之維護。
+- v0.2.12 2026-02-28: 函數除錯 _process_jin_kang_piau_im()，對【人工標音字庫】工作表更新紀錄時，為處理【人工標音】更新之情況，需先移除【人工標音字庫】中已有的紀錄（同【漢字】、所處【座標】）；
+然後再新增紀錄，確保【人工標音字庫】工作表中，不會出現同【漢字】、所處【座標】的資料，發生重複且資料內容不一致之問題。
 """
 
 # =========================================================================
@@ -985,6 +987,10 @@ class ExcelCell:
                 cell.offset(1, 0).value = han_ji_piau_im  # 更新【漢字標音】儲存格
 
                 # 在【人工標音字庫】新增一筆資料，記錄：【漢字】、【台語音標】及指向【漢字注音】之【座標】
+                self.jin_kang_piau_im_ji_khoo_dict.remove_coordinate(
+                    han_ji=han_ji,
+                    coordinate=(han_ji_row, han_ji_col),
+                )
                 self.jin_kang_piau_im_ji_khoo_dict.add_or_update_entry(
                     han_ji=han_ji,
                     tai_gi_im_piau=tai_gi_im_piau,
@@ -999,6 +1005,12 @@ class ExcelCell:
                 # source_msg = f"【漢字注音】工作表 {excel_addr}（{row} ,{col}）==》漢字：【{han_ji}】，人工標音：【{jin_kang_piau_im}】"
                 source_msg = f"==》漢字：【{han_ji}】，人工標音：【{jin_kang_piau_im}】"
                 print(f"{source_msg} ...")
+
+                # # 自【人工標音字庫】移除目前處理的座標
+                # self.jin_kang_piau_im_ji_khoo_dict.remove_coordinate(
+                #     han_ji=han_ji,
+                #     coordinate=(han_ji_row, han_ji_col),
+                # )
 
                 # 顯示【人工標音字庫】工作表新增之紀錄
                 row_no_jin_kang_piau_im = (

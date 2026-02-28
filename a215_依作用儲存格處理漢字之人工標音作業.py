@@ -1,4 +1,5 @@
-"""a215_漢字以人工標音處理作業.py v0.1
+"""
+a215_漢字以人工標音處理作業.py v0.1.1
 
 依據【作用儲存格】之【人工標音】欄位，處理人工手動標音作業。
  - 手動標音：在【人工標音】儲存格輸入完整的【台語音標】或【台羅拼音】（接受帶調符號的音標），
@@ -18,6 +19,7 @@
 
 更新紀錄：
 v0.1.0 2026-02-27: 初始版本，實現基本功能：從【人工標音字庫】查找漢字的台語音標，並轉換成漢字標音；若找不到則記錄到【缺字表】。
+v0.1.1 2026-02-28: 修正【作用儲存格】處理邏輯，可以自動矯正【漢字】儲存格之座標，避免使用者操作不慎之問題。
 """
 
 # =========================================================================
@@ -30,7 +32,10 @@ from pathlib import Path
 import xlwings as xw
 
 from mod_excel_access import (
+    excel_address_to_row_col,
     get_active_cell_address,
+    get_line_no_by_row,
+    get_row_by_line_no,
 )
 
 # 載入自訂模組
@@ -143,12 +148,12 @@ def process(wb, args) -> int:
 
         # 取得作用儲存格
         active_cell_address = get_active_cell_address()
-        active_cell = sheet.range(active_cell_address)
-        # row, col = excel_address_to_row_col(active_cell_address)
-        # current_line_no = get_line_no_by_row(current_row_no=row)  # 計算行號
-        # jin_kang_piau_im_row, tai_gi_im_piau_row, han_ji_row, han_ji_piau_im_row = (
-        #     get_row_by_line_no(current_line_no)
-        # )
+        row, col = excel_address_to_row_col(active_cell_address)
+        current_line_no = get_line_no_by_row(current_row_no=row)  # 計算行號
+        jin_kang_piau_im_row, tai_gi_im_piau_row, han_ji_row, han_ji_piau_im_row = (
+            get_row_by_line_no(current_line_no)
+        )
+        active_cell = sheet.range(han_ji_row, col)
         xls_cell._process_jin_kang_piau_im(cell=active_cell)
 
     except Exception as e:
