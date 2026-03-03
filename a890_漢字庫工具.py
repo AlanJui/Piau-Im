@@ -23,15 +23,15 @@ from mod_excel_access import (
 # =========================================================================
 load_dotenv()
 
-DB_HO_LOK_UE = os.getenv('DB_HO_LOK_UE', 'Ho_Lok_Ue.db')
+DB_HO_LOK_UE = os.getenv("DB_HO_LOK_UE", "Ho_Lok_Ue.db")
 
 # =========================================================================
 # 設定日誌
 # =========================================================================
 logging.basicConfig(
-    filename='process_log.txt',
+    filename="process_log.txt",
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    format="%(asctime)s - %(levelname)s - %(message)s",
 )
 
 # =========================================================================
@@ -59,7 +59,9 @@ def get_active_cell_info(wb):
     """
     active_cell = wb.app.selection  # 取得目前作用中的儲存格
     sheet_name = active_cell.sheet.name  # 取得所在的工作表名稱
-    cell_address = active_cell.address.replace("$", "")  # 取得 Excel 格式地址 (去掉 "$")
+    cell_address = active_cell.address.replace(
+        "$", ""
+    )  # 取得 Excel 格式地址 (去掉 "$")
 
     row, col = excel_address_to_row_col(cell_address)  # 轉換為 (row, col)
 
@@ -138,7 +140,9 @@ def check_and_update_pronunciation(wb, han_ji, position, artificial_pronounce):
                 if correction_pronounce_cell.value == "N/A":
                     # 更新【校正音標】為【人工標音】
                     correction_pronounce_cell.value = artificial_pronounce
-                    print(f"✅ 更新成功: {han_ji} ({position}) -> {artificial_pronounce}")
+                    print(
+                        f"✅ 更新成功: {han_ji} ({position}) -> {artificial_pronounce}"
+                    )
                     return True
 
     print(f"❌ 未找到匹配的資料或不符合更新條件: {han_ji} ({position})")
@@ -154,8 +158,8 @@ def convert_tl_to_tlpa(im_piau):
     """
     if not im_piau:
         return ""
-    im_piau = re.sub(r'\btsh', 'c', im_piau)  # tsh → c
-    im_piau = re.sub(r'\bts', 'z', im_piau)   # ts → z
+    im_piau = re.sub(r"\btsh", "c", im_piau)  # tsh → c
+    im_piau = re.sub(r"\bts", "z", im_piau)  # ts → z
     return im_piau
 
 
@@ -197,7 +201,9 @@ def update_pronunciation_in_excel(wb):
             if convert_to_excel_address(str((row, col))) in coordinates:
                 if correction_pronounce_cell.value == "N/A":
                     correction_pronounce_cell.value = artificial_pronounce
-                    print(f"✅ 更新成功: {han_ji} ({row}, {col}) -> {artificial_pronounce}")
+                    print(
+                        f"✅ 更新成功: {han_ji} ({row}, {col}) -> {artificial_pronounce}"
+                    )
                     return EXIT_CODE_SUCCESS
 
     print(f"❌ 未找到匹配的資料或不符合更新條件: {han_ji} ({row}, {col})")
@@ -236,14 +242,19 @@ def update_database_from_excel(wb):
             tlpa_im_piau = convert_tl_to_tlpa(tai_lo_im_piau)
 
             # **在 INSERT 之前，顯示 Console 訊息**
-            print(f"📌 寫入資料庫: 漢字='{han_ji}', 台羅拼音='{tai_lo_im_piau}', 轉換後 TLPA='{tlpa_im_piau}', Excel 第 {idx} 列")
+            print(
+                f"📌 寫入資料庫: 漢字='{han_ji}', 台羅拼音='{tai_lo_im_piau}', 轉換後 TLPA='{tlpa_im_piau}', Excel 第 {idx} 列"
+            )
 
-            cursor.execute("""
+            cursor.execute(
+                """
                 INSERT INTO 漢字庫 (漢字, 台羅音標, 常用度, 更新時間)
                 VALUES (?, ?, ?, CURRENT_TIMESTAMP)
                 ON CONFLICT(漢字, 台羅音標) DO UPDATE
                 SET 更新時間=CURRENT_TIMESTAMP;
-            """, (han_ji, tlpa_im_piau, 0.8))  # 常用度固定為 0.8
+            """,
+                (han_ji, tlpa_im_piau, 0.8),
+            )  # 常用度固定為 0.8
 
         conn.commit()
         print("✅ 資料庫更新完成！")
@@ -277,14 +288,22 @@ def export_database_to_excel(wb):
     try:
         # 讀取資料庫內容
         # cursor.execute("SELECT 識別號, 漢字, 台羅音標, 常用度, 摘要說明, 更新時間 FROM 漢字庫;")
-        cursor.execute("SELECT 識別號, 漢字, 台羅音標, 常用度, 摘要說明, 更新時間 FROM 漢字庫R1;")
+        cursor.execute(
+            "SELECT 識別號, 漢字, 台羅音標, 常用度, 摘要說明, 更新時間 FROM 漢字庫R1;"
+        )
         rows = cursor.fetchall()
 
         # 清空舊內容
         sheet.clear()
 
         # 寫入標題列
-        sheet.range("A1").value = ["識別號", "漢字", "台羅音標", "常用度", "摘要說明" "更新時間"]
+        sheet.range("A1").value = [
+            "識別號",
+            "漢字",
+            "台羅音標",
+            "常用度",
+            "摘要說明" "更新時間",
+        ]
 
         # 寫入資料
         sheet.range("A2").value = rows
@@ -322,7 +341,8 @@ def rebuild_database_from_excel(wb):
         cursor.execute("DROP TABLE IF EXISTS 漢字庫")
 
         # **2️⃣ 重新建立 `漢字庫` 資料表**
-        cursor.execute("""
+        cursor.execute(
+            """
         CREATE TABLE 漢字庫 (
             識別號 INTEGER PRIMARY KEY AUTOINCREMENT,
             漢字 TEXT NOT NULL,
@@ -331,7 +351,8 @@ def rebuild_database_from_excel(wb):
             摘要說明 TEXT DEFAULT 'NA',
             更新時間 TEXT DEFAULT (DATETIME('now', 'localtime')) NOT NULL
         );
-        """)
+        """
+        )
 
         # **3️⃣ 讀取 Excel `漢字庫` 工作表**
         data = sheet.range("A2").expand("table").value
@@ -342,12 +363,22 @@ def rebuild_database_from_excel(wb):
         for idx, row_data in enumerate(data, start=2):
             han_ji = row_data[1]  # B 欄
             tai_lo_im_piau = row_data[2]  # C 欄
-            siong_iong_too = row_data[3] if isinstance(row_data[3], (int, float)) else 0.1  # D 欄
-            summary = row_data[4] if isinstance(row_data[4], str) else "NA"  # E 欄（摘要）
-            updated_time = row_data[5] if isinstance(row_data[5], str) else datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            siong_iong_too = (
+                row_data[3] if isinstance(row_data[3], (int, float)) else 0.1
+            )  # D 欄
+            summary = (
+                row_data[4] if isinstance(row_data[4], str) else "NA"
+            )  # E 欄（摘要）
+            updated_time = (
+                row_data[5]
+                if isinstance(row_data[5], str)
+                else datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            )
 
             # **Console Debug 訊息**
-            print(f"📌 正在處理第 {idx-1} 筆資料 (Excel 第 {idx} 列): 漢字='{han_ji}', 台羅音標='{tai_lo_im_piau}', 更新時間='{updated_time}'")
+            print(
+                f"📌 正在處理第 {idx-1} 筆資料 (Excel 第 {idx} 列): 漢字='{han_ji}', 台羅音標='{tai_lo_im_piau}', 更新時間='{updated_time}'"
+            )
 
             # **確保 `漢字` 和 `台羅音標` 務必要有資料**
             if not han_ji or not tai_lo_im_piau:
@@ -358,7 +389,11 @@ def rebuild_database_from_excel(wb):
                 continue  # 跳過無效資料
 
             # **檢查 `台羅音標` 是否為有效字串**
-            if not han_ji or not isinstance(tai_lo_im_piau, str) or not tai_lo_im_piau.strip():
+            if (
+                not han_ji
+                or not isinstance(tai_lo_im_piau, str)
+                or not tai_lo_im_piau.strip()
+            ):
                 print(f"⚠️ 跳過無效資料: Excel 第 {idx} 列 (台羅音標格式錯誤)")
                 # **將錯誤記錄寫入 `error_log.txt`**
                 with open("error_log.txt", "a", encoding="utf-8") as log_file:
@@ -368,13 +403,18 @@ def rebuild_database_from_excel(wb):
             # 轉換台羅拼音（TL）→ 台語音標（TLPA）
             # tlpa_pinyin = convert_tl_to_tlpa(tai_lo_im_piau)
 
-            cursor.execute("""
+            cursor.execute(
+                """
                 INSERT INTO 漢字庫 (漢字, 台羅音標, 常用度, 摘要說明, 更新時間)
                 VALUES (?, ?, ?, ?, ?);
-            """, (han_ji, tai_lo_im_piau, siong_iong_too, summary, updated_time))
+            """,
+                (han_ji, tai_lo_im_piau, siong_iong_too, summary, updated_time),
+            )
 
         # **5️⃣ 建立 `UNIQUE INDEX` 確保無重複**
-        cursor.execute("CREATE UNIQUE INDEX idx_漢字_台羅音標 ON 漢字庫 (漢字, 台羅音標);")
+        cursor.execute(
+            "CREATE UNIQUE INDEX idx_漢字_台羅音標 ON 漢字庫 (漢字, 台羅音標);"
+        )
 
         conn.commit()
         print("✅ `漢字庫` 資料表已成功重建！")
@@ -410,7 +450,7 @@ def export_to_rime_dict():
             file.write("#\n# 河洛白話音\n#\n")
             file.write("---\n")
             file.write("name: tl_ji_khoo_peh_ue\n")
-            file.write("version: \"v0.1.0.0\"\n")
+            file.write('version: "v0.1.0.0"\n')
             file.write("sort: by_weight\n")
             file.write("use_preset_vocabulary: false\n")
             file.write("columns:\n")
@@ -425,7 +465,9 @@ def export_to_rime_dict():
 
             # **寫入字典內容**
             for han_ji, tai_lo_pinyin, weight, summary, create_time in rows:
-                file.write(f"{han_ji}\t{tai_lo_pinyin}\t{weight}\t{summary}\t{create_time}\n")
+                file.write(
+                    f"{han_ji}\t{tai_lo_pinyin}\t{weight}\t{summary}\t{create_time}\n"
+                )
 
         print(f"✅ RIME 字典 `{dict_filename}` 匯出完成！")
         return EXIT_CODE_SUCCESS
