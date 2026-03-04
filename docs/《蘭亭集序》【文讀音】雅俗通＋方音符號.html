@@ -21,8 +21,76 @@
     <meta name="網頁每列字數" content="0.0" />
 
     <link rel="stylesheet" href="assets/styles/styles2.css">
+
+<style id="nav-horizontal-fix">
+/* 絕對橫向排列與防跑版 */
+nav.main-nav {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important; /* 絕對不換行 */
+    overflow-x: auto !important; /* 允許橫向捲動 */
+    overflow-y: hidden !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    background: #f8f9fa !important;
+    padding: 15px 20px !important;
+    margin: 20px 0 !important;
+    border-radius: 10px !important;
+    box-sizing: border-box !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+nav.main-nav ul {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important; /* 絕對不換行 */
+    justify-content: flex-start !important;
+    align-items: center !important;
+    width: max-content !important; /* 讓 ul 自適應內容長度 */
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    list-style: none !important;
+    gap: 15px !important;
+}
+
+nav.main-nav ul li {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    white-space: nowrap !important; /* 單一按鈕不折行 */
+    flex-shrink: 0 !important;      /* 防止按鈕被擠壓 */
+}
+
+nav.main-nav ul li a, 
+nav.main-nav ul li span {
+    display: inline-block !important;
+    white-space: nowrap !important;
+}
+
+/* 如果是手機螢幕太小，強制消除 body 被限制寬度造成的影響 */
+body {
+    max-width: 100% !important;
+}
+</style>
+
 </head>
 <body>
+<nav class="main-nav">
+  <ul>
+    <li><a href="index.html" class="nav-home">🏠 首頁</a></li>
+    <li><a href="%E3%80%8A%E8%98%AD%E4%BA%AD%E9%9B%86%E5%BA%8F%E3%80%8B%E3%80%90%E6%96%87%E8%AE%80%E9%9F%B3%E3%80%91%E5%8D%81%E4%BA%94%E9%9F%B3%EF%BC%8B%E6%96%B9%E9%9F%B3%E7%AC%A6%E8%99%9F.html" class="nav-sibling">十五音＋方音符號</a></li>
+    <li><a href="%E3%80%8A%E8%98%AD%E4%BA%AD%E9%9B%86%E5%BA%8F%E3%80%8B%E3%80%90%E6%96%87%E8%AE%80%E9%9F%B3%E3%80%91%E9%96%A9%E6%8B%BC%E8%AA%BF%E7%AC%A6.html" class="nav-sibling">閩拼調符</a></li>
+    <li><a href="%E3%80%8A%E8%98%AD%E4%BA%AD%E9%9B%86%E5%BA%8F%E3%80%8B%E3%80%90%E6%96%87%E8%AE%80%E9%9F%B3%E3%80%91%E9%9B%85%E4%BF%97%E9%80%9A.html" class="nav-sibling">雅俗通</a></li>
+    <li><span class="nav-current">雅俗通＋方音符號</span></li>
+  </ul>
+</nav>
+
+
     <div class='separator' style='clear: both'>
   <a href='圖片' style='display: block; padding: 1em 0; text-align: center'>
     <img alt='蘭亭集序' border='0' width='800' 
@@ -3059,6 +3127,19 @@
 </ruby>
   <span>。</span>
 </p></div>
+
+    
+
+
+<nav class="main-nav">
+  <ul>
+    <li><a href="index.html" class="nav-home">🏠 首頁</a></li>
+    <li><a href="%E3%80%8A%E8%98%AD%E4%BA%AD%E9%9B%86%E5%BA%8F%E3%80%8B%E3%80%90%E6%96%87%E8%AE%80%E9%9F%B3%E3%80%91%E5%8D%81%E4%BA%94%E9%9F%B3%EF%BC%8B%E6%96%B9%E9%9F%B3%E7%AC%A6%E8%99%9F.html" class="nav-sibling">十五音＋方音符號</a></li>
+    <li><a href="%E3%80%8A%E8%98%AD%E4%BA%AD%E9%9B%86%E5%BA%8F%E3%80%8B%E3%80%90%E6%96%87%E8%AE%80%E9%9F%B3%E3%80%91%E9%96%A9%E6%8B%BC%E8%AA%BF%E7%AC%A6.html" class="nav-sibling">閩拼調符</a></li>
+    <li><a href="%E3%80%8A%E8%98%AD%E4%BA%AD%E9%9B%86%E5%BA%8F%E3%80%8B%E3%80%90%E6%96%87%E8%AE%80%E9%9F%B3%E3%80%91%E9%9B%85%E4%BF%97%E9%80%9A.html" class="nav-sibling">雅俗通</a></li>
+    <li><span class="nav-current">雅俗通＋方音符號</span></li>
+  </ul>
+</nav>
 </body>
 </html>
     

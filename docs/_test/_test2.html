@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+<style id="nav-horizontal-fix">
+/* 絕對橫向排列與防跑版 */
+nav.main-nav {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important; /* 絕對不換行 */
+    overflow-x: auto !important; /* 允許橫向捲動 */
+    overflow-y: hidden !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    background: #f8f9fa !important;
+    padding: 15px 20px !important;
+    margin: 20px 0 !important;
+    border-radius: 10px !important;
+    box-sizing: border-box !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+nav.main-nav ul {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important; /* 絕對不換行 */
+    justify-content: flex-start !important;
+    align-items: center !important;
+    width: max-content !important; /* 讓 ul 自適應內容長度 */
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    list-style: none !important;
+    gap: 15px !important;
+}
+
+nav.main-nav ul li {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    white-space: nowrap !important; /* 單一按鈕不折行 */
+    flex-shrink: 0 !important;      /* 防止按鈕被擠壓 */
+}
+
+nav.main-nav ul li a, 
+nav.main-nav ul li span {
+    display: inline-block !important;
+    white-space: nowrap !important;
+}
+
+/* 如果是手機螢幕太小，強制消除 body 被限制寬度造成的影響 */
+body {
+    max-width: 100% !important;
+}
+</style>
+
+</head>
+
+<body>
+    <style>
+        .Siang_Pai rt {
+            font-family: Arial, BopomofoRuby;
+            color: #00C4AB;
+            font-size: 40%;
+        }
+
+        .Siang_Pai rt::after {
+            content: attr(data-bopomofo);
+            /* 自訂屬性儲存注音 */
+            color: #B94B6A;
+            font-size: 30%;
+            display: block;
+        }
+    </style>
+    <div class='Siang_Pai'>
+        <p>
+            <span>《</span>
+            <ruby>
+                <rb>春</rb>
+                <rt data-bopomofo="ㄘㄨㄣ">cun1</rt>
+            </ruby>
+            <ruby>
+                <rb>曉</rb>
+                <rt data-bopomofo="ㄏㄧㄠˋ">hiao3</rt>
+            </ruby>
+            <span>》</span>
+        </p>
+        <p>
+        </p>
+        <p>
+            <ruby>
+                <rb>春</rb>
+                <rt data-bopomofo="ㄘㄨㄣ">cun1</rt>
+            </ruby>
+            <ruby>
+                <rb>眠</rb>
+                <rt data-bopomofo="ㆠㄧㄢˊ">bbian2</rt>
+            </ruby>
+            <ruby>
+                <rb>不</rb>
+                <rt data-bopomofo="ㄅㄨㆵ">but7</rt>
+            </ruby>
+            <ruby>
+                <rb>覺</rb>
+                <rt data-bopomofo="ㄍㄚㆻ">gak7</rt>
+            </ruby>
+            <ruby>
+                <rb>曉</rb>
+                <rt data-bopomofo="ㄏㄧㄠˋ">hiao3</rt>
+            </ruby>
+            <span>，</span>
+            <br>
+            <ruby>
+                <rb>處</rb>
+                <rt data-bopomofo="ㄘㄨˋ">cu3</rt>
+            </ruby>
+            <ruby>
+                <rb>處</rb>
+                <rt data-bopomofo="ㄘㄨˋ">cu3</rt>
+            </ruby>
+            <ruby>
+                <rb>聞</rb>
+                <rt data-bopomofo="ㆠㄨㄣˊ">bbun2</rt>
+            </ruby>
+            <ruby>
+                <rb>啼</rb>
+                <rt data-bopomofo="ㄊㆤˊ">te2</rt>
+            </ruby>
+            <ruby>
+                <rb>鳥</rb>
+                <rt data-bopomofo="ㄐㄧㄠˋ">ziao3</rt>
+            </ruby>
+            <span>。</span>
+
+        </p>
+    </div>
+
+    <a href="index.html" class="floating-home-btn" title="回到首頁">🏠</a>
+</body>
+
+</html>

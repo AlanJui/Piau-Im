@@ -4,9 +4,74 @@
 <head>
     <title>《尚有力量的每日祈禱文》【河洛白話音】</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="assets/styles/styles.css">
+    <link rel="stylesheet" href="assets/styles/styles.css?v=9">
+
+<style id="nav-horizontal-fix">
+/* 絕對橫向排列與防跑版 */
+nav.main-nav {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important; /* 絕對不換行 */
+    overflow-x: auto !important; /* 允許橫向捲動 */
+    overflow-y: hidden !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    background: #f8f9fa !important;
+    padding: 15px 20px !important;
+    margin: 20px 0 !important;
+    border-radius: 10px !important;
+    box-sizing: border-box !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+nav.main-nav ul {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important; /* 絕對不換行 */
+    justify-content: flex-start !important;
+    align-items: center !important;
+    width: max-content !important; /* 讓 ul 自適應內容長度 */
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    list-style: none !important;
+    gap: 15px !important;
+}
+
+nav.main-nav ul li {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    white-space: nowrap !important; /* 單一按鈕不折行 */
+    flex-shrink: 0 !important;      /* 防止按鈕被擠壓 */
+}
+
+nav.main-nav ul li a, 
+nav.main-nav ul li span {
+    display: inline-block !important;
+    white-space: nowrap !important;
+}
+
+/* 如果是手機螢幕太小，強制消除 body 被限制寬度造成的影響 */
+body {
+    max-width: 100% !important;
+}
+</style>
+
 </head>
 <body>
+<nav class="main-nav">
+  <ul>
+    <li><a href="index.html" class="nav-home">🏠 首頁</a></li>
+    <li><span class="nav-current">開啟</span></li>
+  </ul>
+</nav>
+
+
     《尚有力量的每日祈禱文》【河洛白話音】
 <div class='separator' style='clear: both'>
   <a href='圖片' style='display: block; padding: 1em 0; text-align: center'>
@@ -160,6 +225,16 @@
 <ruby><rb>昇</rb><rt>sing1</rt><rtc>ㄒㄧㄥ</rtc></ruby>
 <span>。</span>
 </p></div>
+
+    
+
+
+<nav class="main-nav">
+  <ul>
+    <li><a href="index.html" class="nav-home">🏠 首頁</a></li>
+    <li><span class="nav-current">開啟</span></li>
+  </ul>
+</nav>
 </body>
 </html>
     

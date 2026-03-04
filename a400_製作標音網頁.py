@@ -737,6 +737,7 @@ def _create_html_file(
         {content}
         </article>
     </main>
+    <a href="index.html" class="floating-home-btn" title="回到首頁">🏠</a>
 </body>
 </html>
     """

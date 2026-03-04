@@ -4,9 +4,75 @@
 <head>
     <title>《永遇樂．京口北固亭懷古》</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="assets/styles/styles.css">
+    <link rel="stylesheet" href="assets/styles/styles.css?v=9">
+
+<style id="nav-horizontal-fix">
+/* 絕對橫向排列與防跑版 */
+nav.main-nav {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important; /* 絕對不換行 */
+    overflow-x: auto !important; /* 允許橫向捲動 */
+    overflow-y: hidden !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    background: #f8f9fa !important;
+    padding: 15px 20px !important;
+    margin: 20px 0 !important;
+    border-radius: 10px !important;
+    box-sizing: border-box !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+nav.main-nav ul {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important; /* 絕對不換行 */
+    justify-content: flex-start !important;
+    align-items: center !important;
+    width: max-content !important; /* 讓 ul 自適應內容長度 */
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    list-style: none !important;
+    gap: 15px !important;
+}
+
+nav.main-nav ul li {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    white-space: nowrap !important; /* 單一按鈕不折行 */
+    flex-shrink: 0 !important;      /* 防止按鈕被擠壓 */
+}
+
+nav.main-nav ul li a, 
+nav.main-nav ul li span {
+    display: inline-block !important;
+    white-space: nowrap !important;
+}
+
+/* 如果是手機螢幕太小，強制消除 body 被限制寬度造成的影響 */
+body {
+    max-width: 100% !important;
+}
+</style>
+
 </head>
 <body>
+<nav class="main-nav">
+  <ul>
+    <li><a href="index.html" class="nav-home">🏠 首頁</a></li>
+    <li><span class="nav-current">十五音</span></li>
+    <li><a href="%E3%80%8A%E6%B0%B8%E9%81%87%E6%A8%82%EF%BC%8E%E4%BA%AC%E5%8F%A3%E5%8C%97%E5%9B%BA%E4%BA%AD%E6%87%B7%E5%8F%A4%E3%80%8B_%E6%96%B9%E9%9F%B3%E7%AC%A6%E8%99%9F.html" class="nav-sibling">方音符號</a></li>
+  </ul>
+</nav>
+
+
     《永遇樂．京口北固亭懷古》
 <div class='separator' style='clear: both'>
   <a href='圖片' style='display: block; padding: 1em 0; text-align: center'>
@@ -42,6 +108,17 @@
   <ruby><rb>廉</rb><rp>(</rp><rt>兼五柳</rt><rp>)</rp></ruby>  <ruby><rb>頗</rb><rp>(</rp><rt>高二頗</rt><rp>)</rp></ruby>  <ruby><rb>老</rb><rp>(</rp><rt>高二柳</rt><rp>)</rp></ruby>  <ruby><rb>矣</rb><rp>(</rp><rt>居二英</rt><rp>)</rp></ruby><span>，</span>
   <ruby><rb>尚</rb><rp>(</rp><rt>恭七時</rt><rp>)</rp></ruby>  <ruby><rb>能</rb><rp>(</rp><rt>經五柳</rt><rp>)</rp></ruby>  <ruby><rb>飯</rb><rp>(</rp><rt>觀七喜</rt><rp>)</rp></ruby>  <ruby><rb>否</rb><rp>(</rp><rt>沽二喜</rt><rp>)</rp></ruby><span>。</span>
 </p></div>
+
+    
+
+
+<nav class="main-nav">
+  <ul>
+    <li><a href="index.html" class="nav-home">🏠 首頁</a></li>
+    <li><span class="nav-current">十五音</span></li>
+    <li><a href="%E3%80%8A%E6%B0%B8%E9%81%87%E6%A8%82%EF%BC%8E%E4%BA%AC%E5%8F%A3%E5%8C%97%E5%9B%BA%E4%BA%AD%E6%87%B7%E5%8F%A4%E3%80%8B_%E6%96%B9%E9%9F%B3%E7%AC%A6%E8%99%9F.html" class="nav-sibling">方音符號</a></li>
+  </ul>
+</nav>
 </body>
 </html>
     

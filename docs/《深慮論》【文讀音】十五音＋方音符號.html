@@ -26,9 +26,80 @@
     <meta name="右邊標音" content="方音符號" />
     <meta name="網頁每列字數" content="0.0" />
 
-    <link rel="stylesheet" href="assets/styles/styles.css">
+    <link rel="stylesheet" href="assets/styles/styles.css?v=9">
+
+<style id="nav-horizontal-fix">
+/* 絕對橫向排列與防跑版 */
+nav.main-nav {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important; /* 絕對不換行 */
+    overflow-x: auto !important; /* 允許橫向捲動 */
+    overflow-y: hidden !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    background: #f8f9fa !important;
+    padding: 15px 20px !important;
+    margin: 20px 0 !important;
+    border-radius: 10px !important;
+    box-sizing: border-box !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+nav.main-nav ul {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important; /* 絕對不換行 */
+    justify-content: flex-start !important;
+    align-items: center !important;
+    width: max-content !important; /* 讓 ul 自適應內容長度 */
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    list-style: none !important;
+    gap: 15px !important;
+}
+
+nav.main-nav ul li {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    white-space: nowrap !important; /* 單一按鈕不折行 */
+    flex-shrink: 0 !important;      /* 防止按鈕被擠壓 */
+}
+
+nav.main-nav ul li a, 
+nav.main-nav ul li span {
+    display: inline-block !important;
+    white-space: nowrap !important;
+}
+
+/* 如果是手機螢幕太小，強制消除 body 被限制寬度造成的影響 */
+body {
+    max-width: 100% !important;
+}
+</style>
+
 </head>
 <body>
+<nav class="main-nav">
+  <ul>
+    <li><a href="index.html" class="nav-home">🏠 首頁</a></li>
+    <li><span class="nav-current">十五音＋方音符號</span></li>
+    <li><a href="%E3%80%8A%E6%B7%B1%E6%85%AE%E8%AB%96%E3%80%8B%E3%80%90%E6%96%87%E8%AE%80%E9%9F%B3%E3%80%91%E5%8F%B0%E7%BE%85%E6%8B%BC%E9%9F%B3%EF%BC%8B%E6%96%B9%E9%9F%B3%E7%AC%A6%E8%99%9F.html" class="nav-sibling">台羅拼音＋方音符號</a></li>
+    <li><a href="%E3%80%8A%E6%B7%B1%E6%85%AE%E8%AB%96%E3%80%8B%E3%80%90%E6%96%87%E8%AE%80%E9%9F%B3%E3%80%91%E6%B3%A8%E9%9F%B3%E4%BA%8C%E5%BC%8F%EF%BC%8B%E6%96%B9%E9%9F%B3%E7%AC%A6%E8%99%9F.html" class="nav-sibling">注音二式＋方音符號</a></li>
+    <li><a href="%E3%80%8A%E6%B7%B1%E6%85%AE%E8%AB%96%E3%80%8B%E3%80%90%E6%96%87%E8%AE%80%E9%9F%B3%E3%80%91%E7%99%BD%E8%A9%B1%E5%AD%97%EF%BC%8B%E6%96%B9%E9%9F%B3%E7%AC%A6%E8%99%9F.html" class="nav-sibling">白話字＋方音符號</a></li>
+    <li><a href="%E3%80%8A%E6%B7%B1%E6%85%AE%E8%AB%96%E3%80%8B%E3%80%90%E6%96%87%E8%AE%80%E9%9F%B3%E3%80%91%E9%96%A9%E6%8B%BC%E8%AA%BF%E7%AC%A6%EF%BC%8B%E6%96%B9%E9%9F%B3%E7%AC%A6%E8%99%9F.html" class="nav-sibling">閩拼調符＋方音符號</a></li>
+    <li><a href="%E3%80%8A%E6%B7%B1%E6%85%AE%E8%AB%96%E3%80%8B%E3%80%90%E6%96%87%E8%AE%80%E9%9F%B3%E3%80%91%E9%96%A9%E6%8B%BC%E8%AA%BF%E8%99%9F%EF%BC%8B%E6%96%B9%E9%9F%B3%E7%AC%A6%E8%99%9F.html" class="nav-sibling">閩拼調號＋方音符號</a></li>
+    <li><a href="%E3%80%8A%E6%B7%B1%E6%85%AE%E8%AB%96%E3%80%8B%E3%80%90%E6%96%87%E8%AE%80%E9%9F%B3%E3%80%91%E9%9B%85%E4%BF%97%E9%80%9A%EF%BC%8B%E6%96%B9%E9%9F%B3%E7%AC%A6%E8%99%9F.html" class="nav-sibling">雅俗通＋方音符號</a></li>
+  </ul>
+</nav>
+
+
     <main class="page">
         <article class="article_content">
         <div class='separator' style='clear: both'>
@@ -2858,6 +2929,22 @@
 </p></div>
         </article>
     </main>
+
+    
+
+
+<nav class="main-nav">
+  <ul>
+    <li><a href="index.html" class="nav-home">🏠 首頁</a></li>
+    <li><span class="nav-current">十五音＋方音符號</span></li>
+    <li><a href="%E3%80%8A%E6%B7%B1%E6%85%AE%E8%AB%96%E3%80%8B%E3%80%90%E6%96%87%E8%AE%80%E9%9F%B3%E3%80%91%E5%8F%B0%E7%BE%85%E6%8B%BC%E9%9F%B3%EF%BC%8B%E6%96%B9%E9%9F%B3%E7%AC%A6%E8%99%9F.html" class="nav-sibling">台羅拼音＋方音符號</a></li>
+    <li><a href="%E3%80%8A%E6%B7%B1%E6%85%AE%E8%AB%96%E3%80%8B%E3%80%90%E6%96%87%E8%AE%80%E9%9F%B3%E3%80%91%E6%B3%A8%E9%9F%B3%E4%BA%8C%E5%BC%8F%EF%BC%8B%E6%96%B9%E9%9F%B3%E7%AC%A6%E8%99%9F.html" class="nav-sibling">注音二式＋方音符號</a></li>
+    <li><a href="%E3%80%8A%E6%B7%B1%E6%85%AE%E8%AB%96%E3%80%8B%E3%80%90%E6%96%87%E8%AE%80%E9%9F%B3%E3%80%91%E7%99%BD%E8%A9%B1%E5%AD%97%EF%BC%8B%E6%96%B9%E9%9F%B3%E7%AC%A6%E8%99%9F.html" class="nav-sibling">白話字＋方音符號</a></li>
+    <li><a href="%E3%80%8A%E6%B7%B1%E6%85%AE%E8%AB%96%E3%80%8B%E3%80%90%E6%96%87%E8%AE%80%E9%9F%B3%E3%80%91%E9%96%A9%E6%8B%BC%E8%AA%BF%E7%AC%A6%EF%BC%8B%E6%96%B9%E9%9F%B3%E7%AC%A6%E8%99%9F.html" class="nav-sibling">閩拼調符＋方音符號</a></li>
+    <li><a href="%E3%80%8A%E6%B7%B1%E6%85%AE%E8%AB%96%E3%80%8B%E3%80%90%E6%96%87%E8%AE%80%E9%9F%B3%E3%80%91%E9%96%A9%E6%8B%BC%E8%AA%BF%E8%99%9F%EF%BC%8B%E6%96%B9%E9%9F%B3%E7%AC%A6%E8%99%9F.html" class="nav-sibling">閩拼調號＋方音符號</a></li>
+    <li><a href="%E3%80%8A%E6%B7%B1%E6%85%AE%E8%AB%96%E3%80%8B%E3%80%90%E6%96%87%E8%AE%80%E9%9F%B3%E3%80%91%E9%9B%85%E4%BF%97%E9%80%9A%EF%BC%8B%E6%96%B9%E9%9F%B3%E7%AC%A6%E8%99%9F.html" class="nav-sibling">雅俗通＋方音符號</a></li>
+  </ul>
+</nav>
 </body>
 </html>
     

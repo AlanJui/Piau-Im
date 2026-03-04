@@ -1,38 +1,259 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-TW">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <meta property="og:image" content="https://alanjui.github.io/Piau-Im/assets/picts/king_tian.png" />
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta
+      property="og:image"
+      content="https://alanjui.github.io/Piau-Im/assets/picts/king_tian.png"
+    />
     <title>河洛話讀古文</title>
-    <link rel="stylesheet" href="./assets/styles/reset.css">
-    <link rel="stylesheet" href="./assets/styles/styles.css">
+    <link rel="stylesheet" href="./assets/styles/reset.css" />
+    <link rel="stylesheet" href="./assets/styles/styles.css?v=9" />
+  <style id="injected-design">
+/* =========================
+   頁面全域邊距與大字體 (Index & Articles)
+   ========================= */
+body {
+    padding: 0 50px !important;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 0 20px !important;
+    }
+}
+
+/* =========================
+   Index頁面 Header & Nav 改良
+   ========================= */
+#header {
+  text-align: center;
+  padding: 60px 20px 40px !important;
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
+  color: white !important;
+  border-radius: 0 0 20px 20px !important;
+  margin-bottom: 40px !important;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+}
+
+#header img {
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  margin-bottom: 20px;
+  max-width: 100%;
+  height: auto;
+}
+
+#header h1 {
+  font-family: "Noto Serif TC", serif !important;
+  font-weight: 900 !important; /* Noto Serif TC Black */
+  font-size: 48pt !important;
+  margin: 0 !important;
+  text-shadow: 3px 3px 6px rgba(0,0,0,0.4) !important;
+  letter-spacing: 5px !important;
+}
+
+.main-nav {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 40px;
+  background: white;
+  padding: 15px 30px;
+  border-radius: 50px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.main-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 30px;
+}
+
+.main-nav ul li a {
+  text-decoration: none;
+  color: #1e3c72 !important;
+  font-family: "Noto Serif TC", serif !important;
+  font-weight: 700 !important;
+  font-size: 24pt !important;
+  padding: 10px 24px;
+  border-radius: 30px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.main-nav ul li a:hover {
+  background: #1e3c72 !important;
+  color: white !important;
+}
+
+/* =========================
+   卡片式目錄 (Index.html專用) - 動畫收折與大字體
+   ========================= */
+.card-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)) !important;
+  gap: 30px !important;
+  padding: 20px 0 50px 0 !important;
+}
+
+.card {
+  background: var(--article-bg, #ffffff) !important;
+  border-radius: var(--radius, 14px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+  padding: 30px !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+  display: flex !important;
+  flex-direction: column !important;
+  position: relative !important;
+}
+
+.card:hover {
+  transform: translateY(-8px) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+.card-title {
+  margin: 0 !important;
+  font-family: "Noto Sans TC", serif !important;
+  font-size: 24pt !important;
+  color: #333 !important;
+  line-height: 1.5 !important;
+  padding-bottom: 20px !important;
+  transition: color 0.3s !important;
+  cursor: pointer !important;
+}
+
+.card-links {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 15px !important;
+  max-height: 0 !important;
+  opacity: 0 !important;
+  overflow: hidden !important;
+  margin-top: 0 !important;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  pointer-events: none;
+}
+
+.card:hover .card-title {
+  color: #0066cc !important;
+}
+
+.card:hover .card-links {
+  max-height: 800px !important;
+  opacity: 1 !important;
+  margin-top: 20px !important;
+  border-top: 2px solid #e0e0e0 !important;
+  padding-top: 20px !important;
+  pointer-events: auto;
+}
+
+.card-links .badge {
+  background: #f0f4f8 !important;
+  color: #0b57d0 !important;
+  padding: 10px 20px !important;
+  border-radius: 30px !important;
+  font-size: 20pt !important;
+  text-decoration: none !important;
+  font-weight: 500 !important;
+  font-family: "Noto Sans TC", sans-serif !important;
+  border: 2px solid transparent !important;
+  transition: all 0.2s ease !important;
+  display: inline-block;
+}
+
+.card-links .badge:hover {
+  background: #0b57d0 !important;
+  color: #fff !important;
+  border-color: #0b57d0 !important;
+  box-shadow: 0 4px 12px rgba(11,87,208,0.3) !important;
+}
+</style>
+
+<style id="nav-horizontal-fix">
+/* 絕對橫向排列與防跑版 */
+nav.main-nav {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important; /* 絕對不換行 */
+    overflow-x: auto !important; /* 允許橫向捲動 */
+    overflow-y: hidden !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    background: #f8f9fa !important;
+    padding: 15px 20px !important;
+    margin: 20px 0 !important;
+    border-radius: 10px !important;
+    box-sizing: border-box !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+nav.main-nav ul {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important; /* 絕對不換行 */
+    justify-content: flex-start !important;
+    align-items: center !important;
+    width: max-content !important; /* 讓 ul 自適應內容長度 */
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    list-style: none !important;
+    gap: 15px !important;
+}
+
+nav.main-nav ul li {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    white-space: nowrap !important; /* 單一按鈕不折行 */
+    flex-shrink: 0 !important;      /* 防止按鈕被擠壓 */
+}
+
+nav.main-nav ul li a, 
+nav.main-nav ul li span {
+    display: inline-block !important;
+    white-space: nowrap !important;
+}
+
+/* 如果是手機螢幕太小，強制消除 body 被限制寬度造成的影響 */
+body {
+    max-width: 100% !important;
+}
+</style>
+
 </head>
 
-<body>
+  <body>
     <!-- 頁首 -->
     <header id="header">
-        <img src="./assets/picts/king_tian.png" width="300" height="200" alt="四晝五經">
-        <h1>河洛話讀古文</h1>
-    </header><!-- /#header -->
-    <nav>
-        <button><img src="./assets/picts/menu_botton.png" width="40" height="50" alt="Button"></button>
-        <ul>
-            <li><a href="#">回到首頁</a></li>
-            <li><a href="#">操作指引</a></li>
-        </ul>
-    </nav>
+      <img
+        src="./assets/picts/king_tian.png"
+        width="300"
+        height="200"
+        alt="四晝五經"
+      />
+      <h1>河洛話讀古文</h1>
+    </header>
+    <!-- /#header -->
+    
     <!-- 內容 -->
     <main id="main">
-        <!-- 側邊選單 -->
-        <div id="articles">
-            {articles_placeholder}
-        </div>
+      <!-- 側邊選單 -->
+      <div id="articles">{articles_placeholder}</div>
     </main>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script type="text/javascript" src="./assets/javascripts/main.js"></script>
-</body>
-
+  </body>
 </html>
