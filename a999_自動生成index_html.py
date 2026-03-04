@@ -12,6 +12,7 @@ ignore_dir_list = [
 
 ignore_doc_list = [
     "index.html",
+    "index_bak.html",
     "_template.html",
     "output_from_excel.html",
 ]
