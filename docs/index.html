@@ -10,236 +10,229 @@
     <title>河洛話讀古文</title>
     <link rel="stylesheet" href="./assets/styles/reset.css" />
     <link rel="stylesheet" href="./assets/styles/styles.css?v=9" />
-    <style id="injected-design">
-      /* =========================
+  <style id="injected-design">
+/* =========================
    頁面全域邊距與大字體 (Index & Articles)
    ========================= */
-      body {
-        padding: 0 50px !important;
-      }
+body {
+    padding: 0 50px !important;
+}
 
-      @media (max-width: 768px) {
-        body {
-          padding: 0 20px !important;
-        }
-      }
+@media (max-width: 768px) {
+    body {
+        padding: 0 20px !important;
+    }
+}
 
-      /* =========================
+/* =========================
    Index頁面 Header & Nav 改良
    ========================= */
-      #header {
-        text-align: center;
-        padding: 60px 20px 40px !important;
-        background: linear-gradient(
-          135deg,
-          #1e3c72 0%,
-          #2a5298 100%
-        ) !important;
-        color: white !important;
-        border-radius: 0 0 20px 20px !important;
-        margin-bottom: 40px !important;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
-      }
+#header {
+  text-align: center;
+  padding: 60px 20px 40px !important;
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
+  color: white !important;
+  border-radius: 0 0 20px 20px !important;
+  margin-bottom: 40px !important;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+}
 
-      #header img {
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        margin-bottom: 20px;
-        max-width: 100%;
-        height: auto;
-      }
+#header img {
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  margin-bottom: 20px;
+  max-width: 100%;
+  height: auto;
+}
 
-      #header h1 {
-        font-family: "Noto Serif TC", serif !important;
-        font-weight: 900 !important; /* Noto Serif TC Black */
-        font-size: 48pt !important;
-        margin: 0 !important;
-        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4) !important;
-        letter-spacing: 5px !important;
-      }
+#header h1 {
+  font-family: "Noto Serif TC", serif !important;
+  font-weight: 900 !important; /* Noto Serif TC Black */
+  font-size: 48pt !important;
+  margin: 0 !important;
+  text-shadow: 3px 3px 6px rgba(0,0,0,0.4) !important;
+  letter-spacing: 5px !important;
+}
 
-      .main-nav {
-        display: flex !important;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 40px;
-        background: white;
-        padding: 15px 30px;
-        border-radius: 50px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-      }
+.main-nav {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 40px;
+  background: white;
+  padding: 15px 30px;
+  border-radius: 50px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
-      .main-nav ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        gap: 30px;
-      }
+.main-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 30px;
+}
 
-      .main-nav ul li a {
-        text-decoration: none;
-        color: #1e3c72 !important;
-        font-family: "Noto Serif TC", serif !important;
-        font-weight: 700 !important;
-        font-size: 24pt !important;
-        padding: 10px 24px;
-        border-radius: 30px;
-        transition:
-          background 0.3s,
-          color 0.3s;
-      }
+.main-nav ul li a {
+  text-decoration: none;
+  color: #1e3c72 !important;
+  font-family: "Noto Serif TC", serif !important;
+  font-weight: 700 !important;
+  font-size: 24pt !important;
+  padding: 10px 24px;
+  border-radius: 30px;
+  transition: background 0.3s, color 0.3s;
+}
 
-      .main-nav ul li a:hover {
-        background: #1e3c72 !important;
-        color: white !important;
-      }
+.main-nav ul li a:hover {
+  background: #1e3c72 !important;
+  color: white !important;
+}
 
-      /* =========================
+/* =========================
    卡片式目錄 (Index.html專用) - 動畫收折與大字體
    ========================= */
-      .card-grid {
-        display: grid !important;
-        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)) !important;
-        gap: 30px !important;
-        padding: 20px 0 50px 0 !important;
-      }
+.card-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)) !important;
+  gap: 30px !important;
+  padding: 20px 0 50px 0 !important;
+}
 
-      .card {
-        background: var(--article-bg, #ffffff) !important;
-        border-radius: var(--radius, 14px) !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
-        padding: 30px !important;
-        transition:
-          transform 0.3s ease,
-          box-shadow 0.3s ease !important;
-        display: flex !important;
-        flex-direction: column !important;
-        position: relative !important;
-      }
+.card {
+  background: var(--article-bg, #ffffff) !important;
+  border-radius: var(--radius, 14px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+  padding: 30px !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+  display: flex !important;
+  flex-direction: column !important;
+  position: relative !important;
+}
 
-      .card:hover {
-        transform: translateY(-8px) !important;
-        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15) !important;
-      }
+.card:hover {
+  transform: translateY(-8px) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15) !important;
+}
 
-      .card-title {
-        margin: 0 !important;
-        font-family: "Noto Sans TC", serif !important;
-        font-size: 24pt !important;
-        color: #333 !important;
-        line-height: 1.5 !important;
-        padding-bottom: 20px !important;
-        transition: color 0.3s !important;
-        cursor: pointer !important;
-      }
+.card-title {
+  margin: 0 !important;
+  font-family: "Noto Sans TC", serif !important;
+  font-size: 24pt !important;
+  color: #333 !important;
+  line-height: 1.5 !important;
+  padding-bottom: 20px !important;
+  transition: color 0.3s !important;
+  cursor: pointer !important;
+}
 
-      .card-links {
-        display: flex !important;
-        flex-wrap: wrap !important;
-        gap: 15px !important;
-        max-height: 0 !important;
-        opacity: 0 !important;
-        overflow: hidden !important;
-        margin-top: 0 !important;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        pointer-events: none;
-      }
+.card-links {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 15px !important;
+  max-height: 0 !important;
+  opacity: 0 !important;
+  overflow: hidden !important;
+  margin-top: 0 !important;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  pointer-events: none;
+}
 
-      .card:hover .card-title {
-        color: #0066cc !important;
-      }
+.card:hover .card-title {
+  color: #0066cc !important;
+}
 
-      .card:hover .card-links {
-        max-height: 800px !important;
-        opacity: 1 !important;
-        margin-top: 20px !important;
-        border-top: 2px solid #e0e0e0 !important;
-        padding-top: 20px !important;
-        pointer-events: auto;
-      }
+.card:hover .card-links {
+  max-height: 800px !important;
+  opacity: 1 !important;
+  margin-top: 20px !important;
+  border-top: 2px solid #e0e0e0 !important;
+  padding-top: 20px !important;
+  pointer-events: auto;
+}
 
-      .card-links .badge {
-        background: #f0f4f8 !important;
-        color: #0b57d0 !important;
-        padding: 10px 20px !important;
-        border-radius: 30px !important;
-        font-size: 20pt !important;
-        text-decoration: none !important;
-        font-weight: 500 !important;
-        font-family: "Noto Sans TC", sans-serif !important;
-        border: 2px solid transparent !important;
-        transition: all 0.2s ease !important;
-        display: inline-block;
-      }
+.card-links .badge {
+  background: #f0f4f8 !important;
+  color: #0b57d0 !important;
+  padding: 10px 20px !important;
+  border-radius: 30px !important;
+  font-size: 20pt !important;
+  text-decoration: none !important;
+  font-weight: 500 !important;
+  font-family: "Noto Sans TC", sans-serif !important;
+  border: 2px solid transparent !important;
+  transition: all 0.2s ease !important;
+  display: inline-block;
+}
 
-      .card-links .badge:hover {
-        background: #0b57d0 !important;
-        color: #fff !important;
-        border-color: #0b57d0 !important;
-        box-shadow: 0 4px 12px rgba(11, 87, 208, 0.3) !important;
-      }
-    </style>
+.card-links .badge:hover {
+  background: #0b57d0 !important;
+  color: #fff !important;
+  border-color: #0b57d0 !important;
+  box-shadow: 0 4px 12px rgba(11,87,208,0.3) !important;
+}
+</style>
 
-    <style id="nav-horizontal-fix">
-      /* 絕對橫向排列與防跑版 */
-      nav.main-nav {
-        display: flex !important;
-        flex-direction: row !important;
-        justify-content: flex-start !important;
-        align-items: center !important;
-        flex-wrap: nowrap !important; /* 絕對不換行 */
-        overflow-x: auto !important; /* 允許橫向捲動 */
-        overflow-y: hidden !important;
-        width: 100% !important;
-        max-width: 100vw !important;
-        background: #f8f9fa !important;
-        padding: 15px 20px !important;
-        margin: 20px 0 !important;
-        border-radius: 10px !important;
-        box-sizing: border-box !important;
-        -webkit-overflow-scrolling: touch !important;
-      }
+<style id="nav-horizontal-fix">
+/* 絕對橫向排列與防跑版 */
+nav.main-nav {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important; /* 絕對不換行 */
+    overflow-x: auto !important; /* 允許橫向捲動 */
+    overflow-y: hidden !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    background: #f8f9fa !important;
+    padding: 15px 20px !important;
+    margin: 20px 0 !important;
+    border-radius: 10px !important;
+    box-sizing: border-box !important;
+    -webkit-overflow-scrolling: touch !important;
+}
 
-      nav.main-nav ul {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: nowrap !important; /* 絕對不換行 */
-        justify-content: flex-start !important;
-        align-items: center !important;
-        width: max-content !important; /* 讓 ul 自適應內容長度 */
-        max-width: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        list-style: none !important;
-        gap: 15px !important;
-      }
+nav.main-nav ul {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important; /* 絕對不換行 */
+    justify-content: flex-start !important;
+    align-items: center !important;
+    width: max-content !important; /* 讓 ul 自適應內容長度 */
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    list-style: none !important;
+    gap: 15px !important;
+}
 
-      nav.main-nav ul li {
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        white-space: nowrap !important; /* 單一按鈕不折行 */
-        flex-shrink: 0 !important; /* 防止按鈕被擠壓 */
-      }
+nav.main-nav ul li {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    white-space: nowrap !important; /* 單一按鈕不折行 */
+    flex-shrink: 0 !important;      /* 防止按鈕被擠壓 */
+}
 
-      nav.main-nav ul li a,
-      nav.main-nav ul li span {
-        display: inline-block !important;
-        white-space: nowrap !important;
-      }
+nav.main-nav ul li a, 
+nav.main-nav ul li span {
+    display: inline-block !important;
+    white-space: nowrap !important;
+}
 
-      /* 如果是手機螢幕太小，強制消除 body 被限制寬度造成的影響 */
-      body {
-        max-width: 100% !important;
-      }
-    </style>
-  </head>
+/* 如果是手機螢幕太小，強制消除 body 被限制寬度造成的影響 */
+body {
+    max-width: 100% !important;
+}
+</style>
+
+</head>
 
   <body>
     <!-- 頁首 -->
@@ -253,1308 +246,441 @@
       <h1>河洛話讀古文</h1>
     </header>
     <!-- /#header -->
-
+    
     <!-- 內容 -->
     <main id="main">
       <!-- 側邊選單 -->
-      <div id="articles">
-        <div class="card-grid">
-          <div class="card">
-            <h2 class="card-title">《上有力量的每日祈禱文》【白話音】</h2>
-            <div class="card-links">
-              <a
-                href="《上有力量的每日祈禱文》【白話音】十五音.html"
-                class="badge"
-                target="_blank"
-                title="《上有力量的每日祈禱文》【白話音】 - 十五音"
-                >十五音</a
-              >
-              <a
-                href="《上有力量的每日祈禱文》【白話音】台羅拼音.html"
-                class="badge"
-                target="_blank"
-                title="《上有力量的每日祈禱文》【白話音】 - 台羅拼音"
-                >台羅拼音</a
-              >
-              <a
-                href="《上有力量的每日祈禱文》【白話音】台羅改良式.html"
-                class="badge"
-                target="_blank"
-                title="《上有力量的每日祈禱文》【白話音】 - 台羅改良式"
-                >台羅改良式</a
-              >
-              <a
-                href="《上有力量的每日祈禱文》【白話音】台語音標.html"
-                class="badge"
-                target="_blank"
-                title="《上有力量的每日祈禱文》【白話音】 - 台語音標"
-                >台語音標</a
-              >
-              <a
-                href="《上有力量的每日祈禱文》【白話音】方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《上有力量的每日祈禱文》【白話音】 - 方音符號"
-                >方音符號</a
-              >
-              <a
-                href="《上有力量的每日祈禱文》【白話音】白話字.html"
-                class="badge"
-                target="_blank"
-                title="《上有力量的每日祈禱文》【白話音】 - 白話字"
-                >白話字</a
-              >
-              <a
-                href="《上有力量的每日祈禱文》【白話音】閩拼方案.html"
-                class="badge"
-                target="_blank"
-                title="《上有力量的每日祈禱文》【白話音】 - 閩拼方案"
-                >閩拼方案</a
-              >
-              <a
-                href="《上有力量的每日祈禱文》【白話音】雅俗通.html"
-                class="badge"
-                target="_blank"
-                title="《上有力量的每日祈禱文》【白話音】 - 雅俗通"
-                >雅俗通</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《中庸。在上位不陵下》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《中庸。在上位不陵下》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《中庸。在上位不陵下》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《中庸》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《中庸》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《中庸》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">
-              《了凡四訓【第一篇、立命之學】》【文讀音】
-            </h2>
-            <div class="card-links">
-              <a
-                href="《了凡四訓【第一篇、立命之學】》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《了凡四訓【第一篇、立命之學】》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">
-              《了凡四訓【第三篇、積善之方】》【文讀音】
-            </h2>
-            <div class="card-links">
-              <a
-                href="《了凡四訓【第三篇、積善之方】》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《了凡四訓【第三篇、積善之方】》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">
-              《了凡四訓【第二篇、改過之法】》【文讀音】
-            </h2>
-            <div class="card-links">
-              <a
-                href="《了凡四訓【第二篇、改過之法】》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《了凡四訓【第二篇、改過之法】》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">
-              《了凡四訓【第四篇、謙德之效】》【文讀音】
-            </h2>
-            <div class="card-links">
-              <a
-                href="《了凡四訓【第四篇、謙德之效】》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《了凡四訓【第四篇、謙德之效】》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《六國論》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《六國論》【文讀音】十五音.html"
-                class="badge"
-                target="_blank"
-                title="《六國論》【文讀音】 - 十五音"
-                >十五音</a
-              >
-              <a
-                href="《六國論》【文讀音】台羅拼音.html"
-                class="badge"
-                target="_blank"
-                title="《六國論》【文讀音】 - 台羅拼音"
-                >台羅拼音</a
-              >
-              <a
-                href="《六國論》【文讀音】方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《六國論》【文讀音】 - 方音符號"
-                >方音符號</a
-              >
-              <a
-                href="《六國論》【文讀音】白話字.html"
-                class="badge"
-                target="_blank"
-                title="《六國論》【文讀音】 - 白話字"
-                >白話字</a
-              >
-              <a
-                href="《六國論》【文讀音】閩拼方案.html"
-                class="badge"
-                target="_blank"
-                title="《六國論》【文讀音】 - 閩拼方案"
-                >閩拼方案</a
-              >
-              <a
-                href="《六國論》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《六國論》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《出師表》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《出師表》【文讀音】十五音＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《出師表》【文讀音】 - 十五音＋方音符號"
-                >十五音＋方音符號</a
-              >
-              <a
-                href="《出師表》【文讀音】雅俗通＋方音符號R1.html"
-                class="badge"
-                target="_blank"
-                title="《出師表》【文讀音】 - 雅俗通＋方音符號R1"
-                >雅俗通＋方音符號R1</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《出師表》【河洛白話音】</h2>
-            <div class="card-links">
-              <a
-                href="《出師表》【河洛白話音】.html"
-                class="badge"
-                target="_blank"
-                title="《出師表》【河洛白話音】 - 開啟"
-                >開啟</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《前赤壁賦》</h2>
-            <div class="card-links">
-              <a
-                href="《前赤壁賦》.html"
-                class="badge"
-                target="_blank"
-                title="《前赤壁賦》 - 開啟"
-                >開啟</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《前赤壁賦》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《前赤壁賦》【文讀音】十五音+方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《前赤壁賦》【文讀音】 - 十五音+方音符號"
-                >十五音+方音符號</a
-              >
-              <a
-                href="《前赤壁賦》【文讀音】十五音+閩拼調符.html"
-                class="badge"
-                target="_blank"
-                title="《前赤壁賦》【文讀音】 - 十五音+閩拼調符"
-                >十五音+閩拼調符</a
-              >
-              <a
-                href="《前赤壁賦》【文讀音】十五音反切.html"
-                class="badge"
-                target="_blank"
-                title="《前赤壁賦》【文讀音】 - 十五音反切"
-                >十五音反切</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《始得西山宴遊記》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《始得西山宴遊記》【文讀音】方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《始得西山宴遊記》【文讀音】 - 方音符號"
-                >方音符號</a
-              >
-              <a
-                href="《始得西山宴遊記》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《始得西山宴遊記》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《定風波》</h2>
-            <div class="card-links">
-              <a
-                href="《定風波》_閩拼調號.html"
-                class="badge"
-                target="_blank"
-                title="《定風波》 - 閩拼調號"
-                >閩拼調號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《定風波》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《定風波》【文讀音】台語音標＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《定風波》【文讀音】 - 台語音標＋方音符號"
-                >台語音標＋方音符號</a
-              >
-              <a
-                href="《定風波》【文讀音】閩拼調符＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《定風波》【文讀音】 - 閩拼調符＋方音符號"
-                >閩拼調符＋方音符號</a
-              >
-              <a
-                href="《定風波》【文讀音】閩拼調符＋閩拼調符.html"
-                class="badge"
-                target="_blank"
-                title="《定風波》【文讀音】 - 閩拼調符＋閩拼調符"
-                >閩拼調符＋閩拼調符</a
-              >
-              <a
-                href="《定風波》【文讀音】閩拼調號＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《定風波》【文讀音】 - 閩拼調號＋方音符號"
-                >閩拼調號＋方音符號</a
-              >
-              <a
-                href="《定風波》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《定風波》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《定風波》【白話音】</h2>
-            <div class="card-links">
-              <a
-                href="《定風波》【白話音】閩拼調符＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《定風波》【白話音】 - 閩拼調符＋方音符號"
-                >閩拼調符＋方音符號</a
-              >
-              <a
-                href="《定風波》【白話音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《定風波》【白話音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《寒窯賦》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《寒窯賦》【文讀音】閩拼調符.html"
-                class="badge"
-                target="_blank"
-                title="《寒窯賦》【文讀音】 - 閩拼調符"
-                >閩拼調符</a
-              >
-              <a
-                href="《寒窯賦》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《寒窯賦》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《尚有力量的每日祈禱文》</h2>
-            <div class="card-links">
-              <a
-                href="《尚有力量的每日祈禱文》_雅俗通.html"
-                class="badge"
-                target="_blank"
-                title="《尚有力量的每日祈禱文》 - 雅俗通"
-                >雅俗通</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《尚有力量的每日祈禱文》【河洛白話音】</h2>
-            <div class="card-links">
-              <a
-                href="《尚有力量的每日祈禱文》【河洛白話音】.html"
-                class="badge"
-                target="_blank"
-                title="《尚有力量的每日祈禱文》【河洛白話音】 - 開啟"
-                >開啟</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《岳陽樓記》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《岳陽樓記》【文讀音】十五音.html"
-                class="badge"
-                target="_blank"
-                title="《岳陽樓記》【文讀音】 - 十五音"
-                >十五音</a
-              >
-              <a
-                href="《岳陽樓記》【文讀音】方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《岳陽樓記》【文讀音】 - 方音符號"
-                >方音符號</a
-              >
-              <a
-                href="《岳陽樓記》【文讀音】閩拼調符.html"
-                class="badge"
-                target="_blank"
-                title="《岳陽樓記》【文讀音】 - 閩拼調符"
-                >閩拼調符</a
-              >
-              <a
-                href="《岳陽樓記》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《岳陽樓記》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《心經》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《心經》【文讀音】十五音.html"
-                class="badge"
-                target="_blank"
-                title="《心經》【文讀音】 - 十五音"
-                >十五音</a
-              >
-              <a
-                href="《心經》【文讀音】台羅拼音.html"
-                class="badge"
-                target="_blank"
-                title="《心經》【文讀音】 - 台羅拼音"
-                >台羅拼音</a
-              >
-              <a
-                href="《心經》【文讀音】台語音標.html"
-                class="badge"
-                target="_blank"
-                title="《心經》【文讀音】 - 台語音標"
-                >台語音標</a
-              >
-              <a
-                href="《心經》【文讀音】方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《心經》【文讀音】 - 方音符號"
-                >方音符號</a
-              >
-              <a
-                href="《心經》【文讀音】白話字.html"
-                class="badge"
-                target="_blank"
-                title="《心經》【文讀音】 - 白話字"
-                >白話字</a
-              >
-              <a
-                href="《心經》【文讀音】閩拼方案.html"
-                class="badge"
-                target="_blank"
-                title="《心經》【文讀音】 - 閩拼方案"
-                >閩拼方案</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《忘盡心中情》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《忘盡心中情》【文讀音】台羅拼音＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《忘盡心中情》【文讀音】 - 台羅拼音＋方音符號"
-                >台羅拼音＋方音符號</a
-              >
-              <a
-                href="《忘盡心中情》【文讀音】台語音標＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《忘盡心中情》【文讀音】 - 台語音標＋方音符號"
-                >台語音標＋方音符號</a
-              >
-              <a
-                href="《忘盡心中情》【文讀音】閩拼調符＋雅俗通.html"
-                class="badge"
-                target="_blank"
-                title="《忘盡心中情》【文讀音】 - 閩拼調符＋雅俗通"
-                >閩拼調符＋雅俗通</a
-              >
-              <a
-                href="《忘盡心中情》【文讀音】閩拼調號＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《忘盡心中情》【文讀音】 - 閩拼調號＋方音符號"
-                >閩拼調號＋方音符號</a
-              >
-              <a
-                href="《忘盡心中情》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《忘盡心中情》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-              <a
-                href="《忘盡心中情》【文讀音】雅俗通＋閩拼調號.html"
-                class="badge"
-                target="_blank"
-                title="《忘盡心中情》【文讀音】 - 雅俗通＋閩拼調號"
-                >雅俗通＋閩拼調號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《春曉》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《春曉》【文讀音】閩拼方案.html"
-                class="badge"
-                target="_blank"
-                title="《春曉》【文讀音】 - 閩拼方案"
-                >閩拼方案</a
-              >
-              <a
-                href="《春曉》【文讀音】閩拼調號＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《春曉》【文讀音】 - 閩拼調號＋方音符號"
-                >閩拼調號＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《望春風》【白話音】</h2>
-            <div class="card-links">
-              <a
-                href="《望春風》【白話音】閩拼調號＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《望春風》【白話音】 - 閩拼調號＋方音符號"
-                >閩拼調號＋方音符號</a
-              >
-              <a
-                href="《望春風》【白話音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《望春風》【白話音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《桃花源記》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《桃花源記》【文讀音】閩拼調符＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《桃花源記》【文讀音】 - 閩拼調符＋方音符號"
-                >閩拼調符＋方音符號</a
-              >
-              <a
-                href="《桃花源記》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《桃花源記》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《正氣歌》【廣韻讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《正氣歌》【廣韻讀音】.html"
-                class="badge"
-                target="_blank"
-                title="《正氣歌》【廣韻讀音】 - 開啟"
-                >開啟</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《正氣歌》【河洛白話音】</h2>
-            <div class="card-links">
-              <a
-                href="《正氣歌》【河洛白話音】.html"
-                class="badge"
-                target="_blank"
-                title="《正氣歌》【河洛白話音】 - 開啟"
-                >開啟</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《歸去來辭》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《歸去來辭》【文讀音】閩拼方案.html"
-                class="badge"
-                target="_blank"
-                title="《歸去來辭》【文讀音】 - 閩拼方案"
-                >閩拼方案</a
-              >
-              <a
-                href="《歸去來辭》【文讀音】閩拼調符＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《歸去來辭》【文讀音】 - 閩拼調符＋方音符號"
-                >閩拼調符＋方音符號</a
-              >
-              <a
-                href="《歸去來辭》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《歸去來辭》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《歸去來辭》【河洛白話音】</h2>
-            <div class="card-links">
-              <a
-                href="《歸去來辭》【河洛白話音】.html"
-                class="badge"
-                target="_blank"
-                title="《歸去來辭》【河洛白話音】 - 開啟"
-                >開啟</a
-              >
-              <a
-                href="《歸去來辭》【河洛白話音】_十五音.html"
-                class="badge"
-                target="_blank"
-                title="《歸去來辭》【河洛白話音】 - 十五音"
-                >十五音</a
-              >
-              <a
-                href="《歸去來辭》【河洛白話音】_台羅拼音.html"
-                class="badge"
-                target="_blank"
-                title="《歸去來辭》【河洛白話音】 - 台羅拼音"
-                >台羅拼音</a
-              >
-              <a
-                href="《歸去來辭》【河洛白話音】_台語音標.html"
-                class="badge"
-                target="_blank"
-                title="《歸去來辭》【河洛白話音】 - 台語音標"
-                >台語音標</a
-              >
-              <a
-                href="《歸去來辭》【河洛白話音】_方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《歸去來辭》【河洛白話音】 - 方音符號"
-                >方音符號</a
-              >
-              <a
-                href="《歸去來辭》【河洛白話音】_白話字.html"
-                class="badge"
-                target="_blank"
-                title="《歸去來辭》【河洛白話音】 - 白話字"
-                >白話字</a
-              >
-              <a
-                href="《歸去來辭》【河洛白話音】_閩拼方案.html"
-                class="badge"
-                target="_blank"
-                title="《歸去來辭》【河洛白話音】 - 閩拼方案"
-                >閩拼方案</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《歸去來辭》【白話音】</h2>
-            <div class="card-links">
-              <a
-                href="《歸去來辭》【白話音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《歸去來辭》【白話音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《水龍吟·登建康賞心亭》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《水龍吟·登建康賞心亭》【文讀音】十五音.html"
-                class="badge"
-                target="_blank"
-                title="《水龍吟·登建康賞心亭》【文讀音】 - 十五音"
-                >十五音</a
-              >
-              <a
-                href="《水龍吟·登建康賞心亭》【文讀音】台羅拼音.html"
-                class="badge"
-                target="_blank"
-                title="《水龍吟·登建康賞心亭》【文讀音】 - 台羅拼音"
-                >台羅拼音</a
-              >
-              <a
-                href="《水龍吟·登建康賞心亭》【文讀音】台羅改良式.html"
-                class="badge"
-                target="_blank"
-                title="《水龍吟·登建康賞心亭》【文讀音】 - 台羅改良式"
-                >台羅改良式</a
-              >
-              <a
-                href="《水龍吟·登建康賞心亭》【文讀音】方音符號注音.html"
-                class="badge"
-                target="_blank"
-                title="《水龍吟·登建康賞心亭》【文讀音】 - 方音符號注音"
-                >方音符號注音</a
-              >
-              <a
-                href="《水龍吟·登建康賞心亭》【文讀音】白話字拼音.html"
-                class="badge"
-                target="_blank"
-                title="《水龍吟·登建康賞心亭》【文讀音】 - 白話字拼音"
-                >白話字拼音</a
-              >
-              <a
-                href="《水龍吟·登建康賞心亭》【文讀音】閩拼標音.html"
-                class="badge"
-                target="_blank"
-                title="《水龍吟·登建康賞心亭》【文讀音】 - 閩拼標音"
-                >閩拼標音</a
-              >
-              <a
-                href="《水龍吟·登建康賞心亭》【文讀音】雙排注音.html"
-                class="badge"
-                target="_blank"
-                title="《水龍吟·登建康賞心亭》【文讀音】 - 雙排注音"
-                >雙排注音</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《永遇樂．京口北固亭懷古》</h2>
-            <div class="card-links">
-              <a
-                href="《永遇樂．京口北固亭懷古》_十五音.html"
-                class="badge"
-                target="_blank"
-                title="《永遇樂．京口北固亭懷古》 - 十五音"
-                >十五音</a
-              >
-              <a
-                href="《永遇樂．京口北固亭懷古》_方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《永遇樂．京口北固亭懷古》 - 方音符號"
-                >方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《涼州詞》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《涼州詞》【文讀音】台語音標＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《涼州詞》【文讀音】 - 台語音標＋方音符號"
-                >台語音標＋方音符號</a
-              >
-              <a
-                href="《涼州詞》【文讀音】注音二式＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《涼州詞》【文讀音】 - 注音二式＋方音符號"
-                >注音二式＋方音符號</a
-              >
-              <a
-                href="《涼州詞》【文讀音】閩拼調號＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《涼州詞》【文讀音】 - 閩拼調號＋方音符號"
-                >閩拼調號＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《深慮論》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《深慮論》【文讀音】十五音＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《深慮論》【文讀音】 - 十五音＋方音符號"
-                >十五音＋方音符號</a
-              >
-              <a
-                href="《深慮論》【文讀音】台羅拼音＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《深慮論》【文讀音】 - 台羅拼音＋方音符號"
-                >台羅拼音＋方音符號</a
-              >
-              <a
-                href="《深慮論》【文讀音】注音二式＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《深慮論》【文讀音】 - 注音二式＋方音符號"
-                >注音二式＋方音符號</a
-              >
-              <a
-                href="《深慮論》【文讀音】白話字＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《深慮論》【文讀音】 - 白話字＋方音符號"
-                >白話字＋方音符號</a
-              >
-              <a
-                href="《深慮論》【文讀音】閩拼調符＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《深慮論》【文讀音】 - 閩拼調符＋方音符號"
-                >閩拼調符＋方音符號</a
-              >
-              <a
-                href="《深慮論》【文讀音】閩拼調號＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《深慮論》【文讀音】 - 閩拼調號＋方音符號"
-                >閩拼調號＋方音符號</a
-              >
-              <a
-                href="《深慮論》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《深慮論》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《滕王閣序》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《滕王閣序》【文讀音】閩拼調符＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《滕王閣序》【文讀音】 - 閩拼調符＋方音符號"
-                >閩拼調符＋方音符號</a
-              >
-              <a
-                href="《滕王閣序》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《滕王閣序》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《漁父》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《漁父》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《漁父》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《登金陵鳳凰台》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《登金陵鳳凰台》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《登金陵鳳凰台》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《相󠇡見歡󠇡·無󠇡言獨上西樓󠇡》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《相󠇡見歡󠇡·無󠇡言獨上西樓󠇡》【文讀音】十五音＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《相󠇡見歡󠇡·無󠇡言獨上西樓󠇡》【文讀音】 - 十五音＋方音符號"
-                >十五音＋方音符號</a
-              >
-              <a
-                href="《相󠇡見歡󠇡·無󠇡言獨上西樓󠇡》【文讀音】閩拼調符＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《相󠇡見歡󠇡·無󠇡言獨上西樓󠇡》【文讀音】 - 閩拼調符＋方音符號"
-                >閩拼調符＋方音符號</a
-              >
-              <a
-                href="《相󠇡見歡󠇡·無󠇡言獨上西樓󠇡》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《相󠇡見歡󠇡·無󠇡言獨上西樓󠇡》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《短歌行》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《短歌行》【文讀音】方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《短歌行》【文讀音】 - 方音符號"
-                >方音符號</a
-              >
-              <a
-                href="《短歌行》【文讀音】閩拼調符.html"
-                class="badge"
-                target="_blank"
-                title="《短歌行》【文讀音】 - 閩拼調符"
-                >閩拼調符</a
-              >
-              <a
-                href="《短歌行》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《短歌行》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《秋離》【白話音】</h2>
-            <div class="card-links">
-              <a
-                href="《秋離》【白話音】閩拼調符.html"
-                class="badge"
-                target="_blank"
-                title="《秋離》【白話音】 - 閩拼調符"
-                >閩拼調符</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《素書》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《素書》【文讀音】十五音.html"
-                class="badge"
-                target="_blank"
-                title="《素書》【文讀音】 - 十五音"
-                >十五音</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《般若波羅蜜多心經》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《般若波羅蜜多心經》【文讀音】十五音.html"
-                class="badge"
-                target="_blank"
-                title="《般若波羅蜜多心經》【文讀音】 - 十五音"
-                >十五音</a
-              >
-              <a
-                href="《般若波羅蜜多心經》【文讀音】十五音＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《般若波羅蜜多心經》【文讀音】 - 十五音＋方音符號"
-                >十五音＋方音符號</a
-              >
-              <a
-                href="《般若波羅蜜多心經》【文讀音】閩拼調號.html"
-                class="badge"
-                target="_blank"
-                title="《般若波羅蜜多心經》【文讀音】 - 閩拼調號"
-                >閩拼調號</a
-              >
-              <a
-                href="《般若波羅蜜多心經》【文讀音】雅俗通.html"
-                class="badge"
-                target="_blank"
-                title="《般若波羅蜜多心經》【文讀音】 - 雅俗通"
-                >雅俗通</a
-              >
-              <a
-                href="《般若波羅蜜多心經》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《般若波羅蜜多心經》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《蒹葭》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《蒹葭》【文讀音】注音二式＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《蒹葭》【文讀音】 - 注音二式＋方音符號"
-                >注音二式＋方音符號</a
-              >
-              <a
-                href="《蒹葭》【文讀音】閩拼調號＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《蒹葭》【文讀音】 - 閩拼調號＋方音符號"
-                >閩拼調號＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《蘇武牧羊》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《蘇武牧羊》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《蘇武牧羊》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《蘭亭集序》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《蘭亭集序》【文讀音】十五音＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《蘭亭集序》【文讀音】 - 十五音＋方音符號"
-                >十五音＋方音符號</a
-              >
-              <a
-                href="《蘭亭集序》【文讀音】閩拼調符.html"
-                class="badge"
-                target="_blank"
-                title="《蘭亭集序》【文讀音】 - 閩拼調符"
-                >閩拼調符</a
-              >
-              <a
-                href="《蘭亭集序》【文讀音】雅俗通.html"
-                class="badge"
-                target="_blank"
-                title="《蘭亭集序》【文讀音】 - 雅俗通"
-                >雅俗通</a
-              >
-              <a
-                href="《蘭亭集序》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《蘭亭集序》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《蘭亭集序》【白話音】</h2>
-            <div class="card-links">
-              <a
-                href="《蘭亭集序》【白話音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《蘭亭集序》【白話音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《衣帶贊》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《衣帶贊》【文讀音】閩拼調符＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《衣帶贊》【文讀音】 - 閩拼調符＋方音符號"
-                >閩拼調符＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《詩經。周南。桃夭》【白話音】</h2>
-            <div class="card-links">
-              <a
-                href="《詩經。周南。桃夭》【白話音】_漢字注音.html"
-                class="badge"
-                target="_blank"
-                title="《詩經。周南。桃夭》【白話音】 - 漢字注音"
-                >漢字注音</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《詩經。小雅。採薇》【白話音】</h2>
-            <div class="card-links">
-              <a
-                href="《詩經。小雅。採薇》【白話音】.html"
-                class="badge"
-                target="_blank"
-                title="《詩經。小雅。採薇》【白話音】 - 開啟"
-                >開啟</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《詩經．小雅．鹿鳴》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《詩經．小雅．鹿鳴》【文讀音】注音二式＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《詩經．小雅．鹿鳴》【文讀音】 - 注音二式＋方音符號"
-                >注音二式＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《諫太宗十思疏》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《諫太宗十思疏》【文讀音】台語音標＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《諫太宗十思疏》【文讀音】 - 台語音標＋方音符號"
-                >台語音標＋方音符號</a
-              >
-              <a
-                href="《諫太宗十思疏》【文讀音】閩拼調符＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《諫太宗十思疏》【文讀音】 - 閩拼調符＋方音符號"
-                >閩拼調符＋方音符號</a
-              >
-              <a
-                href="《諫太宗十思疏》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《諫太宗十思疏》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《赤壁賦》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《赤壁賦》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《赤壁賦》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《道德經25》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《道德經25》【文讀音】閩拼調符.html"
-                class="badge"
-                target="_blank"
-                title="《道德經25》【文讀音】 - 閩拼調符"
-                >閩拼調符</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《錦瑟》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《錦瑟》【文讀音】閩拼調符.html"
-                class="badge"
-                target="_blank"
-                title="《錦瑟》【文讀音】 - 閩拼調符"
-                >閩拼調符</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《關山月》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《關山月》【文讀音】閩拼調符＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《關山月》【文讀音】 - 閩拼調符＋方音符號"
-                >閩拼調符＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《陋室銘》【文讀音】</h2>
-            <div class="card-links">
-              <a
-                href="《陋室銘》【文讀音】十五音＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《陋室銘》【文讀音】 - 十五音＋方音符號"
-                >十五音＋方音符號</a
-              >
-              <a
-                href="《陋室銘》【文讀音】台羅拼音.html"
-                class="badge"
-                target="_blank"
-                title="《陋室銘》【文讀音】 - 台羅拼音"
-                >台羅拼音</a
-              >
-              <a
-                href="《陋室銘》【文讀音】台語音標.html"
-                class="badge"
-                target="_blank"
-                title="《陋室銘》【文讀音】 - 台語音標"
-                >台語音標</a
-              >
-              <a
-                href="《陋室銘》【文讀音】方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《陋室銘》【文讀音】 - 方音符號"
-                >方音符號</a
-              >
-              <a
-                href="《陋室銘》【文讀音】注音二式＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《陋室銘》【文讀音】 - 注音二式＋方音符號"
-                >注音二式＋方音符號</a
-              >
-              <a
-                href="《陋室銘》【文讀音】白話字.html"
-                class="badge"
-                target="_blank"
-                title="《陋室銘》【文讀音】 - 白話字"
-                >白話字</a
-              >
-              <a
-                href="《陋室銘》【文讀音】閩拼調符＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《陋室銘》【文讀音】 - 閩拼調符＋方音符號"
-                >閩拼調符＋方音符號</a
-              >
-              <a
-                href="《陋室銘》【文讀音】雅俗通.html"
-                class="badge"
-                target="_blank"
-                title="《陋室銘》【文讀音】 - 雅俗通"
-                >雅俗通</a
-              >
-              <a
-                href="《陋室銘》【文讀音】雅俗通＋方音符號.html"
-                class="badge"
-                target="_blank"
-                title="《陋室銘》【文讀音】 - 雅俗通＋方音符號"
-                >雅俗通＋方音符號</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">《雪中紅》【白話音】</h2>
-            <div class="card-links">
-              <a
-                href="《雪中紅》【白話音】閩拼注音.html"
-                class="badge"
-                target="_blank"
-                title="《雪中紅》【白話音】 - 閩拼注音"
-                >閩拼注音</a
-              >
-              <a
-                href="《雪中紅》【白話音】閩拼調號.html"
-                class="badge"
-                target="_blank"
-                title="《雪中紅》【白話音】 - 閩拼調號"
-                >閩拼調號</a
-              >
-              <a
-                href="《雪中紅》【白話音】閩拼調號＋閩拼注音.html"
-                class="badge"
-                target="_blank"
-                title="《雪中紅》【白話音】 - 閩拼調號＋閩拼注音"
-                >閩拼調號＋閩拼注音</a
-              >
-            </div>
-          </div>
-        </div>
-      </div>
+      <div id="articles"><div class="card-grid">
+  <div class="card">
+    <h2 class="card-title">《上有力量的每日祈禱文》【白話音】</h2>
+    <div class="card-links">
+      <a href="《上有力量的每日祈禱文》【白話音】十五音.html" class="badge" target="_blank" title="《上有力量的每日祈禱文》【白話音】 - 十五音">十五音</a>
+      <a href="《上有力量的每日祈禱文》【白話音】台羅拼音.html" class="badge" target="_blank" title="《上有力量的每日祈禱文》【白話音】 - 台羅拼音">台羅拼音</a>
+      <a href="《上有力量的每日祈禱文》【白話音】台羅改良式.html" class="badge" target="_blank" title="《上有力量的每日祈禱文》【白話音】 - 台羅改良式">台羅改良式</a>
+      <a href="《上有力量的每日祈禱文》【白話音】台語音標.html" class="badge" target="_blank" title="《上有力量的每日祈禱文》【白話音】 - 台語音標">台語音標</a>
+      <a href="《上有力量的每日祈禱文》【白話音】方音符號.html" class="badge" target="_blank" title="《上有力量的每日祈禱文》【白話音】 - 方音符號">方音符號</a>
+      <a href="《上有力量的每日祈禱文》【白話音】白話字.html" class="badge" target="_blank" title="《上有力量的每日祈禱文》【白話音】 - 白話字">白話字</a>
+      <a href="《上有力量的每日祈禱文》【白話音】閩拼方案.html" class="badge" target="_blank" title="《上有力量的每日祈禱文》【白話音】 - 閩拼方案">閩拼方案</a>
+      <a href="《上有力量的每日祈禱文》【白話音】雅俗通.html" class="badge" target="_blank" title="《上有力量的每日祈禱文》【白話音】 - 雅俗通">雅俗通</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《中庸。在上位不陵下》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《中庸。在上位不陵下》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《中庸。在上位不陵下》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《中庸》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《中庸》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《中庸》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《了凡四訓【第一篇、立命之學】》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《了凡四訓【第一篇、立命之學】》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《了凡四訓【第一篇、立命之學】》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《了凡四訓【第三篇、積善之方】》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《了凡四訓【第三篇、積善之方】》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《了凡四訓【第三篇、積善之方】》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《了凡四訓【第二篇、改過之法】》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《了凡四訓【第二篇、改過之法】》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《了凡四訓【第二篇、改過之法】》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《了凡四訓【第四篇、謙德之效】》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《了凡四訓【第四篇、謙德之效】》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《了凡四訓【第四篇、謙德之效】》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《六國論》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《六國論》【文讀音】十五音.html" class="badge" target="_blank" title="《六國論》【文讀音】 - 十五音">十五音</a>
+      <a href="《六國論》【文讀音】台羅拼音.html" class="badge" target="_blank" title="《六國論》【文讀音】 - 台羅拼音">台羅拼音</a>
+      <a href="《六國論》【文讀音】方音符號.html" class="badge" target="_blank" title="《六國論》【文讀音】 - 方音符號">方音符號</a>
+      <a href="《六國論》【文讀音】白話字.html" class="badge" target="_blank" title="《六國論》【文讀音】 - 白話字">白話字</a>
+      <a href="《六國論》【文讀音】閩拼方案.html" class="badge" target="_blank" title="《六國論》【文讀音】 - 閩拼方案">閩拼方案</a>
+      <a href="《六國論》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《六國論》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《出師表》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《出師表》【文讀音】十五音＋方音符號.html" class="badge" target="_blank" title="《出師表》【文讀音】 - 十五音＋方音符號">十五音＋方音符號</a>
+      <a href="《出師表》【文讀音】雅俗通＋方音符號R1.html" class="badge" target="_blank" title="《出師表》【文讀音】 - 雅俗通＋方音符號R1">雅俗通＋方音符號R1</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《出師表》【河洛白話音】</h2>
+    <div class="card-links">
+      <a href="《出師表》【河洛白話音】.html" class="badge" target="_blank" title="《出師表》【河洛白話音】 - 開啟">開啟</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《前赤壁賦》</h2>
+    <div class="card-links">
+      <a href="《前赤壁賦》.html" class="badge" target="_blank" title="《前赤壁賦》 - 開啟">開啟</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《前赤壁賦》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《前赤壁賦》【文讀音】十五音+方音符號.html" class="badge" target="_blank" title="《前赤壁賦》【文讀音】 - 十五音+方音符號">十五音+方音符號</a>
+      <a href="《前赤壁賦》【文讀音】十五音+閩拼調符.html" class="badge" target="_blank" title="《前赤壁賦》【文讀音】 - 十五音+閩拼調符">十五音+閩拼調符</a>
+      <a href="《前赤壁賦》【文讀音】十五音反切.html" class="badge" target="_blank" title="《前赤壁賦》【文讀音】 - 十五音反切">十五音反切</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《始得西山宴遊記》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《始得西山宴遊記》【文讀音】方音符號.html" class="badge" target="_blank" title="《始得西山宴遊記》【文讀音】 - 方音符號">方音符號</a>
+      <a href="《始得西山宴遊記》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《始得西山宴遊記》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《定風波》</h2>
+    <div class="card-links">
+      <a href="《定風波》_閩拼調號.html" class="badge" target="_blank" title="《定風波》 - 閩拼調號">閩拼調號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《定風波》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《定風波》【文讀音】台語音標＋方音符號.html" class="badge" target="_blank" title="《定風波》【文讀音】 - 台語音標＋方音符號">台語音標＋方音符號</a>
+      <a href="《定風波》【文讀音】閩拼調符＋方音符號.html" class="badge" target="_blank" title="《定風波》【文讀音】 - 閩拼調符＋方音符號">閩拼調符＋方音符號</a>
+      <a href="《定風波》【文讀音】閩拼調符＋閩拼調符.html" class="badge" target="_blank" title="《定風波》【文讀音】 - 閩拼調符＋閩拼調符">閩拼調符＋閩拼調符</a>
+      <a href="《定風波》【文讀音】閩拼調號＋方音符號.html" class="badge" target="_blank" title="《定風波》【文讀音】 - 閩拼調號＋方音符號">閩拼調號＋方音符號</a>
+      <a href="《定風波》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《定風波》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《定風波》【白話音】</h2>
+    <div class="card-links">
+      <a href="《定風波》【白話音】閩拼調符＋方音符號.html" class="badge" target="_blank" title="《定風波》【白話音】 - 閩拼調符＋方音符號">閩拼調符＋方音符號</a>
+      <a href="《定風波》【白話音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《定風波》【白話音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《寒窯賦》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《寒窯賦》【文讀音】閩拼調符.html" class="badge" target="_blank" title="《寒窯賦》【文讀音】 - 閩拼調符">閩拼調符</a>
+      <a href="《寒窯賦》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《寒窯賦》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《尚有力量的每日祈禱文》</h2>
+    <div class="card-links">
+      <a href="《尚有力量的每日祈禱文》_雅俗通.html" class="badge" target="_blank" title="《尚有力量的每日祈禱文》 - 雅俗通">雅俗通</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《尚有力量的每日祈禱文》【河洛白話音】</h2>
+    <div class="card-links">
+      <a href="《尚有力量的每日祈禱文》【河洛白話音】.html" class="badge" target="_blank" title="《尚有力量的每日祈禱文》【河洛白話音】 - 開啟">開啟</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《岳陽樓記》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《岳陽樓記》【文讀音】十五音.html" class="badge" target="_blank" title="《岳陽樓記》【文讀音】 - 十五音">十五音</a>
+      <a href="《岳陽樓記》【文讀音】方音符號.html" class="badge" target="_blank" title="《岳陽樓記》【文讀音】 - 方音符號">方音符號</a>
+      <a href="《岳陽樓記》【文讀音】閩拼調符.html" class="badge" target="_blank" title="《岳陽樓記》【文讀音】 - 閩拼調符">閩拼調符</a>
+      <a href="《岳陽樓記》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《岳陽樓記》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《心經》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《心經》【文讀音】十五音.html" class="badge" target="_blank" title="《心經》【文讀音】 - 十五音">十五音</a>
+      <a href="《心經》【文讀音】台羅拼音.html" class="badge" target="_blank" title="《心經》【文讀音】 - 台羅拼音">台羅拼音</a>
+      <a href="《心經》【文讀音】台語音標.html" class="badge" target="_blank" title="《心經》【文讀音】 - 台語音標">台語音標</a>
+      <a href="《心經》【文讀音】方音符號.html" class="badge" target="_blank" title="《心經》【文讀音】 - 方音符號">方音符號</a>
+      <a href="《心經》【文讀音】白話字.html" class="badge" target="_blank" title="《心經》【文讀音】 - 白話字">白話字</a>
+      <a href="《心經》【文讀音】閩拼方案.html" class="badge" target="_blank" title="《心經》【文讀音】 - 閩拼方案">閩拼方案</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《忘盡心中情》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《忘盡心中情》【文讀音】台羅拼音＋方音符號.html" class="badge" target="_blank" title="《忘盡心中情》【文讀音】 - 台羅拼音＋方音符號">台羅拼音＋方音符號</a>
+      <a href="《忘盡心中情》【文讀音】台語音標＋方音符號.html" class="badge" target="_blank" title="《忘盡心中情》【文讀音】 - 台語音標＋方音符號">台語音標＋方音符號</a>
+      <a href="《忘盡心中情》【文讀音】閩拼調符＋雅俗通.html" class="badge" target="_blank" title="《忘盡心中情》【文讀音】 - 閩拼調符＋雅俗通">閩拼調符＋雅俗通</a>
+      <a href="《忘盡心中情》【文讀音】閩拼調號＋方音符號.html" class="badge" target="_blank" title="《忘盡心中情》【文讀音】 - 閩拼調號＋方音符號">閩拼調號＋方音符號</a>
+      <a href="《忘盡心中情》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《忘盡心中情》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+      <a href="《忘盡心中情》【文讀音】雅俗通＋閩拼調號.html" class="badge" target="_blank" title="《忘盡心中情》【文讀音】 - 雅俗通＋閩拼調號">雅俗通＋閩拼調號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《春曉》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《春曉》【文讀音】閩拼方案.html" class="badge" target="_blank" title="《春曉》【文讀音】 - 閩拼方案">閩拼方案</a>
+      <a href="《春曉》【文讀音】閩拼調號＋方音符號.html" class="badge" target="_blank" title="《春曉》【文讀音】 - 閩拼調號＋方音符號">閩拼調號＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《望春風》【白話音】</h2>
+    <div class="card-links">
+      <a href="《望春風》【白話音】閩拼調號＋方音符號.html" class="badge" target="_blank" title="《望春風》【白話音】 - 閩拼調號＋方音符號">閩拼調號＋方音符號</a>
+      <a href="《望春風》【白話音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《望春風》【白話音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《桃花源記》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《桃花源記》【文讀音】閩拼調符＋方音符號.html" class="badge" target="_blank" title="《桃花源記》【文讀音】 - 閩拼調符＋方音符號">閩拼調符＋方音符號</a>
+      <a href="《桃花源記》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《桃花源記》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《正氣歌》【廣韻讀音】</h2>
+    <div class="card-links">
+      <a href="《正氣歌》【廣韻讀音】.html" class="badge" target="_blank" title="《正氣歌》【廣韻讀音】 - 開啟">開啟</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《正氣歌》【河洛白話音】</h2>
+    <div class="card-links">
+      <a href="《正氣歌》【河洛白話音】.html" class="badge" target="_blank" title="《正氣歌》【河洛白話音】 - 開啟">開啟</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《歸去來辭》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《歸去來辭》【文讀音】閩拼方案.html" class="badge" target="_blank" title="《歸去來辭》【文讀音】 - 閩拼方案">閩拼方案</a>
+      <a href="《歸去來辭》【文讀音】閩拼調符＋方音符號.html" class="badge" target="_blank" title="《歸去來辭》【文讀音】 - 閩拼調符＋方音符號">閩拼調符＋方音符號</a>
+      <a href="《歸去來辭》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《歸去來辭》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《歸去來辭》【河洛白話音】</h2>
+    <div class="card-links">
+      <a href="《歸去來辭》【河洛白話音】.html" class="badge" target="_blank" title="《歸去來辭》【河洛白話音】 - 開啟">開啟</a>
+      <a href="《歸去來辭》【河洛白話音】_十五音.html" class="badge" target="_blank" title="《歸去來辭》【河洛白話音】 - 十五音">十五音</a>
+      <a href="《歸去來辭》【河洛白話音】_台羅拼音.html" class="badge" target="_blank" title="《歸去來辭》【河洛白話音】 - 台羅拼音">台羅拼音</a>
+      <a href="《歸去來辭》【河洛白話音】_台語音標.html" class="badge" target="_blank" title="《歸去來辭》【河洛白話音】 - 台語音標">台語音標</a>
+      <a href="《歸去來辭》【河洛白話音】_方音符號.html" class="badge" target="_blank" title="《歸去來辭》【河洛白話音】 - 方音符號">方音符號</a>
+      <a href="《歸去來辭》【河洛白話音】_白話字.html" class="badge" target="_blank" title="《歸去來辭》【河洛白話音】 - 白話字">白話字</a>
+      <a href="《歸去來辭》【河洛白話音】_閩拼方案.html" class="badge" target="_blank" title="《歸去來辭》【河洛白話音】 - 閩拼方案">閩拼方案</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《歸去來辭》【白話音】</h2>
+    <div class="card-links">
+      <a href="《歸去來辭》【白話音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《歸去來辭》【白話音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《水龍吟·登建康賞心亭》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《水龍吟·登建康賞心亭》【文讀音】十五音.html" class="badge" target="_blank" title="《水龍吟·登建康賞心亭》【文讀音】 - 十五音">十五音</a>
+      <a href="《水龍吟·登建康賞心亭》【文讀音】台羅拼音.html" class="badge" target="_blank" title="《水龍吟·登建康賞心亭》【文讀音】 - 台羅拼音">台羅拼音</a>
+      <a href="《水龍吟·登建康賞心亭》【文讀音】台羅改良式.html" class="badge" target="_blank" title="《水龍吟·登建康賞心亭》【文讀音】 - 台羅改良式">台羅改良式</a>
+      <a href="《水龍吟·登建康賞心亭》【文讀音】方音符號注音.html" class="badge" target="_blank" title="《水龍吟·登建康賞心亭》【文讀音】 - 方音符號注音">方音符號注音</a>
+      <a href="《水龍吟·登建康賞心亭》【文讀音】白話字拼音.html" class="badge" target="_blank" title="《水龍吟·登建康賞心亭》【文讀音】 - 白話字拼音">白話字拼音</a>
+      <a href="《水龍吟·登建康賞心亭》【文讀音】閩拼標音.html" class="badge" target="_blank" title="《水龍吟·登建康賞心亭》【文讀音】 - 閩拼標音">閩拼標音</a>
+      <a href="《水龍吟·登建康賞心亭》【文讀音】雙排注音.html" class="badge" target="_blank" title="《水龍吟·登建康賞心亭》【文讀音】 - 雙排注音">雙排注音</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《永遇樂．京口北固亭懷古》</h2>
+    <div class="card-links">
+      <a href="《永遇樂．京口北固亭懷古》_十五音.html" class="badge" target="_blank" title="《永遇樂．京口北固亭懷古》 - 十五音">十五音</a>
+      <a href="《永遇樂．京口北固亭懷古》_方音符號.html" class="badge" target="_blank" title="《永遇樂．京口北固亭懷古》 - 方音符號">方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《涼州詞》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《涼州詞》【文讀音】台語音標＋方音符號.html" class="badge" target="_blank" title="《涼州詞》【文讀音】 - 台語音標＋方音符號">台語音標＋方音符號</a>
+      <a href="《涼州詞》【文讀音】注音二式＋方音符號.html" class="badge" target="_blank" title="《涼州詞》【文讀音】 - 注音二式＋方音符號">注音二式＋方音符號</a>
+      <a href="《涼州詞》【文讀音】閩拼調號＋方音符號.html" class="badge" target="_blank" title="《涼州詞》【文讀音】 - 閩拼調號＋方音符號">閩拼調號＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《深慮論》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《深慮論》【文讀音】十五音＋方音符號.html" class="badge" target="_blank" title="《深慮論》【文讀音】 - 十五音＋方音符號">十五音＋方音符號</a>
+      <a href="《深慮論》【文讀音】台羅拼音＋方音符號.html" class="badge" target="_blank" title="《深慮論》【文讀音】 - 台羅拼音＋方音符號">台羅拼音＋方音符號</a>
+      <a href="《深慮論》【文讀音】注音二式＋方音符號.html" class="badge" target="_blank" title="《深慮論》【文讀音】 - 注音二式＋方音符號">注音二式＋方音符號</a>
+      <a href="《深慮論》【文讀音】白話字＋方音符號.html" class="badge" target="_blank" title="《深慮論》【文讀音】 - 白話字＋方音符號">白話字＋方音符號</a>
+      <a href="《深慮論》【文讀音】閩拼調符＋方音符號.html" class="badge" target="_blank" title="《深慮論》【文讀音】 - 閩拼調符＋方音符號">閩拼調符＋方音符號</a>
+      <a href="《深慮論》【文讀音】閩拼調號＋方音符號.html" class="badge" target="_blank" title="《深慮論》【文讀音】 - 閩拼調號＋方音符號">閩拼調號＋方音符號</a>
+      <a href="《深慮論》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《深慮論》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《滕王閣序》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《滕王閣序》【文讀音】閩拼調符＋方音符號.html" class="badge" target="_blank" title="《滕王閣序》【文讀音】 - 閩拼調符＋方音符號">閩拼調符＋方音符號</a>
+      <a href="《滕王閣序》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《滕王閣序》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《漁父》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《漁父》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《漁父》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《登金陵鳳凰台》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《登金陵鳳凰台》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《登金陵鳳凰台》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《相󠇡見歡󠇡·無󠇡言獨上西樓󠇡》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《相󠇡見歡󠇡·無󠇡言獨上西樓󠇡》【文讀音】十五音＋方音符號.html" class="badge" target="_blank" title="《相󠇡見歡󠇡·無󠇡言獨上西樓󠇡》【文讀音】 - 十五音＋方音符號">十五音＋方音符號</a>
+      <a href="《相󠇡見歡󠇡·無󠇡言獨上西樓󠇡》【文讀音】閩拼調符＋方音符號.html" class="badge" target="_blank" title="《相󠇡見歡󠇡·無󠇡言獨上西樓󠇡》【文讀音】 - 閩拼調符＋方音符號">閩拼調符＋方音符號</a>
+      <a href="《相󠇡見歡󠇡·無󠇡言獨上西樓󠇡》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《相󠇡見歡󠇡·無󠇡言獨上西樓󠇡》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《短歌行》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《短歌行》【文讀音】方音符號.html" class="badge" target="_blank" title="《短歌行》【文讀音】 - 方音符號">方音符號</a>
+      <a href="《短歌行》【文讀音】閩拼調符.html" class="badge" target="_blank" title="《短歌行》【文讀音】 - 閩拼調符">閩拼調符</a>
+      <a href="《短歌行》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《短歌行》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《秋離》【白話音】</h2>
+    <div class="card-links">
+      <a href="《秋離》【白話音】閩拼調符.html" class="badge" target="_blank" title="《秋離》【白話音】 - 閩拼調符">閩拼調符</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《素書》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《素書》【文讀音】十五音.html" class="badge" target="_blank" title="《素書》【文讀音】 - 十五音">十五音</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《般若波羅蜜多心經》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《般若波羅蜜多心經》【文讀音】十五音.html" class="badge" target="_blank" title="《般若波羅蜜多心經》【文讀音】 - 十五音">十五音</a>
+      <a href="《般若波羅蜜多心經》【文讀音】十五音＋方音符號.html" class="badge" target="_blank" title="《般若波羅蜜多心經》【文讀音】 - 十五音＋方音符號">十五音＋方音符號</a>
+      <a href="《般若波羅蜜多心經》【文讀音】閩拼調號.html" class="badge" target="_blank" title="《般若波羅蜜多心經》【文讀音】 - 閩拼調號">閩拼調號</a>
+      <a href="《般若波羅蜜多心經》【文讀音】雅俗通.html" class="badge" target="_blank" title="《般若波羅蜜多心經》【文讀音】 - 雅俗通">雅俗通</a>
+      <a href="《般若波羅蜜多心經》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《般若波羅蜜多心經》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《蒹葭》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《蒹葭》【文讀音】注音二式＋方音符號.html" class="badge" target="_blank" title="《蒹葭》【文讀音】 - 注音二式＋方音符號">注音二式＋方音符號</a>
+      <a href="《蒹葭》【文讀音】閩拼調號＋方音符號.html" class="badge" target="_blank" title="《蒹葭》【文讀音】 - 閩拼調號＋方音符號">閩拼調號＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《蘇武牧羊》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《蘇武牧羊》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《蘇武牧羊》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《蘭亭集序》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《蘭亭集序》【文讀音】十五音＋方音符號.html" class="badge" target="_blank" title="《蘭亭集序》【文讀音】 - 十五音＋方音符號">十五音＋方音符號</a>
+      <a href="《蘭亭集序》【文讀音】閩拼調符.html" class="badge" target="_blank" title="《蘭亭集序》【文讀音】 - 閩拼調符">閩拼調符</a>
+      <a href="《蘭亭集序》【文讀音】雅俗通.html" class="badge" target="_blank" title="《蘭亭集序》【文讀音】 - 雅俗通">雅俗通</a>
+      <a href="《蘭亭集序》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《蘭亭集序》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《蘭亭集序》【白話音】</h2>
+    <div class="card-links">
+      <a href="《蘭亭集序》【白話音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《蘭亭集序》【白話音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《衣帶贊》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《衣帶贊》【文讀音】閩拼調符＋方音符號.html" class="badge" target="_blank" title="《衣帶贊》【文讀音】 - 閩拼調符＋方音符號">閩拼調符＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《詩經。周南。桃夭》【白話音】</h2>
+    <div class="card-links">
+      <a href="《詩經。周南。桃夭》【白話音】_漢字注音.html" class="badge" target="_blank" title="《詩經。周南。桃夭》【白話音】 - 漢字注音">漢字注音</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《詩經。小雅。採薇》【白話音】</h2>
+    <div class="card-links">
+      <a href="《詩經。小雅。採薇》【白話音】.html" class="badge" target="_blank" title="《詩經。小雅。採薇》【白話音】 - 開啟">開啟</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《詩經．小雅．鹿鳴》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《詩經．小雅．鹿鳴》【文讀音】注音二式＋方音符號.html" class="badge" target="_blank" title="《詩經．小雅．鹿鳴》【文讀音】 - 注音二式＋方音符號">注音二式＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《諫太宗十思疏》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《諫太宗十思疏》【文讀音】台語音標＋方音符號.html" class="badge" target="_blank" title="《諫太宗十思疏》【文讀音】 - 台語音標＋方音符號">台語音標＋方音符號</a>
+      <a href="《諫太宗十思疏》【文讀音】閩拼調符＋方音符號.html" class="badge" target="_blank" title="《諫太宗十思疏》【文讀音】 - 閩拼調符＋方音符號">閩拼調符＋方音符號</a>
+      <a href="《諫太宗十思疏》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《諫太宗十思疏》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《赤壁賦》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《赤壁賦》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《赤壁賦》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《道德經25》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《道德經25》【文讀音】閩拼調符.html" class="badge" target="_blank" title="《道德經25》【文讀音】 - 閩拼調符">閩拼調符</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《錦瑟》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《錦瑟》【文讀音】閩拼調符.html" class="badge" target="_blank" title="《錦瑟》【文讀音】 - 閩拼調符">閩拼調符</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《關山月》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《關山月》【文讀音】閩拼調符＋方音符號.html" class="badge" target="_blank" title="《關山月》【文讀音】 - 閩拼調符＋方音符號">閩拼調符＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《陋室銘》【文讀音】</h2>
+    <div class="card-links">
+      <a href="《陋室銘》【文讀音】十五音＋方音符號.html" class="badge" target="_blank" title="《陋室銘》【文讀音】 - 十五音＋方音符號">十五音＋方音符號</a>
+      <a href="《陋室銘》【文讀音】台羅拼音.html" class="badge" target="_blank" title="《陋室銘》【文讀音】 - 台羅拼音">台羅拼音</a>
+      <a href="《陋室銘》【文讀音】台語音標.html" class="badge" target="_blank" title="《陋室銘》【文讀音】 - 台語音標">台語音標</a>
+      <a href="《陋室銘》【文讀音】方音符號.html" class="badge" target="_blank" title="《陋室銘》【文讀音】 - 方音符號">方音符號</a>
+      <a href="《陋室銘》【文讀音】注音二式＋方音符號.html" class="badge" target="_blank" title="《陋室銘》【文讀音】 - 注音二式＋方音符號">注音二式＋方音符號</a>
+      <a href="《陋室銘》【文讀音】白話字.html" class="badge" target="_blank" title="《陋室銘》【文讀音】 - 白話字">白話字</a>
+      <a href="《陋室銘》【文讀音】閩拼調符＋方音符號.html" class="badge" target="_blank" title="《陋室銘》【文讀音】 - 閩拼調符＋方音符號">閩拼調符＋方音符號</a>
+      <a href="《陋室銘》【文讀音】雅俗通.html" class="badge" target="_blank" title="《陋室銘》【文讀音】 - 雅俗通">雅俗通</a>
+      <a href="《陋室銘》【文讀音】雅俗通＋方音符號.html" class="badge" target="_blank" title="《陋室銘》【文讀音】 - 雅俗通＋方音符號">雅俗通＋方音符號</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">《雪中紅》【白話音】</h2>
+    <div class="card-links">
+      <a href="《雪中紅》【白話音】閩拼注音.html" class="badge" target="_blank" title="《雪中紅》【白話音】 - 閩拼注音">閩拼注音</a>
+      <a href="《雪中紅》【白話音】閩拼調號.html" class="badge" target="_blank" title="《雪中紅》【白話音】 - 閩拼調號">閩拼調號</a>
+      <a href="《雪中紅》【白話音】閩拼調號＋閩拼注音.html" class="badge" target="_blank" title="《雪中紅》【白話音】 - 閩拼調號＋閩拼注音">閩拼調號＋閩拼注音</a>
+    </div>
+  </div>
+</div>
+</div>
     </main>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
