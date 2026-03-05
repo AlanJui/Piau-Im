@@ -1,9 +1,12 @@
 """
-a400_製作標音網頁.py V0.2.2.10
+a400_製作標音網頁.py V0.2.2.11
 
 修改紀錄：
 v0.2.2.9 2026-2-25: 自動産生【文章標題】及【作者姓名】的 Ruby Tag。
 v0.2.2.10 2026-2-27: 變更 _process_sheet() 計算 start_row 的邏輯，確保從【文章標題】及【作者姓名】之後開始讀取內容。
+v0.2.2.11 2026-3-5:
+  - 為配合 a410 程式之呼叫，將【存檔】作業，自 main() 移至 process()
+  - 修正【顯示處理狀態】的錯誤：遇 \n 及 EOF 時， char_count 竟為 0
 """
 
 # =========================================================================
@@ -557,27 +560,35 @@ class CellProcessor(ExcelCell):
                 if cell_value == "φ":  # 讀到【結尾標示】
                     End_Of_File = True
                     msg = "《文章終止》"
+                    char_count += 1
                     print(
                         f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}"
                     )
+                    print("=" * 80 + "\n")
+                    char_count = 0
                     break
 
                 elif is_first_paragraph:
                     if cell_value == "\n":
                         is_first_paragraph = False
                         msg = "《略過第一段落（標題/作者）》"
+                        char_count += 1
                         print(
                             f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}"
                         )
+                        print("-" * 80 + "\n")
+                        char_count = 0
                     continue
 
                 elif cell_value == "\n":  # 讀到【換行標示】
                     write_buffer += "</p><p>\n"
                     msg = "《換行》"
-                    char_count = 0
+                    char_count += 1
                     print(
                         f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}"
                     )
+                    print("-" * 80 + "\n")
+                    char_count = 0
                     break
 
                 else:
@@ -876,6 +887,17 @@ def process(wb, args) -> int:
         logging_exc_error(msg="處理作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
 
+    # =========================================================================
+    # 儲存檔案
+    # =========================================================================
+    try:
+        # 儲存檔案
+        if not program.save_workbook_as_new_file(wb=wb):
+            return EXIT_CODE_SAVE_FAILURE  # 作業異當終止：無法儲存檔案
+    except Exception as e:
+        logging_exception(msg="儲存檔案失敗！", error=e)
+        return EXIT_CODE_SAVE_FAILURE  # 作業異當終止：無法儲存檔案
+
     # --------------------------------------------------------------------------
     # 處理作業結束
     # --------------------------------------------------------------------------
@@ -934,18 +956,7 @@ def main(args) -> int:
         return EXIT_CODE_PROCESS_FAILURE
 
     # =========================================================================
-    # (4) 儲存檔案
-    # =========================================================================
-    try:
-        # 儲存檔案
-        if not Program.save_workbook_as_new_file(wb=wb):
-            return EXIT_CODE_SAVE_FAILURE  # 作業異當終止：無法儲存檔案
-    except Exception as e:
-        logging_exception(msg="儲存檔案失敗！", error=e)
-        return EXIT_CODE_SAVE_FAILURE  # 作業異當終止：無法儲存檔案
-
-    # =========================================================================
-    # (5) 結束程式
+    # (4) 結束程式
     # =========================================================================
     logging_process_step(f"《========== 程式終止執行：{program_name} ==========》")
     return EXIT_CODE_SUCCESS
