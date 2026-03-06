@@ -8,9 +8,9 @@ from pathlib import Path
 
 import xlwings as xw
 from bs4 import BeautifulSoup
-from dotenv import load_dotenv
 
 from mod_file_access import save_as_new_file
+from mod_logging import init_logging, logging_exc_error, logging_process_step
 
 # =========================================================================
 # 常數定義
@@ -24,19 +24,8 @@ EXIT_CODE_PROCESS_FAILURE = 10  # 過程失敗
 EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 
 # =========================================================================
-# 載入環境變數
-# =========================================================================
-load_dotenv()
-
-# 預設檔案名稱從環境變數讀取
-DB_HO_LOK_UE = os.getenv("DB_HO_LOK_UE", "Ho_Lok_Ue.db")
-DB_KONG_UN = os.getenv("DB_KONG_UN", "Kong_Un.db")
-
-# =========================================================================
 # 設定日誌
 # =========================================================================
-from mod_logging import init_logging, logging_exc_error, logging_process_step
-
 init_logging()
 
 
@@ -102,11 +91,11 @@ def import_html_to_excel(wb, html_file_path):
                 content = meta["content"]
                 if name in env_keys:
                     env_data[name] = content
-    try:
-        env_sheet = wb.sheets["env"]
-    except Exception as e:
-        print("找不到 env 工作表！", e)
-        env_sheet = None
+    # try:
+    #     env_sheet = wb.sheets["env"]
+    # except Exception as e:
+    #     print("找不到 env 工作表！", e)
+    #     # env_sheet = None
     for key, value in env_data.items():
         try:
             wb.names[key].refers_to_range.value = value
@@ -264,7 +253,7 @@ def process(wb, html_file_path):
         # 儲存檔案
         file_path = save_as_new_file(wb=wb)
         if not file_path:
-            logging_exc_error(msg="儲存檔案失敗！", error=e)
+            logging_exc_error(msg="儲存檔案失敗！", error=None)
             return EXIT_CODE_SAVE_FAILURE  # 作業異當終止：無法儲存檔案
         else:
             logging_process_step(f"儲存檔案至路徑：{file_path}")
@@ -308,7 +297,7 @@ def main(html_file_path):
         wb = xw.apps.active.books.active  # 取得 Excel 作用中的活頁簿檔案
         full_file_name = Path(wb.fullname).name
         dir_path = Path(wb.fullname).parent
-        main_file_name = Path(full_file_name).stem
+        # main_file_name = Path(full_file_name).stem
         logging_process_step(
             f"作用中的 Excel 活頁簿：{full_file_name}，路徑：{dir_path}"
         )

@@ -158,20 +158,20 @@ def process(wb, args) -> int:
         program = Program(wb, args, hanji_piau_im_sheet_name="漢字注音")
 
         # 建立儲存格處理器
-        if args.new:
-            xls_cell = CellProcessor(
-                program=program,
-                new_jin_kang_piau_im_ji_khoo_sheet=True,
-                new_piau_im_ji_khoo_sheet=True,
-                new_khuat_ji_piau_sheet=True,
-            )
-        else:
-            xls_cell = CellProcessor(
-                program=program,
-                new_jin_kang_piau_im_ji_khoo_sheet=False,
-                new_piau_im_ji_khoo_sheet=False,
-                new_khuat_ji_piau_sheet=False,
-            )
+        # if args.new:
+        #     xls_cell = CellProcessor(
+        #         program=program,
+        #         new_jin_kang_piau_im_ji_khoo_sheet=True,
+        #         new_piau_im_ji_khoo_sheet=True,
+        #         new_khuat_ji_piau_sheet=True,
+        #     )
+        # else:
+        #     xls_cell = CellProcessor(
+        #         program=program,
+        #         new_jin_kang_piau_im_ji_khoo_sheet=False,
+        #         new_piau_im_ji_khoo_sheet=False,
+        #         new_khuat_ji_piau_sheet=False,
+        #     )
     except Exception as e:
         logging_exc_error(msg="初始化作業，發生執行異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
