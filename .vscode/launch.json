@@ -606,6 +606,13 @@
             "console": "externalTerminal",
         },
         {
+            "name": "a999_自動生成index_html",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a999_自動生成index_html.py",
+            "console": "externalTerminal",
+        },
+        {
             "name": "a704_製作其它漢字標音",
             "type": "debugpy",
             "request": "launch",

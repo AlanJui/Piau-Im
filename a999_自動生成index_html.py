@@ -1,3 +1,12 @@
+"""
+a999_自動生成index_html.py v0.2
+
+為 docs 目錄下的 HTML 檔案自動生成 index.html，並根據檔案的修改時間排序，距今天越近的檔案擺在越前面。
+
+變更紀錄：
+- v0.2 (2024-06-30): 改正了排序邏輯，現在是根據檔案的修改時間（mtime）來排序，而不是檔案名稱。這樣可以確保最新修改的文章會顯示在最前面。
+"""
+
 import os
 import re
 
@@ -56,6 +65,9 @@ with open(index_file, "w", encoding="utf-8") as f:  # 指定 UTF-8 編碼
                 if not filename.endswith(".html") or filename in ignore_doc_list:
                     continue
 
+                full_path = os.path.join(root, filename)
+                mtime = os.path.getmtime(full_path)
+
                 # 取得相對路徑（用於建立超連結）
                 rel_dir = os.path.relpath(root, docs_directory)
                 if rel_dir == ".":
@@ -91,21 +103,30 @@ with open(index_file, "w", encoding="utf-8") as f:  # 指定 UTF-8 編碼
 
                 # 如果文章名稱不在 articles 字典中，則添加
                 if article not in articles:
-                    articles[article] = []
+                    articles[article] = {"methods": [], "mtime": 0}
 
                 # 如果注音方式不在文章名稱對應的列表中，則添加
                 has_added = any(
-                    item[0] == phonetic_method for item in articles[article]
+                    item[0] == phonetic_method for item in articles[article]["methods"]
                 )
                 if not has_added:
-                    articles[article].append((phonetic_method, relative_path))
+                    articles[article]["methods"].append(
+                        (phonetic_method, relative_path)
+                    )
+                    # 更新這篇文章的最新時間
+                    if mtime > articles[article]["mtime"]:
+                        articles[article]["mtime"] = mtime
 
         # 生成文章清單的 HTML 內容
         articles_html = '<div class="card-grid">\n'
 
-        # 針對文章名稱排序，以保持 index.html 的穩定性
-        for article in sorted(articles.keys()):
-            phonetic_methods = articles[article]
+        # 針對文章名稱的最新修改時間排序，距今天越近（mtime越大）擺最上面
+        sorted_articles = sorted(
+            articles.items(), key=lambda x: x[1]["mtime"], reverse=True
+        )
+
+        for article, data in sorted_articles:
+            phonetic_methods = data["methods"]
             articles_html += '  <div class="card">\n'
             articles_html += f'    <h2 class="card-title">{article}</h2>\n'
             articles_html += '    <div class="card-links">\n'
