@@ -1,11 +1,12 @@
 """
-a410_批次式漢字標音網頁製作.py v0.0.1
+a410_批次式漢字標音網頁製作.py v0.0.2
 
 功能說明：
 【漢字注音】工作表中，轉成 HTML 網頁檔案，並另存新檔到指定目錄。
 
 變更紀錄：
 - v0.0.1 (2026-03-05): 初始版本。
+- v0.0.2 (2026-03-10): 調整【工作清單】之設定，新增【純閩拼】、【純閩拼調號】兩種標音方法的設定。
 """
 
 import logging
@@ -194,7 +195,22 @@ def process(wb, args) -> int:
                 "up": "雅俗通",
                 "right": "方音符號",
             },
-            "閩拼": {
+            "純方音符號": {
+                "ruby_format": "右",
+                "up": None,
+                "right": "方音符號",
+            },
+            "純閩拼": {
+                "ruby_format": "上",
+                "up": "閩拼調符",
+                "right": None,
+            },
+            "純閩拼調號": {
+                "ruby_format": "上",
+                "up": "閩拼調號",
+                "right": None,
+            },
+            "閩拼+方音符號": {
                 "ruby_format": "上及右",
                 "up": "閩拼調符",
                 "right": "方音符號",
@@ -218,6 +234,9 @@ def process(wb, args) -> int:
 
         # 開始依【工作清單】之設定産出網頁
         for piau_im_task in piau_im_task_list.keys():
+            # 取出 piau_im_task_list 之 key 索引值
+            piau_im_task_name = piau_im_task
+
             # 依據取出之【工作項目】，依其網頁之漢字標章格式設定，變更【env】工作表之設定值，以供【漢字注音】工作表之儲存格處理器使用。
             program.wb.names["標音方式"].refers_to_range.value = piau_im_task_list[
                 piau_im_task
@@ -232,7 +251,7 @@ def process(wb, args) -> int:
             # 顯示目前處理的標音方法
             print("=" * 80)
             print(
-                f"開始製作【{program.han_ji_piau_im_format}】標音網頁：漢字上方：{program.siong_pinn_piau_im}，漢字右方：{program.zian_pinn_piau_im}..."
+                f"開始製作【{piau_im_task_name}】標音網頁：漢字上方：{program.siong_pinn_piau_im}，漢字右方：{program.zian_pinn_piau_im}..."
             )
 
             # 處理整張工作表的各個儲存格
