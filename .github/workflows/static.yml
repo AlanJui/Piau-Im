@@ -32,6 +32,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate Index
+        run: python a999_自動生成index_html.py
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
