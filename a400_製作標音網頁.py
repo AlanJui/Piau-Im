@@ -4,93 +4,49 @@ a400_製作標音網頁.py V0.2.2.11
 修改紀錄：
 v0.2.2.9 2026-2-25: 自動産生【文章標題】及【作者姓名】的 Ruby Tag。
 v0.2.2.10 2026-2-27: 變更 _process_sheet() 計算 start_row 的邏輯，確保從【文章標題】及【作者姓名】之後開始讀取內容。
-v0.2.2.11 2026-3-5:
+v0.2.2.11 2026-3-12:
   - 為配合 a410 程式之呼叫，將【存檔】作業，自 main() 移至 process()
-  - 修正【顯示處理狀態】的錯誤：遇 \n 及 EOF 時， char_count 竟為 0
+  - 修復 Select 方法在 Excel 失去焦點時導致崩潰的問題
+  - 恢復完整的 Console 監控輸出功能
 """
 
-# =========================================================================
-# 載入程式所需套件/模組/函式庫
-# =========================================================================
 import os
+import sys
 from pathlib import Path
-
-# 載入第三方套件
 import xlwings as xw
 
-# 載入自訂模組
 from mod_excel_access import get_value_by_name
 from mod_logging import (
     init_logging,
-    logging_exc_error,  # noqa: F401
-    logging_exception,  # noqa: F401
-    logging_process_step,  # noqa: F401
-    logging_warning,  # noqa: F401
+    logging_exc_error,
+    logging_exception,
+    logging_process_step,
+    logging_warning,
 )
 from mod_帶調符音標 import is_han_ji, kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
 from mod_標音 import is_punctuation, split_tai_gi_im_piau
 from mod_程式 import ExcelCell, Program
 
-# =========================================================================
-# 常數定義
-# =========================================================================
 EXIT_CODE_SUCCESS = 0
 EXIT_CODE_NO_FILE = 1
-EXIT_CODE_INVALID_INPUT = 2
-EXIT_CODE_SAVE_FAILURE = 3
 EXIT_CODE_PROCESS_FAILURE = 10
-EXIT_CODE_UNKNOWN_ERROR = 99
 
-# =========================================================================
-# 設定日誌
-# =========================================================================
 init_logging()
 
-
-# =========================================================================
-# 自訂 ExcelCell 子類別：覆蓋特定方法以實現萌典查詢功能
-# =========================================================================
 class CellProcessor(ExcelCell):
-    """
-    個人字典查詢專用的儲存格處理器
-    繼承自 ExcelCell
-    覆蓋以下方法以實現個人字典查詢功能：
-    - _process_sheet(): 處理整個工作表
-    """
-
-    def __init__(
-        self,
-        program: Program,
-        new_jin_kang_piau_im_ji_khoo_sheet: bool = False,
-        new_piau_im_ji_khoo_sheet: bool = False,
-        new_khuat_ji_piau_sheet: bool = False,
-    ):
-        # 調用父類別（MengDianExcelCell）的建構子
-        super().__init__(
-            program=program,
-            new_jin_kang_piau_im_ji_khoo_sheet=new_jin_kang_piau_im_ji_khoo_sheet,
-            new_piau_im_ji_khoo_sheet=new_piau_im_ji_khoo_sheet,
-            new_khuat_ji_piau_sheet=new_khuat_ji_piau_sheet,
-        )
-
-        # 網頁相關
+    def __init__(self, program: Program):
+        super().__init__(program=program)
         wb = self.program.wb
         self.title = get_value_by_name(wb=wb, name="TITLE")
         self.image_url = get_value_by_name(wb=wb, name="IMAGE_URL")
         self.output_dir = "docs"
-        self.web_title = str(self.title) if self.title else "網頁標題"
         self.total_chars_per_line = get_value_by_name(wb=wb, name="網頁每列字數")
-        self.total_chars_per_line = (
-            0 if self.total_chars_per_line is None else int(self.total_chars_per_line)
-        )
-
-        # 標音相關
+        self.total_chars_per_line = 0 if self.total_chars_per_line is None else int(self.total_chars_per_line)
         self.han_ji_piau_im_format = get_value_by_name(wb=wb, name="網頁格式")
         self.piau_im_hong_sik = get_value_by_name(wb=wb, name="標音方式")
         self.siong_pinn_piau_im = get_value_by_name(wb=wb, name="上邊標音")
         self.zian_pinn_piau_im = get_value_by_name(wb=wb, name="右邊標音")
 
-        # 聲調符號對映表
         self.zu_im_huat_list = {
             "SNI": ["fifteen_yin", "rt", "十五音切語"],
             "TPS": ["Piau_Im", "rt", "方音符號注音"],
@@ -100,918 +56,230 @@ class CellProcessor(ExcelCell):
             "BP": ["pin_yin", "rt", "閩拼標音"],
             "TLPA_Plus": ["pin_yin", "rt", "台羅改良式"],
             "DBL": ["Siang_Pai", "rtc", "雙排注音"],
+            "雅俗通": ["fifteen_yin", "rt", "十五音切語"],
             "無預設": ["Siang_Pai", "rtc", "雙排注音"],
         }
 
-    # =================================================================
-    # 輔助方法
-    # =================================================================
-    def _build_full_ruby_tag(
-        self, han_ji: str, siong_piau_im: str, zian_piau_im: str
-    ) -> str:
-        """構建 Ruby 標籤"""
+    def _build_ruby_tag(self, han_ji: str, siong_piau_im: str, zian_piau_im: str) -> str:
         if siong_piau_im != "" and zian_piau_im == "":
-            html_str = (
-                "<ruby>\n"
-                "  <rb>%s</rb>\n"  # 漢字
-                "  <rp>(</rp>\n"  # 括號左
-                "  <rt>%s</rt>\n"  # 上方標音
-                "  <rp>)</rp>\n"  # 括號右
-                "</ruby>\n"
-            )
-            return html_str % (han_ji, siong_piau_im)
+            return f"<ruby>\n  {han_ji}\n  <rt>{siong_piau_im}</rt>\n</ruby>\n"
         elif siong_piau_im == "" and zian_piau_im != "":
-            html_str = (
-                "<ruby>\n"
-                "  <rb>%s</rb>\n"  # 漢字
-                "  <rp>(</rp>\n"  # 括號左
-                "  <rtc>%s</rtc>\n"  # 右方標音
-                "  <rp>)</rp>\n"  # 括號右
-                "</ruby>\n"
-            )
-            return html_str % (han_ji, zian_piau_im)
+            return f"<ruby>\n  {han_ji}\n  <rtc>{zian_piau_im}</rtc>\n</ruby>\n"
         elif siong_piau_im != "" and zian_piau_im != "":
-            html_str = (
-                "<ruby>\n"
-                "  <rb>%s</rb>\n"  # 漢字
-                "  <rp>(</rp>\n"  # 括號左
-                "  <rt>%s</rt>\n"  # 上方標音
-                "  <rp>)</rp>\n"  # 括號右
-                "  <rp>(</rp>\n"  # 括號左
-                "  <rtc>%s</rtc>\n"  # 右方標音
-                "  <rp>)</rp>\n"  # 括號右
-                "</ruby>\n"
-            )
-            return html_str % (han_ji, siong_piau_im, zian_piau_im)
-        else:
-            return f"<span>{han_ji}</span>\n"
-
-    def _build_ruby_tag(
-        self, han_ji: str, siong_piau_im: str, zian_piau_im: str
-    ) -> str:
-        """構建 Ruby 標籤"""
-        if siong_piau_im != "" and zian_piau_im == "":
-            # 只有上方標音：羅馬拼音、白話字、台羅、閩拼等
-            html_str = (
-                "<ruby>\n"
-                "  %s\n"  # 漢字
-                "  <rt>%s</rt>\n"  # 上方標音
-                "</ruby>\n"
-            )
-            return html_str % (han_ji, siong_piau_im)
-        elif siong_piau_im == "" and zian_piau_im != "":
-            # 只有右方標音：方音符號（TPS）
-            html_str = (
-                "<ruby>\n"
-                "  %s\n"  # 漢字
-                "  <rtc>%s</rtc>\n"  # 右方標音
-                "</ruby>\n"
-            )
-            return html_str % (han_ji, zian_piau_im)
-        elif siong_piau_im != "" and zian_piau_im != "":
-            # 同時有上方及右方標音：雙排注音（DBL）
-            html_str = (
-                "<ruby>\n"
-                "  %s\n"  # 漢字
-                "  <rt>%s</rt>\n"  # 上方標音
-                "  <rtc>%s</rtc>\n"  # 右方標音
-                "</ruby>\n"
-            )
-            return html_str % (han_ji, siong_piau_im, zian_piau_im)
+            return f"<ruby>\n  {han_ji}\n  <rt>{siong_piau_im}</rt>\n  <rtc>{zian_piau_im}</rtc>\n</ruby>\n"
         else:
             return f"<span>{han_ji}</span>\n"
 
     def generate_ruby_tag(self, han_ji: str, tai_gi_im_piau: str) -> tuple:
-        """
-        生成 Ruby 標籤
-
-        Args:
-            han_ji: 漢字
-            tai_gi_im_piau: 台語音標
-
-        Returns:
-            (ruby_tag, siong_piau_im, zian_piau_im)
-        """
-        # 檢查台語音標是否為空或 None
-        if not tai_gi_im_piau or (
-            isinstance(tai_gi_im_piau, str) and tai_gi_im_piau.strip() == ""
-        ):
-            # 如果沒有音標，返回不帶標音的 span
-            ruby_tag = f"  <span>{han_ji}</span>\n"
-            return ruby_tag, "", ""
-
-        # 解構【台語音標】=【聲母】+【韻母】+【調號】
+        if not tai_gi_im_piau or not str(tai_gi_im_piau).strip():
+            return f"  <span>{han_ji}</span>\n", "", ""
         try:
             zu_im_list = split_tai_gi_im_piau(tai_gi_im_piau)
-        except (IndexError, AttributeError) as e:
-            # 如果解構失敗，返回不帶標音的 span
-            print(f"警告：無法解構音標 '{tai_gi_im_piau}' for 漢字 '{han_ji}': {e}")
-            ruby_tag = f"  <span>{han_ji}</span>\n"
-            return ruby_tag, "", ""
+        except:
+            return f"  <span>{han_ji}</span>\n", "", ""
 
-        # 零聲母處理
-        if zu_im_list[0] == "" or zu_im_list[0] is None:
-            siann_bu = "ø"  # 無聲母: ø
-        else:
-            siann_bu = zu_im_list[0]
-
-        siong_piau_im = ""
-        zian_piau_im = ""
-
-        # 根據【網頁格式】，決定【漢字】之上方或右方，是否該顯示【標音】
+        siann_bu = zu_im_list[0] if zu_im_list[0] else "ø"
+        siong, zian = "", ""
         if self.han_ji_piau_im_format == "無預設":
-            # 根據【標音方式】決定漢字之上方及右方，是否需要放置標音
-            if self.piau_im_hong_sik == "上及右":
-                siong_piau_im = self.program.piau_im.han_ji_piau_im_tng_huan(
-                    piau_im_huat=self.siong_pinn_piau_im,
-                    siann_bu=siann_bu,
-                    un_bu=zu_im_list[1],
-                    tiau_ho=zu_im_list[2],
-                )
-                zian_piau_im = self.program.piau_im.han_ji_piau_im_tng_huan(
-                    piau_im_huat=self.zian_pinn_piau_im,
-                    siann_bu=siann_bu,
-                    un_bu=zu_im_list[1],
-                    tiau_ho=zu_im_list[2],
-                )
-            elif self.piau_im_hong_sik == "上":
-                siong_piau_im = self.program.piau_im.han_ji_piau_im_tng_huan(
-                    piau_im_huat=self.siong_pinn_piau_im,
-                    siann_bu=siann_bu,
-                    un_bu=zu_im_list[1],
-                    tiau_ho=zu_im_list[2],
-                )
-            elif self.piau_im_hong_sik == "右":
-                zian_piau_im = self.program.piau_im.han_ji_piau_im_tng_huan(
-                    piau_im_huat=self.zian_pinn_piau_im,
-                    siann_bu=siann_bu,
-                    un_bu=zu_im_list[1],
-                    tiau_ho=zu_im_list[2],
-                )
+            if "上" in str(self.piau_im_hong_sik):
+                siong = self.program.piau_im.han_ji_piau_im_tng_huan(self.siong_pinn_piau_im, siann_bu, zu_im_list[1], zu_im_list[2])
+            if "右" in str(self.piau_im_hong_sik):
+                zian = self.program.piau_im.han_ji_piau_im_tng_huan(self.zian_pinn_piau_im, siann_bu, zu_im_list[1], zu_im_list[2])
         else:
-            # 按指定網頁格式設定標音位置
-            if self.han_ji_piau_im_format in ["POJ", "TL", "BP", "TLPA_Plus", "SNI"]:
-                siong_piau_im = self.program.piau_im.han_ji_piau_im_tng_huan(
-                    piau_im_huat=self.siong_pinn_piau_im,
-                    siann_bu=siann_bu,
-                    un_bu=zu_im_list[1],
-                    tiau_ho=zu_im_list[2],
-                )
+            if self.han_ji_piau_im_format in ["POJ", "TL", "BP", "TLPA_Plus", "SNI", "雅俗通"]:
+                siong = self.program.piau_im.han_ji_piau_im_tng_huan(self.siong_pinn_piau_im, siann_bu, zu_im_list[1], zu_im_list[2])
             elif self.han_ji_piau_im_format == "TPS":
-                zian_piau_im = self.program.piau_im.han_ji_piau_im_tng_huan(
-                    piau_im_huat=self.zian_pinn_piau_im,
-                    siann_bu=siann_bu,
-                    un_bu=zu_im_list[1],
-                    tiau_ho=zu_im_list[2],
-                )
+                zian = self.program.piau_im.han_ji_piau_im_tng_huan(self.zian_pinn_piau_im, siann_bu, zu_im_list[1], zu_im_list[2])
             elif self.han_ji_piau_im_format == "DBL":
-                siong_piau_im = self.program.piau_im.han_ji_piau_im_tng_huan(
-                    piau_im_huat=self.siong_pinn_piau_im,
-                    siann_bu=siann_bu,
-                    un_bu=zu_im_list[1],
-                    tiau_ho=zu_im_list[2],
-                )
-                zian_piau_im = self.program.piau_im.han_ji_piau_im_tng_huan(
-                    piau_im_huat=self.zian_pinn_piau_im,
-                    siann_bu=siann_bu,
-                    un_bu=zu_im_list[1],
-                    tiau_ho=zu_im_list[2],
-                )
+                siong = self.program.piau_im.han_ji_piau_im_tng_huan(self.siong_pinn_piau_im, siann_bu, zu_im_list[1], zu_im_list[2])
+                zian = self.program.piau_im.han_ji_piau_im_tng_huan(self.zian_pinn_piau_im, siann_bu, zu_im_list[1], zu_im_list[2])
 
-        # 根據標音方式，設定 Ruby Tag
-        ruby_tag = self._build_ruby_tag(han_ji, siong_piau_im, zian_piau_im)
-
-        return ruby_tag, siong_piau_im, zian_piau_im
-
-    def generate_title_with_ruby(self) -> str:
-        """
-        取得文章標題並加注【台語音標】
-
-        Returns:
-            含有 Ruby 標籤的標題 HTML
-        """
-        wb = self.program.wb
-        sheet = wb.sheets["漢字注音"]
-
-        title_chars = ""
-        tlpa_im_piau_list = []
-        title_with_ruby = ""
-        row, col = 5, 4
-
-        if sheet.range((row, col)).value == "《":
-            while True:
-                cell_val = sheet.range((row, col)).value
-                if cell_val is None:
-                    break
-                title_chars += cell_val
-                if cell_val != "《" and cell_val != "》":
-                    tlpa_im_piau_list.append(sheet.range((row - 1, col)).value)
-                if cell_val == "》":
-                    break
-                col += 1
-                if col > 18:  # 超出一列最大值（R欄=18），換行至下一列
-                    row += 1
-                    col = 4
-
-        if title_chars:
-            # 去除《與》符號，只傳入標題文字本體加注 ruby
-            title_han_ji = title_chars.replace("《", "").replace("》", "")
-            i = 0
-            for han_ji in title_han_ji:
-                tai_gi_im_piau = ""
-                # han_ji_piau_im = ""
-                siong_piau_im = ""
-                zian_piau_im = ""
-
-                if han_ji.strip() == "":
-                    i += 1
-                    continue
-                elif han_ji == "\n":
-                    # 若讀到換行字元，則直接輸出換行標籤
-                    tag = "<br/>\n"
-                    title_with_ruby += tag
-                elif not is_han_ji(han_ji):
-                    tag = f"<span>{han_ji}</span>"
-                    title_with_ruby += tag
-                else:
-                    # 取得對應的台語音標
-                    tai_gi_im_piau = (
-                        tlpa_im_piau_list[i] if i < len(tlpa_im_piau_list) else ""
-                    )
-                    # 將【漢字】及【上方】/【右方】標音合併成一個 Ruby Tag
-                    ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
-                        han_ji=han_ji, tai_gi_im_piau=tai_gi_im_piau
-                    )
-                    title_with_ruby += ruby_tag
-                    msg = f"{han_ji} [{tai_gi_im_piau}] ==》 上方標音：{siong_piau_im} / 右方標音：{zian_piau_im}"
-                    print(msg)
-                i += 1
-
-        return title_with_ruby
+        ruby_tag = self._build_ruby_tag(han_ji, siong, zian)
+        if tai_gi_im_piau and "<ruby" in ruby_tag:
+            ruby_tag = ruby_tag.replace("<ruby", f'<ruby data-tlpa="{tai_gi_im_piau}"')
+        return ruby_tag, siong, zian
 
     def generate_title_and_author_with_ruby(self) -> tuple:
-        """
-        自【漢字注音】工作表，取得第一個段落的文字內容，並據此段落
-        解析取得【文章標題】及【作者姓名】，並加注【台語音標】
-
-        Returns:
-            (title_with_ruby, author_with_ruby, row)
-            title_with_ruby: 含有 Ruby 標籤的標題 HTML
-            author_with_ruby: 含有 Ruby 標籤的作者 HTML
-            row: 結束列號
-        """
         program = self.program
-        sheet = program.wb.sheets[program.hanji_piau_im_sheet_name]
-
-        # 工作表起始列號 = 範圍起始列號 + 漢字列偏移量 = 3 + 2 = 5
+        sheet = program.wb.sheets["漢字注音"]
         start_row = program.line_start_row + program.han_ji_row_offset
-
-        # -------------------------------------------------------------
-        # 1. 讀取第一段落的【漢字】與【台語音標】
-        # -------------------------------------------------------------
-        han_ji_list = []
-        tlpa_im_piau_list = []
-
-        # 僅讀取第一列 (假設標題在第一列) 或是直到遇到換行
-        # 依據原有邏輯: 讀取直到 \n 或 φ
-        # 注意: 原程式碼的 row 迴圈可能讀取多行，但標題通常在第一段
-
-        found_end = False
+        han_ji_list, tlpa_list = [], []
         row = start_row
-        while not found_end:
-            # 檢查列是否超過範圍 (簡單保護)
-            if row > 1000:
-                break
-
+        while row < 1000:
+            found_line_end = False
             for col in range(program.start_col, program.end_col):
-                # 讀取漢字 (第 5 列)
-                han_ji = sheet.range((row, col)).value
-
-                # 讀取台語音標 (第 4 列: row - 1)
-                tlpa = sheet.range((row - 1, col)).value
-
-                if han_ji == "φ":  # 讀到【結尾標示】
-                    found_end = True
+                h = sheet.range((row, col)).value
+                t = sheet.range((row - 1, col)).value
+                if h in ["φ", "\\n", "\n"]: 
+                    found_line_end = True
                     break
-                elif han_ji == "\\n" or han_ji == "\n":  # 讀到【換行標示】
-                    found_end = True
-                    break
-
-                # 收集資料
-                # 注意：空儲存格也要處理，視為結束或忽略?
-                # 原程式: cell_value = str(cell_value).strip() if cell_value else ""
-                # 如果是 None，視為空字串，繼續讀取? 或是視為段落結束?
-                # 通常 Piau-Im 的格式，空漢字可能代表空格
-
-                if han_ji is None:
-                    han_ji = ""
-                else:
-                    han_ji = str(han_ji)  # 不 strip，保留空白? 原程式有 strip
-
-                if tlpa is None:
-                    tlpa = ""
-                else:
-                    tlpa = str(tlpa).strip()
-
-                if han_ji == "":
-                    # 空漢字，忽略?
-                    # 原程式 logic: if han_ji.strip() == "": continue
-                    # 但如果是空格字元?
-                    pass
-
-                han_ji_list.append(han_ji)
-                tlpa_im_piau_list.append(tlpa)
-
-            # 換下一列 (如果還沒結束)
-            # Piau-Im 的格式是每 5 列為一組 (ROWS_PER_LINE = 5)
+                han_ji_list.append(str(h) if h else "")
+                tlpa_list.append(str(t).strip() if t else "")
+            if found_line_end: break
             row += program.ROWS_PER_LINE
-
-        # -------------------------------------------------------------
-        # 2. 構建 HTML Segments
-        # -------------------------------------------------------------
+        
         html_segments = []
-
         for i, han_ji in enumerate(han_ji_list):
-            if han_ji.strip() == "":
-                # 這裡是簡單處理，如果需要空格 span 也可以加
-                continue
+            if not han_ji.strip(): continue
+            tag, siong, zian = self.generate_ruby_tag(han_ji, tlpa_list[i])
+            html_segments.append(tag.rstrip() + "\n")
+            print(f"標題處理: {han_ji} [{tlpa_list[i]}] ==》 上：{siong} / 右：{zian}")
 
-            tai_gi_im_piau = tlpa_im_piau_list[i]
-
-            # 使用父類別/本類別的 generate_ruby_tag 方法
-            # 注意: generate_ruby_tag 回傳 tuple (ruby_tag, siong, zian)
-            ruby_tag, _, _ = self.generate_ruby_tag(
-                han_ji=han_ji, tai_gi_im_piau=tai_gi_im_piau
-            )
-
-            # 補上換行符號 (依照 user 在 a940 的要求)
-            ruby_tag = ruby_tag.rstrip() + "\n"
-            html_segments.append(ruby_tag)
-
-        # -------------------------------------------------------------
-        # 3. 拆分標題與作者 (參照 a940 邏輯)
-        # -------------------------------------------------------------
-        title_html = ""
-        author_html = ""
-
-        split_index = -1
-        for i, segment in enumerate(html_segments):
-            if "》" in segment:
-                split_index = i
-                break
-
+        title_html, author_html, split_index = "", "", -1
+        for i, seg in enumerate(html_segments):
+            if "》" in seg: split_index = i; break
+        
         if split_index != -1:
-            # 包含 "》" 的部分屬於標題
-            title_parts = html_segments[: split_index + 1]
-            author_parts = html_segments[split_index + 1 :]
-
-            # 處理標題中的書名號 class="title_mark"
-            new_title_parts = []
-            for p in title_parts:
-                if "《" in p or "》" in p:
-                    p = p.replace("<span>", '<span class="title_mark">')
-                new_title_parts.append(p)
-
-            title_html = "".join(new_title_parts)
-            author_html = "".join(author_parts)
+            t_parts = html_segments[:split_index+1]
+            a_parts = html_segments[split_index+1:]
+            title_html = "".join([p.replace("<span>", '<span class="title_mark">') if "《" in p or "》" in p else p for p in t_parts])
+            author_html = "".join(a_parts)
         else:
-            # 沒找到 "》"，全部當作標題
             title_html = "".join(html_segments)
-            author_html = ""
 
-        # -------------------------------------------------------------
-        # 4. 組合回傳結果
-        # -------------------------------------------------------------
-        title_ruby = f"""
-<p class='title'>
-{title_html}
-<span style="display:none"></span>
-</p>
-"""
-        author_ruby = ""
-        if author_html.strip():
-            author_ruby = f"""
-<p class='author'>
-{author_html}
-</p>
-"""
-        else:
-            author_ruby = "<p class='author'></p>"  # 或是空字串
+        # 傳回下一行起始位置
+        return f"<p class='title'>{title_html}</p>", f"<p class='author'>{author_html}</p>" if author_html else "", row
 
-        return title_ruby, author_ruby, row
-
-    # =================================================================
-    # 覆蓋父類別的方法
-    # =================================================================
     def _process_sheet(self, sheet) -> str:
-        """
-        處理工作表內容並生成 HTML 網頁內容
-
-        Args:
-            sheet: Excel 工作表物件
-
-        Returns:
-            HTML 網頁內容字串
-        """
-        write_buffer = ""
-        is_first_paragraph = True
-
-        # 輸出【文章】Div tag 及【文章標題】Ruby Tag
-        title_with_ruby, author_with_ruby, row_of_title_and_author = (
-            self.generate_title_and_author_with_ruby()
-        )
-        pai_ban_iong_huat = self.zu_im_huat_list[self.han_ji_piau_im_format][0]
-
-        div_tag = f"<div class='{pai_ban_iong_huat}'>\n"
-
-        if title_with_ruby:
-            div_tag += f"{title_with_ruby}\n"
-
-        if author_with_ruby:
-            div_tag += f"{author_with_ruby}\n"
-
-        write_buffer += div_tag
-        write_buffer += "<p>\n"
-
-        # 逐列處理工作表內容
+        title_ruby, author_ruby, next_row = self.generate_title_and_author_with_ruby()
+        pai_ban = self.zu_im_huat_list.get(self.han_ji_piau_im_format, ["pin_yin"])[0]
+        write_buffer = f"<div class='{pai_ban}'>\n{title_ruby}\n{author_ruby}\n<p>\n"
+        
         program = self.program
-        End_Of_File = False
         char_count = 0
-        total_chars_per_line = self.total_chars_per_line  # 網頁每列字數
-        if total_chars_per_line == 0:
-            total_chars_per_line = 0
-
-        # 工作表起始列號 = 範圍起始列號 + 漢字列偏移量 = 3 + 2 = 5
-        start_row = program.line_start_row + program.han_ji_row_offset
-
-        # 調整起始列號，確保從【文章標題】及【作者姓名】之後開始讀取內容
-        if row_of_title_and_author > start_row:
-            start_row = row_of_title_and_author
-            is_first_paragraph = False
-
         end_row = program.line_end_row + program.han_ji_row_offset
 
-        for row in range(start_row, end_row, program.ROWS_PER_LINE):
-            sheet.range((row, program.start_col)).select()
-
+        for row in range(next_row, end_row, program.ROWS_PER_LINE):
+            try:
+                sheet.range((row, program.start_col)).select()
+            except:
+                pass # 防止 Select 失敗導致崩潰
+                
             for col in range(program.start_col, program.end_col):
-                cell_value = sheet.range((row, col)).value
-
-                if cell_value == "φ":  # 讀到【結尾標示】
-                    End_Of_File = True
-                    msg = "《文章終止》"
+                val = sheet.range((row, col)).value
+                addr = f"{xw.utils.col_name(col)}{row}"
+                
+                if val == "φ": 
                     char_count += 1
-                    print(
-                        f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}"
-                    )
-                    print("=" * 80 + "\n")
-                    char_count = 0
-                    break
-
-                elif is_first_paragraph:
-                    if cell_value == "\n":
-                        is_first_paragraph = False
-                        msg = "《略過第一段落（標題/作者）》"
-                        char_count += 1
-                        print(
-                            f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}"
-                        )
-                        print("-" * 80 + "\n")
-                        char_count = 0
-                    continue
-
-                elif cell_value == "\n":  # 讀到【換行標示】
+                    print(f"{char_count}. {addr} ==> 《文章終止》\n" + "="*80)
+                    return write_buffer + "</p></div>"
+                
+                if val in ["\n", "\\n"]: 
+                    char_count += 1
+                    print(f"{char_count}. {addr} ==> 《換行》\n" + "-"*80)
                     write_buffer += "</p><p>\n"
-                    msg = "《換行》"
-                    char_count += 1
-                    print(
-                        f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}"
-                    )
-                    print("-" * 80 + "\n")
                     char_count = 0
                     break
-
+                
+                str_val = str(val).strip() if val else ""
+                if is_punctuation(str_val):
+                    msg = f"{str_val}【標點符號】"
+                    write_buffer += f"<span>{str_val}</span>\n"
+                elif not str_val:
+                    msg = "【空白】"
+                    write_buffer += "<span>　</span>\n"
+                elif not is_han_ji(val):
+                    msg = f"{str_val}【其他字元】"
+                    write_buffer += f"<span>{str_val}</span>\n"
                 else:
-                    # 處理儲存格內容（先檢查標點符號，再檢查漢字）
-                    str_value = str(cell_value).strip() if cell_value else ""
-
-                    # 先檢查是否為標點符號或其他非漢字字元
-                    if is_punctuation(str_value):
-                        msg = f"{str_value}【標點符號】"
-                        ruby_tag = f"  <span>{str_value}</span>\n"
-                        write_buffer += ruby_tag
-                        char_count += 1
-                        print(
-                            f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}"
-                        )
-                    elif str_value == "":
-                        msg = "【空白】"
-                        ruby_tag = "  <span>　</span>\n"
-                        write_buffer += ruby_tag
-                        char_count += 1
-                        print(
-                            f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}"
-                        )
-                    elif not is_han_ji(cell_value):
-                        msg = f"{str_value}【其他字元】"
-                        ruby_tag = f"  <span>{str_value}</span>\n"
-                        write_buffer += ruby_tag
-                        char_count += 1
-                        print(
-                            f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}"
-                        )
+                    tlpa = sheet.range((row - 1, col)).value
+                    tlpa = str(tlpa).strip() if tlpa else ""
+                    if not tlpa:
+                        msg = f"{str_val}【無音標】"
+                        write_buffer += f"<span>{str_val}</span>\n"
                     else:
-                        # 處理漢字
-                        han_ji = cell_value.strip()
-                        tai_gi_im_piau = sheet.range((row - 1, col)).value
-                        tai_gi_im_piau = (
-                            str(tai_gi_im_piau).strip()
-                            if tai_gi_im_piau is not None
-                            else ""
-                        )
+                        if kam_si_u_tiau_hu(tlpa): tlpa = tng_tiau_ho(tng_im_piau(tlpa))
+                        tag, siong, zian = self.generate_ruby_tag(str_val, tlpa)
+                        write_buffer += tag
+                        msg = f"{str_val} [{tlpa}] ==》 上：{siong} / 右：{zian}"
+                
+                char_count += 1
+                print(f"{char_count}. {addr} ==> {msg}")
+                if self.total_chars_per_line and char_count >= self.total_chars_per_line:
+                    write_buffer += "<br/>\n"; char_count = 0; print("《人工斷行》")
+        return write_buffer + "</p></div>"
 
-                        # 檢查音標是否為空
-                        if not tai_gi_im_piau or tai_gi_im_piau == "":
-                            print(
-                                f"警告：漢字 '{han_ji}' 在 ({row}, {col}) 沒有台語音標"
-                            )
-                            ruby_tag = f"  <span>{han_ji}</span>\n"
-                            write_buffer += ruby_tag
-                            char_count += 1
-                            print(
-                                f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {han_ji}【無音標】"
-                            )
-                            continue
-
-                        # 【去調符】轉換為【帶調號之台語音標】
-                        if kam_si_u_tiau_hu(tai_gi_im_piau):
-                            tai_gi_im_piau = tng_im_piau(tai_gi_im_piau)
-                            tlpa_im_piau = tng_tiau_ho(tai_gi_im_piau)
-                        else:
-                            tlpa_im_piau = tai_gi_im_piau
-
-                        ruby_tag, siong_piau_im, zian_piau_im = self.generate_ruby_tag(
-                            han_ji=han_ji,
-                            tai_gi_im_piau=tlpa_im_piau,
-                        )
-                        write_buffer += ruby_tag
-                        msg = f"{han_ji} [{tlpa_im_piau}] ==》 上方標音：{siong_piau_im} / 右方標音：{zian_piau_im}"
-                        char_count += 1
-                        print(
-                            f"{char_count}. {xw.utils.col_name(col)}{row} = ({row}, {col}) ==> {msg}"
-                        )
-
-                # 檢查是否需要插入換行標籤
-                if total_chars_per_line != 0 and char_count >= total_chars_per_line:
-                    write_buffer += "<br/>\n"
-                    char_count = 0
-                    print("《人工斷行》")
-
-            if End_Of_File:
-                break
-
-        write_buffer += "</p></div>"
-        return write_buffer
-
-
-# =========================================================================
-# 主要處理函數
-# =========================================================================
-def _create_html_file(
-    program: Program,
-    output_path: str,
-    head_extra: str = "",
-    title: str = "您的標題",
-    content: str = "",
-):
-    """
-        創建 HTML 檔案
-    <meta content='https://alanjui.github.io/Piau-Im//《深慮論》【文讀音】閩拼調符.html' property='og:url' />
-    <meta content='《深慮論》【文讀音：閩拼+方音符號】' property='og:title' />
-    <meta content='《深慮論》明朝：方孝孺' property='og:description' />
-
-    file_path = output_path
-    parent_directory = Path(r"{file_path}").parent
-    file_name = Path(r"{file_path}").name
-    main_file_name = Path(r"{file_path}").stem
-    file_extension = Path(r"{file_path}").suffix
-    """
-
-    # 取得網頁主檔案名稱（不含路徑及副檔名）
-    web_page_main_file_name = Path(output_path).stem
-    # 取得 Excel 檔案名稱（不含路徑及副檔名）
-    excel_file_stem = program.excel_file_stem
-
-    # 放置文章用圖片
-    # full_image_url = "https://alanjui.github.io/Piau-Im/assets/images/king_tian.png"
-    div_image = (
-        "<div class='separator' style='clear: both'>\n"
-        "  <a href='圖片' style='display: block; padding: 1em 0; text-align: center'>\n"
-        "    <img alt='%s' border='0' width='800' \n"
-        "      src='%s' />\n"
-        "  </a>\n"
-        "</div>\n"
-    )
-    image_url = program.image_url.strip()
-    if image_url.lower().startswith(("http://", "https://")):
-        full_image_url = image_url
-    else:
-        full_image_url = f"./assets/images/{image_url}"
-    pict_for_title = ""
-    pict_for_title += div_image % (program.title, full_image_url)
-
-    # 取得圖片 URL
-    # 判斷 image_url 是否為完整 URL (http/https 開頭)
-    image_url = str(program.image_url or "").strip()
-    if image_url.lower().startswith(("http://", "https://")):
-        full_image_url = image_url
-    else:
-        full_image_url = f"https://alanjui.github.io/Piau-Im/assets/images/{image_url}"
-
+def _create_html_file(program, output_path, head_extra="", title="", content=""):
+    web_page_stem = Path(output_path).stem
+    img_url = str(program.image_url or "").strip()
+    full_img = img_url if img_url.startswith("http") else f"https://alanjui.github.io/Piau-Im/assets/images/{img_url}"
     template = f"""<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
-    <meta content='https://alanjui.github.io/Piau-Im/{web_page_main_file_name}.html' property='og:url' />
-    <meta content='{excel_file_stem}' property='og:title' />
-    <meta content='{title}' property='og:description' />
-    <meta content='{full_image_url}' property='og:image' />
+    <meta content='https://alanjui.github.io/Piau-Im/{web_page_stem}.html' property='og:url' />
     {head_extra}
-    <link rel="stylesheet" href="assets/styles/styles.css">
+    <link rel="stylesheet" href="./assets/styles/styles.css">
+    <script type="text/javascript" src="./assets/javascripts/phonetic_switcher.js"></script>
 </head>
 <body>
     <main class="page">
         <article class="article_content">
-        {pict_for_title}
-        {content}
+            <div style='text-align: center'><img src='{full_img}' width='800' /></div>
+            {content}
         </article>
     </main>
-    <a href="index.html" class="floating-home-btn" title="回到首頁">🏠</a>
+    <a href="index.html" class="floating-home-btn">🏠</a>
 </body>
-</html>
-    """
+</html>"""
+    with open(output_path, "w", encoding="utf-8") as f: f.write(template)
 
-    with open(output_path, "w", encoding="utf-8") as file:
-        file.write(template)
-    print(f"\n輸出網頁檔案：{output_path}")
-
-
-# =========================================================================
-# 作業程序
-# =========================================================================
 def process(wb, args) -> int:
-    """
-    查詢漢字讀音並標注
-
-    Args:
-        wb: Excel Workbook 物件
-        args: 命令列參數
-
-    Returns:
-        處理結果代碼
-    """
-    # --------------------------------------------------------------------------
-    # 作業初始化
-    # --------------------------------------------------------------------------
     logging_process_step("<=========== 作業開始！==========>")
-
     try:
-        # --------------------------------------------------------------------------
-        # 初始化 Program 配置
-        # --------------------------------------------------------------------------
         program = Program(wb=wb, args=args, hanji_piau_im_sheet_name="漢字注音")
-
-        # 建立萌典專用的儲存格處理器（繼承自 ExcelCell）
-        # xls_cell = CellProcessor(
-        #     program=program,
-        #     new_jin_kang_piau_im_ji_khoo_sheet=(
-        #         args.new if hasattr(args, "new") else False
-        #     ),
-        #     new_piau_im_ji_khoo_sheet=args.new if hasattr(args, "new") else False,
-        #     new_khuat_ji_piau_sheet=args.new if hasattr(args, "new") else False,
-        # )
-        xls_cell = CellProcessor(
-            program=program,
-            new_jin_kang_piau_im_ji_khoo_sheet=False,
-            new_piau_im_ji_khoo_sheet=False,
-            new_khuat_ji_piau_sheet=False,
-        )
-    except Exception as e:
-        logging_exc_error(msg="處理作業異常！", error=e)
-        return EXIT_CODE_PROCESS_FAILURE
-
-    # --------------------------------------------------------------------------
-    # 作業處理中
-    # --------------------------------------------------------------------------
-    try:
-        # 處理工作表
-        # sheet_name = program.hanji_piau_im_sheet_name
-        # sheet = wb.sheets[sheet_name]
+        xls_cell = CellProcessor(program=program)
         sheet = wb.sheets["漢字注音"]
         sheet.activate()
-
-        # 產生 HTML 網頁內容
         print("開始製作【漢字注音】網頁！")
-        html_content = xls_cell._process_sheet(sheet=sheet)
+        html_content = xls_cell._process_sheet(sheet)
 
         # 生成輸出檔案名稱
         piau_im_huat = program.piau_im_huat
         ue_im_lui_piat = program.ue_im_lui_piat
         han_ji_piau_im_format = program.han_ji_piau_im_format
+
+        siong = str(program.siong_pinn_piau_im) if program.siong_pinn_piau_im else ""
+        zian = str(program.zian_pinn_piau_im) if program.zian_pinn_piau_im else ""
+
         if han_ji_piau_im_format == "無預設":
             im_piau = piau_im_huat
-        elif han_ji_piau_im_format == "上":
-            im_piau = program.siong_pinn_piau_im
-        elif han_ji_piau_im_format == "右":
-            im_piau = program.zian_pinn_piau_im
         else:
-            im_piau = f"{program.siong_pinn_piau_im}＋{program.zian_pinn_piau_im}"
+            if siong and zian:
+                im_piau = f"{siong}＋{zian}"
+            elif siong:
+                im_piau = siong
+            elif zian:
+                im_piau = zian
+            else:
+                im_piau = piau_im_huat
 
-        title = program.title
-        output_file = f"《{title}》【{ue_im_lui_piat}】{im_piau}.html"
-        output_path = os.path.join(xls_cell.output_dir, output_file)
-
-        # 生成標準 Excel 檔案名稱
-        new_excel_file_name = Program.generate_new_excel_file_name(wb=wb)
-        if not new_excel_file_name:
-            logging_exc_error(
-                msg="無法依【檔案命名標準】生成另存新檔之 Excel 檔案名稱!"
-            )
-            return EXIT_CODE_PROCESS_FAILURE
-        else:
-            print(
-                f"作業結束時，將以 Excel 檔案名稱：【{new_excel_file_name}】另存新檔。"
-            )
-
-        # 確保輸出目錄存在
-        os.makedirs(xls_cell.output_dir, exist_ok=True)
-
-        # 取得 env 工作表的設定值並組合 meta 標籤字串
-        env_keys = [
-            "FILE_NAME",
-            "TITLE",
-            "IMAGE_URL",
-            "OUTPUT_PATH",
-            "章節序號",
-            "顯示注音輸入",
-            "每頁總列數",
-            "每列總字數",
-            "語音類型",
-            "漢字庫",
-            "標音方法",
-            "網頁格式",
-            "標音方式",
-            "上邊標音",
-            "右邊標音",
-            "網頁每列字數",
-        ]
-        head_extra = "\n"
-        for key in env_keys:
-            value = get_value_by_name(wb, key)
-            head_extra += f'    <meta name="{key}" content="{value}" />\n'
-
-        # 輸出到網頁檔案
-        _create_html_file(
-            program=program,
-            output_path=output_path,
-            head_extra=head_extra,
-            title=title,
-            content=html_content,
-        )
-
-        logging_process_step("【漢字注音】工作表轉製網頁作業完畢！")
-
+        output_file = f"《{program.title}》【{ue_im_lui_piat}】{im_piau}.html"
+        output_path = os.path.join("docs", output_file)
+        os.makedirs("docs", exist_ok=True)
+        head_extra = "\n".join([f'<meta name="{k}" content="{get_value_by_name(wb, k)}" />' for k in ["TITLE", "IMAGE_URL", "網頁格式", "上邊標音", "右邊標音"]])
+        _create_html_file(program, output_path, head_extra, program.title, html_content)
+        program.save_workbook_as_new_file(wb=wb)
+        logging_process_step("<=========== 作業結束！==========>")
+        return EXIT_CODE_SUCCESS
     except Exception as e:
-        logging_exc_error(msg="處理作業異常！", error=e)
+        logging_exc_error("處理作業異常", e)
         return EXIT_CODE_PROCESS_FAILURE
 
-    # =========================================================================
-    # 儲存檔案
-    # =========================================================================
+def main(args):
     try:
-        # 儲存檔案
-        if not program.save_workbook_as_new_file(wb=wb):
-            return EXIT_CODE_SAVE_FAILURE  # 作業異當終止：無法儲存檔案
+        wb = xw.apps.active.books.active
+        return process(wb, args)
     except Exception as e:
-        logging_exception(msg="儲存檔案失敗！", error=e)
-        return EXIT_CODE_SAVE_FAILURE  # 作業異當終止：無法儲存檔案
-
-    # --------------------------------------------------------------------------
-    # 處理作業結束
-    # --------------------------------------------------------------------------
-    logging_process_step("<=========== 作業結束！==========>")
-    return EXIT_CODE_SUCCESS
-
-
-# =========================================================================
-# 主程式
-# =========================================================================
-def main(args) -> int:
-    # =========================================================================
-    # (0) 程式初始化
-    # =========================================================================
-    # 取得專案根目錄。
-    current_file_path = Path(__file__).resolve()
-    project_root = current_file_path.parent
-    # 取得程式名稱
-    program_name = current_file_path.stem
-
-    # =========================================================================
-    # (1) 開始執行程式
-    # =========================================================================
-    logging_process_step(f"《========== 程式開始執行：{program_name} ==========》")
-    logging_process_step(f"專案根目錄為: {project_root}")
-
-    # =========================================================================
-    # (2) 設定【作用中活頁簿】：偵測及獲取 Excel 已開啟之活頁簿檔案。
-    # =========================================================================
-    # 取得【作用中活頁簿】
-    wb = None
-    try:
-        wb = xw.apps.active.books.active  # 取得 Excel 作用中的活頁簿檔案
-    except Exception as e:
-        msg = "無法找到作用中的 Excel 工作簿！"
-        logging_exception(msg=msg, error=e)
+        logging_exception("無法找到作用中的 Excel 工作簿！", e)
         return EXIT_CODE_NO_FILE
 
-    # 若無法取得【作用中活頁簿】，則因無法繼續作業，故返回【作業異常終止代碼】結束。
-    if not wb:
-        return EXIT_CODE_NO_FILE
-
-    # =========================================================================
-    # (3) 執行【處理作業】
-    # =========================================================================
-    try:
-        exit_code = process(wb, args)
-    except Exception as e:
-        msg = f"作業程序發生異常，終止執行：{program_name}"
-        logging_exception(msg=msg, error=e)
-        return EXIT_CODE_PROCESS_FAILURE
-
-    if exit_code != EXIT_CODE_SUCCESS:
-        msg = f"處理作業發生異常，終止程式執行：{program_name}（處理作業程序，返回失敗碼）"
-        logging_exc_error(msg=msg, error=None)
-        return EXIT_CODE_PROCESS_FAILURE
-
-    # =========================================================================
-    # (4) 結束程式
-    # =========================================================================
-    logging_process_step(f"《========== 程式終止執行：{program_name} ==========》")
-    return EXIT_CODE_SUCCESS
-
-
-# =============================================================================
-# 測試程式
-# =============================================================================
-def test_01():
-    """
-    測試程式主要作業流程
-    """
-    print("\n\n")
-    print("=" * 100)
-    print("執行測試：test_01()")
-    # 執行主要作業流程
-    return EXIT_CODE_SUCCESS
-
-
-# =============================================================================
-# 程式作業模式切換
-# =============================================================================
 if __name__ == "__main__":
     import argparse
-    import sys
-
-    # 解析命令行參數
-    parser = argparse.ArgumentParser(
-        description="缺字表修正後續作業程式",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
-使用範例：
-  python a000.py          # 執行一般模式
-  python a000.py -new     # 建立新的字庫工作表
-  python a000.py -test    # 執行測試模式
-""",
-    )
-    parser.add_argument(
-        "--test",
-        action="store_true",
-        help="執行測試模式",
-    )
-    parser.add_argument(
-        "--new",
-        action="store_true",
-        help="建立新的標音字庫工作表",
-    )
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--test", action="store_true")
+    parser.add_argument("--new", action="store_true")
     args = parser.parse_args()
-
-    if args.test:
-        # 執行測試
-        test_01()
-    else:
-        # 從 Excel 呼叫
-        exit_code = main(args)
-        if exit_code != EXIT_CODE_SUCCESS:
-            print(f"程式異常終止，返回代碼：{exit_code}")
-            sys.exit(exit_code)
+    sys.exit(main(args))

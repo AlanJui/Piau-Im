@@ -93,6 +93,12 @@ with open(index_file, "w", encoding="utf-8") as f:  # 指定 UTF-8 編碼
                         article = article_and_phonetic
                         phonetic_method = "開啟"
 
+                # 修正 phonetic_method 中可能包含的 None 字串
+                if "None" in phonetic_method:
+                    phonetic_method = phonetic_method.replace("None＋", "").replace("＋None", "").replace("None", "").strip()
+                    if not phonetic_method:
+                        phonetic_method = "開啟"
+
                 # 如果有子目錄，把子目錄名稱加到文章分類前面
                 if rel_dir != ".":
                     article = f"[{rel_dir}] " + article
