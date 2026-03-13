@@ -4,10 +4,10 @@ a400_製作標音網頁.py V0.2.2.11
 修改紀錄：
 v0.2.2.9 2026-2-25: 自動産生【文章標題】及【作者姓名】的 Ruby Tag。
 v0.2.2.10 2026-2-27: 變更 _process_sheet() 計算 start_row 的邏輯，確保從【文章標題】及【作者姓名】之後開始讀取內容。
-v0.2.2.11 2026-3-12:
-  - 為配合 a410 程式之呼叫，將【存檔】作業，自 main() 移至 process()
-  - 修復 Select 方法在 Excel 失去焦點時導致崩潰的問題
-  - 恢復完整的 Console 監控輸出功能
+v0.2.2.11 2026-3-13:
+  - 修復標題與作者重複出現的問題。
+  - 修復檔名與 meta 標籤中出現 "None" 字串的問題。
+  - 恢復完整的進度監控輸出。
 """
 
 import os
@@ -105,8 +105,8 @@ class CellProcessor(ExcelCell):
         start_row = program.line_start_row + program.han_ji_row_offset
         han_ji_list, tlpa_list = [], []
         row = start_row
+        found_line_end = False
         while row < 1000:
-            found_line_end = False
             for col in range(program.start_col, program.end_col):
                 h = sheet.range((row, col)).value
                 t = sheet.range((row - 1, col)).value
@@ -115,8 +115,9 @@ class CellProcessor(ExcelCell):
                     break
                 han_ji_list.append(str(h) if h else "")
                 tlpa_list.append(str(t).strip() if t else "")
-            if found_line_end: break
+            # 重要：移到下一行標音行
             row += program.ROWS_PER_LINE
+            if found_line_end: break
         
         html_segments = []
         for i, han_ji in enumerate(han_ji_list):
@@ -137,11 +138,10 @@ class CellProcessor(ExcelCell):
         else:
             title_html = "".join(html_segments)
 
-        # 傳回下一行起始位置
         return f"<p class='title'>{title_html}</p>", f"<p class='author'>{author_html}</p>" if author_html else "", row
 
     def _process_sheet(self, sheet) -> str:
-        title_ruby, author_ruby, next_row = self.generate_title_and_author_with_ruby()
+        title_ruby, author_ruby, next_start_row = self.generate_title_and_author_with_ruby()
         pai_ban = self.zu_im_huat_list.get(self.han_ji_piau_im_format, ["pin_yin"])[0]
         write_buffer = f"<div class='{pai_ban}'>\n{title_ruby}\n{author_ruby}\n<p>\n"
         
@@ -149,11 +149,11 @@ class CellProcessor(ExcelCell):
         char_count = 0
         end_row = program.line_end_row + program.han_ji_row_offset
 
-        for row in range(next_row, end_row, program.ROWS_PER_LINE):
+        for row in range(next_start_row, end_row, program.ROWS_PER_LINE):
             try:
                 sheet.range((row, program.start_col)).select()
             except:
-                pass # 防止 Select 失敗導致崩潰
+                pass
                 
             for col in range(program.start_col, program.end_col):
                 val = sheet.range((row, col)).value
@@ -166,7 +166,7 @@ class CellProcessor(ExcelCell):
                 
                 if val in ["\n", "\\n"]: 
                     char_count += 1
-                    print(f"{char_count}. {addr} ==> 《換行》\n" + "-"*80)
+                    print(f"{char_count}. {addr} ==> 《換換行》\n" + "-"*80)
                     write_buffer += "</p><p>\n"
                     char_count = 0
                     break
@@ -202,7 +202,10 @@ class CellProcessor(ExcelCell):
 def _create_html_file(program, output_path, head_extra="", title="", content=""):
     web_page_stem = Path(output_path).stem
     img_url = str(program.image_url or "").strip()
+    if img_url == "None" or not img_url:
+        img_url = "king_tian.png" # 預設圖片
     full_img = img_url if img_url.startswith("http") else f"https://alanjui.github.io/Piau-Im/assets/images/{img_url}"
+    
     template = f"""<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -236,30 +239,34 @@ def process(wb, args) -> int:
         print("開始製作【漢字注音】網頁！")
         html_content = xls_cell._process_sheet(sheet)
 
-        # 生成輸出檔案名稱
+        # 生成輸出檔案名稱 (處理 None)
         piau_im_huat = program.piau_im_huat
         ue_im_lui_piat = program.ue_im_lui_piat
         han_ji_piau_im_format = program.han_ji_piau_im_format
-
-        siong = str(program.siong_pinn_piau_im) if program.siong_pinn_piau_im else ""
-        zian = str(program.zian_pinn_piau_im) if program.zian_pinn_piau_im else ""
+        siong = str(program.siong_pinn_piau_im) if program.siong_pinn_piau_im and str(program.siong_pinn_piau_im) != "None" else ""
+        zian = str(program.zian_pinn_piau_im) if program.zian_pinn_piau_im and str(program.zian_pinn_piau_im) != "None" else ""
 
         if han_ji_piau_im_format == "無預設":
             im_piau = piau_im_huat
         else:
-            if siong and zian:
-                im_piau = f"{siong}＋{zian}"
-            elif siong:
-                im_piau = siong
-            elif zian:
-                im_piau = zian
-            else:
-                im_piau = piau_im_huat
+            if siong and zian: im_piau = f"{siong}＋{zian}"
+            elif siong: im_piau = siong
+            elif zian: im_piau = zian
+            else: im_piau = piau_im_huat
 
         output_file = f"《{program.title}》【{ue_im_lui_piat}】{im_piau}.html"
         output_path = os.path.join("docs", output_file)
         os.makedirs("docs", exist_ok=True)
-        head_extra = "\n".join([f'<meta name="{k}" content="{get_value_by_name(wb, k)}" />' for k in ["TITLE", "IMAGE_URL", "網頁格式", "上邊標音", "右邊標音"]])
+        
+        # 處理 Meta 標籤中的 None
+        meta_keys = ["TITLE", "IMAGE_URL", "網頁格式", "上邊標音", "右邊標音"]
+        meta_list = []
+        for k in meta_keys:
+            v = get_value_by_name(wb, k)
+            if v is None or str(v) == "None": v = ""
+            meta_list.append(f'<meta name="{k}" content="{v}" />')
+        head_extra = "\n    ".join(meta_list)
+        
         _create_html_file(program, output_path, head_extra, program.title, html_content)
         program.save_workbook_as_new_file(wb=wb)
         logging_process_step("<=========== 作業結束！==========>")

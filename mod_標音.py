@@ -922,7 +922,7 @@ class PiauIm:
 
     def BP_piau_im_with_tiau_hu(self, siann_bu, un_bu, tiau_ho):
         # ----------------------------------------
-        # 將【台語音標】轉換成 【閩拼音標】
+        # 將【台語音標】轉換成 【閩拼方案（BP）】（帶調符之標準BP格式）
         # ----------------------------------------
         # siann, un, tiau = self._get_BP_syllable(siann_bu, un_bu, tiau_ho)
 
