@@ -100,9 +100,18 @@ class CellProcessor(ExcelCell):
         return ruby_tag, siong, zian
 
     def generate_title_and_author_with_ruby(self) -> tuple:
+        """智慧判定標題與作者"""
         program = self.program
         sheet = program.wb.sheets["漢字注音"]
         start_row = program.line_start_row + program.han_ji_row_offset
+        
+        # 1. 讀取第一行第一個漢字
+        first_han_ji = sheet.range((start_row, program.start_col)).value
+        if first_han_ji != "《":
+            # 如果開頭不是《，判定為無標題文章，直接回傳空，並讓指標維持在起始行
+            return "", "", start_row
+
+        # 2. 既然有《，開始提取
         han_ji_list, tlpa_list = [], []
         row = start_row
         found_line_end = False
@@ -115,7 +124,6 @@ class CellProcessor(ExcelCell):
                     break
                 han_ji_list.append(str(h) if h else "")
                 tlpa_list.append(str(t).strip() if t else "")
-            # 重要：移到下一行標音行
             row += program.ROWS_PER_LINE
             if found_line_end: break
         
@@ -126,6 +134,7 @@ class CellProcessor(ExcelCell):
             html_segments.append(tag.rstrip() + "\n")
             print(f"標題處理: {han_ji} [{tlpa_list[i]}] ==》 上：{siong} / 右：{zian}")
 
+        # 3. 根據標點符號拆分
         title_html, author_html, split_index = "", "", -1
         for i, seg in enumerate(html_segments):
             if "》" in seg: split_index = i; break
@@ -134,7 +143,14 @@ class CellProcessor(ExcelCell):
             t_parts = html_segments[:split_index+1]
             a_parts = html_segments[split_index+1:]
             title_html = "".join([p.replace("<span>", '<span class="title_mark">') if "《" in p or "》" in p else p for p in t_parts])
-            author_html = "".join(a_parts)
+            # 檢查後續是否包含作者標記
+            combined_after = "".join(han_ji_list[split_index+1:])
+            if "：" in combined_after or ":" in combined_after:
+                author_html = "".join(a_parts)
+            else:
+                # 若無作者標記，則作者留空，且將指標重設回標題後的一行
+                author_html = ""
+                # 注意：這裡 row 已經在提取完畢後指向正確位置
         else:
             title_html = "".join(html_segments)
 
@@ -204,7 +220,9 @@ def _create_html_file(program, output_path, head_extra="", title="", content="")
     img_url = str(program.image_url or "").strip()
     if img_url == "None" or not img_url:
         img_url = "king_tian.png" # 預設圖片
-    full_img = img_url if img_url.startswith("http") else f"https://alanjui.github.io/Piau-Im/assets/images/{img_url}"
+    
+    # 修正：恢復相對路徑，確保 Local 端可瀏覽
+    full_img = img_url if img_url.startswith("http") else f"./assets/images/{img_url}"
     
     template = f"""<!DOCTYPE html>
 <html lang="zh-TW">

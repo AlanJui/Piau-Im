@@ -342,6 +342,7 @@ ruby {
   font-size: 2.4rem;
   letter-spacing: 0;
   line-height: 2.4;
+  margin-right: 0.5em; /* 修正：增加漢字之間的間距 */
 }
 
 rt {
@@ -372,7 +373,7 @@ rtc {
   flex-direction: column;
   align-items: center;
   margin-top: -0.5em;
-  margin-left: -0.8em;
+  margin-left: 0.1em; /* 修正：拉開與漢字右端的距離 */
   margin-right: 0.0em;
   text-combine-upright: none;
   -webkit-text-combine: none;
@@ -380,7 +381,6 @@ rtc {
   white-space: normal;
   height: auto;
   width: 1em;
-  margin-left: -0.4em;
 }
 
 /* 瘜券喟泵 */
@@ -389,6 +389,10 @@ rtc {
   font-size: 2.8rem;
   letter-spacing: 0.0em;
   text-align: justify;
+}
+
+.Siang_Pai ruby {
+  margin-right: 0.6em; /* 修正：Siang_Pai 模式下增加字間距 */
 }
 
 .Siang_Pai rt {
@@ -425,7 +429,7 @@ rtc {
 
   /* [Modified by Copilot] 隤踵湔寥喟泵雿蝵殷踹瞍Ｗ */
   /* 喟宏銝暺嚗隞仿輸瞍Ｗ */
-  margin-left: -0.8em;
+  margin-left: 0.1em;  /* 修正：拉開與漢字右端的距離 */
   margin-right: 0.8em;
 }
 

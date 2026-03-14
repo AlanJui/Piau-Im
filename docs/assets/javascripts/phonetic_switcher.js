@@ -1,10 +1,9 @@
 
 /**
- * 漢字標音切換器 (Phonetic Switcher) - 佈局與邏輯精修版
- * 修正項目：
- * 1. 調整 rtc 間距，解決與漢字重疊的問題。
- * 2. 十五音零聲母自動補上「英」。
- * 3. 嚴格遵循使用者提供的樣式規範。
+ * 漢字標音切換器 (Phonetic Switcher) - 穩定最終版
+ * 1. 導覽列：採用「一條龍」橫向佈局，確保不變形。
+ * 2. 樣式：100% 繼承自 styles.css（顏色、字體、大小）。
+ * 3. 對齊：強制左端切齊 (text-align: left)，解決 justify 導致的偏移。
  */
 document.addEventListener('DOMContentLoaded', function() {
     let phoneticMapping = null;
@@ -32,31 +31,32 @@ document.addEventListener('DOMContentLoaded', function() {
     function initSwitcherUI() {
         const toolbar = document.createElement('div');
         toolbar.className = 'phonetic-switcher-toolbar';
-        toolbar.style.cssText = "position:sticky; top:0; z-index:1000; background:#f8f9fa; padding:10px; border-bottom:1px solid #ddd; display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:center;";
+        // 強化導覽列 CSS：確保橫向一條龍，不換行
+        toolbar.style.cssText = "position:sticky; top:0; z-index:1000; background:#f8f9fa; padding:8px 15px; border-bottom:1px solid #ddd; display:flex; flex-wrap:nowrap; gap:8px; align-items:center; overflow-x:auto; white-space:nowrap;";
 
         const homeBtn = document.createElement('button');
         homeBtn.innerHTML = "🏠 回首頁";
-        homeBtn.style.cssText = "padding:5px 15px; cursor:pointer; font-weight:bold;";
+        homeBtn.style.cssText = "padding:4px 10px; cursor:pointer; font-weight:bold; flex-shrink:0;";
         homeBtn.onclick = () => window.location.href = 'index.html';
         toolbar.appendChild(homeBtn);
 
         const btnGroup = document.createElement('div');
-        btnGroup.style.cssText = "display:flex; flex-wrap:wrap; gap:5px; border-left:1px solid #ccc; padding-left:10px;";
+        btnGroup.style.cssText = "display:flex; gap:4px; border-left:1px solid #ccc; padding-left:8px; flex-shrink:0;";
         Object.keys(schemes).forEach(key => {
             const btn = document.createElement('button');
             btn.textContent = schemes[key].label;
-            btn.style.padding = "5px 10px"; btn.style.cursor = "pointer";
+            btn.style.cssText = "padding:4px 8px; cursor:pointer; font-size:13px; flex-shrink:0;";
             btn.onclick = () => applyScheme(key);
             btnGroup.appendChild(btn);
         });
         toolbar.appendChild(btnGroup);
 
         const customDiv = document.createElement('div');
-        customDiv.style.cssText = "border-left:1px solid #ccc; padding-left:10px; display:flex; align-items:center; gap:5px;";
+        customDiv.style.cssText = "border-left:1px solid #ccc; padding-left:8px; display:flex; align-items:center; gap:5px; flex-shrink:0; font-size:13px;";
         customDiv.innerHTML = `
             <span style="font-weight:bold">自訂</span>
-            上: <select id="select-up"></select>
-            右: <select id="select-right"></select>
+            上:<select id="select-up" style="font-size:12px"></select>
+            右:<select id="select-right" style="font-size:12px"></select>
         `;
         toolbar.appendChild(customDiv);
 
@@ -78,9 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const footer = toolbar.cloneNode(true);
             footer.style.position = "static"; footer.style.marginTop = "30px";
             footer.querySelector('button').onclick = () => window.location.href = 'index.html';
-            footer.querySelectorAll('div button').forEach((btn, idx) => {
-                btn.onclick = () => applyScheme(Object.keys(schemes)[idx]);
-            });
+            footer.querySelectorAll('div button').forEach((btn, idx) => { btn.onclick = () => applyScheme(Object.keys(schemes)[idx]); });
             const fSelUp = footer.querySelector('#select-up'); const fSelRight = footer.querySelector('#select-right');
             fSelUp.onchange = () => { selUp.value = fSelUp.value; applyCustom(); };
             fSelRight.onchange = () => { selRight.value = fSelRight.value; applyCustom(); };
@@ -144,7 +142,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (targetSystem === '十五音') {
             let iName = initialMatch ? initialMatch['十五音'] : "";
-            // 修正：零聲母補上「英」
             if (!iName && parts.siann === "ø") iName = "英";
             const fName = finalMatch ? finalMatch['十五音'] : "";
             const toneCN = ["", "一", "二", "三", "四", "五", "六", "七", "八"][parseInt(parts.tiau)] || parts.tiau;
@@ -178,9 +175,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function applyPhonetics(upSystem, rightSystem) {
+        // 撤去 JS 特調設定，讓樣式完全回歸 styles.css 的類別定義
         document.querySelectorAll('article.article_content > div').forEach(div => {
-            div.style.cssText = "display: block; line-height: 2.2; font-family: 'Noto Serif TC', serif; font-size: 2.8rem; text-align: justify;";
-            div.classList.remove('Siang_Pai', 'pin_yin', 'Piau_Im', 'fifteen_yin');
+            div.className = 'Siang_Pai';
+            div.style.cssText = ""; 
         });
 
         document.querySelectorAll('ruby[data-tlpa]').forEach(ruby => {
@@ -192,31 +190,17 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!hanJi && ruby.innerText) hanJi = ruby.innerText.split('\n')[0].trim();
 
             ruby.innerHTML = hanJi;
-            // 修正：增加 ruby 間距，解決注音符號與下一個字太擠的問題
-            ruby.style.cssText = "display: inline-ruby !important; ruby-position: over; margin-right: 0.8em; margin-bottom: 0.5em;";
+            ruby.style.cssText = ""; // 讓 styles.css 決定 ruby 樣式
 
             if (upSystem) {
                 const rt = document.createElement('rt');
                 rt.textContent = convertOne(tlpa, upSystem);
-                rt.style.cssText = `
-                    font-family: Arial, "Noto Sans TC", sans-serif;
-                    color: #00c4ab; font-size: 50%; margin-left: -0.4em;
-                    font-variant-east-asian: salt; -webkit-font-feature-settings: "salt"; font-feature-settings: "salt";
-                    white-space: nowrap;
-                `;
                 ruby.appendChild(rt);
             }
 
             if (rightSystem) {
                 const rtc = document.createElement('rtc');
                 rtc.textContent = convertOne(tlpa, rightSystem);
-                rtc.style.cssText = `
-                    font-family: BopomofoRuby; color: #B94B6A; font-size: 40%; font-weight: bold; line-height: 1;
-                    ruby-position: inter-character; -webkit-writing-mode: vertical-lr; writing-mode: vertical-lr;
-                    vertical-align: middle;
-                    margin-left: -0.1em; /* 修正：進一步拉開與漢字的距離，解決重疊問題 */
-                    margin-right: 0.2em;
-                `;
                 ruby.appendChild(rtc);
             }
         });
