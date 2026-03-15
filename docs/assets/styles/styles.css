@@ -247,7 +247,7 @@ body {
 }
 
 /* =========================
-   
+
    ========================= */
 .separator img,
 .article_content img {
@@ -389,6 +389,7 @@ rtc {
   font-size: 2.8rem;
   letter-spacing: 0.0em;
   text-align: justify;
+  /* text-align: left; */
 }
 
 .Siang_Pai ruby {
@@ -397,10 +398,10 @@ rtc {
 
 .Siang_Pai rt {
   /* font-family: "Noto Serif TC", serif; */
-  /* font-family: "LXGW WenKai Mono TC";   */
-  font-family: "Noto Sans TC", system-ui, -apple-system, sans-serif;
+  /* font-family: "Noto Sans TC", system-ui, -apple-system, sans-serif; */
+  /* font-family: "LXGW WenKai Mono TC", "Microsoft JhengHei", "微軟正黑體"; */
+  font-family: "Noto Sans TC", "Microsoft JhengHei", "微軟正黑體";
   margin-left: 0.1em;
-  font-family: Arial;
   color: #00c4ab;
   font-size: 50%;
   font-variant-east-asian: salt;
@@ -412,7 +413,8 @@ rtc {
 }
 
 .Siang_Pai rtc {
-  font-family: BopomofoRuby;
+  /* font-family: BopomofoRuby; */
+  font-family: BopomofoRuby, "Noto Sans TC" !important;
   color: #B94B6A;
   font-size: 40%;
   font-weight: bold;
@@ -607,9 +609,12 @@ rtc {
  
  . c a r d - t i t l e   { 
      m a r g i n :   0   0   1 6 p x   0   ! i m p o r t a n t ; 
-     f o n t - f a m i l y :   \  
- N o t o  
- S a n s  
+     f o n t - f a m i l y :   \ 
+ 
+ N o t o 
+ 
+ S a n s 
+ 
  T C \ ,   s e r i f   ! i m p o r t a n t ; 
      f o n t - s i z e :   1 . 4 r e m   ! i m p o r t a n t ; 
      c o l o r :   # 3 3 3   ! i m p o r t a n t ; 
@@ -643,7 +648,8 @@ rtc {
      b o r d e r - c o l o r :   # 0 0 6 6 c c ; 
      b o x - s h a d o w :   0   4 p x   8 p x   r g b a ( 0 , 1 0 2 , 2 0 4 , 0 . 3 ) ; 
  } 
-  
+ 
+ 
  
  / *   = = = = = = = = = = = = = = = = = = = = = = = = = 
        I n d e x b  H e a d e r   &   N a v   9eo
@@ -667,9 +673,12 @@ rtc {
  } 
  
  # h e a d e r   h 1   { 
-     f o n t - f a m i l y :   \  
- N o t o  
- S e r i f  
+     f o n t - f a m i l y :   \ 
+ 
+ N o t o 
+ 
+ S e r i f 
+ 
  T C \ ,   s e r i f ; 
      f o n t - s i z e :   2 . 5 r e m ; 
      m a r g i n :   0 ; 
@@ -720,7 +729,8 @@ rtc {
      b a c k g r o u n d :   # 0 0 6 6 c c ; 
      c o l o r :   w h i t e ; 
  } 
-  
+ 
+ 
  
  / *   = = = = = = = = = = = = = = = = = = = = = = = = = 
        鷻nm滍	c  ( e輈b(u) 
@@ -760,7 +770,8 @@ rtc {
          f o n t - s i z e :   2 0 p x ; 
      } 
  } 
-  
+ 
+ 
  
 /* =========================
    頁面全域邊距與大字體 (Index & Articles)
@@ -998,7 +1009,7 @@ body, p, div, span, a, td, th, li {
 h1#site-title, h1, .site-title {
     font-family: 'Noto Serif TC', serif !important;
     font-weight: 900 !important;
-    font-size: 36pt !important; 
+    font-size: 36pt !important;
 }
 
 /* Article Nav 樣式 */
@@ -1083,7 +1094,7 @@ h1#site-title, h1, .site-title {
   display: inline-block;
   cursor: default;
 }
-  
+
 /* Home link */
 .main-nav ul li a.nav-home {
   font-size: 20pt !important;
@@ -1227,7 +1238,7 @@ nav.main-nav ul li {
 }
 
 /* 確保各按鈕文字都同行 */
-nav.main-nav ul li a, 
+nav.main-nav ul li a,
 nav.main-nav ul li span {
     white-space: nowrap !important;
     display: inline-block !important;
