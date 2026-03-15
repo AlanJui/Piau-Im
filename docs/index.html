@@ -174,6 +174,11 @@ body {
   border-color: #0b57d0 !important;
   box-shadow: 0 4px 12px rgba(11,87,208,0.3) !important;
 }
+
+/* 搜尋過濾專用：優先權最高 */
+.card.hidden-card {
+  display: none !important;
+}
 </style>
 
 <style id="nav-horizontal-fix">
@@ -249,9 +254,56 @@ body {
     
     <!-- 內容 -->
     <main id="main">
+      <!-- 搜尋列 -->
+      <div class="search-container" style="text-align: center; margin-bottom: 30px;">
+        <input type="text" id="article-search" placeholder="欲搜尋之文件..." 
+               style="width: 100%; max-width: 600px; padding: 12px 20px; font-size: 20pt; border: 2px solid #ddd; border-radius: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); outline: none; transition: border-color 0.3s;">
+      </div>
       <!-- 側邊選單 -->
       <div id="articles"><div class="card-grid">
 
+    <div class="card">
+        <h2 class="card-title">《定風波》【文讀音】</h2>
+        <div class="card-links">
+            <a href="《定風波》【文讀音】雅俗通＋方音符號.html" class="badge">雅俗通＋方音符號</a>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">《寒窯賦》【文讀音】</h2>
+        <div class="card-links">
+            <a href="《寒窯賦》【文讀音】閩拼調符＋方音符號.html" class="badge">閩拼調符＋方音符號</a>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">《心經》【文讀音】</h2>
+        <div class="card-links">
+            <a href="《心經》【文讀音】台語音標＋雅俗通.html" class="badge">台語音標＋雅俗通</a><a href="《心經》【文讀音】台語音標＋方音符號.html" class="badge">台語音標＋方音符號</a><a href="《心經》【文讀音】閩拼調符＋方音符號.html" class="badge">閩拼調符＋方音符號</a><a href="《心經》【文讀音】閩拼調號.html" class="badge">閩拼調號</a><a href="《心經》【文讀音】閩拼調符.html" class="badge">閩拼調符</a><a href="《心經》【文讀音】方音符號.html" class="badge">方音符號</a><a href="《心經》【文讀音】雅俗通＋方音符號.html" class="badge">雅俗通＋方音符號</a>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">《心術》【文讀音】</h2>
+        <div class="card-links">
+            <a href="《心術》【文讀音】閩拼調號＋方音符號.html" class="badge">閩拼調號＋方音符號</a>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">《桃花源記》【文讀音】</h2>
+        <div class="card-links">
+            <a href="《桃花源記》【文讀音】閩拼調符＋方音符號.html" class="badge">閩拼調符＋方音符號</a>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">《歸去來辭》【文讀音】</h2>
+        <div class="card-links">
+            <a href="《歸去來辭》【文讀音】閩拼調符＋方音符號.html" class="badge">閩拼調符＋方音符號</a>
+        </div>
+    </div>
+    
     <div class="card">
         <h2 class="card-title">《涼州詞》【文讀音】</h2>
         <div class="card-links">
@@ -260,9 +312,44 @@ body {
     </div>
     
     <div class="card">
+        <h2 class="card-title">《深慮論》【文讀音】</h2>
+        <div class="card-links">
+            <a href="《深慮論》【文讀音】閩拼調號＋方音符號.html" class="badge">閩拼調號＋方音符號</a><a href="《深慮論》【文讀音】十五音＋方音符號.html" class="badge">十五音＋方音符號</a>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">《滕王閣序》【文讀音】</h2>
+        <div class="card-links">
+            <a href="《滕王閣序》【文讀音】閩拼調符＋方音符號.html" class="badge">閩拼調符＋方音符號</a>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">《相󠇡見歡󠇡·無󠇡言獨上西樓󠇡》【文讀音】</h2>
+        <div class="card-links">
+            <a href="《相󠇡見歡󠇡·無󠇡言獨上西樓󠇡》【文讀音】十五音＋方音符號.html" class="badge">十五音＋方音符號</a>
+        </div>
+    </div>
+    
+    <div class="card">
         <h2 class="card-title">《短歌行》【文讀音】</h2>
         <div class="card-links">
             <a href="《短歌行》【文讀音】閩拼調號＋方音符號.html" class="badge">閩拼調號＋方音符號</a>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">《禮記‧大學》【文讀音】</h2>
+        <div class="card-links">
+            <a href="《禮記‧大學》【文讀音】注音二式＋方音符號.html" class="badge">注音二式＋方音符號</a>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">《秋離》【白話音】</h2>
+        <div class="card-links">
+            <a href="《秋離》【白話音】閩拼調號＋方音符號.html" class="badge">閩拼調號＋方音符號</a>
         </div>
     </div>
     
@@ -284,6 +371,20 @@ body {
         <h2 class="card-title">《詩經．小雅．鹿鳴》【文讀音】</h2>
         <div class="card-links">
             <a href="《詩經．小雅．鹿鳴》【文讀音】注音二式＋方音符號.html" class="badge">注音二式＋方音符號</a>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">《諫太宗十思疏》【文讀音】</h2>
+        <div class="card-links">
+            <a href="《諫太宗十思疏》【文讀音】台語音標＋雅俗通.html" class="badge">台語音標＋雅俗通</a><a href="《諫太宗十思疏》【文讀音】台語音標＋方音符號.html" class="badge">台語音標＋方音符號</a><a href="《諫太宗十思疏》【文讀音】閩拼調符＋方音符號.html" class="badge">閩拼調符＋方音符號</a><a href="《諫太宗十思疏》【文讀音】閩拼調號.html" class="badge">閩拼調號</a><a href="《諫太宗十思疏》【文讀音】閩拼調符.html" class="badge">閩拼調符</a><a href="《諫太宗十思疏》【文讀音】方音符號.html" class="badge">方音符號</a><a href="《諫太宗十思疏》【文讀音】雅俗通＋方音符號.html" class="badge">雅俗通＋方音符號</a>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">《陋室銘》【文讀音】</h2>
+        <div class="card-links">
+            <a href="《陋室銘》【文讀音】台語音標＋雅俗通.html" class="badge">台語音標＋雅俗通</a><a href="《陋室銘》【文讀音】台語音標＋方音符號.html" class="badge">台語音標＋方音符號</a><a href="《陋室銘》【文讀音】閩拼調符＋方音符號.html" class="badge">閩拼調符＋方音符號</a><a href="《陋室銘》【文讀音】閩拼調號.html" class="badge">閩拼調號</a><a href="《陋室銘》【文讀音】閩拼調符.html" class="badge">閩拼調符</a><a href="《陋室銘》【文讀音】方音符號.html" class="badge">方音符號</a><a href="《陋室銘》【文讀音】雅俗通＋方音符號.html" class="badge">雅俗通＋方音符號</a>
         </div>
     </div>
     </div></div>
