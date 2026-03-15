@@ -17,6 +17,7 @@ ignore_dir_list = [
     "_archived",
     "_test",
     "金鋼經",
+    "__bak",
 ]
 
 ignore_doc_list = [
@@ -95,7 +96,12 @@ with open(index_file, "w", encoding="utf-8") as f:  # 指定 UTF-8 編碼
 
                 # 修正 phonetic_method 中可能包含的 None 字串
                 if "None" in phonetic_method:
-                    phonetic_method = phonetic_method.replace("None＋", "").replace("＋None", "").replace("None", "").strip()
+                    phonetic_method = (
+                        phonetic_method.replace("None＋", "")
+                        .replace("＋None", "")
+                        .replace("None", "")
+                        .strip()
+                    )
                     if not phonetic_method:
                         phonetic_method = "開啟"
 
