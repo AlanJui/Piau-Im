@@ -1,37 +1,33 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+# GitHub Pages 部署流程 - 2026 修正版
+name: Deploy Static Content
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    # 強制所有 JavaScript Action 使用 Node.js 24 執行，以消除棄用警告
+    
+    # 強制升級環境
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Setup Python
@@ -39,18 +35,27 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Generate Index
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # 如果 a999.py 需要額外套件（如 pandas），請在下方加入
+          # pip install pandas xlwings 
+
+      - name: Generate New Index
         run: |
           python a999_自動生成index_html.py
+          echo "==== 檢查 docs 目錄更新狀態 ===="
+          ls -lh docs/index.html
+          date
 
-      - name: Setup Pages
+      - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload artifact
+      - name: Upload Web Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # 只上傳 docs 資料夾作為網頁根目錄
-          path: "docs"
+          # 確保只上傳 docs 資料夾
+          path: 'docs'
 
       - name: Deploy to GitHub Pages
         id: deployment
