@@ -1,8 +1,10 @@
 """
-a999_自動生成index_html.py v0.2.1
+a999_自動生成index_html.py v0.2.2
 
 為 docs 目錄下的 HTML 檔案自動生成 index.html。
-修正：加入顯式排序邏輯，確保 Local 與 GitHub Actions 產生的順序一致。
+修正：
+1. 更正佔位符名稱為 {articles_placeholder}。
+2. 加入顯式排序邏輯與 card-grid 結構。
 """
 
 import os
@@ -36,8 +38,7 @@ for root, dirs, files in os.walk(docs_directory):
             "rel_dir": rel_dir
         })
 
-# 2. 執行排序 (先按 mtime 倒序，同時間則按檔名排序)
-# 注意：GitHub Actions 環境下 mtime 可能相同，所以檔名排序是關鍵
+# 2. 執行排序 (mtime 倒序)
 all_files_info.sort(key=lambda x: (-x["mtime"], x["filename"]))
 
 # 3. 處理文章字典
@@ -46,7 +47,6 @@ for info in all_files_info:
     filename = info["filename"]
     article_and_phonetic = os.path.splitext(filename)[0]
     
-    # 解析文章標題與標音方式
     if "_" in article_and_phonetic:
         parts = article_and_phonetic.split("_")
         phonetic_method = parts[-1]
@@ -60,7 +60,6 @@ for info in all_files_info:
             article = article_and_phonetic
             phonetic_method = "開啟"
 
-    # 清理 None
     if "None" in phonetic_method:
         phonetic_method = phonetic_method.replace("None＋", "").replace("＋None", "").replace("None", "").strip()
         if not phonetic_method: phonetic_method = "開啟"
@@ -72,9 +71,8 @@ for info in all_files_info:
         articles[article] = []
     articles[article].append({"method": phonetic_method, "path": info["relative_path"]})
 
-# 4. 生成 HTML 內容
-cards_html = ""
-# 這裡對字典的 Key 也進行一次排序，確保文章區塊順序一致
+# 4. 生成 HTML 內容 (包含 card-grid 容器)
+cards_html = '<div class="card-grid">\n'
 for article in sorted(articles.keys()):
     links = "".join([f'<a href="{p["path"]}" class="badge">{p["method"]}</a>' for p in articles[article]])
     cards_html += f"""
@@ -85,11 +83,14 @@ for article in sorted(articles.keys()):
         </div>
     </div>
     """
+cards_html += '</div>'
 
-# 5. 寫入檔案
-with open(template_file, "r", encoding="utf-8") as t:
-    content = t.read().replace("{placeholder}", cards_html)
-    with open(index_file, "w", encoding="utf-8") as f:
-        f.write(content)
-
-print(f"成功生成索引：{index_file}，包含 {len(articles)} 篇文章。")
+# 5. 寫入檔案 (修正替換標記)
+if os.path.exists(template_file):
+    with open(template_file, "r", encoding="utf-8") as t:
+        content = t.read().replace("{articles_placeholder}", cards_html)
+        with open(index_file, "w", encoding="utf-8") as f:
+            f.write(content)
+    print(f"成功生成索引：{index_file}，包含 {len(articles)} 篇文章。")
+else:
+    print(f"錯誤：找不到模板檔案 {template_file}")
