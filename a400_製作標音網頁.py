@@ -13,6 +13,7 @@ v0.2.2.11 2026-3-13:
 import os
 import sys
 from pathlib import Path
+
 import xlwings as xw
 
 from mod_excel_access import get_value_by_name
@@ -33,6 +34,7 @@ EXIT_CODE_PROCESS_FAILURE = 10
 
 init_logging()
 
+
 class CellProcessor(ExcelCell):
     def __init__(self, program: Program):
         super().__init__(program=program)
@@ -41,7 +43,9 @@ class CellProcessor(ExcelCell):
         self.image_url = get_value_by_name(wb=wb, name="IMAGE_URL")
         self.output_dir = "docs"
         self.total_chars_per_line = get_value_by_name(wb=wb, name="網頁每列字數")
-        self.total_chars_per_line = 0 if self.total_chars_per_line is None else int(self.total_chars_per_line)
+        self.total_chars_per_line = (
+            0 if self.total_chars_per_line is None else int(self.total_chars_per_line)
+        )
         self.han_ji_piau_im_format = get_value_by_name(wb=wb, name="網頁格式")
         self.piau_im_hong_sik = get_value_by_name(wb=wb, name="標音方式")
         self.siong_pinn_piau_im = get_value_by_name(wb=wb, name="上邊標音")
@@ -60,39 +64,60 @@ class CellProcessor(ExcelCell):
             "無預設": ["Siang_Pai", "rtc", "雙排注音"],
         }
 
-    def _build_ruby_tag(self, han_ji: str, siong_piau_im: str, zian_piau_im: str) -> str:
+    def _build_ruby_tag(
+        self, han_ji: str, siong_piau_im: str, zian_piau_im: str
+    ) -> str:
         if siong_piau_im != "" and zian_piau_im == "":
-            return f"<ruby>{han_ji}<rt>{siong_piau_im}</rt></ruby>"
+            return f"\t\t\t\t<ruby>{han_ji}<rt>{siong_piau_im}</rt></ruby>\n"
         elif siong_piau_im == "" and zian_piau_im != "":
-            return f"<ruby>{han_ji}<rtc>{zian_piau_im}</rtc></ruby>"
+            return f"\t\t\t\t<ruby>{han_ji}<rtc>{zian_piau_im}</rtc></ruby>\n"
         elif siong_piau_im != "" and zian_piau_im != "":
-            return f"<ruby>{han_ji}<rt>{siong_piau_im}</rt><rtc>{zian_piau_im}</rtc></ruby>"
+            return f"\t\t\t\t<ruby>{han_ji}<rt>{siong_piau_im}</rt><rtc>{zian_piau_im}</rtc></ruby>\n"
         else:
-            return f"<span>{han_ji}</span>"
+            return f"\t\t\t\t<span>{han_ji}</span>\n"
 
     def generate_ruby_tag(self, han_ji: str, tai_gi_im_piau: str) -> tuple:
         if not tai_gi_im_piau or not str(tai_gi_im_piau).strip():
-            return f"<span>{han_ji}</span>", "", ""
+            return f"\t\t\t\t<span>{han_ji}</span>\n", "", ""
         try:
             zu_im_list = split_tai_gi_im_piau(tai_gi_im_piau)
-        except:
-            return f"<span>{han_ji}</span>", "", ""
+        except Exception:
+            return f"\t\t\t\t<span>{han_ji}</span>\n", "", ""
 
         siann_bu = zu_im_list[0] if zu_im_list[0] else "ø"
         siong, zian = "", ""
         if self.han_ji_piau_im_format == "無預設":
             if "上" in str(self.piau_im_hong_sik):
-                siong = self.program.piau_im.han_ji_piau_im_tng_huan(self.siong_pinn_piau_im, siann_bu, zu_im_list[1], zu_im_list[2])
+                siong = self.program.piau_im.han_ji_piau_im_tng_huan(
+                    self.siong_pinn_piau_im, siann_bu, zu_im_list[1], zu_im_list[2]
+                )
             if "右" in str(self.piau_im_hong_sik):
-                zian = self.program.piau_im.han_ji_piau_im_tng_huan(self.zian_pinn_piau_im, siann_bu, zu_im_list[1], zu_im_list[2])
+                zian = self.program.piau_im.han_ji_piau_im_tng_huan(
+                    self.zian_pinn_piau_im, siann_bu, zu_im_list[1], zu_im_list[2]
+                )
         else:
-            if self.han_ji_piau_im_format in ["POJ", "TL", "BP", "TLPA_Plus", "SNI", "雅俗通"]:
-                siong = self.program.piau_im.han_ji_piau_im_tng_huan(self.siong_pinn_piau_im, siann_bu, zu_im_list[1], zu_im_list[2])
+            if self.han_ji_piau_im_format in [
+                "POJ",
+                "TL",
+                "BP",
+                "TLPA_Plus",
+                "SNI",
+                "雅俗通",
+            ]:
+                siong = self.program.piau_im.han_ji_piau_im_tng_huan(
+                    self.siong_pinn_piau_im, siann_bu, zu_im_list[1], zu_im_list[2]
+                )
             elif self.han_ji_piau_im_format == "TPS":
-                zian = self.program.piau_im.han_ji_piau_im_tng_huan(self.zian_pinn_piau_im, siann_bu, zu_im_list[1], zu_im_list[2])
+                zian = self.program.piau_im.han_ji_piau_im_tng_huan(
+                    self.zian_pinn_piau_im, siann_bu, zu_im_list[1], zu_im_list[2]
+                )
             elif self.han_ji_piau_im_format == "DBL":
-                siong = self.program.piau_im.han_ji_piau_im_tng_huan(self.siong_pinn_piau_im, siann_bu, zu_im_list[1], zu_im_list[2])
-                zian = self.program.piau_im.han_ji_piau_im_tng_huan(self.zian_pinn_piau_im, siann_bu, zu_im_list[1], zu_im_list[2])
+                siong = self.program.piau_im.han_ji_piau_im_tng_huan(
+                    self.siong_pinn_piau_im, siann_bu, zu_im_list[1], zu_im_list[2]
+                )
+                zian = self.program.piau_im.han_ji_piau_im_tng_huan(
+                    self.zian_pinn_piau_im, siann_bu, zu_im_list[1], zu_im_list[2]
+                )
 
         ruby_tag = self._build_ruby_tag(han_ji, siong, zian)
         if tai_gi_im_piau and "<ruby" in ruby_tag:
@@ -104,7 +129,7 @@ class CellProcessor(ExcelCell):
         program = self.program
         sheet = program.wb.sheets["漢字注音"]
         start_row = program.line_start_row + program.han_ji_row_offset
-        
+
         # 1. 讀取第一行第一個漢字
         first_han_ji = sheet.range((start_row, program.start_col)).value
         if first_han_ji != "《":
@@ -119,17 +144,19 @@ class CellProcessor(ExcelCell):
             for col in range(program.start_col, program.end_col):
                 h = sheet.range((row, col)).value
                 t = sheet.range((row - 1, col)).value
-                if h in ["φ", "\\n", "\n"]: 
+                if h in ["φ", "\\n", "\n"]:
                     found_line_end = True
                     break
                 han_ji_list.append(str(h) if h else "")
                 tlpa_list.append(str(t).strip() if t else "")
             row += program.ROWS_PER_LINE
-            if found_line_end: break
-        
+            if found_line_end:
+                break
+
         html_segments = []
         for i, han_ji in enumerate(han_ji_list):
-            if not han_ji.strip(): continue
+            if not han_ji.strip():
+                continue
             tag, siong, zian = self.generate_ruby_tag(han_ji, tlpa_list[i])
             html_segments.append(tag.rstrip() + "\n")
             print(f"標題處理: {han_ji} [{tlpa_list[i]}] ==》 上：{siong} / 右：{zian}")
@@ -137,14 +164,25 @@ class CellProcessor(ExcelCell):
         # 3. 根據標點符號拆分
         title_html, author_html, split_index = "", "", -1
         for i, seg in enumerate(html_segments):
-            if "》" in seg: split_index = i; break
-        
+            if "》" in seg:
+                split_index = i
+                break
+
         if split_index != -1:
-            t_parts = html_segments[:split_index+1]
-            a_parts = html_segments[split_index+1:]
-            title_html = "".join([p.replace("<span>", '<span class="title_mark">') if "《" in p or "》" in p else p for p in t_parts])
+            t_parts = html_segments[: split_index + 1]
+            a_parts = html_segments[split_index + 1 :]
+            title_html = "".join(
+                [
+                    (
+                        p.replace("<span>", '<span class="title_mark">')
+                        if "《" in p or "》" in p
+                        else p
+                    )
+                    for p in t_parts
+                ]
+            )
             # 檢查後續是否包含作者標記
-            combined_after = "".join(han_ji_list[split_index+1:])
+            combined_after = "".join(han_ji_list[split_index + 1 :])
             if "：" in combined_after or ":" in combined_after:
                 author_html = "".join(a_parts)
             else:
@@ -154,13 +192,19 @@ class CellProcessor(ExcelCell):
         else:
             title_html = "".join(html_segments)
 
-        return f"<p class='title'>{title_html}</p>", f"<p class='author'>{author_html}</p>" if author_html else "", row
+        return (
+            f"\t\t\t\t<p class='title'>{title_html}</p>\n",
+            f"\t\t\t\t<p class='author'>{author_html}</p>\n" if author_html else "",
+            row,
+        )
 
     def _process_sheet(self, sheet) -> str:
-        title_ruby, author_ruby, next_start_row = self.generate_title_and_author_with_ruby()
+        title_ruby, author_ruby, next_start_row = (
+            self.generate_title_and_author_with_ruby()
+        )
         pai_ban = self.zu_im_huat_list.get(self.han_ji_piau_im_format, ["pin_yin"])[0]
         write_buffer = f"<div class='{pai_ban}'>\n{title_ruby}\n{author_ruby}\n<p>\n"
-        
+
         program = self.program
         char_count = 0
         end_row = program.line_end_row + program.han_ji_row_offset
@@ -168,25 +212,25 @@ class CellProcessor(ExcelCell):
         for row in range(next_start_row, end_row, program.ROWS_PER_LINE):
             try:
                 sheet.range((row, program.start_col)).select()
-            except:
+            except Exception:
                 pass
-                
+
             for col in range(program.start_col, program.end_col):
                 val = sheet.range((row, col)).value
                 addr = f"{xw.utils.col_name(col)}{row}"
-                
-                if val == "φ": 
+
+                if val == "φ":
                     char_count += 1
-                    print(f"{char_count}. {addr} ==> 《文章終止》\n" + "="*80)
+                    print(f"{char_count}. {addr} ==> 《文章終止》\n" + "=" * 80)
                     return write_buffer + "</p></div>"
-                
-                if val in ["\n", "\\n"]: 
+
+                if val in ["\n", "\\n"]:
                     char_count += 1
-                    print(f"{char_count}. {addr} ==> 《換換行》\n" + "-"*80)
+                    print(f"{char_count}. {addr} ==> 《換換行》\n" + "-" * 80)
                     write_buffer += "</p><p>\n"
                     char_count = 0
                     break
-                
+
                 str_val = str(val).strip() if val else ""
                 if is_punctuation(str_val):
                     msg = f"{str_val}【標點符號】"
@@ -204,26 +248,33 @@ class CellProcessor(ExcelCell):
                         msg = f"{str_val}【無音標】"
                         write_buffer += f"<span>{str_val}</span>\n"
                     else:
-                        if kam_si_u_tiau_hu(tlpa): tlpa = tng_tiau_ho(tng_im_piau(tlpa))
+                        if kam_si_u_tiau_hu(tlpa):
+                            tlpa = tng_tiau_ho(tng_im_piau(tlpa))
                         tag, siong, zian = self.generate_ruby_tag(str_val, tlpa)
                         write_buffer += tag
                         msg = f"{str_val} [{tlpa}] ==》 上：{siong} / 右：{zian}"
-                
+
                 char_count += 1
                 print(f"{char_count}. {addr} ==> {msg}")
-                if self.total_chars_per_line and char_count >= self.total_chars_per_line:
-                    write_buffer += "<br/>\n"; char_count = 0; print("《人工斷行》")
+                if (
+                    self.total_chars_per_line
+                    and char_count >= self.total_chars_per_line
+                ):
+                    write_buffer += "<br/>\n"
+                    char_count = 0
+                    print("《人工斷行》")
         return write_buffer + "</p></div>"
+
 
 def _create_html_file(program, output_path, head_extra="", title="", content=""):
     web_page_stem = Path(output_path).stem
     img_url = str(program.image_url or "").strip()
     if img_url == "None" or not img_url:
-        img_url = "king_tian.png" # 預設圖片
-    
+        img_url = "king_tian.png"  # 預設圖片
+
     # 修正：恢復相對路徑，確保 Local 端可瀏覽
     full_img = img_url if img_url.startswith("http") else f"./assets/images/{img_url}"
-    
+
     template = f"""<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -245,7 +296,9 @@ def _create_html_file(program, output_path, head_extra="", title="", content="")
     <a href="index.html" class="floating-home-btn">🏠</a>
 </body>
 </html>"""
-    with open(output_path, "w", encoding="utf-8") as f: f.write(template)
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write(template)
+
 
 def process(wb, args) -> int:
     logging_process_step("<=========== 作業開始！==========>")
@@ -261,30 +314,43 @@ def process(wb, args) -> int:
         piau_im_huat = program.piau_im_huat
         ue_im_lui_piat = program.ue_im_lui_piat
         han_ji_piau_im_format = program.han_ji_piau_im_format
-        siong = str(program.siong_pinn_piau_im) if program.siong_pinn_piau_im and str(program.siong_pinn_piau_im) != "None" else ""
-        zian = str(program.zian_pinn_piau_im) if program.zian_pinn_piau_im and str(program.zian_pinn_piau_im) != "None" else ""
+        siong = (
+            str(program.siong_pinn_piau_im)
+            if program.siong_pinn_piau_im and str(program.siong_pinn_piau_im) != "None"
+            else ""
+        )
+        zian = (
+            str(program.zian_pinn_piau_im)
+            if program.zian_pinn_piau_im and str(program.zian_pinn_piau_im) != "None"
+            else ""
+        )
 
         if han_ji_piau_im_format == "無預設":
             im_piau = piau_im_huat
         else:
-            if siong and zian: im_piau = f"{siong}＋{zian}"
-            elif siong: im_piau = siong
-            elif zian: im_piau = zian
-            else: im_piau = piau_im_huat
+            if siong and zian:
+                im_piau = f"{siong}＋{zian}"
+            elif siong:
+                im_piau = siong
+            elif zian:
+                im_piau = zian
+            else:
+                im_piau = piau_im_huat
 
         output_file = f"《{program.title}》【{ue_im_lui_piat}】{im_piau}.html"
         output_path = os.path.join("docs", output_file)
         os.makedirs("docs", exist_ok=True)
-        
+
         # 處理 Meta 標籤中的 None
         meta_keys = ["TITLE", "IMAGE_URL", "網頁格式", "上邊標音", "右邊標音"]
         meta_list = []
         for k in meta_keys:
             v = get_value_by_name(wb, k)
-            if v is None or str(v) == "None": v = ""
+            if v is None or str(v) == "None":
+                v = ""
             meta_list.append(f'<meta name="{k}" content="{v}" />')
         head_extra = "\n    ".join(meta_list)
-        
+
         _create_html_file(program, output_path, head_extra, program.title, html_content)
         program.save_workbook_as_new_file(wb=wb)
         logging_process_step("<=========== 作業結束！==========>")
@@ -292,6 +358,7 @@ def process(wb, args) -> int:
     except Exception as e:
         logging_exc_error("處理作業異常", e)
         return EXIT_CODE_PROCESS_FAILURE
+
 
 def main(args):
     try:
@@ -301,8 +368,10 @@ def main(args):
         logging_exception("無法找到作用中的 Excel 工作簿！", e)
         return EXIT_CODE_NO_FILE
 
+
 if __name__ == "__main__":
     import argparse
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--test", action="store_true")
     parser.add_argument("--new", action="store_true")
