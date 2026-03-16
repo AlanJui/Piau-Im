@@ -1,48 +1,40 @@
 
 /**
- * 漢字標音切換器 (Phonetic Switcher) - 自動修復增強版
- * 
- * 核心功能：
- * 1. 立即觸發：網頁載入後自動修正拉丁拼音的調符偏移。
- * 2. 樣式隔離：確保中文字體特性 (salt) 僅作用於方音符號。
- * 3. 智慧轉換：遵循閩拼與十五音的專業規範。
+ * 漢字標音切換器 (Phonetic Switcher) - 還原穩定版
+ * 已移除破壞佈局的 inline-block 設定。
  */
 document.addEventListener('DOMContentLoaded', function() {
     let phoneticMapping = null;
 
-    // --- [立即觸發] 注入拉丁拼音修復樣式 ---
+    // --- [1. 樣式修復] ---
     const injectLatinFix = () => {
         if (!document.getElementById('latin-phonetic-fix')) {
             const style = document.createElement('style');
             style.id = 'latin-phonetic-fix';
             style.textContent = `
-                /* 強制修正拉丁拼音：關閉中文字體的全形渲染與 salt 彈射特性 */
-                rt.latin-phonetic, rtc.latin-phonetic {
-                    font-family: Arial, Helvetica, sans-serif !important;
-                    font-feature-settings: "normal" !important;
-                    font-variant-east-asian: normal !important;
+                rt.latin-phonetic, rtc.latin-phonetic { 
+                    font-family: Arial, Helvetica, sans-serif !important; 
+                    font-feature-settings: "normal" !important; 
+                    font-variant-east-asian: normal !important; 
                     text-align: center !important;
+                    letter-spacing: -0.01em !important;
                 }
             `;
             document.head.appendChild(style);
         }
     };
 
-    // --- [立即觸發] 自動判定並修正現有的拼音標籤 ---
-    const autoFixLatinPhonetics = () => {
-        const latinRegex = /[a-zA-Z\u0300-\u036f]/; // 包含拉丁字母與組合調符
+    const autoFix = () => {
+        const latinRegex = /[a-zA-Z\u0300-\u036f]/;
         document.querySelectorAll('rt, rtc').forEach(el => {
-            if (latinRegex.test(el.textContent)) {
-                el.classList.add('latin-phonetic');
-            }
+            if (latinRegex.test(el.textContent)) el.classList.add('latin-phonetic');
         });
     };
 
-    // 執行初始修復
     injectLatinFix();
-    autoFixLatinPhonetics();
+    autoFix();
 
-    // 載入對照表並初始化 UI
+    // --- [2. 資料載入] ---
     fetch('./assets/javascripts/phonetic_mapping.json')
         .then(response => response.json())
         .then(data => {
@@ -55,12 +47,10 @@ document.addEventListener('DOMContentLoaded', function() {
         "original": { label: "重設", up: null, right: null },
         "方音符號": { label: "方音符號", up: "", right: "方音符號" },
         "台語音標": { label: "台語音標", up: "台語音標", right: "" },
+        "台羅拼音": { label: "台羅拼音", up: "台羅拼音", right: "" },
+        "白話字": { label: "白話字", up: "白話字", right: "" },
         "閩拼方案": { label: "閩拼方案", up: "閩拼方案", right: "" },
-        "閩拼調號": { label: "閩拼調號", up: "閩拼調號", right: "" },
-        "十五音": { label: "十五音", up: "十五音", right: "" },
         "十五音+方音符號": { label: "十五音+方音符號", up: "十五音", right: "方音符號" },
-        "台語音標+方音符號": { label: "台語音標+方音符號", up: "台語音標", right: "方音符號" },
-        "閩拼方案+方音符號": { label: "閩拼方案+方音符號", up: "閩拼方案", right: "方音符號" },
         "台語音標+十五音": { label: "台語音標+十五音", up: "台語音標", right: "十五音" }
     };
 
@@ -135,8 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let tiau = p.slice(-1);
         if (!isNaN(tiau)) { p = p.slice(0, -1); }
         else {
-            if (['p', 't', 'k', 'h'].includes(tiau)) tiau = '4';
-            else tiau = '1';
+            if (['p', 't', 'k', 'h'].includes(tiau)) tiau = '4'; else tiau = '1';
         }
         let siann = "", un = "";
         const initials = ["tsh", "kh", "ph", "th", "ng", "bb", "gg", "ch", "zh", "ji", "ts", "z", "c", "p", "k", "t", "l", "s", "h", "b", "g", "m", "n", "j"];
@@ -151,58 +140,55 @@ document.addEventListener('DOMContentLoaded', function() {
         return str.replace(/U\+([0-9A-Fa-f]{4})/g, (match, hex) => String.fromCharCode(parseInt(hex, 16)));
     }
 
-    function convertToBP(siann, un, tiauTLPA, isNumeric) {
-        let bSiann = siann === "ø" ? "" : siann;
-        let bUn = un;
-        bUn = bUn.replace(/iauh/g, "iaoh").replace(/auh/g, "aoh").replace(/iau/g, "iao").replace(/au/g, "ao");
-        if (bUn.endsWith("nn")) { bUn = "n" + bUn.slice(0, -2); }
-        if (bSiann === "") {
-            if (bUn.startsWith('n')) {
-                if (un.startsWith('i')) bSiann = "y"; else if (un.startsWith('u')) bSiann = "w";
-            } else if (bUn.startsWith('i')) {
-                if (bUn === 'i' || /^(in|im|ing|it|ip|ik|ih)/.test(bUn)) bSiann = "y"; else { bSiann = "y"; bUn = bUn.substring(1); }
-            } else if (bUn.startsWith('u')) {
-                if (bUn === 'u' || /^(un|ut|uh)/.test(bUn)) bSiann = "w"; else { bSiann = "w"; bUn = bUn.substring(1); }
-            }
-        }
-        let base = bSiann + bUn;
-        const numMap = {"1":"1", "5":"2", "2":"3", "6":"4", "3":"5", "7":"6", "4":"7", "8":"8"};
-        if (isNumeric) return base + (numMap[tiauTLPA] || tiauTLPA);
-        const markMap = {"1":"\u0304", "5":"\u0301", "2":"\u030c", "6":"\u030c", "3":"\u0300", "7":"\u0302", "4":"\u0304", "8":"\u0301"};
-        let mark = markMap[tiauTLPA] || "";
+    function applyToneMark(base, tiau, system) {
+        const marks = {
+            "TL":  { "2":"\u0301", "3":"\u0300", "5":"\u0302", "6":"\u030c", "7":"\u0304", "8":"\u030d" },
+            "POJ": { "2":"\u0301", "3":"\u0300", "5":"\u0302", "7":"\u0304", "8":"\u030d" },
+            "BP":  { "1":"\u0304", "5":"\u0301", "2":"\u030c", "6":"\u030c", "3":"\u0300", "7":"\u0302", "4":"\u0304", "8":"\u0301" }
+        };
+        let sys = system === "白話字" ? "POJ" : (system === "台羅拼音" ? "TL" : "BP");
+        let mark = marks[sys][tiau] || "";
+        if (!mark) return base;
+
         let s = base.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         let pos = -1;
+
         if (s.includes("ere")) pos = s.indexOf("ere") + 2;
         else if (s.includes("iu")) pos = s.indexOf("u");
         else if (s.includes("ui")) pos = s.indexOf("i");
-        else if (s.includes("oo")) pos = s.indexOf("oo");
+        else if (s.includes("oo")) pos = s.indexOf("o");
         else if (s.includes("ng") && !/[aeiou]/.test(s)) pos = s.indexOf("n");
         else if (s.includes("m") && !/[aeiou]/.test(s)) pos = s.indexOf("m");
         else {
             const priority = ['a', 'o', 'e', 'i', 'u', 'v'];
             for (let v of priority) { if (s.includes(v)) { pos = s.indexOf(v); break; } }
         }
-        let result = (pos === -1 || !mark) ? s : (s.slice(0, pos + 1) + mark + s.slice(pos + 1));
-        return result.normalize("NFC");
+
+        if (pos === -1) return s + mark;
+        let res = s.slice(0, pos + 1) + mark + s.slice(pos + 1);
+        if (system === "白話字" && base.includes("o\u0358")) res = res.replace("o", "o\u0358");
+        return res.normalize("NFC");
     }
 
     function convertOne(tlpa, targetSystem) {
         if (!targetSystem) return "";
         const parts = splitTLPA(tlpa); if (!parts) return "";
+
         let initialMatch = phoneticMapping.initials.find(i => i.台語音標 === parts.siann || (parts.siann === "ø" && (i.台語音標 === "" || i.台語音標 === "Ø")));
         let finalMatch = phoneticMapping.finals.find(f => f.台語音標 === parts.un);
-        let toneMatch = phoneticMapping.tones.find(t => String(t.台羅調號) === parts.tiau || String(t.台語音標).endsWith(parts.tiau));
+
         if (targetSystem === '十五音') {
-            let iName = initialMatch ? initialMatch['十五音'] : "";
-            if (!iName && parts.siann === "ø") iName = "英";
+            let iName = initialMatch ? initialMatch['十五音'] : (parts.siann === "ø" ? "英" : "");
             const fName = finalMatch ? finalMatch['十五音'] : "";
             const toneCN = ["", "一", "二", "三", "四", "五", "六", "七", "八"][parseInt(parts.tiau)] || parts.tiau;
             return fName + toneCN + iName;
         }
+
         if (targetSystem === '方音符號') {
             let iTPS = initialMatch ? initialMatch['方音符號'] : "";
             let fTPS = finalMatch ? finalMatch['方音符號'] : "";
-            let tTPS = (toneMatch && toneMatch['注音調符編碼']) || "";
+            let toneMatch = phoneticMapping.tones.find(t => String(t.台羅調號) === parts.tiau);
+            let tTPS = decodeUnicode((toneMatch && toneMatch['注音調符編碼'])) || "";
             if (tTPS.startsWith('U+')) tTPS = String.fromCharCode(parseInt(tTPS.substring(2), 16));
             if (parts.un.startsWith('i') && ['z','ts','c','tsh','s','j','ji'].includes(parts.siann)) {
                 if (parts.siann === 's') iTPS = 'ㄒ'; else if (parts.siann === 'j' || parts.siann === 'ji') iTPS = 'ㆢ';
@@ -210,19 +196,41 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             return (iTPS === "Ø" ? "" : iTPS) + fTPS + tTPS;
         }
-        if (targetSystem === "閩拼方案" || targetSystem === "閩拼調號") return convertToBP(parts.siann, parts.un, parts.tiau, targetSystem === "閩拼調號");
-        let iPin = initialMatch ? (initialMatch[targetSystem] || initialMatch['台羅拼音'] || parts.siann) : parts.siann;
-        let fPin = finalMatch ? (finalMatch[targetSystem] || finalMatch['台羅拼音'] || parts.un) : parts.un;
-        if (iPin === "Ø" || iPin === "ø") iPin = "";
-        return iPin + fPin + parts.tiau;
+
+        let bSiann = parts.siann === "ø" ? "" : parts.siann;
+        let bUn = parts.un;
+
+        if (targetSystem === "白話字") {
+            if (bSiann === "ts" || bSiann === "z") bSiann = "ch"; else if (bSiann === "tsh" || bSiann === "c") bSiann = "chh";
+            bUn = bUn.replace(/ue/g, "oe").replace(/ua/g, "oa").replace(/ik/g, "ek").replace(/ing/g, "eng").replace(/oo/g, "o\u0358").replace(/nn/g, "\u207F");
+            return applyToneMark(bSiann + bUn, parts.tiau, "白話字");
+        }
+
+        if (targetSystem === "台羅拼音") {
+            if (bSiann === "z") bSiann = "ts"; if (bSiann === "c") bSiann = "tsh";
+            return applyToneMark(bSiann + bUn, parts.tiau, "台羅拼音");
+        }
+
+        if (targetSystem === "閩拼方案" || targetSystem === "閩拼調號") {
+            if (bSiann === "") {
+                if (bUn.startsWith('i')) { if (bUn === 'i' || /^(in|im|ing|it|ip|ik|ih)/.test(bUn)) bSiann = "y"; else { bSiann = "y"; bUn = bUn.substring(1); } }
+                else if (bUn.startsWith('u')) { if (bUn === 'u' || /^(un|ut|uh)/.test(bUn)) bSiann = "w"; else { bSiann = "w"; bUn = bUn.substring(1); } }
+            }
+            if (targetSystem === "閩拼調號") {
+                const numMap = {"1":"1", "5":"2", "2":"3", "6":"4", "3":"5", "7":"6", "4":"7", "8":"8"};
+                return bSiann + bUn + (numMap[parts.tiau] || parts.tiau);
+            }
+            return applyToneMark(bSiann + bUn, parts.tiau, "BP");
+        }
+
+        return bSiann + bUn + parts.tiau;
     }
 
     function applyPhonetics(upSystem, rightSystem) {
-        document.querySelectorAll('article.article_content > div').forEach(div => {
-            div.className = 'Siang_Pai';
-            div.style.cssText = ""; 
-        });
+        injectLatinFix();
+        document.querySelectorAll('article.article_content > div').forEach(div => { div.className = 'Siang_Pai'; div.style.cssText = ""; });
         const latinSystems = ["台語音標", "台羅拼音", "白話字", "閩拼方案", "閩拼調號", "注音二式"];
+
         document.querySelectorAll('ruby[data-tlpa]').forEach(ruby => {
             const tlpa = ruby.getAttribute('data-tlpa');
             let hanJi = "";
@@ -232,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (upSystem) {
                 const rt = document.createElement('rt');
                 rt.textContent = convertOne(tlpa, upSystem);
-                if (latinSystems.includes(upSystem)) rt.className = "latin-phonetic";
+                if (latinSystems.includes(upSystem)) rt.classList.add('latin-phonetic');
                 ruby.appendChild(rt);
             }
             if (rightSystem) {
