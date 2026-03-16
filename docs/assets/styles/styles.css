@@ -1,11 +1,30 @@
 /* Version 0.2.2 */
 
+/* 加入 Gentium Plus: 補強調號 */
+/* @import url('https://fonts.googleapis.com/css2?family=Gentium+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@400;700;900&display=swap'); */
+
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@400;700;900&display=swap');
 
 @font-face {
   font-family: "BopomofoRuby";
   src: url("https://alanjui.github.io/Blogger/assets/fonts/BopomofoRuby1909-v1-Regular.ttf") format("truetype");
   font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Charis";
+  src: url("../fonts/Charis-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Charis";
+  src: url("../fonts/Charis-Bold.ttf") format("truetype");
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
@@ -39,6 +58,7 @@ html,
 body {
   margin: 0;
   padding: 0;
+  text-rendering: optimizeLegibility;
 }
 
 html {
@@ -400,7 +420,9 @@ rtc {
   /* font-family: "Noto Serif TC", serif; */
   /* font-family: "Noto Sans TC", system-ui, -apple-system, sans-serif; */
   /* font-family: "LXGW WenKai Mono TC", "Microsoft JhengHei", "微軟正黑體"; */
-  font-family: "Noto Sans TC", "Microsoft JhengHei", "微軟正黑體";
+  /* font-family: "Noto Sans TC", "Microsoft JhengHei", "微軟正黑體"; */
+  /* font-family: "Gentium Plus", "Charis SIL", serif; ← 加這行 */
+  font-family: "Charis", serif; /* ← 加這行 */
   margin-left: 0.1em;
   color: #00c4ab;
   font-size: 50%;
@@ -1242,4 +1264,26 @@ nav.main-nav ul li a,
 nav.main-nav ul li span {
     white-space: nowrap !important;
     display: inline-block !important;
+}
+
+/* --- 手機版標題優化 (解決折行問題) --- */
+@media screen and (max-width: 600px) {
+  .title, .title_line, h1#site-title, h1, .site-title {
+    font-size: 1.5rem !important; /* 縮小手機端標題字體，避免折行 */
+    line-height: 1.3 !important;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+    word-break: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+  
+  .title ruby {
+    font-size: 1.8rem !important;
+  }
+  
+  /* 同步調整 body 邊距，為標題爭取更多空間 */
+  body {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
 }
