@@ -62,21 +62,21 @@ class CellProcessor(ExcelCell):
 
     def _build_ruby_tag(self, han_ji: str, siong_piau_im: str, zian_piau_im: str) -> str:
         if siong_piau_im != "" and zian_piau_im == "":
-            return f"<ruby>\n  {han_ji}\n  <rt>{siong_piau_im}</rt>\n</ruby>\n"
+            return f"<ruby>{han_ji}<rt>{siong_piau_im}</rt></ruby>"
         elif siong_piau_im == "" and zian_piau_im != "":
-            return f"<ruby>\n  {han_ji}\n  <rtc>{zian_piau_im}</rtc>\n</ruby>\n"
+            return f"<ruby>{han_ji}<rtc>{zian_piau_im}</rtc></ruby>"
         elif siong_piau_im != "" and zian_piau_im != "":
-            return f"<ruby>\n  {han_ji}\n  <rt>{siong_piau_im}</rt>\n  <rtc>{zian_piau_im}</rtc>\n</ruby>\n"
+            return f"<ruby>{han_ji}<rt>{siong_piau_im}</rt><rtc>{zian_piau_im}</rtc></ruby>"
         else:
-            return f"<span>{han_ji}</span>\n"
+            return f"<span>{han_ji}</span>"
 
     def generate_ruby_tag(self, han_ji: str, tai_gi_im_piau: str) -> tuple:
         if not tai_gi_im_piau or not str(tai_gi_im_piau).strip():
-            return f"  <span>{han_ji}</span>\n", "", ""
+            return f"<span>{han_ji}</span>", "", ""
         try:
             zu_im_list = split_tai_gi_im_piau(tai_gi_im_piau)
         except:
-            return f"  <span>{han_ji}</span>\n", "", ""
+            return f"<span>{han_ji}</span>", "", ""
 
         siann_bu = zu_im_list[0] if zu_im_list[0] else "ø"
         siong, zian = "", ""
