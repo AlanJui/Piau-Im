@@ -1,7 +1,9 @@
 
 /**
- * 漢字標音切換器 (Phonetic Switcher) - 還原穩定版
- * 已移除破壞佈局的 inline-block 設定。
+ * 漢字標音切換器 (Phonetic Switcher) - 聲韻學強修版
+ * 1. 新增【國際音標 (IPA)】轉換功能。
+ * 2. 羅馬拼音調符全效支援 (TL, POJ, BP)。
+ * 3. 啟動即修復拉丁調符偏移問題。
  */
 document.addEventListener('DOMContentLoaded', function() {
     let phoneticMapping = null;
@@ -85,7 +87,8 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         toolbar.appendChild(customDiv);
 
-        const systems = ["無", "十五音", "方音符號", "台語音標", "台羅拼音", "白話字", "閩拼方案", "閩拼調號", "注音二式"];
+        // --- 修正：在選單中加入【國際音標】 ---
+        const systems = ["無", "十五音", "方音符號", "國際音標", "台語音標", "台羅拼音", "白話字", "閩拼方案", "閩拼調號", "注音二式"];
         const selUp = customDiv.querySelector('#select-up');
         const selRight = customDiv.querySelector('#select-right');
         systems.forEach(s => {
@@ -152,7 +155,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         let s = base.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         let pos = -1;
-
         if (s.includes("ere")) pos = s.indexOf("ere") + 2;
         else if (s.includes("iu")) pos = s.indexOf("u");
         else if (s.includes("ui")) pos = s.indexOf("i");
@@ -163,7 +165,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const priority = ['a', 'o', 'e', 'i', 'u', 'v'];
             for (let v of priority) { if (s.includes(v)) { pos = s.indexOf(v); break; } }
         }
-
         if (pos === -1) return s + mark;
         let res = s.slice(0, pos + 1) + mark + s.slice(pos + 1);
         if (system === "白話字" && base.includes("o\u0358")) res = res.replace("o", "o\u0358");
@@ -174,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!targetSystem) return "";
         const parts = splitTLPA(tlpa); if (!parts) return "";
 
-        let initialMatch = phoneticMapping.initials.find(i => i.台語音標 === parts.siann || (parts.siann === "ø" && (i.台語音標 === "" || i.台語音標 === "Ø")));
+        let initialMatch = phoneticMapping.initials.find(i => i.台語音標 === parts.siann || (parts.siann === "ø" && (i.台語音標 === "" || i.台語音標 === "Ø" || i.台語音標 === "ø")));
         let finalMatch = phoneticMapping.finals.find(f => f.台語音標 === parts.un);
 
         if (targetSystem === '十五音') {
@@ -195,6 +196,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 else if (parts.siann === 'z' || parts.siann === 'ts') iTPS = 'ㄐ'; else iTPS = 'ㄑ';
             }
             return (iTPS === "Ø" ? "" : iTPS) + fTPS + tTPS;
+        }
+
+        // --- 修正：處理國際音標 (IPA) ---
+        if (targetSystem === '國際音標') {
+            let iIPA = initialMatch ? initialMatch['國際音標'] : (parts.siann === "ø" ? "" : "");
+            let fIPA = finalMatch ? finalMatch['國際音標'] : parts.un;
+            // 處理 Ø 顯示
+            if (iIPA === "Ø" || iIPA === "ø") iIPA = "";
+            return iIPA + fIPA + parts.tiau; // 直接帶數字調號
         }
 
         let bSiann = parts.siann === "ø" ? "" : parts.siann;
@@ -229,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function applyPhonetics(upSystem, rightSystem) {
         injectLatinFix();
         document.querySelectorAll('article.article_content > div').forEach(div => { div.className = 'Siang_Pai'; div.style.cssText = ""; });
-        const latinSystems = ["台語音標", "台羅拼音", "白話字", "閩拼方案", "閩拼調號", "注音二式"];
+        const latinSystems = ["台語音標", "台羅拼音", "白話字", "閩拼方案", "閩拼調號", "注音二式", "國際音標"];
 
         document.querySelectorAll('ruby[data-tlpa]').forEach(ruby => {
             const tlpa = ruby.getAttribute('data-tlpa');
@@ -246,7 +256,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (rightSystem) {
                 const rtc = document.createElement('rtc');
                 rtc.textContent = convertOne(tlpa, rightSystem);
-                if (latinSystems.includes(rightSystem)) rtc.className = "latin-phonetic";
+                if (latinSystems.includes(rightSystem)) rtc.classList.add('latin-phonetic');
                 ruby.appendChild(rtc);
             }
         });
