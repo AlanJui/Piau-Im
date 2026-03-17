@@ -152,7 +152,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (['p', 't', 'k', 'h'].includes(tiau)) tiau = '4'; else tiau = '1';
         }
         let siann = "", un = "";
-        const initials = ["tsh", "kh", "ph", "th", "ng", "bb", "gg", "ch", "zh", "ji", "ts", "z", "c", "p", "k", "t", "l", "s", "h", "b", "g", "m", "n", "j"];
+        // 移除了 'ji', 'ch', 'zh' 等可能導致誤判的組合，確保 jin 能切分為 j + in
+        const initials = ["tsh", "kh", "ph", "th", "ng", "bb", "gg", "ts", "z", "c", "p", "k", "t", "l", "s", "h", "b", "g", "m", "n", "j"];
         initials.sort((a, b) => b.length - a.length);
         for (let i of initials) { if (p.startsWith(i)) { siann = i; un = p.slice(i.length); break; } }
         if (!siann) un = p;
@@ -176,13 +177,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
         let s = base.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         let pos = -1;
-        if (s.includes("ere")) pos = s.indexOf("ere") + 2;
-        else if (s.includes("iu")) pos = s.indexOf("u");
-        else if (s.includes("ui")) pos = s.indexOf("i");
+        // 遵循指引優先級規則
+        if (s.includes("ere")) pos = s.indexOf("ere") + 2; // ere 標在最後的 e
+        else if (s.includes("iu")) pos = s.indexOf("u");   // iu 標在 u
+        else if (s.includes("ui")) pos = s.indexOf("i");   // ui 標在 i
         else if (s.includes("oo")) pos = s.indexOf("o");
-        else if (s.includes("ng") && !/[aeiou]/.test(s)) pos = s.indexOf("n");
+        else if (s.includes("ng") && !/[aeiou]/.test(s)) pos = s.indexOf("n"); // ng 標在 n
         else if (s.includes("m") && !/[aeiou]/.test(s)) pos = s.indexOf("m");
         else {
+            // 響度順序: a > o > e > i > u
             const priority = ['a', 'o', 'e', 'i', 'u', 'v'];
             for (let v of priority) { if (s.includes(v)) { pos = s.indexOf(v); break; } }
         }
@@ -209,14 +212,19 @@ document.addEventListener('DOMContentLoaded', function() {
         else if (targetSystem === '方音符號') {
             let iTPS = initialMatch ? initialMatch['方音符號'] : "";
             let fTPS = finalMatch ? finalMatch['方音符號'] : "";
-            let toneMatch = phoneticMapping.tones.find(t => String(t.台羅調號) === parts.tiau);
-            let tTPS = decodeUnicode((toneMatch && toneMatch['注音調符編碼'])) || "";
-            if (tTPS.startsWith('U+')) tTPS = String.fromCharCode(parseInt(tTPS.substring(2), 16));
+            
+            // 處理介音顎化規則
             if (parts.un.startsWith('i') && ['z','ts','c','tsh','s','j','ji'].includes(parts.siann)) {
-                if (parts.siann === 's') iTPS = 'ㄒ'; else if (parts.siann === 'j' || parts.siann === 'ji') iTPS = 'ㆢ';
-                else if (parts.siann === 'z' || parts.siann === 'ts') iTPS = 'ㄐ'; else iTPS = 'ㄑ';
+                if (parts.siann === 's') iTPS = 'ㄒ'; 
+                else if (parts.siann === 'j' || parts.siann === 'ji') iTPS = 'ㆢ';
+                else if (parts.siann === 'z' || parts.siann === 'ts') iTPS = 'ㄐ'; 
+                else iTPS = 'ㄑ';
             }
-            result = (iTPS === "Ø" ? "" : iTPS) + fTPS + tTPS;
+            
+            const toneMap = { "1":"", "2":"\u02CB", "3":"\u02EA", "4":"", "5":"\u02CA", "6":"", "7":"\u02EB", "8":"\u02D9" };
+            let tTPS = toneMap[parts.tiau] || "";
+            
+            result = (iTPS === "Ø" || iTPS === "ø" ? "" : iTPS) + fTPS + tTPS;
         }
         else if (targetSystem === '國際音標') {
             let iIPA = initialMatch ? initialMatch['國際音標'] : (parts.siann === "ø" ? "" : "");
@@ -230,7 +238,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (targetSystem === "白話字") {
                 if (bSiann === "ts" || bSiann === "z") bSiann = "ch"; else if (bSiann === "tsh" || bSiann === "c") bSiann = "chh";
-                bUn = bUn.replace(/ue/g, "oe").replace(/ua/g, "oa").replace(/ik/g, "ek").replace(/ing/g, "eng").replace(/oo/g, "o\u0358").replace(/nn/g, "\u207F");
+                // 處理鼻化與特殊韻母
+                bUn = bUn.replace(/nnh/g, "h\u207F").replace(/nn/g, "\u207F");
+                bUn = bUn.replace(/ue/g, "oe").replace(/ua/g, "oa").replace(/ik/g, "ek").replace(/ing/g, "eng").replace(/oo/g, "o\u0358");
                 result = applyToneMark(bSiann + bUn, parts.tiau, "白話字");
             }
             else if (targetSystem === "台羅拼音") {
@@ -238,10 +248,32 @@ document.addEventListener('DOMContentLoaded', function() {
                 result = applyToneMark(bSiann + bUn, parts.tiau, "台羅拼音");
             }
             else if (targetSystem === "閩拼方案" || targetSystem === "閩拼調號") {
-                if (bSiann === "") {
-                    if (bUn.startsWith('i')) { if (bUn === 'i' || /^(in|im|ing|it|ip|ik|ih)/.test(bUn)) bSiann = "y"; else { bSiann = "y"; bUn = bUn.substring(1); } }
-                    else if (bUn.startsWith('u')) { if (bUn === 'u' || /^(un|ut|uh)/.test(bUn)) bSiann = "w"; else { bSiann = "w"; bUn = bUn.substring(1); } }
+                // 1. 韻母變更规则
+                bUn = bUn.replace(/au/g, "ao"); 
+                
+                // 2. 鼻化韻母前置規則
+                if (bUn.endsWith("nn")) {
+                    let core = bUn.slice(0, -2);
+                    if (core === "io") core = "ioo";
+                    else if (core === "o") core = "oo";
+                    bUn = "n" + core;
                 }
+
+                // 3. 零聲母 y/w 變換
+                if (bSiann === "") {
+                    if (bUn.startsWith('i')) { 
+                        if (bUn === 'i' || /^(in|im|ing|it|ip|ik|ih)/.test(bUn)) bSiann = "y"; 
+                        else { bSiann = "y"; bUn = bUn.substring(1); } 
+                    }
+                    else if (bUn.startsWith('u')) { 
+                        if (bUn === 'u' || /^(un|ut|uh)/.test(bUn)) bSiann = "w"; 
+                        else { bSiann = "w"; bUn = bUn.substring(1); } 
+                    }
+                } else {
+                    // 聲母轉換依據 mapping
+                    bSiann = initialMatch ? initialMatch['閩拼方案'] : bSiann;
+                }
+
                 if (targetSystem === "閩拼調號") {
                     const numMap = {"1":"1", "5":"2", "2":"3", "6":"4", "3":"5", "7":"6", "4":"7", "8":"8"};
                     result = bSiann + bUn + (numMap[parts.tiau] || parts.tiau);
