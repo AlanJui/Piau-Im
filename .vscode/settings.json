@@ -47,6 +47,14 @@
         "/^c:\\\\work\\\\Piau-Im\\\\\\.venv\\\\Scripts\\\\python c:\\\\work\\\\Piau-Im\\\\test_jkd_update\\.py$/": {
             "approve": true,
             "matchCommandLine": true
+        },
+        "/^python -c \"\nlines = open\\('docs/assets/styles/styles\\.css', encoding='utf-8'\\)\\.readlines\\(\\)\n# 驗證：確認沒有殘留的 null bytes\ncorrupted = \\[i\\+1 for i, l in enumerate\\(lines\\) if '\\\\x00' in l\\]\nif corrupted:\n    print\\(f'仍有損壞行: \\{corrupted\\[:10\\]\\}'\\)\nelse:\n    print\\(f'驗證通過！共 \\{len\\(lines\\)\\} 行，無損壞內容。'\\)\n# 顯示修復後的接縫（原第 606 行附近）\nfor i in range\\(603, 612\\):\n    print\\(f'\\{i\\+1\\}: \\{lines\\[i\\]\\.rstrip\\(\\)\\}'\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^python -c \"\nimport re\ncontent = open\\('docs/index\\.html', encoding='utf-8'\\)\\.read\\(\\)\n# 找 h1 標籤\nmatches = re\\.findall\\(r'<h1\\[\\^>\\]\\*>\\.\\*\\?</h1>', content, re\\.DOTALL\\)\nfor m in matches:\n    print\\(repr\\(m\\[:120\\]\\)\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
         }
     }
 }
