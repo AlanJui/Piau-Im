@@ -1,5 +1,5 @@
 """
-a222_依作用儲存格在個人字典查找漢字讀音.py V0.2.11
+a222_依作用儲存格在個人字典查找漢字讀音.py V0.2.12
 功能說明：
     依作用儲存格位置，在個人字典中查找漢字讀音。
 更新紀錄：
@@ -13,6 +13,7 @@ a222_依作用儲存格在個人字典查找漢字讀音.py V0.2.11
     【漢字】之【台語音標】及【漢字標音】，導致【作用儲存格】之 Excel Address
     已變更，需將之校正回歸。
  -  v0.2.9 2026-02-13: 修正原【無標音漢字】與【缺字表】工作表無法正常運作之問題。
+ -  v0.2.12 2026-03-18: 改善 _bo_thok_im() 方法，當【台語音標】或【漢字標音】為空值時，均屬標音異常，很可能起因於字典當無該漢字之讀音資料，或其它原因，故要求使用者重新輸入。
 """
 
 # =========================================================================
@@ -100,7 +101,9 @@ class CellProcessor(ExcelCell):
 
     def ca_tai_gi_im_piau(self, han_ji: str, cell) -> list[str] | None:
         """查字典"""
-        if han_ji == "":
+        # 確認有取得【漢字】且【台語音標】及【漢字標音】儲存格皆已標注，再進行查字作業；
+        # 否則，視為【字典】無此漢字標音，應當終止查字作業。
+        if han_ji == "" or not cell.offset(-1, 0).value or not cell.offset(1, 0).value:
             return None
 
         # (1) 查字典：使用 HanJiTian 類別查詢漢字讀音
@@ -148,6 +151,16 @@ class CellProcessor(ExcelCell):
         except ValueError:
             print(f">> 使用者輸入格式有誤：{user_input}")
             return None
+
+    def get_user_input_piau_im(self, han_ji: str) -> str | None:
+        """供使用者直接輸入漢字之標音"""
+        user_input = input("\n請輸入漢字之標音 (直接按 Enter 跳過): ").strip()
+
+        if not user_input:
+            print(">> 放棄變更！")
+            return None
+
+        return user_input
 
     # =================================================================
     # 覆蓋父類別的方法
@@ -279,14 +292,18 @@ class CellProcessor(ExcelCell):
         # 取得【漢字】儲存格內容
         han_ji = cell.value
 
-        # 查字典：使用 HanJiTian 類別查詢漢字讀音
-        result = self.ca_tai_gi_im_piau(han_ji=han_ji, cell=cell)
-        if not result:
+        tai_gi_im_piau = self.get_user_input_piau_im(han_ji=han_ji)
+        if not tai_gi_im_piau:
             return
-        tai_gi_im_piau, han_ji_piau_im = result
-
-        # 更新【台語音標】及【漢字標音】儲存格內容
         cell.offset(-1, 0).value = tai_gi_im_piau  # 台語音標
+
+        # 將使用者輸入之【台語音標】轉換為【漢字標音】
+        han_ji_piau_im = self.convert_tai_gi_im_piau_to_han_ji_piau_im(
+            tai_gi_im_piau=tai_gi_im_piau,
+        )
+        if not han_ji_piau_im:
+            print(">> 無法將輸入之【台語音標】轉換為【漢字標音】！")
+            return
         cell.offset(1, 0).value = han_ji_piau_im  # 漢字標音
 
         # 在【缺字表】工作表查找此【漢字】之 Excel 的 Row No
@@ -378,9 +395,9 @@ class CellProcessor(ExcelCell):
         col = cell.column  # 取得【漢字】儲存格的欄號
 
         cell_value = cell.value
-        jin_kang_piau_im = cell.offset(-2, 0).value  # 人工標音
-        tai_gi_im_piau = cell.offset(-1, 0).value  # 台語音標
-        han_ji_piau_im = cell.offset(1, 1).value  # 漢字標音
+        jin_kang_piau_im = cell.offset(-2, 0).value or ""  # 人工標音
+        tai_gi_im_piau = cell.offset(-1, 0).value or ""  # 台語音標
+        han_ji_piau_im = cell.offset(1, 0).value or ""  # 漢字標音
 
         # 初始化樣式
         self._reset_cell_style(cell)
@@ -414,11 +431,10 @@ class CellProcessor(ExcelCell):
         # ======================================================================
 
         # 檢查是否為【無標音漢字】
-        if (
-            not tai_gi_im_piau
-            or str(tai_gi_im_piau).strip() == ""
-            and not han_ji_piau_im
-        ):
+        if tai_gi_im_piau == "" or han_ji_piau_im == "":
+            print(
+                f"漢字：【{cell_value}】的【台語音標】、【漢字標音】，未能完整標注，可能字典尚無此字之讀音！"
+            )
             self._process_bo_thok_im(cell)
             return 0  # 漢字
 
