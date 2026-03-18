@@ -1,5 +1,5 @@
 """
-mod_程式.py V0.2.12
+mod_程式.py V0.2.13
 
 本系統各功能之程式架構模版。
 模版中包含程式配置類別 Program 及儲存格處理器類別 ExcelCell。
@@ -11,6 +11,7 @@ mod_程式.py V0.2.12
 - v0.2.11 2026-02-27: 將原 a223 中的 _resolve_manual_annotation() 方法納入，以便未來參考其作法，令現有的 _process_jin_kang_piau_im() 方法，其程式碼可以更模組結構化，以便未來之維護。
 - v0.2.12 2026-02-28: 函數除錯 _process_jin_kang_piau_im()，對【人工標音字庫】工作表更新紀錄時，為處理【人工標音】更新之情況，需先移除【人工標音字庫】中已有的紀錄（同【漢字】、所處【座標】）；
 然後再新增紀錄，確保【人工標音字庫】工作表中，不會出現同【漢字】、所處【座標】的資料，發生重複且資料內容不一致之問題。
+- v0.2.13 2026-03-18: 改善 _bo_thok_im() 方法，當【台語音標】或【漢字標音】為空值時，均屬標音異常，很可能起因於字典當無該漢字之讀音資料，或其它原因，故要求使用者重新輸入。
 """
 
 # =========================================================================
@@ -1383,6 +1384,58 @@ class ExcelCell:
 
         return
 
+    def get_user_input_piau_im(self, han_ji: str) -> str | None:
+        """供使用者直接輸入漢字之標音"""
+        user_input = input("\n請輸入漢字之標音 (直接按 Enter 跳過): ").strip()
+
+        if not user_input:
+            print(">> 放棄變更！")
+            return None
+
+        return user_input
+
+    def _process_bo_thok_im(self, cell):
+        """處理【無標音漢字】的【台語音標】及【漢字標音】儲存格內容"""
+        row = cell.row  # 取得【漢字】儲存格的列號
+        col = cell.column  # 取得【漢字】儲存格的欄號
+        # 取得【漢字】儲存格內容
+        han_ji = cell.value
+
+        tai_gi_im_piau = self.get_user_input_piau_im(han_ji=han_ji)
+        if not tai_gi_im_piau:
+            return
+        cell.offset(-1, 0).value = tai_gi_im_piau  # 台語音標
+
+        # 將使用者輸入之【台語音標】轉換為【漢字標音】
+        han_ji_piau_im = self.convert_tai_gi_im_piau_to_han_ji_piau_im(
+            tai_gi_im_piau=tai_gi_im_piau,
+        )
+        if not han_ji_piau_im:
+            print(">> 無法將輸入之【台語音標】轉換為【漢字標音】！")
+            return
+        cell.offset(1, 0).value = han_ji_piau_im  # 漢字標音
+
+        # 在【缺字表】工作表查找此【漢字】之 Excel 的 Row No
+        row_no = self.khuat_ji_piau_ji_khoo_dict.get_row_by_han_ji_and_coordinate(
+            han_ji=han_ji,
+            coordinate=(row, col),
+        )
+        if row_no != -1:
+            # 找到【漢字】所在之 Row No 後，依據【座標】欄儲存格之【座標清單】，逐一更新指向
+            # 【漢字注音】工作表之【漢字】的【台語音標】及【漢字標音】。
+            # 之【台語音標】及【漢字標音】。
+            self.update_piau_im_worksheet_entry(
+                coordinate=(row, col),
+                han_ji=han_ji,
+                tai_gi_im_piau=tai_gi_im_piau,
+                han_ji_piau_im=han_ji_piau_im,
+                piau_im_ji_khoo_dict=self.khuat_ji_piau_ji_khoo_dict,
+                row_no=row_no,
+            )
+            # 因【標音字庫】依【漢字】之【座標】紀錄，更新【漢字注音】工作表中對映之【台語音標】及【漢字標音】；導致
+            # 【作用儲存格】之 Excel Address 已變更，需將之校正回歸。
+            cell.select()  # 選取【作用儲存格】，以確保游標位置正確
+
     def _process_cell(
         self,
         cell,
@@ -1402,8 +1455,8 @@ class ExcelCell:
 
         cell_value = cell.value
         jin_kang_piau_im = cell.offset(-2, 0).value  # 人工標音
-        # tai_gi_im_piau = cell.offset(-1, 0).value  # 台語音標
-        # han_ji_piau_im = cell.offset(1, 1).value  # 漢字標音
+        tai_gi_im_piau = cell.offset(-1, 0).value or ""  # 台語音標
+        han_ji_piau_im = cell.offset(1, 1).value or ""  # 漢字標音
 
         # 初始化樣式
         # self._reset_cell_style(cell)
@@ -1436,13 +1489,12 @@ class ExcelCell:
         # ======================================================================
 
         # 檢查是否為【無標音漢字】
-        # if (
-        #     not tai_gi_im_piau
-        #     or str(tai_gi_im_piau).strip() == ""
-        #     and not han_ji_piau_im
-        # ):
-        #     self._process_bo_thok_im(cell)
-        #     return 0  # 漢字
+        if tai_gi_im_piau == "" and han_ji_piau_im == "":
+            print(
+                f"原漢字【{cell_value}】未標注【台語音標】、【漢字標音】，可能字典尚無此字之讀音！"
+            )
+            self._process_bo_thok_im(cell)
+            return 0  # 漢字
 
         # 檢查是否為【人工標音漢字】
         if jin_kang_piau_im and str(jin_kang_piau_im).strip() != "":
