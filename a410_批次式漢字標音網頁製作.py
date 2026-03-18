@@ -190,32 +190,32 @@ def process(wb, args) -> int:
 
         # 待製作網頁之【工作清單】
         piau_im_task_list = {
-            "十五音": {
+            # "純方音符號": {
+            #     "ruby_format": "右",
+            #     "up": None,
+            #     "right": "方音符號",
+            # },
+            # "純閩拼": {
+            #     "ruby_format": "上",
+            #     "up": "閩拼調符",
+            #     "right": None,
+            # },
+            # "純閩拼調號": {
+            #     "ruby_format": "上",
+            #     "up": "閩拼調號",
+            #     "right": None,
+            # },
+            "雅俗通+方音符號": {
                 "ruby_format": "上及右",
                 "up": "雅俗通",
                 "right": "方音符號",
-            },
-            "純方音符號": {
-                "ruby_format": "右",
-                "up": None,
-                "right": "方音符號",
-            },
-            "純閩拼": {
-                "ruby_format": "上",
-                "up": "閩拼調符",
-                "right": None,
-            },
-            "純閩拼調號": {
-                "ruby_format": "上",
-                "up": "閩拼調號",
-                "right": None,
             },
             "閩拼+方音符號": {
                 "ruby_format": "上及右",
                 "up": "閩拼調符",
                 "right": "方音符號",
             },
-            "台語音標": {
+            "台語音標+方音符號": {
                 "ruby_format": "上及右",
                 "up": "台語音標",
                 "right": "方音符號",
