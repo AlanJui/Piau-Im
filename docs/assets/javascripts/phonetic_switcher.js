@@ -80,31 +80,30 @@ document.addEventListener('DOMContentLoaded', function() {
     function initSwitcherUI() {
         const toolbar = document.createElement('div');
         toolbar.className = 'phonetic-switcher-toolbar';
-        toolbar.style.cssText = "position:sticky; top:0; z-index:1000; background:#f8f9fa; padding:8px 15px; border-bottom:1px solid #ddd; display:flex; flex-wrap:nowrap; gap:8px; align-items:center; overflow-x:auto; white-space:nowrap;";
 
         const homeBtn = document.createElement('button');
+        homeBtn.className = 'ps-home-btn';
         homeBtn.innerHTML = "🏠 回首頁";
-        homeBtn.style.cssText = "padding:4px 10px; cursor:pointer; font-weight:bold; flex-shrink:0;";
         homeBtn.onclick = () => window.location.href = 'index.html';
         toolbar.appendChild(homeBtn);
 
         const btnGroup = document.createElement('div');
-        btnGroup.style.cssText = "display:flex; gap:4px; border-left:1px solid #ccc; padding-left:8px; flex-shrink:0;";
+        btnGroup.className = 'ps-btn-group';
         Object.keys(schemes).forEach(key => {
             const btn = document.createElement('button');
+            btn.className = 'ps-scheme-btn';
             btn.textContent = schemes[key].label;
-            btn.style.cssText = "padding:4px 8px; cursor:pointer; font-size:13px; flex-shrink:0;";
             btn.onclick = () => applyScheme(key);
             btnGroup.appendChild(btn);
         });
         toolbar.appendChild(btnGroup);
 
         const customDiv = document.createElement('div');
-        customDiv.style.cssText = "border-left:1px solid #ccc; padding-left:8px; display:flex; align-items:center; gap:5px; flex-shrink:0; font-size:13px;";
+        customDiv.className = 'ps-custom-div';
         customDiv.innerHTML = `
-            <span style="font-weight:bold">自訂</span>
-            上:<select id="select-up" style="font-size:12px"></select>
-            右:<select id="select-right" style="font-size:12px"></select>
+            <span class="ps-custom-label">自訂</span>
+            <span class="ps-custom-text">上:</span><select id="select-up"></select>
+            <span class="ps-custom-text">右:</span><select id="select-right"></select>
         `;
         toolbar.appendChild(customDiv);
 
@@ -125,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (main) {
             main.insertBefore(toolbar, main.firstChild);
             const footer = toolbar.cloneNode(true);
-            footer.style.position = "static"; footer.style.marginTop = "30px";
+            footer.classList.add('ps-footer');
             footer.querySelector('button').onclick = () => window.location.href = 'index.html';
             footer.querySelectorAll('div button').forEach((btn, idx) => { btn.onclick = () => applyScheme(Object.keys(schemes)[idx]); });
             const fSelUp = footer.querySelector('#select-up'); const fSelRight = footer.querySelector('#select-right');
@@ -212,18 +211,18 @@ document.addEventListener('DOMContentLoaded', function() {
         else if (targetSystem === '方音符號') {
             let iTPS = initialMatch ? initialMatch['方音符號'] : "";
             let fTPS = finalMatch ? finalMatch['方音符號'] : "";
-            
+
             // 處理介音顎化規則
             if (parts.un.startsWith('i') && ['z','ts','c','tsh','s','j','ji'].includes(parts.siann)) {
-                if (parts.siann === 's') iTPS = 'ㄒ'; 
+                if (parts.siann === 's') iTPS = 'ㄒ';
                 else if (parts.siann === 'j' || parts.siann === 'ji') iTPS = 'ㆢ';
-                else if (parts.siann === 'z' || parts.siann === 'ts') iTPS = 'ㄐ'; 
+                else if (parts.siann === 'z' || parts.siann === 'ts') iTPS = 'ㄐ';
                 else iTPS = 'ㄑ';
             }
-            
+
             const toneMap = { "1":"", "2":"\u02CB", "3":"\u02EA", "4":"", "5":"\u02CA", "6":"", "7":"\u02EB", "8":"\u02D9" };
             let tTPS = toneMap[parts.tiau] || "";
-            
+
             result = (iTPS === "Ø" || iTPS === "ø" ? "" : iTPS) + fTPS + tTPS;
         }
         else if (targetSystem === '國際音標') {
@@ -249,8 +248,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             else if (targetSystem === "閩拼方案" || targetSystem === "閩拼調號") {
                 // 1. 韻母變更规则
-                bUn = bUn.replace(/au/g, "ao"); 
-                
+                bUn = bUn.replace(/au/g, "ao");
+
                 // 2. 鼻化韻母前置規則
                 if (bUn.endsWith("nn")) {
                     let core = bUn.slice(0, -2);
@@ -261,13 +260,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // 3. 零聲母 y/w 變換
                 if (bSiann === "") {
-                    if (bUn.startsWith('i')) { 
-                        if (bUn === 'i' || /^(in|im|ing|it|ip|ik|ih)/.test(bUn)) bSiann = "y"; 
-                        else { bSiann = "y"; bUn = bUn.substring(1); } 
+                    if (bUn.startsWith('i')) {
+                        if (bUn === 'i' || /^(in|im|ing|it|ip|ik|ih)/.test(bUn)) bSiann = "y";
+                        else { bSiann = "y"; bUn = bUn.substring(1); }
                     }
-                    else if (bUn.startsWith('u')) { 
-                        if (bUn === 'u' || /^(un|ut|uh)/.test(bUn)) bSiann = "w"; 
-                        else { bSiann = "w"; bUn = bUn.substring(1); } 
+                    else if (bUn.startsWith('u')) {
+                        if (bUn === 'u' || /^(un|ut|uh)/.test(bUn)) bSiann = "w";
+                        else { bSiann = "w"; bUn = bUn.substring(1); }
                     }
                 } else {
                     // 聲母轉換依據 mapping

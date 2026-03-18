@@ -1161,3 +1161,84 @@ nav.main-nav ul li span {
     text-align: justify !important; /* 手機版內文改為兩端對齊，讓字距更自然 */
   }
 }
+
+/* =========================
+   音標切換導覽列 (phonetic-switcher)
+   ========================= */
+.phonetic-switcher-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #f8f9fa;
+  padding: 8px 15px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  align-items: center;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.phonetic-switcher-toolbar.ps-footer {
+  position: static;
+  margin-top: 30px;
+}
+
+/* 回首頁按鈕 */
+.ps-home-btn {
+  padding: 4px 10px;
+  cursor: pointer;
+  font-weight: bold;
+  flex-shrink: 0;
+  font-family: 'Noto Serif TC', serif;
+  font-size: 14px;
+}
+
+/* 標音方案群組容器 */
+.ps-btn-group {
+  display: flex;
+  gap: 4px;
+  border-left: 1px solid #ccc;
+  padding-left: 8px;
+  flex-shrink: 0;
+}
+
+/* 標音方案切換按鈕 */
+.ps-scheme-btn {
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+/* 自訂區塊容器 */
+.ps-custom-div {
+  border-left: 1px solid #ccc;
+  padding-left: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+/* 「自訂」標籤文字 */
+.ps-custom-label {
+  font-weight: bold;
+  font-family: 'Noto Serif TC', serif;
+  font-size: 4px;
+}
+
+/* 「上：」「右：」提示文字 */
+.ps-custom-text {
+  /* font-size: 10.5px; */
+  /* 無論如何調整，均無效果 */
+  font-size: 2px;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+/* 自訂下拉選單 */
+.ps-custom-div select {
+  font-size: 16px;
+  font-family: 'Noto Sans TC', sans-serif;
+}
