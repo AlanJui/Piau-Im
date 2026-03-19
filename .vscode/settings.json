@@ -1,60 +1,22 @@
 {
-    "editor.formatOnSave": true,
-    "[html]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "editor.formatOnSave": true,
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "Ho-Lok-Ue",
+      "database": "Ho_Lok_Ue",
+      "username": "postgres"
     },
-    "[python]": {
-        "editor.defaultFormatter": "ms-python.black-formatter"
-    },
-    "python.terminal.launchArgs": [
-        "-NoExit"
-    ],
-    "debug.console.closeOnEnd": false,
-    "terminal.integrated.defaultProfile.windows": "PowerShell",
-    "python.formatting.provider": "none",
-    "sqltools.connections": [
-        {
-            "previewLimit": 50,
-            "server": "localhost",
-            "port": 5432,
-            "driver": "PostgreSQL",
-            "name": "Ho-Lok-Ue",
-            "database": "Ho_Lok_Ue",
-            "username": "postgres"
-        },
-        {
-            "previewLimit": 50,
-            "driver": "SQLite",
-            "name": "Kong_Un_V2",
-            "database": "${workspaceFolder:Piau-Im}/Kong_Un_V2.db"
-        }
-    ],
-    "sqltools.useNodeRuntime": true,
-    "liveServer.settings.port": 5501,
-    "chat.tools.terminal.autoApprove": {
-        "/^python generate_docs_index\\.py$/": {
-            "approve": true,
-            "matchCommandLine": true
-        },
-        "/^\\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"import logging; print\\(logging\\.__file__\\)\"$/": {
-            "approve": true,
-            "matchCommandLine": true
-        },
-        "/^python c:\\\\work\\\\Piau-Im\\\\test_jkd_update\\.py$/": {
-            "approve": true,
-            "matchCommandLine": true
-        },
-        "/^c:\\\\work\\\\Piau-Im\\\\\\.venv\\\\Scripts\\\\python c:\\\\work\\\\Piau-Im\\\\test_jkd_update\\.py$/": {
-            "approve": true,
-            "matchCommandLine": true
-        },
-        "/^python -c \"\nlines = open\\('docs/assets/styles/styles\\.css', encoding='utf-8'\\)\\.readlines\\(\\)\n# 驗證：確認沒有殘留的 null bytes\ncorrupted = \\[i\\+1 for i, l in enumerate\\(lines\\) if '\\\\x00' in l\\]\nif corrupted:\n    print\\(f'仍有損壞行: \\{corrupted\\[:10\\]\\}'\\)\nelse:\n    print\\(f'驗證通過！共 \\{len\\(lines\\)\\} 行，無損壞內容。'\\)\n# 顯示修復後的接縫（原第 606 行附近）\nfor i in range\\(603, 612\\):\n    print\\(f'\\{i\\+1\\}: \\{lines\\[i\\]\\.rstrip\\(\\)\\}'\\)\n\"\n$/": {
-            "approve": true,
-            "matchCommandLine": true
-        },
-        "/^python -c \"\nimport re\ncontent = open\\('docs/index\\.html', encoding='utf-8'\\)\\.read\\(\\)\n# 找 h1 標籤\nmatches = re\\.findall\\(r'<h1\\[\\^>\\]\\*>\\.\\*\\?</h1>', content, re\\.DOTALL\\)\nfor m in matches:\n    print\\(repr\\(m\\[:120\\]\\)\\)\n\"\n$/": {
-            "approve": true,
-            "matchCommandLine": true
-        }
+    {
+      "previewLimit": 50,
+      "driver": "SQLite",
+      "name": "Kong_Un_V2",
+      "database": "${workspaceFolder:Piau-Im}/Kong_Un_V2.db"
     }
+  ],
+  "sqltools.useNodeRuntime": true,
+  "liveServer.settings.port": 5501
 }

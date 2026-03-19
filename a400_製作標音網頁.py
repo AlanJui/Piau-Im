@@ -1,5 +1,5 @@
 """
-a400_製作標音網頁.py V0.2.2.11
+a400_製作標音網頁.py V0.2.2.12
 
 修改紀錄：
 v0.2.2.9 2026-2-25: 自動産生【文章標題】及【作者姓名】的 Ruby Tag。
@@ -8,6 +8,7 @@ v0.2.2.11 2026-3-13:
   - 修復標題與作者重複出現的問題。
   - 修復檔名與 meta 標籤中出現 "None" 字串的問題。
   - 恢復完整的進度監控輸出。
+v0.2.2.12 2026-3-20: 改善 html 輸出之格式，確保【內縮】與【換行】的正確顯示。
 """
 
 import os
@@ -22,7 +23,6 @@ from mod_logging import (
     logging_exc_error,
     logging_exception,
     logging_process_step,
-    logging_warning,
 )
 from mod_帶調符音標 import is_han_ji, kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
 from mod_標音 import is_punctuation, split_tai_gi_im_piau
@@ -67,22 +67,26 @@ class CellProcessor(ExcelCell):
     def _build_ruby_tag(
         self, han_ji: str, siong_piau_im: str, zian_piau_im: str
     ) -> str:
+        TAB = "\t"  # t = char(9) 取名 tab
+        LEFT_MARGIN = f"{TAB*5}"  # 左邊距，根據實際需要調整
         if siong_piau_im != "" and zian_piau_im == "":
-            return f"\t\t\t\t<ruby>{han_ji}<rt>{siong_piau_im}</rt></ruby>\n"
+            return f"{LEFT_MARGIN}<ruby>{han_ji}<rt>{siong_piau_im}</rt></ruby>\n"
         elif siong_piau_im == "" and zian_piau_im != "":
-            return f"\t\t\t\t<ruby>{han_ji}<rtc>{zian_piau_im}</rtc></ruby>\n"
+            return f"{LEFT_MARGIN}<ruby>{han_ji}<rtc>{zian_piau_im}</rtc></ruby>\n"
         elif siong_piau_im != "" and zian_piau_im != "":
-            return f"\t\t\t\t<ruby>{han_ji}<rt>{siong_piau_im}</rt><rtc>{zian_piau_im}</rtc></ruby>\n"
+            return f"{LEFT_MARGIN}<ruby>{han_ji}<rt>{siong_piau_im}</rt><rtc>{zian_piau_im}</rtc></ruby>\n"
         else:
-            return f"\t\t\t\t<span>{han_ji}</span>\n"
+            return f"{LEFT_MARGIN}<span>{han_ji}</span>\n"
 
     def generate_ruby_tag(self, han_ji: str, tai_gi_im_piau: str) -> tuple:
+        TAB = "\t"  # t = char(9) 取名 tab
+        LEFT_MARGIN = f"{TAB*5}"  # 左邊距，根據實際需要調整
         if not tai_gi_im_piau or not str(tai_gi_im_piau).strip():
-            return f"\t\t\t\t<span>{han_ji}</span>\n", "", ""
+            return f"{LEFT_MARGIN}<span>{han_ji}</span>\n", "", ""
         try:
             zu_im_list = split_tai_gi_im_piau(tai_gi_im_piau)
         except Exception:
-            return f"\t\t\t\t<span>{han_ji}</span>\n", "", ""
+            return f"{LEFT_MARGIN}<span>{han_ji}</span>\n", "", ""
 
         siann_bu = zu_im_list[0] if zu_im_list[0] else "ø"
         siong, zian = "", ""
@@ -174,7 +178,7 @@ class CellProcessor(ExcelCell):
             title_html = "".join(
                 [
                     (
-                        p.replace("<span>", '<span class="title_mark">')
+                        p.replace("<span>", f'<span class="title_mark">')
                         if "《" in p or "》" in p
                         else p
                     )
@@ -193,18 +197,26 @@ class CellProcessor(ExcelCell):
             title_html = "".join(html_segments)
 
         return (
-            f"\t\t\t\t<p class='title'>{title_html}</p>\n",
-            f"\t\t\t\t<p class='author'>{author_html}</p>\n" if author_html else "",
+            f"{title_html}",
+            f"{author_html}" if author_html else "",
             row,
         )
 
     def _process_sheet(self, sheet) -> str:
+        TAB = "\t"  # t = char(9) 取名 tab
+        LEFT_MARGIN = f"{TAB*3}"  # 左邊距，根據實際需要調整
         title_ruby, author_ruby, next_start_row = (
             self.generate_title_and_author_with_ruby()
         )
         pai_ban = self.zu_im_huat_list.get(self.han_ji_piau_im_format, ["pin_yin"])[0]
-        write_buffer = f"<div class='{pai_ban}'>\n{title_ruby}\n{author_ruby}\n<p>\n"
-
+        write_buffer = f"""
+{LEFT_MARGIN}<div class='{pai_ban}'>
+{LEFT_MARGIN}\t<p class='title'>
+{title_ruby}{LEFT_MARGIN}\t</p>
+{LEFT_MARGIN}\t<p class='author'>
+{author_ruby}{LEFT_MARGIN}\t</p>
+{LEFT_MARGIN}\t<p>
+"""
         program = self.program
         char_count = 0
         end_row = program.line_end_row + program.han_ji_row_offset
@@ -222,31 +234,31 @@ class CellProcessor(ExcelCell):
                 if val == "φ":
                     char_count += 1
                     print(f"{char_count}. {addr} ==> 《文章終止》\n" + "=" * 80)
-                    return write_buffer + "</p></div>"
+                    return write_buffer + f"{TAB*4}</p>\n{TAB*3}</div>"
 
                 if val in ["\n", "\\n"]:
                     char_count += 1
                     print(f"{char_count}. {addr} ==> 《換換行》\n" + "-" * 80)
-                    write_buffer += "</p><p>\n"
+                    write_buffer += f"{TAB*4}</p><p>\n"
                     char_count = 0
                     break
 
                 str_val = str(val).strip() if val else ""
                 if is_punctuation(str_val):
                     msg = f"{str_val}【標點符號】"
-                    write_buffer += f"<span>{str_val}</span>\n"
+                    write_buffer += f"{TAB*5}<span>{str_val}</span>\n"
                 elif not str_val:
                     msg = "【空白】"
-                    write_buffer += "<span>　</span>\n"
+                    write_buffer += f"{TAB*5}<span>　</span>\n"
                 elif not is_han_ji(val):
                     msg = f"{str_val}【其他字元】"
-                    write_buffer += f"<span>{str_val}</span>\n"
+                    write_buffer += f"{TAB*5}<span>{str_val}</span>\n"
                 else:
                     tlpa = sheet.range((row - 1, col)).value
                     tlpa = str(tlpa).strip() if tlpa else ""
                     if not tlpa:
                         msg = f"{str_val}【無音標】"
-                        write_buffer += f"<span>{str_val}</span>\n"
+                        write_buffer += f"{TAB*5}<span>{str_val}</span>\n"
                     else:
                         if kam_si_u_tiau_hu(tlpa):
                             tlpa = tng_tiau_ho(tng_im_piau(tlpa))
@@ -260,10 +272,13 @@ class CellProcessor(ExcelCell):
                     self.total_chars_per_line
                     and char_count >= self.total_chars_per_line
                 ):
-                    write_buffer += "<br/>\n"
+                    # write_buffer += "<br/>\n"
+                    write_buffer += "</p><p>\n"
                     char_count = 0
                     print("《人工斷行》")
-        return write_buffer + "</p></div>"
+
+        # write_buffer += f"\n{TAB*3}</p></div>"
+        # return write_buffer
 
 
 def _create_html_file(program, output_path, head_extra="", title="", content=""):
@@ -289,7 +304,9 @@ def _create_html_file(program, output_path, head_extra="", title="", content="")
 <body>
     <main class="page">
         <article class="article_content">
-            <div style='text-align: center'><img src='{full_img}' width='800' /></div>
+            <div style='text-align: center'>
+                <img src='{full_img}' width='800' />
+            </div>
             {content}
         </article>
     </main>
