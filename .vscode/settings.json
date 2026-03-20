@@ -18,5 +18,6 @@
     }
   ],
   "sqltools.useNodeRuntime": true,
-  "liveServer.settings.port": 5501
+  "liveServer.settings.port": 5501,
+  "python.defaultInterpreterPath": "c:\\work\\Piau-Im\\.venv\\Scripts\\python.exe"
 }
