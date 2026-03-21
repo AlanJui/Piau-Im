@@ -1,5 +1,5 @@
 """
-mod_程式.py V0.2.13
+mod_程式.py V0.2.14
 
 本系統各功能之程式架構模版。
 模版中包含程式配置類別 Program 及儲存格處理器類別 ExcelCell。
@@ -12,6 +12,7 @@ mod_程式.py V0.2.13
 - v0.2.12 2026-02-28: 函數除錯 _process_jin_kang_piau_im()，對【人工標音字庫】工作表更新紀錄時，為處理【人工標音】更新之情況，需先移除【人工標音字庫】中已有的紀錄（同【漢字】、所處【座標】）；
 然後再新增紀錄，確保【人工標音字庫】工作表中，不會出現同【漢字】、所處【座標】的資料，發生重複且資料內容不一致之問題。
 - v0.2.13 2026-03-18: 改善 _bo_thok_im() 方法，當【台語音標】或【漢字標音】為空值時，均屬標音異常，很可能起因於字典當無該漢字之讀音資料，或其它原因，故要求使用者重新輸入。
+- v0.2.14 2026-03-21: 修正 end_col 的計算方式，原為 start_col + CHARS_PER_ROW，修正為 start_col + CHARS_PER_ROW - 1，以確保 end_col 為最後一個字的正確欄位。
 """
 
 # =========================================================================
@@ -124,7 +125,7 @@ class Program:
         )
         self.CHARS_PER_ROW = int(wb.names["每列總字數"].refers_to_range.value)
         self.start_col = 4
-        self.end_col = self.start_col + self.CHARS_PER_ROW
+        self.end_col = self.start_col + self.CHARS_PER_ROW - 1
         self.han_ji_orgin_cell = "V3"  # 原始漢字儲存格位置
         # 每一行【漢字標音行】組成結構
         self.jin_kang_piau_im_row_offset = 0  # 人工標音儲存格

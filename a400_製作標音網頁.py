@@ -227,7 +227,7 @@ class CellProcessor(ExcelCell):
             except Exception:
                 pass
 
-            for col in range(program.start_col, program.end_col):
+            for col in range(program.start_col, program.end_col+1):
                 val = sheet.range((row, col)).value
                 addr = f"{xw.utils.col_name(col)}{row}"
 

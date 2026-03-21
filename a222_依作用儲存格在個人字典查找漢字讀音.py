@@ -1,5 +1,5 @@
 """
-a222_依作用儲存格在個人字典查找漢字讀音.py V0.2.12
+a222_依作用儲存格在個人字典查找漢字讀音.py V0.2.13
 功能說明：
     依作用儲存格位置，在個人字典中查找漢字讀音。
 更新紀錄：
@@ -14,6 +14,7 @@ a222_依作用儲存格在個人字典查找漢字讀音.py V0.2.12
     已變更，需將之校正回歸。
  -  v0.2.9 2026-02-13: 修正原【無標音漢字】與【缺字表】工作表無法正常運作之問題。
  -  v0.2.12 2026-03-18: 改善 _bo_thok_im() 方法，當【台語音標】或【漢字標音】為空值時，均屬標音異常，很可能起因於字典當無該漢字之讀音資料，或其它原因，故要求使用者重新輸入。
+ -  v0.2.13 2026-03-21: 修正查字典時，顯示所有讀音的預設值為 True。
 """
 
 # =========================================================================
@@ -110,6 +111,7 @@ class CellProcessor(ExcelCell):
         result = self.program.ji_tian.han_ji_ca_piau_im(
             han_ji=han_ji,
             ue_im_lui_piat=self.program.ue_im_lui_piat,
+            display_all_piau_im=True,
         )
 
         # 查無此字
@@ -285,7 +287,7 @@ class CellProcessor(ExcelCell):
         # 將結果儲存回標音字庫工作表
         self.save_all_piau_im_ji_khoo_dicts()
 
-    def _process_bo_thok_im(self, cell):
+    def _manual_input_thok_im(self, cell):
         """處理【無標音漢字】的【台語音標】及【漢字標音】儲存格內容"""
         row = cell.row  # 取得【漢字】儲存格的列號
         col = cell.column  # 取得【漢字】儲存格的欄號
@@ -435,7 +437,7 @@ class CellProcessor(ExcelCell):
             print(
                 f"漢字：【{cell_value}】的【台語音標】、【漢字標音】，未能完整標注，可能字典尚無此字之讀音！"
             )
-            self._process_bo_thok_im(cell)
+            self._manual_input_thok_im(cell)
             return 0  # 漢字
 
         # 檢查是否為【人工標音漢字】

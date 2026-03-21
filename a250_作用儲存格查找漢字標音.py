@@ -537,7 +537,7 @@ class CellProcessor(ExcelCell):
             or str(tai_gi_im_piau).strip() == ""
             and not han_ji_piau_im
         ):
-            self._process_bo_thok_im(cell)
+            self._manual_input_thok_im(cell)
             return 0  # 漢字
 
         # 檢查是否為【人工標音漢字】

@@ -1,13 +1,14 @@
 """
-mod_ca_ji_tian.py V0.2.1
+mod_ca_ji_tian.py V0.2.2
 
 功能說明：
 漢字查字典模組，提供漢字查詢讀音功能
 
 更新紀錄：
-    v0.2.1 2024-02-14: 變更讀音查詢作法，預設為：不分文讀/白話音，查詢結果依
+ - v0.2.1 2026-02-14: 變更讀音查詢作法，預設為：不分文讀/白話音，查詢結果依
     常用度之由大到小排序；新增參數 `display_all_piau_im`，用於控制是否顯示
     所有讀音（包含常用度 > 0.00 的讀音），預設為 True。
+ - v0.2.2 2026-03-211: 修訂 `han_ji_ca_piau_im()` 查漢字標音之常用度用法。
 """
 
 import sqlite3
@@ -85,7 +86,7 @@ class HanJiTian:
         self,
         han_ji: str,
         ue_im_lui_piat: str = "文讀音",
-        display_all_piau_im: bool = True,
+        display_all_piau_im: bool = False,
     ) -> Optional[List[Dict[str, Union[str, float]]]]:
         """
         根據漢字查詢其台羅音標及相關讀音資訊，並將台羅音標轉換為台語音標。
@@ -130,7 +131,17 @@ class HanJiTian:
                 elif ue_im_lui_piat == "其它":
                     reading_condition = "常用度 > 0.00 AND 常用度 <= 0.40"
                 else:
-                    reading_condition = "1=1"  # 查詢所有
+                    reading_condition = "常用度 > 0.00 AND 常用度 <= 1.00"  # 查詢所有
+            # if ue_im_lui_piat == "文讀音":
+            #     # reading_condition = f"(常用度 > 0.60 AND 常用度 <= 0.80) OR ({common_reading_condition})"
+            #     reading_condition = f"({common_reading_condition}) OR (常用度 > 0.60 AND 常用度 <= 0.80)"
+            # elif ue_im_lui_piat == "白話音":
+            #     # reading_condition = f"(常用度 > 0.40 AND 常用度 <= 0.60) OR ({common_reading_condition})"
+            #     reading_condition = f"({common_reading_condition}) OR (常用度 > 0.40 AND 常用度 <= 0.60)"
+            # elif ue_im_lui_piat == "其它":
+            #     reading_condition = "常用度 > 0.00 AND 常用度 <= 0.40"
+            # else:
+            #     reading_condition = "常用度 > 0.00 AND 常用度 <= 1.00"
 
             query = f"""
             SELECT

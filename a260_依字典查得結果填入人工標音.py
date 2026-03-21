@@ -1,11 +1,12 @@
 """
-a260_依字典查得結果填入人工標音.py V0.0.1
+a260_依字典查得結果填入人工標音.py V0.0.2
 
 在【漢字注音】工作表之【作用儲存格】，可以兩種方式輸入【人工標音】資料：
 （1）自【自用字典】查得【台語音標】；（2）直接手動輸入【台語音標】/【台羅拼音】。
 
 修改紀錄：
 v0.0.1 2026-2-28: 初始版本，完成基本功能。
+v0.0.2 2026-3-21: 修正查字典時，顯示所有讀音的預設值為 True。
 """
 
 # =========================================================================
@@ -33,6 +34,7 @@ from mod_logging import (
 )
 
 # 載入自訂模組/函式
+from mod_標音 import is_han_ji, tlpa_tng_han_ji_piau_im
 from mod_程式 import ExcelCell, Program
 
 # =========================================================================
@@ -101,6 +103,7 @@ class CellProcessor(ExcelCell):
         result = self.program.ji_tian.han_ji_ca_piau_im(
             han_ji=han_ji,
             ue_im_lui_piat=self.program.ue_im_lui_piat,
+            display_all_piau_im=True,
         )
 
         # 查無此字
@@ -168,6 +171,8 @@ class CellProcessor(ExcelCell):
 
     def _za_ji_tain_au_thiam_jin_kang_piau_im(self, active_cell):
         """查字典後填入工標音"""
+        piau_im_huat = self.program.piau_im_huat
+        piau_im = self.program.piau_im
         tai_gi_im_piau = ""
 
         # 依據【作用儲存格】之【漢字】，從【自用字典】查詢【台語音標】
@@ -175,9 +180,112 @@ class CellProcessor(ExcelCell):
         if tai_gi_im_piau is None:
             return
 
-        active_cell.offset(-2, 0).value = tai_gi_im_piau  # 人工標音
-        self._process_jin_kang_piau_im(cell=active_cell)
+        # 依指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
+        han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+            piau_im=piau_im,
+            piau_im_huat=piau_im_huat,
+            tai_gi_im_piau=tai_gi_im_piau,
+        )
 
+        active_cell.offset(-2, 0).value = tai_gi_im_piau  # 人工標音
+        active_cell.offset(-1, 0).value = tai_gi_im_piau  # 台語音標
+        active_cell.offset(1, 0).value = han_ji_piau_im  # 漢字標音
+
+        return tai_gi_im_piau, han_ji_piau_im
+
+    def _manual_input_thok_im(self, cell):
+        """
+        手動輸入【漢字】之【台語音標】讀音
+
+        returns:
+            tai_gi_im_piau: 使用者輸入的台語音標
+            han_ji_piau_im: 由台語音標轉換而成的漢字標音
+
+            cell.offset(-2, 0).value = tai_gi_im_piau  # 人工標音
+            cell.offset(-1, 0).value = tai_gi_im_piau  # 台語音標
+            cell.offset(1, 0).value = han_ji_piau_im  # 漢字標音
+        """
+        # 取得【漢字】儲存格內容
+        han_ji = cell.value
+
+        tai_gi_im_piau = self.get_user_input_piau_im(han_ji=han_ji)
+        if not tai_gi_im_piau:
+            return
+        cell.offset(-1, 0).value = tai_gi_im_piau  # 台語音標
+
+        # 將使用者輸入之【台語音標】轉換為【漢字標音】
+        han_ji_piau_im = self.convert_tai_gi_im_piau_to_han_ji_piau_im(
+            tai_gi_im_piau=tai_gi_im_piau,
+        )
+        if not han_ji_piau_im:
+            print(">> 無法將輸入之【台語音標】轉換為【漢字標音】！")
+            return tai_gi_im_piau, None
+
+        cell.offset(-2, 0).value = tai_gi_im_piau  # 人工標音
+        cell.offset(-1, 0).value = tai_gi_im_piau  # 台語音標
+        cell.offset(1, 0).value = han_ji_piau_im  # 漢字標音
+
+        return tai_gi_im_piau, han_ji_piau_im
+
+    def _update_khuat_ji_piau_worksheet(self, cell) -> None:
+        """
+        更新【缺字表】工作表
+        """
+        row = cell.row
+        col = cell.column
+        han_ji = cell.value
+        tai_gi_im_piau = cell.offset(-1, 0).value
+        han_ji_piau_im = cell.offset(1, 0).value
+
+        # 在【缺字表】工作表查找此【漢字】之 Excel 的 Row No
+        row_no = self.khuat_ji_piau_ji_khoo_dict.get_row_by_han_ji_and_coordinate(
+            han_ji=han_ji,
+            coordinate=(row, col),
+        )
+        if row_no != -1:
+            # 找到【漢字】所在之 Row No 後，依據【座標】欄儲存格之【座標清單】，逐一更新指向
+            # 【漢字注音】工作表之【漢字】的【台語音標】及【漢字標音】。
+            # 之【台語音標】及【漢字標音】。
+            self.update_piau_im_worksheet_entry(
+                coordinate=(row, col),
+                han_ji=han_ji,
+                tai_gi_im_piau=tai_gi_im_piau,
+                han_ji_piau_im=han_ji_piau_im,
+                piau_im_ji_khoo_dict=self.khuat_ji_piau_ji_khoo_dict,
+                row_no=row_no,
+            )
+            # 因【標音字庫】依【漢字】之【座標】紀錄，更新【漢字注音】工作表中對映之【台語音標】及【漢字標音】；導致
+            # 【作用儲存格】之 Excel Address 已變更，需將之校正回歸。
+            cell.select()  # 選取【作用儲存格】，以確保游標位置正確
+
+    def _update_jin_kang_piau_im_ji_khoo_worksheet(self, cell) -> None:
+        """
+        更新【人工標音字庫】工作表
+        """
+        row = cell.row
+        col = cell.column
+        han_ji = cell.value
+        tai_gi_im_piau = cell.offset(-1, 0).value
+
+        # 是否存在【標音字庫】
+        row_no = self.piau_im_ji_khoo_dict.get_row_by_han_ji_and_coordinate(
+            han_ji=han_ji,
+            coordinate=(row, col),
+        )
+        # 若是存在【標音字庫】之中，需移除
+        if row_no != -1:
+            self.piau_im_ji_khoo_dict.remove_entry(
+                han_ji=han_ji,
+                coordinate=(row, col),
+            )
+
+        # 將【人工標音】記錄到【人工標音字庫】工作表
+        self.jin_kang_piau_im_ji_khoo_dict.add_entry(
+            han_ji=han_ji,
+            tai_gi_im_piau=tai_gi_im_piau,
+            hau_ziann_im_piau='N/A',
+            coordinates=(row, col),
+        )
 
 # =============================================================================
 # 作業主流程
@@ -238,25 +346,36 @@ def process(wb, args) -> int:
             get_row_by_line_no(current_line_no)
         )
 
+        # 確認【作用儲存格】為【漢字】
         han_ji = source_sheet.range((han_ji_row, col)).value
-        jin_kang_piau_im = source_sheet.range((jin_kang_piau_im_row, col)).value
+        if not is_han_ji(han_ji):
+            msg=f"作用儲存格 {active_cell_address} 的漢字為【{han_ji}】，屬於標點符號或特殊符號，跳過處理。"
+            print(f">> {msg}")
+            return EXIT_CODE_SUCCESS
+
+        # 確認【作用儲存格】的【漢字】有【台語音標】及【漢字標音】，否則可能是字典目前無此【漢字】之讀音資料，
+        # 故後續之查字典作業應被略過，直接要求使用者輸入【台語音標】或【台羅拼音】。
         tai_gi_im_piau = source_sheet.range((tai_gi_im_piau_row, col)).value
         han_ji_piau_im = source_sheet.range((han_ji_piau_im_row, col)).value
-        han_ji_position = (han_ji_row, col)
+        if not tai_gi_im_piau or not han_ji_piau_im:
+            msg = f"作用儲存格 {active_cell_address} 的漢字【{han_ji}】缺乏【台語音標】或【漢字標音】，可能是字典無此漢字之讀音資料，將略過查字典作業，直接要求使用者輸入【台語音標】或【台羅拼音】。"
+            print(f">> {msg}")
+            tai_gi_im_piau, han_ji_piau_im = xls_cell.get_user_input_piau_im(han_ji=han_ji)
+        else:
+            # ----------------------------------------------------------------------
+            # 查字典後填人工標音
+            # ----------------------------------------------------------------------
+            jin_kang_piau_im = source_sheet.range((jin_kang_piau_im_row, col)).value
+            han_ji_position = (han_ji_row, col)
 
-        print(
-            f"📌 作用儲存格：{active_cell_address} ==> 漢字儲存格座標：{han_ji_position}"
-        )
-        print(f"📌 漢字：{han_ji}")
-        print(
-            f"📌 人工標音：{jin_kang_piau_im}，台語音標：{tai_gi_im_piau}，漢字標音：{han_ji_piau_im}"
-        )
-
-        # ----------------------------------------------------------------------
-        # 查字典後填人工標音
-        # Za-Ji-Tain-Au-Thiam-Jin-Kang-Piau-Im
-        # ----------------------------------------------------------------------
-        xls_cell._za_ji_tain_au_thiam_jin_kang_piau_im(active_cell=active_cell)
+            print(
+                f"📌 作用儲存格：{active_cell_address} ==> 漢字儲存格座標：{han_ji_position}"
+            )
+            print(f"📌 漢字：{han_ji}")
+            print(
+                f"📌 人工標音：{jin_kang_piau_im}，台語音標：{tai_gi_im_piau}，漢字標音：{han_ji_piau_im}"
+            )
+            xls_cell._za_ji_tain_au_thiam_jin_kang_piau_im(active_cell=active_cell)
 
         # 透過【作用儲存格】取出處理後的【人工標音】、【台語音標】、【漢字標音】
         jin_kang_piau_im = source_sheet.range((jin_kang_piau_im_row, col)).value
@@ -272,27 +391,52 @@ def process(wb, args) -> int:
             row = han_ji_row
 
             # -------------------------------------------------------------------------
+            # 自【標音字庫】工作表對映之【字庫】(dict)，移除該【漢字】之【座標】資料
+            # -------------------------------------------------------------------------
+            # 是否存在【標音字庫】
+            row_no = xls_cell.piau_im_ji_khoo_dict.get_row_by_han_ji_and_coordinate(
+                han_ji=han_ji,
+                coordinate=(row, col),
+            )
+            # 若是存在【標音字庫】之中，需移除
+            if row_no != -1:
+                xls_cell.piau_im_ji_khoo_dict.remove_entry(
+                    han_ji=han_ji,
+                    coordinate=(row, col),
+                )
+            # -------------------------------------------------------------------------
             # 在【人工標音字庫】工作表對映之【字庫】(dict)，添加或更新一筆【漢字】及
             # 【台語音標】資料
             # 依【漢字】及【台語音標】查詢【人工標音字庫】，若無此【漢字】或【台語音標】之資料，則新增一筆資料；若已有此【漢字】及【台語音標】之資料，則更新其【人工標音】欄位值。
             # -------------------------------------------------------------------------
-            xls_cell.jin_kang_piau_im_ji_khoo_dict.remove_coordinate(
+            row_no = xls_cell.jin_kang_piau_im_ji_khoo_dict.get_row_by_han_ji_and_coordinate(
                 han_ji=han_ji,
                 coordinate=(row, col),
             )
+            if row_no != -1:
+                xls_cell.jin_kang_piau_im_ji_khoo_dict.remove_coordinate(
+                    han_ji=han_ji,
+                    coordinate=(row, col),
+                )
             xls_cell.jin_kang_piau_im_ji_khoo_dict.add_entry(
                 han_ji=han_ji,
                 tai_gi_im_piau=tai_gi_im_piau,
-                hau_ziann_im_piau=jin_kang_piau_im,
+                hau_ziann_im_piau='N/A',
                 coordinates=(row, col),
             )
-            # -------------------------------------------------------------------------
-            # 自【標音字庫】工作表對映之【字庫】(dict)，移除該【漢字】之【座標】資料
-            # -------------------------------------------------------------------------
-            xls_cell.piau_im_ji_khoo_dict.remove_coordinate(
-                han_ji=han_ji,
-                coordinate=(row, col),
+            # ----------------------------------------------------------------------
+            # 將【標音字庫】，寫入 Excel 工作表
+            # ----------------------------------------------------------------------
+            xls_cell.piau_im_ji_khoo_dict.write_to_excel_sheet(
+                wb=wb, sheet_name=piau_im_ji_khoo_sheet_name
             )
+            # ----------------------------------------------------------------------
+            # 將【人工標音字庫】，寫入 Excel 工作表
+            # ----------------------------------------------------------------------
+            xls_cell.jin_kang_piau_im_ji_khoo_dict.write_to_excel_sheet(
+                wb=wb, sheet_name=jin_kang_piau_im_sheet_name
+            )
+
             # -------------------------------------------------------------------------
             # 更新資料庫中【漢字庫】資料表
             # -------------------------------------------------------------------------
@@ -305,20 +449,6 @@ def process(wb, args) -> int:
                 tai_gi_im_piau=tai_gi_im_piau,
                 ue_im_lui_piat=program.ue_im_lui_piat,
                 siong_iong_too=siong_iong_too_to_use,
-            )
-
-            # ----------------------------------------------------------------------
-            # 將【標音字庫】，寫入 Excel 工作表
-            # ----------------------------------------------------------------------
-            xls_cell.piau_im_ji_khoo_dict.write_to_excel_sheet(
-                wb=wb, sheet_name=piau_im_ji_khoo_sheet_name
-            )
-
-            # ----------------------------------------------------------------------
-            # 將【人工標音字庫】，寫入 Excel 工作表
-            # ----------------------------------------------------------------------
-            xls_cell.jin_kang_piau_im_ji_khoo_dict.write_to_excel_sheet(
-                wb=wb, sheet_name=jin_kang_piau_im_sheet_name
             )
 
         logging_process_step(msg="已完成【台語音標】和【漢字標音】標注工作。")
