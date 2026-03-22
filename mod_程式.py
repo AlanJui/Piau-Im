@@ -1321,7 +1321,7 @@ class ExcelCell:
             for coordinate in entry["coordinates"]:
                 row, col = coordinate
                 target_cell = sheet.range((row, col))
-                target_cell.select()
+                # target_cell.select()
                 target_cell.offset(-1, 0).value = tai_gi_im_piau  # 台語音標
                 target_cell.offset(1, 0).value = han_ji_piau_im  # 漢字標音
                 excel_addr = xw.utils.col_name(col) + str(row)
@@ -1339,7 +1339,10 @@ class ExcelCell:
                 coordinates=entry["coordinates"],
             )
             # 儲存回標音字庫工作表
-            self.save_all_piau_im_ji_khoo_dicts()
+            # self.save_all_piau_im_ji_khoo_dicts()
+            self.piau_im_ji_khoo_dict.write_to_excel_sheet(
+                wb=self.program.wb, sheet_name=self.piau_im_ji_khoo_dict.name
+            )
             return True  # 已完成【標音字庫】資料表物件之更新，並回存工作表
 
     def _update_khuat_ji_piau_worksheet(self, cell) -> None:
@@ -1544,7 +1547,7 @@ class ExcelCell:
 
         # (3) 供使用者輸入選擇
         user_input = (
-            input("\n請輸入【選擇編號】；或【入台語音標/台羅拼音】 (直接按 Enter 跳過): ").strip().lstrip("\ufeff")
+            input("\n請輸入【選擇編號】；或【台語音標/台羅拼音】 (直接按 Enter 跳過): ").strip().lstrip("\ufeff")
         )
 
         if not user_input:
