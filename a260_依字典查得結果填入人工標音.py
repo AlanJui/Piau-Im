@@ -1,5 +1,5 @@
 """
-a260_依字典查得結果填入人工標音.py V0.0.3
+a260_依字典查得結果填入人工標音.py V0.0.4
 
 在【漢字注音】工作表之【作用儲存格】，可以兩種方式輸入【人工標音】資料：
 （1）自【自用字典】查得【台語音標】；（2）直接手動輸入【台語音標】/【台羅拼音】。
@@ -9,6 +9,8 @@ v0.0.1 2026-2-28: 初始版本，完成基本功能。
 v0.0.2 2026-3-21: 修正查字典時，顯示所有讀音的預設值為 True。
 v0.0.3 2026-3-22: 修正查字典後填入人工標音的邏輯，將【人工標音】、【台語音標】、【漢字標音】
     分別填入【作用儲存格】之上方一格、下方一格、同一格；並修正相關邏輯以確保資料正確填入。
+v0.0.4 2026-3-23: 修正問題：當使用者放棄輸入【人工標音】時，即刻跳出 process 函式，避免後續
+    更新【標音字庫】現有資料紀錄，引發錯誤。
 """
 
 # =========================================================================
@@ -36,7 +38,7 @@ from mod_logging import (
 )
 
 # 載入自訂模組/函式
-from mod_標音 import convert_tl_with_tiau_hu_to_tlpa, is_han_ji, kam_si_u_tiau_hu, tlpa_tng_han_ji_piau_im
+from mod_標音 import is_han_ji, tlpa_tng_han_ji_piau_im
 from mod_程式 import ExcelCell, Program
 
 # =========================================================================
@@ -115,39 +117,6 @@ class CellProcessor(ExcelCell):
 
         return tai_gi_im_piau, han_ji_piau_im
 
-    # def _manual_input_thok_im(self, cell):
-    #     """
-    #     手動輸入【漢字】之【台語音標】讀音
-
-    #     returns:
-    #         tai_gi_im_piau: 使用者輸入的台語音標
-    #         han_ji_piau_im: 由台語音標轉換而成的漢字標音
-
-    #         cell.offset(-2, 0).value = tai_gi_im_piau  # 人工標音
-    #         cell.offset(-1, 0).value = tai_gi_im_piau  # 台語音標
-    #         cell.offset(1, 0).value = han_ji_piau_im  # 漢字標音
-    #     """
-    #     # 取得【漢字】儲存格內容
-    #     han_ji = cell.value
-
-    #     tai_gi_im_piau = self.get_user_input_piau_im(han_ji=han_ji)
-    #     if not tai_gi_im_piau:
-    #         return
-    #     cell.offset(-1, 0).value = tai_gi_im_piau  # 台語音標
-
-    #     # 將使用者輸入之【台語音標】轉換為【漢字標音】
-    #     han_ji_piau_im = self.convert_tai_gi_im_piau_to_han_ji_piau_im(
-    #         tai_gi_im_piau=tai_gi_im_piau,
-    #     )
-    #     if not han_ji_piau_im:
-    #         print(">> 無法將輸入之【台語音標】轉換為【漢字標音】！")
-    #         return tai_gi_im_piau, None
-
-    #     cell.offset(-2, 0).value = tai_gi_im_piau  # 人工標音
-    #     cell.offset(-1, 0).value = tai_gi_im_piau  # 台語音標
-    #     cell.offset(1, 0).value = han_ji_piau_im  # 漢字標音
-
-    #     return tai_gi_im_piau, han_ji_piau_im
 
 # =============================================================================
 # 作業主流程
@@ -205,6 +174,8 @@ def process(wb, args) -> int:
         jin_kang_piau_im_row, tai_gi_im_piau_row, han_ji_row, han_ji_piau_im_row = (
             get_row_by_line_no(current_line_no)
         )
+        source_sheet.range((han_ji_row, col)).select()  # 選取【漢字】儲存格，以確保游標位置正確
+        source_sheet.activate()  # 重新激活工作表以刷新儲存格地址
 
         # 確認【作用儲存格】為【漢字】
         han_ji = source_sheet.range((han_ji_row, col)).value
@@ -218,6 +189,8 @@ def process(wb, args) -> int:
         tai_gi_im_piau = source_sheet.range((tai_gi_im_piau_row, col)).value
         han_ji_piau_im = source_sheet.range((han_ji_piau_im_row, col)).value
         jin_kang_piau_im = source_sheet.range((jin_kang_piau_im_row, col)).value
+        # 記錄原始的的【人工標音】
+        original_jin_kang_piau_im = jin_kang_piau_im
 
         if not tai_gi_im_piau or not han_ji_piau_im:
             # ----------------------------------------------------------------------
@@ -247,7 +220,9 @@ def process(wb, args) -> int:
             print(
                 f"📌 人工標音：{jin_kang_piau_im}，台語音標：{tai_gi_im_piau}，漢字標音：{han_ji_piau_im}"
             )
-            if not xls_cell._za_ji_tain_au_thiam_jin_kang_piau_im(active_cell=active_cell):
+            if not xls_cell._za_ji_tain_au_thiam_jin_kang_piau_im(
+                active_cell=source_sheet.range((han_ji_row, col))
+            ):
                 return EXIT_CODE_SUCCESS    # 若使用者放棄變更，則結束作業流程
 
         # 透過【作用儲存格】取出處理後的【人工標音】、【台語音標】、【漢字標音】
@@ -259,7 +234,7 @@ def process(wb, args) -> int:
         print(f">> 儲存格：{active_cell_address}，{msg}")
 
         # 將【台語音標】和【漢字標音】寫入【漢字注音】工作表之【作用儲存格】
-        if not jin_kang_piau_im:    # 若【人工標音】儲存格未填入標音
+        if not jin_kang_piau_im or original_jin_kang_piau_im == jin_kang_piau_im:    # 若【人工標音】儲存格未填入標音
             return EXIT_CODE_SUCCESS
 
         # -------------------------------------------------------------------------
@@ -288,6 +263,7 @@ def process(wb, args) -> int:
         # 因【標音字庫】依【漢字】之【座標】紀錄，更新【漢字注音】工作表中對映之【台語音標】及【漢字標音】；導致
         # 【作用儲存格】之 Excel Address 已變更，需將之校正回歸。
         # -------------------------------------------------------------------------
+        source_sheet.activate()  # 重新激活工作表以刷新儲存格地址
         active_cell.select()  # 選取【作用儲存格】，以確保游標位置正確
 
         logging_process_step(msg="已完成【台語音標】和【漢字標音】標注工作。")

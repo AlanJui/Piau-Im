@@ -96,7 +96,7 @@ class JiKhooDict:
 
         try:
             sheet = wb.sheets[sheet_name]
-            sheet.activate()
+            # sheet.activate()
             sheet.range("A1").value = "漢字"
             sheet.range("B1").value = "台語音標"
             sheet.range("C1").value = "校正音標"

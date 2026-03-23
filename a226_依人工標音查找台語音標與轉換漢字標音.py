@@ -201,14 +201,14 @@ class CellProcessor:
                 han_ji=cell.value,
                 tai_gi_im_piau=tai_gi_im_piau,
                 hau_ziann_im_piau="N/A",
-                coordinates=(row, col),
+                coordinate=(row, col),
             )
             # 記錄到標音字庫
             self.piau_im_ji_khoo.add_entry(
                 han_ji=cell.value,
                 tai_gi_im_piau=tai_gi_im_piau,
                 hau_ziann_im_piau="N/A",
-                coordinates=(row, col),
+                coordinate=(row, col),
             )
             print(
                 f"已將【{cell.value}】之【人工標音】記錄到【人工標音字庫】工作表的【校正音標】儲存格。"
@@ -252,7 +252,7 @@ class CellProcessor:
                         han_ji=cell.value,
                         tai_gi_im_piau="N/A",
                         hau_ziann_im_piau="N/A",
-                        coordinates=(row, col),
+                        coordinate=(row, col),
                     )
 
         if sing_kong:
@@ -323,7 +323,7 @@ class CellProcessor:
                 han_ji=han_ji,
                 tai_gi_im_piau="",
                 hau_ziann_im_piau="N/A",
-                coordinates=(row, col),
+                coordinate=(row, col),
             )
             return f"【{han_ji}】查無此字！", False
 
