@@ -2,11 +2,19 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Project Purpose
+## 語言設定
 
-This is a Taiwanese Hokkien (河洛話/台語) phonetic annotation system. It processes Chinese characters in Excel workbooks, looks up their Taiwanese pronunciations from SQLite dictionaries, and generates HTML pages using Ruby tags for web publication.
+**所有對話回覆與產出文件，一律使用繁體中文。**
 
-## Environment Setup
+---
+
+## 專案目的
+
+本專案為台語（河洛話）漢字標音系統。主要功能：將 Excel 活頁簿中的漢字，自 SQLite 字典資料庫查得台語讀音，並產出帶有 Ruby 標籤的 HTML 網頁，供網站發布使用。
+
+---
+
+## 開發環境建置
 
 ```bash
 python -m venv .venv
@@ -14,86 +22,93 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-ChromeDriver is required for Selenium-based scripts. Configure the path in `config.env`:
+部分程式需使用 Selenium，須安裝 ChromeDriver，並於 `config.env` 設定路徑：
+
 ```
 CHROMEDRIVER_PATH=d:\bin\chromedriver-win64\chromedriver.exe
 ```
 
-## Development Commands
+---
+
+## 常用開發指令
 
 ```bash
-# Code formatting
+# 程式碼格式化
 black .
 ruff format .
 
-# Linting
+# 程式碼檢查
 ruff check .
-pylint .          # Only F (fatal) and E (error) checks are enabled via .pylintrc
+pylint .          # 依 .pylintrc 設定，僅啟用 F（嚴重）與 E（錯誤）等級檢查
 
-# Type checking
+# 型別檢查
 mypy .
 
-# Run any script directly (most scripts use __main__ entry points)
+# 直接執行單支程式（大多數程式含 __main__ 進入點）
 python a200_查找及填入漢字標音.py
 
-# Regenerate docs/index.html
+# 重新產生 docs/index.html
 python a999_自動生成index_html.py
 ```
 
-Code style: line length 160, double quotes (configured in `pyproject.toml` and `setup.cfg`).
+程式碼風格：行寬上限 160 字元、字串使用雙引號（設定於 `pyproject.toml` 與 `setup.cfg`）。
 
-## Architecture
+---
 
-### Core Module Layer (`mod_*.py`)
+## 系統架構
 
-| Module | Purpose |
-|--------|---------|
-| `mod_程式.py` | Base framework: `Program` (config) and `ExcelCell` (cell processor) classes |
-| `mod_標音.py` | Phonetic conversion: `PiauIm` class, TLPA↔TL↔BP↔MPS2 conversions |
-| `mod_ca_ji_tian.py` | SQLite lookups: `HanJiTian` class queries character pronunciations |
-| `mod_字庫.py` | Excel-to-dict conversion: `JiKhooDict` manages in-memory character libraries |
-| `mod_excel_access.py` | xlwings helpers: cell addressing, worksheet CRUD, named ranges |
-| `mod_database.py` | Singleton SQLite connection manager with context manager support |
-| `mod_logging.py` | Logging helpers writing to `process_log.txt` and `error_log.txt` |
-| `mod_帶調符音標.py` | Tone-diacritic handling utilities |
+### 核心模組層（`mod_*.py`）
 
-### Application Scripts (`a###_*.py`)
+| 模組 | 用途 |
+|------|------|
+| `mod_程式.py` | 程式架構基底：`Program`（設定參數）與 `ExcelCell`（儲存格處理器）類別 |
+| `mod_標音.py` | 音標轉換：`PiauIm` 類別，處理 TLPA↔TL↔BP↔MPS2 等系統互轉 |
+| `mod_ca_ji_tian.py` | SQLite 查詢：`HanJiTian` 類別負責漢字讀音查找 |
+| `mod_字庫.py` | Excel 轉字典：`JiKhooDict` 管理記憶體內字庫 |
+| `mod_excel_access.py` | xlwings 工具函式：儲存格定址、工作表 CRUD、命名範圍 |
+| `mod_database.py` | SQLite 連線管理員（Singleton 模式），支援 context manager |
+| `mod_logging.py` | 日誌工具，輸出至 `process_log.txt` 與 `error_log.txt` |
+| `mod_帶調符音標.py` | 調號符號處理工具 |
 
-Scripts follow a numbered naming convention indicating workflow stage:
+### 應用程式腳本（`a###_*.py`）
 
-- **a000–a002**: Reset/clear worksheets
-- **a100**: Populate Chinese characters from text file into Excel
-- **a200–a260**: Phonetic annotation lookup and fill (core annotation workflow)
-- **a300–a320**: Manual correction of annotations
-- **a400**: Generate HTML output with Ruby tags
-- **a500–a530**: Import/export annotation data
-- **a600–a622**: Guangyun (廣韻) and Fifteen-Yin (十五音) dictionary lookups
-- **a700–a750**: Typing practice worksheet generators
-- **a800–a890**: Character library (漢字庫) maintenance and export
-- **a900–a910**: Batch processing
-- **a999**: Generate `docs/index.html` for GitHub Pages
+腳本以編號命名，代表作業流程階段：
 
-### Excel Worksheet Cell Layout
+- **a000–a002**：重置／清除工作表
+- **a100**：將文字檔內容填入 Excel 漢字欄位
+- **a200–a260**：標音查找與填入（核心標音流程）
+- **a300–a320**：人工校正標音
+- **a400**：產生含 Ruby 標籤的 HTML 輸出
+- **a500–a530**：標音資料匯入／匯出
+- **a600–a622**：廣韻（Kong_Un）與十五音字典查找
+- **a700–a750**：拚音打字練習工作表產生器
+- **a800–a890**：漢字庫維護與匯出
+- **a900–a910**：批次處理
+- **a999**：產生 `docs/index.html` 供 GitHub Pages 使用
 
-The annotation workbook uses a structured row layout per character column:
-- **Row 1**: 人工標音 (manual annotation override)
-- **Row 2**: 台語音標 (Taiwan Language Romanization - TL/TLPA)
-- **Row 3**: 漢字 (Chinese character)
-- **Row 4**: 漢字標音 (final phonetic annotation in target system)
+### Excel 工作表儲存格結構
 
-### Databases
+每個漢字欄位依固定列次存放資料：
 
-- `Ho_Lok_Ue.db` — Primary Taiwanese Hokkien character dictionary
-- `Kong_Un.db` — Guangyun (廣韻) Middle Chinese dictionary
-- `雅俗通十五音字典.db` — Fifteen-Yin (十五音) dictionary
+- **第 1 列**：人工標音（優先覆蓋自動標音）
+- **第 2 列**：台語音標（台羅拼音 TL/TLPA）
+- **第 3 列**：漢字
+- **第 4 列**：漢字標音（依目標音標系統轉換後的最終標音）
 
-Database selection is controlled via environment variables loaded from `.env`.
+### 資料庫
 
-### Supported Phonetic Systems
+- `Ho_Lok_Ue.db` — 主要河洛話漢字字典
+- `Kong_Un.db` — 廣韻（中古漢語）字典
+- `雅俗通十五音字典.db` — 十五音字典
 
-TLPA, TL (台羅), BP (閩拼), MPS2 (方音符號), POJ (白話字), 十五音 (Fifteen-Yin). Conversions are handled by `PiauIm` class in `mod_標音.py`.
+資料庫選用由 `.env` 環境變數控制。
 
-### Output
+### 支援音標系統
 
-- `docs/` — HTML files deployed to GitHub Pages (via `.github/workflows/static.yml`)
-- `output*/` — Intermediate and final Excel/text outputs per processing run
+TLPA、TL（台羅）、BP（閩拼）、MPS2（方音符號）、POJ（白話字）、十五音。
+轉換邏輯集中於 `mod_標音.py` 的 `PiauIm` 類別。
+
+### 輸出目錄
+
+- `docs/` — HTML 檔，經 `.github/workflows/static.yml` 自動部署至 GitHub Pages
+- `output*/` — 各次作業的中間與最終 Excel／文字輸出
