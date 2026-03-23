@@ -116,73 +116,73 @@ class CellProcessor(ExcelCell):
 
         return tai_gi_im_piau, han_ji_piau_im
 
-    def _update_piau_im_ji_khoo_worksheet(self, cell) -> None:
-        """
-        更新【標音字庫】工作表
-        """
-        row = cell.row  # 漢字儲存格所在之 Row
-        col = cell.column
-        han_ji = cell.value
+    # def _update_piau_im_ji_khoo_worksheet(self, cell) -> None:
+    #     """
+    #     更新【標音字庫】工作表
+    #     """
+    #     row = cell.row  # 漢字儲存格所在之 Row
+    #     col = cell.column
+    #     han_ji = cell.value
 
-        # 在【標音字庫】工作表查找此【漢字】之 Excel 的 Row No
-        row_no = self.piau_im_ji_khoo_dict.get_row_by_han_ji_and_coordinate(
-            han_ji=han_ji,
-            coordinate=(row, col),
-        )
-        if row_no != -1:
-            # 將【標音字庫】中對映之【漢字】，自紀錄中【座標】欄位已有之資料移除。
-            self.piau_im_ji_khoo_dict.remove_coordinate_by_han_ji_and_coordinate(
-                han_ji=han_ji,
-                coordinate=(row, col),
-            )
-            # ----------------------------------------------------------------------
-            # 將【標音字庫】之【字庫表】，寫回 Excel 工作表
-            # ----------------------------------------------------------------------
-            self.piau_im_ji_khoo_dict.write_to_excel_sheet(
-                wb=self.program.wb, sheet_name=self.piau_im_ji_khoo_dict.name
-            )
+    #     # 在【標音字庫】工作表查找此【漢字】之 Excel 的 Row No
+    #     row_no = self.piau_im_ji_khoo_dict.get_row_by_han_ji_and_coordinate(
+    #         han_ji=han_ji,
+    #         coordinate=(row, col),
+    #     )
+    #     if row_no != -1:
+    #         # 將【標音字庫】中對映之【漢字】，自紀錄中【座標】欄位已有之資料移除。
+    #         self.piau_im_ji_khoo_dict.remove_coordinate_by_han_ji_and_coordinate(
+    #             han_ji=han_ji,
+    #             coordinate=(row, col),
+    #         )
+    #         # ----------------------------------------------------------------------
+    #         # 將【標音字庫】之【字庫表】，寫回 Excel 工作表
+    #         # ----------------------------------------------------------------------
+    #         self.piau_im_ji_khoo_dict.write_to_excel_sheet(
+    #             wb=self.program.wb, sheet_name=self.piau_im_ji_khoo_dict.name
+    #         )
 
-    def _update_jin_kang_piau_im_ji_khoo_worksheet(self, cell) -> None:
-        """
-        更新【人工標音字庫】工作表
-        """
-        row = cell.row
-        col = cell.column
-        han_ji = cell.value
-        tai_gi_im_piau = cell.offset(-1, 0).value
+    # def _update_jin_kang_piau_im_ji_khoo_worksheet(self, cell) -> None:
+    #     """
+    #     更新【人工標音字庫】工作表
+    #     """
+    #     row = cell.row
+    #     col = cell.column
+    #     han_ji = cell.value
+    #     tai_gi_im_piau = cell.offset(-1, 0).value
 
-        # -------------------------------------------------------------------------
-        # 確認【漢字】在【人工標音字庫】之【字庫表】，沒有留下舊記錄
-        # -------------------------------------------------------------------------
-        row_no = self.jin_kang_piau_im_ji_khoo_dict.get_row_by_han_ji_and_coordinate(
-            han_ji=han_ji,
-            coordinate=(row, col),
-        )
-        # 若是在【標音字庫】中留有舊記錄，需將之移除
-        if row_no != -1:
-            # self.jin_kang_piau_im_ji_khoo_dict.remove_coordinate(
-            #     han_ji=han_ji,
-            #     coordinate=(row, col),
-            # )
-            self.jin_kang_piau_im_ji_khoo_dict.remove_coordinate_by_han_ji_and_coordinate(
-                han_ji=han_ji,
-                coordinate=(row, col),
-            )
-        # -------------------------------------------------------------------------
-        # 在【人工標音字庫】之【字庫表】(dict)，新增該【漢字】之記錄
-        # -------------------------------------------------------------------------
-        self.jin_kang_piau_im_ji_khoo_dict.add_entry(
-            han_ji=han_ji,
-            tai_gi_im_piau=tai_gi_im_piau,
-            hau_ziann_im_piau='N/A',
-            coordinate=(row, col),
-        )
-        # ----------------------------------------------------------------------
-        # 將【人工標音字庫】之【字庫表】，寫回 Excel 工作表
-        # ----------------------------------------------------------------------
-        self.jin_kang_piau_im_ji_khoo_dict.write_to_excel_sheet(
-            wb=self.program.wb, sheet_name=self.jin_kang_piau_im_ji_khoo_dict.name
-        )
+    #     # -------------------------------------------------------------------------
+    #     # 確認【漢字】在【人工標音字庫】之【字庫表】，沒有留下舊記錄
+    #     # -------------------------------------------------------------------------
+    #     row_no = self.jin_kang_piau_im_ji_khoo_dict.get_row_by_han_ji_and_coordinate(
+    #         han_ji=han_ji,
+    #         coordinate=(row, col),
+    #     )
+    #     # 若是在【標音字庫】中留有舊記錄，需將之移除
+    #     if row_no != -1:
+    #         # self.jin_kang_piau_im_ji_khoo_dict.remove_coordinate(
+    #         #     han_ji=han_ji,
+    #         #     coordinate=(row, col),
+    #         # )
+    #         self.jin_kang_piau_im_ji_khoo_dict.remove_coordinate_by_han_ji_and_coordinate(
+    #             han_ji=han_ji,
+    #             coordinate=(row, col),
+    #         )
+    #     # -------------------------------------------------------------------------
+    #     # 在【人工標音字庫】之【字庫表】(dict)，新增該【漢字】之記錄
+    #     # -------------------------------------------------------------------------
+    #     self.jin_kang_piau_im_ji_khoo_dict.add_entry(
+    #         han_ji=han_ji,
+    #         tai_gi_im_piau=tai_gi_im_piau,
+    #         hau_ziann_im_piau='N/A',
+    #         coordinate=(row, col),
+    #     )
+    #     # ----------------------------------------------------------------------
+    #     # 將【人工標音字庫】之【字庫表】，寫回 Excel 工作表
+    #     # ----------------------------------------------------------------------
+    #     self.jin_kang_piau_im_ji_khoo_dict.write_to_excel_sheet(
+    #         wb=self.program.wb, sheet_name=self.jin_kang_piau_im_ji_khoo_dict.name
+    #     )
 
     def _process_sheet(self):
 
@@ -210,6 +210,8 @@ class CellProcessor(ExcelCell):
                 get_row_by_line_no(current_line_no)
             )
             han_ji_cell=source_sheet.range((han_ji_row, col))
+            source_sheet.range((han_ji_row, col)).select()  # 選取【漢字】儲存格，以確保游標位置正確
+            source_sheet.activate()  # 重新激活工作表以刷新儲存格地址
 
             # 確認【作用儲存格】為【漢字】
             han_ji = source_sheet.range((han_ji_row, col)).value
@@ -272,7 +274,7 @@ class CellProcessor(ExcelCell):
             # -------------------------------------------------------------------------
             # 自【標音字庫】之【字庫表】(dict)，移除該【漢字】之記錄
             # -------------------------------------------------------------------------
-            self._update_piau_im_ji_khoo_worksheet(cell=han_ji_cell)
+            self._update_piau_im_ji_khoo_worksheet_by_change_all(cell=han_ji_cell)
             # -------------------------------------------------------------------------
             # 在【人工標音字庫】之【字庫表】(dict)，新增該【漢字】之記錄
             # -------------------------------------------------------------------------

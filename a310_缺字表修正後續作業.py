@@ -117,7 +117,6 @@ class CellProcessor(ExcelCell):
                 break
 
             # 取得原始【台語音標】並轉換為 TLPA+ 格式
-            # org_tai_gi_im_piau = source_sheet.range(f"B{row}").value
             tai_gi_im_piau = source_sheet.range(f"B{row}").value
 
             # 將【校正音標】欄（C 欄）填入之音標，視作【漢字】之【台語音標】，
@@ -143,6 +142,13 @@ class CellProcessor(ExcelCell):
             # 以此符合 TLPA+ 格式之拼音字母，作為真正使用之【校正音標】。
             hau_ziann_im_piau = tlpa_im_piau
 
+            # 轉換【台語音標】，取得【漢字標音】
+            han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+                piau_im=piau_im,
+                piau_im_huat=piau_im_huat,
+                tai_gi_im_piau=tai_gi_im_piau,
+            )
+
             # 讀取【缺字表】中【座標】欄（D 欄），取得指向【漢字注音】工作表【漢字】之【座標清單】。
             # 欄中內容【格式】，如： "(5, 17); (33, 8); (77, 5)"
             coordinates_str = source_sheet.range(f"D{row}").value
@@ -154,7 +160,10 @@ class CellProcessor(ExcelCell):
                 f"{row-1}. (A{row}) 【{han_ji}】：台語音標：{tai_gi_im_piau}, 校正音標：{hau_ziann_im_piau} ==> 【{target_sheet_name}】工作表，儲存格：{excel_address_str} {coordinates_str}"
             )
 
+            #--------------------------------------------------------------------------
+            # 根據【缺字表】記錄之所有【座標】，在【漢字注音】工作表逐個填入【台語音標】及【漢字標音】。
             # 將【座標】欄位內容解析成 (row, col) 座標：此座標指向【漢字注音】工作表中之【漢字】儲存格位置
+            #--------------------------------------------------------------------------
             if coordinates_str:
                 # 利用正規表達式解析所有形如 (row, col) 的座標
                 coordinate_tuples = re.findall(
@@ -185,12 +194,12 @@ class CellProcessor(ExcelCell):
                         f"   台語音標：【{tai_gi_im_piau}】，填入【{target_sheet_name}】工作表之儲存格： {excel_address_str} {tai_gi_im_piau_cell}"
                     )
 
-                    # 轉換【台語音標】，取得【漢字標音】
-                    han_ji_piau_im = tlpa_tng_han_ji_piau_im(
-                        piau_im=piau_im,
-                        piau_im_huat=piau_im_huat,
-                        tai_gi_im_piau=tai_gi_im_piau,
-                    )
+                    # # 轉換【台語音標】，取得【漢字標音】
+                    # han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+                    #     piau_im=piau_im,
+                    #     piau_im_huat=piau_im_huat,
+                    #     tai_gi_im_piau=tai_gi_im_piau,
+                    # )
 
                     # 將【漢字標音】填入【漢字注音】工作表，【漢字】儲存格下之【漢字標音】儲存格（即：row + 1)
                     target_row = r_coord + 1
@@ -213,13 +222,12 @@ class CellProcessor(ExcelCell):
                     # 以【缺字表】工作表之【漢字】+【台語音標】作為【資料紀錄索引】，
                     # ------------------------------------------------------------------------
                     # 在【標音字庫】工作表【添增】此筆資料紀錄
-                    # hau_ziann_im_piau_to_be = 'N/A' if hau_ziann_im_piau == '' else hau_ziann_im_piau
-                    # hau_ziann_im_piau_to_be = "N/A"
-                    self.tiau_zing_piau_im_ji_khoo_dict(
+                    # self.tiau_zing_piau_im_ji_khoo_dict(
+                    self.piau_im_ji_khoo_dict.add_entry(
                         han_ji=han_ji,
                         tai_gi_im_piau=hau_ziann_im_piau,  # 以【校正音標】作為【台語音標】，【漢字注音】工作表之【台語音標】欄位
                         hau_ziann_im_piau="N/A",  # 更新【校正音標】為 'N/A'
-                        coordinates=(r_coord, c_coord),
+                        coordinate=(r_coord, c_coord),
                     )
 
                     # 將【座標】自【來源工作表】工作表（缺字表）的【座標】欄移除
@@ -235,12 +243,12 @@ class CellProcessor(ExcelCell):
                     # )
 
                     # 更新【缺字表】工作表之【台語音標】欄（B欄）、【校正音標】欄（C欄）、【座標】欄（D欄）
-                    source_dict.update_entry(
-                        han_ji=han_ji,
-                        tai_gi_im_piau="N/A",  # 更新【台語音標】為 'N/A'
-                        hau_ziann_im_piau=hau_ziann_im_piau,
-                        coordinates=(r_coord, c_coord),
-                    )
+                    # source_dict.update_entry(
+                    #     han_ji=han_ji,
+                    #     tai_gi_im_piau="N/A",  # 更新【台語音標】為 'N/A'
+                    #     hau_ziann_im_piau=hau_ziann_im_piau,
+                    #     coordinates=(r_coord, c_coord),
+                    # )
             # 讀取下一列
             row += 1
 

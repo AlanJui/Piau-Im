@@ -555,6 +555,8 @@ def process(wb, args) -> int:
         jin_kang_piau_im_row, tai_gi_im_piau_row, han_ji_row, han_ji_piau_im_row = (
             get_row_by_line_no(current_line_no)
         )
+        source_sheet.range((han_ji_row, col)).select()  # 選取【漢字】儲存格，以確保游標位置正確
+        source_sheet.activate()  # 重新激活工作表以刷新儲存格地址
 
         # 確認【作用儲存格】為【漢字】
         han_ji = source_sheet.range((han_ji_row, col)).value
@@ -597,7 +599,10 @@ def process(wb, args) -> int:
             print(
                 f"📌 人工標音：{jin_kang_piau_im}，台語音標：{tai_gi_im_piau}，漢字標音：{han_ji_piau_im}"
             )
-            if not xls_cell._za_ji_tain_au_thiam_jin_kang_piau_im(active_cell=active_cell):
+            tai_gi_im_piau_result, han_ji_piau_im_result = xls_cell._za_ji_tain_au_thiam_jin_kang_piau_im(
+                active_cell=source_sheet.range((han_ji_row, col))
+            )
+            if tai_gi_im_piau_result is None:
                 return EXIT_CODE_SUCCESS    # 若使用者放棄變更，則結束作業流程
 
         # 透過【作用儲存格】取出處理後的【人工標音】、【台語音標】、【漢字標音】
@@ -612,9 +617,11 @@ def process(wb, args) -> int:
             return EXIT_CODE_PROCESS_FAILURE
 
         # -------------------------------------------------------------------------
-        # 自【標音字庫】之【字庫表】(dict)，移除該【漢字】之記錄
+        # 自【標音字庫】之【字庫表】(dict)：
+        # （1）更新【漢字注音】工作表，所有對照到此【漢字】之【台語音標】及【漢字標音】；
+        # （2）更新該【漢字】之記錄
         # -------------------------------------------------------------------------
-        xls_cell._update_piau_im_ji_khoo_worksheet(cell=active_cell)
+        xls_cell._update_all_piau_im_in_han_ji_zu_im_sheet(cell=active_cell)
 
         # -------------------------------------------------------------------------
         # 更新資料庫中【漢字庫】資料表

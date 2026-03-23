@@ -1390,6 +1390,41 @@ class ExcelCell:
                 wb=self.program.wb, sheet_name=self.khuat_ji_piau_ji_khoo_dict.name
             )
 
+    def _update_all_piau_im_in_han_ji_zu_im_sheet(self, cell) -> None:
+        """
+        更新【標音字庫】工作表，依據【漢字注音】工作表之【漢字】的變更後【台語音標】，
+        並參照【標音字庫】工作表之【座標】欄位，更新指向【漢字注音】工作表之【漢字】的
+        【台語音標】及【漢字標音】。
+        """
+        row = cell.row  # 漢字儲存格所在之 Row
+        col = cell.column
+        han_ji = cell.value
+        tai_gi_im_piau = cell.offset(-1, 0).value
+        han_ji_piau_im = cell.offset(1, 0).value
+
+        # 在【標音字庫】工作表查找此【漢字】之 Excel 的 Row No
+        row_no = self.piau_im_ji_khoo_dict.get_row_by_han_ji_and_coordinate(
+            han_ji=han_ji,
+            coordinate=(row, col),
+        )
+        if row_no != -1:
+            # 找到【漢字】所在之 Row No 後，依據【座標】欄儲存格之【座標清單】，逐一更新指向
+            # 【漢字注音】工作表之【漢字】的【台語音標】及【漢字標音】。
+            self.update_piau_im_worksheet_entry(
+                coordinate=(row, col),
+                han_ji=han_ji,
+                tai_gi_im_piau=tai_gi_im_piau,
+                han_ji_piau_im=han_ji_piau_im,
+                piau_im_ji_khoo_dict=self.piau_im_ji_khoo_dict,
+                row_no=row_no,
+            )
+            # ----------------------------------------------------------------------
+            # 將【標音字庫】之【字庫表】，寫回 Excel 工作表
+            # ----------------------------------------------------------------------
+            self.piau_im_ji_khoo_dict.write_to_excel_sheet(
+                wb=self.program.wb, sheet_name=self.piau_im_ji_khoo_dict.name
+            )
+
     def _update_piau_im_ji_khoo_worksheet(self, cell) -> None:
         """
         更新【標音字庫】工作表
