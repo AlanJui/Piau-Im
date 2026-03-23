@@ -147,9 +147,81 @@ def insert_or_update_to_db(
 
 
 # =========================================================================
-# 使用【人工標音】更新【標音字庫】的校正音標
+# 使用【缺字表】更新【漢字庫】資料庫
 # =========================================================================
 def khuat_ji_piau_poo_im_piau(wb, sheet_name: str = "人工標音字庫"):
+    """
+    讀取 Excel 的【缺字表/人工標音字庫/標音字庫】工作表，並將資料回填至 SQLite 資料庫。
+
+    :param excel_path: Excel 檔案路徑。
+    :param sheet_name: Excel 工作表名稱。
+    :param db_path: 資料庫檔案路徑。
+    :param table_name: 資料表名稱。
+    """
+    # sheet_name = "缺字表"
+    # sheet_name = "人工標音字庫"
+    sheet = wb.sheets[sheet_name]
+    piau_im_huat = wb.names["語音類型"].refers_to_range.value
+    db_path = "Ho_Lok_Ue.db"  # 替換為你的資料庫檔案路徑
+    table_name = "漢字庫"  # 替換為你的資料表名稱
+    # hue_im = wb.names["語音類型"].refers_to_range.value
+    # siong_iong_too = 0.8 if hue_im == "文讀音" else 0.6  # 根據語音類型設定常用度
+
+    # 讀取資料表範圍
+    # data = sheet.range("A2").expand("table").value
+
+    # 從 A2 開始讀取，並嘗試讀取到 D 欄
+    try:
+        last_row = sheet.range("A" + str(sheet.cells.last_cell.row)).end("up").row
+        if last_row < 2:
+            print("Excel 無資料 (至少需要有一列資料)。")
+            return
+
+        # 讀取所有資料（ A2:F{last_row} ）
+        data = sheet.range(f"A2:D{last_row}").value
+    except Exception as e:
+        print(f"讀取 Excel 資料失敗: {e}")
+        return
+
+    # 確保資料為 2D 列表
+    if not isinstance(data[0], list):
+        data = [data]
+
+    idx = 0
+    for row in data:
+        han_ji = row[0]  # 漢字
+        tai_gi_im_piau = row[1]  # 台語音標
+        hau_ziann_im_piau = row[2]  # 校正音標
+        zo_piau = row[3]  # (儲存格位置)座標
+
+        if han_ji and (tai_gi_im_piau != "N/A" or hau_ziann_im_piau != "N/A"):
+            # 將 Excel 工作表存放的【台語音標（TLPA）】，改成資料庫保存的【台羅拼音（TL）】
+            tlpa_im_piau = tng_im_piau(
+                tai_gi_im_piau
+            )  # 將【音標】使用之【拼音字母】轉換成【TLPA拼音字母】；【音標調符】仍保持
+            tlpa_im_piau_cleanned = tng_tiau_ho(
+                tlpa_im_piau
+            ).lower()  # 將【音標調符】轉換成【數值調號】
+            tl_im_piau = convert_tlpa_to_tl(tlpa_im_piau_cleanned)
+
+            insert_or_update_to_db(
+                db_path, table_name, han_ji, tl_im_piau, piau_im_huat
+            )
+            print(
+                f"📌 {idx+1}. 【{han_ji}】：台羅音標：【{tl_im_piau}】、校正音標：【{hau_ziann_im_piau}】、台語音標=【{tai_gi_im_piau}】、座標：{zo_piau}"
+            )
+            idx += 1
+
+    logging_process_step(
+        f"【{sheet_name}】中的資料已成功回填至資料庫： {db_path} 的【{table_name}】資料表中。"
+    )
+    return EXIT_CODE_SUCCESS
+
+
+# =========================================================================
+# 使用【缺字表】更新【漢字庫】資料庫
+# =========================================================================
+def update_han_ji_khoo_by_piau_im_ji_khoo(wb, sheet_name: str = "標音字庫"):
     """
     讀取 Excel 的【缺字表/人工標音字庫/標音字庫】工作表，並將資料回填至 SQLite 資料庫。
 
@@ -191,10 +263,10 @@ def khuat_ji_piau_poo_im_piau(wb, sheet_name: str = "人工標音字庫"):
     for row in data:
         han_ji = row[0]  # 漢字
         tai_gi_im_piau = row[1]  # 台語音標
-        hau_ziann_im_piau = row[2]  # 台語音標
+        hau_ziann_im_piau = row[2]  # 校正音標
         zo_piau = row[3]  # (儲存格位置)座標
 
-        if han_ji and (tai_gi_im_piau != "N/A" or hau_ziann_im_piau != "N/A"):
+        if han_ji and (not tai_gi_im_piau and tai_gi_im_piau != "N/A"):
             # 將 Excel 工作表存放的【台語音標（TLPA）】，改成資料庫保存的【台羅拼音（TL）】
             tlpa_im_piau = tng_im_piau(
                 tai_gi_im_piau

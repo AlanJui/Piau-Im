@@ -117,30 +117,30 @@ class CellProcessor(ExcelCell):
                 break
 
             # 取得原始【台語音標】並轉換為 TLPA+ 格式
-            tai_gi_im_piau = source_sheet.range(f"B{row}").value
+            org_tai_gi_im_piau = source_sheet.range(f"B{row}").value
 
             # 將【校正音標】欄（C 欄）填入之音標，視作【漢字】之【台語音標】，
             # 此音標需符合 TLPA+ 格式（無調符，使用數值調號；沒有台羅拼音的聲母：ts/tsh），
             # 剛取得使用者輸入之【校正音標】，視作【原始台語音標】，需經：（1）轉換成 TLPA 拼音字母；
             # （2）去調符轉調號，依此作業方式，達成符合 TLPA+ 格式。
-            org_tai_gi_im_piau = source_sheet.range(f"C{row}").value
+            hau_ziann_im_piau = source_sheet.range(f"C{row}").value
             if (
-                org_tai_gi_im_piau == "N/A" or not org_tai_gi_im_piau
+                hau_ziann_im_piau == "N/A" or not hau_ziann_im_piau
             ):  # 若【台語音標】欄為空，則結束迴圈
                 row += 1
                 continue
 
             # 確保【原始台語音標】為 TLPA+ 格式（無調符，使用數值調號；沒有台羅拼音的聲母：ts/tsh）
-            if org_tai_gi_im_piau and kam_si_u_tiau_hu(
-                org_tai_gi_im_piau
+            if hau_ziann_im_piau and kam_si_u_tiau_hu(
+                hau_ziann_im_piau
             ):  # 有【調符】時轉換成【TLPA+格式拼音字母】
-                tlpa_im_piau = tng_im_piau(org_tai_gi_im_piau)
+                tlpa_im_piau = tng_im_piau(hau_ziann_im_piau)
                 tlpa_im_piau = tng_tiau_ho(tlpa_im_piau).lower()
             else:  # 若非帶調符音標，則直接使用原音標
-                tlpa_im_piau = org_tai_gi_im_piau
+                tlpa_im_piau = tng_im_piau(hau_ziann_im_piau)  # TL 轉換 TLPA 拼音字母
 
-            # 以此符合 TLPA+ 格式之拼音字母，作為真正使用之【校正音標】。
-            hau_ziann_im_piau = tlpa_im_piau
+            tai_gi_im_piau = tlpa_im_piau  # 以【校正音標】作為【台語音標】，【漢字注音】工作表之【台語音標】欄位
+            source_sheet.range(f"B{row}").value = tai_gi_im_piau  # 更新【缺字表】之【台語音標】欄位
 
             # 轉換【台語音標】，取得【漢字標音】
             han_ji_piau_im = tlpa_tng_han_ji_piau_im(
@@ -157,7 +157,7 @@ class CellProcessor(ExcelCell):
             )  # B欄（台語音標）儲存格位置
             print("\n")
             print(
-                f"{row-1}. (A{row}) 【{han_ji}】：台語音標：{tai_gi_im_piau}, 校正音標：{hau_ziann_im_piau} ==> 【{target_sheet_name}】工作表，儲存格：{excel_address_str} {coordinates_str}"
+                f"{row-1}. (A{row}) 【{han_ji}】：台語音標：{tlpa_im_piau}, 校正音標：{hau_ziann_im_piau} ==> 【{target_sheet_name}】工作表，儲存格：{excel_address_str} {coordinates_str}"
             )
 
             #--------------------------------------------------------------------------
@@ -184,7 +184,6 @@ class CellProcessor(ExcelCell):
                     tai_gi_im_piau_cell = (target_row, c_coord)
 
                     # 對指向【漢字注音】工作表之【漢字儲存格】，填入漢字之【台語音標】
-                    tai_gi_im_piau = hau_ziann_im_piau  # 以【校正音標】作為【台語音標】，【漢字注音】工作表之【台語音標】欄位
                     target_sheet.range(tai_gi_im_piau_cell).value = tai_gi_im_piau
                     excel_address_str = target_sheet.range(tai_gi_im_piau_cell).address
                     excel_address_str = excel_address_str.replace(
@@ -193,13 +192,6 @@ class CellProcessor(ExcelCell):
                     print(
                         f"   台語音標：【{tai_gi_im_piau}】，填入【{target_sheet_name}】工作表之儲存格： {excel_address_str} {tai_gi_im_piau_cell}"
                     )
-
-                    # # 轉換【台語音標】，取得【漢字標音】
-                    # han_ji_piau_im = tlpa_tng_han_ji_piau_im(
-                    #     piau_im=piau_im,
-                    #     piau_im_huat=piau_im_huat,
-                    #     tai_gi_im_piau=tai_gi_im_piau,
-                    # )
 
                     # 將【漢字標音】填入【漢字注音】工作表，【漢字】儲存格下之【漢字標音】儲存格（即：row + 1)
                     target_row = r_coord + 1
@@ -221,34 +213,14 @@ class CellProcessor(ExcelCell):
                     # ------------------------------------------------------------------------
                     # 以【缺字表】工作表之【漢字】+【台語音標】作為【資料紀錄索引】，
                     # ------------------------------------------------------------------------
+                    # TODO：需確認【標音字庫】工作表中無舊資料紀錄
                     # 在【標音字庫】工作表【添增】此筆資料紀錄
-                    # self.tiau_zing_piau_im_ji_khoo_dict(
                     self.piau_im_ji_khoo_dict.add_entry(
                         han_ji=han_ji,
                         tai_gi_im_piau=hau_ziann_im_piau,  # 以【校正音標】作為【台語音標】，【漢字注音】工作表之【台語音標】欄位
                         hau_ziann_im_piau="N/A",  # 更新【校正音標】為 'N/A'
                         coordinate=(r_coord, c_coord),
                     )
-
-                    # 將【座標】自【來源工作表】工作表（缺字表）的【座標】欄移除
-                    # source_dict.remove_coordinate_by_hau_ziann_im_piau(
-                    #     han_ji=han_ji,
-                    #     hau_ziann_im_piau=hau_ziann_im_piau,
-                    #     coordinate=(r_coord, c_coord)
-                    # )
-                    # source_dict.remove_coordinate(
-                    #     han_ji=han_ji,
-                    #     tai_gi_im_piau=org_tai_gi_im_piau,
-                    #     coordinate=(r_coord, c_coord)
-                    # )
-
-                    # 更新【缺字表】工作表之【台語音標】欄（B欄）、【校正音標】欄（C欄）、【座標】欄（D欄）
-                    # source_dict.update_entry(
-                    #     han_ji=han_ji,
-                    #     tai_gi_im_piau="N/A",  # 更新【台語音標】為 'N/A'
-                    #     hau_ziann_im_piau=hau_ziann_im_piau,
-                    #     coordinates=(r_coord, c_coord),
-                    # )
             # 讀取下一列
             row += 1
 
