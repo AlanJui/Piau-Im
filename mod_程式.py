@@ -1700,7 +1700,7 @@ class ExcelCell:
         han_ji_piau_im = cell.offset(1, 1).value or ""  # 漢字標音
 
         # 初始化樣式
-        # self._reset_cell_style(cell)
+        self._reset_cell_style(cell)
 
         # 確保 cell_value 務必是【漢字】，故需篩飾【特殊字元】
         if cell_value == "φ":
@@ -1728,14 +1728,6 @@ class ExcelCell:
         # 3. 【人工標音漢字】：在【人工標音】儲存格，有手動輸入之【台羅拼音】、【TLPA音標】
         #     。或是【=】（引用【人工標音】）。在【人工標音字庫】有紀錄登錄。
         # ======================================================================
-
-        # 檢查是否為【無標音漢字】
-        if tai_gi_im_piau == "" and han_ji_piau_im == "":
-            print(
-                f"原漢字【{cell_value}】未標注【台語音標】、【漢字標音】，可能字典尚無此字之讀音！"
-            )
-            self._process_bo_thok_im(cell)
-            return 0  # 漢字
 
         # 檢查是否為【人工標音漢字】
         if jin_kang_piau_im and str(jin_kang_piau_im).strip() != "":
