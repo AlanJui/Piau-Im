@@ -297,7 +297,10 @@ def process(wb, sheet_name: str = "人工標音字庫"):
     logging_process_step("<----------- 作業開始！---------->")
 
     try:
+        # 【缺字表】工作表回填資料庫
         khuat_ji_piau_poo_im_piau(wb, sheet_name)
+        # 【人工標音字庫】工作表回填資料庫
+        # 【標音字庫】工作表回填資料庫
     except Exception as e:
         logging_exc_error(msg=f"無法將【{sheet_name}】資料回填至資料庫！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
