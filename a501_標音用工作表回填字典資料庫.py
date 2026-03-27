@@ -32,6 +32,7 @@ from dotenv import load_dotenv
 
 # 載入自訂模組/函式
 from mod_file_access import save_as_new_file
+from mod_字庫 import JiKhooDict
 from mod_帶調符音標 import tng_im_piau, tng_tiau_ho
 from mod_標音 import convert_tlpa_to_tl
 
@@ -152,77 +153,45 @@ def insert_or_update_to_db(
 
 
 # =========================================================================
-# 將指定的 Excel 工作表，讀取資料並轉換成字典列表
+# 使用工作表的【校正音標】更新【漢字庫】資料庫
 # =========================================================================
-def create_dict_from_worksheet(sheet, start_row: int = 2, end_col: str = "D"):
+def iong_hau_ziann_im_piau_poo_han_ji_khoo(wb, sheet_name: str = "缺字表"):
     """
-    從 Excel 工作表中讀取資料，並將其轉換為字典列表。
+    使用【校正音標】欄取得之【標音資料】更新【漢字庫】資料庫。
+    此狀況適用於【缺字表】工作表。
 
-    :param sheet: Excel 工作表對象。
-    :param start_row: 資料開始的列號（預設為 2，表示從第二列開始讀取）。
-    :param end_col: 資料結束的欄位字母（預設為 "D"，表示讀取到 D 欄）。
-    :return: 包含資料的字典列表。
-    """
-    try:
-        last_row = sheet.range("A" + str(sheet.cells.last_cell.row)).end("up").row
-        if last_row < start_row:
-            print("Excel 無資料 (至少需要有一列資料)。")
-            return []
-
-        data = sheet.range(f"A{start_row}:{end_col}{last_row}").value
-        if not isinstance(data[0], list):
-            data = [data]
-
-        dict_list = []
-        for row in data:
-            dict_list.append({
-                "漢字": row[0],
-                "台語音標": row[1],
-                "校正音標": row[2],
-                "座標": row[3]
-            })
-        return dict_list
-
-    except Exception as e:
-        print(f"讀取 Excel 資料失敗: {e}")
-        return []
-
-
-# =========================================================================
-# 使用工作表的【台語音標】更新【漢字庫】資料庫
-# =========================================================================
-def iong_tai_gi_im_piau_poo_han_ji_khoo(wb, sheet_name: str):
-    """
-    讀取 Excel 的【標音字庫/人工標音字庫】工作表，並將資料回填至 SQLite 資料庫。
-
-    :param excel_path: Excel 檔案路徑。
+    :param wb: Excel 活頁簿物件。
     :param sheet_name: Excel 工作表名稱。
-    :param db_path: 資料庫檔案路徑。
-    :param table_name: 資料表名稱。
     """
-    sheet = wb.sheets[sheet_name]
     piau_im_huat = wb.names["語音類型"].refers_to_range.value
+    print("\n" * 2)
+    print("=" * 60)
 
-    # 自【缺字表】工作表，産製 dict_list
-    dict_list = []
-    dict_list = create_dict_from_worksheet(sheet, start_row=2, end_col="D")
-
-    if not dict_list:
-        print("從 Excel 工作表中讀取資料失敗，無法產製 dict_list。")
+    try:
+        han_ji_piau_im_dict = []
+        han_ji_piau_im_dict = JiKhooDict.create_ji_khoo_dict_from_sheet(wb, sheet_name)
+    except Exception as e:
+        print(f"無法從《{sheet_name}》工作表讀取資料，產生【漢字標音資料表】（han_ji_piau_im_dict）。")
+        print(f"問題詳述：{e}")
         return EXIT_CODE_INVALID_INPUT
 
-    # 依據 dict_list 中的資料，更新【漢字庫】資料庫中的【漢字庫】欄位值
-    for item in dict_list:
+    # 讀取【缺字表】工作表所製成之【漢字標音資料表】的【總筆數】
+    total_entries = len(han_ji_piau_im_dict)
+    print(f"從【{sheet_name}】工作表讀取到 {total_entries} 筆資料。")
+
+    # 自【漢字標音資料表】中遍歷【標音工作表】的每一筆資料（row）
+    for idx, item in enumerate(han_ji_piau_im_dict, start=1):
         han_ji = item.get("漢字")
         tai_gi_im_piau = item.get("台語音標")
         hau_ziann_im_piau = item.get("校正音標")
         zo_piau = item.get("座標")
+        print(f"{idx}. 【{han_ji}】：台語音標=【{tai_gi_im_piau}】、校正音標=【{hau_ziann_im_piau}】、座標={zo_piau}")
 
         # 確認讀入的資料有效：【校正音標】欄確認有填入【修正資料】
-        if han_ji and (tai_gi_im_piau and tai_gi_im_piau != "N/A"):
+        if han_ji and (hau_ziann_im_piau and hau_ziann_im_piau != "N/A"):
             # 確保【校正音標】欄所填入的拼音為【台語音標（TLPA）】
             # 使用者若填入【台羅拼音（TL）】音標，需先轉成帶【調符】之【台語音標】
-            tlpa_im_piau = tng_im_piau(tai_gi_im_piau)
+            tlpa_im_piau = tng_im_piau(hau_ziann_im_piau)
             # 將帶有【調符】的【台語音標（TLPA）】轉換成【數值調號】的【台羅拼音（TL）】
             tlpa_im_piau_cleanned = tng_tiau_ho(
                 tlpa_im_piau
@@ -244,40 +213,46 @@ def iong_tai_gi_im_piau_poo_han_ji_khoo(wb, sheet_name: str):
 
 
 # =========================================================================
-# 使用工作表的【校正音標】更新【漢字庫】資料庫
+# 使用工作表的【台語音標】更新【漢字庫】資料庫
 # =========================================================================
-def iong_hau_ziann_im_piau_poo_han_ji_khoo(wb, sheet_name: str = "缺字表"):
+def iong_tai_gi_im_piau_poo_han_ji_khoo(wb, sheet_name: str):
     """
-    讀取 Excel 的【缺字表/人工標音字庫/標音字庫】工作表，並將資料回填至 SQLite 資料庫。
+    使用【台語音標】欄取得之【標音資料】更新【漢字庫】資料庫。
+    此狀況適用於【標音字庫/人工標音字庫】工作表。
 
-    :param excel_path: Excel 檔案路徑。
+    :param wb: Excel 活頁簿物件。
     :param sheet_name: Excel 工作表名稱。
-    :param db_path: 資料庫檔案路徑。
-    :param table_name: 資料表名稱。
     """
-    sheet = wb.sheets[sheet_name]
     piau_im_huat = wb.names["語音類型"].refers_to_range.value
+    print("\n" * 2)
+    print("=" * 60)
 
-    # 自【缺字表】工作表，産製 dict_list
-    dict_list = []
-    dict_list = create_dict_from_worksheet(sheet, start_row=2, end_col="D")
-
-    if not dict_list:
-        print("從 Excel 工作表中讀取資料失敗，無法產製 dict_list。")
+    # 自【標音字庫/人工標音字庫】工作表，産製 han_ji_piau_im_dict
+    try:
+        han_ji_piau_im_dict = []
+        han_ji_piau_im_dict = JiKhooDict.create_ji_khoo_dict_from_sheet(wb, sheet_name)
+    except Exception as e:
+        print(f"無法從《{sheet_name}》工作表讀取資料，產生【漢字標音資料表】（han_ji_piau_im_dict）。")
+        print(f"問題詳述：{e}")
         return EXIT_CODE_INVALID_INPUT
 
-    # 依據 dict_list 中的資料，更新【漢字庫】資料庫中的【漢字庫】欄位值
-    for item in dict_list:
+    # 讀取【標音字庫/人工標音字庫】工作表所製成之【漢字標音資料表】的【總筆數】
+    total_entries = len(han_ji_piau_im_dict)
+    print(f"從【{sheet_name}】工作表讀取到 {total_entries} 筆資料。")
+
+    # 自【漢字標音資料表】中遍歷【標音工作表】的每一筆資料（row）
+    for idx, item in enumerate(han_ji_piau_im_dict, start=1):
         han_ji = item.get("漢字")
         tai_gi_im_piau = item.get("台語音標")
         hau_ziann_im_piau = item.get("校正音標")
         zo_piau = item.get("座標")
+        print(f"{idx}. 【{han_ji}】：台語音標=【{tai_gi_im_piau}】、校正音標=【{hau_ziann_im_piau}】、座標={zo_piau}")
 
         # 確認讀入的資料有效：【校正音標】欄確認有填入【修正資料】
-        if han_ji and (hau_ziann_im_piau and hau_ziann_im_piau != "N/A"):
-            # 確保【校正音標】欄所填入的拼音為【台語音標（TLPA）】
+        if han_ji and (tai_gi_im_piau and tai_gi_im_piau != "N/A"):
+            # 確保【台語音標】欄所填入的拼音為【台語音標（TLPA）】
             # 使用者若填入【台羅拼音（TL）】音標，需先轉成帶【調符】之【台語音標】
-            tlpa_im_piau = tng_im_piau(hau_ziann_im_piau)
+            tlpa_im_piau = tng_im_piau(tai_gi_im_piau)
             # 將帶有【調符】的【台語音標（TLPA）】轉換成【數值調號】的【台羅拼音（TL）】
             tlpa_im_piau_cleanned = tng_tiau_ho(
                 tlpa_im_piau

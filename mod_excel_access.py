@@ -273,20 +273,6 @@ def get_row_col_from_coordinate(coord_str):
         return ""  # 避免解析錯誤
 
 
-# def get_active_cell(wb):
-#     """
-#     獲取目前作用中的 Excel 儲存格 (Active Cell)
-
-#     :param wb: Excel 活頁簿物件 (xlwings.Book)
-#     :return: (工作表名稱, 儲存格地址)，如 ("漢字注音", "D9")
-#     """
-#     active_cell = wb.app.selection  # 獲取目前作用中的儲存格
-#     sheet_name = active_cell.sheet.name  # 獲取所在的工作表名稱
-#     cell_address = active_cell.address.replace("$", "")  # 取得 Excel 格式地址 (去掉 "$")
-
-#     return sheet_name, cell_address
-
-
 # 定義儲存格格式
 def set_range_format(range_obj, font_name, font_size, font_color, fill_color=None):
     range_obj.api.Font.Name = font_name
@@ -903,54 +889,89 @@ def get_tai_gi_by_han_ji(sheet, han_ji, show_msg=False):
     return None
 
 
-def create_dict_by_sheet(
-    wb, sheet_name: str, allow_empty_correction: bool = False
+def create_dict_by_piau_im_sheet(
+    wb, sheet_name="標音字庫", start_row: int =2, end_col: str = "D"
 ) -> Optional[dict]:
     """
-    更新【標音字庫】表中的【台語音標】欄位內容，依據【漢字注音】表中的【人工標音】欄位進行更新，並將【人工標音】覆蓋至原【台語音標】。
+    以標音用工作表，建置查詢用字典，key: 漢字, value: (台語音標, 校正音標, 次數)
     """
     # 取得工作表
-    ji_khoo_sheet = wb.sheets[sheet_name]
-    ji_khoo_sheet.activate()
+    sheet = wb.sheets[sheet_name]
+    sheet.activate()
 
-    # 取得【標音字庫】表格範圍的所有資料
-    data = ji_khoo_sheet.range("A2").expand("table").value
+    try:
+        last_row = sheet.range("A" + str(sheet.cells.last_cell.row)).end("up").row
+        if last_row < start_row:
+            print("Excel 無資料 (至少需要有一列資料)。")
+            return []
 
-    if data is None:
-        print(f"【{sheet_name}】工作表無資料")
-        return None
+        data = sheet.range(f"A{start_row}:{end_col}{last_row}").value
+        if not isinstance(data[0], list):
+            data = [data]
 
-    # 確保資料為 2D 列表
-    if not isinstance(data[0], list):
-        data = [data]
+        dict_list = []
+        for row in data:
+            dict_list.append({
+                "漢字": row[0],
+                "台語音標": row[1],
+                "校正音標": row[2],
+                "座標": row[3]
+            })
+        return dict_list
 
-    # 將資料轉為字典格式，key: 漢字, value: (台語音標, 校正音標, 次數)
-    han_ji_dict = {}
-    for i, row in enumerate(data, start=2):
-        han_ji = row[0] or ""
-        tai_gi_im_piau = row[1] or ""
-        total_count = (
-            int(row[2]) if len(row) > 2 and isinstance(row[2], (int, float)) else 0
-        )
-        corrected_tai_gi = row[3] if len(row) > 3 else ""  # 若無 D 欄資料則設為空字串
+    except Exception as e:
+        print(f"讀取 Excel 資料失敗: {e}")
+        return []
 
-        # 在 dict 新增一筆紀錄：（1）已填入校正音標，且校正音標不同於現有之台語音標；（2）允許校正音標為空時也加入字典
-        if allow_empty_correction or (
-            corrected_tai_gi and corrected_tai_gi != tai_gi_im_piau
-        ):
-            han_ji_dict[han_ji] = (
-                tai_gi_im_piau,
-                corrected_tai_gi,
-                total_count,
-                i,
-            )  # i 為資料列索引
 
-    # 若 han_ji_dict 為空，表查找不到【漢字】對應的【台語音標】
-    if not han_ji_dict:
-        print(f"無法依據【{sheet_name}】工作表，建置【字庫】字典")
-        return None
+# def create_dict_by_sheet(
+#     wb, sheet_name: str, allow_empty_correction: bool = False
+# ) -> Optional[dict]:
+#     """
+#     更新【標音字庫】表中的【台語音標】欄位內容，依據【漢字注音】表中的【人工標音】欄位進行更新，並將【人工標音】覆蓋至原【台語音標】。
+#     """
+#     # 取得工作表
+#     work_sheet = wb.sheets[sheet_name]
+#     work_sheet.activate()
 
-    return han_ji_dict
+#     # 取得【標音字庫】表格範圍的所有資料
+#     data = work_sheet.range("A2").expand("table").value
+
+#     if data is None:
+#         print(f"【{sheet_name}】工作表無資料")
+#         return None
+
+#     # 確保資料為 2D 列表
+#     if not isinstance(data[0], list):
+#         data = [data]
+
+#     # 將資料轉為字典格式，key: 漢字, value: (台語音標, 校正音標, 次數)
+#     han_ji_dict = {}
+#     for i, row in enumerate(data, start=2):
+#         han_ji = row[0] or ""
+#         tai_gi_im_piau = row[1] or ""
+#         total_count = (
+#             int(row[2]) if len(row) > 2 and isinstance(row[2], (int, float)) else 0
+#         )
+#         corrected_tai_gi = row[3] if len(row) > 3 else ""  # 若無 D 欄資料則設為空字串
+
+#         # 在 dict 新增一筆紀錄：（1）已填入校正音標，且校正音標不同於現有之台語音標；（2）允許校正音標為空時也加入字典
+#         if allow_empty_correction or (
+#             corrected_tai_gi and corrected_tai_gi != tai_gi_im_piau
+#         ):
+#             han_ji_dict[han_ji] = (
+#                 tai_gi_im_piau,
+#                 corrected_tai_gi,
+#                 total_count,
+#                 i,
+#             )  # i 為資料列索引
+
+#     # 若 han_ji_dict 為空，表查找不到【漢字】對應的【台語音標】
+#     if not han_ji_dict:
+#         print(f"無法依據【{sheet_name}】工作表，建置【字庫】字典")
+#         return None
+
+#     return han_ji_dict
 
 
 def get_sheet_by_name(wb, sheet_name="工作表1"):

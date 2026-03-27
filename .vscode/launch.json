@@ -5,15 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "cli_taigi",
+            "name": "編輯中檔案除錯",
             "type": "debugpy",
             "request": "launch",
-            "program": "cli_taigi.py",
-            "console": "integratedTerminal",
-            // "args": "${command:pickArgs}"
-            "args": [
-                "白"
-            ]
+            "program": "${file}",
+            "console": "integratedTerminal"
         },
         {
             "name": "Python: Debug with External Console",
@@ -21,6 +17,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "externalTerminal", // 使用外部終端機
+            "redirectOutput": true,        // 同時將輸出複製至 Debug Console 面板
             "cwd": "${workspaceFolder}",
             "args": [],
             "justMyCode": true,
@@ -31,19 +28,23 @@
             }
         },
         {
-            "name": "Python 偵錯: 目前檔案",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal"
-        },
-        {
             "name": "Python 偵錯: 帶引數的目前檔案",
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
             "args": "${command:pickArgs}"
+        },
+        {
+            "name": "cli_taigi",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "cli_taigi.py",
+            "console": "integratedTerminal",
+            // "args": "${command:pickArgs}"
+            "args": [
+                "白"
+            ]
         },
         {
             "name": "Python 偵錯: 帶參數",
@@ -452,6 +453,7 @@
             "request": "launch",
             "program": "a501_標音用工作表回填字典資料庫.py",
             "console": "externalTerminal",
+            "redirectOutput": true,        // 同時將輸出複製至 Debug Console 面板
             "args": [
                 // "2"
             ]

@@ -60,12 +60,30 @@ class JiKhooDict:
         self.name = name
         self.ji_khoo_dict = {}
 
-    # 新增這兩個方法
     def __contains__(self, key):
         return key in self.ji_khoo_dict
 
     def __getitem__(self, key):
         return self.ji_khoo_dict[key]
+
+    def __len__(self):
+        return sum(len(entries) for entries in self.ji_khoo_dict.values())
+
+    def __bool__(self):
+        return bool(self.ji_khoo_dict)
+
+    def __iter__(self):
+        """迭代時回傳相容 a501 的 dict 格式，含「漢字」、「台語音標」、「校正音標」、「座標」欄位。"""
+        for han_ji, entries in self.ji_khoo_dict.items():
+            for entry in entries:
+                coords = entry.get("coordinates", [])
+                zo_piau = "; ".join(f"({r}, {c})" for r, c in coords)
+                yield {
+                    "漢字": han_ji,
+                    "台語音標": entry.get("tai_gi_im_piau", "N/A"),
+                    "校正音標": entry.get("hau_ziann_im_piau", "N/A"),
+                    "座標": zo_piau,
+                }
 
     def items(self):
         for han_ji, entries in self.ji_khoo_dict.items():
@@ -155,6 +173,13 @@ class JiKhooDict:
         hau_ziann_im_piau: str,
         coordinate: tuple[int, int],
     ):
+        """
+        在【標音字庫】新增一筆【漢字+台語音標】資料紀錄，並記錄【座標】。
+
+        【註】：漢字具一字多音之特性，所以遇字典的索引鍵（【漢字】）重複時，
+        需再會檢查新入資料之【台語音標】與既存之資料紀錄是否相同；兩者皆同視為【同音漢字】；
+        否則視作【多音漢字】。
+        """
         if not tai_gi_im_piau:
             tai_gi_im_piau = "N/A"
         if not hau_ziann_im_piau:
@@ -166,14 +191,19 @@ class JiKhooDict:
             "coordinates": [coordinate],
         }
 
+        # 若字典中無此【漢字】，則新增一筆資料錄；
         if han_ji not in self.ji_khoo_dict:
             self.ji_khoo_dict[han_ji] = [entry]
         else:
+            # 若字典中已有相同之【漢字】，則確認【台語音標】是否相同：
             for existing in self.ji_khoo_dict[han_ji]:
                 if existing["tai_gi_im_piau"] == tai_gi_im_piau:
+                    # 當【漢字】與【台語音標】相同時，當作【同音漢字】出現在【漢字注音】工作表，
+                    # 不同位置處
                     if coordinate not in existing["coordinates"]:
                         existing["coordinates"].append(coordinate)
                     return
+            # 若【漢字】相同但【台語音標】不同，則當作【多音漢字】，首度出現在【漢字注音】工作表。
             self.ji_khoo_dict[han_ji].append(entry)
 
     def update_entry(
