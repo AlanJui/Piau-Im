@@ -64,6 +64,8 @@ class JiKhooDict:
         return key in self.ji_khoo_dict
 
     def __getitem__(self, key):
+        if isinstance(key, int):
+            return list(self.__iter__())[key]
         return self.ji_khoo_dict[key]
 
     def __len__(self):
