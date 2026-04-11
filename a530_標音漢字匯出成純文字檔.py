@@ -9,10 +9,10 @@ from pathlib import Path
 # 載入第三方套件
 import xlwings as xw
 from dotenv import load_dotenv
+from p709_reset_han_ji_cells import reset_han_ji_cells
 
 # 載入自訂模組
 from mod_file_access import save_as_new_file
-from p709_reset_han_ji_cells import reset_han_ji_cells
 
 # =========================================================================
 # 載入環境變數
@@ -75,34 +75,6 @@ def process(wb):
     #--------------------------------------------------------------------------
     logging_process_step("<----------- 作業開始！---------->")
 
-    # 選擇工作表
-    sheet = wb.sheets['漢字注音']
-    sheet.activate()
-    #--------------------------------------------------------------------------
-    # 自【env】設定工作表，取得處理作業所需參數
-    #--------------------------------------------------------------------------
-
-    # 設定起始及結束的【列】位址（【第5列】、【第9列】、【第13列】等列）
-    TOTAL_LINES = int(wb.names['每頁總列數'].refers_to_range.value)
-    ROWS_PER_LINE = 4
-    start_row = 5
-    end_row = start_row + (TOTAL_LINES * ROWS_PER_LINE)
-    line = 1
-
-    # 設定起始及結束的【欄】位址（【D欄=4】到【R欄=18】）
-    CHARS_PER_ROW = int(wb.names['每列總字數'].refers_to_range.value)
-    start_col = 4
-    end_col = start_col + CHARS_PER_ROW
-
-    #--------------------------------------------------------------------------
-    # 作業處理：逐列取出漢字，組合成純文字檔
-    #--------------------------------------------------------------------------
-    logging_process_step(f"開始【處理作業】...")
-    han_ji_text = ""
-    EOF = False
-
-    # 逐列處理作業
-    for row in range(start_row, end_row, ROWS_PER_LINE):
     # 選擇工作表
     sheet = wb.sheets['漢字注音']
     sheet.activate()
