@@ -1,0 +1,1312 @@
+/* Version 0.2.2 */
+
+/* 加入 Gentium Plus: 補強調號 */
+/* @import url('https://fonts.googleapis.com/css2?family=Gentium+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@400;700;900&display=swap'); */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@400;700;900&display=swap');
+
+@font-face {
+  font-family: "BopomofoRuby";
+  src: url("https://alanjui.github.io/Blogger/assets/fonts/BopomofoRuby1909-v1-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Charis";
+  src: url("../fonts/Charis-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Charis";
+  src: url("../fonts/Charis-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* User's CSS
+----------------------------------------------- */
+
+/* =========================
+   箸祈身摰
+   ========================= */
+:root {
+  --page-bg: #f7f7f7;
+  --article-bg: #ffffff;
+  --text: #1b1b1b;
+  --muted: #666;
+  --link: #0b57d0;
+
+  --article-max: 760px;
+  --pad: 18px;
+
+  --line-height: 1.9;
+  --radius: 14px;
+  --shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  text-rendering: optimizeLegibility;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: var(--page-bg);
+  color: var(--text);
+  font-family:
+    system-ui,
+    -apple-system,
+    "Noto Sans TC",
+    "Noto Serif TC",
+    "Microsoft JhengHei",
+    Arial,
+    sans-serif;
+  line-height: var(--line-height);
+}
+
+/* =========================
+   Ｗ捆
+   ========================= */
+.page {
+  padding: 28px 14px;
+}
+
+.article_content {
+  max-width: var(--article-max);
+  margin: 0 auto;
+  background: var(--article-bg);
+  padding: 22px var(--pad);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  font-family: "Noto Serif TC", Arial, sans-serif;
+  font-size: 24px;
+  letter-spacing: 0.0em;
+  line-height: 2;
+}
+
+@media (max-width: 480px) {
+  .article_content {
+    padding: 18px 14px;
+    border-radius: 12px;
+    font-size: 20px;
+  }
+}
+
+/* =========================
+   摮
+   ========================= */
+.article_content p {
+  margin: 0 0 14px;
+  word-break: break-word;
+}
+
+.article_content h2 {
+  margin: 50px -5px 10px;
+  font-family: "Noto Sans TC", serif;
+  font-size: 2em;
+  font-weight: bold;
+  color: #0066cc;
+}
+
+.article_content .QA {
+  margin-top: 2.4em;
+  margin-bottom: 0.4em;
+}
+
+.title {
+  font-size: 1.2em;
+  letter-spacing: 0px;
+  text-align: center;
+}
+
+.title_mark {
+  font-size: 0.6em;
+  vertical-align: middle;
+}
+
+.title_line {
+  font-family: "Noto Sans TC", serif;
+  color: #0066cc;
+  font-size: 1.2em;
+  text-align: center;
+  font-weight: 700;
+  margin: 0 0 16px;
+  padding: 0;
+}
+
+.line {
+  font-size: 0.5em;
+  text-align: center;
+  margin: 0 auto 20px;
+  padding: 0;
+}
+
+.line.deco {
+  text-align: center;
+  font-size: 0.5em;
+  color: var(--muted);
+  margin: 14px 0 18px;
+}
+
+.sub_title {
+  font-size: 0.7em;
+  letter-spacing: 0px;
+  text-align: center;
+}
+
+.author {
+  font-size: 0.7em;
+  letter-spacing: 2px;
+  text-align: right;
+  margin-top: 1em;
+  margin-bottom: 2em;
+}
+
+.author ruby {
+  font-size: 1.68rem;
+  /* 2.4rem * 0.7 */
+  /* line-height 蝜潭輯 ruby  2.4嚗芸瘥靘蝮桀 */
+}
+
+/* 蝣箔雿憛抒 rt  rtc 頝蝮桀 */
+.author ruby rt,
+.author ruby rtc {
+  font-size: 40%;
+}
+
+/* 蝯 */
+.article_content a {
+  color: var(--link);
+  text-decoration: none;
+}
+
+.article_content a:hover {
+  text-decoration: underline;
+}
+
+/* =========================
+   separator嚗慦擃憛嚗敶梁/嚗
+   ========================= */
+.separator {
+  clear: both;
+  text-align: center;
+  margin: 18px 0 22px;
+}
+
+/* ---- 敶梁嚗YouTube iframe嚗RWD 詨 ----
+    .embed 銝撅歹 padding-top  16:9
+*/
+.separator .embed {
+  position: relative;
+  margin: 0 auto;
+  width: 100%;
+  /* 閮剔策銝嚗踹獢璈憭芸之 */
+  max-width: 560px;
+}
+
+/* 16:9 瘥靘摰孵 */
+.separator .embed::before {
+  content: "";
+  display: block;
+  padding-top: 56.25%;
+}
+
+/* iframe 鞎潭遛摰孵 */
+.separator iframe {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  border: 0;
+  display: block;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12);
+}
+
+/* ---- 敶梁撖砍漲批塚銝蝔格芋撘 ---- */
+
+/* (1) 箏憭 400px嚗璈芸蝮桀 100% */
+.separator.media-400 .embed {
+  max-width: 400px;
+}
+
+/* (2) 曉瘥嚗靘憒 60%嚗獢璈 60%嚗璈芸皛輻嚗 */
+.separator.media-pct-60 .embed {
+  max-width: 900px;
+  /* 脫迫Ｗ頞憭扳撖 */
+  width: 60%;
+}
+
+@media (max-width: 640px) {
+  .separator.media-pct-60 .embed {
+    width: 100%;
+  }
+}
+
+/* (3) RWD clamp嚗 240px嚚560px 芸霈 */
+.separator.media-rwd .embed {
+  max-width: none;
+  width: clamp(240px, 70vw, 560px);
+}
+
+/* =========================
+
+   ========================= */
+.separator img,
+.article_content img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12);
+}
+
+/* 撖砍漲批塚撠敶梁銝蝔格芋撘 */
+.separator.img-400 img {
+  width: 100% !important;
+  max-width: 400px;
+}
+
+.separator.img-pct-60 img {
+  width: 60% !important;
+}
+
+@media (max-width: 640px) {
+  .separator.img-pct-60 img {
+    width: 100% !important;
+  }
+}
+
+.separator.img-rwd img {
+  width: clamp(240px, 70vw, 560px) !important;
+  max-width: none;
+}
+
+.image-caption {
+  font-family: Noto Sans TC, sans-serif;
+  font-size: 1.1em;
+  color: brown;
+  font-style: bold;
+  margin-top: 5px;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.custom-border {
+  border: 1pt solid #000;
+  border-radius: 5px;
+}
+
+/* =========================
+   敶梁璅憿
+   ========================= */
+.video_title {
+  font-size: 0.8em;
+  font-weight: bold;
+  color: purple;
+  text-align: center;
+  margin-top: 0em;
+  margin-bottom: 1em;
+  line-height: 1.2;
+  font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+}
+
+/* =========================
+   皜格見撘
+   ========================= */
+.article_content ul li {
+  font-size: 1em;
+  line-height: 1.4;
+  list-style-type: none;
+  position: relative;
+  padding-left: 1.2em;
+}
+
+.article_content ul li::before {
+  font-size: 0.8em;
+  line-height: 1.4;
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0px;
+}
+
+/* =========================
+   瘜券喟泵賊嚗寥喟泵撠剁
+   ========================= */
+
+/* 脫迫 ruby 蝝冽銵鋡急 */
+ruby {
+  white-space: nowrap;
+  text-align: justify;
+  font-family: "Noto Serif TC", serif;
+  font-weight: 700;
+  font-size: 2.4rem;
+  letter-spacing: 0;
+  line-height: 2.4;
+  margin-right: 0.5em;
+  /* 修正：增加漢字之間的間距 */
+}
+
+rt {
+  font-family: 'Noto Sans TC', Arial, sans-serif !important;
+  font-weight: 400;
+  color: darkcyan;
+  font-size: 40%;
+  letter-spacing: 0;
+  font-feature-settings: "salt";
+  margin-left: -0.4em;
+}
+
+rtc {
+  font-family: BopomofoRuby !important;
+  font-weight: bold;
+  color: #B94B6A;
+  font-size: 40%;
+  -webkit-ruby-position: inter-character;
+  ruby-position: inter-character;
+  -webkit-text-orientation: upright;
+  text-orientation: upright;
+  letter-spacing: 0px;
+  -webkit-writing-mode: vertical-lr;
+  -ms-writing-mode: vertical-lr;
+  writing-mode: vertical-lr;
+  vertical-align: middle;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -0.5em;
+  margin-left: 0.1em;
+  /* 修正：拉開與漢字右端的距離 */
+  margin-right: 0.0em;
+  text-combine-upright: none;
+  -webkit-text-combine: none;
+  word-break: break-all;
+  white-space: normal;
+  height: auto;
+  width: 1em;
+}
+
+/* 瘜券喟泵 */
+.Siang_Pai {
+  font-family: "Noto Serif TC", serif;
+  font-size: 2.8rem;
+  letter-spacing: 0.0em;
+  text-align: justify;
+  /* text-align: left; */
+}
+
+.Siang_Pai ruby {
+  margin-right: 0.6em;
+  /* 修正：Siang_Pai 模式下增加字間距 */
+}
+
+.Siang_Pai rt {
+  /* font-family: "Noto Serif TC", serif; */
+  /* font-family: "Noto Sans TC", system-ui, -apple-system, sans-serif; */
+  /* font-family: "LXGW WenKai Mono TC", "Microsoft JhengHei", "微軟正黑體"; */
+  /* font-family: "Noto Sans TC", "Microsoft JhengHei", "微軟正黑體"; */
+  /* font-family: "Gentium Plus", "Charis SIL", serif; ← 加這行 */
+  font-family: "Charis", serif;
+  /* ← 加這行 */
+  margin-left: 0.1em;
+  color: #00c4ab;
+  font-size: 50%;
+  font-variant-east-asian: salt;
+  -moz-font-feature-settings: "salt";
+  -webkit-font-feature-settings: "salt";
+  font-feature-settings: "salt";
+  text-orientation: upright;
+  margin-left: -0.4em;
+}
+
+.Siang_Pai rtc {
+  /* font-family: BopomofoRuby; */
+  font-family: BopomofoRuby, "Noto Sans TC" !important;
+  color: #B94B6A;
+  font-size: 40%;
+  font-weight: bold;
+  line-height: 1;
+  -webkit-ruby-position: inter-character;
+  ruby-position: inter-character;
+  -webkit-writing-mode: vertical-lr;
+  text-orientation: upright;
+  writing-mode: vertical-lr;
+  vertical-align: middle;
+  display: inline;
+  /* letter-spacing: 0.2em; */
+  /* margin-left: -0.8em; */
+
+  /* [Modified by Copilot] 隤踵湔寥喟泵雿蝵殷踹瞍Ｗ */
+  /* 喟宏銝暺嚗隞仿輸瞍Ｗ */
+  margin-left: 0.1em;
+  /* 修正：拉開與漢字右端的距離 */
+  margin-right: 0.8em;
+}
+
+/* .Siang_Pai rtc,
+.title rtc {
+  color: #B94B6A;
+  font-size: 35%;
+  -webkit-ruby-position: inter-character;
+  ruby-position: inter-character;
+  text-orientation: upright;
+
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+
+  transform: translateX(0%);
+} */
+
+.Siang_Pai ruby,
+.Siang_Pai span {
+  font-size: 2.88rem !important;
+}
+
+.Siang_Pai .author ruby,
+.Siang_Pai .author span {
+  font-size: 1.8rem !important;
+}
+
+/* .Siang_Pai .title .title_mark {
+  display: inline-block;
+  font-size: 1.4rem !important;
+  line-height: 1;
+  transform: translateY(-0.3em);
+} */
+
+.Siang_Pai .title .title_mark {
+  display: inline-block;
+  font-size: 1.4rem !important;
+  line-height: 1;
+  vertical-align: middle;
+  transform: translateY(-0.35em);
+  margin: 0 0.15em;
+}
+
+/* 寥喟泵 */
+.Piau_Im {
+  /* font-family: "Noto Serif TC Black"; */
+  font-size: 2.8rem;
+  letter-spacing: 0.1rem;
+}
+
+.Piau_Im rt {
+  font-family: BopomofoRuby;
+  color: #B94B6A;
+  font-size: 35%;
+  -webkit-ruby-position: inter-character;
+  ruby-position: inter-character;
+  text-orientation: upright;
+  -webkit-writing-mode: vertical-rl;
+  writing-mode: vertical-rl;
+  vertical-align: middle;
+  display: inline;
+}
+
+.Piau_Im rtc {
+  font-family: BopomofoRuby !important;
+}
+
+/* 瘜券 */
+.zhu_yin {
+  /* font-family: "Noto Serif TC"; */
+  font-size: 2.8rem;
+  letter-spacing: 0.0em;
+  line-height: 2;
+}
+
+/* 啁拇潦質店摮 */
+.pin_yin {
+  /* font-family: "Noto Serif TC"; */
+  font-size: 28pt;
+  letter-spacing: 0.2em;
+  line-height: 2;
+}
+
+.poj {
+  /* font-family: "Noto Serif TC"; */
+  font-size: 28pt;
+  letter-spacing: 0.2em;
+  line-height: 2;
+}
+
+/* 鈭 */
+.fifteen_yin {
+  /* font-family: "Noto Serif TC"; */
+  font-size: 28pt;
+  letter-spacing: 0.2em;
+  line-height: 2;
+}
+
+/* 鈭 */
+.fifteen_yin {
+  /* font-family: "Noto Serif TC"; */
+  font-size: 28pt;
+  letter-spacing: 0.2em;
+  line-height: 2;
+}
+
+.fifteen_yin rt {
+  letter-spacing: 0;
+  font-size: 40%;
+}
+
+/* =========================
+   Markdown 璅撘
+   ========================= */
+.md {
+  font-family: "Noto Serif TC", Arial, sans-serif;
+  font-size: 1.4em;
+  letter-spacing: 0.0em;
+  line-height: 1.6;
+}
+
+.md h1,
+.md h2,
+.md h3 {
+  margin-top: 2.4em;
+  margin-bottom: 0.4em;
+}
+
+.md p {
+  margin-bottom: 1em;
+}
+
+.md pre {
+  background: #f4f4f4;
+  padding: 10px;
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+/* 撠 markdown 憛銝剔皜桃葬隤踹 */
+.md ul,
+.md ol {
+  margin-left: 1em;
+  padding-left: 1em;
+}
+
+.md li {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+/* =========================
+   蝘餃蝡航矽
+   ========================= */
+@media screen and (max-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+
+  body {
+    max-width: 640px;
+    margin: 0 auto;
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  .article_content {
+    font-size: 20px;
+  }
+
+  .image-caption {
+    font-size: 0.9em;
+  }
+
+}
+
+/* =========================
+   頁面全域邊距與大字體 (Index & Articles)
+   ========================= */
+body {
+  padding: 0 50px !important;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 0 20px !important;
+  }
+}
+
+/* =========================
+   Index頁面 Header & Nav 改良
+   ========================= */
+#header {
+  text-align: center;
+  padding: 60px 20px 40px !important;
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
+  color: white !important;
+  border-radius: 0 0 20px 20px !important;
+  margin-bottom: 40px !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+#header img {
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px;
+  max-width: 100%;
+  height: auto;
+}
+
+#header h1 {
+  font-family: "Noto Serif TC", serif !important;
+  font-weight: 900 !important;
+  /* Noto Serif TC Black */
+  font-size: 48pt !important;
+  margin: 0 !important;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4) !important;
+  letter-spacing: 5px !important;
+}
+
+.main-nav {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 40px;
+  background: white;
+  padding: 15px 30px;
+  border-radius: 50px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.main-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 30px;
+}
+
+.main-nav ul li a {
+  text-decoration: none;
+  color: #1e3c72 !important;
+  font-family: "Noto Serif TC", serif !important;
+  font-weight: 700 !important;
+  font-size: 24pt !important;
+  padding: 10px 24px;
+  border-radius: 30px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.main-nav ul li a:hover {
+  background: #1e3c72 !important;
+  color: white !important;
+}
+
+/* =========================
+   卡片式目錄 (Index.html專用) - 動畫收折與大字體
+   ========================= */
+.card-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)) !important;
+  gap: 30px !important;
+  padding: 20px 0 50px 0 !important;
+}
+
+.card {
+  background: var(--article-bg, #ffffff) !important;
+  border-radius: var(--radius, 14px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+  padding: 30px !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+  display: flex !important;
+  flex-direction: column !important;
+  position: relative !important;
+}
+
+.card:hover {
+  transform: translateY(-8px) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+.card-title {
+  margin: 0 !important;
+  font-family: "Noto Sans TC", serif !important;
+  font-size: 24pt !important;
+  color: #333 !important;
+  line-height: 1.5;
+  padding-bottom: 20px;
+  transition: color 0.3s;
+  cursor: pointer;
+}
+
+.card-links {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 15px !important;
+  max-height: 0 !important;
+  opacity: 0 !important;
+  overflow: hidden !important;
+  margin-top: 0 !important;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  pointer-events: none;
+}
+
+/* 懸停展開與字體上色 */
+.card:hover .card-title {
+  color: #0066cc !important;
+}
+
+.card:hover .card-links {
+  max-height: 800px !important;
+  opacity: 1 !important;
+  margin-top: 20px !important;
+  border-top: 2px solid #e0e0e0 !important;
+  padding-top: 20px !important;
+  pointer-events: auto;
+}
+
+.card-links .badge {
+  background: #f0f4f8 !important;
+  color: #0b57d0 !important;
+  padding: 10px 20px !important;
+  border-radius: 30px !important;
+  font-size: 20pt !important;
+  text-decoration: none !important;
+  font-weight: 500 !important;
+  font-family: "Noto Sans TC", sans-serif !important;
+  border: 2px solid transparent !important;
+  transition: all 0.2s ease !important;
+  display: inline-block;
+}
+
+.card-links .badge:hover {
+  background: #0b57d0 !important;
+  color: #fff !important;
+  border-color: #0b57d0 !important;
+  box-shadow: 0 4px 12px rgba(11, 87, 208, 0.3) !important;
+}
+
+/* 搜尋過濾專用：優先權最高 */
+.card.hidden-card {
+  display: none !important;
+}
+
+/* 懸浮首頁按鈕避免被覆蓋 */
+.floating-home-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: #0066cc;
+  color: white;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  font-size: 30px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s, background-color 0.3s;
+  z-index: 1000;
+}
+
+.floating-home-btn:hover {
+  background-color: #004c99;
+  transform: scale(1.1);
+  color: white;
+  text-decoration: none;
+}
+
+/* 全域文章邊距強置 (適用於各篇文章檔) */
+body {
+  padding-left: 50px !important;
+  padding-right: 50px !important;
+}
+
+/* 舊版 Nav 按鈕替換為優雅的設計 (適用於各篇文章檔的 <nav>) */
+nav {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin: 20px auto 40px !important;
+  background: #f8f9fa !important;
+  padding: 15px 30px !important;
+  border-radius: 50px !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+  max-width: 800px !important;
+  gap: 20px !important;
+}
+
+nav button {
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: transform 0.3s !important;
+}
+
+nav button:hover {
+  transform: scale(1.1) !important;
+}
+
+nav button img {
+  border-radius: 50% !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 全域大字體設定 (符合24pt需求) */
+body,
+p,
+div,
+span,
+a,
+td,
+th,
+li {
+  font-size: 24pt !important;
+}
+
+/* 網站標題 Noto Serif TC Black */
+h1#site-title,
+h1,
+.site-title {
+  font-family: 'Noto Serif TC', serif !important;
+  font-weight: 900 !important;
+  font-size: 36pt !important;
+}
+
+/* Article Nav 樣式 */
+.main-nav {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 40px;
+  margin-top: 40px;
+  background: white;
+  padding: 15px 30px;
+  border-radius: 50px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.main-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 30px;
+}
+
+.main-nav ul li {
+  margin: 0;
+}
+
+.main-nav ul li a {
+  text-decoration: none;
+  color: #1e3c72 !important;
+  font-family: "Noto Serif TC", serif !important;
+  font-weight: 700 !important;
+  font-size: 24pt !important;
+  padding: 10px 24px;
+  border-radius: 30px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.main-nav ul li a:hover {
+  background: #1e3c72 !important;
+  color: white !important;
+}
+
+/* siblings/phonetics links wrap */
+.main-nav {
+  height: auto !important;
+  flex-wrap: wrap !important;
+  max-width: 90% !important;
+}
+
+.main-nav ul {
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 15px !important;
+}
+
+/* Sibling in Nav */
+.main-nav ul li a.nav-sibling {
+  font-size: 18pt !important;
+  padding: 8px 16px !important;
+  background: #eef2f7 !important;
+  color: #2a5298 !important;
+  border-radius: 20px !important;
+}
+
+.main-nav ul li a.nav-sibling:hover {
+  background: #2a5298 !important;
+  color: white !important;
+}
+
+/* Current sibling active */
+.main-nav ul li span.nav-current {
+  font-size: 18pt !important;
+  padding: 8px 16px !important;
+  background: #fbbc05 !important;
+  color: #fff !important;
+  border-radius: 20px !important;
+  font-weight: 900 !important;
+  box-shadow: 0 4px 10px rgba(251, 188, 5, 0.4) !important;
+  display: inline-block;
+  cursor: default;
+}
+
+/* Home link */
+.main-nav ul li a.nav-home {
+  font-size: 20pt !important;
+  background: #1e3c72 !important;
+  color: white !important;
+  padding: 8px 20px !important;
+  border-radius: 20px !important;
+}
+
+.main-nav ul li a.nav-home:hover {
+  background: #0d2146 !important;
+}
+
+/* Override navigation layout to be strictly left-to-right aligned instead of center */
+.main-nav {
+  justify-content: flex-start !important;
+  align-items: flex-start !important;
+  padding: 15px 20px !important;
+}
+
+.main-nav ul {
+  justify-content: flex-start !important;
+  align-items: center !important;
+  text-align: left !important;
+  width: 100% !important;
+}
+
+/* Force horizontal row alignment for navigation */
+.main-nav,
+.main-nav ul {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+}
+
+.main-nav ul li {
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  white-space: nowrap !important;
+}
+
+.main-nav {
+  max-width: 100% !important;
+  width: 100% !important;
+  overflow-x: auto !important;
+  /* Allow scrolling if it truly escapes the screen width */
+}
+
+/* 徹底覆寫 NAV 按鈕強制橫向排列 */
+nav.main-nav {
+  display: block !important;
+  /* 不用flex，改用 block 外框 */
+  text-align: left !important;
+  padding: 20px !important;
+  white-space: normal !important;
+}
+
+nav.main-nav ul {
+  display: block !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  list-style: none !important;
+}
+
+nav.main-nav ul li {
+  display: inline-block !important;
+  /* 每個按鈕強制變成行內區塊 */
+  margin: 10px 15px 10px 0 !important;
+  vertical-align: middle !important;
+}
+
+/* nav.main-nav 橫向排版（整合版）*/
+nav.main-nav {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  width: 100% !important;
+  max-width: 100vw !important;
+  background: #f8f9fa !important;
+  padding: 15px 20px !important;
+  margin: 20px 0 !important;
+  border-radius: 10px !important;
+  box-sizing: border-box !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+nav.main-nav ul {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  width: max-content !important;
+  max-width: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  list-style: none !important;
+  gap: 15px !important;
+}
+
+nav.main-nav ul li {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+nav.main-nav ul li a,
+nav.main-nav ul li span {
+  display: inline-block !important;
+  white-space: nowrap !important;
+}
+
+/* 徹底達成一條長橫列不換行 (No-Wrap & Horizontal Scroll) */
+body {
+  max-width: 100% !important;
+}
+
+nav.main-nav {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  /* 滿出版面時允許左右滑動 */
+  overflow-y: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  width: 100% !important;
+  max-width: 100vw !important;
+  padding: 10px 20px !important;
+  box-sizing: border-box !important;
+}
+
+nav.main-nav ul {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  /* 絕對不換行 */
+  justify-content: flex-start !important;
+  align-items: center !important;
+  width: auto !important;
+  max-width: none !important;
+  gap: 15px !important;
+}
+
+nav.main-nav ul li {
+  display: inline-flex !important;
+  white-space: nowrap !important;
+  /* 文字絕對不折行 */
+  flex-shrink: 0 !important;
+  /* 按鈕不自動縮水擠壓 */
+}
+
+/* 確保各按鈕文字都同行 */
+nav.main-nav ul li a,
+nav.main-nav ul li span {
+  white-space: nowrap !important;
+  display: inline-block !important;
+}
+
+/* --- 手機版標題優化 (解決折行問題) --- */
+@media screen and (max-width: 600px) {
+  #header {
+    padding: 20px 12px !important;
+  }
+
+  /* 核心修復：用高特殊性 + !important 覆蓋 #header h1 的 48pt 與 letter-spacing */
+  #header h1 {
+    font-size: clamp(2rem, 8.6vw, 2.4rem) !important;
+    /* 460px 時 ≈ 39px，6字同行 */
+    letter-spacing: 1px !important;
+    white-space: nowrap !important;
+    line-height: 1.4 !important;
+  }
+
+  /* 針對標題與內文的所有容器，取消分散對齊，改為置中以防止漢字間距被拉開 */
+  /* .article_content, .article_content p, .title, .title_line, .Siang_Pai, ruby {
+    text-align: center !important;
+    justify-content: center !important;
+  } */
+
+  /* 以高特殊性 (0,2,1) 蓋過 .article_content p (0,1,1) 的 justify */
+  .article_content p.title,
+  .article_content .title {
+    text-align: center !important;
+  }
+
+  .article_content p.author,
+  .article_content .author {
+    text-align: right !important;
+  }
+
+  .article_content,
+  .article_content p {
+    text-align: justify !important;
+  }
+
+  /* 強制縮小標題字體並【絕對不換行】 */
+  .title,
+  .title_line,
+  .author,
+  h1,
+  .site-title,
+  #site-title {
+    font-size: 1.3rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 10px !important;
+    white-space: nowrap !important;
+    /* 終極解決方案：強制不換行 */
+    letter-spacing: -1px !important;
+    /* 縮小字距 */
+  }
+
+  /* 縮小標題內的 ruby 字體，並移除字距 */
+  .title ruby,
+  .author ruby {
+    font-size: 1.4rem !important;
+    margin-right: 0 !important;
+  }
+
+  /* 核心修復：縮小內文漢字字體與極小化字與字之間的間距 */
+  ruby {
+    font-size: 1.8rem !important;
+    margin-right: 0.05em !important;
+    /* 從 0.15em 降至 0.05em，讓字體更緊湊 */
+  }
+
+  /* 標音字體也同步微調 */
+  rt,
+  rtc {
+    font-size: 45% !important;
+  }
+
+  /* 恢復 body 邊距 */
+  body {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+
+  p {
+    text-align: justify !important;
+    /* 手機版內文改為兩端對齊，讓字距更自然 */
+  }
+}
+
+/* =========================
+   音標切換導覽列 (phonetic-switcher)
+   ========================= */
+.phonetic-switcher-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #f8f9fa;
+  padding: 8px 15px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  align-items: center;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.phonetic-switcher-toolbar.ps-footer {
+  position: static;
+  margin-top: 30px;
+}
+
+/* 回首頁按鈕 */
+.ps-home-btn {
+  padding: 4px 10px;
+  cursor: pointer;
+  font-weight: bold;
+  flex-shrink: 0;
+  font-family: 'Noto Serif TC', serif;
+  font-size: 14px;
+}
+
+/* 標音方案群組容器 */
+.ps-btn-group {
+  display: flex;
+  gap: 4px;
+  border-left: 1px solid #ccc;
+  padding-left: 8px;
+  flex-shrink: 0;
+}
+
+/* 標音方案切換按鈕 */
+.ps-scheme-btn {
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+/* 自訂區塊容器 */
+.ps-custom-div {
+  border-left: 1px solid #ccc;
+  padding-left: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+/* 「自訂」標籤文字 */
+.ps-custom-label {
+  font-weight: bold;
+  font-family: 'Noto Serif TC', serif;
+  font-size: 4px;
+}
+
+/* 「上：」「右：」提示文字 */
+.ps-custom-text {
+  /* font-size: 10.5px; */
+  /* 無論如何調整，均無效果 */
+  font-size: 2px;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+/* 自訂下拉選單 */
+.ps-custom-div select {
+  font-size: 16px;
+  font-family: 'Noto Sans TC', sans-serif;
+}
