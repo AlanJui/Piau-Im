@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
         toolbar.appendChild(customDiv);
 
         // --- 修正：在選單中加入【國際音標】 ---
-        const systems = ["無", "十五音", "方音符號", "國際音標", "台語音標", "台羅拼音", "白話字", "閩拼方案", "閩拼調號", "注音二式"];
+        const systems = ["無", "十五音", "方音符號", "國際音標", "台語音標", "台羅拼音", "白話字", "閩拼方案", "閩拼調號", "台語注音二式"];
         const selUp = customDiv.querySelector('#select-up');
         const selRight = customDiv.querySelector('#select-right');
         systems.forEach(s => {
@@ -289,7 +289,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function applyPhonetics(upSystem, rightSystem) {
         injectLatinFix();
         document.querySelectorAll('article.article_content > div').forEach(div => { div.className = 'Siang_Pai'; div.style.cssText = ""; });
-        const latinSystems = ["台語音標", "台羅拼音", "白話字", "閩拼方案", "閩拼調號", "注音二式", "國際音標"];
+        const latinSystems = ["台語音標", "台羅拼音", "白話字", "閩拼方案", "閩拼調號", "台語注音二式", "國際音標"];
 
         document.querySelectorAll('ruby[data-tlpa]').forEach(ruby => {
             const tlpa = ruby.getAttribute('data-tlpa');

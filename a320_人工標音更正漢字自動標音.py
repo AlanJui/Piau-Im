@@ -9,7 +9,7 @@ from pathlib import Path
 import xlwings as xw
 
 # 載入自訂模組/函式
-from mod_excel_access import save_as_new_file
+from mod_file_access import save_as_new_file
 from mod_logging import (
     init_logging,
     logging_exc_error,
@@ -32,6 +32,7 @@ EXIT_CODE_SUCCESS = 0  # 成功
 EXIT_CODE_NO_FILE = 1  # 無法找到檔案
 EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
 EXIT_CODE_SAVE_FAILURE = 3  # 儲存失敗
+EXIT_CODE_PROCESS_SKIP = 9  # 作業略過
 EXIT_CODE_PROCESS_FAILURE = 10  # 過程失敗
 EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
 
@@ -83,11 +84,16 @@ def process(wb, args) -> int:
     logging_process_step(msg)
 
     try:
-        # 以【人工標音字庫】工作表中各【校正音標】欄之注音，更新【漢字注音】工作表
-        exit_code = xls_cell.update_hanji_zu_im_sheet_by_jin_kang_piau_im_ji_khoo(
-            source_sheet_name=source_sheet_name,
-            target_sheet_name=target_sheet_name,
-        )
+        working_sheet = wb.sheets[source_sheet_name]
+        if not working_sheet.range("A2").value:
+            print(f"【{source_sheet_name}】為空，處理作業略過！")
+            return EXIT_CODE_PROCESS_SKIP
+        else:
+            # 以【人工標音字庫】工作表中各【校正音標】欄之注音，更新【漢字注音】工作表
+            exit_code = xls_cell.update_hanji_zu_im_sheet_by_jin_kang_piau_im_ji_khoo(
+                source_sheet_name=source_sheet_name,
+                target_sheet_name=target_sheet_name,
+            )
     except Exception as e:
         logging_exc_error(msg=f"處理【{source_sheet_name}】作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
@@ -193,6 +199,8 @@ def main(args) -> int:
     logging_process_step(f"《========== 程式終止執行：{program_name} ==========》")
     if exit_code == EXIT_CODE_SUCCESS:
         return EXIT_CODE_SUCCESS    # 作業正常結束
+    elif exit_code == EXIT_CODE_PROCESS_SKIP:
+        return EXIT_CODE_PROCESS_SKIP    # 作業略過
     else:
         msg = f"程式異常終止，返回失敗碼：{exit_code}"
         logging_exc_error(msg=msg, error=None)
@@ -248,6 +256,10 @@ if __name__ == "__main__":
         exit_code = main(args)
 
     # 只在命令列執行時使用 sys.exit()，避免在調試環境中引發 SystemExit 例外
-    if exit_code != EXIT_CODE_SUCCESS:
+    if exit_code == EXIT_CODE_PROCESS_SKIP:
+        sys.exit(0)  # 作業略過，正常結束程式
+    elif exit_code != EXIT_CODE_SUCCESS:
         sys.exit(exit_code)
+
+
 

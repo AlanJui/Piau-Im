@@ -8,7 +8,6 @@ from pathlib import Path
 # 載入第三方套件
 import xlwings as xw
 
-from a330_以標音字庫更新漢字注音工作表 import process_update_hanji_zu_im_sheet_by_piau_im_ji_khoo
 from mod_excel_access import excel_address_to_row_col, get_active_cell
 from mod_logging import (
     init_logging,
@@ -129,12 +128,19 @@ def process(wb, args) -> int:
         # 即使用者為【漢字】補入查找不到的【台語音標】時，若是在【缺字表】工作表中之【校正音標】直接填寫
         # 則應執行 a310*.py 程式；但使用者若是在【漢字注音】工作表中之【人工標音】欄位填寫，則應執行 a320*.py 程式
         # a300*.py 之本程式
-        xls_cell.update_hanji_zu_im_sheet_by_khuat_ji_piau(
-            source_sheet_name=source_sheet_name,
-            target_sheet_name=target_sheet_name,
-        )
-        # 將所有【標音字庫工作表】對映之字典物件，回存 Excel 活頁簿檔案(Workbook)
-        xls_cell.save_all_piau_im_ji_khoo_dicts()
+        # 【缺字表】工作表：第 1 列為標題列（漢字／台語音標／校正音標／座標），
+        # 資料自第 2 列起。先行檢查 A2 是否為空，以判斷是否有任何資料紀錄。
+        # 若【缺字表】為空，則略過本段處理作業，後續 Line 146 作業仍接續執行。
+        working_sheet = wb.sheets[source_sheet_name]
+        if not working_sheet.range("A2").value:
+            print(f"【{source_sheet_name}】為空，處理作業略過！")
+        else:
+            xls_cell.update_hanji_zu_im_sheet_by_khuat_ji_piau(
+                source_sheet_name=source_sheet_name,
+                target_sheet_name=target_sheet_name,
+            )
+            # 將所有【標音字庫工作表】對映之字典物件，回存 Excel 活頁簿檔案(Workbook)
+            xls_cell.save_all_piau_im_ji_khoo_dicts()
     except Exception as e:
         logging_exc_error(msg=f"處理【{sheet_name}】作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
@@ -146,33 +152,49 @@ def process(wb, args) -> int:
     try:
         # 使用【漢字注音】工作表作為【目標工作表】
         target_sheet_name = '漢字注音'
-        logging_process_step(f"以【{sheet_name}】工作表之【校正音標】，更新【{target_sheet_name}】工作表之【台語音標】與【漢字標音】！")
+        # logging_process_step(f"以【{sheet_name}】工作表之【校正音標】，更新【{target_sheet_name}】工作表之【台語音標】與【漢字標音】！")
 
         # 使用【人工標音字庫】，作為來源工作表中的【校正音標】欄位，更新【漢字注音】工作表中的【台語音標】及【漢字標音】欄位
         source_sheet_name = '人工標音字庫'
         sheet_name = source_sheet_name
         _show_separtor_line(source_sheet_name=source_sheet_name, target_sheet_name=target_sheet_name)
-        xls_cell.update_hanji_zu_im_sheet_by_jin_kang_piau_im_ji_khoo(
-            source_sheet_name=source_sheet_name,
-            target_sheet_name=target_sheet_name,
-        )
-        # 使用【缺字表】，作為來源工作表中的【校正音標】欄位，更新【漢字注音】工作表中的【台語音標】及【漢字標音】欄位
-        source_sheet_name = '缺字表'
-        sheet_name = source_sheet_name
-        _show_separtor_line(source_sheet_name=source_sheet_name, target_sheet_name=target_sheet_name)
-        xls_cell.update_hanji_zu_im_sheet_by_khuat_ji_piau(
-            source_sheet_name=source_sheet_name,
-            target_sheet_name=target_sheet_name,
-        )
-        # 使用【標音字庫】工作表中的【校正音標】欄位，更新【漢字注音】工作表中的【台語音標】及【漢字標音】欄位
-        # 執行 a200_查找及填入漢字標音：可在【漢字注音】工作表，直接標注【人工標音】者，並更新【人工標音字庫】工作表
-        source_sheet_name = '標音字庫'
-        sheet_name = source_sheet_name
-        _show_separtor_line(source_sheet_name=source_sheet_name, target_sheet_name=target_sheet_name)
-        xls_cell.update_hanji_zu_im_sheet_by_piau_im_ji_khoo(
-            source_sheet_name=source_sheet_name,
-            target_sheet_name=target_sheet_name,
-        )
+        working_sheet = wb.sheets[source_sheet_name]
+        if not working_sheet.range("A2").value:
+            print(f"【{source_sheet_name}】為空，處理作業略過！")
+        else:
+            xls_cell.update_hanji_zu_im_sheet_by_jin_kang_piau_im_ji_khoo(
+                source_sheet_name=source_sheet_name,
+                target_sheet_name=target_sheet_name,
+            )
+            # 將所有【標音字庫工作表】對映之字典物件，回存 Excel 活頁簿檔案(Workbook)
+            xls_cell.save_all_piau_im_ji_khoo_dicts()
+            # 使用【缺字表】，作為來源工作表中的【校正音標】欄位，更新【漢字注音】工作表中的【台語音標】及【漢字標音】欄位
+            source_sheet_name = '缺字表'
+            sheet_name = source_sheet_name
+            _show_separtor_line(source_sheet_name=source_sheet_name, target_sheet_name=target_sheet_name)
+            if not working_sheet.range("A2").value:
+                print(f"【{source_sheet_name}】為空，處理作業略過！")
+            else:
+                xls_cell.update_hanji_zu_im_sheet_by_piau_im_ji_khoo(
+                    source_sheet_name=source_sheet_name,
+                    target_sheet_name=target_sheet_name,
+                )
+                # 將所有【標音字庫工作表】對映之字典物件，回存 Excel 活頁簿檔案(Workbook)
+                xls_cell.save_all_piau_im_ji_khoo_dicts()
+                # 使用【標音字庫】工作表中的【校正音標】欄位，更新【漢字注音】工作表中的【台語音標】及【漢字標音】欄位
+                # 執行 a200_查找及填入漢字標音：可在【漢字注音】工作表，直接標注【人工標音】者，並更新【人工標音字庫】工作表
+                source_sheet_name = '標音字庫'
+                sheet_name = source_sheet_name
+                _show_separtor_line(source_sheet_name=source_sheet_name, target_sheet_name=target_sheet_name)
+                if not working_sheet.range("A2").value:
+                    print(f"【{source_sheet_name}】為空，處理作業略過！")
+                else:
+                    xls_cell.update_hanji_zu_im_sheet_by_piau_im_ji_khoo(
+                        source_sheet_name=source_sheet_name,
+                        target_sheet_name=target_sheet_name,
+                    )
+                    # 將所有【標音字庫工作表】對映之字典物件，回存 Excel 活頁簿檔案(Workbook)
+                    xls_cell.save_all_piau_im_ji_khoo_dicts()
     except Exception as e:
         logging_exc_error(msg=f"使用【{sheet_name}】工作表，更新【漢字注音】工作表，發生作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
@@ -186,13 +208,18 @@ def process(wb, args) -> int:
     # 根據【標音字庫】工作表，更新【漢字注音】工作表中的【台語音標】及【漢字標音】欄位
     #-----------------------------------------------------------------------------
     try:
-        sheet_name = '標音字庫'
-        logging_process_step(f"以【{sheet_name}】工作表之【校正音標】，更新【{target_sheet_name}】工作表之【台語音標】與【漢字標音】！")
-        print('\n\n')
-        print("=" * 100)
-        print(f"使用【{sheet_name}】工作表中的【校正音標】，更新【漢字注音】工作表中的【台語音標】：")
-        print("=" * 100)
-        process_update_hanji_zu_im_sheet_by_piau_im_ji_khoo(wb=wb)
+        source_sheet_name = '標音字庫'
+        sheet_name = source_sheet_name
+        _show_separtor_line(source_sheet_name=source_sheet_name, target_sheet_name=target_sheet_name)
+        if not working_sheet.range("A2").value:
+            print(f"【{source_sheet_name}】為空，處理作業略過！")
+        else:
+            xls_cell.update_hanji_zu_im_sheet_by_piau_im_ji_khoo(
+                source_sheet_name=source_sheet_name,
+                target_sheet_name=target_sheet_name,
+            )
+            # 將所有【標音字庫工作表】對映之字典物件，回存 Excel 活頁簿檔案(Workbook)
+            xls_cell.save_all_piau_im_ji_khoo_dicts()
     except Exception as e:
         logging_exc_error(msg=f"處理以【{sheet_name}】更新【漢字注音】工作表之作業，發生執行異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
@@ -202,6 +229,7 @@ def process(wb, args) -> int:
     #------------------------------------------------------------------------------
     han_ji_piau_im_sheet.activate()
 
+    print('\n\n')
     print('=' * 80)
     logging_process_step("已完成【台語音標】和【漢字標音】標注工作。")
     logging_process_step("<=========== 完成處理流程作業！==========>")

@@ -8,7 +8,8 @@ import time
 from pathlib import Path
 
 import xlwings as xw
-from openpyxl import load_workbook
+
+# from openpyxl import load_workbook
 
 try:
     from pythoncom import com_error as pywintypes_com_error

@@ -16,7 +16,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
-            "console": "externalTerminal", // 使用外部終端機
+            "console": "integratedTerminal", // 使用外部終端機
             "redirectOutput": true,        // 同時將輸出複製至 Debug Console 面板
             "cwd": "${workspaceFolder}",
             "args": [],
@@ -76,14 +76,14 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a000_重置漢字標音工作表.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a100_作業中活頁檔填入漢字",
             "type": "debugpy",
             "request": "launch",
             "program": "a100_作業中活頁檔填入漢字.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "_tmp_p1_han_ji.txt",
                 "--new",
@@ -95,7 +95,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a100_作業中活頁檔填入漢字.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "_tmp_p1_han_ji.txt",
                 "--peh_ue",
@@ -107,7 +107,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a101_將漢字標音匯出成文字檔.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             // "args": [
             //     "_tmp_p1_han_ji.txt",
             // ]
@@ -117,7 +117,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a102_漢字標音整合匯出.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             // "args": [
             //     "_tmp_p1_han_ji.txt",
             // ]
@@ -127,7 +127,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a103_整句漢字標音匯出.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             // "args": [
             //     "_tmp_p1_han_ji.txt",
             // ]
@@ -137,7 +137,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a110_使用漢字文字檔.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "_tmp_p1_han_ji.txt",
             ]
@@ -147,7 +147,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a110_使用漢字文字檔.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "_tmp_p1_han_ji.txt",
                 "_tmp_p2_ping_im.txt",
@@ -158,7 +158,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a110_使用漢字文字檔.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "_tmp_p1_han_ji.txt",
                 "--peh_ue",
@@ -169,7 +169,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a110_使用漢字文字檔.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "_tmp_p1_han_ji.txt",
                 "--peh_ue",
@@ -181,7 +181,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a110_使用已標音文字檔填入.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "tmp.txt",
                 "hu"
@@ -192,7 +192,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a109_漢字注音工作表導讀.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "--edit"
             ]
@@ -202,14 +202,14 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a109_漢字注音工作表導讀.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a200_查找及填入漢字標音 --new",
             "type": "debugpy",
             "request": "launch",
             "program": "a200_查找及填入漢字標音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "--new"
             ]
@@ -219,21 +219,21 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a200_查找及填入漢字標音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a201_更換漢字標音",
             "type": "debugpy",
             "request": "launch",
             "program": "a201_更換漢字標音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a210_漢字以人工標音處理作業",
             "type": "debugpy",
             "request": "launch",
             "program": "a210_漢字以人工標音處理作業.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "Test: a210_repro (Unit Test)",
@@ -243,49 +243,49 @@
             "args": [
                 "test_a210_repro.py"
             ],
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a215_依作用儲存格處理漢字之人工標音作業",
             "type": "debugpy",
             "request": "launch",
             "program": "a215_依作用儲存格處理漢字之人工標音作業.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a220_作用儲存格查找萌典漢字讀音",
             "type": "debugpy",
             "request": "launch",
             "program": "a220_作用儲存格查找萌典漢字讀音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a222_依作用儲存格在個人字典查找漢字讀音",
             "type": "debugpy",
             "request": "launch",
             "program": "a222_依作用儲存格在個人字典查找漢字讀音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a223_以作用儲存格之人工標音更新標音字庫",
             "type": "debugpy",
             "request": "launch",
             "program": "a223_以作用儲存格之人工標音更新標音字庫.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a224_引用既有的漢字標音",
             "type": "debugpy",
             "request": "launch",
             "program": "a224_引用既有的漢字標音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a226_依人工標音查找台語音標與轉換漢字標音",
             "type": "debugpy",
             "request": "launch",
             "program": "a226_依人工標音查找台語音標與轉換漢字標音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 // "-test",
             ]
@@ -295,7 +295,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a230_缺字表補標音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": []
         },
         {
@@ -303,21 +303,21 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a232_自萌典查找缺字表之漢字讀音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a240_為漢字標注漢字標音",
             "type": "debugpy",
             "request": "launch",
             "program": "a240_為漢字標注漢字標音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a250_作用儲存格查找漢字標音",
             "type": "debugpy",
             "request": "launch",
             "program": "a250_作用儲存格查找漢字標音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 // "--test"
             ]
@@ -327,7 +327,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a290_批次式漢字注音工作表製作.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": []
         },
         {
@@ -335,7 +335,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a299_批次式查找漢字標音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": []
         },
         {
@@ -343,7 +343,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a300_手動更正漢字標音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 // "--new"
             ]
@@ -353,29 +353,29 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a310_缺字表修正後續作業.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a320_人工標音更正漢字自動標音",
             "type": "debugpy",
             "request": "launch",
             "program": "a320_人工標音更正漢字自動標音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a330_以標音字庫更新漢字注音工作表",
             "type": "debugpy",
             "request": "launch",
             "program": "a330_以標音字庫更新漢字注音工作表.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a400_製作標音網頁",
             "type": "debugpy",
             "request": "launch",
             "program": "a400_製作標音網頁.py",
-            // "console": "externalTerminal",
-            "console": "externalTerminal",
+            // "console": "integratedTerminal",
+            "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
             "args": []
         },
@@ -384,8 +384,8 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a400_製作標音網頁.py",
-            // "console": "externalTerminal",
-            "console": "externalTerminal",
+            // "console": "integratedTerminal",
+            "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
             "args": []
         },
@@ -394,7 +394,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a410_批次式漢字標音網頁製作.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": []
         },
         {
@@ -402,7 +402,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a500_漢字庫工具.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "2"
             ]
@@ -412,7 +412,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a500_漢字庫工具.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "1"
             ]
@@ -422,7 +422,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a500_漢字庫工具.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "2"
             ]
@@ -432,7 +432,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a500_漢字庫工具.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "3"
             ]
@@ -442,7 +442,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a500_漢字庫工具.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "5"
             ]
@@ -452,7 +452,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a501_標音用工作表回填字典資料庫.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "redirectOutput": true,        // 同時將輸出複製至 Debug Console 面板
             "args": [
                 // "2"
@@ -463,7 +463,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a611_廣韻_漢字查標音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "東",
                 // "詼",
@@ -475,7 +475,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a612_廣韻_反切查標音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "德紅",
                 // "詼",
@@ -487,14 +487,14 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a710_製作拚音打字練習工作表.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a710_製作拚音打字練習工作表（閩拼）",
             "type": "debugpy",
             "request": "launch",
             "program": "a710_製作拚音打字練習工作表.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "bp"
             ]
@@ -504,7 +504,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a720_製作注音打字練習工作表.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "bp"
             ]
@@ -514,7 +514,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a730_注音符號打字練習表.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "bp"
             ]
@@ -524,7 +524,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a740_羅馬拚音打字練習表.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "bp"
             ]
@@ -534,7 +534,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a800_更新漢字庫之漢字標音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 // 使用【標音字庫】工作表
                 "1"
@@ -545,7 +545,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a800_更新漢字庫之漢字標音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 // 使用【網頁匯入】工作表
                 "4"
@@ -556,105 +556,105 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a802_批次式更新漢字庫.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a810_缺字表更新漢字典資料庫",
             "type": "debugpy",
             "request": "launch",
             "program": "a810_缺字表更新漢字典資料庫.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a815_人工標音字庫表更新漢字典",
             "type": "debugpy",
             "request": "launch",
             "program": "a815_人工標音字庫表更新漢字典.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a820_用標音字庫之校正音標更新漢字庫",
             "type": "debugpy",
             "request": "launch",
             "program": "a820_用標音字庫之校正音標更新漢字庫.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a830_匯出製成中州韻輸入法字典檔",
             "type": "debugpy",
             "request": "launch",
             "program": "a830_匯出製成中州韻輸入法字典檔.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a840_匯出漢字庫至Excel",
             "type": "debugpy",
             "request": "launch",
             "program": "a840_匯出漢字庫至Exccel.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a850_使用Excel重建漢字庫",
             "type": "debugpy",
             "request": "launch",
             "program": "a850_使用Excel重建漢字庫.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a851_自Excel匯入漢字及台語音標",
             "type": "debugpy",
             "request": "launch",
             "program": "a851_自Excel匯入漢字及台語音標.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a999_自動生成index_html",
             "type": "debugpy",
             "request": "launch",
             "program": "a999_自動生成index_html.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a704_製作其它漢字標音",
             "type": "debugpy",
             "request": "launch",
             "program": "a704_製作其它漢字標音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a705_依漢字注音工作表內容更新待注音漢字",
             "type": "debugpy",
             "request": "launch",
             "program": "a705_依漢字注音工作表內容更新待注音漢字.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a710_批次式漢字標音及網頁製作",
             "type": "debugpy",
             "request": "launch",
             "program": "a710_批次式漢字標音及網頁製作.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a711_批次式查找漢字標音",
             "type": "debugpy",
             "request": "launch",
             "program": "a711_批次式查找漢字標音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a712_批次式製作標音網頁",
             "type": "debugpy",
             "request": "launch",
             "program": "a712_批次式製作標音網頁.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a750_漢字注音存檔",
             "type": "debugpy",
             "request": "launch",
             "program": "a750_漢字注音存檔.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "-i Tai_Gi_Zu_Im_Bun.xlsx",
             ]
@@ -664,7 +664,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a760_漢字注音檔存成工作暫存檔.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 // "-i 【河洛話注音】金剛般若波羅蜜經。無為福勝分第十一.xlsx",
                 // "-o Tai_Gi_Zu_Im_Bun.xlsx",
@@ -676,49 +676,49 @@
             "type": "debugpy",
             "request": "launch",
             "program": "mod_字庫.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "mod_帶調符音標",
             "type": "debugpy",
             "request": "launch",
             "program": "mod_帶調符音標.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "mod_ca_ji_tian",
             "type": "debugpy",
             "request": "launch",
             "program": "mod_ca_ji_tian.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "mod_excel_access",
             "type": "debugpy",
             "request": "launch",
             "program": "mod_excel_access.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "mod_台羅音標漢字庫",
             "type": "debugpy",
             "request": "launch",
             "program": "mod_台羅音標漢字庫.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "mod_雅俗通",
             "type": "debugpy",
             "request": "launch",
             "program": "mod_雅俗通.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "csv01_更新漢字表資料",
             "type": "debugpy",
             "request": "launch",
             "program": "csv01_更新【漢字表】資料.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "type": "msedge",
@@ -731,7 +731,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a900_Batch_Process.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "a500_予我廣韻標音.py",
                 // "a510_用廣韻為漢字標音.py",
@@ -747,7 +747,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a910_Batch_Process_By_Todo_List.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "a500_予我廣韻標音.py",
                 // "a510_用廣韻為漢字標音.py",
@@ -759,7 +759,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a920_製作目錄檔案清單.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "todo_list.txt",
                 "output",
@@ -772,14 +772,14 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a999_自動生成index_html.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "a310_廣韻_漢字查標音",
             "type": "debugpy",
             "request": "launch",
             "program": "a310_廣韻_漢字查標音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "凍"
             ]
@@ -789,7 +789,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a320_廣韻_反切查標音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "余呂"
             ]
@@ -799,7 +799,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a410_十五音_漢字查標音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "凍"
             ]
@@ -809,7 +809,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a420_十五音_反切查標音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "君五求"
             ]
@@ -819,7 +819,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a500_予我廣韻標音.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "-i",
                 "【河洛話注音】周易．大過卦"
@@ -831,7 +831,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a520_製作注音網頁.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "-d",
                 "output2",
@@ -844,7 +844,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a991_update_bopo2_in_excel.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 "漢字庫.xlsx",
                 // "漢字庫【台語注音二式】.xlsx",
@@ -855,7 +855,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a992_excel_to_rime_dict.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             "args": [
                 // "漢字庫【台語注音二式】.xlsx",
                 "漢字庫.xlsx",
@@ -867,7 +867,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "a980_rime_convert_phing_im.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
             // "args": "${command:pickArgs}"
             "args": [
                 "input.xlsx"
@@ -880,14 +880,14 @@
             "type": "debugpy",
             "request": "launch",
             "program": "test_mod_字庫.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
         {
             "name": "test_mod_字庫_R2",
             "type": "debugpy",
             "request": "launch",
             "program": "test_mod_字庫_R2.py",
-            "console": "externalTerminal",
+            "console": "integratedTerminal",
         },
     ]
 }
