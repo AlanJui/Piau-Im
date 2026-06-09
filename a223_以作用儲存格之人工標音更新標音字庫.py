@@ -159,7 +159,7 @@ def process(wb, args) -> int:
             han_ji=han_ji,
             tai_gi_im_piau=tai_gi_im_piau,
             hau_ziann_im_piau=jin_kang_piau_im,
-            coordinates=(row, col),
+            coordinate=(row, col),
         )
         # -------------------------------------------------------------------------
         # 自【標音字庫】工作表對映之【字庫】(dict)，移除該【漢字】之【座標】資料
