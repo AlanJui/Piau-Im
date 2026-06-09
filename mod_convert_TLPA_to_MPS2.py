@@ -52,42 +52,35 @@ CI_IM_TNG_UANN_PIAU = {
     "si": "shi",  # ㄒ：s+i → sh+i
 }
 
-# 韻母轉換對照表（【索引】字串排序，需由長到短）
+# 韻母轉換對照表
+# 【準則】以 Documents/_聲韻調對照表.xlsx【韻】韻母對照表為標準；
+#         此處僅列出「台語音標 != 台語注音二式」之韻母（需轉換者），
+#         未列出者一律維持原樣（identity）。採整段比對（非前綴比對）。
 UN_BU_TNG_UANN_PIAU = {
-    "oonn": "oonn",
-    # "ainn": "ainn",
-    # "aunn": "aunn",
-    # "ang": "ang",
-    # "ann": "ann",
-    # "inn": "inn",
-    # "unn": "unn",
-    # "enn": "enn",
-    # "ong": "ong",
-    # "ing": "ing",
-    "ionn": "ioonn",
-    "ioh": "iorh",
-    "iok": "iook",
-    "io": "ior",
-    "onnh": "oonnh",
-    "onn": "oonn",
-    "ooh": "ooh",
-    "oo": "oo",
+    # ㆤ（漳腔）→ e
+    "ee": "e",
+    "eeh": "eh",
+    "ei": "e",
+    # ㄜ（o → or）系列
+    "o": "or",
     "oh": "orh",
-    "op": "oop",
-    "ok": "ook",
+    "io": "ior",
+    "ioh": "iorh",
+    # ㆦ（oo）鼻化／入聲系列
     "om": "oom",
+    "op": "oop",
+    "onn": "oonn",
+    "ohnn": "onnh",
+    "ionn": "ioonn",
+    # ㄧㆤ（ik → iek）、ㄧㆦㆻ（iok → iook）
     "ik": "iek",
-    # "ai": "ai",
-    # "au": "au",
-    # "an": "an",
-    # "en": "en",
-    # "ir": "ir",
-    # "am": "am",
-    # "a": "a",
-    # "i": "i",
-    # "u": "u",
-    # "e": "e",
-    "o": "or",  # ㄜ
+    "iok": "iook",
+    # 鼻化＋入聲（台語音標 Vhnn → 注音二式 Vnnh，h 移至韻尾）
+    "ahnn": "annh",
+    "ehnn": "ennh",
+    "ihnn": "innh",
+    "uaihnn": "uainnh",
+    "iauhnn": "iaunnh",
 }
 
 

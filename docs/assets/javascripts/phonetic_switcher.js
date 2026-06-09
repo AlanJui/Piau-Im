@@ -231,6 +231,22 @@ document.addEventListener('DOMContentLoaded', function() {
             if (iIPA === "Ø" || iIPA === "ø") iIPA = "";
             result = iIPA + fIPA + parts.tiau;
         }
+        else if (targetSystem === '台語注音二式') {
+            // 對映 mod_convert_TLPA_to_MPS2.py 之轉換規則
+            let iMPS = initialMatch ? initialMatch['台語注音二式'] : "";
+            let fMPS = finalMatch ? finalMatch['台語注音二式'] : parts.un;
+            if (iMPS === "Ø" || iMPS === "ø") iMPS = "";
+
+            // 齒音聲母（z/c/s/zz）後接介音 i 時之顎化規則：
+            //   z+i → j、c+i → ch、s+i → sh、zz(j)+i → jj （介音 i 仍保留於韻母）
+            if (fMPS.startsWith('i') && ['z', 'c', 's', 'zz'].includes(iMPS)) {
+                if (iMPS === 'z') iMPS = 'j';        // ㄐ
+                else if (iMPS === 'c') iMPS = 'ch';  // ㄑ
+                else if (iMPS === 's') iMPS = 'sh';  // ㄒ
+                else if (iMPS === 'zz') iMPS = 'jj'; // ㆢ
+            }
+            result = iMPS + fMPS + parts.tiau;
+        }
         else {
             let bSiann = parts.siann === "ø" ? "" : parts.siann;
             let bUn = parts.un;
