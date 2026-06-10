@@ -881,19 +881,22 @@ class PiauIm:
 
         # 閩拼特例：零聲母 + i/u 開頭的韻母
         # 當聲母為「空白」，韻母為首之【羅馬拼音字母】為：i 或 u 時之調整作業
+        # 規則一：韻首之後皆無母音字母（如 i, in, im, ing, it, ip, ik），
+        #         原零聲母以 y（或 w）代之，韻母保持不變 ==> yi, yin, ...
+        # 規則二：韻首之後接有其它母音字母（如 iao, ian, iang, iong），
+        #         韻母中的 i（或 u）以 y（或 w）替換 ==> yao, yan, ...
         if siann == "":
+            bu_im = {"a", "e", "i", "o", "u"}  # 母音字母
             if un.startswith("i"):
-                # un = "y" + un[1:] if len(un) > 1 else "y" + un
-                if len(un) == 1:
-                    un = "y" + un  # i 後無其它韻母字母，增添 y
+                if any(ch in bu_im for ch in un[1:]):
+                    un = "y" + un[1:]  # i 後接其它母音字母，i 改為 y
                 else:
-                    un = "y" + un[1:]  # i 後有其它韻母字母，將 i 改為 y
+                    siann = "y"  # i 後皆無母音字母，零聲母以 y 代
             elif un.startswith("u"):
-                # un = "w" + un[1:] if len(un) > 1 else "w" + un
-                if len(un) == 1:
-                    un = "w" + un  # u 後無其它韻母字母，增添 w
+                if any(ch in bu_im for ch in un[1:]):
+                    un = "w" + un[1:]  # u 後接其它母音字母，u 改為 w
                 else:
-                    un = "w" + un[1:]  # u 後有其它韻母字母，將 u 改為 w
+                    siann = "w"  # u 後皆無母音字母，零聲母以 w 代
 
         syllable = (siann, un, str(tiau)) if with_tone_number else (siann, un, "")
         return syllable

@@ -63,8 +63,9 @@ UN_BU_TNG_UANN_PIAU = {
     "ionn": "nio",
     "iann": "nia",
     "ainn": "nai",
-    "oonn": "no",
-    "onn": "no",
+    "oonn": "noo",
+    "ann": "na",
+    "onn": "noo",
     "enn": "ne",
     "inn": "ni",
     # （2）複合韻母
