@@ -232,6 +232,16 @@ def calculate_total_lines(
         return 0
 
 
+def _col_to_index(col) -> int:
+    """將欄位字母（如 'D'）轉成欄位序號（如 4）；已是數字則原樣回傳。"""
+    if isinstance(col, int):
+        return col
+    col_number = 0
+    for letter in str(col).strip().upper():
+        col_number = col_number * 26 + (ord(letter) - ord("A") + 1)
+    return col_number
+
+
 def calculate_total_rows(
     sheet,
     start_col=START_COL,
@@ -243,16 +253,32 @@ def calculate_total_rows(
     total_rows = 0
     current_base = base_row
 
+    # 欄位參數可能為欄位字母（如 "D"）或欄位序號（如 4），一律轉成序號
+    start_col_idx = _col_to_index(start_col)
+    end_col_idx = _col_to_index(end_col)
+
     while True:
-        han_row = current_base + 2
-        pronunciation_row = current_base + 3
-        target_range = sheet.range(f"{start_col}{han_row}:{end_col}{pronunciation_row}")
+        han_ji_row = current_base + 2   # 漢字所在 row
+        piau_im_row = current_base + 3  # 漢字標音所在 row
+        target_range = sheet.range(
+            (han_ji_row, start_col_idx), (piau_im_row, end_col_idx)
+        )
         values = target_range.value
 
         if not _has_meaningful_data(values):
             break
 
         total_rows += 1
+
+        # 漢字列出現【文章終止】符號（φ），即終止統計
+        han_ji_values = values[0] if isinstance(values[0], list) else [values[0]]
+        if any(
+            # val is not None and str(val).strip() == "φ"
+            val is not None and (str(val).strip() == "φ" or str(val).strip() == "\n")
+            for val in han_ji_values
+        ):
+            break
+
         current_base += rows_per_group
 
     return total_rows

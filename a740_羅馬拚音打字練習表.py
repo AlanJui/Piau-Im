@@ -156,12 +156,12 @@ def process(tone_map_type: str) -> bool:
 
                 # 計算漢字和標音的實際行號
                 han_ji_row = base_row + 2    # 第3格
-                pronunciation_row = base_row + 3  # 第4格
+                piau_im_row = base_row + 3  # 第4格
                 tai_gi_row = base_row + 1  # 第2格（目前未使用）
 
                 # 取得當前單元格的資料
                 han_ji = han_ji_zu_im_sheet.range(f'{col_letter}{han_ji_row}').value
-                pronunciation = han_ji_zu_im_sheet.range(f'{col_letter}{pronunciation_row}').value
+                han_ji_piau_im = han_ji_zu_im_sheet.range(f'{col_letter}{piau_im_row}').value
                 tai_gi_piau_im = han_ji_zu_im_sheet.range(f'{col_letter}{tai_gi_row}').value
 
                 # 檢查是否遇到終結符號
@@ -186,7 +186,7 @@ def process(tone_map_type: str) -> bool:
                     continue
 
                 # 檢查資料是否有效
-                if han_ji is None or pronunciation is None:
+                if han_ji is None or han_ji_piau_im is None:
                     print(f"    ==> 欄位 {col_letter} 資料為空，跳過")
                     continue
 
@@ -208,15 +208,15 @@ def process(tone_map_type: str) -> bool:
                     # zu_im_un = convert_tlpa_to_zu_im_by_un_bu(un)
                     tiau_hu = convert_tlpa_to_zu_im_by_tiau(tiau)
                     zu_im = f"{zu_im_siann}{zu_im_un}{tiau_hu}"
-                    pronunciation = zu_im
+                    han_ji_piau_im = zu_im
 
                 # 填入純文字資料（不改變格式）
                 typing_sheet.range(f'B{current_row}').api.Value2 = str(han_ji)
-                typing_sheet.range(f'C{current_row}').api.Value2 = str(pronunciation)
+                typing_sheet.range(f'C{current_row}').api.Value2 = str(han_ji_piau_im)
 
                 # 分解標音符號
                 # tone_map_type = 'tfs'
-                decomposed = decompose_bp_phing_im(str(pronunciation), tone_map_type)
+                decomposed = decompose_bp_phing_im(str(han_ji_piau_im), tone_map_type)
                 print(f"    ==> 鍵盤按鍵: {decomposed}\n")
 
                 # 將分解後的字元填入 E~M 欄（純文字）
@@ -226,7 +226,7 @@ def process(tone_map_type: str) -> bool:
                         typing_sheet.range(f'{col_letter_target}{current_row}').api.Value2 = char
 
                 # 顯示目前處理之【儲存格】位置與內容
-                print(f"\n{col_index-3}.【{col_letter}{han_ji_row}】: 漢字={repr(han_ji)} [{tai_gi_piau_im}], 漢字標音={repr(pronunciation)}")
+                print(f"\n{col_index-3}.【{col_letter}{han_ji_row}】: 漢字={repr(han_ji)} [{tai_gi_piau_im}], 漢字標音={repr(han_ji_piau_im)}")
                 current_row += 1
             except Exception as e:
                 print(f"處理欄位 {col_letter} 時發生錯誤: {e}")
