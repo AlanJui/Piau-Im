@@ -92,12 +92,12 @@ def update_khuat_ji_piau(wb):
         # tai_lo_im_piau = convert_tl_with_tiau_hu_to_tlpa(im_piau)
 
         # 更新【缺字表】中【校正音標】欄（D 欄）
-        sheet.range(f"D{row}").value = tai_gi_im_piau
+        # sheet.range(f"D{row}").value = tai_gi_im_piau
 
         print(f"{row-1}. (A{row}) 【{han_ji}】： 取自【校正音標】欄，可能使用【調符】之【台語音標】：{im_piau}, 正規化之【台語音標】：{tai_gi_im_piau}")
 
         # 讀取【缺字表】中【座標】欄（E 欄）的內容，該內容可能含有多組座標，如 "(5, 17); (33, 8); (77, 5)"
-        coordinates_str = sheet.range(f"E{row}").value
+        coordinates_str = sheet.range(f"D{row}").value
         if coordinates_str:
             # 利用正規表達式解析所有形如 (row, col) 的座標
             coordinate_tuples = re.findall(r"\((\d+)\s*,\s*(\d+)\)", coordinates_str)
@@ -179,7 +179,7 @@ def process(wb, args) -> int:
     #--------------------------------------------------------------------------
     try:
         # 處理工作表
-        sheet_name = program.hanji_piau_im_sheet
+        sheet_name = program.hanji_piau_im_sheet_name
         sheet = wb.sheets[sheet_name]
         sheet.activate()
 

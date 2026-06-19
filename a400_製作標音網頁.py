@@ -145,7 +145,7 @@ class CellProcessor(ExcelCell):
         row = start_row
         found_line_end = False
         while row < 1000:
-            for col in range(program.start_col, program.end_col):
+            for col in range(program.start_col, program.end_col + 1):
                 h = sheet.range((row, col)).value
                 t = sheet.range((row - 1, col)).value
                 if h in ["φ", "\\n", "\n"]:
