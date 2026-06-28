@@ -42,7 +42,10 @@
   --muted: #666;
   --link: #0b57d0;
 
-  --article-max: 760px;
+  /* 雙排標音（上＋右）：每列 8 字 + 2 標點；字級略放大以減輕右側空白 */
+  --article-max: 1024px;
+  --siang-pai-ruby: 2.2rem;
+  --siang-pai-base: 3.08rem;
   --pad: 18px;
 
   --line-height: 1.9;
@@ -410,10 +413,16 @@ rtc {
 /* 瘜券喟泵 */
 .Siang_Pai {
   font-family: "Noto Serif TC", serif;
-  font-size: 2.8rem;
+  font-size: var(--siang-pai-base);
   letter-spacing: 0.0em;
   text-align: justify;
   /* text-align: left; */
+}
+
+/* 詩詞內文列：避免在標點前意外折行 */
+.Siang_Pai > p:not(.title):not(.author):not(:empty) {
+  word-break: keep-all;
+  overflow-wrap: normal;
 }
 
 .Siang_Pai ruby {
@@ -481,12 +490,12 @@ rtc {
 
 .Siang_Pai ruby,
 .Siang_Pai span {
-  font-size: 2.00rem !important;
+  font-size: var(--siang-pai-ruby) !important;
 }
 
 .Siang_Pai .author ruby,
 .Siang_Pai .author span {
-  font-size: 1.8rem !important;
+  font-size: calc(var(--siang-pai-ruby) * 0.9) !important;
 }
 
 /* .Siang_Pai .title .title_mark {
@@ -498,7 +507,7 @@ rtc {
 
 .Siang_Pai .title_mark {
   display: inline-block;
-  font-size: 2.0rem !important;
+  font-size: var(--siang-pai-ruby) !important;
   line-height: 1;
   vertical-align: middle;
   transform: translateY(-0.35em);
