@@ -1,5 +1,5 @@
 """
-a223_以作用儲存格之人工標音更新標音字庫.py V0.2.4
+a223_以作用儲存格之人工標音更新標音字庫.py V0.3
 
 依據【】工作表，取得當前【作用儲存格】手動輸入之【人工標音】，調整自漢字典
 資料庫查得之【台語音標】，並據此更新【漢字標音】儲存格內容。
@@ -158,6 +158,20 @@ def process(wb, args) -> int:
         row = han_ji_row
 
         # -------------------------------------------------------------------------
+        # 取得該【座標】目前於【人工標音字庫】中所屬之舊紀錄（若有）。因為人工標音有
+        # 可能被反覆修改（例如這次由 "zai1" 改回 "ti1"），若不先查出舊【台語音標】，
+        # 新紀錄與舊紀錄會同時並存，造成同一座標卻有兩筆矛盾紀錄的殘留舊資料。
+        # -------------------------------------------------------------------------
+        old_jin_kang_entry = (
+            xls_cell.jin_kang_piau_im_ji_khoo_dict.get_entry_by_han_ji_and_coordinate(
+                han_ji=han_ji, coordinate=(row, col)
+            )
+        )
+        old_jin_kang_tai_gi_im_piau = (
+            old_jin_kang_entry.get("tai_gi_im_piau") if old_jin_kang_entry else None
+        )
+
+        # -------------------------------------------------------------------------
         # 在【人工標音字庫】工作表對映之【字庫】(dict)，添加或更新一筆【漢字】及
         # 【台語音標】資料：依【漢字】及【座標】在【人工標音字庫】工作表查檢是否已
         # 有紀錄，若有：執行【更新】作業；若無：執行【添加】作業。
@@ -168,6 +182,19 @@ def process(wb, args) -> int:
             hau_ziann_im_piau="N/A",
             coordinate=(row, col),
         )
+
+        # -------------------------------------------------------------------------
+        # 若該座標先前登錄之【台語音標】與本次不同，代表舊紀錄已被本次人工標音取代，
+        # 屬過時、重複的資料，應予移除該座標（若移除後座標清單清空，則整筆紀錄刪除）。
+        # -------------------------------------------------------------------------
+        if old_jin_kang_tai_gi_im_piau and old_jin_kang_tai_gi_im_piau != tai_gi_im_piau:
+            xls_cell.jin_kang_piau_im_ji_khoo_dict.remove_coordinate_by_han_ji_and_tai_gi_im_piau(
+                han_ji=han_ji,
+                tai_gi_im_piau=old_jin_kang_tai_gi_im_piau,
+                coordinate=(row, col),
+                entry_to_delete_if_empty=True,
+            )
+
         # 將【人工標音字庫】，寫入 Excel 工作表
         xls_cell.jin_kang_piau_im_ji_khoo_dict.write_to_excel_sheet(
             wb=wb, sheet_name=jin_kang_piau_im_sheet_name
@@ -181,15 +208,16 @@ def process(wb, args) -> int:
         old_entry = xls_cell.piau_im_ji_khoo_dict.get_entry_by_han_ji_and_coordinate(
             han_ji=han_ji, coordinate=(row, col)
         )
+        old_tai_gi_im_piau = old_entry.get("tai_gi_im_piau") if old_entry else None
         old_coord_list = (
             list(old_entry.get("coordinates", [])) if old_entry else [(row, col)]
         )
 
         # -------------------------------------------------------------------------
-        # 【注意】：【標音字庫】的【座標】欄，須完整保留所有指向【漢字注音】工作表的
-        # 紀錄，絕對不可移除既有座標。因此本處【不】自舊【台語音標】資料紀錄中移除
-        # 任何座標，僅將上述取得的【座標清單】，逐一併入登錄至新【台語音標】的資料
-        # 紀錄（若尚無此【台語音標】之紀錄，add_or_update_entry() 會自動新增一筆）。
+        # 將上述取得的【座標清單】，逐一併入登錄至新【台語音標】的資料紀錄
+        # （若尚無此【台語音標】之紀錄，add_or_update_entry() 會自動新增一筆）。
+        # 此步驟只會【新增】座標對映，不會刪除任何座標，故不會遺失任何指向
+        # 【漢字注音】工作表的紀錄。
         # -------------------------------------------------------------------------
         for coord in old_coord_list:
             xls_cell.piau_im_ji_khoo_dict.add_or_update_entry(
@@ -198,6 +226,21 @@ def process(wb, args) -> int:
                 hau_ziann_im_piau="N/A",
                 coordinates=coord,
             )
+
+        # -------------------------------------------------------------------------
+        # 舊【台語音標】紀錄（本例為 "ti1"）之座標，已於上一步驟【全數】搬遷、併入新
+        # 紀錄（本例為 "zai1"），故舊紀錄已成為重複、過時的資料，應予移除；由於其座標
+        # 已完整保留在新紀錄中，移除舊紀錄並不會遺失任何指向【漢字注音】工作表的紀錄。
+        # -------------------------------------------------------------------------
+        if old_tai_gi_im_piau and old_tai_gi_im_piau != tai_gi_im_piau:
+            for coord in old_coord_list:
+                xls_cell.piau_im_ji_khoo_dict.remove_coordinate_by_han_ji_and_tai_gi_im_piau(
+                    han_ji=han_ji,
+                    tai_gi_im_piau=old_tai_gi_im_piau,
+                    coordinate=coord,
+                    entry_to_delete_if_empty=True,
+                )
+
         # 將【標音字庫】，寫入 Excel 工作表
         xls_cell.piau_im_ji_khoo_dict.write_to_excel_sheet(
             wb=wb, sheet_name=piau_im_ji_khoo_sheet_name
