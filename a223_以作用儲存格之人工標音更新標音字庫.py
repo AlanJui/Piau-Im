@@ -148,26 +148,95 @@ def process(wb, args) -> int:
         msg = f"{han_ji}： [{jin_kang_piau_im}] / [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
         print(f"✅ 已更新儲存格：{active_cell_address}，內容為：{msg}")
 
+        # -------------------------------------------------------------------------
+        # 將【漢字注音】工作表，存放在【作用儲存格】的【人工標音】，轉換成【漢字標音】後：
+        # 1. 在【人工標音字庫】工作表，留下紀錄：漢字、台語音標（取自【作用儲存格】的新【台語音標】）、校正音標（="N/A"）、座標（取自【作用儲存格】的儲存格座標）
+        # 2. 自【標音字庫】工作表，依對映到【漢字注音】工作表的【座標】，找到資料錄。然後更新【資料紀錄】的【台語音標】欄。
+        # 3. 依找到的【資料紀錄】，取【座欄】欄內的【座標清單】，依各個【座標】值，更新【漢字注音】工作表的【台語音標】及【漢字標音】。
+        # -------------------------------------------------------------------------
         # 調整 row 指向【漢字】儲存格所在座標列
         row = han_ji_row
 
         # -------------------------------------------------------------------------
         # 在【人工標音字庫】工作表對映之【字庫】(dict)，添加或更新一筆【漢字】及
-        # 【台語音標】資料
+        # 【台語音標】資料：依【漢字】及【座標】在【人工標音字庫】工作表查檢是否已
+        # 有紀錄，若有：執行【更新】作業；若無：執行【添加】作業。
         # -------------------------------------------------------------------------
         xls_cell.jin_kang_piau_im_ji_khoo_dict.add_entry(
             han_ji=han_ji,
             tai_gi_im_piau=tai_gi_im_piau,
-            hau_ziann_im_piau=jin_kang_piau_im,
+            hau_ziann_im_piau="N/A",
             coordinate=(row, col),
         )
-        # -------------------------------------------------------------------------
-        # 自【標音字庫】工作表對映之【字庫】(dict)，移除該【漢字】之【座標】資料
-        # -------------------------------------------------------------------------
-        xls_cell.piau_im_ji_khoo_dict.remove_coordinate(
-            han_ji=han_ji,
-            coordinate=(row, col),
+        # 將【人工標音字庫】，寫入 Excel 工作表
+        xls_cell.jin_kang_piau_im_ji_khoo_dict.write_to_excel_sheet(
+            wb=wb, sheet_name=jin_kang_piau_im_sheet_name
         )
+        # -------------------------------------------------------------------------
+        # 取得該【座標】目前所屬之【標音字庫】資料紀錄（本例中為【台語音標】="ti1" 的
+        # 紀錄），並取出其完整之【座標】清單。這份清單代表：在人工訂正之前，此漢字在
+        # 【漢字注音】工作表中，凡是與【作用儲存格】共用同一（待訂正）讀音的所有出現
+        # 位置——這些位置理應隨同校正為這次輸入的新【台語音標】。
+        # -------------------------------------------------------------------------
+        old_entry = xls_cell.piau_im_ji_khoo_dict.get_entry_by_han_ji_and_coordinate(
+            han_ji=han_ji, coordinate=(row, col)
+        )
+        old_coord_list = (
+            list(old_entry.get("coordinates", [])) if old_entry else [(row, col)]
+        )
+
+        # -------------------------------------------------------------------------
+        # 【注意】：【標音字庫】的【座標】欄，須完整保留所有指向【漢字注音】工作表的
+        # 紀錄，絕對不可移除既有座標。因此本處【不】自舊【台語音標】資料紀錄中移除
+        # 任何座標，僅將上述取得的【座標清單】，逐一併入登錄至新【台語音標】的資料
+        # 紀錄（若尚無此【台語音標】之紀錄，add_or_update_entry() 會自動新增一筆）。
+        # -------------------------------------------------------------------------
+        for coord in old_coord_list:
+            xls_cell.piau_im_ji_khoo_dict.add_or_update_entry(
+                han_ji=han_ji,
+                tai_gi_im_piau=tai_gi_im_piau,
+                hau_ziann_im_piau="N/A",
+                coordinates=coord,
+            )
+        # 將【標音字庫】，寫入 Excel 工作表
+        xls_cell.piau_im_ji_khoo_dict.write_to_excel_sheet(
+            wb=wb, sheet_name=piau_im_ji_khoo_sheet_name
+        )
+
+        # -------------------------------------------------------------------------
+        # 依據【座標】清單，指向【漢字注音】工作表各【漢字】儲存格的【台語音標】及【漢字標音】
+        # 《注音》：使用【標音字庫】工作表的【座標】資料欄中的【座標清單】時，應剔除【人工標音字庫】
+        # 已標注的【座標】。
+        # -------------------------------------------------------------------------
+        # 取得【標音字庫】中，此【漢字】+【台語音標】對映的【座標清單】
+        piau_im_coord_list = (
+            xls_cell.piau_im_ji_khoo_dict.get_coordinates_by_han_ji_and_tai_gi_im_piau(
+                han_ji=han_ji, tai_gi_im_piau=tai_gi_im_piau
+            )
+        )
+
+        # 取得【人工標音字庫】中，此【漢字】已登錄之全部【座標】（跨所有音讀項目），
+        # 用以自【座標清單】中剔除，避免重複覆寫已由人工標音掌管之儲存格
+        jin_kang_coord_list = []
+        for jin_kang_entry in xls_cell.jin_kang_piau_im_ji_khoo_dict.ji_khoo_dict.get(
+            han_ji, []
+        ):
+            jin_kang_coord_list.extend(jin_kang_entry.get("coordinates", []))
+
+        # 剔除【人工標音字庫】已標注的座標後，將【標音字庫】座標清單中剩餘的座標，
+        # 對映到【漢字注音】工作表的【漢字】儲存格，同步更新其上、下方之
+        # 【台語音標】、【漢字標音】儲存格內容
+        for coord_row, coord_col in piau_im_coord_list:
+            if (coord_row, coord_col) in jin_kang_coord_list:
+                continue
+            target_han_ji_cell = source_sheet.range((coord_row, coord_col))
+            target_han_ji_cell.offset(-1, 0).value = tai_gi_im_piau  # 台語音標
+            target_han_ji_cell.offset(+1, 0).value = han_ji_piau_im  # 漢字標音
+            print(
+                f"✅ 同步更新位於【漢字注音】工作表的儲存格：({coord_row}, {coord_col}) ==> "
+                f"台語音標：{tai_gi_im_piau}，漢字標音：{han_ji_piau_im}"
+            )
+
         # -------------------------------------------------------------------------
         # 更新資料庫中【漢字庫】資料表
         # -------------------------------------------------------------------------
@@ -180,16 +249,6 @@ def process(wb, args) -> int:
             tai_gi_im_piau=tai_gi_im_piau,
             ue_im_lui_piat=program.ue_im_lui_piat,
             siong_iong_too=siong_iong_too_to_use,
-        )
-
-        # ----------------------------------------------------------------------
-        # 將【標音字庫】、【人工標音字庫】，寫入 Excel 工作表
-        # ----------------------------------------------------------------------
-        xls_cell.piau_im_ji_khoo_dict.write_to_excel_sheet(
-            wb=wb, sheet_name=piau_im_ji_khoo_sheet_name
-        )
-        xls_cell.jin_kang_piau_im_ji_khoo_dict.write_to_excel_sheet(
-            wb=wb, sheet_name=jin_kang_piau_im_sheet_name
         )
 
         logging_process_step(msg="已完成【台語音標】和【漢字標音】標注工作。")
