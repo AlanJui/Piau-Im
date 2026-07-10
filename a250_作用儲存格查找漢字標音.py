@@ -134,7 +134,7 @@ class CellProcessor(ExcelCell):
         han_ji: str,
         tai_gi_im_piau: str,
         han_ji_piau_im: str,
-        ) -> None:
+    ) -> None:
         """
         訂正作業步驟 5–7：更新【標音字庫】，並同步【漢字注音】工作表。
 
@@ -173,9 +173,6 @@ class CellProcessor(ExcelCell):
             piau_im_ji_khoo_dict=self.piau_im_ji_khoo_dict,
             row_no=row_no,
         )
-        # 將【標音字庫】之【字庫表】寫回 Excel 工作表
-        # （update_piau_im_worksheet_entry 內已寫回；此處再寫一次以確保一致）
-        self.piau_im_ji_khoo_dict.write_to_excel_sheet(wb=self.program.wb, sheet_name=self.piau_im_ji_khoo_dict.name)
 
     # def _update_jin_kang_piau_im_ji_khoo_worksheet(self, cell) -> None:
     #     """
@@ -259,7 +256,7 @@ class CellProcessor(ExcelCell):
             han_ji_piau_im = source_sheet.range((han_ji_piau_im_row, col)).value
             jin_kang_piau_im = source_sheet.range((jin_kang_piau_im_row, col)).value
             # 記錄原始的的【人工標音】
-            original_jin_kang_piau_im = jin_kang_piau_im
+            # original_jin_kang_piau_im = jin_kang_piau_im
             original_tai_gi_im_piau = tai_gi_im_piau
             original_han_ji_piau_im = han_ji_piau_im
 
@@ -295,7 +292,8 @@ class CellProcessor(ExcelCell):
                 # 查字典後，將查尋所得之【台語音標】，轉換【漢字標音】，最後回傳
                 tai_gi_im_piau, han_ji_piau_im = self._za_ji_tian_au_thiam_jin_kang_piau_im(active_cell=han_ji_cell)
                 # 若使用者放棄變更，則結束作業流程
-                if not tai_gi_im_piau and not han_ji_piau_im: return EXIT_CODE_SUCCESS
+                if not tai_gi_im_piau and not han_ji_piau_im:
+                    return EXIT_CODE_SUCCESS
 
             msg = f"【{han_ji}】[{original_tai_gi_im_piau}] / [{original_han_ji_piau_im}] 變更為： [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
             print(f">> 儲存格：{active_cell_address}，{msg}")
@@ -382,45 +380,6 @@ def process(wb, args) -> int:
     # 作業處理中
     # --------------------------------------------------------------------------
     try:
-        # 處理工作表
-        sheet_name = program.hanji_piau_im_sheet_name
-        sheet = wb.sheets[sheet_name]
-        sheet.activate()
-
-    except Exception as e:
-        logging_exc_error(msg="處理作業異常！", error=e)
-        return EXIT_CODE_PROCESS_FAILURE
-
-    # print("=" * 80)
-    # print("無限循環模式：請在 Excel 中選擇任一儲存格後按 Enter 查詢")
-    # print("按 Ctrl+C 終止程式")
-    # print("=" * 80)
-
-    # # 無限循環
-    # while True:
-    #     try:
-    #         # 等待使用者按 Enter
-    #         input("\n請在 Excel 選擇【作用儲存格】後按 Enter 繼續（Ctrl+C 終止）...")
-
-    #         # 確保工作表為作用中
-    #         wb.sheets[sheet_name].activate()
-
-    #         xls_cell._process_sheet()
-    #         print("=" * 80)
-    #         print("\n")
-
-    #     except KeyboardInterrupt:
-    #         print("\n\n使用者中斷程式（Ctrl+C）")
-    #         print("=" * 70)
-    #         break  # 中斷循環
-
-    #     except Exception as e:
-    #         logging.error(f"處理錯誤：{e}")
-    #         print(f"❌ 錯誤：{e}")
-    #         # 發生錯誤時繼續循環，不中斷程式
-    #         continue
-
-    try:
         # 確保工作表為作用中
         # wb.sheets[sheet_name].activate()
         xls_cell._process_sheet()
@@ -428,7 +387,6 @@ def process(wb, args) -> int:
     except Exception as e:
         logging.error(f"處理錯誤：{e}")
         print(f"❌ 錯誤：{e}")
-        # 發生錯誤時繼續循環，不中斷程式
 
     # --------------------------------------------------------------------------
     # 處理作業結束

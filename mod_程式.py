@@ -1310,7 +1310,7 @@ class ExcelCell:
             )
             return False  # 無需更新
 
-        # 查驗【漢字】是否存在於【標音字庫】；且已記錄指向【漢字注音】工作表之【座標】
+        # 查驗傳入之【漢字】儲存格【座標】，在【標音字庫】工作表的【資料紀錄】，可於【座標】欄儲存的【座標清單】找到
         row, col = coordinate
         exist = self.check_coordinate_exists(
             row=row,
