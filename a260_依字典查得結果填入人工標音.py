@@ -113,6 +113,54 @@ class CellProcessor(ExcelCell):
 
         return tai_gi_im_piau, han_ji_piau_im
 
+    def _update_one_entry_in_piau_im_ji_khoo_worksheet(
+        self,
+        han_ji: str,
+        tai_gi_im_piau: str,
+        row: int,
+        col: int,
+    ):
+        """
+        更新【標音字庫】已登錄之【資料紀錄】
+        1. 以查得之【台語音標】（新輸入之【人工標音】），更新【標音字庫】工作表，
+           原登錄之【資料紀錄】；原【資料紀錄】中的【台語音標】欄，以查得之【台語音標】
+           代；
+        2. 依原【資料紀錄】在【座標】欄之資料（座標清單），依每個【座標】，更新
+           指向【漢字注音】工作表【漢字】儲存格之【台語音標】及【漢字標音】。
+        """
+        # 在【標音字庫】字典，依【作用儲存格】之【漢字】、【座標】，找出【原登錄資料紀錄】。
+        piau_im_ji_khoo_entry = self.piau_im_ji_khoo_dict.get_entry_by_han_ji_and_coordinate(
+            han_ji=han_ji,
+            coordinate=(row, col),
+        )
+        if not piau_im_ji_khoo_entry:
+            return None
+
+        # 自已登錄之【資料紀錄】，取得原有的【台語音標】。
+        old_tai_gi_im_piau = piau_im_ji_khoo_entry.get("tai_gi_im_piau")
+        if old_tai_gi_im_piau == tai_gi_im_piau:
+            return None
+
+        # 在【標音字庫】字典，先【新登錄資料紀錄】（新增一筆）。
+        self.piau_im_ji_khoo_dict.add_entry(
+            han_ji=han_ji,
+            tai_gi_im_piau=tai_gi_im_piau,
+            hau_ziann_im_piau="N/A",
+            coordinate=(row, col),
+        )
+        # 然後將傳入函數之【座標】，自【原登錄資料紀錄】，【座標】欄內的【座標清單】中移除。
+        self.piau_im_ji_khoo_dict.remove_coordinate_by_han_ji_and_tai_gi_im_piau(
+            han_ji=han_ji,
+            tai_gi_im_piau=old_tai_gi_im_piau,
+            coordinate=(row, col),
+            entry_to_delete_if_empty=True,
+        )
+        # 將【標音字庫】字典，寫入【標音字庫】工作表
+        self.piau_im_ji_khoo_dict.write_to_excel_sheet(
+            wb=self.program.wb,
+            sheet_name=self.piau_im_ji_khoo_dict.name,
+        )
+
     def _update_piau_im_ji_khoo_worksheet(
         self,
         row: int,
@@ -234,43 +282,18 @@ class CellProcessor(ExcelCell):
                 return EXIT_CODE_SUCCESS
 
             # -------------------------------------------------------------------------
-            # 更新【標音字庫】已登錄之【資料紀錄】
-            # 1. 以查得之【台語音標】（新輸入之【人工標音】），更新【標音字庫】工作表，
-            #    原登錄之【資料紀錄】；原【資料紀錄】中的【台語音標】欄，以查得之【台語音標】
-            #    代；
-            # 2. 依原【資料紀錄】在【座標】欄之資料（座標清單），依每個【座標】，更新
-            #    指向【漢字注音】工作表【漢字】儲存格之【台語音標】及【漢字標音】。
+            # 更新【標音字庫】原登錄之【資料紀錄】
             # -------------------------------------------------------------------------
-            # 在【標音字庫】字典，依【作用儲存格】之【漢字】、【座標】，查找已登錄之
-            # 【資料紀錄】。
-            old_piau_im_ji_khoo_entry = self.piau_im_ji_khoo_dict.get_entry_by_han_ji_and_coordinate(
-                han_ji=han_ji,
-                coordinate=(han_ji_row, col),
-            )
-            # 若在【標音字庫】字典，找到已登錄之【資料紀錄】，則自【資料紀錄】取得原有
-            # 的【台語音標】。
-            if old_piau_im_ji_khoo_entry:
-                old_tai_gi_im_piau = old_piau_im_ji_khoo_entry.get("tai_gi_im_piau")
-            # 先在【標音字庫】字典，新增一筆【資料紀錄】。
-            self.piau_im_ji_khoo_dict.add_entry(
+            self._update_one_entry_in_piau_im_ji_khoo_worksheet(
                 han_ji=han_ji,
                 tai_gi_im_piau=tai_gi_im_piau,
-                hau_ziann_im_piau="N/A",
-                coordinate=(han_ji_row, col),
+                row=han_ji_row,
+                col=col,
             )
-            # 然後將【標音字庫】字典，原有【資料紀錄】的【座標】欄，自【座標清單】刪除【座標】。
-            self.piau_im_ji_khoo_dict.remove_coordinate_by_han_ji_and_tai_gi_im_piau(
-                han_ji=han_ji,
-                tai_gi_im_piau=old_tai_gi_im_piau,
-                coordinate=(han_ji_row, col),
-                entry_to_delete_if_empty=True,
-            )
-            # 將【標音字庫】字典，寫入【標音字庫】工作表
-            self.piau_im_ji_khoo_dict.write_to_excel_sheet(
-                wb=wb,
-                sheet_name=self.piau_im_ji_khoo_dict.name
-            )
-            # 更新【漢字注音】工作表【漢字】儲存格相關之【人工標音】、【台語音標】、【漢字標音】
+            # -------------------------------------------------------------------------
+            # 更新【漢字注音】工作表【作用儲存格】，【漢字】上方之【人工標音】、【台語音標】，及下方
+            # 之【漢字標音】
+            # -------------------------------------------------------------------------
             source_sheet.range((jin_kang_piau_im_row, col)).value = new_jin_kang_piau_im
             source_sheet.range((tai_gi_im_piau_row, col)).value = tai_gi_im_piau
             source_sheet.range((han_ji_piau_im_row, col)).value = han_ji_piau_im
