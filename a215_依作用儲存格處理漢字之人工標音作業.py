@@ -1,21 +1,23 @@
 """
 a215_漢字以人工標音處理作業.py v0.1.1
 
-依據【作用儲存格】之【人工標音】欄位，處理人工手動標音作業。
- - 手動標音：在【人工標音】儲存格輸入完整的【台語音標】或【台羅拼音】（接受帶調符號的音標），
-    手動標音會被記錄到【人工標音字庫】工作表；
- - 引用既有人工標音：輸入【=】符號，則【台語音標】將自【人工標音字庫】工作表查找；
- - 取消人工標音：輸入【-】符號，則取消人工標音，並從【人工標音字庫】工作表刪除該漢字的人工標音資料。
+依【作用儲存格】所在處，指定【漢字標音】工作表裡的【漢字】，其讀音採用【人工標音】。
 
-【處理規則】：
-遇【人工標音】填入【引用既有的人工標音符號（=）】符號時，漢字的【台語音標】
-自【人工標音字庫】工作表查找，並轉換成【漢字標音】。
-
-若在【人工標音字庫】工作表找不到對映的【台語音標】，退而求其次，再自【標音字庫】
-工作表查找；
-
-若仍在【標音字庫】工作表亦找不到，則再退而求其次，自【字典】查找；如若仍找不到，
-則將該漢字記錄到【缺字表】工作表。
+X 依據【作用儲存格】之【人工標音】欄位，處理人工手動標音作業。
+X  - 手動標音：在【人工標音】儲存格輸入完整的【台語音標】或【台羅拼音】（接受帶調符號的音標），
+X     手動標音會被記錄到【人工標音字庫】工作表；
+X  - 引用既有人工標音：輸入【=】符號，則【台語音標】將自【人工標音字庫】工作表查找；
+X  - 取消人工標音：輸入【-】符號，則取消人工標音，並從【人工標音字庫】工作表刪除該漢字的人工標音資料。
+X
+X 【處理規則】：
+X 遇【人工標音】填入【引用既有的人工標音符號（=）】符號時，漢字的【台語音標】
+X 自【人工標音字庫】工作表查找，並轉換成【漢字標音】。
+X
+X 若在【人工標音字庫】工作表找不到對映的【台語音標】，退而求其次，再自【標音字庫】
+X 工作表查找；
+X
+X 若仍在【標音字庫】工作表亦找不到，則再退而求其次，自【字典】查找；如若仍找不到，
+X 則將該漢字記錄到【缺字表】工作表。
 
 更新紀錄：
 v0.1.0 2026-02-27: 初始版本，實現基本功能：從【人工標音字庫】查找漢字的台語音標，並轉換成漢字標音；若找不到則記錄到【缺字表】。
@@ -113,22 +115,17 @@ class CellProcessor(ExcelCell):
             # --------------------------------------------------------------------------
             # 取得【作用儲存格】
             # --------------------------------------------------------------------------
-            source_sheet_name = self.program.hanji_piau_im_sheet_name
-            wb = self.program.wb
-            source_sheet = wb.sheets[source_sheet_name]
-            source_sheet.activate()
+            sheet_name = self.program.hanji_piau_im_sheet_name
+            source_sheet = self.program.wb.sheets[sheet_name]
 
-            active_cell_address = get_active_cell_address()
-            active_cell = source_sheet.range(active_cell_address)
-            row, col = excel_address_to_row_col(active_cell_address)
-            current_line_no = get_line_no_by_row(current_row_no=row)  # 計算行號
-            jin_kang_piau_im_row, tai_gi_im_piau_row, han_ji_row, han_ji_piau_im_row = get_row_by_line_no(current_line_no)
-            han_ji_cell = source_sheet.range((han_ji_row, col))
-            source_sheet.range((han_ji_row, col)).select()  # 選取【漢字】儲存格，以確保游標位置正確
-            source_sheet.activate()  # 重新激活工作表以刷新儲存格地址
+            # 取得【漢字標音】工作表的【作用儲存格】
+            han_ji_cell = self.get_han_ji_cell_with_active_cell()
+            # 自【漢字】儲存格取得【位址】（Excel Address）及【座標】 (row, col)
+            active_cell_address = han_ji_cell.address.replace("$", "")
+            han_ji_row, col = han_ji_cell.row, han_ji_cell.column
 
             # 確認【作用儲存格】為【漢字】
-            han_ji = source_sheet.range((han_ji_row, col)).value
+            han_ji = han_ji_cell.offset(0, 0).value
             if not is_han_ji(han_ji):
                 msg = f"作用儲存格 {active_cell_address} 的漢字為【{han_ji}】，屬於標點符號或特殊符號，跳過處理。"
                 print(f">> {msg}")
@@ -136,9 +133,9 @@ class CellProcessor(ExcelCell):
 
             # 確認【作用儲存格】的【漢字】有【台語音標】及【漢字標音】，否則可能是字典目前無此【漢字】之讀音資料，
             # 故後續之查字典作業應被略過，直接要求使用者輸入【台語音標】或【台羅拼音】。
-            tai_gi_im_piau = source_sheet.range((tai_gi_im_piau_row, col)).value
-            han_ji_piau_im = source_sheet.range((han_ji_piau_im_row, col)).value
-            jin_kang_piau_im = source_sheet.range((jin_kang_piau_im_row, col)).value
+            jin_kang_piau_im = han_ji_cell.offset(-2, 0).value
+            tai_gi_im_piau = han_ji_cell.offset(-1, 0).value
+            han_ji_piau_im = han_ji_cell.offset(1, 0).value
             new_jin_kang_piau_im = None
 
             if not tai_gi_im_piau or not han_ji_piau_im:
@@ -148,6 +145,14 @@ class CellProcessor(ExcelCell):
                 msg = (
                     f"作用儲存格 {active_cell_address} 的漢字【{han_ji}】缺乏【台語音標】或【漢字標音】，"
                     f"後續作業無法進行，請先手動補全【台語音標】與【漢字標音】，再執行本程式。"
+                )
+                print(f">> {msg}")
+                return EXIT_CODE_PROCESS_FAILURE
+            elif not jin_kang_piau_im:
+                msg = (
+                    f"作用儲存格 {active_cell_address} 的漢字【{han_ji}】未填【人工標音】，"
+                    f"請手動輸入完整的【台語音標】或【台羅拼音】（接受帶調符號的音標），"
+                    f"或輸入【=】符號以引用既有人工標音，或輸入【-】符號以取消人工標音。"
                 )
                 print(f">> {msg}")
                 return EXIT_CODE_PROCESS_FAILURE
@@ -203,7 +208,7 @@ class CellProcessor(ExcelCell):
             # 【作用儲存格】之 Excel Address 已變更，需將之校正回歸。
             # -------------------------------------------------------------------------
             source_sheet.activate()  # 重新激活工作表以刷新儲存格地址
-            active_cell.select()  # 選取【作用儲存格】，以確保游標位置正確
+            han_ji_cell.select()  # 選取【作用儲存格】，以確保游標位置正確
 
             logging_process_step(msg="已完成【台語音標】和【漢字標音】標注工作。")
             return EXIT_CODE_SUCCESS

@@ -30,19 +30,22 @@ from typing import Tuple
 import xlwings as xw
 from dotenv import load_dotenv
 
+# =========================================================================
+# 載入自訂模組/函式
+# =========================================================================
 from mod_ca_ji_tian import HanJiTian
 from mod_database import DatabaseManager
 from mod_excel_access import (
     convert_coord_str_to_excel_address,
     convert_row_col_to_excel_address,
     delete_sheet_by_name,
+    excel_address_to_row_col,
+    get_active_cell_address,
     get_current_directory_from_workbook,
+    get_line_no_by_row,
+    get_row_by_line_no,
 )
-
-# =========================================================================
-# 設定日誌
-# =========================================================================
-from mod_logging import (
+from mod_logging import (  # 設定日誌
     init_logging,
     logging_exc_error,
     logging_exception,
@@ -51,8 +54,6 @@ from mod_logging import (
 )
 from mod_字庫 import JiKhooDict
 from mod_帶調符音標 import kam_si_u_tiau_hu, tng_im_piau, tng_tiau_ho
-
-# 載入自訂模組/函式
 from mod_標音 import (  # 台語音標轉台語音標; 漢字標音物件
     PiauIm,
     ca_ji_tng_piau_im,
@@ -66,11 +67,12 @@ from mod_標音 import (  # 台語音標轉台語音標; 漢字標音物件
     tlpa_tng_han_ji_piau_im,
 )
 
+# =========================================================================
+# 設置作業環境
+# =========================================================================
+# 啟用日誌
 init_logging()
-
-# =========================================================================
 # 載入環境變數
-# =========================================================================
 load_dotenv()
 
 # 預設檔案名稱從環境變數讀取
@@ -420,6 +422,19 @@ class ExcelCell:
         else:
             print("無作用儲存格，請先選取一個儲存格後再執行本程式！")
             return None, None, None
+
+    def get_han_ji_cell_with_active_cell(self):
+        # 取得【漢字標音】工作表的【作用儲存格】(Excel 儲存格位址)
+        source_sheet_name = self.program.hanji_piau_im_sheet_name
+        source_sheet = self.program.wb.sheets[source_sheet_name]
+        active_cell_address = get_active_cell_address()
+        # 將 Excel 儲存格地址轉換為【座標】的列號與欄號
+        row, col = excel_address_to_row_col(active_cell_address)
+        current_line_no = get_line_no_by_row(current_row_no=row)  # 計算行號
+        jin_kang_piau_im_row, tai_gi_im_piau_row, han_ji_row, han_ji_piau_im_row = get_row_by_line_no(current_line_no)
+        han_ji_cell = source_sheet.range((han_ji_row, col))
+
+        return han_ji_cell
 
     def get_han_ji_cell(self, sheet) -> Tuple[xw.main.Range, int, int]:
         """取得【漢字】儲存格，避兔使用者選取到非【漢字】儲存格，導致後續處理發生錯誤"""
@@ -1615,6 +1630,22 @@ class ExcelCell:
             return None
 
         return tai_gi_im_piau
+
+    def _convert_tai_gi_im_piau_to_han_ji_piau_im(
+        self,
+        tai_gi_im_piau: str,
+    ) -> str:
+        piau_im_huat = self.program.piau_im_huat
+        piau_im = self.program.piau_im
+        han_ji_piau_im = None
+
+        # 依指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
+        han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+            piau_im=piau_im,
+            piau_im_huat=piau_im_huat,
+            tai_gi_im_piau=tai_gi_im_piau,
+        )
+        return han_ji_piau_im
 
     def _ca_ji_tian_au_thiam_jin_kang_piau_im(self, active_cell):
         """查字典後填入工標音"""
