@@ -1,34 +1,32 @@
 """
-a250_作用儲存格查找漢字標音.py V0.3
+a215_人工標音指定漢字讀音.py v0.1.1
 
-依作用儲存格位置，在個人字典中查找漢字讀音。找到／輸入之漢字讀音，將用
-以代換【漢字標音】工作表已登錄之【資料紀錄】。
+依【作用儲存格】所在處，指定【漢字標音】工作表裡的【漢字】，其讀音採用【人工標音】。
 
-經 a200.py 程式，我在【漢字注音】工作表中的每個【漢字】，程式會自動代為查找【台語音標】並填入。但因漢字一字多音，及閩南話之漢字尚分【文讀音】、【白話音】兩種發音，故程式自動查找的【台語音標】往往不對。所以，使用者需要自行校對。
-
-a250.py 程式的功能，在於提供使用者，校對【漢字注音】工作表，發現某【漢字】之【台語音標】有錯時，可依以下程序完成【訂正作業】：
-
- 1. 在【漢字注音】工作表，將有錯之漢字設定為【作用儲存格】；
- 2. 在【終端機】執行 a250.py 程式；
- 3. 程式執行漢字查尋作業，並條列於 Console 供使用者挑選；
- 4. 使用者選擇某【台語音標】，或自行手動輸入【台語音標】；
- 5. 程式依【漢字】及【台語音標】，在【標音字庫】工作表找到已有的【資料紀錄】；
- 6. 程式依找到的【資料紀錄】，更新【台語音標】欄的舊資料；
- 7. 程式依找到的【資料紀錄】，取出【座標】欄的資料，作為：【座標清單】。然後依【座標清單】指向【漢字注音】工作表，各【漢字】儲存格之【座標】，一一為之更新【台語音標】及【漢字標音】。
-
-函數：_update_piau_im_ji_khoo_worksheet() ，負責上述【訂正作業】之【步驟5-7】工作。
+X 依據【作用儲存格】之【人工標音】欄位，處理人工手動標音作業。
+X  - 手動標音：在【人工標音】儲存格輸入完整的【台語音標】或【台羅拼音】（接受帶調符號的音標），
+X     手動標音會被記錄到【人工標音字庫】工作表；
+X  - 引用既有人工標音：輸入【=】符號，則【台語音標】將自【人工標音字庫】工作表查找；
+X  - 取消人工標音：輸入【-】符號，則取消人工標音，並從【人工標音字庫】工作表刪除該漢字的人工標音資料。
+X
+X 【處理規則】：
+X 遇【人工標音】填入【引用既有的人工標音符號（=）】符號時，漢字的【台語音標】
+X 自【人工標音字庫】工作表查找，並轉換成【漢字標音】。
+X
+X 若在【人工標音字庫】工作表找不到對映的【台語音標】，退而求其次，再自【標音字庫】
+X 工作表查找；
+X
+X 若仍在【標音字庫】工作表亦找不到，則再退而求其次，自【字典】查找；如若仍找不到，
+X 則將該漢字記錄到【缺字表】工作表。
 
 更新紀錄：
- -  v0.2.7 2026-02-10: 查得漢字之標音並選用後，因更新【標音字庫】工作表中對應
-    【漢字】之【台語音標】及【漢字標音】，導致【作用儲存格】之 Excel Address
-    已變更，需將之校正回歸。
- - v0.2.8 2026-02-15: 修正 _process_cell(), _process_jin_kang_piau_im() 函式之使用方式。
+v0.1.0 2026-02-27: 初始版本，實現基本功能：從【人工標音字庫】查找漢字的台語音標，並轉換成漢字標音；若找不到則記錄到【缺字表】。
+v0.1.1 2026-02-28: 修正【作用儲存格】處理邏輯，可以自動矯正【漢字】儲存格之座標，避免使用者操作不慎之問題。
 """
 
 # =========================================================================
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
-import logging
 import sys
 from pathlib import Path
 
@@ -62,6 +60,12 @@ EXIT_CODE_INVALID_INPUT = 2  # 輸入錯誤
 EXIT_CODE_SAVE_FAILURE = 3  # 儲存失敗
 EXIT_CODE_PROCESS_FAILURE = 10  # 過程失敗
 EXIT_CODE_UNKNOWN_ERROR = 99  # 未知錯誤
+
+
+# =========================================================================
+# 設定日誌
+# =========================================================================
+init_logging()
 
 
 # =========================================================================
@@ -100,18 +104,14 @@ class CellProcessor(ExcelCell):
         )
 
     def _process_sheet(self):
+        """處理【漢字注音】工作表之作用儲存格訂正／人工標音作業。"""
         try:
             # --------------------------------------------------------------------------
-            # 指定【漢字注音】工作表為【作用工作表】
-            # --------------------------------------------------------------------------
-            source_sheet_name = self.program.hanji_piau_im_sheet_name
-            wb = self.program.wb
-            source_sheet = wb.sheets[source_sheet_name]
-            source_sheet.activate()
-
-            # ----------------------------------------------------------------------
             # 取得【作用儲存格】
-            # ----------------------------------------------------------------------
+            # --------------------------------------------------------------------------
+            sheet_name = self.program.hanji_piau_im_sheet_name
+            source_sheet = self.program.wb.sheets[sheet_name]
+
             # 取得【漢字標音】工作表的【作用儲存格】
             han_ji_cell = self.get_han_ji_cell_with_active_cell()
             # 自【漢字】儲存格取得【位址】（Excel Address）及【座標】 (row, col)
@@ -130,57 +130,62 @@ class CellProcessor(ExcelCell):
             jin_kang_piau_im = han_ji_cell.offset(-2, 0).value
             tai_gi_im_piau = han_ji_cell.offset(-1, 0).value
             han_ji_piau_im = han_ji_cell.offset(1, 0).value
+            new_jin_kang_piau_im = None
 
-            original_tai_gi_im_piau = tai_gi_im_piau
-            original_han_ji_piau_im = han_ji_piau_im
-
-            # 確認【作用儲存格】的【台語音標】、【漢字標音】，需已填入資料。
             if not tai_gi_im_piau or not han_ji_piau_im:
                 # ----------------------------------------------------------------------
-                # 無法查字典狀況的處理作業：若【漢字注音】工作表，【作用儲存格】之【台語音標】或【漢字標音】
-                # 無資料填入，則表【字典】可能無此漢字之【台語音標】。遇此狀況，則【用漢字查字典】之作
-                # 業至此終止，改以【人工查尋，手動輸入作業】。
+                # 直接手動輸入人工標音，若是【作用儲存格】之【漢字】，可能字典尚未登錄此漢字之讀音資料
                 # ----------------------------------------------------------------------
-                # 告知使用者，終止查字作業，需要先人工查字之台語音標，然後手動輸入。
-                msg = f"作用儲存格 {active_cell_address} 的漢字【{han_ji}】缺乏【台語音標】或【漢字標音】，可能是字典無此漢字之讀音資料，將略過查字典作業，直接要求使用者輸入【台語音標】或【台羅拼音】。"
+                msg = (
+                    f"作用儲存格 {active_cell_address} 的漢字【{han_ji}】缺乏【台語音標】或【漢字標音】，"
+                    f"後續作業無法進行，請先手動補全【台語音標】與【漢字標音】，再執行本程式。"
+                )
                 print(f">> {msg}")
-                # 取得使用者輸入之【台語音標】或【台羅拼音】
-                tai_gi_im_piau = self.get_user_input_piau_im(han_ji=han_ji)
-                # 依據使用者輸入之【台語音標】轉換為【漢字標音】
-                han_ji_piau_im = self._convert_tai_gi_im_piau_to_han_ji_piau_im(
-                    tai_gi_im_piau=tai_gi_im_piau,
+                return EXIT_CODE_PROCESS_FAILURE
+            elif not jin_kang_piau_im:
+                msg = (
+                    f"作用儲存格 {active_cell_address} 的漢字【{han_ji}】未填【人工標音】，"
+                    f"請手動輸入完整的【台語音標】或【台羅拼音】（接受帶調符號的音標），"
+                    f"或輸入【=】符號以引用既有人工標音，或輸入【-】符號以取消人工標音。"
                 )
-            else:
-                # ----------------------------------------------------------------------
-                # 使用【漢字】查字典，取得【台語音標】
-                # ----------------------------------------------------------------------
-                han_ji_position = (han_ji_row, col)
-                print(f"📌 作用儲存格：{active_cell_address} ==> 漢字儲存格座標：{han_ji_position}")
-                print(f"📌 漢字：{han_ji}")
-                print(f"📌 人工標音：{jin_kang_piau_im}，台語音標：{tai_gi_im_piau}，漢字標音：{han_ji_piau_im}")
+                print(f">> {msg}")
+                return EXIT_CODE_PROCESS_FAILURE
 
-                # 查字典後，將查尋所得之【台語音標】，轉換【漢字標音】，最後回傳
-                tai_gi_im_piau, han_ji_piau_im = self._ca_ji_tian_au_thiam_jin_kang_piau_im(
-                    active_cell=han_ji_cell,
-                )
-                # 若使用者放棄變更，則結束作業流程
-                if not tai_gi_im_piau and not han_ji_piau_im:
-                    return EXIT_CODE_SUCCESS
+            # ----------------------------------------------------------------------
+            # 查字典後填人工標音
+            # ----------------------------------------------------------------------
+            han_ji_position = (han_ji_row, col)
+            print(f"📌 作用儲存格：{active_cell_address} ==> 漢字儲存格座標：{han_ji_position}")
+            print(f"📌 漢字：{han_ji}")
+            print(f"📌 人工標音：{jin_kang_piau_im}，原台語音標：{tai_gi_im_piau}，原漢字標音：{han_ji_piau_im}")
 
-            msg = f"【{han_ji}】[{original_tai_gi_im_piau}] / [{original_han_ji_piau_im}] 變更為： [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
+            # 依據【作用儲存格】輸入之【人工標音】，轉換【漢字標音】
+            tai_gi_im_piau = jin_kang_piau_im
+            han_ji_piau_im = self._convert_tai_gi_im_piau_to_han_ji_piau_im(
+                tai_gi_im_piau=tai_gi_im_piau,
+            )
+
+            # 若是【沒有查到漢字之台語音標】或是【使用者終止手動輸入】，則程式至此終止。
+            if not jin_kang_piau_im or not tai_gi_im_piau and not han_ji_piau_im:
+                return EXIT_CODE_PROCESS_FAILURE
+            # 將查尋/輸入取得之【台語音標】視作【人工標音】
+            new_jin_kang_piau_im = tai_gi_im_piau if tai_gi_im_piau else None
+            # 在 Console 回報目前作業狀態
+            msg = f"【{han_ji}】變更為： [{jin_kang_piau_im}] / [{tai_gi_im_piau}] /【{han_ji_piau_im}】"
             print(f">> 儲存格：{active_cell_address}，{msg}")
 
             # -------------------------------------------------------------------------
-            # 變更【漢字】之讀音：依【作用儲存格】之【人工標音】，變更【漢字標音】工作表
-            # 已登錄之【資料紀錄】。使用【人工標音】的漢字讀音，取代【台語音標】欄的資料。
+            # 原先由程式自動標注【台語音標】的【漢字】，改成【人工標音】。
             # -------------------------------------------------------------------------
-            self._replace_han_ji_thok_im_by_active_cell(
+            self._change_han_ji_from_tai_gi_im_piau_to_jin_kang_piau_im(
                 row=han_ji_row,
                 col=col,
                 han_ji=han_ji,
+                jin_kang_piau_im=new_jin_kang_piau_im,
                 tai_gi_im_piau=tai_gi_im_piau,
                 han_ji_piau_im=han_ji_piau_im,
             )
+
             # -------------------------------------------------------------------------
             # 更新資料庫中【漢字庫】資料表
             # -------------------------------------------------------------------------
@@ -202,9 +207,7 @@ class CellProcessor(ExcelCell):
             logging_process_step(msg="已完成【台語音標】和【漢字標音】標注工作。")
             return EXIT_CODE_SUCCESS
         except Exception as e:
-            # 你可以在這裡加上紀錄或處理，例如:
             logging_exception(msg="自動為【漢字】查找【台語音標】作業，發生例外！", error=e)
-            # 再次拋出異常，讓外層函式能捕捉
             raise
 
 
@@ -213,7 +216,9 @@ class CellProcessor(ExcelCell):
 # =========================================================================
 def process(wb, args) -> int:
     """
-    查詢漢字讀音並標注
+    作業流程：
+    1. 初始化 Program 與 CellProcessor
+    2. 呼叫 CellProcessor._process_sheet() 處理作用儲存格
 
     Args:
         wb: Excel Workbook 物件
@@ -223,14 +228,10 @@ def process(wb, args) -> int:
         處理結果代碼
     """
     logging_process_step("<=========== 作業開始！==========>")
-
     # --------------------------------------------------------------------------
     # 作業初始化
     # --------------------------------------------------------------------------
     try:
-        # --------------------------------------------------------------------------
-        # 初始化 Program 配置
-        # --------------------------------------------------------------------------
         program = Program(wb=wb, args=args, hanji_piau_im_sheet_name="漢字注音")
 
         # 建立儲存格處理器（繼承自 ExcelCell）
@@ -248,18 +249,11 @@ def process(wb, args) -> int:
     # 作業處理中
     # --------------------------------------------------------------------------
     try:
-        # 確保工作表為作用中
-        # wb.sheets[sheet_name].activate()
         xls_cell._process_sheet()
-
     except Exception as e:
-        logging.error(f"處理錯誤：{e}")
-        print(f"❌ 錯誤：{e}")
+        logging_exc_error(msg="處理作業異常！", error=e)
+        return EXIT_CODE_PROCESS_FAILURE
 
-    # --------------------------------------------------------------------------
-    # 處理作業結束
-    # --------------------------------------------------------------------------
-    print("\n")
     logging_process_step("<=========== 作業結束！==========>")
     return EXIT_CODE_SUCCESS
 
@@ -286,6 +280,7 @@ def main(args) -> int:
     # =========================================================================
     # (2) 設定【作用中活頁簿】：偵測及獲取 Excel 已開啟之活頁簿檔案。
     # =========================================================================
+    # 取得【作用中活頁簿】
     wb = None
     # 取得【作用中活頁簿】
     try:
@@ -305,13 +300,13 @@ def main(args) -> int:
     try:
         exit_code = process(wb, args)
     except Exception as e:
-        msg = f"作業程序發生異常，終止執行：{program_name}"
+        msg = f"程式異常終止：{program_name}"
         logging_exception(msg=msg, error=e)
-        return EXIT_CODE_PROCESS_FAILURE
+        return EXIT_CODE_UNKNOWN_ERROR
 
     if exit_code != EXIT_CODE_SUCCESS:
-        msg = f"處理作業發生異常，終止程式執行：{program_name}（處理作業程序，返回失敗碼）"
-        logging_exc_error(msg)
+        msg = f"程式異常終止：{program_name}（非例外，而是返回失敗碼）"
+        logging_exc_error(msg=msg, error=None)
         return EXIT_CODE_PROCESS_FAILURE
 
     # =========================================================================
@@ -330,17 +325,57 @@ def main(args) -> int:
         return EXIT_CODE_SAVE_FAILURE  # 作業異當終止：無法儲存檔案
 
     # =========================================================================
-    # (5) 結束作業
+    # 結束程式
     # =========================================================================
-    return EXIT_CODE_SUCCESS
+    logging_process_step(f"《========== 程式終止執行：{program_name} ==========》")
+    return EXIT_CODE_SUCCESS  # 作業正常結束
 
 
-# =========================================================================
-# 單元測試程式
-# =========================================================================
-def test_01():
+def test_han_ji_tian():
     """測試 HanJiTian 類別"""
-    pass
+    # =========================================================================
+    # 載入環境變數
+    # =========================================================================
+    import os
+
+    from dotenv import load_dotenv
+
+    from mod_ca_ji_tian import HanJiTian  # 新的查字典模組
+
+    # 預設檔案名稱從環境變數讀取
+    load_dotenv()
+    DB_HO_LOK_UE = os.getenv("DB_HO_LOK_UE", "Ho_Lok_Ue.db")
+
+    print("=" * 80)
+    print("測試 HanJiTian 查詢功能")
+    print("=" * 80)
+
+    try:
+        # 初始化字典
+        ji_tian = HanJiTian(DB_HO_LOK_UE)
+
+        # 測試查詢
+        test_chars = ["東", "西", "南", "北", "中"]
+
+        for han_ji in test_chars:
+            print(f"\n查詢漢字：{han_ji}")
+            result = ji_tian.han_ji_ca_piau_im(han_ji, ue_im_lui_piat="白話音")
+
+            if result:
+                for item in result:
+                    print(f"  台語音標：{item['台語音標']}, 常用度：{item.get('常用度', 'N/A')}, 說明：{item.get('摘要說明', 'N/A')}")
+            else:
+                print("  查無資料")
+
+        print("\n" + "=" * 80)
+        print("測試完成")
+        print("=" * 80)
+
+    except Exception as e:
+        print(f"測試失敗：{e}")
+        import traceback
+
+        traceback.print_exc()
 
 
 if __name__ == "__main__":
@@ -349,7 +384,7 @@ if __name__ == "__main__":
 
     # 解析命令行參數
     parser = argparse.ArgumentParser(
-        description="透過【作用儲格】，查詢漢字之【台語音標】，及生成【漢字標音】",
+        description="缺字表修正後續作業程式",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 使用範例：
@@ -372,7 +407,7 @@ if __name__ == "__main__":
 
     if args.test:
         # 執行測試
-        test_01()
+        test_han_ji_tian()
     else:
         # 從 Excel 呼叫
         exit_code = main(args)

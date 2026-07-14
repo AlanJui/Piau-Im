@@ -246,10 +246,10 @@
             "console": "integratedTerminal",
         },
         {
-            "name": "a215_依作用儲存格處理漢字之人工標音作業",
+            "name": "a215_以人工標音指定漢字之讀音",
             "type": "debugpy",
             "request": "launch",
-            "program": "a215_依作用儲存格處理漢字之人工標音作業.py",
+            "program": "a215_人工標音指定漢字讀音.py",
             "console": "integratedTerminal",
         },
         {

@@ -47,7 +47,7 @@ from mod_logging import (
 
 # 載入自訂模組/函式
 # from mod_標音 import convert_tl_with_tiau_hu_to_tlpa, is_han_ji, kam_si_u_tiau_hu, tlpa_tng_han_ji_piau_im
-from mod_標音 import is_han_ji, tlpa_tng_han_ji_piau_im
+from mod_標音 import is_han_ji
 from mod_程式 import ExcelCell, Program
 
 # =========================================================================
@@ -103,71 +103,16 @@ class CellProcessor(ExcelCell):
         )
 
     # =================================================================
+    # 輔助方法
+    # =================================================================
+
+    # =================================================================
+    # 子類別的方法
+    # =================================================================
+
+    # =================================================================
     # 覆蓋父類別的方法
     # =================================================================
-    # def check_coordinate_exists(self, row: int, col: int, coord_list: list) -> bool:
-    #     """
-    #     檢查座標是否存在於座標列表中
-
-    #     Args:
-    #         row: 列號
-    #         col: 欄號
-    #         coord_list: 座標列表
-
-    #     Returns:
-    #         bool: 座標是否存在
-    #     """
-    #     if not coord_list:
-    #         return False
-    #     return (row, col) in coord_list
-
-    # def _update_piau_im_ji_khoo_worksheet(
-    #     self,
-    #     row: int,
-    #     col: int,
-    #     han_ji: str,
-    #     tai_gi_im_piau: str,
-    #     han_ji_piau_im: str,
-    # ) -> None:
-    #     """
-    #     訂正作業步驟 5–7：更新【標音字庫】，並同步【漢字注音】工作表。
-    #
-    #     5. 依【漢字】與作用儲存格【座標】，在【標音字庫】找到既有資料紀錄
-    #        （該紀錄仍保留訂正前之【台語音標】）。
-    #     6. 將該紀錄之【台語音標】更新為使用者選定／輸入之新音標。
-    #     7. 取出該紀錄【座標】欄之【座標清單】，逐一更新【漢字注音】工作表
-    #        對應儲存格之【台語音標】與【漢字標音】。
-    #     """
-    #     # row = cell.row  # 漢字儲存格所在之 Row
-    #     # col = cell.column
-    #     # han_ji = cell.value
-    #     # # 使用者已選定／輸入之新【台語音標】與轉換後之【漢字標音】
-    #     # tai_gi_im_piau = cell.offset(-1, 0).value
-    #     # han_ji_piau_im = cell.offset(1, 0).value
-    #
-    #     # ------------------------------------------------------------------
-    #     # 步驟 5：依【漢字】與【座標】，在【標音字庫】找到既有資料紀錄
-    #     # ------------------------------------------------------------------
-    #     row_no = self.piau_im_ji_khoo_dict.get_row_by_han_ji_and_coordinate(
-    #         han_ji=han_ji,
-    #         coordinate=(row, col),
-    #     )
-    #     if row_no == -1:
-    #         print(f"⚠️  【標音字庫】查無【{han_ji}】座標 ({row}, {col}) 之紀錄，略過字庫更新。")
-    #         return
-    #
-    #     # ------------------------------------------------------------------
-    #     # 步驟 6–7：更新【台語音標】，並依【座標清單】同步【漢字注音】工作表
-    #     # ------------------------------------------------------------------
-    #     self.update_piau_im_worksheet_entry(
-    #         coordinate=(row, col),
-    #         han_ji=han_ji,
-    #         tai_gi_im_piau=tai_gi_im_piau,
-    #         han_ji_piau_im=han_ji_piau_im,
-    #         piau_im_ji_khoo_dict=self.piau_im_ji_khoo_dict,
-    #         row_no=row_no,
-    #     )
-
     def _process_sheet(self):
 
         try:
@@ -242,7 +187,9 @@ class CellProcessor(ExcelCell):
                 print(f"📌 人工標音：{jin_kang_piau_im}，台語音標：{tai_gi_im_piau}，漢字標音：{han_ji_piau_im}")
 
                 # 查字典後，將查尋所得之【台語音標】，轉換【漢字標音】，最後回傳
-                tai_gi_im_piau, han_ji_piau_im = self._za_ji_tian_au_thiam_jin_kang_piau_im(active_cell=han_ji_cell)
+                tai_gi_im_piau, han_ji_piau_im = self._ca_ji_tian_au_thiam_jin_kang_piau_im(
+                    active_cell=han_ji_cell,
+                )
                 # 若使用者放棄變更，則結束作業流程
                 if not tai_gi_im_piau and not han_ji_piau_im:
                     return EXIT_CODE_SUCCESS
@@ -294,33 +241,6 @@ class CellProcessor(ExcelCell):
             logging_exception(msg="自動為【漢字】查找【台語音標】作業，發生例外！", error=e)
             # 再次拋出異常，讓外層函式能捕捉
             raise
-
-    # =================================================================
-    # 子類別的方法
-    # =================================================================
-
-    # =================================================================
-    # 輔助方法
-    # =================================================================
-    def _za_ji_tian_au_thiam_jin_kang_piau_im(self, active_cell):
-        """查字典後填入工標音"""
-        piau_im_huat = self.program.piau_im_huat
-        piau_im = self.program.piau_im
-        tai_gi_im_piau = ""
-
-        # 依據【作用儲存格】之【漢字】，從【自用字典】查詢【台語音標】
-        tai_gi_im_piau = self._han_ji_ca_piau_im_kap_cu_tik(active_cell)
-        if tai_gi_im_piau is None:
-            return None, None
-
-        # 依指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
-        han_ji_piau_im = tlpa_tng_han_ji_piau_im(
-            piau_im=piau_im,
-            piau_im_huat=piau_im_huat,
-            tai_gi_im_piau=tai_gi_im_piau,
-        )
-
-        return tai_gi_im_piau, han_ji_piau_im
 
 
 # =========================================================================
