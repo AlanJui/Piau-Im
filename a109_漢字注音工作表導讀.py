@@ -16,8 +16,8 @@ a109_漢字注音工作表導讀.py V0.3
   → (Right Arrow) : 向右移動
   ↑ (Up Arrow)    : 向上移動到上一行
   ↓ (Down Arrow)  : 向下移動到下一行
-  空白 / Q 鍵     : 查字典指定漢字讀音
-  R 鍵            : 查字典更換漢字讀音
+  空白            : 查字典更換漢字讀音
+  J 鍵            : 查字典指定漢字讀音
   E 鍵            : 手動輸入人工標音
   = 鍵            : 填入人工標音標記
   ESC             : 結束程式
@@ -75,16 +75,16 @@ try:
 except ImportError:
     HAS_PYTHONCOM = False
 
-# 載入 a222 的核心查詢功能（個人字典）
-try:
-    from a222_依作用儲存格在個人字典查找漢字讀音 import (
-        process as ca_han_ji_thak_im_a222,
-    )
-
-    HAS_A222 = True
-except ImportError as e:
-    HAS_A222 = False
-    print(f"警告：無法載入 a222 模組：{e}")
+# # 載入 a222 的核心查詢功能（個人字典）
+# try:
+#     from a222_依作用儲存格在個人字典查找漢字讀音 import (
+#         process as ca_han_ji_thak_im_a222,
+#     )
+#
+#     HAS_A222 = True
+# except ImportError as e:
+#     HAS_A222 = False
+#     print(f"警告：無法載入 a222 模組：{e}")
 
 # # 載入 a220 的核心查詢功能（萌典）
 # try:
@@ -97,8 +97,9 @@ except ImportError as e:
 
 # 載入 a224 的核心查詢功能（引用既有標音）
 try:
-    # from a224_引用既有的漢字標音 import jin_kang_piau_im_ca_taigi_im_piau
-    from a224_引用既有的漢字標音 import process as jin_kang_piau_im_ca_taigi_im_piau
+    from a224_引用既有的漢字標音 import (
+        process as jin_kang_piau_im_ca_taigi_im_piau,
+    )
 
     HAS_A224 = True
 except ImportError as e:
@@ -115,10 +116,11 @@ try:
 except ImportError as e:
     HAS_A250 = False
     print(f"警告：無法載入 a250 模組：{e}")
+
 # 載入 a260 的核心查詢功能：可先在《個人字典》查找漢字讀音；或手動輸入漢字讀音
 try:
     from a260_為單一漢字指定讀音 import (
-        process as za_ji_tian_au_thiam_jin_kang_piau_im,
+        process as ca_ji_tian_au_thiam_jin_kang_piau_im,
     )
 
     HAS_A260 = True
@@ -758,18 +760,16 @@ class NavigationController:
                 self.pending_action = "down"
             elif key == keyboard.Key.space:
                 # 空白鍵：查詢個人字典
-                self.pending_action = "query_personal"
+                # self.pending_action = "query_personal"
+                self.pending_action = "query_and_replace_thok_im"
             elif hasattr(key, "char") and key.char:
                 # 處理字元鍵
                 if key.char.lower() == " ":
                     # 空白鍵：查詢個人字典
-                    self.pending_action = "query_personal"
-                elif key.char.lower() == "q":
-                    # Q 鍵：查詢個人字典
-                    self.pending_action = "query_personal"
-                elif key.char.lower() == "r":
-                    # R 鍵：更換漢字讀音
-                    self.pending_action = "query_replace"
+                    self.pending_action = "query_and_replace_thok_im"
+                elif key.char.lower() == "j":
+                    # J 鍵：更換漢字讀音
+                    self.pending_action = "query_and_assign_thok_im"
                 # elif key.char.lower() == "s":
                 #     # S 鍵：查詢萌典
                 #     self.pending_action = "query_moedict"
@@ -832,13 +832,17 @@ class NavigationController:
             #     # 查詢萌典
             #     self.query_moedict_dictionary()
             #
-            elif action == "query_personal":
-                # 查詢個人字典
-                self.query_personal_dictionary()
-
-            elif action == "query_replace":
+            # elif action == "query_and_replace_thok_im":
+            #     # 查詢個人字典
+            #     self.query_personal_dictionary()
+            #
+            elif action == "query_and_replace_thok_im":
                 # 更換漢字讀音
                 self.query_dictionary_and_replace_han_ji_thok_im()
+
+            elif action == "query_and_assign_thok_im":
+                # 指定漢字讀音
+                self.query_dictionary_and_assign_han_ji_thok_im()
 
             elif action == "fill_manual_mark":
                 # 填入人工標音標記
@@ -988,8 +992,8 @@ class NavigationController:
         except KeyboardInterrupt:
             print("\n\n使用者中斷查詢")
         except Exception as e:
-            logging.error(f"執行萌典查詢失敗：{e}")
-            print(f"❌ 執行萌典查詢失敗：{e}")
+            logging.error(f"執行字典查詢失敗：{e}")
+            print(f"❌ 執行字典查詢失敗：{e}")
         finally:
             print("\n" + "=" * 70)
             print("返回導航模式")
@@ -1005,10 +1009,10 @@ class NavigationController:
                 time.sleep(0.3)
             print("✓ 已恢復導航模式\n")
 
-    def query_personal_dictionary(self):
-        """查詢個人字典"""
+    def query_dictionary_and_assign_han_ji_thok_im(self):
+        """查詢字典指定漢字讀音"""
         print("\n" + "=" * 70)
-        print("進入個人字典查詢模式")
+        print("進入【漢字指定讀音】模式")
         print("=" * 70)
 
         # 暫停鍵盤監聽
@@ -1017,9 +1021,9 @@ class NavigationController:
             time.sleep(0.3)
 
         try:
-            if HAS_A222:
-                # 直接調用 a222 的核心函數，不進入無限循環
-                print("\n查詢個人字典中...")
+            if HAS_A260:
+                # 直接調用 a260 的核心函數，不進入無限循環
+                print("\n查詢字典中...")
 
                 # 切換到終端機視窗（確保用戶可以輸入）
                 activate_console_window(self.console_hwnd)
@@ -1029,7 +1033,7 @@ class NavigationController:
                 print(f"當前儲存格：{current_cell}")
 
                 # 調用查詢函數
-                exit_code = ca_han_ji_thak_im_a222(
+                exit_code = ca_ji_tian_au_thiam_jin_kang_piau_im(
                     wb=self.wb,
                     args=None,
                 )
@@ -1040,9 +1044,9 @@ class NavigationController:
                     print(f"\n⚠️  查詢結果：exit_code = {exit_code}")
             else:
                 # 回退到 subprocess 方式
-                print("\n執行 a222_依作用儲存格在個人字典查找漢字讀音.py...")
+                print("\n執行 a260_為單一漢字指定讀音.py...")
                 result = subprocess.run(
-                    [sys.executable, "a222_依作用儲存格在個人字典查找漢字讀音.py"],
+                    [sys.executable, "a260_為單一漢字指定讀音.py"],
                     cwd=os.path.dirname(os.path.abspath(__file__)),
                     capture_output=False,
                     text=True,
@@ -1052,8 +1056,8 @@ class NavigationController:
         except KeyboardInterrupt:
             print("\n\n使用者中斷查詢")
         except Exception as e:
-            logging.error(f"執行個人字典查詢失敗：{e}")
-            print(f"❌ 執行個人字典查詢失敗：{e}")
+            logging.error(f"執行字典查詢失敗：{e}")
+            print(f"❌ 執行字典查詢失敗：{e}")
         finally:
             print("\n" + "=" * 70)
             print("返回導航模式")
@@ -1068,6 +1072,70 @@ class NavigationController:
                 self.listener.start()
                 time.sleep(0.3)
             print("✓ 已恢復導航模式\n")
+
+    # def query_personal_dictionary(self):
+    #     """查詢個人字典"""
+    #     print("\n" + "=" * 70)
+    #     print("進入個人字典查詢模式")
+    #     print("=" * 70)
+    #
+    #     # 暫停鍵盤監聽
+    #     if self.listener:
+    #         self.listener.stop()
+    #         time.sleep(0.3)
+    #
+    #     try:
+    #         if HAS_A222:
+    #             # 直接調用 a222 的核心函數，不進入無限循環
+    #             print("\n查詢個人字典中...")
+    #
+    #             # 切換到終端機視窗（確保用戶可以輸入）
+    #             activate_console_window(self.console_hwnd)
+    #
+    #             # 取得當前作用儲存格位置
+    #             current_cell = f"{xw.utils.col_name(self.current_col)}{self.current_row}"
+    #             print(f"當前儲存格：{current_cell}")
+    #
+    #             # 調用查詢函數
+    #             exit_code = ca_han_ji_thak_im_a222(
+    #                 wb=self.wb,
+    #                 args=None,
+    #             )
+    #
+    #             if exit_code == 0:
+    #                 print("\n✓ 查詢完成")
+    #             else:
+    #                 print(f"\n⚠️  查詢結果：exit_code = {exit_code}")
+    #         else:
+    #             # 回退到 subprocess 方式
+    #             print("\n執行 a222_依作用儲存格在個人字典查找漢字讀音.py...")
+    #             result = subprocess.run(
+    #                 [sys.executable, "a222_依作用儲存格在個人字典查找漢字讀音.py"],
+    #                 cwd=os.path.dirname(os.path.abspath(__file__)),
+    #                 capture_output=False,
+    #                 text=True,
+    #             )
+    #             if result.returncode != 0:
+    #                 print(f"⚠️  a222 程式執行失敗，返回碼：{result.returncode}")
+    #     except KeyboardInterrupt:
+    #         print("\n\n使用者中斷查詢")
+    #     except Exception as e:
+    #         logging.error(f"執行個人字典查詢失敗：{e}")
+    #         print(f"❌ 執行個人字典查詢失敗：{e}")
+    #     finally:
+    #         print("\n" + "=" * 70)
+    #         print("返回導航模式")
+    #         print("=" * 70)
+    #
+    #         # 切換回 Excel 視窗
+    #         activate_excel_window(self.wb)
+    #
+    #         # 重新啟動鍵盤監聽
+    #         if self.listener:
+    #             self.listener = keyboard.Listener(on_press=self.on_key_press, suppress=True)
+    #             self.listener.start()
+    #             time.sleep(0.3)
+    #         print("✓ 已恢復導航模式\n")
 
     def fill_manual_annotation_mark(self):
         """填入人工標音標記【=】到當前儲存格上方兩列的人工標音儲存格，並執行 a224 查詢更新標音"""
@@ -1216,7 +1284,10 @@ class NavigationController:
                     import argparse
 
                     args = argparse.Namespace(new=False)
-                    exit_code = za_ji_tian_au_thiam_jin_kang_piau_im(wb=self.wb, args=args)
+                    exit_code = ca_ji_tian_au_thiam_jin_kang_piau_im(
+                        wb=self.wb,
+                        args=args,
+                    )
                     if exit_code == 0:
                         print("✓ 已完成台語音標與漢字標音更新")
                     else:
@@ -1339,8 +1410,8 @@ def read_han_ji_with_keyboard(wb, edit_mode=False) -> int:
         print("  → (Right Arrow) : 向右移動")
         print("  ↑ (Up Arrow)    : 向上移動到上一行")
         print("  ↓ (Down Arrow)  : 向下移動到下一行")
-        print("  空白 / Q 鍵     : 查字典指定漢字讀音（a260）")
-        print("  R 鍵            : 查字典更換漢字讀音（a250）")
+        print("  空白 鍵         : 查字典更換漢字讀音（a250）")
+        print("  J 鍵            : 查字典指定漢字讀音（a260）")
         print("  E 鍵            : 手動輸入人工標音（a222）")
         print("  = 鍵            : 填入人工標音標記")
         print("  ESC             : 結束程式")

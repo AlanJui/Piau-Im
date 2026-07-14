@@ -33,12 +33,12 @@ from pathlib import Path
 # 載入第三方套件
 import xlwings as xw
 
-from mod_excel_access import (
-    excel_address_to_row_col,
-    get_active_cell_address,
-    get_line_no_by_row,
-    get_row_by_line_no,
-)
+# from mod_excel_access import (
+#     excel_address_to_row_col,
+#     get_active_cell_address,
+#     get_line_no_by_row,
+#     get_row_by_line_no,
+# )
 from mod_logging import (
     init_logging,
     logging_exc_error,

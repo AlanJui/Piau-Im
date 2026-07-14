@@ -1293,7 +1293,10 @@ class ExcelCell:
             # ----------------------------------------------------------------------
             # 將【標音字庫】之【字庫表】，寫回 Excel 工作表
             # ----------------------------------------------------------------------
-            self.piau_im_ji_khoo_dict.write_to_excel_sheet(wb=self.program.wb, sheet_name=self.piau_im_ji_khoo_dict.name)
+            self.piau_im_ji_khoo_dict.write_to_excel_sheet(
+                wb=self.program.wb,
+                sheet_name=self.piau_im_ji_khoo_dict.name,
+            )
 
     def _update_piau_im_ji_khoo_worksheet(self, cell) -> None:
         """
@@ -1317,14 +1320,17 @@ class ExcelCell:
             # ----------------------------------------------------------------------
             # 將【標音字庫】之【字庫表】，寫回 Excel 工作表
             # ----------------------------------------------------------------------
-            self.piau_im_ji_khoo_dict.write_to_excel_sheet(wb=self.program.wb, sheet_name=self.piau_im_ji_khoo_dict.name)
+            self.piau_im_ji_khoo_dict.write_to_excel_sheet(
+                wb=self.program.wb,
+                sheet_name=self.piau_im_ji_khoo_dict.name,
+            )
 
-    def _update_jin_kang_piau_im_ji_khoo_worksheet_by_move(
+    def _update_piau_im_ji_khoo_worksheet_by_active_cell(
         self,
-        han_ji: str,
-        jin_kang_piau_im: str,
         row: int,
         col: int,
+        han_ji: str,
+        jin_kang_piau_im: str,
     ):
         """
         將【漢字標音】工作表，原本引用【台語音標】作為讀音之【漢字】，改成引用
@@ -1461,7 +1467,7 @@ class ExcelCell:
         # ----------------------------------------------------------------------
         self.jin_kang_piau_im_ji_khoo_dict.write_to_excel_sheet(wb=self.program.wb, sheet_name=self.jin_kang_piau_im_ji_khoo_dict.name)
 
-    def _update_piau_im_ji_khoo_worksheet_by_active_cell(
+    def _replace_han_ji_thok_im_by_active_cell(
         self,
         row: int,
         col: int,
@@ -1503,7 +1509,68 @@ class ExcelCell:
             row_no=row_no,
         )
 
-    def _change_han_ji_from_tai_gi_im_piau_to_jin_kang_piau_im(
+    def _register_one_entry_jin_kang_piau_im_ji_khoo_worksheet(
+        self,
+        row: int,
+        col: int,
+        han_ji: str,
+        jin_kang_piau_im: str,
+    ) -> None:
+        """
+        將【漢字標音】工作表，原本引用【台語音標】作為讀音之【漢字】，改成引用
+        【人工標音】。
+
+        1. 在【人工標音字庫】工作表，依傳入之【漢字】、【人工標音】，查檢是否
+           資料來源取自【漢字注音】工作表的【作用儲存格】；
+        2. 自已登錄之【資料紀錄】，自【台語音標】欄，取出先前登錄之【原人工標音】；
+        3. 在【人工標音字庫】工作表，登錄【資料紀錄】（在【人工標音字庫】字典，新增
+           一筆紀錄：
+           以下資料之來源為：【漢字注音】工作表，之【作用儲存格】座標...
+           - 漢字= 取自【作用儲存格】的【漢字】儲存格 (han_ji)
+           - 台語音標= 取自【作用儲存格】的【人工標音】儲存格 (jin_kang_piau_im)
+           - 校正音標= "N/A"
+           - 音標=取自【作用儲存格】的【漢字座標】(row, col)
+        4. 自已登錄之【資料紀錄】，從【座標】欄記錄的【座標清單】，移除傳入之
+           座標= (row, col)
+        """
+
+        # Step 1: 依【漢字】、【座標】在【人工標音字庫】工作表，搜尋有無已登錄之
+        # 【資料紀錄】
+        old_jin_kang_entry = self.jin_kang_piau_im_ji_khoo_dict.get_entry_by_han_ji_and_coordinate(
+            han_ji=han_ji,
+            coordinate=(row, col),
+        )
+
+        # Step 2: 若是找到已登錄之【資料紀錄】，則記下【原有之人工標音】
+        old_jin_kang_tai_gi_im_piau = old_jin_kang_entry.get("tai_gi_im_piau") if old_jin_kang_entry else None
+
+        # Step 3: 在【人工標音字庫】工作表，先用【人工標音】、【座標】（指向【漢字】）
+        # ，登錄新的【資料紀錄】
+        self.jin_kang_piau_im_ji_khoo_dict.add_entry(
+            han_ji=han_ji,
+            tai_gi_im_piau=jin_kang_piau_im,
+            hau_ziann_im_piau="N/A",
+            coordinate=(row, col),
+        )
+
+        # Step 4: 若是【人工標音字庫】工作表，已登錄有【資料紀錄】；且【原有之人工標音】
+        # 與新指定之【人工標音】不相同，則已登錄之【資料紀錄】，需將【座標】欄儲存之
+        # 【座標清單】，移除指向【漢字標音】工作表之【座標】。
+        if old_jin_kang_tai_gi_im_piau and old_jin_kang_tai_gi_im_piau != jin_kang_piau_im:
+            self.jin_kang_piau_im_ji_khoo_dict.remove_coordinate_by_han_ji_and_tai_gi_im_piau(
+                han_ji=han_ji,
+                tai_gi_im_piau=old_jin_kang_tai_gi_im_piau,
+                coordinate=(row, col),
+                entry_to_delete_if_empty=True,
+            )
+
+        # 將【人工標音字庫】字典，寫入 Excel 工作表
+        self.jin_kang_piau_im_ji_khoo_dict.write_to_excel_sheet(
+            wb=self.program.wb,
+            sheet_name=self.jin_kang_piau_im_ji_khoo_dict.name,
+        )
+
+    def _assign_han_ji_thok_im_by_active_cell(
         self,
         row: int,
         col: int,
@@ -1531,7 +1598,7 @@ class ExcelCell:
         # -------------------------------------------------------------------------
         # 在【人工標音字庫】工作表，登錄【資料紀錄】：自【標音字庫】搬至【人工標音字庫】
         # -------------------------------------------------------------------------
-        self._update_jin_kang_piau_im_ji_khoo_worksheet_by_move(
+        self._register_one_entry_jin_kang_piau_im_ji_khoo_worksheet(
             han_ji=han_ji,
             jin_kang_piau_im=jin_kang_piau_im,
             row=row,

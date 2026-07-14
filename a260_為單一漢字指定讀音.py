@@ -25,9 +25,9 @@ import xlwings as xw
 from mod_excel_access import (
     excel_address_to_row_col,
     get_active_cell,
-    get_active_cell_address,
-    get_line_no_by_row,
-    get_row_by_line_no,
+    # get_active_cell_address,
+    # get_line_no_by_row,
+    # get_row_by_line_no,
 )
 from mod_logging import (
     init_logging,
@@ -94,27 +94,26 @@ class CellProcessor(ExcelCell):
         )
 
     def _process_sheet(self):
-        """處理【漢字注音】工作表之作用儲存格訂正／人工標音作業。"""
         try:
             # --------------------------------------------------------------------------
-            # 取得【作用儲存格】
+            # 指定【漢字注音】工作表為【作用工作表】
             # --------------------------------------------------------------------------
             source_sheet_name = self.program.hanji_piau_im_sheet_name
             wb = self.program.wb
             source_sheet = wb.sheets[source_sheet_name]
             source_sheet.activate()
 
-            active_cell_address = get_active_cell_address()
-            active_cell = source_sheet.range(active_cell_address)
-            row, col = excel_address_to_row_col(active_cell_address)
-            current_line_no = get_line_no_by_row(current_row_no=row)  # 計算行號
-            jin_kang_piau_im_row, tai_gi_im_piau_row, han_ji_row, han_ji_piau_im_row = get_row_by_line_no(current_line_no)
-            han_ji_cell = source_sheet.range((han_ji_row, col))
-            source_sheet.range((han_ji_row, col)).select()  # 選取【漢字】儲存格，以確保游標位置正確
-            source_sheet.activate()  # 重新激活工作表以刷新儲存格地址
+            # --------------------------------------------------------------------------
+            # 取得【作用儲存格】
+            # --------------------------------------------------------------------------
+            # 取得【漢字標音】工作表的【作用儲存格】
+            han_ji_cell = self.get_han_ji_cell_with_active_cell()
+            # 自【漢字】儲存格取得【位址】（Excel Address）及【座標】 (row, col)
+            active_cell_address = han_ji_cell.address.replace("$", "")
+            han_ji_row, col = han_ji_cell.row, han_ji_cell.column
 
             # 確認【作用儲存格】為【漢字】
-            han_ji = source_sheet.range((han_ji_row, col)).value
+            han_ji = han_ji_cell.offset(0, 0).value
             if not is_han_ji(han_ji):
                 msg = f"作用儲存格 {active_cell_address} 的漢字為【{han_ji}】，屬於標點符號或特殊符號，跳過處理。"
                 print(f">> {msg}")
@@ -122,13 +121,14 @@ class CellProcessor(ExcelCell):
 
             # 確認【作用儲存格】的【漢字】有【台語音標】及【漢字標音】，否則可能是字典目前無此【漢字】之讀音資料，
             # 故後續之查字典作業應被略過，直接要求使用者輸入【台語音標】或【台羅拼音】。
-            tai_gi_im_piau = source_sheet.range((tai_gi_im_piau_row, col)).value
-            han_ji_piau_im = source_sheet.range((han_ji_piau_im_row, col)).value
-            jin_kang_piau_im = source_sheet.range((jin_kang_piau_im_row, col)).value
+            jin_kang_piau_im = han_ji_cell.offset(-2, 0).value
+            tai_gi_im_piau = han_ji_cell.offset(-1, 0).value
+            han_ji_piau_im = han_ji_cell.offset(1, 0).value
+
             # 記錄【原始的人工標音】
-            # original_jin_kang_piau_im = jin_kang_piau_im
             new_jin_kang_piau_im = None
 
+            # 確認【作用儲存格】的【台語音標】、【漢字標音】，需已填入資料。
             if not tai_gi_im_piau or not han_ji_piau_im:
                 # ----------------------------------------------------------------------
                 # 直接手動輸入人工標音，若是【作用儲存格】之【漢字】，可能字典尚未登錄此漢字之讀音資料
@@ -154,7 +154,9 @@ class CellProcessor(ExcelCell):
                 print(f"📌 人工標音：{jin_kang_piau_im}，台語音標：{tai_gi_im_piau}，漢字標音：{han_ji_piau_im}")
 
                 # 依據【漢字】查尋【台語音標】，並轉成【漢字標音】
-                tai_gi_im_piau, han_ji_piau_im = self._ca_ji_tian_au_thiam_jin_kang_piau_im(active_cell=han_ji_cell)
+                tai_gi_im_piau, han_ji_piau_im = self._ca_ji_tian_au_thiam_jin_kang_piau_im(
+                    active_cell=han_ji_cell,
+                )
 
             # 若是【沒有查到漢字之台語音標】或是【使用者終止手動輸入】，則程式至此終止。
             if not tai_gi_im_piau and not han_ji_piau_im:
@@ -166,9 +168,11 @@ class CellProcessor(ExcelCell):
             print(f">> 儲存格：{active_cell_address}，{msg}")
 
             # -------------------------------------------------------------------------
-            # 原先由程式自動標注【台語音標】的【漢字】，改成【人工標音】。
+            # 指定【漢字】之讀音：依【作用儲存格】之【人工標音】，以【漢字】及原【台語音標】
+            # 在【漢字標音】工作表，依【人工標音】登錄新【資料紀錄】；最後，於【人工標音字庫】
+            # 工作表，登錄【資料紀錄】。
             # -------------------------------------------------------------------------
-            self._change_han_ji_from_tai_gi_im_piau_to_jin_kang_piau_im(
+            self._assign_han_ji_thok_im_by_active_cell(
                 row=han_ji_row,
                 col=col,
                 han_ji=han_ji,
@@ -193,7 +197,7 @@ class CellProcessor(ExcelCell):
             # 【作用儲存格】之 Excel Address 已變更，需將之校正回歸。
             # -------------------------------------------------------------------------
             source_sheet.activate()  # 重新激活工作表以刷新儲存格地址
-            active_cell.select()  # 選取【作用儲存格】，以確保游標位置正確
+            han_ji_cell.select()  # 選取【作用儲存格】，以確保游標位置正確
 
             logging_process_step(msg="已完成【台語音標】和【漢字標音】標注工作。")
             return EXIT_CODE_SUCCESS
