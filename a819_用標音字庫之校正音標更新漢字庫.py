@@ -72,6 +72,15 @@ def update_database_from_missing_characters(wb):
     conn = sqlite3.connect(DB_HO_LOK_UE)
     cursor = conn.cursor()
 
+    # 確保【最近揀用時間】欄位存在（既有之舊資料表自動升級）
+    existing_cols = [row[1] for row in cursor.execute("PRAGMA table_info(漢字庫)").fetchall()]
+    if "最近揀用時間" not in existing_cols:
+        cursor.execute("ALTER TABLE 漢字庫 ADD COLUMN 最近揀用時間 TEXT")
+        conn.commit()
+        print("ℹ️ 已為【漢字庫】資料表自動新增【最近揀用時間】欄位。")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_漢字庫_查音 ON 漢字庫(漢字, 常用度 DESC, 最近揀用時間 DESC)")
+    conn.commit()
+
     try:
         for idx, row_data in enumerate(data, start=2):  # Excel A2 起始，Python Index 2
             han_ji = row_data[0]  # A 欄: 漢字

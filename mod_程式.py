@@ -2047,6 +2047,17 @@ class ExcelCell:
         """
         )
 
+        # 確保【最近揀用時間】欄位存在（既有之舊資料表自動升級）
+        existing_cols = [row[1] for row in self.db_manager.fetchall(f"PRAGMA table_info({table_name})")]
+        if "最近揀用時間" not in existing_cols:
+            self.db_manager.execute(f"ALTER TABLE {table_name} ADD COLUMN 最近揀用時間 TEXT")
+            self.db_manager.commit()
+            print(f"  ℹ️ 已為【{table_name}】資料表自動新增【最近揀用時間】欄位。")
+        self.db_manager.execute(
+            f"CREATE INDEX IF NOT EXISTS idx_漢字庫_查音 ON {table_name}(漢字, 常用度 DESC, 最近揀用時間 DESC)"
+        )
+        self.db_manager.commit()
+
         # 檢查是否已存在該漢字和音標的組合
         row = self.db_manager.fetchone(
             f"SELECT 識別號 FROM {table_name} WHERE 漢字 = ? AND 台羅音標 = ?",
