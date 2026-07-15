@@ -88,10 +88,11 @@ def update_database_from_missing_characters(wb):
             print(f"📌 寫入資料庫: 漢字='{han_ji}', 台語音標='{tai_lo_im_piau}', 轉換後台羅音標='{tl_im_piau}', Excel 第 {idx} 列")
 
             cursor.execute("""
-                INSERT INTO 漢字庫 (漢字, 台羅音標, 常用度, 摘要說明, 更新時間)
-                VALUES (?, ?, ?, ?, ?)
+                INSERT INTO 漢字庫 (漢字, 台羅音標, 常用度, 摘要說明, 更新時間, 最近揀用時間)
+                VALUES (?, ?, ?, ?, ?, DATETIME('now', 'localtime'))
                 ON CONFLICT(漢字, 台羅音標) DO UPDATE
-                SET 更新時間=CURRENT_TIMESTAMP;
+                SET 更新時間=DATETIME('now', 'localtime'),
+                    最近揀用時間=DATETIME('now', 'localtime');
             """, (han_ji, tl_im_piau, siong_iong_too, "NA", datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
 
         conn.commit()

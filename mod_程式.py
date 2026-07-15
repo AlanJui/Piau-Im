@@ -2041,7 +2041,8 @@ class ExcelCell:
             常用度 REAL,
             摘要說明 TEXT,
             建立時間 TEXT NOT NULL DEFAULT (DATETIME('now', 'localtime')),
-            更新時間 TEXT NOT NULL DEFAULT (DATETIME('now', 'localtime'))
+            更新時間 TEXT NOT NULL DEFAULT (DATETIME('now', 'localtime')),
+            最近揀用時間 TEXT
         );
         """
         )
@@ -2066,17 +2067,20 @@ class ExcelCell:
         tl_im_piau = convert_tlpa_to_tl(tai_gi_im_piau_cleanned)  # 使用轉換後的【台羅拼音】作為資料庫存放的音標
         try:
             with self.db_manager.transaction():
+                now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 if row:
-                    # 更新資料
+                    # 更新資料（同步更新【最近揀用時間】：此讀音最近一次被人工揀用/校正之時間，
+                    # 供查音時於常用度相同之讀音間排定優先順序）
                     self.db_manager.execute(
                         f"""
                     UPDATE {table_name}
-                    SET 常用度 = ?, 更新時間 = ?
+                    SET 常用度 = ?, 更新時間 = ?, 最近揀用時間 = ?
                     WHERE 識別號 = ?;
                     """,
                         (
                             siong_iong_too_to_use,
-                            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                            now_time,
+                            now_time,
                             row[0],
                         ),
                     )
@@ -2085,10 +2089,10 @@ class ExcelCell:
                     # 新增資料
                     self.db_manager.execute(
                         f"""
-                    INSERT INTO {table_name} (漢字, 台羅音標, 常用度, 摘要說明)
-                    VALUES (?, ?, ?, NULL);
+                    INSERT INTO {table_name} (漢字, 台羅音標, 常用度, 摘要說明, 最近揀用時間)
+                    VALUES (?, ?, ?, NULL, ?);
                     """,
-                        (han_ji, tl_im_piau, siong_iong_too_to_use),
+                        (han_ji, tl_im_piau, siong_iong_too_to_use, now_time),
                     )
                     print(f"  ✅ 已新增：{han_ji} -  {tl_im_piau}（原【台語音標】：{tai_gi_im_piau}），常用度：{siong_iong_too_to_use}")
         except Exception as e:
