@@ -2142,7 +2142,7 @@ class ExcelCell:
             hau_ziann_im_piau = row[2]  # 校正音標
             zo_piau = row[3]  # (儲存格位置)座標
 
-            if han_ji and org_tai_gi_im_piau != "N/A":
+            if han_ji and org_tai_gi_im_piau and org_tai_gi_im_piau != "N/A":
                 # 將 Excel 工作表存放的【台語音標（TLPA）】，改成資料庫保存的【台羅拼音（TL）】
                 tlpa_im_piau = tng_im_piau(im_piau=org_tai_gi_im_piau, po_ci=False)  # 將【音標】使用之【拼音字母】轉換成【TLPA拼音字母】；【音標調符】仍保持
                 tlpa_im_piau_cleanned = tng_tiau_ho(tlpa_im_piau).lower()  # 將【音標調符】轉換成【數值調號】
@@ -2160,7 +2160,7 @@ class ExcelCell:
                 )
                 idx += 1
 
-        logging_process_step(f"\n【缺字表】中的資料已成功回填至資料庫： {db_path} 的【{table_name}】資料表中。")
+        logging_process_step(f"\n【{sheet_name}】中的資料已成功回填至資料庫： {db_path} 的【{table_name}】資料表中。")
         return EXIT_CODE_SUCCESS
 
     def tiau_zing_piau_im_ji_khoo_dict(
