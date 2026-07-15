@@ -246,13 +246,6 @@
             "console": "integratedTerminal",
         },
         {
-            "name": "a215_以人工標音指定漢字之讀音",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "a215_人工標音指定漢字讀音.py",
-            "console": "integratedTerminal",
-        },
-        {
             "name": "a220_作用儲存格查找萌典漢字讀音",
             "type": "debugpy",
             "request": "launch",
@@ -337,6 +330,13 @@
             "console": "integratedTerminal",
             "args": [
             ]
+        },
+        {
+            "name": "a270_以人工標音指定漢字之讀音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a270_人工標音指定漢字讀音.py",
+            "console": "integratedTerminal",
         },
         {
             "name": "a290_批次式漢字注音工作表製作",
