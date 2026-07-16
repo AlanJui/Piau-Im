@@ -386,10 +386,10 @@
             "console": "integratedTerminal",
         },
         {
-            "name": "a340_以標音字庫更新漢字注音工作表",
+            "name": "a340_以字庫工作表更新漢字庫資料庫",
             "type": "debugpy",
             "request": "launch",
-            "program": "a340_以標音字庫更新漢字注音工作表.py",
+            "program": "a340_以字庫工作表更新漢字庫資料庫.py",
             "console": "integratedTerminal",
         },
         {

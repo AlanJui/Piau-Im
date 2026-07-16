@@ -175,8 +175,8 @@ def process(wb, args) -> int:
             if not working_sheet.range("A2").value:
                 print(f"【{source_sheet_name}】為空，處理作業略過！")
             else:
-                xls_cell.update_hanji_zu_im_sheet_by_piau_im_ji_khoo(
-                    source_sheet_name=source_sheet_name,
+                xls_cell.update_han_ji_khoo_db_by_ji_khoo_worksheet(
+                    sheet_name=source_sheet_name,
                     target_sheet_name=target_sheet_name,
                 )
                 # 將所有【標音字庫工作表】對映之字典物件，回存 Excel 活頁簿檔案(Workbook)
@@ -189,8 +189,8 @@ def process(wb, args) -> int:
                 if not working_sheet.range("A2").value:
                     print(f"【{source_sheet_name}】為空，處理作業略過！")
                 else:
-                    xls_cell.update_hanji_zu_im_sheet_by_piau_im_ji_khoo(
-                        source_sheet_name=source_sheet_name,
+                    xls_cell.update_han_ji_khoo_db_by_ji_khoo_worksheet(
+                        sheet_name=source_sheet_name,
                         target_sheet_name=target_sheet_name,
                     )
                     # 將所有【標音字庫工作表】對映之字典物件，回存 Excel 活頁簿檔案(Workbook)
@@ -214,8 +214,8 @@ def process(wb, args) -> int:
         if not working_sheet.range("A2").value:
             print(f"【{source_sheet_name}】為空，處理作業略過！")
         else:
-            xls_cell.update_hanji_zu_im_sheet_by_piau_im_ji_khoo(
-                source_sheet_name=source_sheet_name,
+            xls_cell.update_han_ji_khoo_db_by_ji_khoo_worksheet(
+                sheet_name=source_sheet_name,
                 target_sheet_name=target_sheet_name,
             )
             # 將所有【標音字庫工作表】對映之字典物件，回存 Excel 活頁簿檔案(Workbook)
