@@ -379,17 +379,17 @@
             "console": "integratedTerminal",
         },
         {
-            "name": "a330_以標音字庫更新漢字注音工作表",
+            "name": "a330_在字庫工作表查找漢字讀音",
             "type": "debugpy",
             "request": "launch",
-            "program": "a330_以標音字庫更新漢字注音工作表.py",
+            "program": "a330_在字庫工作表查找漢字讀音.py",
             "console": "integratedTerminal",
         },
         {
-            "name": "a340_在字庫工作表查找漢字讀音",
+            "name": "a340_以標音字庫更新漢字注音工作表",
             "type": "debugpy",
             "request": "launch",
-            "program": "a340_在字庫工作表查找漢字讀音.py",
+            "program": "a340_以標音字庫更新漢字注音工作表.py",
             "console": "integratedTerminal",
         },
         {
