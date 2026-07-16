@@ -1,17 +1,19 @@
 """
-程式名稱：a350_以標音與人工標音字庫工作表更新漢字庫.py v0.0.1
+程式名稱：a340_以校正音標更新漢字庫資料庫.py v0.2.4
 
-功能：
-透過每個已完成編輯、校正的【漢字標音】Excel 檔，更新資料庫【漢字庫】資料表中【最近揀用時間】欄位
-的資料，以便提高【漢字】的某【讀音】具有較高之權重，在【漢字查找讀音】作業，可被優先揀用。
+以【標音字庫】工作表，及【人工標音字庫】工作表之【校正音標】，更新【漢字庫】資料庫。
+此程式適用時機為：查覺【標音字庫】工作表，及【人工標音字庫】工作表在【台語音標】欄填入
+的資料不適合時，可透過此程式完成漢字讀音之改正。
 
-使用的工作表為：【標音字庫】與【人工標音字庫】：
+若是覺得在【校正音標】欄資料前，需要透過【漢字庫】查找漢字讀音，則可先執行 a330 程式後，
+再執行此程式。
 
-1. 以【標音字庫】工作表之【漢字】、【台語音標】欄位，更新資料庫【漢字庫】資料表；
-2. 以【人工標音字庫】工作表之【漢字】、【台語音標】欄位，更新資料庫【漢字庫】資料表。
-
-更新紀錄：
- - v0.0.1 2026-07-15: 新增功能。
+1. 在【標音字庫】/【人工標音字庫】工作表，找到【校正音標】欄有資料之【資料紀錄】，將
+   【台語音標】欄內資料，以【校正音標】欄內資料取代；
+2. 承繼上一步驟，自【座標】欄（D欄）取得【漢字注音】工作表中【台語音標】儲存格位置，以
+   校正後的【台語音標】及轉換後的【漢字標音】，更新【漢字注音】工作表，漢字的【台語音標】
+   及【漢字標音】；
+3. 以【標音字庫】/【人工標音字庫】工作表之【漢字】、【台語音標】欄位，更新【漢字庫】資料庫。
 """
 
 # =========================================================================
@@ -55,16 +57,7 @@ init_logging()
 # =========================================================================
 def process(wb, args) -> int:
     """
-    依序以【標音字庫】、【人工標音字庫】工作表之【漢字】（A欄）、【台語音標】（B欄），
-    更新資料庫【漢字庫】資料表：
-    - 紀錄（漢字＋台羅音標）已存在：依【語音類型】更新【常用度】（文讀音 0.8／白話音 0.6），
-      並更新【更新時間】與【最近揀用時間】；
-    - 紀錄不存在：新增一筆，【常用度】依【語音類型】設定，並填上【最近揀用時間】。
-
-    註：【人工標音字庫】置於【標音字庫】之後處理。因【人工標音】為使用者明確指定之讀音，
-    其【最近揀用時間】較晚，於【漢字查找讀音】排序時可獲得最高優先權。
-
-    本程式不更動活頁簿中任何工作表之內容。
+    更新【漢字注音】表中【台語音標】儲存格的內容，依據【標音字庫】中的【校正音標】欄位進行更新，並將【校正音標】覆蓋至原【台語音標】。
 
     Args:
         wb: Excel Workbook 物件
@@ -73,16 +66,16 @@ def process(wb, args) -> int:
     Returns:
         處理結果代碼
     """
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # 作業開始
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     logging_process_step("<=========== 作業開始！==========>")
 
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # 作業初始化
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     try:
-        program = Program(wb, args, hanji_piau_im_sheet_name='漢字注音')
+        program = Program(wb, args, hanji_piau_im_sheet_name="漢字注音")
 
         # 建立儲存格處理器
         xls_cell = ExcelCell(
@@ -95,46 +88,42 @@ def process(wb, args) -> int:
         logging_exc_error(msg="處理作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
 
-    #--------------------------------------------------------------------------
-    # 處理作業開始：依序以各來源工作表，更新資料庫【漢字庫】資料表
-    # 註：【人工標音字庫】置於【標音字庫】之後處理，因【人工標音】為使用者
-    #     明確指定之讀音，其【最近揀用時間】較晚，於查音排序時可獲得最高優先權。
-    #--------------------------------------------------------------------------
-    source_sheet_names = ["標音字庫", "人工標音字庫"]
-
-    for sheet_name in source_sheet_names:
-        msg = f'使用【{sheet_name}】工作表，更新資料庫【漢字庫】資料表......'
-        print('\n')
+    # --------------------------------------------------------------------------
+    # 處理作業開始
+    # --------------------------------------------------------------------------
+    source_sheet_list = ["標音字庫", "人工標音字庫"]
+    target_sheet_name = "漢字注音"
+    for source_sheet_name in source_sheet_list:
+        msg = f"使用【{source_sheet_name}】工作表，更新【漢字庫】資料庫......"
+        print("\n")
         print("=" * 80)
         logging_process_step(msg)
 
         try:
-            if sheet_name not in [sheet.name for sheet in wb.sheets]:
-                logging_process_step(f"活頁簿中無【{sheet_name}】工作表，略過此步驟。")
-                continue
-            wb.sheets[sheet_name].activate()
-            exit_code = xls_cell.update_han_ji_khoo_db_by_sheet(sheet_name=sheet_name)
-            if exit_code != EXIT_CODE_SUCCESS:
-                return exit_code
-        except ValueError as e:
-            # 工作表內無資料：非屬異常，略過此步驟即可
-            logging_process_step(f"【{sheet_name}】工作表內無資料，略過此步驟。（{e}）")
+            wb.sheets[source_sheet_name].activate()
+            exit_code = xls_cell.update_han_ji_zu_im_sheet_by_ji_khoo_sheet(
+                source_sheet_name=source_sheet_name,
+                target_sheet_name=target_sheet_name,
+            )
         except Exception as e:
-            logging_exc_error(msg=f"處理【{sheet_name}】作業異常！", error=e)
+            logging_exc_error(msg=f"處理【{source_sheet_name}】作業異常！", error=e)
             return EXIT_CODE_PROCESS_FAILURE
 
-    #-------------------------------------------------------------------------
+    if exit_code != EXIT_CODE_SUCCESS:
+        return exit_code
+
+    # -------------------------------------------------------------------------
     # 更新資料庫 & 關閉資料庫連線
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # 關閉資料庫連線
     if xls_cell.db_manager:
         xls_cell.db_manager.disconnect()
         logging_process_step("已關閉資料庫連線")
 
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # 作業結束
-    #--------------------------------------------------------------------------
-    print('\n')
+    # --------------------------------------------------------------------------
+    print("\n")
     logging_process_step("<=========== 作業結束！==========>")
     return EXIT_CODE_SUCCESS
 
@@ -164,7 +153,7 @@ def main(args) -> int:
     wb = None
     # 取得【作用中活頁簿】
     try:
-        wb = xw.apps.active.books.active    # 取得 Excel 作用中的活頁簿檔案
+        wb = xw.apps.active.books.active  # 取得 Excel 作用中的活頁簿檔案
     except Exception as e:
         msg = "無法找到作用中的 Excel 工作簿！"
         logging_exception(msg=msg, error=e)
@@ -190,17 +179,24 @@ def main(args) -> int:
         return EXIT_CODE_PROCESS_FAILURE
 
     # =========================================================================
-    # (4) 本程式僅更新資料庫，不更動活頁簿內容，故無需儲存 Excel 檔案。
+    # (4) 儲存檔案
     # =========================================================================
+    try:
+        # 儲存檔案
+        if not Program.save_workbook_as_new_file(wb=wb):
+            return EXIT_CODE_SAVE_FAILURE  # 作業異當終止：無法儲存檔案
+    except Exception as e:
+        logging_exception(msg="儲存檔案失敗！", error=e)
+        return EXIT_CODE_SAVE_FAILURE  # 作業異當終止：無法儲存檔案
 
     # =========================================================================
     # 結束程式
     # =========================================================================
-    print('\n')
-    print('=' * 80)
+    print("\n")
+    print("=" * 80)
     logging_process_step(f"《========== 程式終止執行：{program_name} ==========》")
     if exit_code == EXIT_CODE_SUCCESS:
-        return EXIT_CODE_SUCCESS    # 作業正常結束
+        return EXIT_CODE_SUCCESS  # 作業正常結束
     else:
         msg = f"程式異常終止，返回失敗碼：{exit_code}"
         logging_exc_error(msg=msg, error=None)
@@ -231,23 +227,24 @@ if __name__ == "__main__":
 
     # 解析命令行參數
     parser = argparse.ArgumentParser(
-        description='以【標音字庫】與【人工標音字庫】工作表，更新資料庫【漢字庫】資料表',
+        description="缺字表修正後續作業程式",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog='''
+        epilog="""
 使用範例：
-  python a350_以標音與人工標音字庫工作表更新漢字庫.py          # 執行一般模式
-  python a350_以標音與人工標音字庫工作表更新漢字庫.py --test   # 執行測試模式
-'''
-        )
-    parser.add_argument(
-        '--test',
-        action='store_true',
-        help='執行測試模式',
+  python a000.py          # 執行一般模式
+  python a000.py -new     # 建立新的字庫工作表
+  python a000.py -test    # 執行測試模式
+""",
     )
     parser.add_argument(
-        '--new',
-        action='store_true',
-        help='建立新的標音字庫工作表',
+        "--test",
+        action="store_true",
+        help="執行測試模式",
+    )
+    parser.add_argument(
+        "--new",
+        action="store_true",
+        help="建立新的標音字庫工作表",
     )
     args = parser.parse_args()
 
@@ -261,4 +258,3 @@ if __name__ == "__main__":
     # 只在命令列執行時使用 sys.exit()，避免在調試環境中引發 SystemExit 例外
     if exit_code != EXIT_CODE_SUCCESS:
         sys.exit(exit_code)
-

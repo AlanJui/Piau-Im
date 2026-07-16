@@ -2319,7 +2319,11 @@ class ExcelCell:
             print(f"座標 {coord_to_remove} 不在座標清單之中。")
         return
 
-    def update_han_ji_zu_im_sheet_by_ji_khoo_sheet(self, source_sheet_name: str, target_sheet_name: str) -> int:
+    def update_han_ji_zu_im_sheet_by_ji_khoo_sheet(
+        self,
+        source_sheet_name: str,
+        target_sheet_name: str,
+    ) -> int:
         """
         以【標音字庫】/【人工標音字庫】工作表中的【資料紀錄】，更新【漢字注音】工作表：
         1. 由 A 欄讀取漢字，從 C 欄取得原始輸入之【校正音標】，並轉換為 TLPA+ 格式，然後更新 B 欄（台語音標）。

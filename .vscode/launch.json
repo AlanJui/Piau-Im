@@ -386,10 +386,17 @@
             "console": "integratedTerminal",
         },
         {
-            "name": "a340_以字庫工作表更新漢字庫資料庫",
+            "name": "a340_以校正音標更新漢字庫資料庫",
             "type": "debugpy",
             "request": "launch",
-            "program": "a340_以字庫工作表更新漢字庫資料庫.py",
+            "program": "a340_以校正音標更新漢字庫資料庫.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "a350_以字庫工作表更新漢字庫資料庫",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a350_以字庫工作表更新漢字庫資料庫.py",
             "console": "integratedTerminal",
         },
         {
