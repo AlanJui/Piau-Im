@@ -2053,9 +2053,7 @@ class ExcelCell:
             self.db_manager.execute(f"ALTER TABLE {table_name} ADD COLUMN 最近揀用時間 TEXT")
             self.db_manager.commit()
             print(f"  ℹ️ 已為【{table_name}】資料表自動新增【最近揀用時間】欄位。")
-        self.db_manager.execute(
-            f"CREATE INDEX IF NOT EXISTS idx_漢字庫_查音 ON {table_name}(漢字, 常用度 DESC, 最近揀用時間 DESC)"
-        )
+        self.db_manager.execute(f"CREATE INDEX IF NOT EXISTS idx_漢字庫_查音 ON {table_name}(漢字, 常用度 DESC, 最近揀用時間 DESC)")
         self.db_manager.commit()
 
         # 檢查是否已存在該漢字和音標的組合
@@ -2308,46 +2306,36 @@ class ExcelCell:
 
             # 讀取【缺字表】中【座標】欄（D 欄）的內容
             # 欄中內容可能含有多組座標，如 "(5, 17); (33, 8); (77, 5)"，表【漢字注音】工作表中有多處需要更新
-            coordinates_str = source_sheet.range(f"D{row}").value
-            excel_address_str = convert_coord_str_to_excel_address(coord_str=coordinates_str)  # B欄（台語音標）儲存格位置
+            coord_list_str = source_sheet.range(f"D{row}").value
+            excel_address = convert_coord_str_to_excel_address(coord_str=coord_list_str)  # B欄（台語音標）儲存格位置
             print("\n")
             print(
-                f"{row - 1}. (A{row}) 【{han_ji}】：台語音標：{org_tai_gi_im_piau}, 校正音標：{hau_ziann_im_piau} ==> 【{target_sheet_name}】工作表，儲存格：{excel_address_str} {coordinates_str}"
+                f"{row - 1}. (A{row}) 【{han_ji}】：台語音標：{org_tai_gi_im_piau}, 校正音標：{hau_ziann_im_piau} ==> 【{target_sheet_name}】工作表，儲存格：{excel_address} {coord_list_str}"
             )
 
-            if coordinates_str:
+            if coord_list_str:
                 # 將【座標】欄內存值，解析成多個【單一座標】 (row, col)
-                coordinate_tuples = re.findall(r"\((\d+)\s*,\s*(\d+)\)", coordinates_str)
+                coordinate_tuples = re.findall(r"\((\d+)\s*,\s*(\d+)\)", coord_list_str)
                 # 解析【單一座標】 (row, col) ：指向【漢字注音】工作表中之【漢字】儲存格位置
                 for tup in coordinate_tuples:
                     try:
-                        r_coord = int(tup[0])
-                        c_coord = int(tup[1])
+                        row = int(tup[0])
+                        col = int(tup[1])
                     except ValueError:
                         continue  # 若轉換失敗，跳過該組座標
 
-                    # 指向【漢字注音】工作表，【漢字儲存格】座標
-                    han_ji_cell = (r_coord, c_coord)
+                    # 令【漢字儲存格】指向【漢字注音】工作表之【漢字】儲存格
+                    han_ji_cell = target_sheet.range((row, col))
+                    # 在【漢字儲存格】上方，填入【台語音標】
+                    han_ji_cell.offset(-1, 0).value = tai_gi_im_piau
+                    # 在【漢字儲存格】下方，填入【漢字標音】
+                    han_ji_cell.offset(1, 0).value = han_ji_piau_im
 
-                    # 根據說明，【台語音標】應填入漢字儲存格上方一列 (row - 1)，相同欄位
-                    target_row = r_coord - 1
-                    tai_gi_im_piau_cell = (target_row, c_coord)
-
-                    # 將【校正音標】填入【漢字注音】工作表之【漢字儲存格】，填入漢字之【台語音標】
-                    target_sheet.range(tai_gi_im_piau_cell).value = tai_gi_im_piau
-                    excel_address = target_sheet.range(tai_gi_im_piau_cell).address
-                    excel_address = excel_address.replace("$", "")  # 去除 "$" 符號
-                    print(f"   台語音標：【{tai_gi_im_piau}】，填入【{target_sheet_name}】工作表之儲存格： {excel_address_str} {tai_gi_im_piau_cell}")
-
-                    # 將【漢字標音】填入【漢字注音】工作表，【漢字】儲存格下之【漢字標音】儲存格（即：row + 1)
-                    target_row = r_coord + 1
-                    han_ji_piau_im_cell = (target_row, c_coord)
-
-                    # 將【校正音標】填入【漢字注音】工作表漢字之【台語音標】儲存格
-                    target_sheet.range(han_ji_piau_im_cell).value = han_ji_piau_im
-                    excel_address = target_sheet.range(han_ji_piau_im_cell).address
-                    excel_address = excel_address.replace("$", "")  # 去除 "$" 符號
-                    print(f"   漢字標音：【{han_ji_piau_im}】，填入【{target_sheet_name}】工作表之儲存格： {excel_address_str} {han_ji_piau_im_cell}\n")
+                    # 回報已完工項目
+                    tai_gi_im_piau_addr = han_ji_cell.offset(-1, 0).address.replace("$", "")  # 去除 "$" 符號
+                    print(f"   台語音標：【{tai_gi_im_piau}】，填入【{target_sheet_name}】工作表之儲存格： {tai_gi_im_piau_addr} ({row - 1}, {col})")
+                    han_ji_piau_im_addr = han_ji_cell.offset(+1, 0).address.replace("$", "")  # 去除 "$" 符號
+                    print(f"   台語音標：【{han_ji_piau_im}】，填入【{target_sheet_name}】工作表之儲存格： {han_ji_piau_im_addr} ({row + 1}, {col})")
 
                     # 將【漢字注音】工作表之【漢字】儲存格之底色，重置為【無底色】
                     target_sheet.range(han_ji_cell).color = None
