@@ -120,21 +120,12 @@ def get_current_directory_from_workbook(wb) -> str:
 
 # 方法 1: 檢查是否為 list 且內容是 tuple
 def is_coordinate_list(obj):
-    return (
-        isinstance(obj, list)
-        and len(obj) > 0
-        and all(isinstance(item, tuple) and len(item) == 2 for item in obj)
-    )
+    return isinstance(obj, list) and len(obj) > 0 and all(isinstance(item, tuple) and len(item) == 2 for item in obj)
 
 
 # 方法 2: 更嚴格的檢查（包含型別）
 def is_coordinate_list_type(obj):
-    return isinstance(obj, list) and all(
-        isinstance(item, tuple)
-        and len(item) == 2
-        and all(isinstance(coord, int) for coord in item)
-        for item in obj
-    )
+    return isinstance(obj, list) and all(isinstance(item, tuple) and len(item) == 2 and all(isinstance(coord, int) for coord in item) for item in obj)
 
 
 # -------------------------------------------------------------------------
@@ -178,11 +169,7 @@ def calculate_total_lines(
         # 2. 一次讀取範圍內的資料，提升效能
         #    使用 ndim=2 確保回傳二維列表
         #    讀取範圍： (start_row_no, start_col) 到 (max_row, end_col)
-        data = (
-            sheet.range((start_row_no, start_col), (max_row, end_col))
-            .options(ndim=2)
-            .value
-        )
+        data = sheet.range((start_row_no, start_col), (max_row, end_col)).options(ndim=2).value
 
         last_valid_line = 0
         total_data_rows = len(data)
@@ -258,11 +245,9 @@ def calculate_total_rows(
     end_col_idx = _col_to_index(end_col)
 
     while True:
-        han_ji_row = current_base + 2   # 漢字所在 row
+        han_ji_row = current_base + 2  # 漢字所在 row
         piau_im_row = current_base + 3  # 漢字標音所在 row
-        target_range = sheet.range(
-            (han_ji_row, start_col_idx), (piau_im_row, end_col_idx)
-        )
+        target_range = sheet.range((han_ji_row, start_col_idx), (piau_im_row, end_col_idx))
         values = target_range.value
 
         if not _has_meaningful_data(values):
@@ -383,9 +368,7 @@ def reset_cells_format_in_sheet(
         # 顯示目前處理【狀態】
         start_col_name = xw.utils.col_name(start_col)  # D
         end_col_name = xw.utils.col_name(end_col)  # R
-        print(
-            f"重置【{sheet_name}】工作表之儲存格格式，範圍為：{start_col_name}{start_row}:{end_col_name}{end_row}。"
-        )
+        print(f"重置【{sheet_name}】工作表之儲存格格式，範圍為：{start_col_name}{start_row}:{end_col_name}{end_row}。")
 
         # 以【區塊】（range）方式設置儲存格格式
         row = start_row
@@ -431,9 +414,7 @@ def reset_cells_format_in_sheet(
             # 漢字標音
             range_漢字標音 = sheet.range((row + 1, start_col), (row + 1, end_col))
             range_漢字標音.value = None
-            set_range_format(
-                range_漢字標音, font_name="芫荽 0.94", font_size=26, font_color=0x009900
-            )  # 綠色
+            set_range_format(range_漢字標音, font_name="芫荽 0.94", font_size=26, font_color=0x009900)  # 綠色
 
             # 準備處理下一【行】
             row += rows_per_line
@@ -470,9 +451,7 @@ def excel_address_to_row_col(cell_address: str) -> tuple[int, int]:
     :param cell_address: Excel 儲存格地址 (如 'D9', 'AA15')
     :return: (row, col) 元組，例如 (9, 4)
     """
-    match = re.match(
-        r"([A-Z]+)(\d+)", cell_address
-    )  # 用 regex 拆分字母(列) 和 數字(行)
+    match = re.match(r"([A-Z]+)(\d+)", cell_address)  # 用 regex 拆分字母(列) 和 數字(行)
 
     if not match:
         raise ValueError(f"無效的 Excel 儲存格地址: {cell_address}")
@@ -494,9 +473,7 @@ def excel_address_to_coordinate(cell_address: str) -> tuple[int, int]:
     :param cell_address: Excel 儲存格地址 (如 'D9', 'AA15')
     :return: (row, col) 元組，例如 (9, 4)
     """
-    match = re.match(
-        r"([A-Z]+)(\d+)", cell_address
-    )  # 用 regex 拆分字母(列) 和 數字(行)
+    match = re.match(r"([A-Z]+)(\d+)", cell_address)  # 用 regex 拆分字母(列) 和 數字(行)
 
     if not match:
         raise ValueError(f"無效的 Excel 儲存格地址: {cell_address}")
@@ -509,6 +486,19 @@ def excel_address_to_coordinate(cell_address: str) -> tuple[int, int]:
         col_number = col_number * 26 + (ord(letter) - ord("A") + 1)
 
     return int(row_number), col_number
+
+
+def convert_coord_list_str_to_tuples(
+    coord_list: str,
+) -> list[tuple[int, int]]:
+    """
+    將傳入之 coord_list_str 轉換成 coord_list
+    傳入："(5, 4); (11, 18); (20, 6)"
+    回傳：[(5,4), (11,18), (20,6)]
+    """
+    # 利用正規表達式，解析所有形如 (row, col) 之座標
+    matches = re.findall(r"\((\d+)\s*,\s*(\d+)\)", str(coord_list))
+    return [(int(row), int(col)) for row, col in matches]
 
 
 def convert_coord_str_to_excel_address(coord_str: str) -> str:
@@ -576,9 +566,7 @@ def get_active_excel_file():
         return None
 
 
-def get_line_no_by_row(
-    current_row_no, start_row_no=START_ROW_NO, rows_per_line=ROWS_PER_LINE
-):
+def get_line_no_by_row(current_row_no, start_row_no=START_ROW_NO, rows_per_line=ROWS_PER_LINE):
     """
     根據儲存格的 row 座標，計算其所屬的行號 (line no)。
 
@@ -588,9 +576,7 @@ def get_line_no_by_row(
     :return: 行號 (line no)，從 1 開始計數
     """
     if current_row_no < start_row_no:
-        raise ValueError(
-            f"儲存格的 row 列號（{current_row_no}）必須大於等於基準列（{START_ROW_NO}）。"
-        )
+        raise ValueError(f"儲存格的 row 列號（{current_row_no}）必須大於等於基準列（{START_ROW_NO}）。")
     line_no = ((current_row_no - start_row_no) // rows_per_line) + 1
     return line_no
 
@@ -654,9 +640,7 @@ def get_active_cell_info(wb):
     """
     active_cell = wb.app.selection  # 取得目前作用中的儲存格
     sheet_name = active_cell.sheet.name  # 取得所在的工作表名稱
-    cell_address = active_cell.address.replace(
-        "$", ""
-    )  # 取得 Excel 格式地址 (去掉 "$")
+    cell_address = active_cell.address.replace("$", "")  # 取得 Excel 格式地址 (去掉 "$")
 
     row, col = excel_address_to_row_col(cell_address)  # 轉換為 (row, col)
 
@@ -680,9 +664,7 @@ def get_active_cell(wb):
     """
     active_cell = wb.app.selection  # 獲取目前作用中的儲存格
     sheet_name = active_cell.sheet.name  # 獲取所在的工作表名稱
-    cell_address = active_cell.address.replace(
-        "$", ""
-    )  # 取得 Excel 格式地址 (去掉 "$")
+    cell_address = active_cell.address.replace("$", "")  # 取得 Excel 格式地址 (去掉 "$")
 
     return sheet_name, cell_address
 
@@ -861,9 +843,7 @@ def maintain_ji_khoo(sheet, han_ji, tai_gi, show_msg=False):
     found = False
     for i, row in enumerate(records):
         if row[0] == han_ji and row[1] == tai_gi:
-            row[2] = (
-                row[2] if isinstance(row[2], (int, float)) else 0
-            ) + 1  # 確保存在總數是數字
+            row[2] = (row[2] if isinstance(row[2], (int, float)) else 0) + 1  # 確保存在總數是數字
             found = True
             if show_msg:
                 print(f"漢字：【{han_ji}（{tai_gi}）】紀錄己有，總數為： {int(row[2])}")
@@ -915,9 +895,7 @@ def get_tai_gi_by_han_ji(sheet, han_ji, show_msg=False):
     return None
 
 
-def create_dict_by_piau_im_sheet(
-    wb, sheet_name="標音字庫", start_row: int =2, end_col: str = "D"
-) -> Optional[dict]:
+def create_dict_by_piau_im_sheet(wb, sheet_name="標音字庫", start_row: int = 2, end_col: str = "D") -> Optional[dict]:
     """
     以標音用工作表，建置查詢用字典，key: 漢字, value: (台語音標, 校正音標, 次數)
     """
@@ -937,12 +915,7 @@ def create_dict_by_piau_im_sheet(
 
         dict_list = []
         for row in data:
-            dict_list.append({
-                "漢字": row[0],
-                "台語音標": row[1],
-                "校正音標": row[2],
-                "座標": row[3]
-            })
+            dict_list.append({"漢字": row[0], "台語音標": row[1], "校正音標": row[2], "座標": row[3]})
         return dict_list
 
     except Exception as e:
