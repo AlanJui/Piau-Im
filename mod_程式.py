@@ -2405,7 +2405,6 @@ class ExcelCell:
 
             if coord_list_str:
                 # 將【座標】欄內存值，解析成多個【單一座標】 (row, col)
-                # coordinate_tuples = re.findall(r"\((\d+)\s*,\s*(\d+)\)", coord_list_str)
                 coordinate_tuples = convert_coord_list_str_to_tuples(
                     coord_list=coord_list_str,
                 )
@@ -2434,6 +2433,17 @@ class ExcelCell:
                     target_sheet.range(han_ji_cell).color = None
 
             row += 1  # 讀取下一列
+            # -------------------------------------------------------------------------
+            # 更新資料庫中【漢字庫】資料表
+            # -------------------------------------------------------------------------
+            siong_iong_too_to_use = 0.8 if self.program.ue_im_lui_piat == "文讀音" else 0.6  # 根據語音類型設定常用度
+            self.insert_or_update_to_db(
+                table_name=self.program.table_name,
+                han_ji=han_ji,
+                tai_gi_im_piau=tai_gi_im_piau,
+                ue_im_lui_piat=self.program.ue_im_lui_piat,
+                siong_iong_too=siong_iong_too_to_use,
+            )
 
         return EXIT_CODE_SUCCESS
 

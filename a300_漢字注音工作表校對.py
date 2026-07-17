@@ -16,6 +16,8 @@ a109_漢字注音工作表校對.py V0.3
   → (Right Arrow) : 向右移動
   ↑ (Up Arrow)    : 向上移動到上一行
   ↓ (Down Arrow)  : 向下移動到下一行
+  PgUp (Page Up)  : 翻到上一頁
+  PgDn (Page Down): 翻到下一頁
   空白            : 查字典更換漢字讀音
   J 鍵            : 查字典指定漢字讀音
   E 鍵            : 手動輸入人工標音
@@ -24,6 +26,9 @@ a109_漢字注音工作表校對.py V0.3
 ======================================================================
 
 變更紀錄：
+V0.5 (2026-07-16): 新增 PgUp/PgDn 按鍵支援：以 Excel 視窗目前可視列數換算
+每頁行數，令游標一次向上／向下翻一頁（頁首／頁尾自動截止於第一行／最後一行）。
+
 V0.3 (2026-02-28): 變更【人工標音作業】功能（按鍵：【E】），原先以 a224 程式
 要求使用者手動輸入漢字讀音；現在改用 a260 程式，先在《個人字典》查找漢字讀音；
 故使用者除了自行手動輸入外；亦可直接套用《個人字典》查得的漢字讀音。
@@ -383,6 +388,25 @@ def get_total_lines(wb) -> int:
     except:  # noqa: E722
         # 預設值
         return 10
+
+
+def get_lines_per_page(wb) -> int:
+    """
+    取得【每頁行數】：以 Excel 視窗目前可視列數，換算可容納幾【行】
+    （每行佔 ROWS_PER_LINE 列）；供 PgUp/PgDn 翻頁使用。
+
+    Args:
+        wb: Excel 工作簿物件
+
+    Returns:
+        每頁行數（至少 1 行；無法取得時，預設 5 行）
+    """
+    try:
+        visible_rows = wb.app.api.ActiveWindow.VisibleRange.Rows.Count
+        return max(1, visible_rows // ROWS_PER_LINE)
+    except Exception as e:
+        logging.debug(f"無法取得可視列數：{e}")
+        return 5
 
 
 def hide_manual_annotation_style(wb):
@@ -758,6 +782,12 @@ class NavigationController:
                 self.pending_action = "up"
             elif key == keyboard.Key.down:
                 self.pending_action = "down"
+            elif key == keyboard.Key.page_up:
+                # PgUp 鍵：翻到上一頁
+                self.pending_action = "page_up"
+            elif key == keyboard.Key.page_down:
+                # PgDn 鍵：翻到下一頁
+                self.pending_action = "page_down"
             elif key == keyboard.Key.space:
                 # 空白鍵：查詢個人字典
                 # self.pending_action = "query_personal"
@@ -827,6 +857,30 @@ class NavigationController:
                 new_row, new_col = move_down(self.sheet, self.current_row, self.current_col, self.total_lines)
                 if new_row != self.current_row or new_col != self.current_col:
                     self.move_to_cell(new_row, new_col)
+
+            elif action == "page_up":
+                # 翻到上一頁（重置延遲計時器）
+                self.last_move_time = None
+                lines_per_page = get_lines_per_page(self.wb)
+                line_no = get_line_number(self.current_row)
+                new_line = max(1, line_no - lines_per_page)
+                if new_line != line_no:
+                    print(f"  [PgUp：向上翻 {line_no - new_line} 行]")
+                    self.move_to_cell(get_row_from_line(new_line), self.current_col)
+                else:
+                    print("  [已在第一行，無法向上翻頁]")
+
+            elif action == "page_down":
+                # 翻到下一頁（重置延遲計時器）
+                self.last_move_time = None
+                lines_per_page = get_lines_per_page(self.wb)
+                line_no = get_line_number(self.current_row)
+                new_line = min(self.total_lines, line_no + lines_per_page)
+                if new_line != line_no:
+                    print(f"  [PgDn：向下翻 {new_line - line_no} 行]")
+                    self.move_to_cell(get_row_from_line(new_line), self.current_col)
+                else:
+                    print("  [已在最後一行，無法向下翻頁]")
 
             # elif action == "query_moedict":
             #     # 查詢萌典
@@ -1410,6 +1464,8 @@ def read_han_ji_with_keyboard(wb, view_mode=False) -> int:
         print("  → (Right Arrow) : 向右移動")
         print("  ↑ (Up Arrow)    : 向上移動到上一行")
         print("  ↓ (Down Arrow)  : 向下移動到下一行")
+        print("  PgUp (Page Up)  : 翻到上一頁")
+        print("  PgDn (Page Down): 翻到下一頁")
         print("  空白 鍵         : 查字典更換漢字讀音（a250）")
         print("  J 鍵            : 查字典指定漢字讀音（a260）")
         print("  E 鍵            : 手動輸入人工標音（a222）")
@@ -1510,6 +1566,7 @@ def read_han_ji_zu_im_sheet(wb) -> int:
         print("操作說明：")
         print("  ← (Left Arrow)  : 向左移動")
         print("  → (Right Arrow) : 向右移動")
+        print("  pgup / pgdn     : 翻到上一頁／下一頁")
         print("  Ctrl+C          : 結束程式")
         print("=" * 70)
         print(f"總行數：{total_lines}")
@@ -1549,6 +1606,30 @@ def read_han_ji_zu_im_sheet(wb) -> int:
                         print(f"→ 移動到：{xw.utils.col_name(current_col)}{current_row}")
                     else:
                         print("已在最後一行行尾，無法向右移動")
+
+                elif user_input in ["pgup", "pu"]:
+                    # 翻到上一頁
+                    lines_per_page = get_lines_per_page(wb)
+                    line_no = get_line_number(current_row)
+                    new_line = max(1, line_no - lines_per_page)
+                    if new_line != line_no:
+                        current_row = get_row_from_line(new_line)
+                        sheet.range((current_row, current_col)).select()
+                        print(f"→ 翻到上一頁：{xw.utils.col_name(current_col)}{current_row}")
+                    else:
+                        print("已在第一行，無法向上翻頁")
+
+                elif user_input in ["pgdn", "pd"]:
+                    # 翻到下一頁
+                    lines_per_page = get_lines_per_page(wb)
+                    line_no = get_line_number(current_row)
+                    new_line = min(total_lines, line_no + lines_per_page)
+                    if new_line != line_no:
+                        current_row = get_row_from_line(new_line)
+                        sheet.range((current_row, current_col)).select()
+                        print(f"→ 翻到下一頁：{xw.utils.col_name(current_col)}{current_row}")
+                    else:
+                        print("已在最後一行，無法向下翻頁")
 
                 elif user_input == "":
                     # 空白輸入，不移動
