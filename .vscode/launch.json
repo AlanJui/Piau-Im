@@ -355,20 +355,27 @@
             "args": []
         },
         {
-            "name": "a300_手動更正漢字標音",
+            "name": "a300_漢字注音工作表校對",
             "type": "debugpy",
             "request": "launch",
-            "program": "a300_手動更正漢字標音.py",
+            "program": "a300_漢字注音工作表校對.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "a310_手動更正漢字標音",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "a310_手動更正漢字標音.py",
             "console": "integratedTerminal",
             "args": [
                 // "--new"
             ]
         },
         {
-            "name": "a310_缺字表修正後續作業",
+            "name": "a311_缺字表修正後續作業",
             "type": "debugpy",
             "request": "launch",
-            "program": "a310_缺字表修正後續作業.py",
+            "program": "a311_缺字表修正後續作業.py",
             "console": "integratedTerminal",
         },
         {
