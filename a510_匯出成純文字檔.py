@@ -1,4 +1,17 @@
 # =========================================================================
+# a510_匯出成純文字檔.py
+#
+# 功能說明：
+# 將【漢字注音】工作表之內的【漢字】】匯出，製成純文字檔。
+#
+# 【漢字注音】工作表之儲存格結構（每行文句佔 4 列）：
+#     第 1 列：人工標音
+#     第 2 列：台語音標
+#     第 3 列：漢字（起始列號 5，之後每隔 4 列為下一行）
+#     第 4 列：漢字標音（本程式取用之標音）
+# =========================================================================
+
+# =========================================================================
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
 import logging
@@ -9,10 +22,6 @@ from pathlib import Path
 # 載入第三方套件
 import xlwings as xw
 from dotenv import load_dotenv
-from p709_reset_han_ji_cells import reset_han_ji_cells
-
-# 載入自訂模組
-from mod_file_access import save_as_new_file
 
 # =========================================================================
 # 載入環境變數
@@ -146,14 +155,15 @@ def process(wb):
 
     # 將所有漢字寫入文字檔
     output_dir_path = wb.names['OUTPUT_PATH'].refers_to_range.value
-    output_file = 'tmp.txt'
+    # output_file = 'tmp.txt'
+    output_file = f"{Path(wb.name).stem}.txt"  # 取活頁簿檔名（去掉 .xlsx）加 .txt
     output_file_path = os.path.join(output_dir_path, output_file)
     with open(output_file_path, 'w', encoding='utf-8') as f:
         f.write(han_ji_text)
     logging_process_step(f"已成功將漢字輸出至檔案：{output_file}")
 
     # 螢幕 Dump 檔案內容
-    dump_txt_file(output_file)
+    dump_txt_file(output_file_path)
 
     # 作業結束前處理
     logging_process_step(f"完成【處理作業】...")
