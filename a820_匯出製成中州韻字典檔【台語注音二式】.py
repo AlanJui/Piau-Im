@@ -1,4 +1,18 @@
 # =========================================================================
+# a820_匯出製成中州韻字典檔【台語注音二式】.py
+#
+# 功能說明：
+# 將【Ho_Lok_Ue.db】/【漢字庫】資料表內的漢字讀音紀錄匯出，製成
+# 中州韻輸入方案字典檔（.yaml）檔案：ji_khoo_bpm2.dict.yaml。
+#
+# 此字典檔專供「台語注音二式」輸入方案使用，其羅馬拼音系統採用「台語注音二式」。
+#
+# 若需要詳細之「台語注音二式」羅馬拼音系統說明，可參考：
+# C:\Users\AlanJui\work\rime-tlpa\docs\090_漢字標音轉換指引.md 文件。
+# =========================================================================
+
+
+# =========================================================================
 # 載入程式所需套件/模組
 # =========================================================================
 import logging
@@ -6,10 +20,10 @@ import os
 import shutil
 import sqlite3
 import sys
-from datetime import datetime
 
 from dotenv import load_dotenv
 
+from mod_convert_TLPA_to_MPS2 import convert_TLPA_to_MPS2  # 載入 TLPA 轉台語注音二式的函式
 from mod_標音 import convert_tl_to_tlpa  # 載入台羅音標轉 TLPA 的函式
 
 # =========================================================================
@@ -42,16 +56,29 @@ EXIT_CODE_UNKNOWN_ERROR = 99
 def export_database_to_rime_yaml():
     r"""
     從資料庫讀取【漢字庫】資料，產生符合中州韻輸入法引擎字典規格的 YAML 檔，
-    檔名為 tl_ji_khoo_peh_ue.yaml，接著將此檔案複製到下列兩個目錄：
+    檔名為 ji_khoo_bpm2.dict.yaml；code 欄之拼音採【台語注音二式（BPM2）】，
+    轉換路徑：台羅音標（資料庫存放格式）→ TLPA → 台語注音二式。
+    接著將此檔案複製到下列兩個目錄：
       - C:\Users\AlanJui\AppData\Roaming\Rime\
-      - Z:\home\alanjui\workspace\rime\rime-tlpa\
+      - C:\Users\AlanJui\work\rime-tlpa\
     """
     conn = None
     try:
         # 連接資料庫並讀取資料表內容
+        # 【漢字庫】資料表現行結構：識別號、漢字、台羅音標、常用度、摘要說明、更新時間、最近揀用時間。
+        # 排序規則與查音邏輯（mod_ca_ji_tian.py）一致：同漢字之多筆讀音，
+        # 依【常用度】由大至小；常用度相同時，依【最近揀用時間】由新至舊。
         conn = sqlite3.connect(DB_HO_LOK_UE)
         cursor = conn.cursor()
-        cursor.execute("SELECT 識別號, 漢字, 台羅音標, 常用度, 摘要說明, 更新時間 FROM 漢字庫;")
+        cursor.execute(
+            """
+            SELECT 漢字, 台羅音標, 常用度, 摘要說明, 更新時間, 最近揀用時間
+            FROM 漢字庫
+            ORDER BY 漢字 ASC,
+                     COALESCE(常用度, 0) DESC,
+                     COALESCE(最近揀用時間, '') DESC;
+            """
+        )
         rows = cursor.fetchall()
 
         # ---------------------------------------------------------------------
@@ -60,24 +87,19 @@ def export_database_to_rime_yaml():
         header_content = """# Rime dictionary
 # encoding: utf-8
 #
-# 河洛白話音
+# Ho_Lok_Ue.db/漢字庫資料表轉製成中州韻輸入方案字典檔
+# 此字典檔專供「台語注音二式」輸入方案使用，其羅馬拼音系統採用「台語注音二式」。
 ---
-name: tl_ji_khoo_peh_ue
-version: "0.1.0.0"
+name: ji_khoo_bpm2
+version: "v0.1.0"
 sort: by_weight
 use_preset_vocabulary: false
 columns:
-  - text    # 漢字／詞彙
-  - code    # 台灣音標（TLPA）拼音字母
+  - text    # 漢字
+  - code    # 台語注音二式（BPM2）拼音
   - weight  # 常用度（優先顯示度）
   - stem    # 用法舉例
-  - create  # 建立日期
-import_tables:
-  - tl_ji_khoo_kah_kut_bun      # 甲骨文考證漢字庫
-  # - tl_ji_khoo_peh_ue_cu_ting      # 個人自訂擴充字庫
-  # - tl_ji_khoo_ciann_ji
-  # - tl_ji_khoo_siong_iong_si_lui
-  # - tl_ji_khoo_tai_uan_si_lui
+  - create  # 建立時間
 ...
 """
         # ---------------------------------------------------------------------
@@ -86,13 +108,22 @@ import_tables:
         # ---------------------------------------------------------------------
         data_lines = []
         for row in rows:
-            # 資料表欄位依序： 識別號, 漢字, 台羅音標, 常用度, 摘要說明, 更新時間
-            text = row[1] if row[1] is not None else ""
-            # 將「台羅音標」轉換為 TLPA
-            code = convert_tl_to_tlpa(row[2]) if row[2] is not None else ""
-            weight = str(row[3]) if row[3] is not None else ""
-            stem = row[4] if row[4] is not None else ""
-            create = row[5] if row[5] is not None else ""
+            # 查詢結果欄位依序：漢字, 台羅音標, 常用度, 摘要說明, 更新時間, 最近揀用時間
+            han_ji, tai_lo_im_piau, siong_iong_too, zik_iau, kenn_sin_si, kin_king_si = row
+            text = han_ji if han_ji is not None else ""
+            # 將「台羅音標」轉換為 TLPA，再由 TLPA 轉換為「台語注音二式」
+            if tai_lo_im_piau is not None:
+                tlpa_im_piau = convert_tl_to_tlpa(str(tai_lo_im_piau).strip().lower()) or ""
+                code = convert_TLPA_to_MPS2(tlpa_im_piau)
+            else:
+                code = ""
+            weight = str(siong_iong_too) if siong_iong_too is not None else ""
+            # 摘要說明若為 NULL 或空白，一律填入 'NA' 佔位：避免該欄留空時，
+            # 在無法顯示 Tab 控制字元的文字編輯器中，被誤認為多餘空白而遭刪除，
+            # 破壞 RIME 字典檔以 Tab 分欄的結構。
+            stem = zik_iau if zik_iau is not None and str(zik_iau).strip() != "" else "NA"
+            # create 欄：取【最近揀用時間】（人工揀用之讀音較具參考性），無則取【更新時間】
+            create = kin_king_si or kenn_sin_si or ""
             # 組成一行（以 tab 分隔）
             line = f"{text}\t{code}\t{weight}\t{stem}\t{create}"
             data_lines.append(line)
@@ -100,7 +131,7 @@ import_tables:
         # ---------------------------------------------------------------------
         # 將 header 與資料行寫入檔案
         # ---------------------------------------------------------------------
-        output_filename = "tl_ji_khoo_peh_ue.dict.yaml"
+        output_filename = "ji_khoo_bpm2.dict.yaml"
         with open(output_filename, "w", encoding="utf-8") as f:
             f.write(header_content)
             f.write("\n")  # 確保 header 與資料間有換行
@@ -114,7 +145,7 @@ import_tables:
         # ---------------------------------------------------------------------
         dest_dirs = [
             r"C:\Users\AlanJui\AppData\Roaming\Rime",
-            r"Z:\home\alanjui\workspace\rime\rime-tlpa"
+            r"C:\Users\AlanJui\work\rime-tlpa"
         ]
         for dest in dest_dirs:
             if not os.path.exists(dest):
