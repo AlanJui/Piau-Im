@@ -113,7 +113,10 @@ class Program:
         self.han_ji_khoo_name = wb.names["漢字庫"].refers_to_range.value  # Table: 漢字庫
         self.db_path = DB_HO_LOK_UE if self.han_ji_khoo_name == "河洛話" else DB_KONG_UN
         self.db_name = Path(self.db_path).name
-        self.table_name = wb.names["漢字庫"].refers_to_range.value  # Table: 漢字庫
+        # 【注意】活頁簿命名範圍【漢字庫】存放的是「字典名稱」（河洛話/廣韻），用以決定連接哪個資料庫；
+        # 兩個資料庫中，存放漢字讀音的資料表，名稱皆固定為【漢字庫】，切勿誤用字典名稱當資料表名稱。
+        # self.table_name = wb.names["漢字庫"].refers_to_range.value # 不要指定為【河洛話】
+        self.table_name = "漢字庫"
         self.ji_tian = HanJiTian(self.db_name)
         self.piau_im = PiauIm(han_ji_khoo=self.han_ji_khoo_name)
         # 【漢字注音】工作表描述
@@ -1185,11 +1188,14 @@ class ExcelCell:
         # 即：取得【漢字】所在列的【各欄】資料
         _, entry = piau_im_ji_khoo_dict.get_entry_by_row_no(row_no)
 
-        # 檢查尋得之【漢字】，其【台語音標】是否與欲更新之【台語音標】不同
-        existing_tai_gi_im_piau = entry.get("tai_gi_im_piau", "")
-        if existing_tai_gi_im_piau == tai_gi_im_piau:
-            print(f"\n【{han_ji}】在【標音字庫】工作表之【台語音標】：【{tai_gi_im_piau}】，同字典選用之標音，無需更新！\n")
-            return False  # 無需更新
+        #------------------------------------------------------------------------------
+        # 開發/測試階段，暫時不檢查【台語音標】是否相同，直接更新【標音字庫】工作表之【台語音標】欄位
+        #------------------------------------------------------------------------------
+        # # 檢查尋得之【漢字】，其【台語音標】是否與欲更新之【台語音標】不同
+        # existing_tai_gi_im_piau = entry.get("tai_gi_im_piau", "")
+        # if existing_tai_gi_im_piau == tai_gi_im_piau:
+        #     print(f"\n【{han_ji}】在【標音字庫】工作表之【台語音標】：【{tai_gi_im_piau}】，同字典選用之標音，無需更新！\n")
+        #     return False  # 無需更新
 
         # 查驗傳入之【漢字】儲存格【座標】，在【標音字庫】工作表的【資料紀錄】，可於【座標】欄儲存的【座標清單】找到
         row, col = coordinate
@@ -2057,12 +2063,6 @@ class ExcelCell:
         self.db_manager.execute(f"CREATE INDEX IF NOT EXISTS idx_漢字庫_查音 ON {table_name}(漢字, 常用度 DESC, 最近揀用時間 DESC)")
         self.db_manager.commit()
 
-        # 檢查是否已存在該漢字和音標的組合
-        row = self.db_manager.fetchone(
-            f"SELECT 識別號 FROM {table_name} WHERE 漢字 = ? AND 台羅音標 = ?",
-            (han_ji, tai_gi_im_piau),
-        )
-
         # ---------------------------------------------------------------------------------------------------------
         # 插入或更新資料
         # ---------------------------------------------------------------------------------------------------------
@@ -2075,6 +2075,14 @@ class ExcelCell:
         # 將【台語音標】轉換成【台羅拼音（TL）】（TLPA 調號）
         tai_gi_im_piau_cleanned = tng_tiau_ho(tai_gi_im_piau).lower()  # 將【音標調符號】轉換成【數值調號】
         tl_im_piau = convert_tlpa_to_tl(tai_gi_im_piau_cleanned)  # 使用轉換後的【台羅拼音】作為資料庫存放的音標
+
+        # 檢查是否已存在該漢字和音標的組合。
+        # 【注意】需以「轉換後」的台羅音標查對，因資料庫存放者為轉換後之音標；
+        # 若以原始輸入（可能帶調符）查對，將因查不到既有紀錄而重複新增。
+        row = self.db_manager.fetchone(
+            f"SELECT 識別號 FROM {table_name} WHERE 漢字 = ? AND 台羅音標 = ?",
+            (han_ji, tl_im_piau),
+        )
         try:
             with self.db_manager.transaction():
                 now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")

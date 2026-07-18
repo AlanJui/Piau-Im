@@ -383,9 +383,8 @@ def export_database_to_excel(wb):
 
     try:
         # 讀取資料庫內容
-        # cursor.execute("SELECT 識別號, 漢字, 台羅音標, 常用度, 摘要說明, 更新時間 FROM 漢字庫;")
         cursor.execute(
-            "SELECT 識別號, 漢字, 台羅音標, 常用度, 摘要說明, 更新時間 FROM 漢字庫R1;"
+            "SELECT 識別號, 漢字, 台羅音標, 常用度, 摘要說明, 更新時間 FROM 漢字庫;"
         )
         rows = cursor.fetchall()
 
