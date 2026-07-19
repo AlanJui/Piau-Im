@@ -100,6 +100,10 @@ columns:
   - weight  # 常用度（優先顯示度）
   - stem    # 用法舉例
   - create  # 建立時間
+import_tables:
+  - ji_khoo_ziann_ji_bpm2
+  - ji_khoo_ban_lam_bpm2
+  - ji_khoo_su_lui_bpm2
 ...
 """
         # ---------------------------------------------------------------------
