@@ -3,9 +3,14 @@
 定義程式所需之常數、設定參數。
 
 Dict_List 為批次作業清單：d100／d200 會依序處理其中每一筆。
-各筆可選欄位：
-  - 標的工作表名稱：d100 轉換後工作表名（預設「台語注音二式」）
-  - 標音欄：漢字標音所在欄（預設「B」；可用 d100 --col_addr 全域覆寫）
+
+各筆必要欄位：
+  - WorkBook檔案：Excel 活頁簿檔名
+  - WorkSheet名稱：來源工作表名稱（台羅拼音資料所在）
+
+d100 標的工作表固定為「台語注音二式」（由程式常數決定，不另設欄位）。
+可選欄位：
+  - 標音欄：漢字標音所在欄（預設由 d100 依表頭自動判斷，或 --col_addr 覆寫）
 """
 
 from __future__ import annotations
@@ -48,10 +53,8 @@ target_dir_path = r"%UserProfile%\work\rime-tlpa\src"
 # 預設：來源「台羅拼音」→ 標的「台語注音二式」；標音在 B 欄（code）
 Dict_List = {
     "HanJi": {
-        # 【漢字庫】內「台羅拼音」為資料庫欄位格式；RIME 用「正字庫*」工作表
         "WorkBook檔案": "【漢字庫】.xlsx",
-        "WorkSheet名稱": "正字庫台羅拼音",
-        "標的工作表名稱": "正字庫台語注音二式",
+        "WorkSheet名稱": "台羅拼音",
         "字典檔來源摘要": "網路蒐集之《漢字庫》",
         "字典簡介": "閩南語之漢字字典檔（含：文讀音、白話音）",
         "版本號": "v0.1.0",
@@ -69,10 +72,10 @@ Dict_List = {
         "字典簡介": "閩南語漢字之單字字典，含：各地閩南話方音",
         "版本號": "v0.1.0",
         "TL": {
-            "輸入方案名稱": "ji_khoo_tl_BanLam",
+            "輸入方案名稱": "ji_khoo_tl_BanLam_TanJi",
         },
         "BPM2": {
-            "輸入方案名稱": "ji_khoo_bpm2_BanLam",
+            "輸入方案名稱": "ji_khoo_bpm2_BanLam_TanJi",
         },
     },
     "KamJiTian": {
@@ -102,9 +105,8 @@ Dict_List = {
         },
     },
     "ZiannJi": {
-        # 實際檔名含【後空白，且工作表為 RIME_Dict
-        "WorkBook檔案": "【 閩南語白話音漢字正字】.xlsx",
-        "WorkSheet名稱": "RIME_Dict",
+        "WorkBook檔案": "【閩南語白話音漢字正字】.xlsx",
+        "WorkSheet名稱": "台羅拼音",
         "字典檔來源摘要": "網路蒐集之《閩南語白話漢字正字》",
         "字典簡介": "閩南語漢字之單字/辭彙輸入方案用字典檔",
         "版本號": "v0.1.0",
@@ -128,15 +130,21 @@ def expand_dir_path(path: str) -> Path:
 
 
 def get_source_sheet_name(dict_cfg: dict) -> str:
+    """來源工作表：僅使用 WorkSheet名稱。"""
     return dict_cfg.get("WorkSheet名稱") or DEFAULT_SOURCE_SHEET
 
 
-def get_target_sheet_name(dict_cfg: dict) -> str:
-    return dict_cfg.get("標的工作表名稱") or DEFAULT_TARGET_SHEET
+def get_target_sheet_name(_dict_cfg: dict | None = None) -> str:
+    """標的工作表固定為「台語注音二式」，不依 Dict_List 設定。"""
+    return DEFAULT_TARGET_SHEET
 
 
-def get_code_col_addr(dict_cfg: dict) -> str:
-    return dict_cfg.get("標音欄") or DEFAULT_CODE_COL
+def get_code_col_addr(dict_cfg: dict) -> str | None:
+    """
+    若 Dict 有明示「標音欄」則回傳；否則回傳 None，
+    交由 d100 依工作表表頭自動判斷。
+    """
+    return dict_cfg.get("標音欄")
 
 
 def format_rime_header(
