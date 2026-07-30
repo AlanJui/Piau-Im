@@ -1,64 +1,34 @@
-"""d100_Excel工作表自TL轉BPM2.py v0.0.1
+""" d100_Excel工作表自TL轉BPM2.py v0.0.1
 摘要：
     將 Excel 檔案中的【台羅拼音】工作表轉換成【台語注音二式】工作表。
+    1. 自【台羅拼音】工作表複製成【台語注音二式】工作表。
+    2. 【台羅拼音】工作表，漢字標音欄預設【欄位址】為：B Column，可用 --col_addr 參數指定其他欄位址。
+    3. 將【台羅拼音工作表】的漢字標音欄位，轉換成【台語注音二式】，置入【台語注音二式】工作表的漢字標音欄位。
 
 指令：
-    python D100_Excel工作表自TL轉BPM2.py <欄位址>
+    python d100_Excel工作表自TL轉BPM2.py --col_addr=[欄位址]
 
 使用方法：
-    1. 來源檔目錄路徑： %UserProfile%\work\rime-tlpa\src
-    2. 執行程式，程式會將 Excel 檔案中的資料轉換成中州韻字典檔。
-    3. 中州韻字典檔會存放在程式所在的目錄下。
-"""
+    1. 來源檔目錄路徑： %UserProfile%\\work\\rime-tlpa\\src
+    2. 標的檔目錄路徑： %UserProfile%\\work\\rime-tlpa\\src
+    3. Excel 檔案：Dict_List[index]["WorkBook檔案"]，如：【漢字庫】.xlsx
+    4. 來源工作表名稱：Dict_List[index]["WorkSheet名稱"]，如：台羅拼音
+    5. 標的工作表名稱：台語注音二式
+"""  # noqa: N999
 
 import os
 
 from d000_定義檔 import (
-    dict_list,
+    Dict_List,
     source_dir_path,
-    target_dir_path,
 )
 
-ji_khoo_name = "ji_khoo_tl_HanJi"
+ji_khoo = Dict_List["HanJi"]
 # 定義 Excel 檔案名稱，及使用工作表名稱
-excel_file_name = dict_list[ji_khoo_name]["WorkBook檔案"]
-excel_sheet_name = dict_list[ji_khoo_name]["WorkSheet名稱"]
-excel_file_path = os.path.join(
+excel_file_name = os.path.join(
     source_dir_path,
-    dict_list[ji_khoo_name]["WorkBook檔案"],
+    ji_khoo["WorkBook檔案"],
 )
 
-# 定義字典檔檔名
-dict_name = dict_list[ji_khoo_name]["輸入方案名稱"]
-dict_file_name = f"{dict_name}.dict.yaml"
-dict_file_path = os.path.join(
-    target_dir_path,
-    dict_file_name,
-)
-
-# ---------------------------------------------------------------------
-# 定義 RIME 字典檔的標頭內容（Header）
-# ---------------------------------------------------------------------
-rime_header_content = f"""# Rime dictionary
-# encoding: utf-8
-#
-# {dict_list[ji_khoo_name]["字典檔來源摘要"]}：{dict_list[ji_khoo_name]["漢字標音系統名稱"]}
-# {dict_list[ji_khoo_name]["字典簡介"]}
-#
----
-name: {dict_list[ji_khoo_name]["輸入方案名稱"]}
-version: "{dict_list[ji_khoo_name]["版本號"]}"
-sort: by_weight
-use_preset_vocabulary: false
-columns:
-  - text    # 漢字
-  - code    # 漢字讀音標音
-  - weight  # 常用度（優先顯示度）
-  - stem    # 用法舉例
-  - create  # 建立時間
-# import_tables:
-#   - ji_khoo_ziann_ji_bpm2
-#   - ji_khoo_ban_lam_bpm2
-#   - ji_khoo_su_lui_bpm2
-...
-"""
+source_sheet_name = "台羅拼音"
+target_sheet_name = "台語注音二式"
