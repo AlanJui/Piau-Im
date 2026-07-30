@@ -125,6 +125,81 @@ def convert_TLPA_to_MPS2(TLPA_piau_im: str) -> str:
     return f"{siann}{un}{tiau}"
 
 
+# ---------------------------------------------------------------------
+# MPS2（台語注音二式）→ TLPA 反轉換
+# ---------------------------------------------------------------------
+# 聲母反轉換（由長到短比對）；齒音連 i（jj/j/ch/sh）另於正文前先還原。
+MPS2_TO_TLPA_SIANN = {
+    "bb": "b",
+    "gg": "g",
+    "zz": "j",
+    "ng": "ng",
+    "b": "p",
+    "d": "t",
+    "g": "k",
+    "p": "ph",
+    "t": "th",
+    "k": "kh",
+    "c": "c",
+    "z": "z",
+    "m": "m",
+    "n": "n",
+    "l": "l",
+    "s": "s",
+    "h": "h",
+}
+
+# 齒音連 i：MPS2 → TLPA（還原 CI_IM_TNG_UANN_PIAU）
+MPS2_CI_IM_REV = {
+    "jji": "zzi",
+    "ji": "zi",
+    "chi": "ci",
+    "shi": "si",
+}
+
+# 韻母反轉換：略過 ee/ei→e、eeh→eh 等歧義項（還原時維持 e/eh）
+MPS2_TO_TLPA_UN = {
+    mps2: tlpa
+    for tlpa, mps2 in UN_BU_TNG_UANN_PIAU.items()
+    if not (tlpa in {"ee", "ei"} and mps2 == "e") and not (tlpa == "eeh" and mps2 == "eh")
+}
+
+
+def convert_MPS2_to_TLPA(MPS2_piau_im: str) -> str:
+    """
+    將一個【注音二式/MPS2】（如 'ziann1'）轉回【台語音標/TLPA】（'tsiann1' 之前的 TLPA 形：'ziann1'）。
+    保留後面的數字（聲調）。
+    """
+    m = re.match(r"^([a-z]+)(\d+)$", MPS2_piau_im)
+    if not m:
+        return MPS2_piau_im
+
+    body, tiau = m.group(1), m.group(2)
+
+    # 1. 先還原【齒音連 i】（須由長到短）
+    for mps2_ci, tlpa_ci in sorted(MPS2_CI_IM_REV.items(), key=lambda x: -len(x[0])):
+        if body.startswith(mps2_ci):
+            body = tlpa_ci + body[len(mps2_ci) :]
+            break
+
+    # 2. 反轉聲母
+    siann = ""
+    un = body
+    for key in sorted(MPS2_TO_TLPA_SIANN.keys(), key=lambda x: -len(x)):
+        if body.startswith(key):
+            siann = MPS2_TO_TLPA_SIANN[key]
+            un = body[len(key) :]
+            break
+
+    # 3. 反轉韻母（整段比對，長鍵優先）
+    for key in sorted(MPS2_TO_TLPA_UN.keys(), key=lambda x: -len(x)):
+        if un == key:
+            un = MPS2_TO_TLPA_UN[key]
+            break
+
+    return f"{siann}{un}{tiau}"
+
+
 def main(infile: str, outfile: str):
     with open(infile, "r", encoding="utf-8") as fin:
         lines = fin.readlines()
