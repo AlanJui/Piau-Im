@@ -58,6 +58,165 @@ body {
     display: block;
 }
 
+/* =========================================================
+   橫幅水墨圖 → 直式手機封面（避免上下死白）
+   作法：同圖放大模糊作氛圍底、中央清晰原圖、上下薄霧與直書題字
+   ========================================================= */
+.cover-page.landscape-cover {
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse 90% 55% at 50% 42%, rgba(255, 252, 245, 0.18), transparent 70%),
+        linear-gradient(180deg, #c9c2b4 0%, #e6dfd2 28%, #ebe4d6 50%, #d8d0c2 78%, #b8b0a2 100%);
+}
+
+.cover-page.landscape-cover .cover-backdrop {
+    position: absolute;
+    inset: -8%;
+    width: 116%;
+    height: 116%;
+    object-fit: cover;
+    object-position: center 45%;
+    filter: blur(26px) saturate(1.05) brightness(0.88);
+    transform: scale(1.08);
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* 上下薄霧／墨暈，銜接留白與畫心 */
+.cover-page.landscape-cover::before,
+.cover-page.landscape-cover::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.cover-page.landscape-cover::before {
+    top: 0;
+    height: 32%;
+    background:
+        linear-gradient(180deg, rgba(55, 52, 48, 0.42) 0%, rgba(55, 52, 48, 0.12) 45%, transparent 100%),
+        radial-gradient(ellipse 80% 70% at 22% 18%, rgba(255, 248, 220, 0.22), transparent 60%);
+}
+
+.cover-page.landscape-cover::after {
+    bottom: 0;
+    height: 30%;
+    background:
+        linear-gradient(0deg, rgba(40, 38, 36, 0.5) 0%, rgba(40, 38, 36, 0.16) 50%, transparent 100%);
+}
+
+.cover-page.landscape-cover .cover-img {
+    position: relative;
+    z-index: 1;
+    width: 94%;
+    height: auto;
+    max-height: 46vh;
+    margin-top: -2vh;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 2px;
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.16),
+        0 22px 56px rgba(12, 10, 8, 0.42);
+}
+
+.cover-page.landscape-cover .cover-text {
+    top: auto;
+    bottom: max(5.5%, env(safe-area-inset-bottom, 0px) + 4%);
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(88%, 420px);
+    z-index: 3;
+    color: #f7f1e4;
+    text-shadow:
+        0 1px 0 rgba(0, 0, 0, 0.35),
+        0 10px 28px rgba(0, 0, 0, 0.55);
+}
+
+.cover-page.landscape-cover .cover-text h1 {
+    font-family: "Noto Serif TC", "BiauKai", "DFKai-SB", serif;
+    font-size: clamp(2rem, 7.8vw, 3.35rem);
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    margin-bottom: 0.4em;
+}
+
+.cover-page.landscape-cover .cover-divider {
+    width: 38%;
+    border-top: 1px solid rgba(244, 239, 228, 0.78);
+    box-shadow: none;
+    margin-bottom: 0.75em;
+}
+
+.cover-page.landscape-cover .cover-text h2 {
+    font-family: "Noto Serif TC", "BiauKai", "DFKai-SB", serif;
+    font-size: clamp(1.05rem, 4vw, 1.5rem);
+    letter-spacing: 0.32em;
+    opacity: 0.94;
+}
+
+/* 右側直書點題，填補橫圖上方／側邊空檔 */
+.cover-page.landscape-cover .cover-seal {
+    position: absolute;
+    top: max(6%, env(safe-area-inset-top, 0px) + 4%);
+    right: 5%;
+    z-index: 3;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-family: "Noto Serif TC", "BiauKai", "DFKai-SB", serif;
+    font-size: clamp(1.05rem, 3.8vw, 1.35rem);
+    letter-spacing: 0.5em;
+    color: rgba(255, 248, 230, 0.92);
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55);
+    pointer-events: none;
+}
+
+.cover-page.landscape-cover .cover-seal .seal-line {
+    display: block;
+    opacity: 0.62;
+    margin-top: 1em;
+    letter-spacing: 0.4em;
+    font-size: 0.86em;
+}
+
+/* 左側淡月點綴，呼應畫中月色 */
+.cover-page.landscape-cover .cover-moon {
+    position: absolute;
+    top: 9%;
+    left: 8%;
+    width: clamp(52px, 14vw, 78px);
+    height: clamp(52px, 14vw, 78px);
+    border-radius: 50%;
+    z-index: 2;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 35% 35%, rgba(255, 250, 230, 0.95), rgba(255, 236, 180, 0.55) 42%, rgba(255, 236, 180, 0) 72%);
+    box-shadow: 0 0 40px 12px rgba(255, 240, 200, 0.18);
+    opacity: 0.7;
+}
+
+@media (min-width: 900px) and (orientation: landscape) {
+    .cover-page.landscape-cover .cover-img {
+        max-height: 72vh;
+        width: min(78%, 1100px);
+    }
+
+    .cover-page.landscape-cover .cover-text {
+        bottom: 8%;
+    }
+
+    .cover-page.landscape-cover .cover-seal {
+        right: 8%;
+        top: 12%;
+    }
+}
+
 /* 針對第二頁 (標題頁) 的圖片淡化設定 */
 .title-bg-img {
     opacity: 0.4; /* 降低透明度，產生浮水印/淡化效果 (數值 0.0 ~ 1.0) */
