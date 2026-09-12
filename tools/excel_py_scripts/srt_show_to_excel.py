@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Read Show times from an SRT file and open them in a new Excel workbook."""
+"""Read Show times from an SRT file and write them into Excel via xlwings."""
 from __future__ import annotations
 
 import argparse
@@ -14,6 +14,11 @@ TIME_RE = re.compile(
 FONT = "Microsoft JhengHei"
 SCRIPT_DIR = Path(__file__).resolve().parent
 DEFAULT_SRT = SCRIPT_DIR / "_tmp.srt"
+DEFAULT_XLSX = SCRIPT_DIR.parent / "SRT編輯器.xlsx"
+TARGET_SHEET = "02_計算時長"
+SHOW_START_ROW = 2
+SHOW_END_ROW = 62
+SHOW_COL = "B"
 
 
 def normalize_srt_time(value: str) -> str:
@@ -58,9 +63,64 @@ def resolve_srt(specified: Path | None) -> Path:
     return srt_path
 
 
-def open_in_excel(rows: list[tuple[int, str]], save_path: Path) -> Path:
+def excel_app() -> xw.App:
     app = xw.apps.active if xw.apps.count else xw.App(visible=True)
     app.visible = True
+    return app
+
+
+def find_open_book(path: Path) -> xw.Book | None:
+    target = path.resolve()
+    for app in xw.apps:
+        for book in app.books:
+            try:
+                full = Path(book.fullname).resolve()
+            except Exception:
+                continue
+            if full == target:
+                return book
+    return None
+
+
+def write_show_column(sheet: xw.Sheet, shows: list[str]) -> None:
+    capacity = SHOW_END_ROW - SHOW_START_ROW + 1
+    if len(shows) > capacity:
+        print(f"warning: SRT has {len(shows)} cues; only B{SHOW_START_ROW}:B{SHOW_END_ROW} ({capacity}) written")
+        shows = shows[:capacity]
+
+    rng = sheet.range(f"{SHOW_COL}{SHOW_START_ROW}:{SHOW_COL}{SHOW_END_ROW}")
+    rng.number_format = "@"
+    values = [[show] for show in shows]
+    values.extend([[None] for _ in range(capacity - len(shows))])
+    rng.value = values
+    rng.font.name = FONT
+
+
+def paste_into_editor(rows: list[tuple[int, str]]) -> Path:
+    xlsx_path = DEFAULT_XLSX.resolve()
+    if not xlsx_path.is_file():
+        raise SystemExit(f"Excel not found: {xlsx_path}")
+
+    book = find_open_book(xlsx_path)
+    if book is None:
+        book = excel_app().books.open(str(xlsx_path))
+    else:
+        book.app.visible = True
+
+    try:
+        sheet = book.sheets[TARGET_SHEET]
+    except Exception as exc:
+        raise SystemExit(f"Worksheet not found: {TARGET_SHEET}") from exc
+
+    write_show_column(sheet, [show for _, show in rows])
+    sheet.activate()
+    sheet.range(f"{SHOW_COL}{SHOW_START_ROW}").select()
+    book.activate()
+    return xlsx_path
+
+
+def open_new_workbook(rows: list[tuple[int, str]], save_path: Path) -> Path:
+    app = excel_app()
     app.display_alerts = False
     wb = app.books.add()
     sheet = wb.sheets[0]
@@ -71,7 +131,7 @@ def open_in_excel(rows: list[tuple[int, str]], save_path: Path) -> Path:
     sheet.range("A1").value = data
     sheet.range(f"B2:B{last_row}").number_format = "@"
     sheet.range(f"A1:B{last_row}").font.name = FONT
-    sheet.range(f"A1:B{last_row}").api.HorizontalAlignment = -4108  # xlCenter
+    sheet.range(f"A1:B{last_row}").api.HorizontalAlignment = -4108
     header = sheet.range("A1:B1")
     header.font.bold = True
     header.font.color = (255, 255, 255)
@@ -90,7 +150,7 @@ def open_in_excel(rows: list[tuple[int, str]], save_path: Path) -> Path:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Export SRT Show times to a new Excel workbook and open it."
+        description="Paste SRT Show times into SRT編輯器.xlsx, or create a new workbook with --new."
     )
     parser.add_argument(
         "srt",
@@ -98,12 +158,22 @@ def main() -> None:
         type=Path,
         help="Path to .srt file (default: _tmp.srt next to this script)",
     )
+    parser.add_argument(
+        "--new",
+        action="store_true",
+        help="Create a new Excel workbook instead of writing to 02_計算時長",
+    )
     args = parser.parse_args()
 
     srt_path = resolve_srt(args.srt)
     rows = parse_srt_shows(srt_path)
-    xlsx_path = srt_path.with_name("_tmp_show.xlsx")
-    xlsx_path = open_in_excel(rows, xlsx_path)
+    if args.new:
+        xlsx_path = open_new_workbook(rows, srt_path.with_name("_tmp_show.xlsx"))
+        print("mode=new workbook")
+    else:
+        xlsx_path = paste_into_editor(rows)
+        print(f"mode=paste {TARGET_SHEET}!{SHOW_COL}{SHOW_START_ROW}:{SHOW_COL}{SHOW_END_ROW}")
+
     print(f"srt={srt_path}")
     print(f"cues={len(rows)}")
     print(xlsx_path)
