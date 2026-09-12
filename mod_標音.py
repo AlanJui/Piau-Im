@@ -1157,7 +1157,7 @@ class PiauIm:
             return self.SNI_piau_im(siann_bu, un_bu, tiau_ho)
         elif piau_im_huat == "方音符號":
             return self.TPS_piau_im(siann_bu, un_bu, tiau_ho)
-        elif piau_im_huat == "注音二式":
+        elif piau_im_huat in ("注音二式", "台語注音二式"):
             return self.MPS2_piau_im(siann_bu, un_bu, tiau_ho)
         elif piau_im_huat == "雅俗通":
             return self.NST_piau_im(siann_bu, un_bu, tiau_ho)
