@@ -4,6 +4,7 @@
  * 1. 新增【國際音標 (IPA)】轉換功能。
  * 2. 羅馬拼音調符全效支援 (TL, POJ, BP)。
  * 3. 啟動即修復拉丁調符偏移問題。
+ * 4. 【雅俗通】為韻＋調＋聲（公三時）；【十五音】為聲＋韻＋調（時公三）。
  */
 document.addEventListener('DOMContentLoaded', function() {
     let phoneticMapping = null;
@@ -73,7 +74,9 @@ document.addEventListener('DOMContentLoaded', function() {
         "台羅拼音": { label: "台羅拼音", up: "台羅拼音", right: "" },
         "白話字": { label: "白話字", up: "白話字", right: "" },
         "閩拼方案": { label: "閩拼方案", up: "閩拼方案", right: "" },
+        "雅俗通+方音符號": { label: "雅俗通+方音符號", up: "雅俗通", right: "方音符號" },
         "十五音+方音符號": { label: "十五音+方音符號", up: "十五音", right: "方音符號" },
+        "台語音標+雅俗通": { label: "台語音標+雅俗通", up: "台語音標", right: "雅俗通" },
         "台語音標+十五音": { label: "台語音標+十五音", up: "台語音標", right: "十五音" }
     };
 
@@ -108,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
         toolbar.appendChild(customDiv);
 
         // --- 修正：在選單中加入【國際音標】 ---
-        const systems = ["無", "十五音", "方音符號", "國際音標", "台語音標", "台羅拼音", "白話字", "閩拼方案", "閩拼調號", "台語注音二式"];
+        const systems = ["無", "雅俗通", "十五音", "方音符號", "國際音標", "台語音標", "台羅拼音", "白話字", "閩拼方案", "閩拼調號", "台語注音二式"];
         const selUp = customDiv.querySelector('#select-up');
         const selRight = customDiv.querySelector('#select-right');
         systems.forEach(s => {
@@ -194,6 +197,15 @@ document.addEventListener('DOMContentLoaded', function() {
         return res.normalize("NFD");
     }
 
+    function composeSipNgooIm(parts, initialMatch, finalMatch) {
+        let siann = initialMatch ? initialMatch['十五音'] : (parts.siann === "ø" ? "英" : "");
+        const un = finalMatch ? finalMatch['十五音'] : "";
+        let tiauNum = parseInt(parts.tiau, 10);
+        if (tiauNum === 6) tiauNum = 7;
+        const tiau = ["", "一", "二", "三", "四", "五", "六", "七", "八"][tiauNum] || parts.tiau;
+        return { siann: siann, un: un, tiau: tiau };
+    }
+
     function convertOne(tlpa, targetSystem) {
         if (!targetSystem) return "";
         const parts = splitTLPA(tlpa); if (!parts) return "";
@@ -202,11 +214,12 @@ document.addEventListener('DOMContentLoaded', function() {
         let initialMatch = phoneticMapping.initials.find(i => i.台語音標 === parts.siann || (parts.siann === "ø" && (i.台語音標 === "" || i.台語音標 === "Ø" || i.台語音標 === "ø")));
         let finalMatch = phoneticMapping.finals.find(f => f.台語音標 === parts.un);
 
-        if (targetSystem === '十五音') {
-            let iName = initialMatch ? initialMatch['十五音'] : (parts.siann === "ø" ? "英" : "");
-            const fName = finalMatch ? finalMatch['十五音'] : "";
-            const toneCN = ["", "一", "二", "三", "四", "五", "六", "七", "八"][parseInt(parts.tiau)] || parts.tiau;
-            result = fName + toneCN + iName;
+        if (targetSystem === '雅俗通' || targetSystem === '十五音') {
+            // 雅俗通：韻＋調＋聲（宋 → 公三時）；十五音：聲＋韻＋調（宋 → 時公三）
+            const sipNgoo = composeSipNgooIm(parts, initialMatch, finalMatch);
+            result = targetSystem === '雅俗通'
+                ? sipNgoo.un + sipNgoo.tiau + sipNgoo.siann
+                : sipNgoo.siann + sipNgoo.un + sipNgoo.tiau;
         }
         else if (targetSystem === '方音符號') {
             let iTPS = initialMatch ? initialMatch['方音符號'] : "";
