@@ -11,6 +11,8 @@ v0.0.3 2026-3-22: 修正查字典後填入人工標音的邏輯，將【人工�
     分別填入【作用儲存格】之上方一格、下方一格、同一格；並修正相關邏輯以確保資料正確填入。
 v0.0.4 2026-3-23: 修正問題：當使用者放棄輸入【人工標音】時，即刻跳出 process 函式，避免後續
     更新【標音字庫】現有資料紀錄，引發錯誤。
+v0.0.5 2026-09-13: 手動補入缺字讀音後，同步更新【缺字表】台語音標（B 欄），並在【標音字庫】
+    補入該漢字座標之資料紀錄。
 """
 
 # =========================================================================
@@ -124,19 +126,27 @@ class CellProcessor(ExcelCell):
 
             # 記錄【原始的人工標音】
             new_jin_kang_piau_im = None
+            force_manual = bool(getattr(self.program.args, "manual_input", False))
+            missing_piau_im = not tai_gi_im_piau or not han_ji_piau_im
 
-            # 確認【作用儲存格】的【台語音標】、【漢字標音】，需已填入資料。
-            if not tai_gi_im_piau or not han_ji_piau_im:
+            # E 鍵（手動輸入）或儲存格尚無標音時，略過查字典，直接請使用者輸入。
+            if force_manual or missing_piau_im:
                 # ----------------------------------------------------------------------
                 # 直接手動輸入人工標音，若是【作用儲存格】之【漢字】，可能字典尚未登錄此漢字之讀音資料
                 # ----------------------------------------------------------------------
-                msg = (
-                    f"作用儲存格 {active_cell_address} 的漢字【{han_ji}】缺乏【台語音標】或【漢字標音】，"
-                    f"可能是字典無此漢字之讀音資料，將略過查字典作業，直接要求使用者輸入【台語音標】或【台羅拼音】。"
-                )
-                print(f">> {msg}")
+                if missing_piau_im and not force_manual:
+                    msg = (
+                        f"作用儲存格 {active_cell_address} 的漢字【{han_ji}】缺乏【台語音標】或【漢字標音】，"
+                        f"可能是字典無此漢字之讀音資料，將略過查字典作業，直接要求使用者輸入【台語音標】或【台羅拼音】。"
+                    )
+                    print(f">> {msg}")
+                else:
+                    print(f"📌 作用儲存格：{active_cell_address} ==> 漢字：{han_ji}")
+                    print(f"📌 人工標音：{jin_kang_piau_im}，台語音標：{tai_gi_im_piau}，漢字標音：{han_ji_piau_im}")
                 # 取得使用者輸入之【台語音標】或【台羅拼音】
                 tai_gi_im_piau = self.get_user_input_piau_im(han_ji=han_ji)
+                if not tai_gi_im_piau:
+                    return EXIT_CODE_SUCCESS
                 # 依據使用者輸入之【台語音標】轉換為【漢字標音】
                 han_ji_piau_im = self._convert_tai_gi_im_piau_to_han_ji_piau_im(
                     tai_gi_im_piau=tai_gi_im_piau,
@@ -157,7 +167,8 @@ class CellProcessor(ExcelCell):
 
             # 若是【沒有查到漢字之台語音標】或是【使用者終止手動輸入】，則程式至此終止。
             if not tai_gi_im_piau and not han_ji_piau_im:
-                return EXIT_CODE_PROCESS_FAILURE
+                print(">> 已取消或未取得標音，未變更資料。")
+                return EXIT_CODE_SUCCESS
             # 將查尋/輸入取得之【台語音標】視作【人工標音】
             new_jin_kang_piau_im = tai_gi_im_piau if tai_gi_im_piau else None
             # 在 Console 回報目前作業狀態

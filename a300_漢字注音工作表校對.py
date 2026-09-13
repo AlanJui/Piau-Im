@@ -36,6 +36,14 @@ V0.3 (2026-02-28): 變更【人工標音作業】功能（按鍵：【E】），
 V0.4 (2026-07-14): 重構功能，不可支援外部字典查詢。查字典時，亦可人工輸入漢字
 讀音。a250 將字典查得讀音，替換【漢字標音】工作表登錄之資料紀錄；a260 則用於
 為某一漢字指定漢字讀音（標注於【人工標音】儲存格）
+
+V0.6 (2026-09-13): 修正空白鍵／J 鍵查字失敗。a250／a260 初始化時讀取命名範圍
+會把 Excel 作用儲存格帶到第 1 列，導致「列號必須大於等於基準列（3）」；現改為
+由 a300 明確傳入目前漢字儲存格位址，並避免查字失敗後整支導航程式被 COM 錯誤中止。
+
+V0.7 (2026-09-13): 查字進入 input() 前，把 Windows 焦點從 Excel 搶回啟動本程式
+的終端機（含 WezTerm）。先前只在呼叫 a250／a260 前切換一次，初始化讀取 Excel
+時焦點又被帶走，使用者必須改用滑鼠點 Terminal。
 """
 
 # =========================================================================
@@ -132,6 +140,8 @@ try:
 except ImportError as e:
     HAS_A260 = False
     print(f"警告：無法載入 a260 模組：{e}")
+
+from mod_window_focus import activate_console_window, capture_console_hwnd
 
 # =========================================================================
 # 常數定義
@@ -506,137 +516,13 @@ def activate_excel_window(wb):
         logging.error(f"無法激活 Excel 視窗：{e}")
 
 
-def activate_console_window(console_hwnd):
-    """
-    激活終端機視窗，使其成為前景視窗
-
-    Args:
-        console_hwnd: 終端機視窗句柄
-    """
-    if not HAS_WIN32:
-        print("提示：無法自動切換到終端機視窗（需要 pywin32 套件）")
-        return
-
-    try:
-        # import win32api
-        import win32process
-
-        # 嘗試找到正確的 Console 視窗
-        current_hwnd = console_hwnd
-
-        # 如果提供的句柄無效，嘗試找到 Python 控制台或 PowerShell 視窗
-        if not current_hwnd or not win32gui.IsWindow(current_hwnd):
-
-            def enum_handler(hwnd, result_list):
-                if win32gui.IsWindowVisible(hwnd):
-                    title = win32gui.GetWindowText(hwnd)
-                    if any(
-                        keyword in title.lower()
-                        for keyword in [
-                            "python",
-                            "powershell",
-                            "cmd",
-                            "terminal",
-                            "piau-im",
-                            "vscode",
-                        ]
-                    ):
-                        result_list.append(hwnd)
-
-            windows = []
-            win32gui.EnumWindows(enum_handler, windows)
-            if windows:
-                current_hwnd = windows[0]
-
-        if current_hwnd and win32gui.IsWindow(current_hwnd):
-            # 如果視窗最小化，先還原
-            if win32gui.IsIconic(current_hwnd):
-                win32gui.ShowWindow(current_hwnd, win32con.SW_RESTORE)
-                time.sleep(0.3)
-
-            # 【強化版】使用 AttachThreadInput 解決 Windows 前景視窗限制
-            try:
-                # 獲取當前前景視窗的線程ID
-                foreground_hwnd = win32gui.GetForegroundWindow()
-                foreground_thread_id, _ = win32process.GetWindowThreadProcessId(foreground_hwnd)
-                # 獲取目標視窗的線程ID
-                target_thread_id, _ = win32process.GetWindowThreadProcessId(current_hwnd)
-
-                # 如果線程不同，嘗試附加線程輸入
-                if foreground_thread_id != target_thread_id:
-                    try:
-                        win32process.AttachThreadInput(foreground_thread_id, target_thread_id, True)
-                        logging.debug(f"成功附加線程輸入: {foreground_thread_id} -> {target_thread_id}")
-                    except Exception as e:
-                        logging.debug(f"AttachThreadInput 失敗: {e}")
-
-                # 多次嘗試激活視窗
-                for attempt in range(3):
-                    # 方法 1: 使用 BringWindowToTop
-                    win32gui.BringWindowToTop(current_hwnd)
-                    time.sleep(0.1)
-
-                    # 方法 2: 使用 ShowWindow 激活
-                    win32gui.ShowWindow(current_hwnd, win32con.SW_SHOW)
-                    time.sleep(0.1)
-
-                    # 方法 3: 設為前景視窗
-                    win32gui.SetForegroundWindow(current_hwnd)
-                    time.sleep(0.3)
-
-                    # 檢查是否成功
-                    if win32gui.GetForegroundWindow() == current_hwnd:
-                        logging.debug(f"第 {attempt + 1} 次嘗試成功")
-                        break
-
-                    time.sleep(0.2)
-
-                # 方法 4: 再次嘗試激活
-                try:
-                    win32gui.SetActiveWindow(current_hwnd)
-                except Exception as e:
-                    logging.debug(f"SetActiveWindow 失敗: {e}！")
-
-                # 分離線程輸入
-                if foreground_thread_id != target_thread_id:
-                    try:
-                        win32process.AttachThreadInput(foreground_thread_id, target_thread_id, False)
-                    except Exception as e:
-                        logging.debug(f"DetachThreadInput 失敗: {e}")
-
-            except Exception as e:
-                # SetActiveWindow 可能失敗，這是正常的
-                logging.debug(f"視窗激活過程出現錯誤（可預期）：{e}")
-
-            # 等待更長時間確保視窗完全激活並準備接收輸入
-            time.sleep(1.5)
-
-            # 驗證視窗是否成為前景視窗
-            foreground = win32gui.GetForegroundWindow()
-            if foreground != current_hwnd:
-                print("⚠️  視窗切換可能未完成")
-                print("✓ 已切換到終端機視窗")
-                print("\n重要提示：請立即用滑鼠點擊一次終端機視窗，然後繼續操作！")
-                time.sleep(2.0)  # 給用戶時間手動點擊
-            else:
-                print("✓ 已切換到終端機視窗")
-                print("視窗焦點已正確設置")
-        else:
-            print("提示：無法找到終端機視窗，請手動點擊終端機視窗")
-    except Exception as e:
-        # Windows 對 SetForegroundWindow 有限制，可能會失敗
-        # 這不是致命錯誤，只需提示用戶手動點擊
-        print(f"提示：無法自動切換視窗，請手動點擊終端機視窗")
-        logging.debug(f"SetForegroundWindow 失敗：{e}")
-
-
 # =========================================================================
 # 主要處理函數（使用鍵盤監聽）
 # =========================================================================
 class NavigationController:
     """導航控制器 - 使用鍵盤監聽"""
 
-    def __init__(self, wb, sheet, edit_mode=False):
+    def __init__(self, wb, sheet, edit_mode=False, console_hwnd=None):
         self.wb = wb
         self.sheet = sheet
         self.edit_mode = edit_mode  # 是否為校稿模式
@@ -651,67 +537,18 @@ class NavigationController:
         self.auto_skip_enabled = True  # 是否啟用自動跳過換行
 
         # 儲存視窗句柄（用於切換視窗）
-        self.console_hwnd = None
+        self.console_hwnd = console_hwnd
         self.excel_hwnd = None
         if HAS_WIN32:
             try:
-                # 取得 Excel 視窗句柄（使用 xlwings API）
                 self.excel_hwnd = wb.app.api.Hwnd
-
-                # 取得當前前景視窗（應該是 Console）
-                current_foreground = win32gui.GetForegroundWindow()
-
-                # 驗證這是否是 Console 視窗
-                if current_foreground:
-                    title = win32gui.GetWindowText(current_foreground)
-                    # 如果標題包含 Python, PowerShell, CMD 等，這就是 Console
-                    if any(
-                        keyword in title.lower()
-                        for keyword in [
-                            "python",
-                            "powershell",
-                            "cmd",
-                            "terminal",
-                            "piau-im",
-                            "vscode",
-                        ]
-                    ):
-                        self.console_hwnd = current_foreground
-                    else:
-                        # 否則嘗試搜尋 Console 視窗
-                        self.console_hwnd = self._find_console_window()
-
+                if not self.console_hwnd:
+                    # 若啟動時已切到 Excel，改依 WezTerm／Terminal 行程補抓
+                    self.console_hwnd = capture_console_hwnd(excel_hwnd=self.excel_hwnd)
                 logging.info(f"Console 視窗句柄：{self.console_hwnd}")
                 logging.info(f"Excel 視窗句柄：{self.excel_hwnd}")
             except Exception as e:
                 logging.warning(f"無法取得視窗句柄：{e}")
-
-    def _find_console_window(self):
-        """搜尋 Console 視窗"""
-        try:
-            windows = []
-
-            def enum_handler(hwnd, result_list):
-                if win32gui.IsWindowVisible(hwnd):
-                    title = win32gui.GetWindowText(hwnd)
-                    if any(
-                        keyword in title.lower()
-                        for keyword in [
-                            "python",
-                            "powershell",
-                            "cmd",
-                            "terminal",
-                            "piau-im",
-                            "vscode",
-                        ]
-                    ):
-                        result_list.append(hwnd)
-
-            win32gui.EnumWindows(enum_handler, windows)
-            return windows[0] if windows else None
-        except Exception as e:
-            logging.warning(f"搜尋 Console 視窗失敗：{e}")
-            return None
 
     def move_to_cell(self, row, col, reset_timer=True):
         """移動到指定儲存格"""
@@ -731,6 +568,31 @@ class NavigationController:
         display_value = cell_value or ""
         print(f"→ 第 {line_no} 行，{col_letter}{row}【{display_value}】")
 
+    def current_cell_address(self) -> str:
+        """目前導航位置的 Excel 位址，例如 F5。"""
+        return f"{xw.utils.col_name(self.current_col)}{self.current_row}"
+
+    def build_query_args(self, manual_input: bool = False):
+        """建立傳給 a250／a260 的參數，明確帶入目前漢字儲存格與終端機視窗。"""
+        return argparse.Namespace(
+            new=False,
+            cell=self.current_cell_address(),
+            console_hwnd=self.console_hwnd,
+            manual_input=manual_input,
+        )
+
+    def select_current_cell(self):
+        """將 Excel 作用儲存格對齊目前導航位置。"""
+        try:
+            self.sheet.activate()
+            self.sheet.range((self.current_row, self.current_col)).select()
+        except Exception as e:
+            logging.debug(f"重新選取目前儲存格失敗：{e}")
+
+    def focus_console(self, quiet: bool = False):
+        """把焦點切回啟動本程式的終端機（含 WezTerm）。"""
+        activate_console_window(self.console_hwnd, excel_hwnd=self.excel_hwnd, quiet=quiet)
+
     def check_and_skip_newline(self):
         """檢查當前儲存格是否為換行符號，如果是則自動跳到下一行"""
         if not self.auto_skip_enabled:
@@ -745,9 +607,15 @@ class NavigationController:
             return  # 還沒到延遲時間
 
         # 延遲時間已到，檢查當前儲存格
-        current_cell = self.sheet.range((self.current_row, self.current_col))
-        cell_value = current_cell.value
-        cell_formula = current_cell.formula
+        try:
+            current_cell = self.sheet.range((self.current_row, self.current_col))
+            cell_value = current_cell.value
+            cell_formula = current_cell.formula
+        except Exception as e:
+            # 查字過程若短暫中斷 Excel COM，不應讓整支導航程式結束
+            logging.debug(f"檢查換行符號失敗：{e}")
+            self.last_move_time = None
+            return
 
         is_newline = False
         # 檢查公式是否為 =CHAR(10)
@@ -1015,17 +883,18 @@ class NavigationController:
                 # 直接調用 a250 的核心函數，不進入無限循環
                 print("\n查詢字典中...")
 
-                # 切換到終端機視窗（確保用戶可以輸入）
-                activate_console_window(self.console_hwnd)
+                # 先對齊 Excel 作用儲存格，再切換到終端機視窗（確保用戶可以輸入）
+                self.select_current_cell()
+                self.focus_console()
 
                 # 取得當前作用儲存格位置
-                current_cell = f"{xw.utils.col_name(self.current_col)}{self.current_row}"
+                current_cell = self.current_cell_address()
                 print(f"當前儲存格：{current_cell}")
 
-                # 調用查詢函數
+                # 調用查詢函數（明確傳入目前漢字儲存格，避免初始化後讀到錯誤位置）
                 exit_code = ca_han_ji_thok_im_a250(
                     wb=self.wb,
-                    args=None,
+                    args=self.build_query_args(),
                 )
 
                 if exit_code == 0:
@@ -1053,7 +922,8 @@ class NavigationController:
             print("返回導航模式")
             print("=" * 70)
 
-            # 切換回 Excel 視窗
+            # 切換回 Excel 視窗，並回到查字前的漢字儲存格
+            self.select_current_cell()
             activate_excel_window(self.wb)
 
             # 重新啟動鍵盤監聽
@@ -1079,17 +949,18 @@ class NavigationController:
                 # 直接調用 a260 的核心函數，不進入無限循環
                 print("\n查詢字典中...")
 
-                # 切換到終端機視窗（確保用戶可以輸入）
-                activate_console_window(self.console_hwnd)
+                # 先對齊 Excel 作用儲存格，再切換到終端機視窗（確保用戶可以輸入）
+                self.select_current_cell()
+                self.focus_console()
 
                 # 取得當前作用儲存格位置
-                current_cell = f"{xw.utils.col_name(self.current_col)}{self.current_row}"
+                current_cell = self.current_cell_address()
                 print(f"當前儲存格：{current_cell}")
 
-                # 調用查詢函數
+                # 調用查詢函數（明確傳入目前漢字儲存格，避免初始化後讀到錯誤位置）
                 exit_code = ca_ji_tian_au_thiam_jin_kang_piau_im(
                     wb=self.wb,
-                    args=None,
+                    args=self.build_query_args(),
                 )
 
                 if exit_code == 0:
@@ -1117,7 +988,8 @@ class NavigationController:
             print("返回導航模式")
             print("=" * 70)
 
-            # 切換回 Excel 視窗
+            # 切換回 Excel 視窗，並回到查字前的漢字儲存格
+            self.select_current_cell()
             activate_excel_window(self.wb)
 
             # 重新啟動鍵盤監聽
@@ -1231,7 +1103,7 @@ class NavigationController:
                     print("\n查詢並更新標音中...")
 
                     # 切換到終端機視窗（確保用戶可以輸入）
-                    activate_console_window(self.console_hwnd)
+                    self.focus_console()
 
                     # 取得設定值
                     # try:
@@ -1243,13 +1115,13 @@ class NavigationController:
                     #     han_ji_khoo = "河洛話"
 
                     # 取得當前作用儲存格位置
-                    current_cell = f"{xw.utils.col_name(self.current_col)}{self.current_row}"
+                    current_cell = self.current_cell_address()
                     print(f"當前儲存格：{current_cell}")
 
                     # 調用查詢函數
                     exit_code = jin_kang_piau_im_ca_taigi_im_piau(
                         wb=self.wb,
-                        args=None,
+                        args=self.build_query_args(),
                     )
 
                     if exit_code == 0:
@@ -1330,17 +1202,14 @@ class NavigationController:
                 time.sleep(0.3)
 
             # 確保切換回終端機，以便使用者輸入文字
-            activate_console_window(self.console_hwnd)
+            self.focus_console()
 
             try:
                 if HAS_A260:
-                    # 創建簡單的 args 物件（模擬命令列參數）
-                    import argparse
-
-                    args = argparse.Namespace(new=False)
+                    # E 鍵：略過查字典，直接手動輸入人工標音
                     exit_code = ca_ji_tian_au_thiam_jin_kang_piau_im(
                         wb=self.wb,
-                        args=args,
+                        args=self.build_query_args(manual_input=True),
                     )
                     if exit_code == 0:
                         print("✓ 已完成台語音標與漢字標音更新")
@@ -1411,11 +1280,8 @@ class NavigationController:
             print("\n正在更新台語音標與漢字標音...")
             try:
                 if HAS_A224:
-                    # 創建簡單的 args 物件（模擬命令列參數）
-                    import argparse
-
-                    args = argparse.Namespace(new=False)
-                    exit_code = jin_kang_piau_im_ca_taigi_im_piau(wb=self.wb, args=args)
+                    # 創建簡單的 args 物件（模擬命令列參數），並帶入目前漢字儲存格
+                    exit_code = jin_kang_piau_im_ca_taigi_im_piau(wb=self.wb, args=self.build_query_args())
                     if exit_code == 0:
                         print("✓ 已完成台語音標與漢字標音更新\n")
                     else:
@@ -1431,13 +1297,14 @@ class NavigationController:
             print(f"\n❌ 清除失敗：{e}\n")
 
 
-def read_han_ji_with_keyboard(wb, view_mode=False) -> int:
+def read_han_ji_with_keyboard(wb, view_mode=False, console_hwnd=None) -> int:
     """
     漢字注音工作表導讀主程式（使用鍵盤監聽）
 
     Args:
         wb: Excel 工作簿物件
-        edit_mode: 是否為校稿模式（True=校稿模式，不修改樣式；False=導讀模式，隱藏人工標音）
+        view_mode: 是否為瀏覽模式（True=隱藏人工標音；False=校對模式）
+        console_hwnd: 啟動本程式的終端機視窗句柄（WezTerm 等）
 
     Returns:
         退出代碼
@@ -1448,7 +1315,7 @@ def read_han_ji_with_keyboard(wb, view_mode=False) -> int:
         sheet.activate()
 
         # 初始化控制器
-        controller = NavigationController(wb, sheet, edit_mode=view_mode)
+        controller = NavigationController(wb, sheet, edit_mode=view_mode, console_hwnd=console_hwnd)
 
         # 移動到第一行行首（D5）
         controller.move_to_cell(START_ROW, START_COL)
@@ -1502,9 +1369,14 @@ def read_han_ji_with_keyboard(wb, view_mode=False) -> int:
         try:
             # 主迴圈：在主執行緒處理待執行的動作
             while controller.running:
-                controller.process_pending_action()
-                # 檢查是否需要自動跳過換行符號
-                controller.check_and_skip_newline()
+                try:
+                    controller.process_pending_action()
+                    # 檢查是否需要自動跳過換行符號
+                    controller.check_and_skip_newline()
+                except Exception as e:
+                    logging.error(f"導航迴圈錯誤：{e}")
+                    print(f"⚠️  操作發生錯誤：{e}")
+                    controller.select_current_cell()
                 time.sleep(0.05)  # 避免 CPU 佔用過高
         finally:
             if controller.listener:
@@ -1663,6 +1535,9 @@ def main(args) -> int:
         # 解析命令行參數
         view_mode = args.view
 
+        # 在接觸 Excel 之前先記住啟動本程式的終端機（WezTerm 等）
+        console_hwnd = capture_console_hwnd()
+
         # 取得 Excel 活頁簿
         wb = None
         # 若失敗，則取得作用中的活頁簿
@@ -1680,8 +1555,7 @@ def main(args) -> int:
         if HAS_PYNPUT:
             mode_text = "瀏覽模式" if view_mode else "校對模式"
             print(f"使用鍵盤監聽模式 - {mode_text}")
-            # return read_han_ji_with_keyboard(wb, edit_mode=edit_mode)
-            return read_han_ji_with_keyboard(wb, view_mode=view_mode)
+            return read_han_ji_with_keyboard(wb, view_mode=view_mode, console_hwnd=console_hwnd)
         else:
             print("使用輸入模式")
             # return read_han_ji_zu_im_sheet(wb)

@@ -13,6 +13,8 @@ mod_程式.py V0.2.15
 然後再新增紀錄，確保【人工標音字庫】工作表中，不會出現同【漢字】、所處【座標】的資料，發生重複且資料內容不一致之問題。
 - v0.2.13 2026-03-18: 改善 _bo_thok_im() 方法，當【台語音標】或【漢字標音】為空值時，均屬標音異常，很可能起因於字典當無該漢字之讀音資料，或其它原因，故要求使用者重新輸入。
 - v0.2.14 2026-03-21: 修正 end_col 的計算方式，原為 start_col + CHARS_PER_ROW，修正為 start_col + CHARS_PER_ROW - 1，以確保 end_col 為最後一個字的正確欄位。
+- v0.2.16 2026-09-13: Program 初始化先保存作用儲存格；get_han_ji_cell_with_active_cell 優先使用 args.cell，避免讀取命名範圍後誤用第 1 列查字。
+- v0.2.17 2026-09-13: 手動補入缺字讀音後，填【缺字表】台語音標並在【標音字庫】補入該座標紀錄。
 """
 
 # =========================================================================
@@ -22,6 +24,7 @@ import logging
 import os
 import re
 import sys
+import types
 from datetime import datetime
 from pathlib import Path
 from typing import Tuple
@@ -101,6 +104,8 @@ class Program:
     def __init__(self, wb, args, hanji_piau_im_sheet_name: str = "漢字注音"):
         self.wb = wb
         self.args = args
+        # 先記下呼叫當下的作用儲存格，避免後續讀取命名範圍時，Excel 選取位置被帶走
+        self._remember_active_cell()
         # =========================================================================
         # 載入環境變數
         # =========================================================================
@@ -161,6 +166,30 @@ class Program:
         self.excel_file_stem = Path(wb.fullname).stem
         # Excel 檔案儲存路徑
         self.output_path = wb.names["OUTPUT_PATH"].refers_to_range.value
+
+    def _remember_active_cell(self) -> None:
+        """
+        在讀取活頁簿命名範圍之前，先保存目前作用儲存格位址。
+
+        透過 xlwings 讀取 ``wb.names[...].refers_to_range`` 時，Excel 有時會
+        把選取位置移到該命名範圍（常見於 env 工作表第 1 列）。後續若再依
+        【作用儲存格】查字，就會誤判列號而失敗。
+        """
+        if self.args is None:
+            self.args = types.SimpleNamespace()
+        if getattr(self.args, "cell", None):
+            return
+        try:
+            selection = self.wb.app.selection
+            if selection is None:
+                return
+            address = selection.address.replace("$", "")
+            row, _col = excel_address_to_row_col(address)
+            # 命名範圍常落在第 1 列；這種位址不是漢字儲存格，不可當成查字座標
+            if row >= 3:
+                self.args.cell = address
+        except Exception:
+            pass
 
     def connect_db(self):
         """建立持續性資料庫連線"""
@@ -431,7 +460,8 @@ class ExcelCell:
         # 取得【漢字標音】工作表的【作用儲存格】(Excel 儲存格位址)
         source_sheet_name = self.program.hanji_piau_im_sheet_name
         source_sheet = self.program.wb.sheets[source_sheet_name]
-        active_cell_address = get_active_cell_address()
+        source_sheet.activate()
+        active_cell_address = self._resolve_han_ji_cell_address()
         # 將 Excel 儲存格地址轉換為【座標】的列號與欄號
         row, col = excel_address_to_row_col(active_cell_address)
         current_line_no = get_line_no_by_row(current_row_no=row)  # 計算行號
@@ -439,6 +469,29 @@ class ExcelCell:
         han_ji_cell = source_sheet.range((han_ji_row, col))
 
         return han_ji_cell
+
+    def _resolve_han_ji_cell_address(self) -> str:
+        """
+        解析【漢字】儲存格位址，優先使用呼叫端指定的 cell，
+        避免另開 COM 連線讀到錯誤的作用儲存格。
+        """
+        args = getattr(self.program, "args", None)
+        cell_address = getattr(args, "cell", None) if args is not None else None
+        if cell_address:
+            return str(cell_address).replace("$", "")
+
+        try:
+            selection = self.program.wb.app.selection
+            if selection is not None:
+                return selection.address.replace("$", "")
+        except Exception:
+            pass
+
+        cell_address = get_active_cell_address()
+        if cell_address:
+            return cell_address
+
+        raise ValueError("無法取得作用儲存格，請先選取【漢字注音】工作表中的漢字儲存格。")
 
     def get_han_ji_cell(self, sheet) -> Tuple[xw.main.Range, int, int]:
         """取得【漢字】儲存格，避兔使用者選取到非【漢字】儲存格，導致後續處理發生錯誤"""
@@ -1577,6 +1630,56 @@ class ExcelCell:
             sheet_name=self.jin_kang_piau_im_ji_khoo_dict.name,
         )
 
+    def _sync_khuat_ji_piau_and_piau_im_ji_khoo_after_manual_input(
+        self,
+        row: int,
+        col: int,
+        han_ji: str,
+        tai_gi_im_piau: str,
+    ) -> None:
+        """
+        字典查無此字時，a200 會在【缺字表】留下紀錄（台語音標常為 N/A），且【標音字庫】
+        不會有該座標。使用者以 E 鍵補入【人工標音】後：
+
+        1. 在【缺字表】對應紀錄的【台語音標】欄（B 欄）填入音標；
+        2. 若【標音字庫】尚無此座標，補入【漢字＋台語音標＋座標】。
+        """
+        coordinate = (row, col)
+        khuat_entry = self.khuat_ji_piau_ji_khoo_dict.get_entry_by_han_ji_and_coordinate(
+            han_ji=han_ji,
+            coordinate=coordinate,
+        )
+        piau_im_entry = self.piau_im_ji_khoo_dict.get_entry_by_han_ji_and_coordinate(
+            han_ji=han_ji,
+            coordinate=coordinate,
+        )
+
+        if khuat_entry:
+            old_im_piau = khuat_entry.get("tai_gi_im_piau") or "N/A"
+            khuat_entry["tai_gi_im_piau"] = tai_gi_im_piau
+            self.khuat_ji_piau_ji_khoo_dict.write_to_excel_sheet(
+                wb=self.program.wb,
+                sheet_name=self.khuat_ji_piau_ji_khoo_dict.name,
+            )
+            print(f"✓ 已更新【缺字表】【{han_ji}】之【台語音標】：{old_im_piau} → {tai_gi_im_piau}，座標：{coordinate}")
+        elif not piau_im_entry:
+            print(f"⚠️  【缺字表】查無【{han_ji}】座標 {coordinate} 之紀錄，略過缺字表更新。")
+
+        if piau_im_entry:
+            return
+
+        self.piau_im_ji_khoo_dict.add_entry(
+            han_ji=han_ji,
+            tai_gi_im_piau=tai_gi_im_piau,
+            hau_ziann_im_piau="N/A",
+            coordinate=coordinate,
+        )
+        self.piau_im_ji_khoo_dict.write_to_excel_sheet(
+            wb=self.program.wb,
+            sheet_name=self.piau_im_ji_khoo_dict.name,
+        )
+        print(f"✓ 已在【標音字庫】補入【{han_ji}】／{tai_gi_im_piau}，座標：{coordinate}")
+
     def _assign_han_ji_thok_im_by_active_cell(
         self,
         row: int,
@@ -1591,16 +1694,26 @@ class ExcelCell:
 
         1. 在【標音字庫】工作表，該【漢字】已登錄之資料，原指向【漢字標音】工作表之
            【座標】需要移除；
-        2. 在【人工標音字庫】工作表，登錄該【漢字】之【台語音標】及【座標】。
+        2. 若原為【缺字】（字典無此字），補填【缺字表】台語音標，並在【標音字庫】補入紀錄；
+        3. 在【人工標音字庫】工作表，登錄該【漢字】之【台語音標】及【座標】。
         """
         # -------------------------------------------------------------------------
-        # 更新【標音字庫】原登錄之【資料紀錄】
+        # 更新【標音字庫】原登錄之【資料紀錄】（若原本就在字庫中）
         # -------------------------------------------------------------------------
         self._update_one_entry_in_piau_im_ji_khoo_worksheet(
             han_ji=han_ji,
             tai_gi_im_piau=tai_gi_im_piau,
             row=row,
             col=col,
+        )
+        # -------------------------------------------------------------------------
+        # 缺字補音：填【缺字表】B 欄，並在【標音字庫】補入此座標
+        # -------------------------------------------------------------------------
+        self._sync_khuat_ji_piau_and_piau_im_ji_khoo_after_manual_input(
+            row=row,
+            col=col,
+            han_ji=han_ji,
+            tai_gi_im_piau=tai_gi_im_piau,
         )
         # -------------------------------------------------------------------------
         # 在【人工標音字庫】工作表，登錄【資料紀錄】：自【標音字庫】搬至【人工標音字庫】
@@ -1640,17 +1753,19 @@ class ExcelCell:
             display_all_piau_im=True,
         )
 
-        # 查無此字
+        # 查無此字：改請使用者手動輸入，避免回傳空字串後續轉換時崩潰
         if not result:
             print(f">> 漢字【{han_ji}】查不到讀音資料！")
-            return tai_gi_im_piau
+            print("改為手動輸入【台語音標】或【台羅拼音】。")
+            return self.get_user_input_piau_im(han_ji=han_ji)
 
         # (2) 在 console 列出字典中，查詢之漢字有那些讀音選項及其常用程度
 
         # 顯示所有讀音選項
         piau_im_options = self.display_all_piau_im_for_a_han_ji(han_ji, result)
 
-        # (3) 供使用者輸入選擇
+        # (3) 供使用者輸入選擇（Excel COM 常把焦點搶走，先切回終端機）
+        self._prepare_console_input()
         user_input = input("\n請輸入【選擇編號】；或【台語音標/台羅拼音】 (直接按 Enter 跳過): ").strip().lstrip("\ufeff")
 
         if not user_input:
@@ -1729,7 +1844,7 @@ class ExcelCell:
 
         # 依據【作用儲存格】之【漢字】，從【自用字典】查詢【台語音標】
         tai_gi_im_piau = self._han_ji_ca_piau_im_kap_cu_tik(active_cell)
-        if tai_gi_im_piau is None:
+        if not tai_gi_im_piau:
             return None, None
 
         # 依指定之【標音方法】，將【台語音標】轉換成其所需之【漢字標音】
@@ -1741,9 +1856,22 @@ class ExcelCell:
 
         return tai_gi_im_piau, han_ji_piau_im
 
+    def _prepare_console_input(self) -> None:
+        """input() 前把焦點搶回啟動本程式的終端機（含 WezTerm）。"""
+        args = getattr(self.program, "args", None)
+        hwnd = getattr(args, "console_hwnd", None) if args is not None else None
+        try:
+            from mod_window_focus import activate_console_window
+
+            activate_console_window(hwnd, quiet=True)
+        except Exception:
+            pass
+
     def get_user_input_piau_im(self, han_ji: str) -> str | None:
         """供使用者直接輸入漢字之標音"""
-        user_input = input("\n請輸入漢字之標音 (直接按 Enter 跳過): ").strip()
+        self._prepare_console_input()
+        prompt_han_ji = f"【{han_ji}】" if han_ji else "漢字"
+        user_input = input(f"\n請輸入{prompt_han_ji}之標音（如：Tông 或 Tong5；直接按 Enter 跳過）: ").strip()
 
         if not user_input:
             print(">> 放棄變更！")
