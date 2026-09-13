@@ -1,10 +1,14 @@
-"""b200_製作字幕檔.py v0.1.0
+"""b300_製作上下注音文.py v0.1.2
 
-將工作表 I 欄【可匯出SRT】內容輸出成 SRT 文字檔。
-預設輸出路徑：%USERPROFILE%\\_tmp\\_tmp.srt
+自【SRT漢字注音】工作表 T 欄（起始儲存格 T4）讀取上下注音文，
+輸出成文字檔，並於 Console 顯示處理結果。
+
+換行使用 Windows CRLF（\\r\\n），並將結果放入剪貼簿，方便貼入 PowerPoint。
 
 更新紀錄：
- - v0.1.0 2026-09-12: 初版。自 I 欄匯出 SRT，預設使用作用中活頁簿。
+ - v0.1.2 2026-09-13: Console／文字檔改 CRLF；結果同步寫入剪貼簿。
+ - v0.1.1 2026-09-13: 改讀作用中活頁簿【SRT漢字注音】T4 起；保留 Console 顯示。
+ - v0.1.0 2026-09-12: 初版。
 """
 
 # =========================================================================
@@ -33,10 +37,9 @@ EXIT_CODE_SAVE_FAILURE = 3
 EXIT_CODE_PROCESS_FAILURE = 10
 EXIT_CODE_UNKNOWN_ERROR = 99
 
-DEFAULT_SHEET_NAME = "02_計算時長"
-HAN_JI_PIAU_IM_COL = 11  # K 欄
-START_ROW = 2
-HEADER_VALUE = "可匯出SRT"
+DEFAULT_SHEET_NAME = "SRT漢字注音"
+SOURCE_COL = 20  # T 欄
+START_ROW = 4  # 起始儲存格：T4
 DEFAULT_OUTPUT_DIR = "output9"
 DEFAULT_TEXT_FILE_PATH = Path.home() / "_tmp" / "_tmp.txt"
 
@@ -78,20 +81,20 @@ def resolve_workbook_path(file_arg: str, project_root: Path) -> Path:
     raise FileNotFoundError(f"找不到指定的 Excel 檔案：{file_arg}（已於預設目錄尋找：{searched}）")
 
 
-def resolve_srt_output_path(output_arg: str | None) -> Path:
-    """解析輸出 SRT 路徑；未指定時使用 %USERPROFILE%\\_tmp\\_tmp.srt。"""
+def resolve_output_path(output_arg: str | None) -> Path:
+    """解析輸出文字檔路徑；未指定時使用 %USERPROFILE%\\_tmp\\_tmp.txt。"""
     if not output_arg:
         return DEFAULT_TEXT_FILE_PATH
 
     raw = os.path.expandvars(output_arg.strip())
     path = Path(raw).expanduser()
-    if path.suffix.lower() != ".srt":
-        path = path.with_suffix(".srt") if not path.suffix else path
+    if not path.suffix:
+        path = path.with_suffix(".txt")
     return path
 
 
 def get_workbook(file_arg: str | None, project_root: Path):
-    """預設使用作用中活頁簿；僅在指定 --file 時才依 output9 開啟檔案。"""
+    """預設使用作用中活頁簿；僅在指定 --file 時才依路徑開啟檔案。"""
     if file_arg:
         path = resolve_workbook_path(file_arg, project_root)
         logging_process_step(f"依 --file 開啟活頁簿：{path}")
@@ -108,90 +111,124 @@ def get_workbook(file_arg: str | None, project_root: Path):
             logging_process_step(f"使用作用中活頁簿：{wb.fullname}")
             return wb
     except Exception as e:
-        logging_exc_error(msg="無法找到作用中的 Excel 工作簿！請先開啟活頁簿，或使用 --file 指定檔名。", error=e)
+        logging_exc_error(msg="無法找到作用中的 Excel 工作簿！請先開啟活頁簿。", error=e)
         return None
 
     return None
 
 
-def resolve_srt_sheet(wb, sheet_arg: str | None):
-    """決定要讀取 I 欄的工作表。"""
-    if sheet_arg:
-        sheet_names = [s.name for s in wb.sheets]
-        if sheet_arg not in sheet_names:
-            raise ValueError(f"活頁簿找不到工作表【{sheet_arg}】，現有工作表：{sheet_names}")
-        return wb.sheets[sheet_arg]
-
-    active = wb.sheets.active
-    header = active.range((1, HAN_JI_PIAU_IM_COL)).value
-    if header and str(header).strip() == HEADER_VALUE:
-        return active
-
-    sheet_names = [s.name for s in wb.sheets]
-    if DEFAULT_SHEET_NAME in sheet_names:
-        return wb.sheets[DEFAULT_SHEET_NAME]
-
-    for sheet in wb.sheets:
-        value = sheet.range((1, HAN_JI_PIAU_IM_COL)).value
-        if value and str(value).strip() == HEADER_VALUE:
-            return sheet
-
-    raise ValueError(f"找不到含【{HEADER_VALUE}】之 I 欄工作表（預設：{DEFAULT_SHEET_NAME}）。")
+def normalize_lf(text: str) -> str:
+    """將各種換行統一成 LF，方便後續再轉成 CRLF。"""
+    return str(text).replace("\r\n", "\n").replace("\r", "\n")
 
 
-def collect_srt_blocks(sheet) -> list[str]:
-    """自 I 欄第 2 列起讀取 SRT 區塊，遇空列即停。"""
+def to_crlf(text: str) -> str:
+    """轉成 Windows 換行（CRLF），PowerPoint 文字框才會當成段落。"""
+    return normalize_lf(text).replace("\n", "\r\n")
+
+
+def print_crlf(text: str = "", end: str = "\n"):
+    """輸出至 Console，換行寫成 CRLF。"""
+    sys.stdout.write(to_crlf(f"{text}{end}"))
+    sys.stdout.flush()
+
+
+def copy_to_windows_clipboard(text: str) -> bool:
+    """將文字以 CRLF 放入 Windows 剪貼簿。"""
+    try:
+        import win32clipboard
+    except ImportError:
+        return False
+
+    payload = to_crlf(text)
+    win32clipboard.OpenClipboard()
+    try:
+        win32clipboard.EmptyClipboard()
+        win32clipboard.SetClipboardText(payload, win32clipboard.CF_UNICODETEXT)
+    finally:
+        win32clipboard.CloseClipboard()
+    return True
+
+
+def resolve_source_sheet(wb, sheet_arg: str | None):
+    """取得【SRT漢字注音】工作表。"""
+    sheet_name = sheet_arg or DEFAULT_SHEET_NAME
+    sheet_names = [sheet.name for sheet in wb.sheets]
+    if sheet_name not in sheet_names:
+        raise ValueError(f"活頁簿找不到工作表【{sheet_name}】，現有工作表：{sheet_names}")
+    return wb.sheets[sheet_name]
+
+
+def collect_annotation_blocks(sheet) -> list[str]:
+    """自 T4 起逐列讀取上下注音文，遇空列即停。"""
     blocks: list[str] = []
     row = START_ROW
     while True:
-        cell_value = sheet.range((row, HAN_JI_PIAU_IM_COL)).value
+        cell = sheet.range((row, SOURCE_COL))
+        cell_value = cell.value
+        addr = f"{xw.utils.col_name(SOURCE_COL)}{row}"
         if cell_value is None or str(cell_value).strip() == "":
+            print_crlf(f"{addr}：【空白，停止讀取】")
             break
-        block = str(cell_value).replace("\r\n", "\n").replace("\r", "\n").strip()
+
+        block = normalize_lf(cell_value).strip()
         if block:
             blocks.append(block)
+            print_crlf("-" * 80)
+            print_crlf(f"{addr}：")
+            print_crlf(block)
         row += 1
     return blocks
 
 
-def write_srt_file(blocks: list[str], output_path: Path) -> Path:
-    """將 SRT 區塊寫入文字檔。"""
-    output_path.parent.mkdir(parents=True, exist_ok=True)
+def join_blocks(blocks: list[str]) -> str:
+    """以空行分隔各則上下注音文。"""
     content = "\n\n".join(blocks)
     if content and not content.endswith("\n"):
         content += "\n"
-    output_path.write_text(content, encoding="utf-8", newline="\n")
+    return content
+
+
+def write_text_file(blocks: list[str], output_path: Path) -> Path:
+    """將上下注音文寫入文字檔（Windows CRLF）。"""
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(join_blocks(blocks), encoding="utf-8", newline="\r\n")
     return output_path
 
 
 def process(wb, args) -> int:
-    """讀取 I 欄 SRT 並輸出文字檔。"""
+    """讀取 T 欄上下注音文並輸出文字檔，同時於 Console 顯示。"""
     logging_process_step("<=========== 作業開始！==========>")
 
     try:
-        sheet = resolve_srt_sheet(wb, getattr(args, "sheet", None))
-        output_path = resolve_srt_output_path(getattr(args, "output", None))
+        sheet = resolve_source_sheet(wb, getattr(args, "sheet", None))
+        output_path = resolve_output_path(getattr(args, "output", None))
 
         logging_process_step(f"活頁簿：{wb.fullname}")
         logging_process_step(f"工作表：{sheet.name}")
-        logging_process_step(f"來源欄：{xw.utils.col_name(HAN_JI_PIAU_IM_COL)}（自第 {START_ROW} 列起）")
+        logging_process_step(f"來源儲存格：{xw.utils.col_name(SOURCE_COL)}{START_ROW} 起")
         logging_process_step(f"輸出檔：{output_path}")
 
         sheet.activate()
-        blocks = collect_srt_blocks(sheet)
+        blocks = collect_annotation_blocks(sheet)
         if not blocks:
-            raise ValueError(f"【{sheet.name}】工作表 I 欄沒有可匯出的 SRT 內容。")
+            raise ValueError(f"【{sheet.name}】工作表 T 欄自 T{START_ROW} 起沒有可匯出的上下注音文。")
 
-        write_srt_file(blocks, output_path)
+        write_text_file(blocks, output_path)
+        content = join_blocks(blocks)
 
-        print("=" * 80)
-        print(output_path.read_text(encoding="utf-8"), end="")
-        print("=" * 80)
-        logging_process_step(f"已輸出 {len(blocks)} 則字幕至：{output_path}")
+        print_crlf("=" * 80)
+        print_crlf(content, end="")
+        print_crlf("=" * 80)
+        if copy_to_windows_clipboard(content):
+            logging_process_step("已將上下注音文（CRLF）複製到剪貼簿，可直接貼入 PowerPoint。")
+        else:
+            logging_process_step("無法寫入剪貼簿；請改從輸出文字檔複製。")
+        logging_process_step(f"已輸出 {len(blocks)} 則上下注音文至：{output_path}")
         return EXIT_CODE_SUCCESS
 
     except Exception as e:
-        logging_exception(msg="匯出 SRT 字幕檔時發生例外！", error=e)
+        logging_exception(msg="匯出上下注音文時發生例外！", error=e)
         raise
 
 
@@ -214,7 +251,7 @@ def main(args) -> int:
         return EXIT_CODE_NO_FILE
 
     if not wb:
-        logging_exc_error(msg="無法取得 Excel 活頁簿！請先開啟活頁簿，或使用 --file 指定檔名。", error=None)
+        logging_exc_error(msg="無法取得 Excel 活頁簿！請先開啟活頁簿。", error=None)
         return EXIT_CODE_NO_FILE
 
     try:
@@ -239,15 +276,13 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="將工作表 I 欄【可匯出SRT】輸出成 SRT 文字檔",
+        description="自【SRT漢字注音】工作表 T4 起讀取上下注音文並輸出文字檔",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=f"""
 使用範例：
-  python b200_製作字幕檔.py
-      # 預設：作用中活頁簿，輸出至 {DEFAULT_TEXT_FILE_PATH}
-  python b200_製作字幕檔.py --file 【字幕】帛書版道德經。第十一章.xlsx
-  python b200_製作字幕檔.py --sheet 海海人生
-  python b200_製作字幕檔.py --output %USERPROFILE%\\_tmp\\道德經.srt
+  python b300_製作上下注音文.py
+      # 預設：作用中活頁簿【SRT漢字注音】T4 起，輸出至 {DEFAULT_TEXT_FILE_PATH}
+  python b300_製作上下注音文.py --output %USERPROFILE%\\_tmp\\上下注音文.txt
 """,
     )
     parser.add_argument(
@@ -260,13 +295,13 @@ if __name__ == "__main__":
         "--sheet",
         dest="sheet",
         default=None,
-        help=f"工作表名稱；未指定時，作用中工作表 I1 若為【{HEADER_VALUE}】則用之，否則用【{DEFAULT_SHEET_NAME}】",
+        help=f"工作表名稱；未指定時使用【{DEFAULT_SHEET_NAME}】",
     )
     parser.add_argument(
         "--output",
         dest="output",
         default=None,
-        help=f"輸出 SRT 路徑（預設：{DEFAULT_TEXT_FILE_PATH}）",
+        help=f"輸出文字檔路徑（預設：{DEFAULT_TEXT_FILE_PATH}）",
     )
     args = parser.parse_args()
 
