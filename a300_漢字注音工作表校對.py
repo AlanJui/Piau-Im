@@ -44,6 +44,9 @@ V0.6 (2026-09-13): 修正空白鍵／J 鍵查字失敗。a250／a260 初始化�
 V0.7 (2026-09-13): 查字進入 input() 前，把 Windows 焦點從 Excel 搶回啟動本程式
 的終端機（含 WezTerm）。先前只在呼叫 a250／a260 前切換一次，初始化讀取 Excel
 時焦點又被帶走，使用者必須改用滑鼠點 Terminal。
+
+V0.8 (2026-09-15): 新增 --start 參數，Esc 中斷後可自指定儲存格續校。
+例如：python a300_漢字注音工作表校對.py --start d133
 """
 
 # =========================================================================
@@ -52,6 +55,7 @@ V0.7 (2026-09-13): 查字進入 input() 前，把 Windows 焦點從 Excel 搶回
 import argparse
 import logging
 import os
+import re
 import subprocess
 import sys
 import time
@@ -201,6 +205,73 @@ def get_row_from_line(line_no: int) -> int:
         該行漢字儲存格的列號
     """
     return START_ROW + (line_no - 1) * ROWS_PER_LINE
+
+
+def snap_to_han_ji_row(row: int) -> int:
+    """
+    將列號對齊到所屬【行】的漢字列。
+
+    每一行佔 4 列：人工標音、台語音標、漢字、漢字標音。
+    第一行漢字列為 START_ROW（D5 所在列）。
+    """
+    block_start_row = START_ROW - 2  # 第一行【人工標音】列
+    if row < block_start_row:
+        return START_ROW
+    block_index = (row - block_start_row) // ROWS_PER_LINE
+    return START_ROW + block_index * ROWS_PER_LINE
+
+
+def parse_start_cell_address(cell_address: str) -> tuple[int, int]:
+    """
+    將起始儲存格位址（如 d133、D133、$D$133）解析為 (row, col)。
+
+    若列號落在同一【行】的四列區塊內，會對齊到該行的漢字列。
+    欄位必須在 D 至 R 之間。
+    """
+    if not cell_address or not str(cell_address).strip():
+        raise ValueError("起始儲存格不可為空白")
+
+    normalized = str(cell_address).strip().upper().replace("$", "")
+    match = re.match(r"^([A-Z]+)(\d+)$", normalized)
+    if not match:
+        raise ValueError(f"無效的儲存格位址：{cell_address}（請使用如 D133 的格式）")
+
+    col_letters, row_text = match.groups()
+    col_number = 0
+    for letter in col_letters:
+        col_number = col_number * 26 + (ord(letter) - ord("A") + 1)
+    row_number = int(row_text)
+
+    if col_number < START_COL or col_number > END_COL:
+        start_letter = xw.utils.col_name(START_COL)
+        end_letter = xw.utils.col_name(END_COL)
+        raise ValueError(f"起始儲存格欄位必須在 {start_letter} 至 {end_letter} 之間：{normalized}")
+
+    return snap_to_han_ji_row(row_number), col_number
+
+
+def argparse_start_cell(value: str) -> str:
+    """argparse 型別：先驗證儲存格位址，再保留原始字串。"""
+    try:
+        parse_start_cell_address(value)
+    except ValueError as e:
+        raise argparse.ArgumentTypeError(str(e)) from e
+    return str(value).strip()
+
+
+def resolve_start_cell(start_address: str | None, total_lines: int) -> tuple[int, int]:
+    """
+    決定校對起始儲存格。未指定時自 D5 開始；超出最後一行時改從最後一行開始。
+    """
+    if not start_address:
+        return START_ROW, START_COL
+
+    row, col = parse_start_cell_address(start_address)
+    last_han_ji_row = get_row_from_line(max(1, total_lines))
+    if row > last_han_ji_row:
+        print(f"⚠️  起始列超出最後一行（漢字列 {last_han_ji_row}），改從最後一行開始")
+        row = last_han_ji_row
+    return row, col
 
 
 def move_up(sheet, current_row: int, current_col: int) -> tuple:
@@ -1297,7 +1368,7 @@ class NavigationController:
             print(f"\n❌ 清除失敗：{e}\n")
 
 
-def read_han_ji_with_keyboard(wb, view_mode=False, console_hwnd=None) -> int:
+def read_han_ji_with_keyboard(wb, view_mode=False, console_hwnd=None, start_cell=None) -> int:
     """
     漢字注音工作表導讀主程式（使用鍵盤監聽）
 
@@ -1305,6 +1376,7 @@ def read_han_ji_with_keyboard(wb, view_mode=False, console_hwnd=None) -> int:
         wb: Excel 工作簿物件
         view_mode: 是否為瀏覽模式（True=隱藏人工標音；False=校對模式）
         console_hwnd: 啟動本程式的終端機視窗句柄（WezTerm 等）
+        start_cell: 校對起始儲存格（如 d133）；未指定時自 D5 開始
 
     Returns:
         退出代碼
@@ -1317,8 +1389,21 @@ def read_han_ji_with_keyboard(wb, view_mode=False, console_hwnd=None) -> int:
         # 初始化控制器
         controller = NavigationController(wb, sheet, edit_mode=view_mode, console_hwnd=console_hwnd)
 
-        # 移動到第一行行首（D5）
-        controller.move_to_cell(START_ROW, START_COL)
+        try:
+            start_row, start_col = resolve_start_cell(start_cell, controller.total_lines)
+        except ValueError as e:
+            print(f"❌ {e}")
+            return EXIT_CODE_INVALID_INPUT
+
+        # 移動到指定起始儲存格（預設第一行行首 D5）
+        controller.move_to_cell(start_row, start_col)
+        if start_cell:
+            requested = str(start_cell).strip().upper().replace("$", "")
+            actual = f"{xw.utils.col_name(start_col)}{start_row}"
+            if requested != actual:
+                print(f"起始儲存格已對齊漢字列：{requested} → {actual}")
+            else:
+                print(f"起始儲存格：{actual}")
 
         print("=" * 70)
         if view_mode:
@@ -1409,12 +1494,13 @@ def read_han_ji_with_keyboard(wb, view_mode=False, console_hwnd=None) -> int:
 # =========================================================================
 # 主要處理函數（使用輸入模式）
 # =========================================================================
-def read_han_ji_zu_im_sheet(wb) -> int:
+def read_han_ji_zu_im_sheet(wb, start_cell=None) -> int:
     """
     漢字注音工作表導讀主程式（輸入模式）
 
     Args:
         wb: Excel 工作簿物件
+        start_cell: 校對起始儲存格（如 d133）；未指定時自 D5 開始
 
     Returns:
         退出代碼
@@ -1427,10 +1513,16 @@ def read_han_ji_zu_im_sheet(wb) -> int:
         # 取得總行數
         total_lines = get_total_lines(wb)
 
-        # 初始化：移動到第一行行首（D5）
-        current_row = START_ROW
-        current_col = START_COL
+        try:
+            current_row, current_col = resolve_start_cell(start_cell, total_lines)
+        except ValueError as e:
+            print(f"❌ {e}")
+            return EXIT_CODE_INVALID_INPUT
+
+        # 初始化：移動到指定起始儲存格（預設第一行行首 D5）
         sheet.range((current_row, current_col)).select()
+        if start_cell:
+            print(f"起始儲存格：{xw.utils.col_name(current_col)}{current_row}")
 
         print("=" * 70)
         print("漢字注音工作表導讀（輸入模式）")
@@ -1534,6 +1626,7 @@ def main(args) -> int:
     try:
         # 解析命令行參數
         view_mode = args.view
+        start_cell = getattr(args, "start", None)
 
         # 在接觸 Excel 之前先記住啟動本程式的終端機（WezTerm 等）
         console_hwnd = capture_console_hwnd()
@@ -1555,11 +1648,12 @@ def main(args) -> int:
         if HAS_PYNPUT:
             mode_text = "瀏覽模式" if view_mode else "校對模式"
             print(f"使用鍵盤監聽模式 - {mode_text}")
-            return read_han_ji_with_keyboard(wb, view_mode=view_mode, console_hwnd=console_hwnd)
+            return read_han_ji_with_keyboard(
+                wb, view_mode=view_mode, console_hwnd=console_hwnd, start_cell=start_cell
+            )
         else:
             print("使用輸入模式")
-            # return read_han_ji_zu_im_sheet(wb)
-            return read_han_ji_zu_im_sheet(wb)
+            return read_han_ji_zu_im_sheet(wb, start_cell=start_cell)
 
     except KeyboardInterrupt:
         print("\n\n使用者中斷程式（Ctrl+C）")
@@ -1587,8 +1681,10 @@ if __name__ == "__main__":
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 使用範例：
-python a300_漢字注音工作表校對.py          # 校稿模式（顯示人工標音）
-python a300_漢字注音工作表校對.py --view   # 瀏覽模式（隱藏人工標音）
+python a300_漢字注音工作表校對.py                 # 校對模式，自 D5 開始
+python a300_漢字注音工作表校對.py --view          # 瀏覽模式（隱藏人工標音）
+python a300_漢字注音工作表校對.py --start d133    # 自儲存格 D133 續校
+python a300_漢字注音工作表校對.py --start D133 --view
         """,
     )
     parser.add_argument(
@@ -1601,6 +1697,13 @@ python a300_漢字注音工作表校對.py --view   # 瀏覽模式（隱藏人�
         "--view",
         action="store_true",
         help="啟用瀏覽模式（隱藏人工標音文字顏色）",
+    )
+    parser.add_argument(
+        "--start",
+        metavar="CELL",
+        default=None,
+        type=argparse_start_cell,
+        help="校對起始儲存格（例如 d133）。未指定時自 D5 開始。",
     )
     args = parser.parse_args()
 
