@@ -42,7 +42,7 @@
   --muted: #666;
   --link: #0b57d0;
 
-  --article-max: 760px;
+  --article-max: 100%;
   --pad: 18px;
 
   --line-height: 1.9;
@@ -129,6 +129,17 @@ body {
 .article_content .QA {
   margin-top: 2.4em;
   margin-bottom: 0.4em;
+}
+
+.title_s {
+  font-size: 0.8em;
+  letter-spacing: 0px;
+  text-align: center;
+}
+
+.title_mark_s {
+  font-size: 0.5em;
+  vertical-align: middle;
 }
 
 .title {

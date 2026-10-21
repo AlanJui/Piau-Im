@@ -1,7 +1,8 @@
-"""b000_抄寫到SRT漢字注音工作表.py v0.1.1
+"""b000_抄寫到SRT漢字注音工作表.py v0.1.3
 
-自【漢字注音】工作表讀取各漢字單元的【漢字列】與【漢字標音列】，
-依斷句規則抄入【SRT漢字注音】工作表 Q 欄（漢字）與 R 欄（漢字標音）。
+自【漢字注音】工作表讀取各漢字單元的【漢字列】與【台語音標列】，
+依活頁簿名稱【SRT漢字標音】將台語音標轉成【漢字標音】，
+再依斷句規則抄入【SRT漢字注音】工作表 Q 欄（漢字）與 R 欄（漢字標音）。
 
 斷句規則（於漢字列判斷）：
  - 讀到換行（\\n 或 =CHAR(10)）時，寫入目前句子並換到下一列。
@@ -15,6 +16,8 @@
  - 標點轉半形後緊接前一音節（至少 , . ? !）。
 
 更新紀錄：
+ - v0.1.3 2026-10-21: 實際列數超過模板 $4:$10 時，自 A4:T4 抄儲存格格式到後續列，並補上 T 欄公式。
+ - v0.1.2 2026-10-19: R 欄改依名稱【SRT漢字標音】轉換台語音標，不再沿用【標音方法】（env!C15）所填的漢字標音列。
  - v0.1.1 2026-09-13: 句首大寫保留調符；標點緊接前一音節。
  - v0.1.0 2026-09-13: 初版。預設處理作用中活頁簿。
 """
@@ -22,6 +25,7 @@
 # =========================================================================
 # 載入程式所需套件/模組/函式庫
 # =========================================================================
+import re
 import sys
 import unicodedata
 from pathlib import Path
@@ -31,10 +35,10 @@ import xlwings as xw
 from mod_excel_access import (
     END_COL,
     HAN_JI_OFFSET,
-    HAN_JI_PIAU_IM_OFFSET,
     ROWS_PER_LINE,
     START_COL,
     START_ROW_NO,
+    TAI_GI_IM_PIAU_OFFSET,
     ensure_sheet_exists,
     get_value_by_name,
 )
@@ -44,7 +48,7 @@ from mod_logging import (
     logging_exception,
     logging_process_step,
 )
-from mod_標音 import is_han_ji
+from mod_標音 import PiauIm, is_han_ji, tlpa_tng_han_ji_piau_im
 
 # =========================================================================
 # 常數定義
@@ -61,9 +65,16 @@ TARGET_SHEET_NAME = "SRT漢字注音"
 HAN_JI_OUT_COL = 17  # Q 欄
 PIAU_IM_OUT_COL = 18  # R 欄
 OUTPUT_START_ROW = 4  # 起始儲存格：Q4、R4
+TEMPLATE_DATA_ROWS = 7  # 模板預先備好的資料列：$4:$10
+TEMPLATE_LAST_ROW = OUTPUT_START_ROW + TEMPLATE_DATA_ROWS - 1  # 10
+FORMAT_START_COL = 1  # A
+FORMAT_END_COL = 20  # T
+ANNOTATION_COL = 20  # T 欄：上下注音文
+XL_PASTE_FORMATS = -4122
 OUTPUT_HEADER_ROW = 3  # 對齊【SRT漢字注音（台羅拼音）】Q3／R3 表頭
 OUTPUT_HAN_JI_HEADER = "漢字"
 OUTPUT_PIAU_IM_HEADER = "漢字標音"
+PIAU_IM_HUAT_NAME = "SRT漢字標音"
 
 # 標點轉半形，緊接前一個標音（對齊【SRT漢字注音（台羅拼音）】R 欄）
 PUNCTUATION_MAP = {
@@ -205,6 +216,47 @@ def get_workbook(file_arg: str | None, project_root: Path):
     return None
 
 
+def _named_text(wb, name: str, default: str = "") -> str:
+    """讀取活頁簿名稱為文字；缺值時回傳 default。"""
+    value = get_value_by_name(wb, name)
+    if value is None or str(value).strip() == "":
+        return default
+    return str(value).strip()
+
+
+def get_piau_im_huat(wb) -> str:
+    """自活頁簿名稱【SRT漢字標音】讀取漢字標音方法。"""
+    value = _named_text(wb, PIAU_IM_HUAT_NAME)
+    if value:
+        return value
+    raise ValueError("無法自活頁簿名稱【SRT漢字標音】讀取漢字標音方法。")
+
+
+class HanJiPiauImConverter:
+    """依指定標音方法，將【台語音標】轉成【漢字標音】；同一音標只轉一次。"""
+
+    def __init__(self, piau_im: PiauIm, piau_im_huat: str):
+        self.piau_im = piau_im
+        self.piau_im_huat = piau_im_huat
+        self._cache: dict[str, str] = {}
+
+    def convert(self, tai_gi_im_piau) -> str:
+        key = cell_text(tai_gi_im_piau).strip()
+        if not key:
+            return ""
+        if key in self._cache:
+            return self._cache[key]
+
+        han_ji_piau_im = tlpa_tng_han_ji_piau_im(
+            piau_im=self.piau_im,
+            piau_im_huat=self.piau_im_huat,
+            tai_gi_im_piau=key,
+        )
+        result = str(han_ji_piau_im or "").strip()
+        self._cache[key] = result
+        return result
+
+
 def _int_named_value(wb, name: str, default: int) -> int:
     """讀取活頁簿名稱為整數；缺值時回傳 default。"""
     value = get_value_by_name(wb, name)
@@ -270,12 +322,12 @@ def collect_source_cells(sheet, total_lines: int, start_col: int, end_col: int) 
     for line_no in range(1, total_lines + 1):
         base_row = START_ROW_NO + (line_no - 1) * ROWS_PER_LINE
         han_ji_row = base_row + HAN_JI_OFFSET
-        piau_im_row = base_row + HAN_JI_PIAU_IM_OFFSET
+        tai_gi_row = base_row + TAI_GI_IM_PIAU_OFFSET
         han_range = sheet.range((han_ji_row, start_col), (han_ji_row, end_col))
-        piau_range = sheet.range((piau_im_row, start_col), (piau_im_row, end_col))
+        tai_gi_range = sheet.range((tai_gi_row, start_col), (tai_gi_row, end_col))
         han_values = _as_row_values(han_range.value, chars_per_row)
         han_formulas = _as_row_values(han_range.formula, chars_per_row)
-        piau_values = _as_row_values(piau_range.value, chars_per_row)
+        tai_gi_values = _as_row_values(tai_gi_range.value, chars_per_row)
 
         for offset, col in enumerate(range(start_col, end_col + 1)):
             cells.append(
@@ -285,13 +337,13 @@ def collect_source_cells(sheet, total_lines: int, start_col: int, end_col: int) 
                     "col": col,
                     "han_ji": han_values[offset] if offset < len(han_values) else None,
                     "han_formula": han_formulas[offset] if offset < len(han_formulas) else None,
-                    "piau_im": piau_values[offset] if offset < len(piau_values) else None,
+                    "tai_gi_im_piau": tai_gi_values[offset] if offset < len(tai_gi_values) else None,
                 }
             )
     return cells
 
 
-def build_sentences(source_cells: list[dict]) -> list[tuple[str, str]]:
+def build_sentences(source_cells: list[dict], converter: HanJiPiauImConverter) -> list[tuple[str, str]]:
     """依斷句規則將來源儲存格組成（漢字, 漢字標音）列。"""
     sentences: list[tuple[str, str]] = []
     han_chars: list[str] = []
@@ -306,7 +358,7 @@ def build_sentences(source_cells: list[dict]) -> list[tuple[str, str]]:
             return
         sentences.append((han_text, piau_text))
 
-    def append_pair(han_ji, piau_im):
+    def append_pair(han_ji, tai_gi_im_piau):
         han_text = cell_text(han_ji)
         if not han_text:
             return
@@ -314,7 +366,7 @@ def build_sentences(source_cells: list[dict]) -> list[tuple[str, str]]:
         if len(han_text) == 1 and not is_han_ji(han_text):
             piau_line.add_punctuation(han_text)
             return
-        piau_text = cell_text(piau_im).strip()
+        piau_text = converter.convert(tai_gi_im_piau)
         if piau_text:
             piau_line.add_piau_im(piau_text)
 
@@ -332,7 +384,7 @@ def build_sentences(source_cells: list[dict]) -> list[tuple[str, str]]:
             break
 
         if is_period_plus_newline(han_ji):
-            append_pair(PERIOD_MARK, cell["piau_im"])
+            append_pair(PERIOD_MARK, cell["tai_gi_im_piau"])
             print(f"{addr} [漢字列] = 【句號＋換行】")
             flush()
             index += 1
@@ -348,7 +400,7 @@ def build_sentences(source_cells: list[dict]) -> list[tuple[str, str]]:
             index += 1
             continue
 
-        append_pair(han_ji, cell["piau_im"])
+        append_pair(han_ji, cell["tai_gi_im_piau"])
 
         if is_period(han_ji):
             next_cell = source_cells[index + 1] if index + 1 < total else None
@@ -372,6 +424,42 @@ def clear_output_columns(sheet, start_row: int):
         sheet.range((start_row, HAN_JI_OUT_COL), (last_row, PIAU_IM_OUT_COL)).clear_contents()
 
 
+def shift_row_refs(formula: str, from_row: int, to_row: int) -> str:
+    """把公式裡指向 from_row 的儲存格參照改到 to_row（例如 Q4 → Q11）。"""
+    if not formula:
+        return formula
+    return re.sub(
+        rf"(\$?[A-Z]{{1,3}}\$?){from_row}(?!\d)",
+        lambda match: f"{match.group(1)}{to_row}",
+        formula,
+    )
+
+
+def extend_rows_beyond_template(sheet, end_row: int) -> int:
+    """模板只備好 $4:$10。實際列數超過時，自 A4:T4 抄格式，並補上 T 欄公式。"""
+    if end_row <= TEMPLATE_LAST_ROW:
+        return 0
+
+    first_extra = TEMPLATE_LAST_ROW + 1
+    source = sheet.range((OUTPUT_START_ROW, FORMAT_START_COL), (OUTPUT_START_ROW, FORMAT_END_COL))
+    target = sheet.range((first_extra, FORMAT_START_COL), (end_row, FORMAT_END_COL))
+    source.api.Copy()
+    target.api.PasteSpecial(XL_PASTE_FORMATS)
+    sheet.book.app.api.CutCopyMode = False
+
+    template_height = sheet.range((OUTPUT_START_ROW, FORMAT_START_COL)).row_height
+    sheet.range((first_extra, FORMAT_START_COL), (end_row, FORMAT_START_COL)).row_height = template_height
+
+    template_formula = sheet.range((OUTPUT_START_ROW, ANNOTATION_COL)).formula
+    if template_formula:
+        for row in range(first_extra, end_row + 1):
+            sheet.range((row, ANNOTATION_COL)).formula = shift_row_refs(
+                str(template_formula), OUTPUT_START_ROW, row
+            )
+
+    return end_row - TEMPLATE_LAST_ROW
+
+
 def write_sentences(sheet, sentences: list[tuple[str, str]]) -> int:
     """將句子寫入 Q／R 欄，並補上表頭。"""
     header_han = sheet.range((OUTPUT_HEADER_ROW, HAN_JI_OUT_COL)).value
@@ -387,6 +475,11 @@ def write_sentences(sheet, sentences: list[tuple[str, str]]) -> int:
 
     end_row = OUTPUT_START_ROW + len(sentences) - 1
     sheet.range((OUTPUT_START_ROW, HAN_JI_OUT_COL), (end_row, PIAU_IM_OUT_COL)).value = sentences
+    extra_rows = extend_rows_beyond_template(sheet, end_row)
+    if extra_rows:
+        logging_process_step(
+            f"模板僅備 $4:${TEMPLATE_LAST_ROW}，已將 A4:T4 格式抄到第 {TEMPLATE_LAST_ROW + 1}–{end_row} 列，並補上 T 欄公式。"
+        )
     return len(sentences)
 
 
@@ -415,15 +508,19 @@ def process(wb, _args) -> int:
         chars_per_row = _int_named_value(wb, "每列總字數", DEFAULT_CHARS_PER_ROW)
         start_col = START_COL
         end_col = min(START_COL + chars_per_row - 1, END_COL)
+        han_ji_khoo = _named_text(wb, "漢字庫", "河洛話") or "河洛話"
+        piau_im_huat = get_piau_im_huat(wb)
+        converter = HanJiPiauImConverter(PiauIm(han_ji_khoo=han_ji_khoo), piau_im_huat)
 
         logging_process_step(f"活頁簿：{wb.fullname}")
         logging_process_step(f"來源工作表：{source_sheet.name}")
         logging_process_step(f"目標工作表：{target_sheet.name}")
+        logging_process_step(f"漢字標音方法：{piau_im_huat}（名稱【{PIAU_IM_HUAT_NAME}】）")
         logging_process_step(f"掃描範圍：漢字列 {start_col}–{end_col} 欄，共 {total_lines} 行")
 
         source_sheet.activate()
         source_cells = collect_source_cells(source_sheet, total_lines, start_col, end_col)
-        sentences = build_sentences(source_cells)
+        sentences = build_sentences(source_cells, converter)
         written = write_sentences(target_sheet, sentences)
         target_sheet.activate()
 
@@ -492,7 +589,7 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="將【漢字注音】的漢字列與漢字標音列抄入【SRT漢字注音】Q／R 欄",
+        description="將【漢字注音】的漢字列，依名稱【SRT漢字標音】轉成漢字標音後，抄入【SRT漢字注音】Q／R 欄",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 使用範例：

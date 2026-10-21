@@ -1,5 +1,5 @@
 """
-a100_作業中活頁檔填入漢字.py V0.2.9
+a100_作業中活頁檔填入漢字.py V0.2.10
 功能：將漢字純文字檔中的漢字，填入 Excel 活頁簿中的【漢字注音】工作表，並自動查找台語音標與漢字標音。
 更新紀錄：
  v0.2.7 2026-02-08：
@@ -11,6 +11,9 @@ a100_作業中活頁檔填入漢字.py V0.2.9
  v0.2.0.9 2026-02-17:
   - 修正 _process_cell() 呼叫方式，改為傳入 active_cell 物件；
     原 row, col 值之取得，透過 active_cell 物件即可。
+ v0.2.10 2026-10-19:
+  - 預設 --new：先移除作用活頁簿的【缺字表】、【標音字庫】、【人工標音字庫】，再建立新表。
+  - 加入 --update：略過上述三張工作表的移除，沿用既有工作表。
 """
 
 # =========================================================================
@@ -160,8 +163,9 @@ def _fill_han_ji_into_sheet(
     # 建漢字清單：將 text_with_han_ji 整編為【漢字清單】
     han_ji_list = []
     for han_ji_ku in text_with_han_ji:
-        for han_ji in han_ji_ku:
-            han_ji_list.append(han_ji)
+        # for han_ji in han_ji_ku:
+        #     # han_ji_list.append(han_ji)
+        han_ji_list.extend(han_ji_ku)
         # 段落終結處：換下一段落
         han_ji_list.append("\n")
     # 將漢字檔已讀取之內容，填入【漢字注音】工作表之【V3】儲存格
@@ -316,7 +320,7 @@ class CellProcessor(ExcelCell):
         total_lines = calculate_total_lines(sheet)
         try:
             wb.names["每頁總列數"].refers_to_range.value = total_lines
-        except Exception:
+        except Exception:  # noqa: BLE001, S110
             pass  # 若無此名稱定義，則忽略（不影響主流程）
 
         for r in range(1, total_lines + 1):
@@ -330,10 +334,10 @@ class CellProcessor(ExcelCell):
             new_line = False
             for c in range(start_col, end_col + 1):
                 if is_eof:
-                    break  # noqa: E701
+                    break
                 if new_line:
                     break  # 跳出內層迴圈，進入下一行處理
-                row = row
+                # row = row
                 col = c
                 active_cell = sheet.range((row, col))
                 active_cell.select()
@@ -383,14 +387,22 @@ def process(wb, args) -> int:
         # 初始化 process config
         program = Program(wb, args, hanji_piau_im_sheet_name="漢字注音")
 
+        # 預設 --new：先移除三張字庫工作表再建立。
+        # --update：略過移除，沿用作用活頁簿中既有的工作表。
+        rebuild_ji_khoo_sheets = getattr(args, "ji_khoo_mode", "new") != "update"
+        if rebuild_ji_khoo_sheets:
+            logging_process_step("【--new】先移除【缺字表】、【標音字庫】、【人工標音字庫】，再建立新表。")
+        else:
+            logging_process_step("【--update】略過移除【缺字表】、【標音字庫】、【人工標音字庫】。")
+
         # 建立儲存格處理器
         xls_cell = CellProcessor(
             program=program,
-            new_jin_kang_piau_im_ji_khoo_sheet=True,
-            new_piau_im_ji_khoo_sheet=True,
-            new_khuat_ji_piau_sheet=True,
+            new_jin_kang_piau_im_ji_khoo_sheet=rebuild_ji_khoo_sheets,
+            new_piau_im_ji_khoo_sheet=rebuild_ji_khoo_sheets,
+            new_khuat_ji_piau_sheet=rebuild_ji_khoo_sheets,
         )
-    except Exception as e:
+    except (xw.XlwingsError, ValueError, TypeError, KeyError, OSError) as e:
         logging_exc_error(msg="處理作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
 
@@ -411,7 +423,7 @@ def process(wb, args) -> int:
             han_ji_orgin_cell=program.han_ji_orgin_cell,
         )
         # logging.info("儲存格內容清除完畢")
-    except Exception as e:
+    except xw.XlwingsError as e:
         logging_exc_error(msg="清除儲存格內容作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
 
@@ -587,9 +599,10 @@ if __name__ == "__main__":
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 使用範例：
-  python a100_作業中活頁檔填入漢字.py          # 執行一般模式
-  python a100_作業中活頁檔填入漢字.py -new     # 建立新的字庫工作表
-  python a100_作業中活頁檔填入漢字.py -test    # 執行測試模式
+  python a100_作業中活頁檔填入漢字.py              # 預設 --new：先移除三張字庫工作表再建立
+  python a100_作業中活頁檔填入漢字.py --new        # 同上
+  python a100_作業中活頁檔填入漢字.py --update     # 略過移除，沿用既有字庫工作表
+  python a100_作業中活頁檔填入漢字.py --test       # 執行測試模式
 """,
     )
     parser.add_argument(
@@ -597,11 +610,22 @@ if __name__ == "__main__":
         action="store_true",
         help="執行測試模式",
     )
-    parser.add_argument(
+    ji_khoo_mode = parser.add_mutually_exclusive_group()
+    ji_khoo_mode.add_argument(
         "--new",
-        action="store_true",
-        help="建立新的字庫工作表",
+        dest="ji_khoo_mode",
+        action="store_const",
+        const="new",
+        help="先移除【缺字表】、【標音字庫】、【人工標音字庫】，再建立新表（預設）",
     )
+    ji_khoo_mode.add_argument(
+        "--update",
+        dest="ji_khoo_mode",
+        action="store_const",
+        const="update",
+        help="略過移除【缺字表】、【標音字庫】、【人工標音字庫】，沿用既有工作表",
+    )
+    parser.set_defaults(ji_khoo_mode="new")
     parser.add_argument(
         "han_ji_file", nargs="?", default="_tmp_p1_han_ji.txt", help="漢字純文字檔路徑"
     )
