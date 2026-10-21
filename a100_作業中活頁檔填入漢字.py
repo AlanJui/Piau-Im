@@ -402,7 +402,7 @@ def process(wb, args) -> int:
             new_piau_im_ji_khoo_sheet=rebuild_ji_khoo_sheets,
             new_khuat_ji_piau_sheet=rebuild_ji_khoo_sheets,
         )
-    except (xw.XlwingsError, ValueError, TypeError, KeyError, OSError) as e:
+    except Exception as e:
         logging_exc_error(msg="處理作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
 
