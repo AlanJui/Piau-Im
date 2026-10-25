@@ -115,11 +115,14 @@ class TestA400TitleAuthor(unittest.TestCase):
         )
         processor = CellProcessor.__new__(CellProcessor)
         processor.program = program
-        processor.generate_ruby_tag = lambda han_ji, tlpa: (
-            f"<ruby>{han_ji}</ruby>",
-            "",
-            "",
+        processor.generate_ruby_tag = (
+            lambda han_ji, tlpa, han_ji_piau_im="", pian_tiau=False: (
+                f"<ruby>{han_ji}</ruby>",
+                "",
+                "",
+            )
         )
+        processor._is_pian_tiau_cell = lambda cell: False
 
         title_html, author_html, next_start_row = (
             processor.generate_title_and_author_with_ruby()
