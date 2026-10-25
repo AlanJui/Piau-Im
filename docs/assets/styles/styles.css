@@ -366,7 +366,7 @@ body {
    瘜券喟泵賊嚗寥喟泵撠剁
    ========================= */
 
-/* 脫迫 ruby 蝝冽銵鋡急 */
+/* 基礎 ruby 樣式 */
 ruby {
   white-space: nowrap;
   text-align: justify;
@@ -377,6 +377,9 @@ ruby {
   line-height: 2.4;
   margin-right: 0.5em;
   /* 修正：增加漢字之間的間距 */
+  /* 變調標音較長時，避免 <rt> 視覺上壓到相鄰標點 */
+  ruby-overhang: none;
+  -webkit-ruby-overhang: none;
 }
 
 rt {
@@ -430,6 +433,14 @@ rtc {
 .Siang_Pai ruby {
   margin-right: 0.6em;
   /* 修正：Siang_Pai 模式下增加字間距 */
+  ruby-overhang: none;
+  -webkit-ruby-overhang: none;
+}
+
+/* 標點僅為 span，不應承接 ruby 標音（含 overhang） */
+.Siang_Pai > p > span,
+span.title_mark {
+  ruby-position: unset;
 }
 
 .Siang_Pai rt {
