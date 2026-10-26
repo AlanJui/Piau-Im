@@ -1227,7 +1227,7 @@ nav.main-nav ul li span {
 }
 
 /* =========================
-   音標切換導覽列 (phonetic-switcher)
+   音標切換導覽列 (phonetic-switcher) — PRG-web01
    ========================= */
 .phonetic-switcher-toolbar {
   position: sticky;
@@ -1242,6 +1242,8 @@ nav.main-nav ul li span {
   align-items: center;
   overflow-x: auto;
   white-space: nowrap;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 14px;
 }
 
 .phonetic-switcher-toolbar.ps-footer {
@@ -1249,7 +1251,6 @@ nav.main-nav ul li span {
   margin-top: 30px;
 }
 
-/* 回首頁按鈕 */
 .ps-home-btn {
   padding: 4px 10px;
   cursor: pointer;
@@ -1259,50 +1260,41 @@ nav.main-nav ul li span {
   font-size: 14px;
 }
 
-/* 標音方案群組容器 */
-.ps-btn-group {
-  display: flex;
-  gap: 4px;
-  border-left: 1px solid #ccc;
-  padding-left: 8px;
+.ps-divider {
+  display: inline-block;
+  width: 1px;
+  height: 20px;
+  background-color: #ccc;
+  margin: 0 7px;
+  vertical-align: middle;
   flex-shrink: 0;
 }
 
-/* 標音方案切換按鈕 */
-.ps-scheme-btn {
-  padding: 4px 8px;
-  cursor: pointer;
-  font-size: 13px;
-  flex-shrink: 0;
-}
-
-/* 自訂區塊容器 */
-.ps-custom-div {
-  border-left: 1px solid #ccc;
-  padding-left: 8px;
+.ps-group {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   flex-shrink: 0;
 }
 
-/* 「自訂」標籤文字 */
+.ps-group label,
 .ps-custom-label {
-  font-weight: bold;
+  font-weight: 500;
   font-family: 'Noto Serif TC', serif;
-  font-size: 4px;
+  font-size: 14px;
+  white-space: nowrap;
 }
 
-/* 「上：」「右：」提示文字 */
-.ps-custom-text {
-  /* font-size: 10.5px; */
-  /* 無論如何調整，均無效果 */
-  font-size: 2px;
-  font-family: 'Noto Sans TC', sans-serif;
+.ps-custom-div {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
-/* 自訂下拉選單 */
-.ps-custom-div select {
-  font-size: 16px;
+.phonetic-switcher-toolbar select {
+  font-size: 14px;
   font-family: 'Noto Sans TC', sans-serif;
+  padding: 2px 6px;
+  max-width: 11em;
 }
