@@ -1,5 +1,5 @@
 """
-a260_依字典查得結果填入人工標音.py V0.0.4
+a260_依字典查得結果填入人工標音.py V0.0.6
 
 在【漢字注音】工作表之【作用儲存格】，可以兩種方式輸入【人工標音】資料：
 （1）自【自用字典】查得【台語音標】；（2）直接手動輸入【台語音標】/【台羅拼音】。
@@ -13,6 +13,7 @@ v0.0.4 2026-3-23: 修正問題：當使用者放棄輸入【人工標音】時�
     更新【標音字庫】現有資料紀錄，引發錯誤。
 v0.0.5 2026-09-13: 手動補入缺字讀音後，同步更新【缺字表】台語音標（B 欄），並在【標音字庫】
     補入該漢字座標之資料紀錄。
+v0.0.6 2026-10-27: E 鍵先查字典。字典無讀音或查詢發生例外時，改為手動輸入，不中斷後續作業。
 """
 
 # =========================================================================
@@ -129,20 +130,21 @@ class CellProcessor(ExcelCell):
             force_manual = bool(getattr(self.program.args, "manual_input", False))
             missing_piau_im = not tai_gi_im_piau or not han_ji_piau_im
 
-            # E 鍵（手動輸入）或儲存格尚無標音時，略過查字典，直接請使用者輸入。
-            if force_manual or missing_piau_im:
+            # E 鍵：先查字典（與空白鍵相同）。字典無讀音或查詢例外時，改為手動輸入。
+            if force_manual:
+                print(f"📌 作用儲存格：{active_cell_address} ==> 漢字：{han_ji}")
+                print(f"📌 人工標音：{jin_kang_piau_im}，台語音標：{tai_gi_im_piau}，漢字標音：{han_ji_piau_im}")
+                tai_gi_im_piau, han_ji_piau_im = self._lookup_then_manual(han_ji_cell, han_ji)
+            # 儲存格尚無標音時，略過查字典，直接請使用者輸入。
+            elif missing_piau_im:
                 # ----------------------------------------------------------------------
-                # 直接手動輸入人工標音，若是【作用儲存格】之【漢字】，可能字典尚未登錄此漢字之讀音資料
+                # 儲存格尚無標音：直接手動輸入。E 鍵不走這條，已先查字典。
                 # ----------------------------------------------------------------------
-                if missing_piau_im and not force_manual:
-                    msg = (
-                        f"作用儲存格 {active_cell_address} 的漢字【{han_ji}】缺乏【台語音標】或【漢字標音】，"
-                        f"可能是字典無此漢字之讀音資料，將略過查字典作業，直接要求使用者輸入【台語音標】或【台羅拼音】。"
-                    )
-                    print(f">> {msg}")
-                else:
-                    print(f"📌 作用儲存格：{active_cell_address} ==> 漢字：{han_ji}")
-                    print(f"📌 人工標音：{jin_kang_piau_im}，台語音標：{tai_gi_im_piau}，漢字標音：{han_ji_piau_im}")
+                msg = (
+                    f"作用儲存格 {active_cell_address} 的漢字【{han_ji}】缺乏【台語音標】或【漢字標音】，"
+                    "可能是字典無此漢字之讀音資料，將略過查字典作業，直接要求使用者輸入【台語音標】或【台羅拼音】。"
+                )
+                print(f">> {msg}")
                 # 取得使用者輸入之【台語音標】或【台羅拼音】
                 tai_gi_im_piau = self.get_user_input_piau_im(han_ji=han_ji)
                 if not tai_gi_im_piau:
@@ -211,7 +213,37 @@ class CellProcessor(ExcelCell):
             return EXIT_CODE_SUCCESS
         except Exception as e:
             logging_exception(msg="自動為【漢字】查找【台語音標】作業，發生例外！", error=e)
+            print(">> 標音寫入發生例外，本次未變更資料。可再按 E 鍵繼續。")
             raise
+
+    def _lookup_then_manual(self, han_ji_cell, han_ji: str):
+        """先查字典。查無讀音時由查字流程改為手動輸入；查詢例外時亦改為手動輸入。"""
+        try:
+            return self._ca_ji_tian_au_thiam_jin_kang_piau_im(active_cell=han_ji_cell)
+        except Exception as e:
+            logging_exception(
+                msg=f"漢字【{han_ji}】查字典發生例外，改為手動輸入。",
+                error=e,
+            )
+            print(
+                f">> 漢字【{han_ji}】查字典時發生例外，"
+                "改為手動輸入【台語音標】或【台羅拼音】。"
+            )
+            tai_gi_im_piau = self.get_user_input_piau_im(han_ji=han_ji)
+            if not tai_gi_im_piau:
+                return None, None
+            try:
+                han_ji_piau_im = self._convert_tai_gi_im_piau_to_han_ji_piau_im(
+                    tai_gi_im_piau=tai_gi_im_piau,
+                )
+            except Exception as conv_error:
+                logging_exception(
+                    msg=f"漢字【{han_ji}】手動輸入之標音無法轉換。",
+                    error=conv_error,
+                )
+                print(">> 無法轉換所輸入的標音，本次未變更資料。")
+                return None, None
+            return tai_gi_im_piau, han_ji_piau_im
 
 
 # =============================================================================

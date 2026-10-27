@@ -240,11 +240,18 @@ class HanJiTian:
             data = []
             for result in results:
                 row_dict = dict(zip(fields, result))
-                # 取得台羅音標
+                # 取得台羅音標。字典尚無讀音（空值）時略過，避免拆音時發生例外。
                 tai_loo_im = row_dict["台語音標"]
+                if tai_loo_im is None or str(tai_loo_im).strip() == "":
+                    continue
 
                 # 將台羅音標轉換為台語音標
-                split_result = split_tai_gi_im_piau(tai_loo_im)
+                try:
+                    split_result = split_tai_gi_im_piau(tai_loo_im)
+                except (TypeError, IndexError, ValueError):
+                    continue
+                if not split_result or not any(split_result):
+                    continue
                 row_dict["聲母"] = split_result[0]
                 row_dict["韻母"] = split_result[1]
                 row_dict["聲調"] = split_result[2]
@@ -256,6 +263,9 @@ class HanJiTian:
 
                 # 將結果加入列表
                 data.append(row_dict)
+
+            if not data:
+                return None
 
             return data
 

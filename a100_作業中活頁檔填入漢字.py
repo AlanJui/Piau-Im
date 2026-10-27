@@ -1,5 +1,5 @@
 """
-a100_作業中活頁檔填入漢字.py V0.2.10
+a100_作業中活頁檔填入漢字.py V0.2.11
 功能：將漢字純文字檔中的漢字，填入 Excel 活頁簿中的【漢字注音】工作表，並自動查找台語音標與漢字標音。
 更新紀錄：
  v0.2.7 2026-02-08：
@@ -14,6 +14,8 @@ a100_作業中活頁檔填入漢字.py V0.2.10
  v0.2.10 2026-10-19:
   - 預設 --new：先移除作用活頁簿的【缺字表】、【標音字庫】、【人工標音字庫】，再建立新表。
   - 加入 --update：略過上述三張工作表的移除，沿用既有工作表。
+ v0.2.11 2026-10-27:
+  - 抄入漢字之前，先將【漢字】儲存格（列 5、9、13、17…，欄 D:R）底色改回無填滿。
 """
 
 # =========================================================================
@@ -87,6 +89,36 @@ init_logging()
 # =========================================================================
 # 主要處理函數
 # =========================================================================
+def clear_han_ji_cell_fill(wb, program: Program, sheet_name: str = "漢字注音") -> None:
+    """抄入漢字之前，將【漢字】儲存格底色改回無填滿。
+
+    漢字列為 5、9、13、17…（自起始列起每隔 4 列），欄位為 D:R。
+    只清底色，不改儲存格內容與字型。
+    """
+    sheet = wb.sheets[sheet_name]
+    start_row = program.han_ji_start_row
+    rows_per_line = program.ROWS_PER_LINE
+    start_col = program.start_col
+    end_col = program.end_col
+    total_lines = int(program.TOTAL_LINES)
+
+    if total_lines < 1:
+        return
+
+    start_col_name = xw.utils.col_name(start_col)
+    end_col_name = xw.utils.col_name(end_col)
+    last_han_ji_row = start_row + (total_lines - 1) * rows_per_line
+    logging_process_step(
+        "將【漢字】儲存格底色改回無填滿："
+        f"{start_col_name}{start_row}:{end_col_name}{last_han_ji_row}"
+        f"（列 {start_row} 起，每隔 {rows_per_line} 列）。"
+    )
+
+    for line in range(total_lines):
+        row = start_row + line * rows_per_line
+        sheet.range((row, start_col), (row, end_col)).color = None
+
+
 def fill_in_han_ji(
     wb, text_with_han_ji: list, sheet_name: str = "漢字注音", start_row: int = 5
 ):
@@ -452,6 +484,8 @@ def process(wb, args) -> int:
         # 顯示正在處理的漢字檔案名稱
         print("=" * 80)
         print(f"正在處理的漢字檔案：{text_file_name}")
+        # 漢字尚未抄入前，先把漢字列（5、9、13、17…，欄 D:R）底色改回無填滿
+        clear_han_ji_cell_fill(wb, program, sheet_name="漢字注音")
         _fill_han_ji_into_sheet(
             wb=wb,
             program=program,

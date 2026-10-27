@@ -348,6 +348,9 @@ def kam_si_u_tiau_hu(im_piau: str) -> bool:
         bool: [True] 帶調符音標；[False] 無調符音標
     """
 
+    if not im_piau:
+        return False
+
     # 若【音標】末端為數值，表音標已是【帶調號音標】，直接回傳【無調符音標】
     # u_tiau_hu = False
     if im_piau[-1] in "123456789":
@@ -671,6 +674,15 @@ class PiauIm:
     # ================================================================
     # 在韻母加調號：白話字(POJ)與台羅(TL)同
     # ================================================================
+    def _mark_nng_tone(self, piau_im, tiau_ho):
+        """聲母 n + 韻母 ng（nng）：調符只標在第 2 個 n。無此組合則回傳 None。"""
+        match = re.search(r"nng", piau_im, re.I)
+        if not match:
+            return None
+        idx = match.start() + 1
+        marked = self.un_bu_ga_tiau_ho(piau_im[idx], tiau_ho)
+        return piau_im[:idx] + marked + piau_im[idx + 1 :]
+
     def un_bu_ga_tiau_ho(self, guan_im, tiau):
         tiau_hu_dict = {
             1: "",
@@ -720,6 +732,11 @@ class PiauIm:
         un = self.Un_Bu_Dict[un_bu][piau_im_huat]
         piau_im = f"{siann}{un}"
 
+        # 聲母 n + 韻母 ng：調符標在第 2 個 n（nn̄g），不可兩個 n 都標
+        marked_nng = self._mark_nng_tone(piau_im, tiau_ho)
+        if marked_nng is not None:
+            return marked_nng
+
         # 韻母為複元音
         searchObj = self.TL_pattern1.search(piau_im)
         if searchObj:
@@ -767,6 +784,11 @@ class PiauIm:
 
         un = self.Un_Bu_Dict[un_bu][piau_im_huat]
         piau_im = f"{siann}{un}"
+
+        # 聲母 n + 韻母 ng：調符標在第 2 個 n，不可兩個 n 都標
+        marked_nng = self._mark_nng_tone(piau_im, tiau_ho)
+        if marked_nng is not None:
+            return marked_nng
 
         # 韻母為複元音
         searchObj = self.POJ_pattern1.search(piau_im)
@@ -1243,11 +1265,11 @@ def ca_ji_tng_piau_im(entry, han_ji_khoo: str, piau_im, piau_im_huat: str):
         if siann_bu in ("none", "None", None):
             siann_bu = ""
         un_bu = entry.get("韻母", "")
-        # if un_bu in ("none", "None", None):
-        #     un_bu = ""
+        if un_bu in ("none", "None", None):
+            un_bu = ""
         tiau_ho = entry.get("聲調", "")
-        # if tiau_ho in ("none", "None", None):
-        #     tiau_ho = ""
+        if tiau_ho in ("none", "None", None):
+            tiau_ho = ""
         un_bu = tai_gi_im_piau_tng_un_bu(un_bu)
         if tiau_ho == "6":
             # 若【聲調】為【6】，則將【聲調】改為【7】
@@ -1676,6 +1698,8 @@ def tai_gi_im_piau_tng_un_bu(tai_gi_im_piau: str) -> str:
     :param tai_gi_im_piau: str - 整體台語音標 (例如 "kere1")
     :return: str - 韻母轉換後的台語音標 (例如 "kue1")
     """
+    if not tai_gi_im_piau:
+        return ""
 
     # 使用正則表達式拆解聲母、韻母、聲調
     match = re.match(r"([ptkghmnzcsjlrw]?)([a-z]+)(\d?)", tai_gi_im_piau, re.I)
@@ -1725,6 +1749,9 @@ def split_tai_lo(input_str):
 # 將【台語音標】分解為【聲母】、【韻母】、【調號】
 # ============================================================================
 def split_tai_gi_im_piau(im_piau: str, po_ci: bool = False):
+    if im_piau is None or str(im_piau).strip() == "":
+        return ["", "", ""]
+
     # 如果輸入之【音標】為【帶調符音標】，則需確保轉換為【帶調號TLPA音標】
     if kam_si_u_tiau_hu(im_piau):
         im_piau = tng_im_piau(im_piau)

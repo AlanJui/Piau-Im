@@ -20,7 +20,7 @@ a109_漢字注音工作表校對.py V0.3
   PgDn (Page Down): 翻到下一頁
   空白            : 查字典更換漢字讀音
   J 鍵            : 查字典指定漢字讀音
-  E 鍵            : 手動輸入人工標音
+  E 鍵            : 先查字典，查無則手動輸入人工標音
   = 鍵            : 填入人工標音標記
   ESC             : 結束程式
 ======================================================================
@@ -47,6 +47,9 @@ V0.7 (2026-09-13): 查字進入 input() 前，把 Windows 焦點從 Excel 搶回
 
 V0.8 (2026-09-15): 新增 --start 參數，Esc 中斷後可自指定儲存格續校。
 例如：python a300_漢字注音工作表校對.py --start d133
+
+V0.9 (2026-10-27): E 鍵先查字典（與空白鍵相同）。字典無此漢字讀音，或查詢
+發生例外時，改為手動輸入，不讓例外中斷後續人工標音。
 """
 
 # =========================================================================
@@ -743,7 +746,7 @@ class NavigationController:
                 #     # S 鍵：查詢萌典
                 #     self.pending_action = "query_moedict"
                 elif key.char.lower() == "e":
-                    # E 鍵：手動輸入人工標音
+                    # E 鍵：先查字典；查無讀音或查詢例外時，改為手動輸入人工標音
                     self.pending_action = "manual_input"
                 elif key.char == "=":
                     # = 鍵：引用既有的人工標音
@@ -842,7 +845,7 @@ class NavigationController:
                 self.fill_manual_annotation_mark()
 
             elif action == "manual_input":
-                # 手動輸入人工標音
+                # 先查字典，查無則手動輸入人工標音
                 self.manual_input_annotation()
 
             elif action == "clear_manual_annotation":
@@ -1238,7 +1241,7 @@ class NavigationController:
                 self.listener.start()
 
     def manual_input_annotation(self):
-        """手動輸入人工標音到當前儲存格上方兩列的人工標音儲存格"""
+        """先查字典是否已有讀音；查無或查詢例外時，再手動輸入人工標音。"""
         try:
             # 計算人工標音儲存格的位置（當前儲存格上方兩列）
             manual_annotation_row = self.current_row - 2
@@ -1256,11 +1259,13 @@ class NavigationController:
             current_han_ji = self.sheet.range((self.current_row, self.current_col)).value or ""
 
             print("\n" + "=" * 70)
-            print("手動輸入人工標音模式")
+            print("人工校音：先查字典，查無則手動輸入")
             print("=" * 70)
             print(f"當前漢字儲存格：{current_cell_address}【{current_han_ji}】")
             print(f"人工標音儲存格：{target_cell_address}")
             print("\n輸入說明：")
+            print("  - 字典已有讀音時，可輸入選擇編號套用")
+            print("  - 字典無此讀音時，改為手動輸入，不會因查詢例外而中斷")
             print("  - 可輸入帶調符的台羅拼音（如：Tông, Sióng）")
             print("  - 可輸入帶調號的台羅拼音（如：Tong5, Siong2）")
             print("  - 可使用 Ctrl+V 貼上複製的內容")
@@ -1277,7 +1282,7 @@ class NavigationController:
 
             try:
                 if HAS_A260:
-                    # E 鍵：略過查字典，直接手動輸入人工標音
+                    # E 鍵：先查字典；查無讀音或查詢例外時，a260 改為手動輸入
                     exit_code = ca_ji_tian_au_thiam_jin_kang_piau_im(
                         wb=self.wb,
                         args=self.build_query_args(manual_input=True),
@@ -1420,7 +1425,7 @@ def read_han_ji_with_keyboard(wb, view_mode=False, console_hwnd=None, start_cell
         print("  PgDn (Page Down): 翻到下一頁")
         print("  空白 鍵         : 查字典更換漢字讀音（a250）")
         print("  J 鍵            : 查字典指定漢字讀音（a260）")
-        print("  E 鍵            : 手動輸入人工標音（a222）")
+        print("  E 鍵            : 先查字典，查無則手動輸入人工標音（a260）")
         print("  = 鍵            : 填入人工標音標記")
         print("  ESC             : 結束程式")
         print("=" * 70)
