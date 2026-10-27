@@ -3,6 +3,7 @@
  * 依 PRG-web01：預設標音樣式／自訂上端・右端／變調標音開關。
  * - 變調標音預設「關閉」；啟用後僅 <rt> 依 data-pian-tiau 產出本調／變調；<rtc> 維持標準格式。
  * - data-pian-tiau 缺省等同 "false"（本調格式）。
+ * - 聲母 n + 韻母 ng（nng7）：調符標在第 2 個 n（nn̄g），不標在第 1 個 n。
  */
 document.addEventListener("DOMContentLoaded", function () {
     let phoneticMapping = null;
@@ -396,8 +397,11 @@ document.addEventListener("DOMContentLoaded", function () {
         else if (s.includes("iu")) pos = s.indexOf("u");
         else if (s.includes("ui")) pos = s.indexOf("i");
         else if (s.includes("oo")) pos = s.indexOf("o");
-        else if (s.includes("ng") && !/[aeiou]/.test(s)) pos = s.indexOf("n");
-        else if (s.includes("m") && !/[aeiou]/.test(s)) pos = s.indexOf("m");
+        else if (s.includes("ng") && !/[aeiou]/.test(s)) {
+            // 韻母 ng 的調符標在 ng 的 n。nng（聲母 n + 韻母 ng）標在第 2 個 n。
+            const ngN = s.search(/n(?=g)/i);
+            pos = ngN === -1 ? s.indexOf("n") : ngN;
+        } else if (s.includes("m") && !/[aeiou]/.test(s)) pos = s.indexOf("m");
         else {
             for (const v of ["a", "o", "e", "i", "u", "v"]) {
                 if (s.includes(v)) {
