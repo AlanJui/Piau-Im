@@ -21,6 +21,7 @@ a109_漢字注音工作表校對.py V0.3
   空白            : 查字典更換漢字讀音
   J 鍵            : 查字典指定漢字讀音
   E 鍵            : 先查字典，查無則手動輸入人工標音
+  C 鍵            : 啟用／關閉變調標音樣式
   = 鍵            : 填入人工標音標記
   ESC             : 結束程式
 ======================================================================
@@ -50,6 +51,13 @@ V0.8 (2026-09-15): 新增 --start 參數，Esc 中斷後可自指定儲存格續
 
 V0.9 (2026-10-27): E 鍵先查字典（與空白鍵相同）。字典無此漢字讀音，或查詢
 發生例外時，改為手動輸入，不讓例外中斷後續人工標音。
+
+V0.10 (2026-10-28): 空白鍵與 E 鍵在列出讀音選項前，先顯示【標音字庫】裡
+同一漢字、同一台語音標指向哪些【漢字注音】儲存格，以便判斷要統一改音
+或只改目前這一格。
+
+V0.11 (2026-10-28): 新增 C 鍵，切換作用中漢字儲存格的變調標音樣式。
+無填滿為本調（關閉）；淡灰 #E8E8E8 為變調（啟用）。
 """
 
 # =========================================================================
@@ -165,6 +173,8 @@ START_ROW = 5  # 第一行的起始列號
 START_COL = 4  # D 欄（第 4 欄）
 END_COL = 18  # R 欄（第 18 欄）
 ROWS_PER_LINE = 4  # 每行佔用 4 列
+# 變調標音樣式底色（淡灰 #E8E8E8）。無填滿表示本調（變調樣式關閉）。
+BIAN_TIAU_FILL_COLOR = (232, 232, 232)
 
 # =========================================================================
 # 載入環境變數
@@ -748,6 +758,9 @@ class NavigationController:
                 elif key.char.lower() == "e":
                     # E 鍵：先查字典；查無讀音或查詢例外時，改為手動輸入人工標音
                     self.pending_action = "manual_input"
+                elif key.char.lower() == "c":
+                    # C 鍵：啟用／關閉變調標音樣式
+                    self.pending_action = "toggle_bian_tiau"
                 elif key.char == "=":
                     # = 鍵：引用既有的人工標音
                     self.pending_action = "fill_manual_mark"
@@ -851,6 +864,10 @@ class NavigationController:
             elif action == "clear_manual_annotation":
                 # 清除人工標音
                 self.clear_manual_annotation()
+
+            elif action == "toggle_bian_tiau":
+                # 啟用／關閉變調標音樣式
+                self.toggle_bian_tiau_style()
 
             elif action == "esc":
                 print("\n按下 ESC 鍵，程式結束")
@@ -1322,6 +1339,33 @@ class NavigationController:
                 self.listener = keyboard.Listener(on_press=self.on_key_press, suppress=True)
                 self.listener.start()
 
+    def toggle_bian_tiau_style(self):
+        """切換作用中漢字儲存格的變調標音樣式。
+
+        無填滿（看似白色）＝本調，變調樣式關閉。
+        淡灰 #E8E8E8 ＝變調樣式啟用。再按一次 C 鍵即改回無填滿。
+        """
+        try:
+            cell = self.sheet.range((self.current_row, self.current_col))
+            han_ji = cell.value or ""
+            address = f"{xw.utils.col_name(self.current_col)}{self.current_row}"
+            if self._is_bian_tiau_fill(cell.color):
+                cell.color = None
+                print(f"{address}【{han_ji}】：關閉變調標音樣式（無填滿）")
+            else:
+                cell.color = BIAN_TIAU_FILL_COLOR
+                print(f"{address}【{han_ji}】：啟用變調標音樣式（淡灰 #E8E8E8）")
+        except Exception as e:
+            logging.error(f"切換變調標音樣式失敗：{e}")
+            print(f"\n❌ 切換變調標音樣式失敗：{e}\n")
+
+    @staticmethod
+    def _is_bian_tiau_fill(color) -> bool:
+        """漢字儲存格底色是否為變調標示淡灰。無填滿（None）視為本調。"""
+        if not isinstance(color, tuple) or len(color) < 3:
+            return False
+        return all(int(round(color[i])) == BIAN_TIAU_FILL_COLOR[i] for i in range(3))
+
     def clear_manual_annotation(self):
         """清除當前儲存格上方兩列的人工標音儲存格內容"""
         try:
@@ -1426,6 +1470,7 @@ def read_han_ji_with_keyboard(wb, view_mode=False, console_hwnd=None, start_cell
         print("  空白 鍵         : 查字典更換漢字讀音（a250）")
         print("  J 鍵            : 查字典指定漢字讀音（a260）")
         print("  E 鍵            : 先查字典，查無則手動輸入人工標音（a260）")
+        print("  C 鍵            : 啟用／關閉變調標音樣式（淡灰 #E8E8E8／無填滿）")
         print("  = 鍵            : 填入人工標音標記")
         print("  ESC             : 結束程式")
         print("=" * 70)

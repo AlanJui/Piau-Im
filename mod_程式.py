@@ -1,5 +1,5 @@
 """
-mod_程式.py V0.2.15
+mod_程式.py V0.2.18
 
 本系統各功能之程式架構模版。
 模版中包含程式配置類別 Program 及儲存格處理器類別 ExcelCell。
@@ -15,6 +15,7 @@ mod_程式.py V0.2.15
 - v0.2.14 2026-03-21: 修正 end_col 的計算方式，原為 start_col + CHARS_PER_ROW，修正為 start_col + CHARS_PER_ROW - 1，以確保 end_col 為最後一個字的正確欄位。
 - v0.2.16 2026-09-13: Program 初始化先保存作用儲存格；get_han_ji_cell_with_active_cell 優先使用 args.cell，避免讀取命名範圍後誤用第 1 列查字。
 - v0.2.17 2026-09-13: 手動補入缺字讀音後，填【缺字表】台語音標並在【標音字庫】補入該座標紀錄。
+- v0.2.18 2026-10-28: 空白鍵／E 鍵查字前，顯示【標音字庫】中同一漢字、同一台語音標所指向的【漢字注音】儲存格。
 """
 
 # =========================================================================
@@ -401,6 +402,43 @@ class ExcelCell:
         print("-" * 80)
         col_name = xw.utils.col_name(col)
         print(f"【{col_name}{row}】({row}, {col}) = {msg}")
+
+    def _show_same_reading_in_piau_im_ji_khoo(self, han_ji: str, tai_gi_im_piau) -> None:
+        """顯示【標音字庫】裡，與作用儲存格相同漢字、相同台語音標的座標清單。
+
+        空白鍵會一次改掉這份清單裡的全部儲存格；若只要改目前這一格，應改按 E 鍵。
+        """
+        sheet_name = "標音字庫"
+        im_piau = tai_gi_im_piau if isinstance(tai_gi_im_piau, str) else ""
+        im_piau = im_piau.strip()
+        if not im_piau or im_piau == "N/A":
+            print(f"📌 【{sheet_name}】工作表尚無【{han_ji}】的台語音標可對照。")
+            return
+
+        try:
+            ji_khoo = self.piau_im_ji_khoo_dict
+            row_no = ji_khoo.get_row_by_han_ji_and_tai_gi_im_piau(han_ji, im_piau)
+            coords = ji_khoo.get_coordinates_by_han_ji_and_tai_gi_im_piau(han_ji, im_piau) or []
+        except Exception as e:
+            logging.warning(f"查詢【{sheet_name}】【{han_ji}】／{im_piau} 失敗：{e}")
+            print(f"📌 【{sheet_name}】工作表查詢【{han_ji}】／{im_piau} 失敗。")
+            return
+
+        addresses = []
+        for coord in coords:
+            if not coord or len(coord) < 2:
+                continue
+            row, col = int(coord[0]), int(coord[1])
+            addresses.append(f"{xw.utils.col_name(col)}{row}")
+
+        if row_no == -1 or not addresses:
+            print(f"📌 【{sheet_name}】工作表尚無【{han_ji}】／{im_piau} 的紀錄。")
+            return
+
+        cell_addr = f"A{row_no}"
+        joined = ", ".join(addresses)
+        print(f"📌 【{sheet_name}】工作表 {cell_addr} 儲存格有 {len(addresses)} 筆紀錄，指向【漢字注音】工作表！")
+        print(f"    {cell_addr} ==> [{joined}]")
 
     def _get_title_from_sheet(self, sheet) -> str:
         """

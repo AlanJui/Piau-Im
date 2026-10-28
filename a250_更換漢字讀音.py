@@ -23,6 +23,7 @@ a250.py 程式的功能，在於提供使用者，校對【漢字注音】工作
     【漢字】之【台語音標】及【漢字標音】，導致【作用儲存格】之 Excel Address
     已變更，需將之校正回歸。
  - v0.2.8 2026-02-15: 修正 _process_cell(), _process_jin_kang_piau_im() 函式之使用方式。
+ - v0.2.9 2026-10-28: 更換讀音前，顯示【標音字庫】中同一漢字、同一台語音標指向的儲存格。
 """
 
 # =========================================================================
@@ -156,6 +157,7 @@ class CellProcessor(ExcelCell):
                 # ----------------------------------------------------------------------
                 han_ji_position = (han_ji_row, col)
                 print(f"📌 作用儲存格：{active_cell_address} ==> 漢字儲存格座標：{han_ji_position}")
+                self._show_same_reading_in_piau_im_ji_khoo(han_ji, tai_gi_im_piau)
                 print(f"📌 漢字：{han_ji}")
                 print(f"📌 人工標音：{jin_kang_piau_im}，台語音標：{tai_gi_im_piau}，漢字標音：{han_ji_piau_im}")
 
