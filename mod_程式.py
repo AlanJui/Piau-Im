@@ -1,5 +1,5 @@
 """
-mod_程式.py V0.2.18
+mod_程式.py V0.2.19
 
 本系統各功能之程式架構模版。
 模版中包含程式配置類別 Program 及儲存格處理器類別 ExcelCell。
@@ -16,6 +16,7 @@ mod_程式.py V0.2.18
 - v0.2.16 2026-09-13: Program 初始化先保存作用儲存格；get_han_ji_cell_with_active_cell 優先使用 args.cell，避免讀取命名範圍後誤用第 1 列查字。
 - v0.2.17 2026-09-13: 手動補入缺字讀音後，填【缺字表】台語音標並在【標音字庫】補入該座標紀錄。
 - v0.2.18 2026-10-28: 空白鍵／E 鍵查字前，顯示【標音字庫】中同一漢字、同一台語音標所指向的【漢字注音】儲存格。
+- v0.2.19 2026-10-29: 空白鍵手動補入缺字讀音時，【標音字庫】若無該座標，仍寫入【台語音標】與【漢字標音】，並補入字庫紀錄。
 """
 
 # =========================================================================
@@ -1565,6 +1566,37 @@ class ExcelCell:
         # ----------------------------------------------------------------------
         self.jin_kang_piau_im_ji_khoo_dict.write_to_excel_sheet(wb=self.program.wb, sheet_name=self.jin_kang_piau_im_ji_khoo_dict.name)
 
+    def _write_missing_piau_im_for_active_cell(
+        self,
+        row: int,
+        col: int,
+        han_ji: str,
+        tai_gi_im_piau: str,
+        han_ji_piau_im: str,
+    ) -> None:
+        """【標音字庫】沒有此座標時，仍把讀音寫入目前這一格，並補入字庫。
+
+        空白鍵遇到字典無此字時，【台語音標】與【漢字標音】都是空的，
+        【標音字庫】也不會有該座標。此時不能略過寫入，否則 Console
+        已顯示變更，工作表卻仍是空白。
+        """
+        sheet_name = self.program.hanji_piau_im_sheet_name
+        source_sheet = self.program.wb.sheets[sheet_name]
+        han_ji_cell = source_sheet.range((row, col))
+        han_ji_cell.offset(-1, 0).value = tai_gi_im_piau
+        han_ji_cell.offset(1, 0).value = han_ji_piau_im
+        excel_addr = xw.utils.col_name(col) + str(row)
+        print(
+            f"✓ 已寫入【漢字注音】{excel_addr}【{han_ji}】："
+            f"[{tai_gi_im_piau}] /【{han_ji_piau_im}】"
+        )
+        self._sync_khuat_ji_piau_and_piau_im_ji_khoo_after_manual_input(
+            row=row,
+            col=col,
+            han_ji=han_ji,
+            tai_gi_im_piau=tai_gi_im_piau,
+        )
+
     def _replace_han_ji_thok_im_by_active_cell(
         self,
         row: int,
@@ -1582,6 +1614,8 @@ class ExcelCell:
         2. 將該紀錄之【台語音標】更新為使用者選定／輸入之新音標。
         3. 取出該紀錄【座標】欄之【座標清單】，逐一更新【漢字注音】工作表
            對應儲存格之【台語音標】與【漢字標音】。
+        4. 若【標音字庫】沒有此座標（字典原本無此字），仍把新音標寫入目前
+           這一格的【台語音標】與【漢字標音】，並補入【標音字庫】紀錄。
         """
 
         # ------------------------------------------------------------------
@@ -1592,7 +1626,13 @@ class ExcelCell:
             coordinate=(row, col),
         )
         if row_no == -1:
-            print(f"⚠️  【標音字庫】查無【{han_ji}】座標 ({row}, {col}) 之紀錄，略過字庫更新。")
+            self._write_missing_piau_im_for_active_cell(
+                row=row,
+                col=col,
+                han_ji=han_ji,
+                tai_gi_im_piau=tai_gi_im_piau,
+                han_ji_piau_im=han_ji_piau_im,
+            )
             return
 
         # ------------------------------------------------------------------
@@ -1677,7 +1717,7 @@ class ExcelCell:
     ) -> None:
         """
         字典查無此字時，a200 會在【缺字表】留下紀錄（台語音標常為 N/A），且【標音字庫】
-        不會有該座標。使用者以 E 鍵補入【人工標音】後：
+        不會有該座標。使用者以空白鍵或 E 鍵手動補入讀音後：
 
         1. 在【缺字表】對應紀錄的【台語音標】欄（B 欄）填入音標；
         2. 若【標音字庫】尚無此座標，補入【漢字＋台語音標＋座標】。

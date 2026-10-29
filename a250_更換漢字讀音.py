@@ -24,6 +24,8 @@ a250.py 程式的功能，在於提供使用者，校對【漢字注音】工作
     已變更，需將之校正回歸。
  - v0.2.8 2026-02-15: 修正 _process_cell(), _process_jin_kang_piau_im() 函式之使用方式。
  - v0.2.9 2026-10-28: 更換讀音前，顯示【標音字庫】中同一漢字、同一台語音標指向的儲存格。
+ - v0.2.10 2026-10-29: 儲存格尚無標音、使用者手動輸入後，即使【標音字庫】沒有該座標，
+   仍寫入【台語音標】與【漢字標音】。直接按 Enter 跳過時，不再繼續更新。
 """
 
 # =========================================================================
@@ -147,6 +149,8 @@ class CellProcessor(ExcelCell):
                 print(f">> {msg}")
                 # 取得使用者輸入之【台語音標】或【台羅拼音】
                 tai_gi_im_piau = self.get_user_input_piau_im(han_ji=han_ji)
+                if not tai_gi_im_piau:
+                    return EXIT_CODE_SUCCESS
                 # 依據使用者輸入之【台語音標】轉換為【漢字標音】
                 han_ji_piau_im = self._convert_tai_gi_im_piau_to_han_ji_piau_im(
                     tai_gi_im_piau=tai_gi_im_piau,

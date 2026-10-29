@@ -1,8 +1,11 @@
-"""b000_抄寫到SRT漢字注音工作表.py v0.1.3
+"""b000_抄寫到SRT漢字注音工作表.py v0.1.4
 
 自【漢字注音】工作表讀取各漢字單元的【漢字列】與【台語音標列】，
 依活頁簿名稱【SRT漢字標音】將台語音標轉成【漢字標音】，
 再依斷句規則抄入【SRT漢字注音】工作表 Q 欄（漢字）與 R 欄（漢字標音）。
+
+【SRT漢字注音】自【SRT漢字注音【模版】】複製製作；若已存在則先刪除後重製。
+程式結束前，將【SRT漢字注音】索引標籤顏色設為梅紅色（#A02B93）。
 
 斷句規則（於漢字列判斷）：
  - 讀到換行（\\n 或 =CHAR(10)）時，寫入目前句子並換到下一列。
@@ -16,6 +19,7 @@
  - 標點轉半形後緊接前一音節（至少 , . ? !）。
 
 更新紀錄：
+ - v0.1.4 2026-10-29: 【SRT漢字注音】改由【SRT漢字注音【模版】】複製製作，結束前將索引標籤顏色設為梅紅色（#A02B93）。
  - v0.1.3 2026-10-21: 實際列數超過模板 $4:$10 時，自 A4:T4 抄儲存格格式到後續列，並補上 T 欄公式。
  - v0.1.2 2026-10-19: R 欄改依名稱【SRT漢字標音】轉換台語音標，不再沿用【標音方法】（env!C15）所填的漢字標音列。
  - v0.1.1 2026-09-13: 句首大寫保留調符；標點緊接前一音節。
@@ -39,7 +43,6 @@ from mod_excel_access import (
     START_COL,
     START_ROW_NO,
     TAI_GI_IM_PIAU_OFFSET,
-    ensure_sheet_exists,
     get_value_by_name,
 )
 from mod_logging import (
@@ -61,7 +64,9 @@ EXIT_CODE_PROCESS_FAILURE = 10
 EXIT_CODE_UNKNOWN_ERROR = 99
 
 SOURCE_SHEET_NAME = "漢字注音"
+TEMPLATE_SHEET_NAME = "SRT漢字注音【模版】"
 TARGET_SHEET_NAME = "SRT漢字注音"
+TAB_COLOR_PLUM = (0xA0, 0x2B, 0x93)  # 梅紅色 #A02B93
 HAN_JI_OUT_COL = 17  # Q 欄
 PIAU_IM_OUT_COL = 18  # R 欄
 OUTPUT_START_ROW = 4  # 起始儲存格：Q4、R4
@@ -491,6 +496,33 @@ def resolve_source_sheet(wb):
     return wb.sheets[SOURCE_SHEET_NAME]
 
 
+def copy_target_sheet_from_template(wb):
+    """自【SRT漢字注音【模版】】複製製作【SRT漢字注音】；目標已存在時先刪除。"""
+    sheet_names = [sheet.name for sheet in wb.sheets]
+    if TEMPLATE_SHEET_NAME not in sheet_names:
+        raise ValueError(f"活頁簿找不到工作表【{TEMPLATE_SHEET_NAME}】，現有工作表：{sheet_names}")
+
+    app = wb.app
+    previous_alerts = app.display_alerts
+    app.display_alerts = False
+    try:
+        if TARGET_SHEET_NAME in sheet_names:
+            logging_process_step(f"工作表【{TARGET_SHEET_NAME}】已存在，先刪除後自模版重新製作。")
+            wb.sheets[TARGET_SHEET_NAME].delete()
+        template = wb.sheets[TEMPLATE_SHEET_NAME]
+        target = template.copy(after=template, name=TARGET_SHEET_NAME)
+    finally:
+        app.display_alerts = previous_alerts
+
+    logging_process_step(f"已自【{TEMPLATE_SHEET_NAME}】複製製作【{TARGET_SHEET_NAME}】。")
+    return target
+
+
+def set_sheet_tab_color(sheet, rgb: tuple[int, int, int]):
+    """設定工作表索引標籤顏色。rgb 為 (紅, 綠, 藍)，各 0–255。"""
+    sheet.api.Tab.Color = xw.utils.rgb_to_int(rgb)
+
+
 # =========================================================================
 # 本程式主要處理作業程序
 # =========================================================================
@@ -500,9 +532,7 @@ def process(wb, _args) -> int:
 
     try:
         source_sheet = resolve_source_sheet(wb)
-        target_sheet = ensure_sheet_exists(wb, TARGET_SHEET_NAME)
-        if target_sheet is None:
-            raise ValueError(f"無法建立或開啟工作表【{TARGET_SHEET_NAME}】。")
+        target_sheet = copy_target_sheet_from_template(wb)
 
         total_lines = _int_named_value(wb, "每頁總列數", DEFAULT_TOTAL_LINES)
         chars_per_row = _int_named_value(wb, "每列總字數", DEFAULT_CHARS_PER_ROW)
@@ -531,6 +561,8 @@ def process(wb, _args) -> int:
             print(f"R{row}：{piau_text}")
         print("=" * 80)
         logging_process_step(f"已抄寫 {written} 列至【{TARGET_SHEET_NAME}】Q／R 欄。")
+        set_sheet_tab_color(target_sheet, TAB_COLOR_PLUM)
+        logging_process_step(f"已將【{TARGET_SHEET_NAME}】索引標籤顏色設為梅紅色（#A02B93）。")
         return EXIT_CODE_SUCCESS
 
     except Exception as e:
@@ -589,7 +621,7 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="將【漢字注音】的漢字列，依名稱【SRT漢字標音】轉成漢字標音後，抄入【SRT漢字注音】Q／R 欄",
+        description="自【SRT漢字注音【模版】】複製【SRT漢字注音】，再將【漢字注音】依名稱【SRT漢字標音】轉成漢字標音後抄入 Q／R 欄",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 使用範例：
