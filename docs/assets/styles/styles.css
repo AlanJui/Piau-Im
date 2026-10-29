@@ -383,7 +383,7 @@ ruby {
 }
 
 rt {
-  font-family: 'Noto Sans TC', Arial, sans-serif !important;
+  font-family: "Charis", "Noto Sans TC", Arial, sans-serif !important;
   font-weight: 400;
   color: darkcyan;
   font-size: 40%;
@@ -448,9 +448,7 @@ span.title_mark {
   /* font-family: "Noto Sans TC", system-ui, -apple-system, sans-serif; */
   /* font-family: "LXGW WenKai Mono TC", "Microsoft JhengHei", "微軟正黑體"; */
   /* font-family: "Noto Sans TC", "Microsoft JhengHei", "微軟正黑體"; */
-  /* font-family: "Gentium Plus", "Charis SIL", serif; ← 加這行 */
-  font-family: "Charis", serif;
-  /* ← 加這行 */
+  font-family: "Charis", "Noto Sans TC", serif !important;
   margin-left: 0.1em;
   color: #00c4ab;
   font-size: 50%;

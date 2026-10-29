@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 font-style: normal;
             }
             rt.latin-phonetic, rtc.latin-phonetic {
-                font-family: 'Charis SIL', 'Source Han Sans TC', sans-serif !important;
+                font-family: "Charis SIL", "Charis", "Noto Sans TC", sans-serif !important;
                 font-variant-ligatures: common-ligatures !important;
                 font-feature-settings: "kern" 1, "liga" 1, "mark" 1, "mkmk" 1, "ccmp" 1 !important;
                 font-variant-east-asian: normal !important;
