@@ -433,6 +433,8 @@ rtc {
 .Siang_Pai ruby {
   margin-right: 0.6em;
   /* 修正：Siang_Pai 模式下增加字間距 */
+  /* 上端羅馬拼音對齊漢字中央；右端方音符號另以 rtc 垂直置中 */
+  ruby-align: center;
   ruby-overhang: none;
   -webkit-ruby-overhang: none;
 }
@@ -449,7 +451,10 @@ span.title_mark {
   /* font-family: "LXGW WenKai Mono TC", "Microsoft JhengHei", "微軟正黑體"; */
   /* font-family: "Noto Sans TC", "Microsoft JhengHei", "微軟正黑體"; */
   font-family: "Charis", "Noto Sans TC", serif !important;
-  margin-left: 0.1em;
+  /* 與漢字水平對齊：不要再用負邊距把拼音往左推 */
+  margin-left: 0;
+  margin-right: 0;
+  text-align: center;
   color: #00c4ab;
   font-size: 50%;
   font-variant-east-asian: salt;
@@ -457,14 +462,14 @@ span.title_mark {
   -webkit-font-feature-settings: "salt";
   font-feature-settings: "salt";
   text-orientation: upright;
-  margin-left: -0.4em;
 }
 
 .Siang_Pai rtc {
   /* font-family: BopomofoRuby; */
   font-family: BopomofoRuby, "Noto Sans TC" !important;
   color: #B94B6A;
-  font-size: 40%;
+  /* 略小於原本 40%，讓直排注音收在漢字高度內，再與漢字垂直置中 */
+  font-size: 34%;
   font-weight: bold;
   line-height: 1;
   -webkit-ruby-position: inter-character;
@@ -474,11 +479,8 @@ span.title_mark {
   writing-mode: vertical-lr;
   vertical-align: middle;
   display: inline;
-  /* letter-spacing: 0.2em; */
-  /* margin-left: -0.8em; */
-
-  /* [Modified by Copilot] 隤踵湔寥喟泵雿蝵殷踹瞍Ｗ */
-  /* 喟宏銝暺嚗隞仿輸瞍Ｗ */
+  /* 抵銷基礎 rtc 的上移後，再依注音字級收回約半個字高，與漢字垂直置中 */
+  margin-top: -0.42em;
   margin-left: 0.1em;
   /* 修正：拉開與漢字右端的距離 */
   margin-right: 0.8em;
@@ -1206,10 +1208,18 @@ nav.main-nav ul li span {
     /* 從 0.15em 降至 0.05em，讓字體更緊湊 */
   }
 
-  /* 標音字體也同步微調 */
-  rt,
-  rtc {
+  /* 標音字體也同步微調；雙排的右端注音維持較小，才能與漢字垂直置中 */
+  rt {
     font-size: 45% !important;
+  }
+
+  .Siang_Pai rt {
+    margin-left: 0 !important;
+  }
+
+  .Siang_Pai rtc {
+    font-size: 34% !important;
+    margin-top: -0.42em !important;
   }
 
   /* 恢復 body 邊距 */

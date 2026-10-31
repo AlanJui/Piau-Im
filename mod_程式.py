@@ -1,5 +1,5 @@
 """
-mod_程式.py V0.2.19
+mod_程式.py V0.2.20
 
 本系統各功能之程式架構模版。
 模版中包含程式配置類別 Program 及儲存格處理器類別 ExcelCell。
@@ -17,6 +17,7 @@ mod_程式.py V0.2.19
 - v0.2.17 2026-09-13: 手動補入缺字讀音後，填【缺字表】台語音標並在【標音字庫】補入該座標紀錄。
 - v0.2.18 2026-10-28: 空白鍵／E 鍵查字前，顯示【標音字庫】中同一漢字、同一台語音標所指向的【漢字注音】儲存格。
 - v0.2.19 2026-10-29: 空白鍵手動補入缺字讀音時，【標音字庫】若無該座標，仍寫入【台語音標】與【漢字標音】，並補入字庫紀錄。
+- v0.2.20 2026-10-31: 另存新檔若目標就是目前開啟的活頁簿，改為直接儲存，避免 Excel SaveAs 失敗。
 """
 
 # =========================================================================
@@ -284,30 +285,114 @@ class Program:
             return None
 
     @staticmethod
+    def _normalize_workbook_path(file_path: str) -> str:
+        """將活頁簿路徑正規化，供 Windows 路徑比對。"""
+        if not file_path:
+            return ""
+        return os.path.normcase(os.path.abspath(os.path.normpath(str(file_path))))
+
+    @staticmethod
+    def _is_same_workbook_path(left: str, right: str) -> bool:
+        """兩個路徑是否指向同一個活頁簿檔。"""
+        if not left or not right:
+            return False
+        if Program._normalize_workbook_path(left) == Program._normalize_workbook_path(right):
+            return True
+        try:
+            return os.path.samefile(left, right)
+        except OSError:
+            return False
+
+    @staticmethod
+    def _other_open_book(wb, file_path: str):
+        """若同一個 Excel 已開啟目標檔、且不是目前這本，回傳該活頁簿。"""
+        if not file_path:
+            return None
+        try:
+            books = wb.app.books
+        except Exception:
+            return None
+        for book in books:
+            if book == wb:
+                continue
+            try:
+                fullname = book.fullname or ""
+            except Exception:
+                continue
+            if Program._is_same_workbook_path(fullname, file_path):
+                return book
+        return None
+
+    @staticmethod
     def save_workbook_as_new_file(wb, new_file_path: str = None) -> bool:
-        """將活頁簿另存新檔"""
+        """將活頁簿另存新檔。
+
+        若目標路徑就是目前開啟的活頁簿，Excel 的 SaveAs 會失敗
+        （錯誤：Class Workbook 的 SaveAs 方法失敗）。此時改為直接儲存。
+        """
         try:
             # 檢查與設定儲存時，使用之【路徑】（目錄與檔名）
             if not new_file_path:
                 new_excel_file_name = Program.generate_new_excel_file_name(wb)
+                if not new_excel_file_name:
+                    logging_exc_error(msg="無法產生新活頁簿檔名，未儲存檔案", error=None)
+                    return False
 
                 current_dir = Program.get_current_dir_from_wb(wb)
+                if not current_dir:
+                    logging_exc_error(msg="無法取得活頁簿所在目錄，未儲存檔案", error=None)
+                    return False
                 parent_dir = str(Path(current_dir).parent)
-                output_dir = wb.names["OUTPUT_PATH"].refers_to_range.value
-                new_dir_path = f"{parent_dir}\\{output_dir}"
+                output_dir = str(wb.names["OUTPUT_PATH"].refers_to_range.value or "").strip()
+                output_path = Path(output_dir)
+                if output_path.is_absolute():
+                    new_dir_path = output_path
+                else:
+                    new_dir_path = Path(parent_dir) / output_dir
+                new_dir_path.mkdir(parents=True, exist_ok=True)
+                new_file_path = str(new_dir_path / new_excel_file_name)
 
-                # new_file_path = os.path.join(
-                #     ".\\{0}".format(new_dir_path),
-                #     f"{new_excel_file_name}",
-                # )
-                # new_file_path = current_dir / f"{new_excel_file_name}"
-                new_file_path = r"{0}\{1}".format(new_dir_path, new_excel_file_name)
+            logging_process_step(f"準備儲存活頁簿：{new_file_path}")
+            current_fullname = ""
+            try:
+                current_fullname = wb.fullname or ""
+            except Exception:
+                current_fullname = ""
+
+            if Program._is_same_workbook_path(current_fullname, new_file_path):
+                wb.save()
+                logging_process_step(
+                    f"目標與目前開啟的活頁簿相同，已直接儲存：{current_fullname}"
+                )
+                return True
 
             wb.save(new_file_path)
             logging_process_step(f"已將活頁簿另存為新檔：{new_file_path}")
             return True
         except Exception as e:
-            logging_exception("儲存活頁簿為新檔時發生錯誤", e)
+            current_fullname = ""
+            try:
+                current_fullname = wb.fullname or ""
+            except Exception:
+                current_fullname = ""
+            if new_file_path and Program._is_same_workbook_path(current_fullname, new_file_path):
+                try:
+                    wb.save()
+                    logging_process_step(
+                        f"另存新檔失敗，已改為直接儲存目前活頁簿：{current_fullname}"
+                    )
+                    return True
+                except Exception as save_error:
+                    logging_exception("直接儲存目前活頁簿時發生錯誤", save_error)
+                    return False
+            if new_file_path and Program._other_open_book(wb, new_file_path):
+                logging_exception(
+                    f"儲存活頁簿為新檔時發生錯誤：{new_file_path}。"
+                    "此檔已在 Excel 開啟，請先關閉該活頁簿後再執行。",
+                    e,
+                )
+            else:
+                logging_exception(f"儲存活頁簿為新檔時發生錯誤：{new_file_path}", e)
             return False
 
     @staticmethod
