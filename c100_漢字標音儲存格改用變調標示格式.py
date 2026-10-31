@@ -1,4 +1,4 @@
-"""c100_漢字標音儲存格改用變調標示格式.py v0.1.0
+"""c100_漢字標音儲存格改用變調標示格式.py v0.1.1
 
 將【漢字注音】工作表各個【漢字標音】儲存格，依【漢字】儲存格底色，
 改寫成【變調標音格式】或【本調標音格式】。
@@ -313,17 +313,15 @@ class CellProcessor(ExcelCell):
         )
 
     def _process_non_han_ji(self, cell) -> str:
-        """標點／空白：標點字元同步寫入漢字標音列。"""
+        """標點／空白：標點字元略過，不寫入漢字標音列。"""
         cell_value = cell.value
         if cell_value is None or str(cell_value).strip() == "":
             return "【空白字元】"
 
         str_value = str(cell_value).strip()
-        han_ji_piau_im_cell = cell.offset(1, 0)
 
         if is_punctuation(str_value):
-            han_ji_piau_im_cell.value = str_value
-            return f"【標點符號】→ {str_value}"
+            return f"【標點符號】略過：{str_value}"
 
         return f"【非漢字】：{str_value}"
 

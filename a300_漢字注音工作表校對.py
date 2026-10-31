@@ -18,6 +18,7 @@ a109_漢字注音工作表校對.py V0.3
   ↓ (Down Arrow)  : 向下移動到下一行
   PgUp (Page Up)  : 翻到上一頁
   PgDn (Page Down): 翻到下一頁
+  A 鍵            : 切換【作用儲存格】
   空白            : 查字典更換漢字讀音
   J 鍵            : 查字典指定漢字讀音
   E 鍵            : 先查字典，查無則手動輸入人工標音
@@ -58,6 +59,12 @@ V0.10 (2026-10-28): 空白鍵與 E 鍵在列出讀音選項前，先顯示【標
 
 V0.11 (2026-10-28): 新增 C 鍵，切換作用中漢字儲存格的變調標音樣式。
 無填滿為本調（關閉）；淡灰 #E8E8E8 為變調（啟用）。
+
+V0.12 (2026-10-31): 新增 A 鍵，輸入 Excel 位址（如 J21）後切換作用儲存格，
+並將該列捲到視窗垂直中央。
+
+V0.13 (2026-10-31): 向右鍵自 R 欄換到下一列 D 欄，以及向下鍵換列時，
+亦將作用儲存格捲到視窗垂直中央。
 """
 
 # =========================================================================
@@ -503,6 +510,33 @@ def get_lines_per_page(wb) -> int:
         return 5
 
 
+def scroll_row_to_vertical_center(wb, row: int) -> bool:
+    """
+    將指定列捲到 Excel 視窗的垂直中央。
+
+    先把該列放到可視區頂端，再依目前可視列數回推 ScrollRow，
+    使該列落在可視列的中央。有凍結窗格時，不捲進凍結列。
+    """
+    try:
+        window = wb.app.api.ActiveWindow
+        frozen_rows = 0
+        try:
+            if bool(window.FreezePanes):
+                frozen_rows = int(window.SplitRow)
+        except Exception:
+            frozen_rows = 0
+
+        first_scrollable_row = frozen_rows + 1
+        window.ScrollRow = max(first_scrollable_row, row)
+        visible_rows = int(window.VisibleRange.Rows.Count)
+        scrollable_rows = max(1, visible_rows - frozen_rows)
+        window.ScrollRow = max(first_scrollable_row, row - (scrollable_rows // 2))
+        return True
+    except Exception as e:
+        logging.debug(f"無法將作用儲存格垂直置中：{e}")
+        return False
+
+
 def hide_manual_annotation_style(wb):
     """
     隱藏【人工標音儲存格】樣式的文字
@@ -634,11 +668,13 @@ class NavigationController:
             except Exception as e:
                 logging.warning(f"無法取得視窗句柄：{e}")
 
-    def move_to_cell(self, row, col, reset_timer=True):
-        """移動到指定儲存格"""
+    def move_to_cell(self, row, col, reset_timer=True, center_vertically=False):
+        """移動到指定儲存格。center_vertically 為真時，把該列捲到視窗垂直中央。"""
         self.current_row = row
         self.current_col = col
         self.sheet.range((row, col)).select()
+        if center_vertically:
+            scroll_row_to_vertical_center(self.wb, row)
 
         # 記錄移動時間，用於延遲檢查
         if reset_timer:
@@ -676,6 +712,63 @@ class NavigationController:
     def focus_console(self, quiet: bool = False):
         """把焦點切回啟動本程式的終端機（含 WezTerm）。"""
         activate_console_window(self.console_hwnd, excel_hwnd=self.excel_hwnd, quiet=quiet)
+
+    def jump_to_cell_by_address(self):
+        """依使用者輸入的 Excel 位址，切換作用儲存格並垂直置中。"""
+        print("\n" + "=" * 70)
+        print("進入【切換作用儲存格】模式")
+        print("請輸入 Excel 儲存格位址（如 J21）。直接按 Enter 返回導航。")
+        print("=" * 70)
+
+        if self.listener:
+            self.listener.stop()
+            time.sleep(0.3)
+
+        switched = False
+        try:
+            self.focus_console()
+            user_input = input("儲存格位址：").strip().lstrip("\ufeff")
+            if not user_input:
+                print(">> 未輸入位址，返回導航模式。")
+                return
+
+            try:
+                row, col = resolve_start_cell(user_input, self.total_lines)
+            except ValueError as e:
+                print(f"❌ {e}")
+                print(">> 未切換作用儲存格。")
+                return
+
+            requested = user_input.strip().upper().replace("$", "")
+            actual = f"{xw.utils.col_name(col)}{row}"
+            if requested != actual:
+                print(f"已對齊漢字列：{requested} → {actual}")
+
+            self.move_to_cell(row, col)
+            switched = True
+        except Exception as e:
+            logging.error(f"切換作用儲存格失敗：{e}")
+            print(f"❌ 切換作用儲存格失敗：{e}")
+        finally:
+            print("\n" + "=" * 70)
+            print("返回導航模式")
+            print("=" * 70)
+
+            self.select_current_cell()
+            activate_excel_window(self.wb)
+            if switched:
+                centered = scroll_row_to_vertical_center(self.wb, self.current_row)
+                address = self.current_cell_address()
+                if centered:
+                    print(f"✓ 作用儲存格 {address} 已置於畫面垂直中央")
+                else:
+                    print(f"✓ 已切換作用儲存格至 {address}")
+
+            if self.listener:
+                self.listener = keyboard.Listener(on_press=self.on_key_press, suppress=True)
+                self.listener.start()
+                time.sleep(0.3)
+            print("✓ 已恢復導航模式\n")
 
     def check_and_skip_newline(self):
         """檢查當前儲存格是否為換行符號，如果是則自動跳到下一行"""
@@ -755,6 +848,9 @@ class NavigationController:
                 # elif key.char.lower() == "s":
                 #     # S 鍵：查詢萌典
                 #     self.pending_action = "query_moedict"
+                elif key.char.lower() == "a":
+                    # A 鍵：輸入 Excel 位址，切換作用儲存格
+                    self.pending_action = "jump_to_cell"
                 elif key.char.lower() == "e":
                     # E 鍵：先查字典；查無讀音或查詢例外時，改為手動輸入人工標音
                     self.pending_action = "manual_input"
@@ -797,7 +893,9 @@ class NavigationController:
                 self.last_move_time = None
                 new_row, new_col = move_right(self.sheet, self.current_row, self.current_col, self.total_lines)
                 if new_row != self.current_row or new_col != self.current_col:
-                    self.move_to_cell(new_row, new_col)
+                    # 行尾（R 欄）或遇到換行符號而跳到下一列 D 欄時，垂直置中
+                    wrapped_to_next_line = new_row != self.current_row and new_col == START_COL
+                    self.move_to_cell(new_row, new_col, center_vertically=wrapped_to_next_line)
 
             elif action == "up":
                 # 向上移動（重置延遲計時器）
@@ -807,11 +905,11 @@ class NavigationController:
                     self.move_to_cell(new_row, new_col)
 
             elif action == "down":
-                # 向下移動（重置延遲計時器）
+                # 向下移動（重置延遲計時器）；換列後垂直置中
                 self.last_move_time = None
                 new_row, new_col = move_down(self.sheet, self.current_row, self.current_col, self.total_lines)
                 if new_row != self.current_row or new_col != self.current_col:
-                    self.move_to_cell(new_row, new_col)
+                    self.move_to_cell(new_row, new_col, center_vertically=True)
 
             elif action == "page_up":
                 # 翻到上一頁（重置延遲計時器）
@@ -824,6 +922,10 @@ class NavigationController:
                     self.move_to_cell(get_row_from_line(new_line), self.current_col)
                 else:
                     print("  [已在第一行，無法向上翻頁]")
+
+            elif action == "jump_to_cell":
+                self.last_move_time = None
+                self.jump_to_cell_by_address()
 
             elif action == "page_down":
                 # 翻到下一頁（重置延遲計時器）
@@ -1467,6 +1569,7 @@ def read_han_ji_with_keyboard(wb, view_mode=False, console_hwnd=None, start_cell
         print("  ↓ (Down Arrow)  : 向下移動到下一行")
         print("  PgUp (Page Up)  : 翻到上一頁")
         print("  PgDn (Page Down): 翻到下一頁")
+        print("  A 鍵            : 切換【作用儲存格】")
         print("  空白 鍵         : 查字典更換漢字讀音（a250）")
         print("  J 鍵            : 查字典指定漢字讀音（a260）")
         print("  E 鍵            : 先查字典，查無則手動輸入人工標音（a260）")
