@@ -23,6 +23,7 @@ a109_漢字注音工作表校對.py V0.3
   J 鍵            : 查字典指定漢字讀音
   E 鍵            : 先查字典，查無則手動輸入人工標音
   C 鍵            : 啟用／關閉變調標音樣式
+  R 鍵            : 切換【畫紅框線標示】
   = 鍵            : 填入人工標音標記
   ESC             : 結束程式
 ======================================================================
@@ -65,6 +66,9 @@ V0.12 (2026-10-31): 新增 A 鍵，輸入 Excel 位址（如 J21）後切換作�
 
 V0.13 (2026-10-31): 向右鍵自 R 欄換到下一列 D 欄，以及向下鍵換列時，
 亦將作用儲存格捲到視窗垂直中央。
+
+V0.14 (2026-11-01): 新增 R 鍵，在作用中漢字儲存格四周切換實心紅框。
+粗細比 Excel 預設細線再粗一級（中等，xlMedium）。
 """
 
 # =========================================================================
@@ -182,6 +186,12 @@ END_COL = 18  # R 欄（第 18 欄）
 ROWS_PER_LINE = 4  # 每行佔用 4 列
 # 變調標音樣式底色（淡灰 #E8E8E8）。無填滿表示本調（變調樣式關閉）。
 BIAN_TIAU_FILL_COLOR = (232, 232, 232)
+# 紅框線：實線，粗細比 Excel 預設細線（xlThin）再粗一級（xlMedium）。
+XL_EDGE_LEFT, XL_EDGE_TOP, XL_EDGE_BOTTOM, XL_EDGE_RIGHT = 7, 8, 9, 10
+XL_LINE_CONTINUOUS = 1
+XL_LINE_NONE = -4142
+XL_WEIGHT_MEDIUM = -4138
+XL_COLOR_RED = 255  # Excel 框線 Color 為 BGR，純紅 = 255
 
 # =========================================================================
 # 載入環境變數
@@ -857,6 +867,9 @@ class NavigationController:
                 elif key.char.lower() == "c":
                     # C 鍵：啟用／關閉變調標音樣式
                     self.pending_action = "toggle_bian_tiau"
+                elif key.char.lower() == "r":
+                    # R 鍵：切換漢字儲存格四周的紅框線標示
+                    self.pending_action = "toggle_red_box"
                 elif key.char == "=":
                     # = 鍵：引用既有的人工標音
                     self.pending_action = "fill_manual_mark"
@@ -970,6 +983,10 @@ class NavigationController:
             elif action == "toggle_bian_tiau":
                 # 啟用／關閉變調標音樣式
                 self.toggle_bian_tiau_style()
+
+            elif action == "toggle_red_box":
+                # 切換漢字儲存格四周的紅框線標示
+                self.toggle_red_box_mark()
 
             elif action == "esc":
                 print("\n按下 ESC 鍵，程式結束")
@@ -1461,6 +1478,56 @@ class NavigationController:
             logging.error(f"切換變調標音樣式失敗：{e}")
             print(f"\n❌ 切換變調標音樣式失敗：{e}\n")
 
+    def toggle_red_box_mark(self):
+        """切換作用中漢字儲存格四周的紅框線。
+
+        實心線，粗細比 Excel 預設細線再粗一級。再按一次 R 鍵即移除框線。
+        """
+        try:
+            cell = self.sheet.range((self.current_row, self.current_col))
+            han_ji = cell.value or ""
+            address = f"{xw.utils.col_name(self.current_col)}{self.current_row}"
+            if self._cell_has_red_box(cell):
+                self._apply_red_box(cell, enabled=False)
+                print(f"{address}【{han_ji}】：關閉紅框線標示")
+            else:
+                self._apply_red_box(cell, enabled=True)
+                print(f"{address}【{han_ji}】：啟用紅框線標示（實線、比預設再粗一級）")
+        except Exception as e:
+            logging.error(f"切換紅框線標示失敗：{e}")
+            print(f"\n❌ 切換紅框線標示失敗：{e}\n")
+
+    @staticmethod
+    def _apply_red_box(cell, enabled: bool) -> None:
+        """在單一儲存格四邊畫上或移除紅框。先設線條樣式，再設粗細與顏色。"""
+        borders = cell.api.Borders
+        for edge_id in (XL_EDGE_LEFT, XL_EDGE_TOP, XL_EDGE_BOTTOM, XL_EDGE_RIGHT):
+            border = borders(edge_id)
+            if enabled:
+                border.LineStyle = XL_LINE_CONTINUOUS
+                border.Weight = XL_WEIGHT_MEDIUM
+                border.Color = XL_COLOR_RED
+            else:
+                border.LineStyle = XL_LINE_NONE
+
+    @staticmethod
+    def _cell_has_red_box(cell) -> bool:
+        """四邊是否皆為實心紅框。已標示時再按 R 鍵即關閉。"""
+        try:
+            borders = cell.api.Borders
+        except Exception:
+            return False
+        for edge_id in (XL_EDGE_LEFT, XL_EDGE_TOP, XL_EDGE_BOTTOM, XL_EDGE_RIGHT):
+            try:
+                border = borders(edge_id)
+                if int(border.LineStyle) != XL_LINE_CONTINUOUS:
+                    return False
+                if int(border.Color) != XL_COLOR_RED:
+                    return False
+            except Exception:
+                return False
+        return True
+
     @staticmethod
     def _is_bian_tiau_fill(color) -> bool:
         """漢字儲存格底色是否為變調標示淡灰。無填滿（None）視為本調。"""
@@ -1574,6 +1641,7 @@ def read_han_ji_with_keyboard(wb, view_mode=False, console_hwnd=None, start_cell
         print("  J 鍵            : 查字典指定漢字讀音（a260）")
         print("  E 鍵            : 先查字典，查無則手動輸入人工標音（a260）")
         print("  C 鍵            : 啟用／關閉變調標音樣式（淡灰 #E8E8E8／無填滿）")
+        print("  R 鍵            : 切換【畫紅框線標示】")
         print("  = 鍵            : 填入人工標音標記")
         print("  ESC             : 結束程式")
         print("=" * 70)
