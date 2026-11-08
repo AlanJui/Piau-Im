@@ -1,7 +1,7 @@
 """
 c200_使用漢字標音儲存格之變調標注製成網頁.py v0.1.0
 
-依 a400 的網頁骨架產出 HTML，標音來源改為：
+依 a400 的網頁骨架產出 HTML，資料來源為《漢字注音【標變調】》工作表：
 
 1. 先執行 c100，將【台語音標】轉成【本調／變調】並寫入【漢字標音】儲存格。
 2. 再執行本程式：
@@ -40,6 +40,7 @@ BIAN_TIAU_FILL_COLOR = (232, 232, 232)
 # 雙排：上端為漢字標音（<rt>），右端為方音符號（<rtc>）
 PAI_BAN_CLASS = "Siang_Pai"
 HONG_IM_HU_HO = "方音符號"
+SOURCE_SHEET_NAME = "漢字注音【標變調】"
 
 init_logging()
 
@@ -174,7 +175,7 @@ class CellProcessor(ExcelCell):
     def generate_title_and_author_with_ruby(self) -> tuple:
         """自文首《》拆出標題與作者，標音同樣取自漢字標音儲存格。"""
         program = self.program
-        sheet = program.wb.sheets["漢字注音"]
+        sheet = program.wb.sheets[SOURCE_SHEET_NAME]
         start_row = program.line_start_row + program.han_ji_row_offset
 
         first_han_ji = sheet.range((start_row, program.start_col)).value
@@ -398,9 +399,11 @@ def _build_head_extra(wb, piau_im_huat: str) -> str:
 def process(wb, args) -> int:
     logging_process_step("<=========== 作業開始！==========>")
     try:
-        program = Program(wb=wb, args=args, hanji_piau_im_sheet_name="漢字注音")
+        program = Program(
+            wb=wb, args=args, hanji_piau_im_sheet_name=SOURCE_SHEET_NAME
+        )
         xls_cell = CellProcessor(program=program)
-        sheet = wb.sheets["漢字注音"]
+        sheet = wb.sheets[SOURCE_SHEET_NAME]
         sheet.activate()
         print("開始以【漢字標音儲存格】與【方音符號】製作網頁！")
         logging_process_step(
