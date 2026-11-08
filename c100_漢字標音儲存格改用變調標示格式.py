@@ -1,7 +1,8 @@
-"""c100_漢字標音儲存格改用變調標示格式.py v0.1.1
+"""c100_漢字標音儲存格改用變調標示格式.py v0.1.2
 
-將【漢字注音】工作表各個【漢字標音】儲存格，依【漢字】儲存格底色，
-改寫成【變調標音格式】或【本調標音格式】。
+若尚無【漢字注音【標變調】】工作表，先自【漢字注音】複製一張。
+再於【漢字注音【標變調】】將各個【漢字標音】儲存格，依【漢字】儲存格底色，
+改寫成【變調標音格式】或【本調標音格式】。原文【漢字注音】維持不變。
 
 判斷規則：
 - 漢字儲存格底色為淺灰 #E8E8E8 → 變調標音格式（例：duan⁵⁻³）
@@ -51,6 +52,10 @@ EXIT_CODE_UNKNOWN_ERROR = 99
 
 # 變調標示底色（淺灰）
 BIAN_TIAU_FILL_COLOR = (232, 232, 232)  # #E8E8E8
+
+# 原文工作表，以及實際寫入本調／變調的工作表
+SOURCE_SHEET_NAME = "漢字注音"
+PIAN_PIAN_TIAU_SHEET_NAME = "漢字注音【標變調】"
 
 # 上標數字
 SUPERSCRIPT_DIGITS = str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")
@@ -387,7 +392,7 @@ class CellProcessor(ExcelCell):
         return 0
 
     def _process_sheet(self, sheet) -> None:
-        """掃描整張【漢字注音】工作表。"""
+        """掃描整張【漢字注音【標變調】】工作表。"""
         config = self.program
         total_lines = config.TOTAL_LINES
         rows_per_line = config.ROWS_PER_LINE
@@ -422,12 +427,60 @@ class CellProcessor(ExcelCell):
                     break
 
 
+def ensure_pian_pian_tiau_sheet(wb):
+    """
+    取得【漢字注音【標變調】】。
+
+    工作表不存在時，自【漢字注音】複製一張再進行標變調。
+    已存在則沿用，不覆寫。
+    """
+    sheet_names = [sheet.name for sheet in wb.sheets]
+    if PIAN_PIAN_TIAU_SHEET_NAME in sheet_names:
+        logging_process_step(
+            f"工作表【{PIAN_PIAN_TIAU_SHEET_NAME}】已存在，直接於該表標示變調。"
+        )
+        return wb.sheets[PIAN_PIAN_TIAU_SHEET_NAME]
+
+    if SOURCE_SHEET_NAME not in sheet_names:
+        logging_exc_error(
+            msg=(
+                f"找不到工作表【{SOURCE_SHEET_NAME}】，"
+                f"無法複製【{PIAN_PIAN_TIAU_SHEET_NAME}】。"
+                f"現有工作表：{sheet_names}"
+            ),
+            error=None,
+        )
+        return None
+
+    logging_process_step(
+        f"工作表【{PIAN_PIAN_TIAU_SHEET_NAME}】不存在，"
+        f"自【{SOURCE_SHEET_NAME}】複製。"
+    )
+    app = wb.app
+    previous_alerts = app.display_alerts
+    app.display_alerts = False
+    try:
+        source = wb.sheets[SOURCE_SHEET_NAME]
+        target = source.copy(after=source, name=PIAN_PIAN_TIAU_SHEET_NAME)
+    finally:
+        app.display_alerts = previous_alerts
+
+    logging_process_step(
+        f"已自【{SOURCE_SHEET_NAME}】複製製作【{target.name}】。"
+    )
+    return target
+
+
 def process(wb, args) -> int:
-    """將漢字標音改為本調／變調標示格式。"""
+    """將【漢字注音【標變調】】的漢字標音改為本調／變調標示格式。"""
     logging_process_step("<=========== 作業開始！==========>")
-    sheet_name = "漢字注音"
+    sheet_name = PIAN_PIAN_TIAU_SHEET_NAME
 
     try:
+        sheet = ensure_pian_pian_tiau_sheet(wb)
+        if sheet is None:
+            return EXIT_CODE_INVALID_INPUT
+
         program = Program(wb, args, hanji_piau_im_sheet_name=sheet_name)
         logging_process_step(f"【標音方法】：{program.piau_im_huat}")
 
@@ -438,12 +491,13 @@ def process(wb, args) -> int:
             new_khuat_ji_piau_sheet=False,
         )
 
-        sheet = wb.sheets[sheet_name]
         sheet.activate()
         xls_cell._process_sheet(sheet=sheet)
 
         print("=" * 80)
-        logging_process_step(msg="已完成【漢字標音】本調／變調標示格式轉換。")
+        logging_process_step(
+            msg=f"已完成【{sheet_name}】本調／變調標示格式轉換。"
+        )
         return EXIT_CODE_SUCCESS
 
     except Exception as e:

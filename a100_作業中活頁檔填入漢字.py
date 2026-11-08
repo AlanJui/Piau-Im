@@ -1,5 +1,5 @@
 """
-a100_作業中活頁檔填入漢字.py V0.2.13
+a100_作業中活頁檔填入漢字.py V0.2.14
 功能：將漢字純文字檔中的漢字，填入 Excel 活頁簿中的【漢字注音】工作表，並自動查找台語音標與漢字標音。
 更新紀錄：
  v0.2.7 2026-02-08：
@@ -21,6 +21,9 @@ a100_作業中活頁檔填入漢字.py V0.2.13
   - 清除舊殘留時，一併移除【漢字注音】標音區塊內每個儲存格的附註。
  v0.2.13 2026-11-08:
   - 找不到【漢字注音】工作表時，自【漢字注音【模版】】複製一張再繼續作業。
+ v0.2.14 2026-11-08:
+  - 清除舊內容、附註與漢字底色時，範圍改涵蓋工作表上已有資料的列，
+    不再只清到名稱【每頁總列數】為止。
 """
 
 # =========================================================================
@@ -97,7 +100,51 @@ init_logging()
 # =========================================================================
 # 主要處理函數
 # =========================================================================
-def clear_han_ji_cell_fill(wb, program: Program, sheet_name: str = "漢字注音") -> None:
+def annotation_clear_line_count(sheet, program: Program) -> int:
+    """計算要清除的行數。
+
+    名稱【每頁總列數】只代表一頁的編排列數。模版或上一篇若比它更長，
+    那些列上的舊漢字、標音與附註也要一併清掉。
+    """
+    configured = int(program.TOTAL_LINES)
+    start_row = program.line_start_row
+    rows_per_line = program.ROWS_PER_LINE
+    if configured < 1:
+        configured = 1
+
+    last_row = start_row
+    try:
+        used_last = int(sheet.used_range.last_cell.row)
+    except Exception as e:
+        logging_warning(f"無法讀取工作表已使用範圍，改以【每頁總列數】清除：{e}")
+        return configured
+
+    if used_last > start_row:
+        block = sheet.range((start_row, program.start_col), (used_last, program.end_col)).value
+        if block is not None:
+            if not isinstance(block, list):
+                block = [block]
+            if block and not isinstance(block[0], list):
+                block = [block]
+            for offset, row_vals in enumerate(block):
+                if row_vals is None:
+                    continue
+                if not isinstance(row_vals, list):
+                    row_vals = [row_vals]
+                if any(value not in (None, "") for value in row_vals):
+                    last_row = start_row + offset
+
+    span = max(last_row - start_row + 1, rows_per_line)
+    used_lines = (span + rows_per_line - 1) // rows_per_line
+    return max(configured, used_lines)
+
+
+def clear_han_ji_cell_fill(
+    wb,
+    program: Program,
+    sheet_name: str = "漢字注音",
+    total_lines: int | None = None,
+) -> None:
     """抄入漢字之前，將【漢字】儲存格底色改回無填滿。
 
     漢字列為 5、9、13、17…（自起始列起每隔 4 列），欄位為 D:R。
@@ -108,7 +155,7 @@ def clear_han_ji_cell_fill(wb, program: Program, sheet_name: str = "漢字注音
     rows_per_line = program.ROWS_PER_LINE
     start_col = program.start_col
     end_col = program.end_col
-    total_lines = int(program.TOTAL_LINES)
+    total_lines = int(program.TOTAL_LINES if total_lines is None else total_lines)
 
     if total_lines < 1:
         return
@@ -127,7 +174,12 @@ def clear_han_ji_cell_fill(wb, program: Program, sheet_name: str = "漢字注音
         sheet.range((row, start_col), (row, end_col)).color = None
 
 
-def clear_cell_notes(wb, program: Program, sheet_name: str = "漢字注音") -> None:
+def clear_cell_notes(
+    wb,
+    program: Program,
+    sheet_name: str = "漢字注音",
+    total_lines: int | None = None,
+) -> None:
     """移除【漢字注音】標音區塊內，每個儲存格的【附註】。
 
     範圍與清除舊內容相同：自起始列起，涵蓋人工標音、台語音標、漢字、漢字標音。
@@ -139,7 +191,7 @@ def clear_cell_notes(wb, program: Program, sheet_name: str = "漢字注音") -> 
     rows_per_line = program.ROWS_PER_LINE
     start_col = program.start_col
     end_col = program.end_col
-    total_lines = int(program.TOTAL_LINES)
+    total_lines = int(program.TOTAL_LINES if total_lines is None else total_lines)
     if total_lines < 1:
         return
 
@@ -558,10 +610,16 @@ def process(wb, args) -> int:
         # ======================================================================
         # 重置工作表
         print("清除儲存格內容作業...")
+        han_ji_sheet = wb.sheets["漢字注音"]
+        clear_lines = annotation_clear_line_count(han_ji_sheet, program)
+        logging_process_step(
+            f"清除舊資料共 {clear_lines} 行"
+            f"（名稱【每頁總列數】為 {int(program.TOTAL_LINES)}）。"
+        )
         clear_han_ji_kap_piau_im(
             wb,
             sheet_name="漢字注音",
-            total_lines=program.TOTAL_LINES,
+            total_lines=clear_lines,
             rows_per_line=program.ROWS_PER_LINE,
             start_row=program.line_start_row,
             start_col=program.start_col,
@@ -575,7 +633,7 @@ def process(wb, args) -> int:
 
     try:
         print("移除儲存格附註作業...")
-        clear_cell_notes(wb, program, sheet_name="漢字注音")
+        clear_cell_notes(wb, program, sheet_name="漢字注音", total_lines=clear_lines)
     except Exception as e:
         logging_exc_error(msg="移除儲存格附註作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
@@ -606,7 +664,7 @@ def process(wb, args) -> int:
         print("=" * 80)
         print(f"正在處理的漢字檔案：{text_file_name}")
         # 漢字尚未抄入前，先把漢字列（5、9、13、17…，欄 D:R）底色改回無填滿
-        clear_han_ji_cell_fill(wb, program, sheet_name="漢字注音")
+        clear_han_ji_cell_fill(wb, program, sheet_name="漢字注音", total_lines=clear_lines)
         _fill_han_ji_into_sheet(
             wb=wb,
             program=program,
