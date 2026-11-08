@@ -1,5 +1,5 @@
 """
-a100_作業中活頁檔填入漢字.py V0.2.14
+a100_作業中活頁檔填入漢字.py V0.2.15
 功能：將漢字純文字檔中的漢字，填入 Excel 活頁簿中的【漢字注音】工作表，並自動查找台語音標與漢字標音。
 更新紀錄：
  v0.2.7 2026-02-08：
@@ -24,6 +24,8 @@ a100_作業中活頁檔填入漢字.py V0.2.14
  v0.2.14 2026-11-08:
   - 清除舊內容、附註與漢字底色時，範圍改涵蓋工作表上已有資料的列，
     不再只清到名稱【每頁總列數】為止。
+ v0.2.15 2026-11-08:
+  - 清除舊資料時，一併拭去【漢字】儲存格上校對用的紅框線，含沾到相鄰格的紅邊。
 """
 
 # =========================================================================
@@ -90,6 +92,14 @@ EXIT_CODE_UNKNOWN_ERROR = 99
 
 HAN_JI_SHEET_NAME = "漢字注音"
 HAN_JI_TEMPLATE_SHEET_NAME = "漢字注音【模版】"
+
+# 校對程式 a300 的 R 鍵：漢字儲存格四邊實線，粗細 xlMedium，顏色純紅（BGR = 255）。
+XL_EDGE_LEFT, XL_EDGE_TOP, XL_EDGE_BOTTOM, XL_EDGE_RIGHT = 7, 8, 9, 10
+XL_RED_BOX_EDGES = (XL_EDGE_LEFT, XL_EDGE_TOP, XL_EDGE_BOTTOM, XL_EDGE_RIGHT)
+XL_LINE_CONTINUOUS = 1
+XL_LINE_NONE = -4142
+XL_WEIGHT_MEDIUM = -4138
+XL_COLOR_RED = 255
 
 # =========================================================================
 # 設定日誌
@@ -172,6 +182,78 @@ def clear_han_ji_cell_fill(
     for line in range(total_lines):
         row = start_row + line * rows_per_line
         sheet.range((row, start_col), (row, end_col)).color = None
+
+
+def _is_red_box_edge(border) -> bool:
+    """這一邊是否為校對用紅框（實線、xlMedium、純紅）。"""
+    try:
+        if int(border.LineStyle) != XL_LINE_CONTINUOUS:
+            return False
+        if int(border.Weight) != XL_WEIGHT_MEDIUM:
+            return False
+        return int(border.Color) == XL_COLOR_RED
+    except Exception:
+        return False
+
+
+def _clear_red_edges_on_row(sheet, row: int, start_col: int, end_col: int) -> int:
+    """拭去一列裡的紅框邊。其他顏色的框線（例如黑色底線）保留。
+
+    不可先讀整列的 Borders：同一邊若有的儲存格有框、有的沒有，Excel 會回報成沒有框線。
+    """
+    removed = 0
+    for col in range(start_col, end_col + 1):
+        cell = sheet.range((row, col))
+        cleared = False
+        for edge_id in XL_RED_BOX_EDGES:
+            border = cell.api.Borders(edge_id)
+            if not _is_red_box_edge(border):
+                continue
+            border.LineStyle = XL_LINE_NONE
+            cleared = True
+        if cleared:
+            removed += 1
+    return removed
+
+
+def clear_han_ji_red_boxes(
+    wb,
+    program: Program,
+    sheet_name: str = "漢字注音",
+    total_lines: int | None = None,
+) -> None:
+    """拭去【漢字】儲存格上的紅框線。
+
+    紅框是校對時按 R 鍵畫的。框線會沾到左右鄰格，以及上方台語音標、下方漢字標音的共用邊，
+    這三列的紅邊一併移除。
+    """
+    sheet = wb.sheets[sheet_name]
+    han_ji_start = program.han_ji_start_row
+    rows_per_line = program.ROWS_PER_LINE
+    start_col = program.start_col
+    end_col = program.end_col
+    total_lines = int(program.TOTAL_LINES if total_lines is None else total_lines)
+    if total_lines < 1:
+        return
+
+    last_han_ji_row = han_ji_start + (total_lines - 1) * rows_per_line
+    start_col_name = xw.utils.col_name(start_col)
+    end_col_name = xw.utils.col_name(end_col)
+    logging_process_step(
+        "拭去【漢字】儲存格紅框線："
+        f"{start_col_name}{han_ji_start}:{end_col_name}{last_han_ji_row}"
+        f"（含上下相鄰列的紅邊）。"
+    )
+
+    removed = 0
+    for line in range(total_lines):
+        han_ji_row = han_ji_start + line * rows_per_line
+        for row in (han_ji_row - 1, han_ji_row, han_ji_row + 1):
+            if row < 1:
+                continue
+            removed += _clear_red_edges_on_row(sheet, row, start_col, end_col)
+
+    logging_process_step(f"已拭去【{sheet_name}】紅框線，共 {removed} 個儲存格。")
 
 
 def clear_cell_notes(
@@ -636,6 +718,13 @@ def process(wb, args) -> int:
         clear_cell_notes(wb, program, sheet_name="漢字注音", total_lines=clear_lines)
     except Exception as e:
         logging_exc_error(msg="移除儲存格附註作業異常！", error=e)
+        return EXIT_CODE_PROCESS_FAILURE
+
+    try:
+        print("拭去漢字儲存格紅框線...")
+        clear_han_ji_red_boxes(wb, program, sheet_name="漢字注音", total_lines=clear_lines)
+    except Exception as e:
+        logging_exc_error(msg="拭去漢字儲存格紅框線作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
 
     try:
