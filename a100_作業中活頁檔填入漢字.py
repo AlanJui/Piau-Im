@@ -1,5 +1,5 @@
 """
-a100_作業中活頁檔填入漢字.py V0.2.11
+a100_作業中活頁檔填入漢字.py V0.2.13
 功能：將漢字純文字檔中的漢字，填入 Excel 活頁簿中的【漢字注音】工作表，並自動查找台語音標與漢字標音。
 更新紀錄：
  v0.2.7 2026-02-08：
@@ -7,7 +7,7 @@ a100_作業中活頁檔填入漢字.py V0.2.11
   - 改善 total_lines 的計算方式：改為從 Excel 工作表中讀取實際的資料行數，而非使用固定值，提升彈性與適應性。
  v0.2.8 2026-02-15:
   - 與【標音】相關的三張工作表（標音字庫、人工標音字庫、缺字表），在執行 process() 時，務必建立新表
-  （刪除舊表、建立新表），避免舊文章之標音資料與之相混。
+    （刪除舊表、建立新表），避免舊文章之標音資料與之相混。
  v0.2.0.9 2026-02-17:
   - 修正 _process_cell() 呼叫方式，改為傳入 active_cell 物件；
     原 row, col 值之取得，透過 active_cell 物件即可。
@@ -16,6 +16,11 @@ a100_作業中活頁檔填入漢字.py V0.2.11
   - 加入 --update：略過上述三張工作表的移除，沿用既有工作表。
  v0.2.11 2026-10-27:
   - 抄入漢字之前，先將【漢字】儲存格（列 5、9、13、17…，欄 D:R）底色改回無填滿。
+ v0.2.12 2026-11-08:
+  - 找不到作用中活頁簿時，改自專案根目錄開啟 Template.xlsx，不再直接終止程式。
+  - 清除舊殘留時，一併移除【漢字注音】標音區塊內每個儲存格的附註。
+ v0.2.13 2026-11-08:
+  - 找不到【漢字注音】工作表時，自【漢字注音【模版】】複製一張再繼續作業。
 """
 
 # =========================================================================
@@ -56,7 +61,7 @@ from mod_logging import (
     logging_exc_error,
     logging_exception,
     logging_process_step,
-    logging_warning,  # noqa: F401
+    logging_warning,
 )
 from mod_帶調符音標 import read_text_with_han_ji
 from mod_標音 import is_han_ji
@@ -79,6 +84,9 @@ EXIT_CODE_INVALID_INPUT = 2
 EXIT_CODE_SAVE_FAILURE = 3
 EXIT_CODE_PROCESS_FAILURE = 10
 EXIT_CODE_UNKNOWN_ERROR = 99
+
+HAN_JI_SHEET_NAME = "漢字注音"
+HAN_JI_TEMPLATE_SHEET_NAME = "漢字注音【模版】"
 
 # =========================================================================
 # 設定日誌
@@ -117,6 +125,75 @@ def clear_han_ji_cell_fill(wb, program: Program, sheet_name: str = "漢字注音
     for line in range(total_lines):
         row = start_row + line * rows_per_line
         sheet.range((row, start_col), (row, end_col)).color = None
+
+
+def clear_cell_notes(wb, program: Program, sheet_name: str = "漢字注音") -> None:
+    """移除【漢字注音】標音區塊內，每個儲存格的【附註】。
+
+    範圍與清除舊內容相同：自起始列起，涵蓋人工標音、台語音標、漢字、漢字標音。
+    Excel 的附註即舊版 Comment（Note）。先刪工作表附註集合中落在範圍內的項目，
+    再對整段範圍呼叫 ClearComments，避免只清到其中一種。
+    """
+    sheet = wb.sheets[sheet_name]
+    start_row = program.line_start_row
+    rows_per_line = program.ROWS_PER_LINE
+    start_col = program.start_col
+    end_col = program.end_col
+    total_lines = int(program.TOTAL_LINES)
+    if total_lines < 1:
+        return
+
+    end_row = start_row + (total_lines * rows_per_line) - 1
+    start_col_name = xw.utils.col_name(start_col)
+    end_col_name = xw.utils.col_name(end_col)
+    logging_process_step(
+        "移除【漢字注音】儲存格附註："
+        f"{start_col_name}{start_row}:{end_col_name}{end_row}。"
+    )
+
+    removed = _delete_notes_in_range(
+        sheet,
+        start_row=start_row,
+        end_row=end_row,
+        start_col=start_col,
+        end_col=end_col,
+    )
+    sheet.range((start_row, start_col), (end_row, end_col)).api.ClearComments()
+    logging_process_step(
+        f"已清除【{sheet_name}】工作表 {start_col_name}{start_row}:{end_col_name}{end_row} 的儲存格附註"
+        f"（附註集合刪除 {removed} 則）。"
+    )
+
+
+def _delete_notes_in_range(
+    sheet,
+    start_row: int,
+    end_row: int,
+    start_col: int,
+    end_col: int,
+) -> int:
+    """刪除範圍內既有附註。讀不到附註集合時，交由呼叫端以範圍一次清除。"""
+    try:
+        comments = sheet.api.Comments
+        count = int(comments.Count)
+    except Exception as e:
+        logging_warning(f"無法讀取工作表附註集合，改以範圍清除：{e}")
+        return 0
+
+    removed = 0
+    for index in range(count, 0, -1):
+        try:
+            comment = comments.Item(index)
+            anchor = comment.Parent
+            row = int(anchor.Row)
+            col = int(anchor.Column)
+            if not (start_row <= row <= end_row and start_col <= col <= end_col):
+                continue
+            comment.Delete()
+            removed += 1
+        except Exception as e:
+            logging_warning(f"無法刪除第 {index} 則儲存格附註：{e}")
+    return removed
 
 
 def fill_in_han_ji(
@@ -401,6 +478,36 @@ class CellProcessor(ExcelCell):
             self.save_all_piau_im_ji_khoo_dicts()
 
 
+def ensure_han_ji_sheet(
+    wb,
+    sheet_name: str = HAN_JI_SHEET_NAME,
+    template_name: str = HAN_JI_TEMPLATE_SHEET_NAME,
+):
+    """取得【漢字注音】。活頁簿沒有這張表時，自【漢字注音【模版】】複製。"""
+    sheet_names = [sheet.name for sheet in wb.sheets]
+    if sheet_name in sheet_names:
+        return wb.sheets[sheet_name]
+    if template_name not in sheet_names:
+        logging.error(
+            f"找不到工作表【{sheet_name}】，也沒有可複製的【{template_name}】。"
+            f"現有工作表：{sheet_names}"
+        )
+        return None
+
+    logging_process_step(f"找不到工作表【{sheet_name}】，自【{template_name}】複製。")
+    app = wb.app
+    previous_alerts = app.display_alerts
+    app.display_alerts = False
+    try:
+        template = wb.sheets[template_name]
+        target = template.copy(after=template, name=sheet_name)
+    finally:
+        app.display_alerts = previous_alerts
+
+    logging_process_step(f"已自【{template_name}】複製製作【{target.name}】。")
+    return target
+
+
 def process(wb, args) -> int:
     """
     Args:
@@ -414,6 +521,13 @@ def process(wb, args) -> int:
     # 作業初始化
     # ------------------------------------------------------------------------------
     logging_process_step("<=========== 作業開始！==========>")
+
+    try:
+        if ensure_han_ji_sheet(wb) is None:
+            return EXIT_CODE_PROCESS_FAILURE
+    except Exception as e:
+        logging_exc_error(msg="無法準備【漢字注音】工作表！", error=e)
+        return EXIT_CODE_PROCESS_FAILURE
 
     try:
         # 初始化 process config
@@ -455,8 +569,15 @@ def process(wb, args) -> int:
             han_ji_orgin_cell=program.han_ji_orgin_cell,
         )
         # logging.info("儲存格內容清除完畢")
-    except xw.XlwingsError as e:
+    except Exception as e:
         logging_exc_error(msg="清除儲存格內容作業異常！", error=e)
+        return EXIT_CODE_PROCESS_FAILURE
+
+    try:
+        print("移除儲存格附註作業...")
+        clear_cell_notes(wb, program, sheet_name="漢字注音")
+    except Exception as e:
+        logging_exc_error(msg="移除儲存格附註作業異常！", error=e)
         return EXIT_CODE_PROCESS_FAILURE
 
     try:
@@ -527,6 +648,42 @@ def process(wb, args) -> int:
 # =========================================================================
 # 主程式
 # =========================================================================
+def _open_template_workbook(project_root: Path):
+    """找不到作用中活頁簿時，自專案根目錄開啟 Template.xlsx。"""
+    file_path = project_root / "Template.xlsx"
+    if not file_path.is_file():
+        logging.error(f"找不到範本活頁簿：{file_path}")
+        return None
+    logging_process_step(f"找不到作用中活頁簿，改自專案根目錄開啟範本：{file_path}")
+    try:
+        return xw.Book(str(file_path))
+    except Exception as e:
+        logging_exc_error(msg="無法開啟範本活頁簿 Template.xlsx", error=e)
+        return None
+
+
+def _acquire_workbook(project_root: Path):
+    """取得作用中活頁簿。沒有已開啟的活頁簿時，改開專案根目錄的 Template.xlsx。"""
+    try:
+        wb = xw.Book.caller()
+        if wb:
+            return wb
+    except Exception:
+        pass
+
+    try:
+        app = xw.apps.active
+        if app is not None and app.books.count > 0:
+            wb = app.books.active
+            if wb:
+                logging_process_step(f"作用中活頁簿：{wb.name}")
+                return wb
+    except Exception as e:
+        logging_process_step(f"找不到作用中的 Excel 活頁簿：{e}")
+
+    return _open_template_workbook(project_root)
+
+
 def main(args) -> int:
     """主程式 - 從 Excel 呼叫或直接執行"""
     # =========================================================================
@@ -546,20 +703,9 @@ def main(args) -> int:
 
     # =========================================================================
     # (2) 設定【作用中活頁簿】：偵測及獲取 Excel 已開啟之活頁簿檔案。
+    #     找不到時，改自專案根目錄開啟 Template.xlsx。
     # =========================================================================
-    wb = None
-    try:
-        # 嘗試從 Excel 呼叫取得（RunPython）
-        wb = xw.Book.caller()
-    except Exception:
-        # 若失敗，則取得作用中的活頁簿
-        try:
-            wb = xw.apps.active.books.active
-        except Exception as e:
-            logging.error(f"無法找到作用中的 Excel 工作簿: {e}")
-            return EXIT_CODE_NO_FILE
-
-    # 若無法取得【作用中活頁簿】，則因無法繼續作業，故返回【作業異常終止代碼】結束。
+    wb = _acquire_workbook(project_root)
     if not wb:
         logging.error("無法取得 Excel 活頁簿")
         return EXIT_CODE_NO_FILE
@@ -637,6 +783,10 @@ if __name__ == "__main__":
   python a100_作業中活頁檔填入漢字.py --new        # 同上
   python a100_作業中活頁檔填入漢字.py --update     # 略過移除，沿用既有字庫工作表
   python a100_作業中活頁檔填入漢字.py --test       # 執行測試模式
+
+找不到作用中活頁簿時，改開專案根目錄的 Template.xlsx。
+找不到【漢字注音】工作表時，自【漢字注音【模版】】複製一張。
+抄入漢字前，會清除【漢字注音】標音區塊內每個儲存格的附註。
 """,
     )
     parser.add_argument(
