@@ -1,5 +1,5 @@
 """
-mod_程式.py V0.2.20
+mod_程式.py V0.2.21
 
 本系統各功能之程式架構模版。
 模版中包含程式配置類別 Program 及儲存格處理器類別 ExcelCell。
@@ -18,6 +18,7 @@ mod_程式.py V0.2.20
 - v0.2.18 2026-10-28: 空白鍵／E 鍵查字前，顯示【標音字庫】中同一漢字、同一台語音標所指向的【漢字注音】儲存格。
 - v0.2.19 2026-10-29: 空白鍵手動補入缺字讀音時，【標音字庫】若無該座標，仍寫入【台語音標】與【漢字標音】，並補入字庫紀錄。
 - v0.2.20 2026-10-31: 另存新檔若目標就是目前開啟的活頁簿，改為直接儲存，避免 Excel SaveAs 失敗。
+- v0.2.21 2026-11-09: 相對的【OUTPUT_PATH】改接在專案根目錄下。活頁簿在專案根目錄時，不再存到上一層的 output 目錄。
 """
 
 # =========================================================================
@@ -342,13 +343,16 @@ class Program:
                 if not current_dir:
                     logging_exc_error(msg="無法取得活頁簿所在目錄，未儲存檔案", error=None)
                     return False
-                parent_dir = str(Path(current_dir).parent)
+                # 【OUTPUT_PATH】若是相對路徑，接在專案根目錄下。
+                # 不可再用活頁簿目錄的上一層：範本 Template.xlsx 就在專案根目錄，
+                # 再往上會存成 C:\Users\AlanJui\work\output7，而不是專案裡的 output7。
+                project_root = Path(__file__).resolve().parent
                 output_dir = str(wb.names["OUTPUT_PATH"].refers_to_range.value or "").strip()
                 output_path = Path(output_dir)
                 if output_path.is_absolute():
                     new_dir_path = output_path
                 else:
-                    new_dir_path = Path(parent_dir) / output_dir
+                    new_dir_path = project_root / output_dir
                 new_dir_path.mkdir(parents=True, exist_ok=True)
                 new_file_path = str(new_dir_path / new_excel_file_name)
 
