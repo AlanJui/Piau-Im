@@ -277,3 +277,70 @@ def Kong_Un_Siann_Tiau_Tng_Tai_Loo(廣韻調名):
     }
     return 方音符號調號.get(tai_lo_tiau_ho, None)
 
+
+# 聲母由長到短比對，避免 kh 被拆成 k、ng 被拆成 n。
+_SING_BU_PATTERN = re.compile(r"(kh|ng|ph|th|ch|tsh|ts|b|c|g|h|j|k|l|m|n|p|s|t|z|Ø)")
+
+
+def _rows_as_dicts(cursor, sql):
+    cursor.execute(sql)
+    columns = [col[0] for col in cursor.description]
+    return [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+
+def init_sing_bu_dict(cursor):
+    """讀取聲母對照表，以台語音標為鍵。"""
+    sing_bu_dict = {}
+    for row in _rows_as_dicts(cursor, "SELECT * FROM 聲母對照表"):
+        code = row["台語音標"]
+        if not code:
+            continue
+        sing_bu_dict[code] = {
+            "code": code,
+            "ipa": row["國際音標"],
+            "tl": row["台羅音標"],
+            "poj": row["白話字"],
+            "bp": row["閩拼方案"],
+            "tps": row["方音符號"],
+            "sni": row["十五音"],
+        }
+    return sing_bu_dict
+
+
+def init_un_bu_dict(cursor):
+    """讀取韻母對照表，以台語音標為鍵。"""
+    un_bu_dict = {}
+    for row in _rows_as_dicts(cursor, "SELECT * FROM 韻母對照表"):
+        code = row["台語音標"]
+        if not code:
+            continue
+        su_ho = row["十五音序"]
+        un_bu_dict[code] = {
+            "code": code,
+            "ipa": row["國際音標"],
+            "tl": row["台羅音標"],
+            "poj": row["白話字"],
+            "bp": row["閩拼方案"],
+            "tps": row["方音符號"],
+            "sni": row["十五音"],
+            "sni_su_ciok_sing": row["十五音舒促聲"],
+            "sni_su_ho": int(su_ho) if su_ho is not None else 0,
+        }
+    return un_bu_dict
+
+
+def split_cu_im(cu_im):
+    """自注音碼拆出聲母、韻母、調號。拆不開時回傳 [None, None, None]。"""
+    if cu_im is None:
+        return [None, None, None]
+    cu_im = str(cu_im).strip()
+    matched = _SING_BU_PATTERN.match(cu_im)
+    if not matched or len(cu_im) < 2:
+        return [None, None, None]
+    sing_bu = matched.group()
+    tiau = cu_im[-1]
+    un_bu = cu_im[len(sing_bu) : -1]
+    if (not tiau.isdigit()) or un_bu == "":
+        return [None, None, None]
+    return [sing_bu, un_bu, tiau]
+

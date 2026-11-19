@@ -9,7 +9,6 @@ import sys
 
 import xlwings as xw
 
-import settings
 from mod_file_access import (
     close_excel_file,
     get_cmd_input,
@@ -27,8 +26,8 @@ def main():
     # =========================================================="
     # 資料庫",
     # =========================================================="
-    # 自 .env 檔案取得資料庫名稱
-    DATABASE = settings.get_database_path()
+    # 與其他廣韻程式相同，預設使用 Kong_Un.db
+    DATABASE = os.getenv("DB_KONG_UN", "Kong_Un.db")
     conn = sqlite3.connect(DATABASE)
     db_cursor = conn.cursor()
     print(f"DATABASE = {DATABASE}")
