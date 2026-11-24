@@ -170,14 +170,11 @@ def readings_to_entries(
     if not bag:
         return None
 
+    # 穩定排序：僅依資料來源分組，組內維持 API／寫入順序
     data: List[Dict[str, Union[str, float]]] = []
     for entry in sorted(
         bag.values(),
-        key=lambda e: (
-            SOURCE_RANK.get(str(e.get("資料來源") or ""), 99),
-            -float(e.get("常用度") or 0),
-            str(e.get("台語音標") or ""),
-        ),
+        key=lambda e: SOURCE_RANK.get(str(e.get("資料來源") or ""), 99),
     ):
         finalized = _finalize_entry(entry)
         if finalized:
