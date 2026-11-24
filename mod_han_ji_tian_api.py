@@ -25,34 +25,68 @@ from mod_標音 import split_tai_gi_im_piau
 
 DEFAULT_API_BASE = "https://han-ji-tian.apps.grok.bot"
 _API_KEY_LOADED = False
+_API_KEY_PATH: Path | None = None
 
 
-def load_api_key_file(override: bool = False) -> Path | None:
-    """載入專案根目錄 `.api_key` 至環境變數；檔案不存在則略過。"""
-    global _API_KEY_LOADED
+def _read_env_file_text(path: Path) -> str:
+    """讀取 .api_key；相容 UTF-8／BOM／UTF-16（Windows 記事本常見）。"""
+    raw = path.read_bytes()
+    if raw.startswith(b"\xff\xfe") or raw.startswith(b"\xfe\xff"):
+        return raw.decode("utf-16")
+    if raw.startswith(b"\xef\xbb\xbf"):
+        return raw.decode("utf-8-sig")
+    try:
+        return raw.decode("utf-8")
+    except UnicodeDecodeError:
+        return raw.decode("utf-16", errors="replace")
+
+
+def _parse_env_assignments(text: str) -> Dict[str, str]:
+    out: Dict[str, str] = {}
+    for line in text.splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, val = line.partition("=")
+        key = key.strip().lstrip("\ufeff")
+        val = val.strip().strip("'").strip('"')
+        if key:
+            out[key] = val
+    return out
+
+
+def load_api_key_file(override: bool = True) -> Path | None:
+    """載入專案根目錄 `.api_key` 至環境變數；檔案不存在則略過。
+
+    預設 override=True：以檔案內容覆寫同名環境變數，避免空字串殘留造成 401。
+    """
+    global _API_KEY_LOADED, _API_KEY_PATH
     path = Path(__file__).resolve().parent / ".api_key"
-    if not path.is_file():
+    _API_KEY_PATH = path if path.is_file() else None
+    if _API_KEY_PATH is None:
+        _API_KEY_LOADED = True
         return None
+
+    parsed = _parse_env_assignments(_read_env_file_text(path))
+    for key, val in parsed.items():
+        if override or key not in os.environ or not str(os.environ.get(key, "")).strip():
+            os.environ[key] = val
+
+    # 順帶交給 dotenv（若已安裝），行為與手動解析一致
     try:
         from dotenv import load_dotenv
 
         load_dotenv(path, override=override)
     except ImportError:
-        for line in path.read_text(encoding="utf-8").splitlines():
-            line = line.strip()
-            if not line or line.startswith("#") or "=" not in line:
-                continue
-            key, _, val = line.partition("=")
-            key, val = key.strip(), val.strip().strip("'").strip('"')
-            if key and (override or key not in os.environ):
-                os.environ[key] = val
+        pass
+
     _API_KEY_LOADED = True
     return path
 
 
 def _ensure_api_key_loaded() -> None:
     if not _API_KEY_LOADED:
-        load_api_key_file(override=False)
+        load_api_key_file(override=True)
 
 
 def _api_base() -> str:
@@ -75,11 +109,24 @@ def fetch_reading_json(han_ji: str, timeout: float = 20.0) -> Dict[str, Any]:
     if not han:
         raise ValueError("漢字不可為空白")
 
-    url = f"{_api_base()}/api/v1/reading?han={urllib.parse.quote(han)}"
-    headers = {"Accept": "application/json", "User-Agent": "Piau-Im-a251/1.0"}
     token = _api_token()
-    if token:
-        headers["Authorization"] = f"Bearer {token}"
+    if not token:
+        hint = (
+            f"請在專案根目錄建立 {_API_KEY_PATH or Path(__file__).resolve().parent / '.api_key'}，"
+            "內容例如：\n"
+            "HAN_JI_TIAN_API_TOKEN=你的token\n"
+            "HAN_JI_TIAN_API_URL=https://han-ji-tian.apps.grok.bot\n"
+            "（可複製 .api_key.example；確認已 git checkout main && git pull）"
+        )
+        raise RuntimeError(f"未載入 API token。{hint}")
+
+    url = f"{_api_base()}/api/v1/reading?han={urllib.parse.quote(han)}"
+    headers = {
+        "Accept": "application/json",
+        "User-Agent": "Piau-Im-a251/1.0",
+        "Authorization": f"Bearer {token}",
+        "X-Api-Key": token,
+    }
 
     req = urllib.request.Request(url, headers=headers, method="GET")
     try:
@@ -88,6 +135,12 @@ def fetch_reading_json(han_ji: str, timeout: float = 20.0) -> Dict[str, Any]:
             return json.loads(body)
     except urllib.error.HTTPError as e:
         detail = e.read().decode("utf-8", errors="replace")[:300]
+        if e.code == 401:
+            raise RuntimeError(
+                f"三合一字典 API HTTP 401（token 無效或未帶上）。"
+                f"請檢查 `.api_key` 的 HAN_JI_TIAN_API_TOKEN。"
+                f" 伺服器回應：{detail}"
+            ) from e
         raise RuntimeError(f"三合一字典 API HTTP {e.code}：{detail}") from e
     except urllib.error.URLError as e:
         raise RuntimeError(f"無法連線三合一字典 API：{e}") from e

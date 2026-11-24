@@ -214,7 +214,16 @@ XL_COLOR_RED = 255  # Excel 框線 Color 為 BGR，純紅 = 255
 # =========================================================================
 load_dotenv()
 # 三合一漢字典 API 憑證（勿提交 git；見 .api_key.example）
-load_dotenv(Path(__file__).resolve().parent / ".api_key", override=False)
+_API_KEY = Path(__file__).resolve().parent / ".api_key"
+if _API_KEY.is_file():
+    load_dotenv(_API_KEY, override=True)
+else:
+    try:
+        from mod_han_ji_tian_api import load_api_key_file
+
+        load_api_key_file(override=True)
+    except Exception:
+        pass
 
 # =========================================================================
 # 設定日誌
