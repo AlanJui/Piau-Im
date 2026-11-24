@@ -1,0 +1,3 @@
+# 複製為 .api_key 後填入真實 token（.api_key 已列入 .gitignore）
+HAN_JI_TIAN_API_TOKEN=你的token
+HAN_JI_TIAN_API_URL=https://han-ji-tian.apps.grok.bot

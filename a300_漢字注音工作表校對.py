@@ -85,6 +85,7 @@ import re
 import subprocess
 import sys
 import time
+from pathlib import Path
 
 # 載入第三方套件
 import xlwings as xw
@@ -212,6 +213,8 @@ XL_COLOR_RED = 255  # Excel 框線 Color 為 BGR，純紅 = 255
 # 載入環境變數
 # =========================================================================
 load_dotenv()
+# 三合一漢字典 API 憑證（勿提交 git；見 .api_key.example）
+load_dotenv(Path(__file__).resolve().parent / ".api_key", override=False)
 
 # =========================================================================
 # 設定日誌

@@ -14,6 +14,10 @@ env/
 __pycache__/
 .pyc
 static_collected/
+
+# 三合一漢字典 API 憑證（勿提交）
+.api_key
+
 # Temporary files
 *.kate-swp
 *.swp

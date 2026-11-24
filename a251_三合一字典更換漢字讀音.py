@@ -7,7 +7,7 @@ a251_三合一字典更換漢字讀音.py
 與 a250 差異：字典來源改為線上 `/api/v1/reading`（雅俗通／甘／廣韻），
 而非本機 Ho_Lok_Ue.db。
 
-環境變數見 mod_han_ji_tian_api.py。
+憑證見專案根目錄 `.api_key`（範本：`.api_key.example`）。
 """
 
 from __future__ import annotations
@@ -28,6 +28,7 @@ from a250_更換漢字讀音 import (
 from mod_han_ji_tian_api import (
     format_grouped_reading_lines,
     han_ji_ca_piau_im_from_api,
+    load_api_key_file,
 )
 from mod_logging import (
     init_logging,
@@ -79,6 +80,8 @@ class CellProcessor(A250CellProcessor):
 def process(wb, args) -> int:
     """查詢三合一字典讀音並標注（介面同 a250.process）。"""
     logging_process_step("<=========== 作業開始！（三合一字典 a251）==========>")
+    if load_api_key_file() is None:
+        print("⚠️  找不到 `.api_key`（可複製 `.api_key.example`）。仍可嘗試系統環境變數。")
 
     try:
         program = Program(wb=wb, args=args, hanji_piau_im_sheet_name="漢字注音")
@@ -153,8 +156,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.test:
-        from mod_han_ji_tian_api import han_ji_ca_piau_im_from_api
-
+        load_api_key_file()
         rows = han_ji_ca_piau_im_from_api(args.han) or []
         print(f"【{args.han}】API 讀音 {len(rows)} 筆：")
         for i, row in enumerate(rows, 1):

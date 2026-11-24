@@ -4,9 +4,11 @@ mod_han_ji_tian_api.py
 呼叫三合一漢字典（han-ji-tian）讀音 API，轉成與 HanJiTian.han_ji_ca_piau_im
 相同形狀的選項清單，供 a251／a300 選音後寫回工作表。
 
-環境變數：
-  HAN_JI_TIAN_API_URL   預設 https://han-ji-tian.apps.grok.bot
-  HAN_JI_TIAN_API_TOKEN 或 READING_API_TOKEN（已設定時帶 Bearer）
+憑證檔（專案根目錄 `.api_key`，已列入 .gitignore）：
+  HAN_JI_TIAN_API_TOKEN=…
+  HAN_JI_TIAN_API_URL=https://han-ji-tian.apps.grok.bot   # 可選
+
+亦可改用系統環境變數 HAN_JI_TIAN_API_TOKEN／READING_API_TOKEN。
 """
 
 from __future__ import annotations
@@ -16,18 +18,50 @@ import os
 import urllib.error
 import urllib.parse
 import urllib.request
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
 from mod_標音 import split_tai_gi_im_piau
 
 DEFAULT_API_BASE = "https://han-ji-tian.apps.grok.bot"
+_API_KEY_LOADED = False
+
+
+def load_api_key_file(override: bool = False) -> Path | None:
+    """載入專案根目錄 `.api_key` 至環境變數；檔案不存在則略過。"""
+    global _API_KEY_LOADED
+    path = Path(__file__).resolve().parent / ".api_key"
+    if not path.is_file():
+        return None
+    try:
+        from dotenv import load_dotenv
+
+        load_dotenv(path, override=override)
+    except ImportError:
+        for line in path.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, _, val = line.partition("=")
+            key, val = key.strip(), val.strip().strip("'").strip('"')
+            if key and (override or key not in os.environ):
+                os.environ[key] = val
+    _API_KEY_LOADED = True
+    return path
+
+
+def _ensure_api_key_loaded() -> None:
+    if not _API_KEY_LOADED:
+        load_api_key_file(override=False)
 
 
 def _api_base() -> str:
+    _ensure_api_key_loaded()
     return (os.environ.get("HAN_JI_TIAN_API_URL") or DEFAULT_API_BASE).rstrip("/")
 
 
 def _api_token() -> str:
+    _ensure_api_key_loaded()
     return (
         os.environ.get("HAN_JI_TIAN_API_TOKEN")
         or os.environ.get("READING_API_TOKEN")
