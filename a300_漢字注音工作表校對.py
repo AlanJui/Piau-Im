@@ -19,9 +19,10 @@ a109_漢字注音工作表校對.py V0.3
   PgUp (Page Up)  : 翻到上一頁
   PgDn (Page Down): 翻到下一頁
   A 鍵            : 切換【作用儲存格】
-  空白            : 查字典更換漢字讀音
-  J 鍵            : 查字典指定漢字讀音
-  E 鍵            : 先查字典，查無則手動輸入人工標音
+  空白            : 查字典更換漢字讀音（a250）
+  D 鍵            : 查三合一字典更換漢字讀音（a251）
+  J 鍵            : 查字典指定漢字讀音（a260）
+  E 鍵            : 先查字典，查無則手動輸入人工標音（a260）
   C 鍵            : 啟用／關閉變調標音樣式
   R 鍵            : 切換【畫紅框線標示】
   = 鍵            : 填入人工標音標記
@@ -29,6 +30,9 @@ a109_漢字注音工作表校對.py V0.3
 ======================================================================
 
 變更紀錄：
+V0.15 (2026-11-24): 新增 D 鍵，呼叫三合一漢字典 API（a251）更換漢字讀音；
+空白鍵仍使用本機個人字典（a250）。
+
 V0.5 (2026-07-16): 新增 PgUp/PgDn 按鍵支援：以 Excel 視窗目前可視列數換算
 每頁行數，令游標一次向上／向下翻一頁（頁首／頁尾自動截止於第一行／最後一行）。
 
@@ -155,6 +159,17 @@ try:
 except ImportError as e:
     HAS_A250 = False
     print(f"警告：無法載入 a250 模組：{e}")
+
+# 載入 a251：三合一漢字典 API 更換讀音
+try:
+    from a251_三合一字典更換漢字讀音 import (
+        process as ca_han_ji_thok_im_a251,
+    )
+
+    HAS_A251 = True
+except ImportError as e:
+    HAS_A251 = False
+    print(f"警告：無法載入 a251 模組：{e}")
 
 # 載入 a260 的核心查詢功能：可先在《個人字典》查找漢字讀音；或手動輸入漢字讀音
 try:
@@ -855,6 +870,9 @@ class NavigationController:
                 elif key.char.lower() == "j":
                     # J 鍵：更換漢字讀音
                     self.pending_action = "query_and_assign_thok_im"
+                elif key.char.lower() == "d":
+                    # D 鍵：查三合一漢字典 API 更換讀音（a251）
+                    self.pending_action = "query_san_hap_it_and_replace"
                 # elif key.char.lower() == "s":
                 #     # S 鍵：查詢萌典
                 #     self.pending_action = "query_moedict"
@@ -963,6 +981,10 @@ class NavigationController:
             elif action == "query_and_replace_thok_im":
                 # 更換漢字讀音
                 self.query_dictionary_and_replace_han_ji_thok_im()
+
+            elif action == "query_san_hap_it_and_replace":
+                # 三合一漢字典 API 更換讀音
+                self.query_san_hap_it_and_replace_han_ji_thok_im()
 
             elif action == "query_and_assign_thok_im":
                 # 指定漢字讀音
@@ -1137,6 +1159,63 @@ class NavigationController:
             activate_excel_window(self.wb)
 
             # 重新啟動鍵盤監聽
+            if self.listener:
+                self.listener = keyboard.Listener(on_press=self.on_key_press, suppress=True)
+                self.listener.start()
+                time.sleep(0.3)
+            print("✓ 已恢復導航模式\n")
+
+    def query_san_hap_it_and_replace_han_ji_thok_im(self):
+        """查詢三合一漢字典 API，將漢字讀音更換（a251）"""
+        print("\n" + "=" * 70)
+        print("進入【三合一字典更換讀音】模式")
+        print("=" * 70)
+
+        if self.listener:
+            self.listener.stop()
+            time.sleep(0.3)
+
+        try:
+            if HAS_A251:
+                print("\n查詢三合一漢字典中...")
+                self.select_current_cell()
+                self.focus_console()
+
+                current_cell = self.current_cell_address()
+                print(f"當前儲存格：{current_cell}")
+
+                exit_code = ca_han_ji_thok_im_a251(
+                    wb=self.wb,
+                    args=self.build_query_args(),
+                )
+
+                if exit_code == 0:
+                    print("\n✓ 查詢完成")
+                else:
+                    print(f"\n⚠️  查詢結果：exit_code = {exit_code}")
+            else:
+                print("\n執行 a251_三合一字典更換漢字讀音.py...")
+                result = subprocess.run(
+                    [sys.executable, "a251_三合一字典更換漢字讀音.py"],
+                    cwd=os.path.dirname(os.path.abspath(__file__)),
+                    capture_output=False,
+                    text=True,
+                )
+                if result.returncode != 0:
+                    print(f"⚠️  a251 程式執行失敗，返回碼：{result.returncode}")
+        except KeyboardInterrupt:
+            print("\n\n使用者中斷查詢")
+        except Exception as e:
+            logging.error(f"執行三合一字典查詢失敗：{e}")
+            print(f"❌ 執行三合一字典查詢失敗：{e}")
+        finally:
+            print("\n" + "=" * 70)
+            print("返回導航模式")
+            print("=" * 70)
+
+            self.select_current_cell()
+            activate_excel_window(self.wb)
+
             if self.listener:
                 self.listener = keyboard.Listener(on_press=self.on_key_press, suppress=True)
                 self.listener.start()
@@ -1638,6 +1717,7 @@ def read_han_ji_with_keyboard(wb, view_mode=False, console_hwnd=None, start_cell
         print("  PgDn (Page Down): 翻到下一頁")
         print("  A 鍵            : 切換【作用儲存格】")
         print("  空白 鍵         : 查字典更換漢字讀音（a250）")
+        print("  D 鍵            : 查三合一字典更換漢字讀音（a251）")
         print("  J 鍵            : 查字典指定漢字讀音（a260）")
         print("  E 鍵            : 先查字典，查無則手動輸入人工標音（a260）")
         print("  C 鍵            : 啟用／關閉變調標音樣式（淡灰 #E8E8E8／無填滿）")
