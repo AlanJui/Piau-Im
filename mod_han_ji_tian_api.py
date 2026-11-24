@@ -71,6 +71,7 @@ def _put_reading(
     freq: float,
     note: str,
     source: str,
+    wen_bai: str = "",
 ) -> None:
     """同台羅只保留先寫入者（來源優先序由呼叫端保證）。"""
     key = (tai_lo or "").strip().lower()
@@ -83,6 +84,7 @@ def _put_reading(
         "常用度": freq,
         "摘要說明": note,
         "資料來源": source,
+        "文白": wen_bai if wen_bai in ("文", "白") else "",
     }
 
 
@@ -146,7 +148,9 @@ def readings_to_entries(
                     meaning = str(vals[0] or "")
             freq = 0.8 if mode == "文" else 0.6
             note = f"甘字典{mode} {meaning}".strip()
-            _put_reading(bag, han_ji, tai_lo, freq, note, "甘字典")
+            _put_reading(
+                bag, han_ji, tai_lo, freq, note, "甘字典", wen_bai=mode
+            )
 
     kong = payload.get("kong_un") or {}
     if isinstance(kong, dict):
@@ -197,10 +201,11 @@ def format_grouped_reading_lines(
             print(f"《{source}》：")
             last_source = source
         tai_gi_im_piau, han_ji_piau_im = piau_im_options[idx]
-        siong_iong_to = entry.get("常用度", "N/A")
+        wen_bai = str(entry.get("文白") or "").strip()
+        suffix = f"  【{wen_bai}】" if source == "甘字典" and wen_bai in ("文", "白") else ""
         print(
             f"  {idx + 1}. 台語音標：{tai_gi_im_piau:<8} "
-            f"漢字標音：[{han_ji_piau_im}] (常用度: {siong_iong_to})"
+            f"漢字標音：[{han_ji_piau_im}]{suffix}"
         )
 
 
