@@ -59,27 +59,48 @@ def fetch_reading_json(han_ji: str, timeout: float = 20.0) -> Dict[str, Any]:
         raise RuntimeError(f"無法連線三合一字典 API：{e}") from e
 
 
+# 顯示與去重優先序：雅俗通 → 甘字典 → 廣韻
+SOURCE_ORDER = ("雅俗通", "甘字典", "廣韻")
+SOURCE_RANK = {name: i for i, name in enumerate(SOURCE_ORDER)}
+
+
 def _put_reading(
     bag: Dict[str, Dict[str, Union[str, float]]],
     han_ji: str,
     tai_lo: str,
     freq: float,
     note: str,
+    source: str,
 ) -> None:
+    """同台羅只保留先寫入者（來源優先序由呼叫端保證）。"""
     key = (tai_lo or "").strip().lower()
-    if not key:
+    if not key or key in bag:
         return
-    prev = bag.get(key)
-    if prev is None or float(prev.get("常用度") or 0) < freq:
-        bag[key] = {
-            "識別號": 0,
-            "漢字": han_ji,
-            "台語音標": key,
-            "常用度": freq,
-            "摘要說明": note,
-        }
-    elif note and note not in str(prev.get("摘要說明") or ""):
-        prev["摘要說明"] = f"{prev.get('摘要說明') or ''}｜{note}".strip("｜")
+    bag[key] = {
+        "識別號": 0,
+        "漢字": han_ji,
+        "台語音標": key,
+        "常用度": freq,
+        "摘要說明": note,
+        "資料來源": source,
+    }
+
+
+def _finalize_entry(
+    entry: Dict[str, Union[str, float]],
+) -> Optional[Dict[str, Union[str, float]]]:
+    tai_loo_im = str(entry.get("台語音標") or "")
+    try:
+        split_result = split_tai_gi_im_piau(tai_loo_im)
+    except (TypeError, IndexError, ValueError):
+        return None
+    if not split_result or not any(split_result):
+        return None
+    entry["聲母"] = split_result[0]
+    entry["韻母"] = split_result[1]
+    entry["聲調"] = split_result[2]
+    entry["台語音標"] = f"{entry['聲母']}{entry['韻母']}{entry['聲調']}"
+    return entry
 
 
 def readings_to_entries(
@@ -87,6 +108,7 @@ def readings_to_entries(
 ) -> Optional[List[Dict[str, Union[str, float]]]]:
     """
     將 API-001 JSON 壓成 HanJiTian 選項清單（含聲／韻／調拆解）。
+    同音多來源時歸屬優先：雅俗通 → 甘字典 → 廣韻。
     常用度啟發式：雅俗通 0.9、甘文 0.8、甘白 0.6、廣韻 0.5。
     """
     han_ji = str(payload.get("han_ji") or "").strip()
@@ -101,7 +123,14 @@ def readings_to_entries(
             fifteen = ""
             if isinstance(vals, list) and vals:
                 fifteen = str(vals[0] or "")
-            _put_reading(bag, han_ji, tai_lo, 0.9, f"雅俗通 {fifteen}".strip())
+            _put_reading(
+                bag,
+                han_ji,
+                tai_lo,
+                0.9,
+                f"雅俗通 {fifteen}".strip(),
+                "雅俗通",
+            )
 
     kam = payload.get("kam_ji_tian") or {}
     if isinstance(kam, dict):
@@ -117,7 +146,7 @@ def readings_to_entries(
                     meaning = str(vals[0] or "")
             freq = 0.8 if mode == "文" else 0.6
             note = f"甘字典{mode} {meaning}".strip()
-            _put_reading(bag, han_ji, tai_lo, freq, note)
+            _put_reading(bag, han_ji, tai_lo, freq, note, "甘字典")
 
     kong = payload.get("kong_un") or {}
     if isinstance(kong, dict):
@@ -129,7 +158,14 @@ def readings_to_entries(
                     cut = str(vals[0] or "")
                 if len(vals) >= 2:
                     meaning = str(vals[1] or "")[:40]
-            _put_reading(bag, han_ji, tai_lo, 0.5, f"廣韻 {cut} {meaning}".strip())
+            _put_reading(
+                bag,
+                han_ji,
+                tai_lo,
+                0.5,
+                f"廣韻 {cut} {meaning}".strip(),
+                "廣韻",
+            )
 
     if not bag:
         return None
@@ -137,23 +173,38 @@ def readings_to_entries(
     data: List[Dict[str, Union[str, float]]] = []
     for entry in sorted(
         bag.values(),
-        key=lambda e: float(e.get("常用度") or 0),
-        reverse=True,
+        key=lambda e: (
+            SOURCE_RANK.get(str(e.get("資料來源") or ""), 99),
+            -float(e.get("常用度") or 0),
+            str(e.get("台語音標") or ""),
+        ),
     ):
-        tai_loo_im = str(entry.get("台語音標") or "")
-        try:
-            split_result = split_tai_gi_im_piau(tai_loo_im)
-        except (TypeError, IndexError, ValueError):
-            continue
-        if not split_result or not any(split_result):
-            continue
-        entry["聲母"] = split_result[0]
-        entry["韻母"] = split_result[1]
-        entry["聲調"] = split_result[2]
-        entry["台語音標"] = f"{entry['聲母']}{entry['韻母']}{entry['聲調']}"
-        data.append(entry)
+        finalized = _finalize_entry(entry)
+        if finalized:
+            data.append(finalized)
 
     return data or None
+
+
+def format_grouped_reading_lines(
+    han_ji: str,
+    result: List[Dict[str, Union[str, float]]],
+    piau_im_options: List[tuple[str, str]],
+) -> None:
+    """在 Console 依《雅俗通》《甘字典》《廣韻》分組列出選項（編號連號）。"""
+    print(f"【{han_ji}】有 {len(result)} 個讀音：")
+    last_source = None
+    for idx, entry in enumerate(result):
+        source = str(entry.get("資料來源") or "其它")
+        if source != last_source:
+            print(f"《{source}》：")
+            last_source = source
+        tai_gi_im_piau, han_ji_piau_im = piau_im_options[idx]
+        siong_iong_to = entry.get("常用度", "N/A")
+        print(
+            f"  {idx + 1}. 台語音標：{tai_gi_im_piau:<8} "
+            f"漢字標音：[{han_ji_piau_im}] (常用度: {siong_iong_to})"
+        )
 
 
 def han_ji_ca_piau_im_from_api(

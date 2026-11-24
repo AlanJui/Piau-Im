@@ -25,7 +25,10 @@ from a250_更換漢字讀音 import (
     EXIT_CODE_SAVE_FAILURE,
     EXIT_CODE_SUCCESS,
 )
-from mod_han_ji_tian_api import han_ji_ca_piau_im_from_api
+from mod_han_ji_tian_api import (
+    format_grouped_reading_lines,
+    han_ji_ca_piau_im_from_api,
+)
 from mod_logging import (
     init_logging,
     logging_exc_error,
@@ -38,7 +41,16 @@ init_logging()
 
 
 class CellProcessor(A250CellProcessor):
-    """沿用 a250 訂正流程；僅置換查字典來源為三合一 API。"""
+    """沿用 a250 訂正流程；置換查字典來源，並依字典分組顯示。"""
+
+    def display_all_piau_im_for_a_han_ji(self, han_ji: str, result: list[dict]):
+        """依《雅俗通》《甘字典》《廣韻》分組顯示讀音選項。"""
+        piau_im_options = []
+        for entry in result:
+            tai_gi_im_piau, han_ji_piau_im = self._convert_piau_im_by_entry(entry)
+            piau_im_options.append((tai_gi_im_piau, han_ji_piau_im))
+        format_grouped_reading_lines(han_ji, result, piau_im_options)
+        return piau_im_options
 
     def _han_ji_ca_piau_im_kap_cu_tik(self, cell):
         original = self.program.ji_tian.han_ji_ca_piau_im
